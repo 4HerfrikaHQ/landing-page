@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
     title: "4Herfrika",
     description: "4Herfrika",
 };
 
-const Logo = (
+const Logo = () => (
     <svg
         width="155"
         height="44"
@@ -49,6 +50,10 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const headersList = headers();
+    const location = new URL(
+        headersList.get("x-invoke-path") ?? "http://localhost:3000",
+    );
     return (
         <html lang="en">
             <body className={`${outfitSans.className} antialiased`}>
@@ -61,7 +66,7 @@ export default function RootLayout({
                             <div className="flex lg:flex-1">
                                 <a href="/" className="-m-1.5 p-1.5">
                                     <span className="sr-only">4Herfrika</span>
-                                    {Logo}
+                                    <Logo />
                                 </a>
                             </div>
                             <div className="flex lg:hidden">
@@ -81,8 +86,8 @@ export default function RootLayout({
                                         aria-hidden="true"
                                     >
                                         <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
                                             d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                                         />
                                     </svg>
@@ -92,18 +97,23 @@ export default function RootLayout({
                                 <a
                                     href="/"
                                     className="text-sm leading-6 text-gray-900"
+                                    data-active={location.pathname === "/"}
                                 >
                                     Home
                                 </a>
                                 <a
                                     href="/about"
                                     className="text-sm leading-6 text-gray-900"
+                                    data-active={location.pathname === "/about"}
                                 >
                                     About
                                 </a>
                                 <a
                                     href="/career-corner"
                                     className="text-sm leading-6 text-gray-900"
+                                    data-active={
+                                        location.pathname === "/career-corner"
+                                    }
                                 >
                                     Career Corner
                                 </a>
@@ -112,12 +122,15 @@ export default function RootLayout({
                                 <a
                                     href="/contact-us"
                                     className="text-sm leading-6 text-gray-900"
+                                    data-active={
+                                        location.pathname === "/contact-us"
+                                    }
                                 >
                                     Contact Us
                                 </a>
                                 <a
                                     href="/join-us" // TODO: replace with google form link
-                                    className="text-sm leading-6 text-white bg-primary-500 hover:bg-primary-300 py-2 px-4 rounded-full"
+                                    className="text-sm leading-6 text-white bg-primary-500 hover:bg-primary-400 py-2 px-4 rounded-full"
                                 >
                                     Register
                                 </a>
@@ -131,7 +144,7 @@ export default function RootLayout({
                                         <span className="sr-only">
                                             4Herfrika
                                         </span>
-                                        {Logo}
+                                        <Logo />
                                     </a>
                                     <button
                                         type="button"
@@ -149,8 +162,8 @@ export default function RootLayout({
                                             aria-hidden="true"
                                         >
                                             <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
                                                 d="M6 18L18 6M6 6l12 12"
                                             />
                                         </svg>
