@@ -1,4 +1,6 @@
-export const Logo = () => (
+import type { FC } from "react";
+
+export const Logo: FC<{ className?: string }> = ({ className }) => (
     <svg
         width="155"
         height="44"
@@ -6,6 +8,7 @@ export const Logo = () => (
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
+        className={className}
     >
         <rect width="155" height="44" fill="url(#pattern0_648_12)" />
         <defs>
