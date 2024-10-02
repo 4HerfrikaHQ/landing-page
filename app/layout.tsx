@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import { headers } from "next/headers";
 import { Logo } from "@/components/Logo";
 import { NavbarLink } from "@/components/NavbarLink";
 
