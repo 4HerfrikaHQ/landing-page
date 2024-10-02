@@ -158,7 +158,7 @@ export default function RootLayout({
                     <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 mt-32 sm:px-6 lg:px-8">
                         <div className="mt-16 flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
                             <div className="text-center sm:text-left">
-                                <p className="text-lg font-medium text-gray-200">
+                                <p className="font-bold text-gray-200">
                                     Quick Links
                                 </p>
 
@@ -210,9 +210,7 @@ export default function RootLayout({
                             </div>
 
                             <div className="text-center sm:text-left">
-                                <p className="text-lg font-medium text-gray-200">
-                                    Legal
-                                </p>
+                                <p className="font-bold text-gray-200">Legal</p>
 
                                 <ul className="mt-8 space-y-4 text-sm">
                                     <li>
@@ -245,7 +243,7 @@ export default function RootLayout({
                             </div>
 
                             <div className="text-center sm:text-left">
-                                <p className="text-lg font-medium text-gray-200">
+                                <p className="font-bold text-gray-200">
                                     Contact Us
                                 </p>
 
@@ -272,7 +270,7 @@ export default function RootLayout({
 
                             <div className="text-center sm:text-left md:col-span-4 lg:col-span-2">
                                 <div className="bg-neutral-500/95">
-                                    <p className="text-lg font-medium text-gray-200">
+                                    <p className="font-bold text-gray-200">
                                         Subscribe
                                     </p>
 
@@ -293,7 +291,7 @@ export default function RootLayout({
                                                 />
 
                                                 <button
-                                                    className="rounded-br-md rounded-tr-md bg-primary-500 px-8 py-3 font-medium text-white transition hover:bg-primary-500"
+                                                    className="rounded-br-md rounded-tr-md bg-primary-500 px-8 py-3 font-bold text-white transition hover:bg-primary-500"
                                                     type="submit"
                                                 >
                                                     &rarr;
