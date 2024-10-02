@@ -61,6 +61,7 @@ export default function RootLayout({
                             <div className="hidden lg:flex lg:gap-x-12">
                                 <NavbarLink href="/">Home</NavbarLink>
                                 <NavbarLink href="/about">About</NavbarLink>
+                                <NavbarLink href="/blog">Blog</NavbarLink>
                                 <NavbarLink href="/career-corner">
                                     Career Corner
                                 </NavbarLink>
@@ -155,7 +156,7 @@ export default function RootLayout({
                 {children}
                 <footer className="bg-secondary-500">
                     <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 mt-32 sm:px-6 lg:px-8">
-                        <div className="mt-16 grid grid-cols-1 gap-8 pt-16 md:grid-cols-3 lg:grid-cols-5">
+                        <div className="mt-16 flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
                             <div className="text-center sm:text-left">
                                 <p className="text-lg font-medium text-gray-200">
                                     Quick Links
@@ -308,13 +309,32 @@ export default function RootLayout({
                             </div>
                         </div>
 
-                        <div className="mt-16 pt-6 sm:flex sm:items-center sm:justify-between">
+                        <div className="mt-16 pt-6 flex flex-col justify-center items-center gap-4 sm:flex-row sm:justify-between">
                             <p className="flex flex-row items-center gap-4 text-center text-sm text-gray-200 sm:text-left">
                                 <span className="bg-white rounded-md px-2 py-1 w-32">
                                     <Logo className="w-28" />
                                 </span>{" "}
                                 &copy; {new Date().getFullYear()}.
                             </p>
+
+                            <ul className="flex justify-center gap-6 sm:justify-start">
+                                <li>
+                                    <a
+                                        href="/"
+                                        className="text-white transition hover:text-primary-500/75"
+                                    >
+                                        Terms of Service
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="/"
+                                        className="text-white transition hover:text-primary-500/75"
+                                    >
+                                        Privacy Policy
+                                    </a>
+                                </li>
+                            </ul>
 
                             <ul className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
                                 <li>
