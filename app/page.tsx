@@ -30,7 +30,7 @@ export default function HomePage() {
                 Learn more
               </button>
               <button className='border px-6 py-2 rounded-full border-pink-500 text-white text-md bg-pink-500 capitalize'>
-                get started
+                Get Started
               </button>
             </div>
           </div>
