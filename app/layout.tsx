@@ -56,7 +56,7 @@ export default function RootLayout({
                   </svg>
                 </button>
               </div>
-              <div className='hidden lg:flex lg:gap-x-12'>
+              <div className='hidden lg:flex lg:gap-x-12 text-gray-400'>
                 <NavbarLink href='/'>Home</NavbarLink>
                 <NavbarLink href='/about'>About</NavbarLink>
                 <NavbarLink href='/blog'>Blog</NavbarLink>
@@ -112,19 +112,19 @@ export default function RootLayout({
                       </a>
                       <a
                         href='/about'
-                        className='-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-200 hover:bg-gray-50'
+                        className='-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-400 hover:bg-gray-50'
                       >
                         About
                       </a>
                       <a
                         href='/career-corner'
-                        className='-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-200 hover:bg-gray-50'
+                        className='-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-400 hover:bg-gray-50'
                       >
                         Career Corner
                       </a>
                       <a
                         href='/contact-us'
-                        className='-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-200 hover:bg-gray-50'
+                        className='-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-400 hover:bg-gray-50'
                       >
                         Contact Us
                       </a>
@@ -132,7 +132,7 @@ export default function RootLayout({
                     <div className='py-6'>
                       <a
                         href='/join-us' // TODO: replace with google form link
-                        className='-mx-3 block rounded-lg px-3 py-2.5 text-base leading-7 text-gray-200 hover:bg-gray-50'
+                        className='-mx-3 block rounded-lg px-3 py-2.5 text-base leading-7 text-gray-400 hover:bg-gray-50'
                       >
                         Register
                       </a>
