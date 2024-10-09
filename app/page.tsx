@@ -16,7 +16,7 @@ export default function HomePage() {
         />
 
         {/* Hero Section */}
-        <section className=' max-container h-[90vh] flex items-center justify-between gap-5 w-full  py-2'>
+        <section className='mx-auto container h-[90vh] flex items-center justify-between gap-5 w-full  py-2'>
           <div>
             <h1 className='text-gray-400 text-6xl font-semibold capitalize tracking-wide'>
               Raising <span className='text-pink-500'>World-class</span> women
@@ -74,7 +74,7 @@ export default function HomePage() {
         </section>
       </section>
       {/* Explore Community Section */}
-      <section className=' max-container px-7 my-8 gap-5 grid grid-cols-1 md:grid-cols-2 items-start max-container'>
+      <section className=' container px-7 my-8 gap-5 grid grid-cols-1 md:grid-cols-2 items-start mx-auto'>
         <div className='px-12 md:border-none  border-l border-pink-400'>
           <Image
             src={"/assets/boss-divas.png"}
@@ -129,7 +129,7 @@ export default function HomePage() {
         <p className='text-center text-xl text-gray-400 my-4'>
           Take a look at what our users say!
         </p>
-        <div className='max-container sm:px-10 grid grid-cols-1 lg:grid-cols-2 gap-x- gap-x-24 gap-y-10 mt-14'>
+        <div className='container mx-auto sm:px-10 grid grid-cols-1 lg:grid-cols-2 gap-x- gap-x-24 gap-y-10 mt-14'>
           <div className='w-full h-full bg-pink-400 rounded-xl gap-2 sm:gap-0 pr-4 py-6 flex sm:items-center sm:flex-row flex-col px-4 sm:px-1'>
             <Image
               src={"/assets/hero.png"}
@@ -261,7 +261,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* Ambassador Section */}
-      <section className=' px-7 max-container h-full grid grid-cols-1 md:grid-cols-2 items-center justify-between gap-8 w-full  py-6'>
+      <section className=' px-7 container mx-auto h-full grid grid-cols-1 md:grid-cols-2 items-center justify-between gap-8 w-full  py-6'>
         <div>
           <h3 className='text-gray-400 text-4xl font-semibold capitalize tracking-wide'>
             Become an ambassador{" "}

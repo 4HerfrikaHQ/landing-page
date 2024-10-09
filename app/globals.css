@@ -43,9 +43,7 @@
     z-index: 1;
 }
 
-.max-container {
-    @apply mx-auto max-w-7xl
-}
+
 
 @media (prefers-color-scheme: dark) {
     :root {
