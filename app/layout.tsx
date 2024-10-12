@@ -153,7 +153,7 @@ export default function RootLayout({
                 <ul className="mt-8 space-y-4 text-sm">
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       Home
@@ -162,7 +162,7 @@ export default function RootLayout({
 
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/about"
                     >
                       About Us
@@ -171,7 +171,7 @@ export default function RootLayout({
 
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       Boss Divas
@@ -180,7 +180,7 @@ export default function RootLayout({
 
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       Tech Divas
@@ -188,7 +188,7 @@ export default function RootLayout({
                   </li>
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       Become an Ambassador
@@ -203,7 +203,7 @@ export default function RootLayout({
                 <ul className="mt-8 space-y-4 text-sm">
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       FAQs
@@ -212,7 +212,7 @@ export default function RootLayout({
 
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       Blog (Coming Soon)
@@ -221,7 +221,7 @@ export default function RootLayout({
 
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="/"
                     >
                       Support
@@ -236,7 +236,7 @@ export default function RootLayout({
                 <ul className="mt-8 space-y-4 text-sm">
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
+                      className="text-white transition hover:text-white/75"
                       href="tel:+234-123-456-7890"
                     >
                       +234-123-456-7890
@@ -245,10 +245,10 @@ export default function RootLayout({
 
                   <li>
                     <a
-                      className="text-gray-300 transition hover:text-gray-300/75"
-                      href="mailto:info@4herfrika.com"
+                      className="text-white transition hover:text-white/75"
+                      href="mailto:info@4herfrika.org"
                     >
-                      info@4herfrika.com
+                      info@4herfrika.org
                     </a>
                   </li>
                 </ul>
