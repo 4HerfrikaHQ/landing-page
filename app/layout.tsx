@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { Logo } from "@/components/Logo";
 import { NavbarLink } from "@/components/NavbarLink";
+import { MenubarButton } from "@/components/MenubarButton";
 
 export const metadata: Metadata = {
   title: "4Herfrika",
@@ -35,26 +36,7 @@ export default function RootLayout({
                 </a>
               </div>
               <div className="flex lg:hidden">
-                <button
-                  type="button"
-                  className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-300"
-                >
-                  <span className="sr-only">Open main menu</span>
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                    />
-                  </svg>
-                </button>
+                <MenubarButton />
               </div>
               <div className="hidden lg:flex lg:gap-x-12 text-gray-400">
                 <NavbarLink href="/">Home</NavbarLink>
@@ -72,7 +54,7 @@ export default function RootLayout({
                 </a>
               </div>
             </nav>
-            <dialog className="lg:hidden" aria-modal="true">
+            <dialog id="menu" className="lg:hidden" aria-modal="true">
               <div className="fixed inset-0 z-50" />
               <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-200/10">
                 <div className="flex items-center justify-between">
@@ -80,54 +62,59 @@ export default function RootLayout({
                     <span className="sr-only">4Herfrika</span>
                     <Logo />
                   </a>
-                  <button
-                    type="button"
+                  <form
+                    method="dialog"
                     className="-m-2.5 rounded-md p-2.5 text-gray-300"
                   >
-                    <span className="sr-only">Close menu</span>
-                    <svg
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+                    <button type="submit">
+                      <span className="sr-only">Close menu</span>
+                      <svg
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </form>
                 </div>
                 <div className="mt-6 flow-root">
                   <div className="-my-6 divide-y divide-gray-500/10">
                     <div className="space-y-2 py-6">
-                      <a
-                        href="/"
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-200 hover:bg-gray-50"
-                      >
+                      <NavbarLink href="/" className="-mx-3 block px-3 py-2">
                         Home
-                      </a>
-                      <a
+                      </NavbarLink>
+                      <NavbarLink
                         href="/about"
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-400 hover:bg-gray-50"
+                        className="-mx-3 block px-3 py-2"
                       >
                         About
-                      </a>
-                      <a
+                      </NavbarLink>
+                      <NavbarLink
+                        href="/blog"
+                        className="-mx-3 block px-3 py-2"
+                      >
+                        Blog
+                      </NavbarLink>
+                      <NavbarLink
                         href="/career-corner"
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-400 hover:bg-gray-50"
+                        className="-mx-3 block px-3 py-2"
                       >
                         Career Corner
-                      </a>
-                      <a
+                      </NavbarLink>
+                      <NavbarLink
                         href="/contact-us"
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base leading-7 text-gray-400 hover:bg-gray-50"
+                        className="-mx-3 block px-3 py-2"
                       >
                         Contact Us
-                      </a>
+                      </NavbarLink>
                     </div>
                     <div className="py-6">
                       <a
