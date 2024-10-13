@@ -16,15 +16,10 @@ export const NavbarLink: FC<HTMLProps<HTMLAnchorElement>> = ({
   ...props
 }) => {
   const pathname = usePathname();
-
   return (
     <Link
       href={href ?? "/"}
-      className={`text-sm leading-6  ${
-        pathname === "/"
-          ? "text-gray-900 hover:text-gray-800"
-          : "text-gray-900 hover:text-gray-800 dark:text-gray-100 dark:hover:text-gray-100"
-      } ${className}`}
+      className={`text-sm leading-6 text-gray-900 hover:text-gray-800  ${className}`}
       data-active={pathname === href}
       {...props}
     >
