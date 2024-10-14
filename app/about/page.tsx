@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import MainImg2 from "../../public/assets/main-img.png";
+import MainImg2 from "@/public/assets/main-img.png";
 
 export default function About() {
   return (
     <section>
-      <div className="container bg-aboutHeroImg bg-no-repeat bg-cover">
-        <div className="flex flex-col items-center gap-12 justify-center w-full h-screen bg-bgOverlay text-center text-white text">
+      <div className="bg-[url('/assets/replaced-hero-img.png')] bg-no-repeat bg-cover">
+        <div className="flex flex-col items-center gap-12 justify-center w-full h-screen bg-overlay-gradient text-center text-white text">
           <h1 className="text-6xl">About 4HerFrika</h1>
           <p className="capitalize text-xl">
             At 4HerFrika, we strive to train, mentor, and empower women <br />{" "}
@@ -29,8 +29,8 @@ export default function About() {
         </div>
       </div>
 
-      <div className="container my-10 px-14 bg-mainBgImg bg-no-repeat bg-center">
-        <div className="bg-mainBgImg bg-no-repeat bg-center flex flex-col gap-20">
+      <div className="my-10 px-14 bg-[url('/assets/aboutLogo.png')] bg-no-repeat bg-center">
+        <div className="bg-[url('/assets/aboutLogo.png')] bg-no-repeat bg-center flex flex-col gap-20">
           <h1 className="text-4xl text-center font-semibold">
             Where Every Girl Achieve Their Goal
           </h1>

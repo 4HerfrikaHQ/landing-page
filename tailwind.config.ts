@@ -9,12 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        // image will be changed , also the overlay color
-        aboutHeroImg: "url('/assets/replaced-hero-img.png')",
-        bgOverlay:
+        // TODO: Change overlay gradient to a variable (switch the colors)
+        "overlay-gradient":
           "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)",
-        mainBgImg:
-          "url('../public/assets/aboutLogo.png'),_url('../public/assets/aboutVector.png')",
       },
       backgroundSize: {
         hero: "200px, 100%",
