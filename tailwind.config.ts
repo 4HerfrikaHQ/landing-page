@@ -37,18 +37,26 @@ const config: Config = {
           300: "var(--gray-300)",
         },
         nextadmin: {
-          background: {
-            default: "#FEFEFE",
-          },
           brand: {
             default: "var(--primary-500)",
             emphasis: "var(--primary-400)",
+            subtle: "var(--primary-500)",
           },
           menu: {
             default: "var(--primary-500)",
             emphasis: "var(--primary-400)",
             muted: "var(--neutral-500)",
           },
+        },
+        get "dark-nextadmin"() {
+          return {
+            // @ts-expect-error - this is a getter
+            ...this.nextadmin,
+            menu: {
+              default: "var(--neutral-500)",
+              emphasis: "var(--neutral-400)",
+            },
+          };
         },
       },
     },
