@@ -1,15 +1,7 @@
-import {
-  NextAdmin,
-  NextAdminOptions,
-  PageProps,
-} from "@premieroctet/next-admin";
+import { NextAdmin, PageProps } from "@premieroctet/next-admin";
 import { getNextAdminProps } from "@premieroctet/next-admin/appRouter";
 import { prisma } from "@/prisma";
-import {
-  basePath,
-  apiBasePath,
-  options,
-} from "@/app/(admin)/backoffice/options";
+import { basePath, apiBasePath, options } from "../options";
 import schema from "@/prisma/json-schema/json-schema.json";
 
 export default async function Admin({

@@ -5,7 +5,7 @@ export const basePath = "/backoffice";
 export const apiBasePath = "/api/admin";
 
 export const options: NextAdminOptions = {
-  title: "⚡️ Admin",
+  title: "4Herfrika",
   model: {
     /* Your model configuration here */
   },
@@ -25,13 +25,7 @@ export const options: NextAdminOptions = {
     groups: [
       {
         title: "Users",
-        className: " bg-green-600 p-2 rounded-md", // group title extra classes. (optional)
         models: ["User"],
-      },
-      {
-        title: "Categories",
-        // @ts-expect-error "Category" model does not exist
-        models: ["Category"],
       },
     ],
   },

@@ -4,9 +4,10 @@ const config: Config = {
   content: [
     "./app/**/*.tsx",
     "./components/**/*.tsx",
-    "./../../node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
-    "./../../node_modules/@premieroctet/next-admin/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@premieroctet/next-admin/dist/**/*.{js,ts,jsx,tsx}",
   ],
+  presets: [require("@premieroctet/next-admin/preset")],
   theme: {
     extend: {
       colors: {
@@ -34,6 +35,20 @@ const config: Config = {
         gray: {
           400: "var(--gray-400)",
           300: "var(--gray-300)",
+        },
+        nextadmin: {
+          background: {
+            default: "#FEFEFE",
+          },
+          brand: {
+            default: "var(--primary-500)",
+            emphasis: "var(--primary-400)",
+          },
+          menu: {
+            default: "var(--primary-500)",
+            emphasis: "var(--primary-400)",
+            muted: "var(--neutral-500)",
+          },
         },
       },
     },
