@@ -3,13 +3,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const outfitSans = Outfit({
-  weight: ["400"],
+  weight: ["400", "600", "700"],
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "4Herfrika",
-  description: "4Herfrika",
+  title:
+    "4Herfrika - Raising World-Class Female Leaders at the intersection of business and technology in Africa",
+  description:
+    "4Herfrika is raising world-class women at the intersection of business and technology",
 };
 
 export default function RootLayout({
