@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn migrate && next dev",
-    "build": "next build",
+    "build": "cloudflare",
     "start": "next start",
     "lint": "next lint",
     "generate": "prisma generate",
@@ -12,7 +12,6 @@
     "postinstall": "yarn generate"
   },
   "dependencies": {
-    "@cloudflare/next-on-pages": "^1.13.5",
     "@cloudflare/workers-types": "^4.20241011.0",
     "@opennextjs/cloudflare": "0.2.1",
     "@premieroctet/next-admin": "6.1.6",
