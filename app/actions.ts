@@ -1,6 +1,6 @@
 "use server";
-import { prisma } from "@/utils/prisma";
+import { prisma } from "@/prisma";
 
-export function hello() {
-  return prisma().user.findMany();
+export function getUser() {
+  return prisma.user.findMany();
 }

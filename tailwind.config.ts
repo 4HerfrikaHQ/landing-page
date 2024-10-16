@@ -2,10 +2,12 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.tsx",
+    "./components/**/*.tsx",
+    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@premieroctet/next-admin/dist/**/*.{js,ts,jsx,tsx}",
   ],
+  presets: [require("@premieroctet/next-admin/preset")],
   theme: {
     extend: {
       backgroundImage: {
@@ -41,6 +43,28 @@ const config: Config = {
         gray: {
           400: "var(--gray-400)",
           300: "var(--gray-300)",
+        },
+        nextadmin: {
+          brand: {
+            default: "var(--primary-500)",
+            emphasis: "var(--primary-400)",
+            subtle: "var(--primary-500)",
+          },
+          menu: {
+            default: "var(--primary-500)",
+            emphasis: "var(--primary-400)",
+            muted: "var(--neutral-500)",
+          },
+        },
+        get "dark-nextadmin"() {
+          return {
+            // @ts-expect-error - this is a getter
+            ...this.nextadmin,
+            menu: {
+              default: "var(--neutral-500)",
+              emphasis: "var(--neutral-400)",
+            },
+          };
         },
       },
     },
