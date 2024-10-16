@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate": "prisma generate",
-    "postinstall": "yarn generate"
+    "postinstall": "prisma migrate dev"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.5",
