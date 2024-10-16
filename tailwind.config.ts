@@ -8,9 +8,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        // TODO: Change overlay gradient to a variable (switch the colors)
+        "overlay-gradient":
+          "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)",
+      },
+      backgroundSize: {
+        hero: "200px, 100%",
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
         primary: {
           100: "var(--primary-100)",
           200: "var(--primary-200)",

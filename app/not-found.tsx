@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 export default function NotFoundPage() {
     return (
         <div className="flex items-center justify-center py-12 px-4 lg:pt-44">
