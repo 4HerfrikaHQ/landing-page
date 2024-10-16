@@ -1,10 +1,10 @@
 import { prisma } from "@/prisma";
-import { options } from "@/app/(admin)/backoffice/options";
+import { options, apiBasePath } from "@/app/(admin)/backoffice/options";
 import schema from "@/prisma/json-schema/json-schema.json";
 import { createHandler } from "@premieroctet/next-admin/appHandler";
 
 const { run } = createHandler({
-  apiBasePath: "/api/admin",
+  apiBasePath,
   options,
   prisma,
   schema,
