@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn migrate && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "generate": "prisma generate",
-    "postinstall": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "postinstall": "yarn generate"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.5",
