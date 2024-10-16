@@ -10,6 +10,14 @@ const config: Config = {
   presets: [require("@premieroctet/next-admin/preset")],
   theme: {
     extend: {
+      backgroundImage: {
+        // TODO: Change overlay gradient to a variable (switch the colors)
+        "overlay-gradient":
+          "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)",
+      },
+      backgroundSize: {
+        hero: "200px, 100%",
+      },
       colors: {
         primary: {
           100: "var(--primary-100)",
