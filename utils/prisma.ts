@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PrismaD1 } from "@prisma/adapter-d1";
 
-export async function generatePrismaClient(): Promise<PrismaClient> {
+export function generatePrismaClient(): PrismaClient {
   if (process.env.ENV === "production") {
-    const { env } = await getCloudflareContext();
+    const { env } = getRequestContext();
     const adapter = new PrismaD1(env.DB);
     return new PrismaClient({ adapter });
   }

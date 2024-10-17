@@ -12,8 +12,6 @@
     "postinstall": "yarn generate"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "^4.20241011.0",
-    "@opennextjs/cloudflare": "0.2.1",
     "@premieroctet/next-admin": "6.1.6",
     "@prisma/adapter-d1": "5.20.0",
     "@prisma/client": "5.20.0",
@@ -26,6 +24,8 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "1.13.5",
+    "@cloudflare/workers-types": "^4.20241011.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

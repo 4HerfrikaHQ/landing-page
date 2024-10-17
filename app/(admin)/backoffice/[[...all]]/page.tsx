@@ -1,21 +1,14 @@
+"use client";
 import { NextAdmin, PageProps } from "@premieroctet/next-admin";
-import { getNextAdminProps } from "@premieroctet/next-admin/appRouter";
-import { prisma } from "@/prisma";
-import { basePath, apiBasePath, options } from "../options";
-import schema from "@/prisma/json-schema/json-schema.json";
+import { options } from "../options";
+import { useAsync } from "react-use";
+import { getAdminProps } from "@/app/actions";
 
-export default async function Admin({
-  params,
-  searchParams,
-}: Readonly<PageProps>) {
-  const props = await getNextAdminProps({
-    params: params.all,
-    searchParams,
-    basePath,
-    apiBasePath,
-    schema,
-    prisma,
-  });
+export default function Admin({ params, searchParams }: Readonly<PageProps>) {
+  const { value: props } = useAsync(
+    () => getAdminProps({ params, searchParams }),
+    [params, searchParams]
+  );
 
   return (
     <NextAdmin
@@ -27,7 +20,7 @@ export default async function Admin({
         logout: "/api/admin/logout",
       }}
       options={options}
-      {...props}
+      {...props!}
     />
   );
 }
