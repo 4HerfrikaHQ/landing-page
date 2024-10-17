@@ -182,7 +182,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 py-20">
         <div className="flex flex-col justify-center items-center gap-8 text-center">
           <h1 className="text-5xl">
             <span className="text-primary-500">F</span>requently{" "}
@@ -234,7 +234,7 @@ export default function About() {
                 </span>
               </button>
               {openIndices.includes(index) && (
-                <div className="p-4 bg-pink-300 rounded-md mt-2 w-full">
+                <div className="py-4 px-8 bg-pink-300 rounded-md mt-2 w-full">
                   <p className="text-white font-bold">{faq.question}</p>
                   <p className="text-white mt-2">{faq.answer}</p>
                 </div>
