@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { FC, HTMLProps } from "react";
+import type { FC } from "react";
 
 /**
  * A link in the navbar.
  *
  * Takes all the props of an anchor element.
  */
-export const NavbarLink: FC<HTMLProps<HTMLAnchorElement>> = ({
+export const NavbarLink: FC<React.ComponentProps<typeof Link>> = ({
   href,
   className,
   children,

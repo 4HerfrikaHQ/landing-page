@@ -28,11 +28,11 @@ export default function WebLayout({
             <div className="hidden lg:flex lg:gap-x-12 text-gray-400">
               <NavbarLink href="/">Home</NavbarLink>
               <NavbarLink href="/about">About</NavbarLink>
-              <NavbarLink href="/blog">Blog</NavbarLink>
-              <NavbarLink href="/career-corner">Career Corner</NavbarLink>
+              <NavbarLink href="/">Blog</NavbarLink>
+              <NavbarLink href="/">Career Corner</NavbarLink>
             </div>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-8">
-              <NavbarLink href="/contact-us">Contact Us</NavbarLink>
+              <NavbarLink href="/">Contact Us</NavbarLink>
               <a
                 href="/join-us" // TODO: replace with google form link
                 className="text-sm leading-6 text-white bg-primary-500 hover:bg-primary-400 py-2 px-4 rounded-full"
@@ -81,17 +81,14 @@ export default function WebLayout({
                     <NavbarLink href="/about" className="-mx-3 block px-3 py-2">
                       About
                     </NavbarLink>
-                    <NavbarLink href="/blog" className="-mx-3 block px-3 py-2">
+                    <NavbarLink href="/" className="-mx-3 block px-3 py-2">
                       Blog
                     </NavbarLink>
-                    <NavbarLink
-                      href="/career-corner"
-                      className="-mx-3 block px-3 py-2"
-                    >
+                    <NavbarLink href="/" className="-mx-3 block px-3 py-2">
                       Career Corner
                     </NavbarLink>
                     <NavbarLink
-                      href="/contact-us"
+                      href="/"
                       className="-mx-3 block px-3 py-2 underline"
                     >
                       Contact Us

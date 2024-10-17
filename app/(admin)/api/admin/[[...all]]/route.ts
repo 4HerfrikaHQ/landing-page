@@ -1,16 +1,22 @@
-import { prisma } from "@/prisma";
-import { options, apiBasePath } from "@/app/(admin)/backoffice/options";
-import schema from "@/prisma/json-schema/json-schema.json";
-import { createHandler } from "@premieroctet/next-admin/appHandler";
+// import { prisma } from "@/prisma";
+// import { options, apiBasePath } from "@/app/(admin)/backoffice/options";
+// import schema from "@/prisma/json-schema/json-schema.json";
+import { NextRequest, NextResponse } from "next/server";
+import type { RequestContext } from "@premieroctet/next-admin";
 
 export const runtime = "edge";
 
-const { run } = createHandler({
-  apiBasePath,
-  options,
-  prisma,
-  schema,
-  paramKey: "all",
-});
+export async function GET(request: NextRequest, ctx: RequestContext<"all">) {
+  console.log("GET /api/admin", request.body, ctx);
+  return new NextResponse();
+}
 
-export { run as DELETE, run as GET, run as POST };
+export async function POST(request: NextRequest, ctx: RequestContext<"all">) {
+  console.log("POST /api/admin", request.body, ctx);
+  return new NextResponse();
+}
+
+export async function DELETE(request: NextRequest, ctx: RequestContext<"all">) {
+  console.log("DELETE /api/admin", request.body, ctx);
+  return new NextResponse();
+}

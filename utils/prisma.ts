@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client/edge";
+import { PrismaClient as DevPrismaClient } from "@prisma/client";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { PrismaD1 } from "@prisma/adapter-d1";
 
@@ -8,5 +9,5 @@ export function generatePrismaClient(): PrismaClient {
     const adapter = new PrismaD1(env.DB);
     return new PrismaClient({ adapter });
   }
-  return new PrismaClient();
+  return new DevPrismaClient();
 }

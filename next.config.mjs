@@ -1,12 +1,19 @@
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    // this will override the experiments
-    config.experiments = { ...config.experiments, topLevelAwait: true };
-    // this will just update topLevelAwait property of config.experiments
-    // config.experiments.topLevelAwait = true
+  experimental: {
+    typedRoutes: true,
+    serverComponentsExternalPackages: ["@premieroctet/next-admin"],
+  },
+  webpack: (config, { nextRuntime }) => {
+    // Alias prisma client imports to edge when nextRuntime is "edge"
+    if (nextRuntime === "edge") {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        // "@prisma/client/runtime/library": "@prisma/client/runtime/edge",
+        // "@prisma/client": "@prisma/client/edge",
+      };
+    }
+
     return config;
   },
 };
