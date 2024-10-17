@@ -1,15 +1,10 @@
 "use client";
-import { NextAdmin, PageProps } from "@premieroctet/next-admin";
-import { options } from "../options";
-import { useAsync } from "react-use";
-import { getAdminProps } from "@/app/actions";
+import { NextAdmin } from "@premieroctet/next-admin";
+import { apiBasePath, basePath, options } from "../options";
 
-export default function Admin({ params, searchParams }: Readonly<PageProps>) {
-  const { value: props } = useAsync(
-    () => getAdminProps({ params, searchParams }),
-    [params, searchParams]
-  );
+export const runtime = "edge";
 
+export default function Admin(/**_props: Readonly<PageProps> */) {
   return (
     <NextAdmin
       isAppDir
@@ -20,7 +15,8 @@ export default function Admin({ params, searchParams }: Readonly<PageProps>) {
         logout: "/api/admin/logout",
       }}
       options={options}
-      {...props!}
+      basePath={basePath}
+      apiBasePath={apiBasePath}
     />
   );
 }
