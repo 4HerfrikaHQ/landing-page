@@ -389,7 +389,7 @@ export const getMainLayoutProps = ({
     sidebar: options?.sidebar,
     resourcesIcons,
     externalLinks: options?.externalLinks,
-    options: extractSerializable(options, true),
+    options: options,
     dmmfSchema: dmmfSchema?.fields,
     resourcesIdProperty: resourcesIdProperty,
   };
