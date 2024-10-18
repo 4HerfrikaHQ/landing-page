@@ -6,9 +6,13 @@ export const env = new Proxy<EnvVariables>(
   {
     get(target, prop: string) {
       if (!(prop in target)) {
-        throw new Error(`Please configure Environment var: ${prop} before use`);
+        // throw new Error(`ERROR: Missing env var: \`${prop}\`. Please check .env`);
       }
-      return target[prop];
+      try {
+        return JSON.parse(target[prop] as string);
+      } catch {
+        return target[prop];
+      }
     },
   }
 );
