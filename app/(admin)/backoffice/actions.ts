@@ -175,8 +175,7 @@ export const getPropsFromParams = async ({
         data,
         total,
         error: error ?? (searchParams?.error as string),
-        // @ts-expect-error - schema types are not compatible
-        schema,
+        schema: schema as never,
         actions: serializedActions,
       };
     }
@@ -232,8 +231,7 @@ export const getPropsFromParams = async ({
           resource,
           // data,
           // slug,
-          // @ts-expect-error - no further typing can be done
-          schema,
+          schema: schema as never,
           dmmfSchema: dmmfSchema?.fields,
           // customInputs,
           // actions: serializedActions,
@@ -244,8 +242,7 @@ export const getPropsFromParams = async ({
         return {
           ...baseProps,
           resource,
-          // @ts-expect-error - no further typing can be done
-          schema,
+          schema: schema as never,
           dmmfSchema: dmmfSchema?.fields,
           // customInputs,
         };
