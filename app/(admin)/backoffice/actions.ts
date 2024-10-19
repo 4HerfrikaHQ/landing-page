@@ -1,51 +1,39 @@
 "use server";
-import { Prisma } from "@prisma/client/edge";
+import type { Session } from "next-auth";
 import type { AdminComponentProps, PageProps } from "@premieroctet/next-admin";
-import { prisma } from "@/prisma";
+import { getNextAdminProps } from "@premieroctet/next-admin/appRouter";
+import prisma from "@/utils/prisma";
+import schema from "@/prisma/json-schema/json-schema.json";
 import { options, apiBasePath, basePath } from "./options";
-import { buildProps, getMainLayoutProps } from "../api/admin/utils";
+import { auth } from "../api/auth/config";
 
-export const getPropsFromParams = async ({
+export const getAdminProps = async ({
   params,
   searchParams,
 }: {
   params: string | string[];
   searchParams: PageProps["searchParams"];
-}): Promise<
-  | AdminComponentProps
-  | Omit<AdminComponentProps, "dmmfSchema" | "schema" | "resource" | "action">
-  | Pick<
-      AdminComponentProps,
-      | "pageComponent"
-      | "basePath"
-      | "apiBasePath"
-      | "isAppDir"
-      | "message"
-      | "resources"
-      | "error"
-    >
-> => {
-  if (params !== undefined && !Array.isArray(params)) {
-    throw new Error(
-      "`params` parameter in `getMainLayoutProps` should be an array of strings."
-    );
-  }
-  const { models } = Prisma.dmmf.datamodel;
-  const baseProps = getMainLayoutProps({
-    basePath,
-    apiBasePath,
-    options,
-    params,
-    models,
-  });
-
-  if (!params) return baseProps;
-  return buildProps({
-    baseProps,
+}): Promise<AdminComponentProps & { session?: Session }> => {
+  const session = await auth();
+  const props = await getNextAdminProps({
     params,
     searchParams,
-    models,
-    prisma,
     options,
+    prisma: prisma.client,
+    basePath,
+    apiBasePath,
+    schema,
   });
+  return {
+    ...props,
+    user: session?.user
+      ? {
+          data: {
+            name: session.user.name!,
+          },
+          logout: "/api/auth/logout",
+        }
+      : undefined,
+    session: session ?? undefined,
+  };
 };
