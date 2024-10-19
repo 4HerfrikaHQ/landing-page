@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -8,8 +8,7 @@ export default function About() {
   const faqData = [
     {
       question: "Who can join 4Herfrika?",
-      answer:
-        "",
+      answer: "",
     },
     {
       question: "How does 4Herfrika operate?",
@@ -29,9 +28,8 @@ export default function About() {
     {
       question: " Are there any fees to join 4Herfrika?",
       answer:
-      "No, 4Herfrika membership is free. Our goal is to make mentorship and leadership opportunities accessible to as many young women as possible."
+        "No, 4Herfrika membership is free. Our goal is to make mentorship and leadership opportunities accessible to as many young women as possible.",
     },
-    
   ];
 
   // const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -44,7 +42,7 @@ export default function About() {
 
   const toggleFAQ = (index: number) => {
     if (openIndices.includes(index)) {
-      setOpenIndices(openIndices.filter(i => i !== index));
+      setOpenIndices(openIndices.filter((i) => i !== index));
     } else {
       setOpenIndices([...openIndices, index]);
     }
@@ -118,8 +116,8 @@ export default function About() {
                   </h4>
                   <p className="text-xl text-gray-300 text-justify">
                     We envision 4herfrika in all tertiary <br /> institutions
-                    across sub-Saharan Africa and to have impacted 2 million women
-                    and girls with tech and entrepreneurship by 2030.
+                    across sub-Saharan Africa and to have impacted 2 million
+                    women and girls with tech and entrepreneurship by 2030.
                   </p>
                 </div>
               </div>
@@ -204,11 +202,16 @@ export default function About() {
           {faqData.map((faq, index) => (
             <div key={index} className="mb-4">
               <button
-                className={`w-full flex justify-between items-center py-4 px-8 rounded-md shadow-md focus:outline-none  ${openIndices.includes(index) ? 'bg-primary-500 text-white' : 'bg-white text-black'
-                  }`}
+                className={`w-full flex justify-between items-center py-4 px-8 rounded-md shadow-md focus:outline-none  ${
+                  openIndices.includes(index)
+                    ? "bg-primary-500 text-white"
+                    : "bg-white text-black"
+                }`}
                 onClick={() => toggleFAQ(index)}
               >
-                <span className="text-lg font-medium w-full text-left">{faq.question}</span>
+                <span className="text-lg font-medium w-full text-left">
+                  {faq.question}
+                </span>
                 <span className="text-lg">
                   {openIndices.includes(index) ? (
                     <svg
@@ -218,7 +221,12 @@ export default function About() {
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 15l7-7 7 7"
+                      />
                     </svg>
                   ) : (
                     <svg
@@ -228,7 +236,12 @@ export default function About() {
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   )}
                 </span>
