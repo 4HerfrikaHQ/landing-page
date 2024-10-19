@@ -1,43 +1,23 @@
-"use client";
 import { lazy } from "react";
 import type { PageProps } from "@premieroctet/next-admin";
-import { useAsync } from "react-use";
-import { getPropsFromParams } from "../actions";
-import { apiBasePath, basePath, options } from "../options";
-
-export const runtime = "edge";
+import { SessionProvider } from "next-auth/react";
+import { getAdminProps } from "../actions";
 
 const NextAdmin = lazy(async () => ({
   default: (await import("@premieroctet/next-admin")).NextAdmin,
 }));
 
-export default function Admin({ params, searchParams }: Readonly<PageProps>) {
-  const { value: props } = useAsync(
-    () => getPropsFromParams({ params: params.all, searchParams }),
-    [params]
-  );
-  return props ? (
-    <NextAdmin
-      user={{
-        data: {
-          name: "John Doe",
-        },
-        logout: "/api/admin/logout",
-      }}
-      {...props}
-    />
-  ) : (
-    <NextAdmin
-      isAppDir
-      user={{
-        data: {
-          name: "John Doe",
-        },
-        logout: "/api/admin/logout",
-      }}
-      options={options}
-      apiBasePath={apiBasePath}
-      basePath={basePath}
-    />
+export default async function Admin({
+  params,
+  searchParams,
+}: Readonly<PageProps>) {
+  const { session, ...props } = await getAdminProps({
+    params: params.all,
+    searchParams,
+  });
+  return (
+    <SessionProvider basePath="/api/auth" session={session ?? null}>
+      <NextAdmin isAppDir {...props} />
+    </SessionProvider>
   );
 }
