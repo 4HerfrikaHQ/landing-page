@@ -1,10 +1,15 @@
 "use client";
-import { NextAdmin, PageProps } from "@premieroctet/next-admin";
+import { lazy } from "react";
+import type { PageProps } from "@premieroctet/next-admin";
 import { useAsync } from "react-use";
 import { getPropsFromParams } from "../actions";
 import { apiBasePath, basePath, options } from "../options";
 
 export const runtime = "edge";
+
+const NextAdmin = lazy(async () => ({
+  default: (await import("@premieroctet/next-admin")).NextAdmin,
+}));
 
 export default function Admin({ params, searchParams }: Readonly<PageProps>) {
   const { value: props } = useAsync(
