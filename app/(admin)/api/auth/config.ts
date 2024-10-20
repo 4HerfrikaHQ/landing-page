@@ -9,6 +9,8 @@ import { apiBasePath, basePath } from "../../backoffice/options";
 const config: NextAuthConfig = {
   session: { strategy: "database" },
   secret: env.AUTH_SECRET,
+  trustHost: true,
+  useSecureCookies: true,
   basePath: "/api/auth",
   adapter: PrismaAdapter(prisma.client),
   providers: [
