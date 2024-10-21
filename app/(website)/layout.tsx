@@ -1,13 +1,7 @@
-import type { Metadata } from "next";
 import "../globals.css";
 import { Logo } from "@/components/Logo";
 import { NavbarLink } from "@/components/NavbarLink";
 import { MenubarButton } from "@/components/MenubarButton";
-
-export const metadata: Metadata = {
-  title: "4Herfrika",
-  description: "4Herfrika",
-};
 
 export default function WebLayout({
   children,
@@ -34,11 +28,11 @@ export default function WebLayout({
             <div className="hidden lg:flex lg:gap-x-12 text-gray-400">
               <NavbarLink href="/">Home</NavbarLink>
               <NavbarLink href="/about">About</NavbarLink>
-              <NavbarLink href="/blog">Blog</NavbarLink>
-              <NavbarLink href="/career-corner">Career Corner</NavbarLink>
+              <NavbarLink href="/">Blog</NavbarLink>
+              <NavbarLink href="/">Career Corner</NavbarLink>
             </div>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-8">
-              <NavbarLink href="/contact-us">Contact Us</NavbarLink>
+              <NavbarLink href="/">Contact Us</NavbarLink>
               <a
                 href="/join-us" // TODO: replace with google form link
                 className="text-sm leading-6 text-white bg-primary-500 hover:bg-primary-400 py-2 px-4 rounded-full"
@@ -87,18 +81,15 @@ export default function WebLayout({
                     <NavbarLink href="/about" className="-mx-3 block px-3 py-2">
                       About
                     </NavbarLink>
-                    <NavbarLink href="/blog" className="-mx-3 block px-3 py-2">
+                    <NavbarLink href="/" className="-mx-3 block px-3 py-2">
                       Blog
                     </NavbarLink>
-                    <NavbarLink
-                      href="/career-corner"
-                      className="-mx-3 block px-3 py-2"
-                    >
+                    <NavbarLink href="/" className="-mx-3 block px-3 py-2">
                       Career Corner
                     </NavbarLink>
                     <NavbarLink
-                      href="/contact-us"
-                      className="-mx-3 block px-3 py-2"
+                      href="/"
+                      className="-mx-3 block px-3 py-2 underline"
                     >
                       Contact Us
                     </NavbarLink>
@@ -189,7 +180,7 @@ export default function WebLayout({
                     className="text-white transition hover:text-white/75"
                     href="/"
                   >
-                    Blog (Coming Soon)
+                    Blog
                   </a>
                 </li>
 
@@ -229,7 +220,7 @@ export default function WebLayout({
             </div>
 
             <div className="text-center sm:text-left md:col-span-4 lg:col-span-2">
-              <div className="bg-neutral-500/95">
+              <div className="bg-neutral-500/20 p-12 rounded-2xl -mt-8">
                 <p className="font-bold text-gray-200">Subscribe</p>
 
                 <div className="mx-auto mt-8 max-w-md sm:ms-0">
@@ -240,16 +231,29 @@ export default function WebLayout({
                       </label>
 
                       <input
-                        className="w-full rounded-tl-md rounded-bl-md border-gray-200 px-6 py-3 shadow-sm placeholder:text-primary-500 focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs"
+                        className="w-full rounded-tl-md rounded-bl-md border-gray-200 px-6 py-3 shadow-sm placeholder:text-primary-500/60 focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs"
                         type="email"
                         placeholder="Email Address"
                       />
 
                       <button
-                        className="rounded-br-md rounded-tr-md bg-primary-500 px-8 py-3 font-bold text-white transition hover:bg-primary-500"
+                        className="rounded-br-md rounded-tr-md bg-primary-500/60 px-8 py-4 font-bold text-white hover:bg-primary-500/65"
                         type="submit"
                       >
-                        &rarr;
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 13"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M9.23347 13L14.8898 7.42846C15.4106 6.91519 15.4106 6.08324 14.8898 5.57154L9.23347 0L7.34788 1.8581L10.7279 5.18669H0L0 7.81292H10.7279L7.34788 11.1427L9.23347 13Z"
+                            fill="white"
+                          />
+                        </svg>
                       </button>
                     </div>
                     <p className="text-xs text-gray-200 mt-2">
@@ -276,7 +280,7 @@ export default function WebLayout({
                   href="/"
                   className="text-white transition hover:text-primary-500/75"
                 >
-                  Terms of Service
+                  Terms
                 </a>
               </li>
               <li>
@@ -284,7 +288,16 @@ export default function WebLayout({
                   href="/"
                   className="text-white transition hover:text-primary-500/75"
                 >
-                  Privacy Policy
+                  Privacy
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="/"
+                  className="text-white transition hover:text-primary-500/75"
+                >
+                  Cookies
                 </a>
               </li>
             </ul>
@@ -295,19 +308,27 @@ export default function WebLayout({
                   href="/" // TODO: Add facebook links
                   rel="noreferrer"
                   target="_blank"
-                  className="text-white transition hover:text-primary-500/75"
+                  className="text-white transition hover:text-neutral-500/75 block p-4 border-[1.5px] border-neutral-500/30 rounded-full"
                 >
-                  <span className="sr-only">Facebook</span>
+                  <span className="sr-only">LinkedIn</span>
                   <svg
-                    className="size-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fillRule="evenodd"
-                      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-                      clipRule="evenodd"
+                      d="M1.48355 2.9671C2.30289 2.9671 2.9671 2.30289 2.9671 1.48355C2.9671 0.664208 2.30289 0 1.48355 0C0.664208 0 0 0.664208 0 1.48355C0 2.30289 0.664208 2.9671 1.48355 2.9671Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M2.71984 3.95801H0.247258C0.110772 3.95801 0 4.06878 0 4.20527V11.623C0 11.7595 0.110772 11.8703 0.247258 11.8703H2.71984C2.85633 11.8703 2.9671 11.7595 2.9671 11.623V4.20527C2.9671 4.06878 2.85633 3.95801 2.71984 3.95801Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M10.088 3.54665C9.03126 3.18466 7.70942 3.50263 6.91671 4.07281C6.88951 3.96649 6.79258 3.88737 6.67736 3.88737H4.20478C4.06829 3.88737 3.95752 3.99814 3.95752 4.13463V11.5524C3.95752 11.6889 4.06829 11.7996 4.20478 11.7996H6.67736C6.81385 11.7996 6.92462 11.6889 6.92462 11.5524V6.22149C7.32419 5.8773 7.83898 5.76752 8.26031 5.94653C8.66878 6.11912 8.90269 6.54045 8.90269 7.10172V11.5524C8.90269 11.6889 9.01346 11.7996 9.14994 11.7996H11.6225C11.759 11.7996 11.8698 11.6889 11.8698 11.5524V6.60375C11.8416 4.57178 10.8857 3.81962 10.088 3.54665Z"
+                      fill="currentColor"
                     />
                   </svg>
                 </a>
@@ -318,19 +339,19 @@ export default function WebLayout({
                   href="/" // TODO: Add Instagram link
                   rel="noreferrer"
                   target="_blank"
-                  className="text-white transition hover:text-primary-500/75"
+                  className="text-white transition hover:text-neutral-500/75 block p-4 border-[1.5px] border-neutral-500/30 rounded-full"
                 >
                   <span className="sr-only">Instagram</span>
                   <svg
-                    className="size-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fillRule="evenodd"
-                      d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
-                      clipRule="evenodd"
+                      d="M5.99839 3.99907C4.89666 3.99907 3.99757 4.89816 3.99757 5.99989C3.99757 7.10161 4.89666 8.0007 5.99839 8.0007C7.10011 8.0007 7.9992 7.10161 7.9992 5.99989C7.9992 4.89816 7.10011 3.99907 5.99839 3.99907ZM11.9993 5.99989C11.9993 5.17134 12.0068 4.3503 11.9603 3.52326C11.9138 2.56263 11.6946 1.71007 10.9922 1.00761C10.2882 0.303646 9.43715 0.0860026 8.47652 0.0394721C7.64797 -0.00705849 6.82693 0.00044646 5.99989 0.00044646C5.17134 0.00044646 4.3503 -0.00705849 3.52326 0.0394721C2.56263 0.0860026 1.71007 0.305147 1.00761 1.00761C0.303646 1.71157 0.0860026 2.56263 0.0394721 3.52326C-0.00705849 4.35181 0.00044646 5.17284 0.00044646 5.99989C0.00044646 6.82693 -0.00705849 7.64947 0.0394721 8.47652C0.0860026 9.43715 0.305147 10.2897 1.00761 10.9922C1.71157 11.6961 2.56263 11.9138 3.52326 11.9603C4.35181 12.0068 5.17284 11.9993 5.99989 11.9993C6.82843 11.9993 7.64947 12.0068 8.47652 11.9603C9.43715 11.9138 10.2897 11.6946 10.9922 10.9922C11.6961 10.2882 11.9138 9.43715 11.9603 8.47652C12.0083 7.64947 11.9993 6.82843 11.9993 5.99989ZM5.99839 9.07841C4.29477 9.07841 2.91986 7.70351 2.91986 5.99989C2.91986 4.29627 4.29477 2.92137 5.99839 2.92137C7.70201 2.92137 9.07691 4.29627 9.07691 5.99989C9.07691 7.70351 7.70201 9.07841 5.99839 9.07841ZM9.20299 3.51426C8.80523 3.51426 8.48402 3.19304 8.48402 2.79528C8.48402 2.39752 8.80523 2.07631 9.20299 2.07631C9.60075 2.07631 9.92197 2.39752 9.92197 2.79528C9.92208 2.88973 9.90357 2.98328 9.86748 3.07056C9.83139 3.15785 9.77843 3.23715 9.71165 3.30394C9.64486 3.37072 9.56556 3.42368 9.47827 3.45977C9.39099 3.49586 9.29744 3.51437 9.20299 3.51426Z"
+                      fill="currentColor"
                     />
                   </svg>
                 </a>
@@ -338,19 +359,23 @@ export default function WebLayout({
 
               <li>
                 <a
-                  href="/" // TODO: Change to Twitter link
+                  href="/" // TODO: Change to X link
                   rel="noreferrer"
                   target="_blank"
-                  className="text-white transition hover:text-primary-500/75"
+                  className="text-white transition hover:text-neutral-500/75 block p-4 border-[1.5px] border-neutral-500/30 rounded-full"
                 >
-                  <span className="sr-only">Twitter</span>
+                  <span className="sr-only">X</span>
                   <svg
-                    className="size-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
+                    width="12"
+                    height="11"
+                    viewBox="0 0 12 11"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                    <path
+                      d="M9.4506 0H11.2908L7.2708 4.575L12 10.8H8.2968L5.397 7.0242L2.0784 10.8H0.2364L4.5366 5.907L0 0H3.7968L6.4188 3.4512L9.4506 0ZM8.805 9.7032H9.825L3.2424 1.0392H2.148L8.805 9.7032Z"
+                      fill="currentColor"
+                    />
                   </svg>
                 </a>
               </li>

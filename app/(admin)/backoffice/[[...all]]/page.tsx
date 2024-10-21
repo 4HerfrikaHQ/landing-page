@@ -1,33 +1,23 @@
-import { NextAdmin, PageProps } from "@premieroctet/next-admin";
-import { getNextAdminProps } from "@premieroctet/next-admin/appRouter";
-import { prisma } from "@/prisma";
-import { basePath, apiBasePath, options } from "../options";
-import schema from "@/prisma/json-schema/json-schema.json";
+import { lazy } from "react";
+import type { PageProps } from "@premieroctet/next-admin";
+import { SessionProvider } from "next-auth/react";
+import { getAdminProps } from "../actions";
+
+const NextAdmin = lazy(async () => ({
+  default: (await import("@premieroctet/next-admin")).NextAdmin,
+}));
 
 export default async function Admin({
   params,
   searchParams,
 }: Readonly<PageProps>) {
-  const props = await getNextAdminProps({
+  const { session, ...props } = await getAdminProps({
     params: params.all,
     searchParams,
-    basePath,
-    apiBasePath,
-    schema,
-    prisma,
   });
-
   return (
-    <NextAdmin
-      isAppDir
-      user={{
-        data: {
-          name: "John Doe",
-        },
-        logout: "/api/admin/logout",
-      }}
-      options={options}
-      {...props}
-    />
+    <SessionProvider basePath="/api/auth" session={session ?? null}>
+      <NextAdmin isAppDir {...props} />
+    </SessionProvider>
   );
 }
