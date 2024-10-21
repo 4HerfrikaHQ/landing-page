@@ -13,7 +13,7 @@ import prisma from "@/utils/prisma";
 import type { UserData } from "@premieroctet/next-admin";
 
 export async function getUserData(): Promise<UserData> {
-  const user = await prisma.client.user.findFirst();
+  const user = await prisma.user.findFirst();
   return {
     name: user!.name!,
   };
