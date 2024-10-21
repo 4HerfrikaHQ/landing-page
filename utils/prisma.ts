@@ -4,7 +4,7 @@ import { createClient } from "@libsql/client";
 import { env } from "./env";
 import { AlaSQLAdapter } from "./sqlite3";
 
-export default {
+const prismaClient = {
   get client() {
     try {
       const client = createClient({
@@ -21,3 +21,5 @@ export default {
     }
   },
 };
+
+export default prismaClient.client;

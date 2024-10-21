@@ -12,7 +12,7 @@ const config: NextAuthConfig = {
   trustHost: true,
   useSecureCookies: true,
   basePath: "/api/auth",
-  adapter: PrismaAdapter(prisma.client),
+  adapter: PrismaAdapter(prisma),
   providers: [
     EmailProvider({
       name: "Email",

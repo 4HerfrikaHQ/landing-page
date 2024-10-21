@@ -19,7 +19,7 @@ export const getAdminProps = async ({
     params,
     searchParams,
     options,
-    prisma: prisma.client,
+    prisma,
     basePath,
     apiBasePath,
     schema,
