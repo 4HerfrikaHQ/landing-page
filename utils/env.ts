@@ -9,8 +9,6 @@
  * ```
  */
 const ENVIRONMENT_DEFAULTS: Partial<EnvVariables> = {
-  AUTH_TOKEN: "",
-
   // remove these if not using Google Oauth
   GOOGLE_CLIENT_ID: "",
   GOOGLE_CLIENT_SECRET: "",
