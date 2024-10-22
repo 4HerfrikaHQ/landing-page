@@ -28,7 +28,7 @@ export const env = new Proxy<EnvVariables>(
     get(target, prop: string) {
       if (
         !(prop in target) &&
-        !(process.env.ENV !== "production" && prop in ENVIRONMENT_DEFAULTS)
+        !(process.env.NODE_ENV !== "production" && prop in ENVIRONMENT_DEFAULTS)
       ) {
         throw new Error(
           `ERROR: Missing env var: \`${prop}\`. Please check .env`
