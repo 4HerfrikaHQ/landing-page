@@ -15,7 +15,7 @@ type EnvVariables = {
 
   /** NextAuth */
   AUTH_SECRET: string;
-  SERVER_URL: string;
+  NEXTAUTH_URL: string;
 
   // untyped var, use with caution
   [key: string]: unknown;

@@ -17,7 +17,7 @@ const config: NextAuthConfig = {
     EmailProvider({
       name: "Email",
       server: env.EMAIL_SERVER,
-      from: `4Herfrika Authenticate <no-reply@${env.SERVER_URL}>`,
+      from: `4Herfrika Authenticate <no-reply@${env.NEXTAUTH_URL}>`,
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,

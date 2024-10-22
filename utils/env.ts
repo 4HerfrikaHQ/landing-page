@@ -16,7 +16,7 @@ const ENVIRONMENT_DEFAULTS: Partial<EnvVariables> = {
   AUTH_SECRET: "",
 
   // remove these if not using Next
-  SERVER_URL: "http://localhost:3000",
+  NEXTAUTH_URL: "http://localhost:3000",
 };
 
 /**
