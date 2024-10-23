@@ -7,29 +7,46 @@
   --foreground: #171717;
 
   /** Primary Pallete */
-  --primary-500: 236 0 140; /* #ec008c */
-  --primary-400: 241 0 161; /* #f100a1 */
-  --primary-300: 243 0 181; /* #f300b5 */
-  --primary-200: 245 0 201; /* #f500c9 */
-  --primary-100: 247 0 221; /* #f700dd */
+  --primary-500: 236 0 140;
+  /* #ec008c */
+  --primary-400: 241 0 161;
+  /* #f100a1 */
+  --primary-300: 243 0 181;
+  /* #f300b5 */
+  --primary-200: 245 0 201;
+  /* #f500c9 */
+  --primary-100: 247 0 221;
+  /* #f700dd */
 
   /** Secondary Pallete */
-  --secondary-500: 3 6 92; /* #03065c */
-  --secondary-400: 10 10 140; /* #0a0a8c */
-  --secondary-300: 15 15 192; /* #0f0fc0 */
-  --secondary-200: 20 20 244; /* #1414f4 */
-  --secondary-100: 25 25 249; /* #1919f9 */
+  --secondary-500: 3 6 92;
+  /* #03065c */
+  --secondary-400: 10 10 140;
+  /* #0a0a8c */
+  --secondary-300: 15 15 192;
+  /* #0f0fc0 */
+  --secondary-200: 20 20 244;
+  /* #1414f4 */
+  --secondary-100: 25 25 249;
+  /* #1919f9 */
 
   /** Neutrals */
-  --neutral-500: 242 242 242; /* #f2f2f2 */
-  --neutral-400: 245 245 245; /* #f5f5f5 */
-  --neutral-300: 247 247 247; /* #f7f7f7 */
-  --neutral-200: 249 249 249; /* #f9f9f9 */
-  --neutral-100: 252 252 252; /* #fcfcfc */
+  --neutral-500: 242 242 242;
+  /* #f2f2f2 */
+  --neutral-400: 245 245 245;
+  /* #f5f5f5 */
+  --neutral-300: 247 247 247;
+  /* #f7f7f7 */
+  --neutral-200: 249 249 249;
+  /* #f9f9f9 */
+  --neutral-100: 252 252 252;
+  /* #fcfcfc */
 
   /* Gray */
-  --gray-400: 51 51 51; /* #333333 */
-  --gray-300: 85 85 85; /* #555555 */
+  --gray-400: 51 51 51;
+  /* #333333 */
+  --gray-300: 85 85 85;
+  /* #555555 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,6 +70,7 @@ a[data-active="true"] {
 a:hover {
   text-decoration: underline;
 }
+
 
 @layer utilities {
   .text-balance {
