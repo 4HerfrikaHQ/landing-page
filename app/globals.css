@@ -71,7 +71,6 @@ a:hover {
   text-decoration: underline;
 }
 
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
