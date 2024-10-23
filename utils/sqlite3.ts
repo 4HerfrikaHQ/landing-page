@@ -30,7 +30,7 @@ class AlaSQLQueryable implements Queryable {
 
     return ok(
       ioResult
-        .map(({ value }) => {
+        .map(({}) => {
           //   const columnTypes = getColumnTypes(declaredColumnTypes, rows);
 
           return {
@@ -49,7 +49,7 @@ class AlaSQLQueryable implements Queryable {
    * Note: Queryable expects a u64, but napi.rs only supports u32.
    */
   async executeRaw(query: Query): Promise<Result<number>> {
-    const tag = "[js::execute_raw]";
+    // const tag = "[js::execute_raw]";
 
     return ok(this.performIO(query).length);
   }
@@ -106,7 +106,7 @@ class AlaSQLTransactionContext extends AlaSQLQueryable
 }
 
 export class AlaSQLAdapter extends AlaSQLQueryable implements DriverAdapter {
-  constructor(database: string) {
+  constructor(protected readonly database: string) {
     super();
   }
 
