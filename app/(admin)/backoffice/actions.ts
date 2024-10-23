@@ -4,7 +4,7 @@ import type { AdminComponentProps, PageProps } from "@premieroctet/next-admin";
 import { getNextAdminProps } from "@premieroctet/next-admin/appRouter";
 import prisma from "@/utils/prisma";
 import schema from "@/prisma/json-schema/json-schema.json";
-import { options, apiBasePath, basePath } from "./options";
+import { getOptions, apiBasePath, basePath } from "./options";
 import { auth } from "../api/auth/config";
 
 export const getAdminProps = async ({
@@ -18,7 +18,7 @@ export const getAdminProps = async ({
   const props = await getNextAdminProps({
     params,
     searchParams,
-    options,
+    options: await getOptions(),
     prisma,
     basePath,
     apiBasePath,

@@ -12,7 +12,7 @@ export default async function Admin({
   searchParams,
 }: Readonly<PageProps>) {
   const { session, ...props } = await getAdminProps({
-    params: params.all,
+    params: params.nextadmin,
     searchParams,
   });
   return (
