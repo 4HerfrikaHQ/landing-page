@@ -24,20 +24,20 @@ const Contact = () => {
             </h3>
             <input
               type="text"
-              className="border w-full px-3 py-2 border-gray-300 bg-transparent text-gray-300 placeholder:text-gray-300 rounded-md"
+              className="border w-full px-3 py-2 border-gray-300/50 bg-transparent text-gray-300 placeholder:text-gray-300 rounded"
               placeholder="Name"
             />
             <input
               type="email"
               name=""
               id=" "
-              className="border w-full px-3 my-7 py-2 border-gray-300 bg-transparent text-gray-300 placeholder:text-gray-300 rounded-md"
+              className="border w-full px-3 my-7 py-2 border-gray-300/50 bg-transparent text-gray-300 placeholder:text-gray-300 rounded"
               placeholder="Email Address"
             />
             <textarea
               name=""
               id=""
-              className="border w-full px-3 py-2 border-gray-300 bg-transparent text-gray-300 placeholder:text-gray-300 rounded-md"
+              className="border w-full px-3 py-2 h-32 border-gray-300/50 bg-transparent text-gray-300 placeholder:text-gray-300 rounded"
               placeholder="Your Message"
             />
             <button

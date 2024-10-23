@@ -5,7 +5,7 @@ export const basePath = "/backoffice";
 export const apiBasePath = "/api/admin";
 
 export const options: NextAdminOptions = {
-  title: "4Herfrika",
+  title: "💬 4Herfrika",
   model: {
     /* Your model configuration here */
   },
@@ -24,8 +24,24 @@ export const options: NextAdminOptions = {
   sidebar: {
     groups: [
       {
-        title: "Users",
+        title: "Blog Posts",
+        models: ["Post"],
+      },
+      {
+        title: "Career Mentors",
+        models: ["Mentor"],
+      },
+      {
+        title: "Contact Messages",
+        models: ["Contact"],
+      },
+      {
+        title: "Manage Admins",
         models: ["User"],
+      },
+      {
+        title: "Manage Admin Roles",
+        models: ["Role"],
       },
     ],
   },

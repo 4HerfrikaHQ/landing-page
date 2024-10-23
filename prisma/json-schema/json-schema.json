@@ -1,6 +1,26 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "Role": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -15,17 +35,126 @@
             "string",
             "null"
           ]
+        },
+        "picture": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Post"
+          }
+        },
+        "role": {
+          "$ref": "#/definitions/Role"
         }
       },
       "required": [
         "email"
       ]
+    },
+    "Post": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "published": {
+          "type": "boolean",
+          "default": false
+        },
+        "author": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "title",
+        "content",
+        "authorId"
+      ]
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "message"
+      ]
+    },
+    "Mentor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "picture": {
+          "type": "string"
+        },
+        "links": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "role",
+        "bio",
+        "picture",
+        "links"
+      ]
     }
   },
   "type": "object",
   "properties": {
+    "role": {
+      "$ref": "#/definitions/Role"
+    },
     "user": {
       "$ref": "#/definitions/User"
+    },
+    "post": {
+      "$ref": "#/definitions/Post"
+    },
+    "contact": {
+      "$ref": "#/definitions/Contact"
+    },
+    "mentor": {
+      "$ref": "#/definitions/Mentor"
     }
   }
 }
