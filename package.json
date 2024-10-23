@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate": "prisma generate",
-    "migrate": "mv dev.db prisma/dev.db && prisma migrate dev --skip-generate && yarn generate && mv prisma/dev.db dev.db",
+    "migrate": "prisma migrate dev --skip-generate && yarn generate",
     "postinstall": "yarn generate"
   },
   "dependencies": {
