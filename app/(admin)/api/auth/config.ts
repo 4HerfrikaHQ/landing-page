@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import EmailProvider from "next-auth/providers/sendgrid";
+import EmailProvider from "next-auth/providers/resend";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "@/utils/env";
 import prisma from "@/utils/prisma";
@@ -16,8 +16,8 @@ const config: NextAuthConfig = {
   providers: [
     EmailProvider({
       name: "Email",
-      server: env.EMAIL_SERVER,
-      from: `4Herfrika Authenticate <no-reply@${env.NEXTAUTH_URL}>`,
+      apiKey: env.RESEND_API_KEY,
+      from: "4Herfrika Authenticate <no-reply@4herfrika.org>",
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,

@@ -13,6 +13,7 @@ const ENVIRONMENT_DEFAULTS: Partial<EnvVariables> = {
   GOOGLE_CLIENT_ID: "",
   GOOGLE_CLIENT_SECRET: "",
   EMAIL_SERVER: "",
+  RESEND_API_KEY: "",
   AUTH_SECRET: "",
 
   // remove these if not using Next

@@ -8,10 +8,11 @@ type EnvVariables = {
   AUTH_TOKEN: string;
 
   /** Google Oauth */
-  GOOGLE_CLIENT_ID: string;
-  GOOGLE_CLIENT_SECRET: string;
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
 
-  EMAIL_SERVER: string;
+  EMAIL_SERVER?: string;
+  RESEND_API_KEY: string;
 
   /** NextAuth */
   AUTH_SECRET: string;
