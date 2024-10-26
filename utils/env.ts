@@ -12,7 +12,8 @@ const ENVIRONMENT_DEFAULTS: Partial<EnvVariables> = {
   // remove these if not using Google Oauth
   GOOGLE_CLIENT_ID: "",
   GOOGLE_CLIENT_SECRET: "",
-  EMAIL_SERVER: "",
+
+  ADMIN_EMAIL: "admin@4herfrika.org",
   RESEND_API_KEY: "",
   AUTH_SECRET: "",
 

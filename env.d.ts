@@ -11,8 +11,15 @@ type EnvVariables = {
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
 
-  EMAIL_SERVER?: string;
+  // email related config
   RESEND_API_KEY: string;
+  /**
+   * Super admin email
+   *
+   * Used primarily to access the bacloffice
+   * @defaults admin@4herfrika.org on local
+   */
+  ADMIN_EMAIL: string;
 
   /** NextAuth */
   AUTH_SECRET: string;
