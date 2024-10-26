@@ -54,8 +54,10 @@ export const getAdminProps = async ({
     user: session?.user
       ? {
           data: {
-            name: session.user.name!,
-            picture: session.user.image! ?? undefined,
+            name: session.user.name || session.user.email!,
+            picture:
+              session.user.image! ||
+              `https://www.gravatar.com/avatar/${session.user.email}&d=wavatar`,
           },
           logout: "/api/auth/logout",
         }

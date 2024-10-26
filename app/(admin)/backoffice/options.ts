@@ -177,7 +177,7 @@ export enum AdminRole {
 }
 
 export const getOptions = async (): Promise<
-  NextAdminOptions & { isSuperAdmin?: true; session?: Session }
+  NextAdminOptions & { isSuperAdmin?: true; session?: Session | null }
 > => {
   const session = await auth();
   if (session) {
@@ -221,5 +221,5 @@ export const getOptions = async (): Promise<
       } catch {}
     }
   }
-  return { ...options };
+  return { ...options, session };
 };
