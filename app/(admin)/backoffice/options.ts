@@ -214,9 +214,11 @@ export const getOptions = async (): Promise<
                   display: ["email", "name", "image", "roleId"],
                   ...options.model?.User?.edit,
                   fields: {
-                    ...options.model?.User?.edit?.fields,
+                    image: {
+                      format: "file",
+                    },
                     roleId: {
-                      format: "updown",
+                      // format: "updown",
                       input: createElement(
                         "select",
                         {

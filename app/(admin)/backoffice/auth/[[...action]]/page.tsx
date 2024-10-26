@@ -2,14 +2,17 @@ import { redirect } from "next/navigation";
 import { PageProps } from "@premieroctet/next-admin";
 import prisma from "@/utils/prisma";
 import { Logo } from "@/components/Logo";
-import { auth, signIn } from "../../../api/auth/config";
+import { auth, signIn, signOut } from "../../../api/auth/config";
 import { EmailSubmitButton } from "../components";
 import Link from "next/link";
 import { env } from "@/utils/env";
 
 type PageTypes = "check-email" | "error";
 
-const handleSubmit = async (formData: FormData) => {
+const handleSubmit = async (
+  formData: FormData,
+  searchParams?: PageProps["searchParams"]
+) => {
   "use server";
   let pageType: PageTypes = "check-email";
 
@@ -20,7 +23,11 @@ const handleSubmit = async (formData: FormData) => {
       select: { id: true },
     });
     if (user || email === env.ADMIN_EMAIL) {
-      await signIn("resend", { email, redirect: false });
+      await signIn(
+        "resend",
+        { email, redirect: false },
+        new URLSearchParams(searchParams as Record<string, string>)
+      );
     } else {
       console.error("SignIn Error::", "User not found");
       pageType = "error";
@@ -30,12 +37,17 @@ const handleSubmit = async (formData: FormData) => {
     pageType = "error";
   }
 
-  redirect(`/backoffice/auth/${pageType}`);
+  redirect(`/backoffice/auth?action=${pageType}`);
 };
 
-function renderAuth({ params, searchParams }: PageProps) {
-  const type = params?.type?.[0] as PageTypes;
-  switch (type) {
+const signOutUser = async () => {
+  "use server";
+  await signOut({ redirectTo: "/backoffice/auth" });
+};
+
+function renderAuth({ searchParams }: PageProps) {
+  console.log(searchParams);
+  switch (searchParams?.action) {
     case "check-email":
       return (
         <div
@@ -153,6 +165,10 @@ function renderAuth({ params, searchParams }: PageProps) {
 }
 
 export default async function AuthPage(props: PageProps) {
+  if (["signout"].includes(props.params?.type?.[0])) {
+    await signOutUser();
+    return <></>;
+  }
   const session = await auth();
   if (session) {
     redirect("/backoffice");
@@ -161,14 +177,17 @@ export default async function AuthPage(props: PageProps) {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
       <form
         className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-md"
-        action={handleSubmit}
+        action={async (formData) => {
+          "use server";
+          await handleSubmit(formData, props.searchParams);
+        }}
       >
         <div className="flex flex-col p-6 space-y-1">
           <h3 className="flex justify-center">
             <Logo />
           </h3>
         </div>
-        {renderAuth(props)}
+        {renderAuth({ ...props })}
       </form>
     </div>
   );
