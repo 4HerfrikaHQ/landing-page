@@ -5,6 +5,7 @@ import { getNextAdminProps } from "@premieroctet/next-admin/appRouter";
 import prisma from "@/utils/prisma";
 import schema from "@/prisma/json-schema/json-schema.json";
 import { getOptions, apiBasePath, basePath } from "./options";
+import { signOut } from "../api/auth/config";
 
 const superAdminResources: Partial<Prisma.ModelName>[] = [
   "User",
@@ -59,7 +60,7 @@ export const getAdminProps = async ({
               session.user.image! ||
               `https://www.gravatar.com/avatar/${session.user.email}&d=wavatar`,
           },
-          logout: "/api/auth/logout",
+          logout: signOut,
         }
       : undefined,
   };
