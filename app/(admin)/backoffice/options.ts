@@ -195,6 +195,53 @@ export const getOptions = async (): Promise<
                     "sessions",
                     "posts",
                   ],
+                  fields: {
+                    roleId: {
+                      formatter(roleId) {
+                        return roleId === AdminRole.Admin
+                          ? "Admin"
+                          : "Super Admin";
+                      },
+                    },
+                    createdAt: {
+                      formatter(createdAt) {
+                        return timeSince(createdAt);
+                      },
+                    },
+                  },
+                },
+                edit: {
+                  display: ["email", "name", "image", "roleId"],
+                  ...options.model?.User?.edit,
+                  fields: {
+                    ...options.model?.User?.edit?.fields,
+                    roleId: {
+                      format: "updown",
+                      input: createElement(
+                        "select",
+                        {
+                          name: "roleId",
+                          className:
+                            "dark:bg-dark-nextadmin-background-subtle text-nextadmin-content-inverted dark:text-dark-nextadmin-content-inverted ring-nextadmin-border-default focus:ring-nextadmin-brand-default dark:focus:ring-dark-nextadmin-brand-default dark:ring-dark-nextadmin-border-strong block w-full rounded-md border-0 px-2 py-1.5 text-sm shadow-sm ring-1 ring-inset transition-colors duration-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:leading-6",
+                        },
+
+                        createElement(
+                          "option",
+                          {
+                            value: AdminRole.Admin,
+                          },
+                          "Admin"
+                        ),
+                        createElement(
+                          "option",
+                          {
+                            value: AdminRole.SuperAdmin,
+                          },
+                          "Super Admin"
+                        )
+                      ),
+                    },
+                  },
                 },
               },
             },
