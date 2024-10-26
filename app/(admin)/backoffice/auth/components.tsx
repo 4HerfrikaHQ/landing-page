@@ -1,18 +1,8 @@
 "use client";
-import { useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import toast from "react-hot-toast";
 
 export function EmailSubmitButton() {
-  const { data, pending } = useFormStatus();
-
-  useEffect(() => {
-    if (data && !pending) {
-      toast.success("Check your email for the magic link!", {
-        icon: "📬",
-      });
-    }
-  }, [data, pending]);
+  const { pending } = useFormStatus();
 
   return (
     <button
