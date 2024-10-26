@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { PageProps } from "@premieroctet/next-admin";
 import prisma from "@/utils/prisma";
 import { Logo } from "@/components/Logo";
-import { signIn } from "../../../api/auth/config";
+import { auth, signIn } from "../../../api/auth/config";
 import { EmailSubmitButton } from "../components";
 import Link from "next/link";
 import { env } from "@/utils/env";
@@ -33,7 +33,7 @@ const handleSubmit = async (formData: FormData) => {
   redirect(`/backoffice/auth/${pageType}`);
 };
 
-function renderAuth({ params }: PageProps) {
+function renderAuth({ params, searchParams }: PageProps) {
   const type = params?.type?.[0] as PageTypes;
   switch (type) {
     case "check-email":
@@ -63,7 +63,9 @@ function renderAuth({ params }: PageProps) {
         >
           <h2 className="text-lg font-semibold">An error occurred</h2>
           <p className="text-sm">
-            We couldn&apos;t send you a magic link. Please try again.
+            {searchParams?.error
+              ? `A server side ${searchParams?.error} occurred.`
+              : "We couldn't send you a magic link. Please try again."}
           </p>
           <Link
             href="/backoffice/auth"
@@ -150,7 +152,11 @@ function renderAuth({ params }: PageProps) {
   }
 }
 
-export default function AuthPage(props: PageProps) {
+export default async function AuthPage(props: PageProps) {
+  const session = await auth();
+  if (session) {
+    redirect("/backoffice");
+  }
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
       <form

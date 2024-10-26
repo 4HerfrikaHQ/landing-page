@@ -17,12 +17,6 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Role {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  users User[]
-}
-
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -31,8 +25,7 @@ model User {
   image         String?
 
   posts Post[]
-  role  Role   @relation(fields: [roleId], references: [id])
-  roleId Int   @default(1)
+  roleId Int   @default(0)
 
   accounts      Account[]
   sessions      Session[]
@@ -103,10 +96,12 @@ model Authenticator {
 model Post {
   id        Int     @id @default(autoincrement())
   title     String
-  content   String
-  published Boolean @default(false)
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
+  content   String
+  published Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Contact {
@@ -114,14 +109,17 @@ model Contact {
   name    String
   email   String
   message String
+  createdAt DateTime @default(now())
 }
 
 model Mentor {
   id      Int    @id @default(autoincrement())
+  picture String
   name    String
   email   String
   role    String
   bio     String
-  picture String
   links   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -1,26 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "Role": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        },
-        "users": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/User"
-          }
-        }
-      },
-      "required": [
-        "name"
-      ]
-    },
     "User": {
       "type": "object",
       "properties": {
@@ -58,8 +38,9 @@
             "$ref": "#/definitions/Post"
           }
         },
-        "role": {
-          "$ref": "#/definitions/Role"
+        "roleId": {
+          "type": "integer",
+          "default": 0
         },
         "accounts": {
           "type": "array",
@@ -271,6 +252,9 @@
         "title": {
           "type": "string"
         },
+        "author": {
+          "$ref": "#/definitions/User"
+        },
         "content": {
           "type": "string"
         },
@@ -278,14 +262,20 @@
           "type": "boolean",
           "default": false
         },
-        "author": {
-          "$ref": "#/definitions/User"
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
       "required": [
         "title",
+        "authorId",
         "content",
-        "authorId"
+        "updatedAt"
       ]
     },
     "Contact": {
@@ -302,6 +292,10 @@
         },
         "message": {
           "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
       "required": [
@@ -316,6 +310,9 @@
         "id": {
           "type": "integer"
         },
+        "picture": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -328,28 +325,31 @@
         "bio": {
           "type": "string"
         },
-        "picture": {
-          "type": "string"
-        },
         "links": {
           "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
       "required": [
+        "picture",
         "name",
         "email",
         "role",
         "bio",
-        "picture",
-        "links"
+        "links",
+        "updatedAt"
       ]
     }
   },
   "type": "object",
   "properties": {
-    "role": {
-      "$ref": "#/definitions/Role"
-    },
     "user": {
       "$ref": "#/definitions/User"
     },
