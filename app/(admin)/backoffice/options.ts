@@ -154,16 +154,8 @@ const superAdminSidebar: SidebarGroup[] = [
     models: ["User"],
   },
   {
-    title: "Manage Authenticators",
-    models: ["Authenticator"],
-  },
-  {
     title: "Manage Accounts",
     models: ["Account"],
-  },
-  {
-    title: "Manage Verification Tokens",
-    models: ["VerificationToken"],
   },
   {
     title: "Manage Sessions",
@@ -195,7 +187,6 @@ export const getOptions = async (): Promise<
               ...options.model,
               User: {
                 toString: (item) => item.email ?? item.id,
-                permissions: ["delete", "edit"],
                 list: {
                   display: [
                     "email",
