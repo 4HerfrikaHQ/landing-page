@@ -46,7 +46,6 @@ const signOutUser = async () => {
 };
 
 function renderAuth({ searchParams }: PageProps) {
-  console.log(searchParams);
   switch (searchParams?.action) {
     case "check-email":
       return (
@@ -165,7 +164,7 @@ function renderAuth({ searchParams }: PageProps) {
 }
 
 export default async function AuthPage(props: PageProps) {
-  if (["signout"].includes(props.params?.type?.[0])) {
+  if (["signout"].includes(props.searchParams?.action as string)) {
     await signOutUser();
     return <></>;
   }

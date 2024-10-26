@@ -59,7 +59,7 @@ export const getAdminProps = async ({
               session.user.image! ||
               `https://www.gravatar.com/avatar/${session.user.email}&d=wavatar`,
           },
-          logout: "/backoffice/auth/signout",
+          logout: "/backoffice/auth?action=signout",
         }
       : undefined,
   };
