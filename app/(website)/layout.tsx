@@ -10,7 +10,7 @@ export default function WebLayout({
 }>) {
   return (
     <>
-      <div className="bg-white">
+      <div className="">
         <header className="sticky inset-x-0 top-0 z-50">
           <nav
             className="flex items-center justify-between p-6 lg:px-8"
@@ -32,7 +32,7 @@ export default function WebLayout({
               <NavbarLink href="/">Career Corner</NavbarLink>
             </div>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-8">
-              <NavbarLink href="/">Contact Us</NavbarLink>
+              <NavbarLink href="/contact-us">Contact Us</NavbarLink>
               <a
                 href="/join-us" // TODO: replace with google form link
                 className="text-sm leading-6 text-white bg-primary-500 hover:bg-primary-400 py-2 px-4 rounded-full"
@@ -88,7 +88,7 @@ export default function WebLayout({
                       Career Corner
                     </NavbarLink>
                     <NavbarLink
-                      href="/"
+                      href="/contact-us"
                       className="-mx-3 block px-3 py-2 underline"
                     >
                       Contact Us

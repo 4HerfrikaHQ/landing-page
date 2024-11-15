@@ -1,39 +1,37 @@
-"use client"
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import MainImg2 from "@/public/assets/about/vision.jpg";
+import MainImg2 from "@/public/assets/about/hero.webp";
+
+const faqData = [
+  {
+    question: "Who can join 4Herfrika?",
+    answer: "",
+  },
+  {
+    question: "How does 4Herfrika operate?",
+    answer:
+      "We operate through a campus structure, with bite-sized communities in tertiary institutions across Africa. Each campus community functions independently but is connected to the broader 4Herfrika network, enabling collaboration and resource sharing.",
+  },
+  {
+    question: "What opportunities does 4Herfrika provide for its members?",
+    answer:
+      "Members have access to mentorship from experienced professionals, leadership development programs, networking events, and opportunities to participate in or lead community impact projects. You will also develop valuable skills such as communication, teamwork, and project management.",
+  },
+  {
+    question: "How do I start a 4Herfrika chapter at my campus?",
+    answer:
+      "If 4Herfrika doesn’t already have a chapter at your campus, you can apply to start one. Reach out to us via our contact form, and we will provide guidance on the requirements and process for launching a new chapter.",
+  },
+  {
+    question: " Are there any fees to join 4Herfrika?",
+    answer:
+      "No, 4Herfrika membership is free. Our goal is to make mentorship and leadership opportunities accessible to as many young women as possible.",
+  },
+];
 
 export default function About() {
-  const faqData = [
-    {
-      question: "Who can join 4Herfrika?",
-      answer:
-        "",
-    },
-    {
-      question: "How does 4Herfrika operate?",
-      answer:
-        "We operate through a campus structure, with bite-sized communities in tertiary institutions across Africa. Each campus community functions independently but is connected to the broader 4Herfrika network, enabling collaboration and resource sharing.",
-    },
-    {
-      question: "What opportunities does 4Herfrika provide for its members?",
-      answer:
-        "Members have access to mentorship from experienced professionals, leadership development programs, networking events, and opportunities to participate in or lead community impact projects. You will also develop valuable skills such as communication, teamwork, and project management.",
-    },
-    {
-      question: "How do I start a 4Herfrika chapter at my campus?",
-      answer:
-        "If 4Herfrika doesn’t already have a chapter at your campus, you can apply to start one. Reach out to us via our contact form, and we will provide guidance on the requirements and process for launching a new chapter.",
-    },
-    {
-      question: " Are there any fees to join 4Herfrika?",
-      answer:
-      "No, 4Herfrika membership is free. Our goal is to make mentorship and leadership opportunities accessible to as many young women as possible."
-    },
-    
-  ];
-
   // const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   // const toggleFAQ = (index: number) => {
@@ -44,7 +42,7 @@ export default function About() {
 
   const toggleFAQ = (index: number) => {
     if (openIndices.includes(index)) {
-      setOpenIndices(openIndices.filter(i => i !== index));
+      setOpenIndices(openIndices.filter((i) => i !== index));
     } else {
       setOpenIndices([...openIndices, index]);
     }
@@ -52,7 +50,7 @@ export default function About() {
 
   return (
     <section>
-      <div className="bg-[url('/assets/about/hero.jpg')] bg-no-repeat bg-cover bg-[10%_35%]">
+      <div className="bg-[url('/assets/about/hero.webp')] bg-no-repeat bg-cover bg-[10%_35%]">
         <div className="flex flex-col items-center gap-12 justify-center w-full h-screen bg-overlay-gradient text-center text-white">
           <h1 className="text-6xl">About 4HerFrika</h1>
           <p className="capitalize text-xl">
@@ -62,13 +60,13 @@ export default function About() {
           <div className="flex gap-2 text-sm font-medium">
             <Link
               href="/"
-              className="py-2 px-6 border border-white rounded-2xl bg-transparent hover:border-transparent hover:bg-primary-500 hover:no-underline"
+              className="py-2 px-6 border border-white rounded-full bg-transparent hover:border-transparent hover:bg-primary-500 hover:no-underline"
             >
               Make an Impact
             </Link>
             <Link
               href="/"
-              className="py-2 px-6 border border-transparent rounded-2xl bg-primary-500 hover:bg-transparent hover:border-primary-500 hover:no-underline"
+              className="py-2 px-6 border border-transparent rounded-full bg-primary-500 hover:bg-transparent hover:border-primary-500 hover:no-underline"
             >
               Contact Us
             </Link>
@@ -118,8 +116,8 @@ export default function About() {
                   </h4>
                   <p className="text-xl text-gray-300 text-justify">
                     We envision 4herfrika in all tertiary <br /> institutions
-                    across sub-Saharan Africa and to have impacted 2 million women
-                    and girls with tech and entrepreneurship by 2030.
+                    across sub-Saharan Africa and to have impacted 2 million
+                    women and girls with tech and entrepreneurship by 2030.
                   </p>
                 </div>
               </div>
@@ -128,7 +126,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="bg-pink-300 flex items-center px-14 py-20 w-full">
+      <div className="bg-primary-500/30 flex items-center px-14 py-20 w-full">
         <div className="flex flex-col gap-10 justify-center items-center w-2/6">
           <h1 className="text-5xl text-secondary-500 font-bold">Core Values</h1>
           <Link
@@ -204,11 +202,16 @@ export default function About() {
           {faqData.map((faq, index) => (
             <div key={index} className="mb-4">
               <button
-                className={`w-full flex justify-between items-center py-4 px-8 rounded-md shadow-md focus:outline-none  ${openIndices.includes(index) ? 'bg-primary-500 text-white' : 'bg-white text-black'
-                  }`}
+                className={`w-full flex justify-between items-center py-4 px-8 rounded-md shadow-md focus:outline-none  ${
+                  openIndices.includes(index)
+                    ? "bg-primary-500 text-white"
+                    : "bg-white text-black"
+                }`}
                 onClick={() => toggleFAQ(index)}
               >
-                <span className="text-lg font-medium w-full text-left">{faq.question}</span>
+                <span className="text-lg font-medium w-full text-left">
+                  {faq.question}
+                </span>
                 <span className="text-lg">
                   {openIndices.includes(index) ? (
                     <svg
@@ -218,7 +221,12 @@ export default function About() {
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 15l7-7 7 7"
+                      />
                     </svg>
                   ) : (
                     <svg
@@ -228,13 +236,18 @@ export default function About() {
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   )}
                 </span>
               </button>
               {openIndices.includes(index) && (
-                <div className="py-4 px-8 bg-pink-300 rounded-md mt-2 w-full">
+                <div className="py-4 px-8 bg-primary-300 rounded-md mt-2 w-full">
                   <p className="text-white font-bold">{faq.question}</p>
                   <p className="text-white mt-2">{faq.answer}</p>
                 </div>

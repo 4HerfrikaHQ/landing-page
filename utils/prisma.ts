@@ -1,13 +1,25 @@
-import { PrismaClient } from "@prisma/client/edge";
-import { PrismaClient as DevPrismaClient } from "@prisma/client";
-import { getRequestContext } from "@cloudflare/next-on-pages";
-import { PrismaD1 } from "@prisma/adapter-d1";
+import { PrismaClient } from "@prisma/client";
+import { PrismaLibSQL } from "@prisma/adapter-libsql";
+import { createClient } from "@libsql/client";
+import { env } from "./env";
+import { AlaSQLAdapter } from "./sqlite3";
 
-export function generatePrismaClient(): PrismaClient {
-  if (process.env.ENV === "production") {
-    const { env } = getRequestContext();
-    const adapter = new PrismaD1(env.DB);
-    return new PrismaClient({ adapter });
-  }
-  return new DevPrismaClient();
-}
+const prismaClient = {
+  get client() {
+    try {
+      const client = createClient({
+        url: `${env.DATABASE_URL}`,
+        authToken: `${env.AUTH_TOKEN}`,
+      });
+      return new PrismaClient({
+        adapter: new PrismaLibSQL(client),
+      });
+    } catch {
+      return new PrismaClient({
+        adapter: new AlaSQLAdapter(":memory:"),
+      });
+    }
+  },
+};
+
+export default prismaClient.client;

@@ -2,18 +2,21 @@
 const nextConfig = {
   experimental: {
     typedRoutes: true,
-    serverComponentsExternalPackages: ["@premieroctet/next-admin"],
+    webpackBuildWorker: true,
   },
-  webpack: (config, { nextRuntime }) => {
-    // Alias prisma client imports to edge when nextRuntime is "edge"
-    if (nextRuntime === "edge") {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        // "@prisma/client/runtime/library": "@prisma/client/runtime/edge",
-        // "@prisma/client": "@prisma/client/edge",
-      };
+  eslint: {
+    ignoreDuringBuilds: process.env.NODE_ENV === "production",
+  },
+  typescript: {
+    ignoreBuildErrors: process.env.NODE_ENV === "production",
+  },
+  productionBrowserSourceMaps: false,
+  webpack: (config, { dev }) => {
+    if (config.cache && !dev) {
+      config.cache = Object.freeze({
+        type: "memory",
+      });
     }
-
     return config;
   },
 };
