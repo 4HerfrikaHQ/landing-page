@@ -1,7 +1,8 @@
-import "../globals.css";
+import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { NavbarLink } from "@/components/NavbarLink";
 import { MenubarButton } from "@/components/MenubarButton";
+import "../globals.css";
 
 export default function WebLayout({
   children,
@@ -29,16 +30,16 @@ export default function WebLayout({
               <NavbarLink href="/">Home</NavbarLink>
               <NavbarLink href="/about">About</NavbarLink>
               <NavbarLink href="/">Blog</NavbarLink>
-              <NavbarLink href="/">Career Corner</NavbarLink>
+              <NavbarLink href="/careers-corner">Careers Corner</NavbarLink>
             </div>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-8">
               <NavbarLink href="/contact-us">Contact Us</NavbarLink>
-              <a
-                href="/join-us" // TODO: replace with google form link
+              <Link
+                href="/join-us"
                 className="text-sm leading-6 text-white bg-primary-500 hover:bg-primary-400 py-2 px-4 rounded-full"
               >
-                Register
-              </a>
+                Join Us
+              </Link>
             </div>
           </nav>
           <dialog id="menu" className="lg:hidden" aria-modal="true">
@@ -84,7 +85,10 @@ export default function WebLayout({
                     <NavbarLink href="/" className="-mx-3 block px-3 py-2">
                       Blog
                     </NavbarLink>
-                    <NavbarLink href="/" className="-mx-3 block px-3 py-2">
+                    <NavbarLink
+                      href="/careers-corner"
+                      className="-mx-3 block px-3 py-2"
+                    >
                       Career Corner
                     </NavbarLink>
                     <NavbarLink
@@ -117,21 +121,21 @@ export default function WebLayout({
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="/"
                   >
                     Home
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="/about"
                   >
                     About Us
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
@@ -152,12 +156,12 @@ export default function WebLayout({
                   </a>
                 </li>
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
-                    href="/"
+                    href="/careers-corner"
                   >
                     Become an Ambassador
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -167,30 +171,30 @@ export default function WebLayout({
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="/"
                   >
                     FAQs
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="/"
                   >
                     Blog
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
-                    href="/"
+                    href="/contact-us"
                   >
                     Support
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -268,9 +272,12 @@ export default function WebLayout({
 
           <div className="mt-16 pt-6 flex flex-col justify-center items-center gap-4 sm:flex-row sm:justify-between">
             <p className="flex flex-row items-center gap-4 text-center text-sm text-gray-200 sm:text-left">
-              <span className="bg-white rounded-md px-2 py-1 w-32">
+              <Link
+                href="/"
+                className="bg-white hover:bg-white/90 rounded-md px-2 py-1 w-32"
+              >
                 <Logo className="w-28" />
-              </span>{" "}
+              </Link>{" "}
               &copy; {new Date().getFullYear()}.
             </p>
 

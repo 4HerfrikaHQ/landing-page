@@ -1,42 +1,7 @@
+import { TestimonialCard } from "@/components/TestimonialCard";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRightLong, FaStar } from "react-icons/fa6";
-
-function TestimonialCard() {
-  return (
-    <div className="w-full h-full bg-primary-500/60 rounded-xl gap-2 sm:gap-0 pr-4 py-6 flex sm:items-center sm:flex-row flex-col px-4 sm:px-1">
-      <Image
-        src={"/assets/home/hero.webp"}
-        alt="member"
-        width={700}
-        height={700}
-        className=" w-24 object-cover aspect-square rounded-full  sm:-ml-12"
-      />
-      <div className="sm:px-4">
-        <p className="font-normal text-sm sm:text-md mb-5">
-          4Herfrika has been an safe space for my growth, offering support,
-          resources, and opportunities. It’s more than just a community;
-          it&apos;s a sisterhood where women uplift and inspire each other.
-        </p>
-        <div className="flex items-center flex-wrap sm:flex-nowrap gap-5 justify-between">
-          <div>
-            <h4 className="text-xl font-medium tracking-wider">
-              Adeleke Glory
-            </h4>
-            <p className="text-sm">Student, Lautech Campus</p>
-          </div>
-          <div className="flex items-center gap-1">
-            <FaStar />
-            <FaStar />
-            <FaStar />
-            <FaStar />
-            <FaStar />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { FaArrowRightLong } from "react-icons/fa6";
 
 export default function HomePage() {
   return (
@@ -52,7 +17,7 @@ export default function HomePage() {
         />
 
         {/* Hero Section */}
-        <section className="flex items-center justify-between gap-8 w-full pt-32 px-8 mx-auto relative z-1">
+        <section className="flex items-center justify-between gap-8 w-full pt-32 md:px-8 md:mx-auto relative z-1 md:container">
           <div>
             <h1 className="text-gray-400 text-6xl font-semibold capitalize tracking-wide">
               Raising <span className="text-primary-500">World-class</span>{" "}
@@ -88,49 +53,56 @@ export default function HomePage() {
           </div>
         </section>
         {/* Metric Section */}
-        <section className="w-full h-full md:h-60 my-7 py-6 flex items-center justify-center gap-10 md:flex-row flex-col">
+        <section className="w-full h-full md:h-60 mt-7 pt-6 flex items-center justify-center md:gap-10">
           <div className="text-gray-400 mx-8">
-            <h3 className="text-5xl font-bold text-center">
-              700<span className="text-primary-500">+</span>
+            <h3 className="text-lg md:text-5xl font-bold text-center">
+              1000<span className="text-primary-500">+</span>
             </h3>
-            <p className="text-center mt-2 font-medium text-mb capitalize">
+            <p className="text-sm md:text-base text-center mt-2 font-medium capitalize">
               members
             </p>
           </div>
-          <hr className="border md:h-2/3 md:w-0 w-1/3 border-gray-400 " />
+          <hr className="border h-full md:h-2/3 w-0 border-gray-400 " />
           <div className="text-gray-400 mx-8">
-            <h3 className="text-5xl font-bold text-center">
+            <h3 className="text-lg md:text-5xl font-bold text-center">
               17<span className="text-primary-500">+</span>
             </h3>
-            <p className="text-center mt-2 font-medium text-mb capitalize">
+            <p className="text-sm md:text-base text-center mt-2 font-medium capitalize">
               campuses
             </p>
           </div>
-          <hr className="border md:h-2/3 md:w-0 w-1/3 border-gray-400 " />
+          <hr className="border h-full md:h-2/3 w-0 border-gray-400 " />
           <div className="text-gray-400 mx-8">
-            <h3 className="text-5xl font-bold text-center">
+            <h3 className="text-lg md:text-5xl font-bold text-center">
               2<span className="text-primary-500">+</span>
             </h3>
-            <p className="text-center mt-2 font-medium text-mb capitalize">
+            <p className="text-sm md:text-base text-center mt-2 font-medium capitalize">
               African countries
             </p>
           </div>
         </section>
+        <Image
+          src="/assets/community-curved-arrow.png"
+          alt=" "
+          width="100"
+          height="50"
+          className="text-center mx-auto mb-7 pb-6"
+        />
       </section>
       {/* Explore Community Section */}
       <section className=" container px-7 my-8 gap-5 grid grid-cols-1 md:grid-cols-2 items-start mx-auto">
-        <div className="px-12 md:border-none  border-l border-primary-400">
+        <div className="p-3 md:px-12 border rounded-3xl md:border-none  border-l border-primary-400">
           <Image
             src={"/assets/boss-divas.png"}
             alt="person"
             width={1030}
             height={1000}
-            className="w-32 object-cover aspect-square rounded-full"
+            className="w-10 md:w-32 object-cover aspect-square rounded-full"
           />
           <h3 className="text-gray-400 text-xl font-bold mt-5 capitalize">
             boss Divas
           </h3>
-          <p className="text-gray-300 my-3">
+          <p className="text-sm md:text-base text-gray-300 my-3">
             A sub-community that caters to young female entrepreneurs with an
             extended vision to reach young girls in marginalized communities. {" "}
           </p>
@@ -141,18 +113,18 @@ export default function HomePage() {
             Explore community <FaArrowRightLong className="text-md" />
           </Link>
         </div>
-        <div className="px-12 border-l border-primary-400 ">
+        <div className="p-3 md:px-12 border md:border-0 rounded-3xl md:rounded-none md:border-l border-primary-400 ">
           <Image
-            src={"/assets/tech-divas.png"}
+            src="/assets/tech-divas.png"
             alt="person"
             width={1000}
             height={900}
-            className="w-32 object-cover aspect-square rounded-full"
+            className="w-10 md:w-32 object-cover aspect-square rounded-full"
           />
           <h3 className="text-gray-400  text-xl font-bold mt-5 capitalize">
             Tech Divas
           </h3>
-          <p className="text-gray-300 my-3">
+          <p className="text-sm md:text-base text-gray-300 my-3">
             A sub-community that caters to women in tech with an extended vision
             to reach rural communities with digital skills.
           </p>
@@ -192,17 +164,23 @@ export default function HomePage() {
             initiatives and impact led programs.
           </p>
           <div className="flex items-center gap-5 flex-wrap">
-            <button className="border px-6 py-2 rounded-full border-primary-500 text-primary-500 text-md capitalize">
+            <Link
+              href="/" // TODO: change to blog page
+              className="border px-6 py-2 rounded-full border-primary-500 text-primary-500 text-md capitalize"
+            >
               View Projects
-            </button>
-            <button className="border px-6 py-2 rounded-full border-primary-500 text-white text-md bg-primary-500 capitalize">
-              Register{" "}
-            </button>
+            </Link>
+            <Link
+              href="/join-us"
+              className="border px-6 py-2 rounded-full border-primary-500 text-white text-md bg-primary-500 capitalize hover:bg-primary-500/80"
+            >
+              Join Us
+            </Link>
           </div>
         </div>
         <div className=" relative  h-full w-full aspect-square self-end">
           <Image
-            src={"/assets/home/ambassador.webp"}
+            src="/assets/home/ambassador.webp"
             alt="ambassadors image"
             fill
             className="object-cover rounded-xl"
