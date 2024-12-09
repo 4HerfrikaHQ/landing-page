@@ -46,5 +46,5 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.13"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.5.3"
 }
