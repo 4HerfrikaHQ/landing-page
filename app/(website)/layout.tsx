@@ -29,8 +29,8 @@ export default function WebLayout({
             <div className="hidden lg:flex lg:gap-x-12 text-gray-400">
               <NavbarLink href="/">Home</NavbarLink>
               <NavbarLink href="/about">About</NavbarLink>
-              <NavbarLink href="/">Blog</NavbarLink>
-              <NavbarLink href="/careers-corner">Careers Corner</NavbarLink>
+              <NavbarLink href="/blog">Blog</NavbarLink>
+              <NavbarLink href="/careers-corner">Career Corner</NavbarLink>
             </div>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-8">
               <NavbarLink href="/contact-us">Contact Us</NavbarLink>
@@ -46,10 +46,10 @@ export default function WebLayout({
             <div className="fixed inset-0 z-50" />
             <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-200/10">
               <div className="flex items-center justify-between">
-                <a href="/" className="-m-1.5 p-1.5">
+                <Link href="/" className="-m-1.5 p-1.5">
                   <span className="sr-only">4Herfrika</span>
                   <Logo />
-                </a>
+                </Link>
                 <form
                   method="dialog"
                   className="-m-2.5 rounded-md p-2.5 text-gray-300"
@@ -82,7 +82,7 @@ export default function WebLayout({
                     <NavbarLink href="/about" className="-mx-3 block px-3 py-2">
                       About
                     </NavbarLink>
-                    <NavbarLink href="/" className="-mx-3 block px-3 py-2">
+                    <NavbarLink href="/blog" className="-mx-3 block px-3 py-2">
                       Blog
                     </NavbarLink>
                     <NavbarLink
@@ -139,21 +139,21 @@ export default function WebLayout({
                 </li>
 
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="/"
                   >
                     Boss Divas
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="/"
                   >
                     Tech Divas
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
@@ -182,7 +182,7 @@ export default function WebLayout({
                 <li>
                   <Link
                     className="text-white transition hover:text-white/75"
-                    href="/"
+                    href="/blog"
                   >
                     Blog
                   </Link>
@@ -204,12 +204,12 @@ export default function WebLayout({
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
+                  <Link
                     className="text-white transition hover:text-white/75"
                     href="tel:+234-123-456-7890"
                   >
                     +234-123-456-7890
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
@@ -283,20 +283,20 @@ export default function WebLayout({
 
             <ul className="flex justify-center gap-6 sm:justify-start">
               <li>
-                <a
+                <Link
                   href="/"
                   className="text-white transition hover:text-primary-500/75"
                 >
                   Terms
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/"
                   className="text-white transition hover:text-primary-500/75"
                 >
                   Privacy
-                </a>
+                </Link>
               </li>
 
               <li>
