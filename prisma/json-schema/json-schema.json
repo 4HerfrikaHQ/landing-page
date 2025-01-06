@@ -346,6 +346,40 @@
         "links",
         "updatedAt"
       ]
+    },
+    "Testimonial": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "message": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pictureId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rating": {
+          "type": "integer",
+          "default": 5
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "name"
+      ]
     }
   },
   "type": "object",
@@ -373,6 +407,9 @@
     },
     "mentor": {
       "$ref": "#/definitions/Mentor"
+    },
+    "testimonial": {
+      "$ref": "#/definitions/Testimonial"
     }
   }
 }

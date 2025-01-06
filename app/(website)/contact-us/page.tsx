@@ -12,13 +12,18 @@ import {
 const Contact = () => {
   return (
     <section className="h-screen grid py-10">
-      <section className="shadow-lg   max-w-4xl h-fit container mx-auto px-7 py-10 rounded-lg">
-        <h1 className="text-primary-500 text-2xl  text-center underline underline-offset-4 capitalize font-semibold">
+      <img
+        src="/assets/contact/background.png"
+        alt="hero"
+        className="object-cover absolute top-0 w-full"
+      />
+      <section className="shadow-lg max-w-5xl container mx-auto p-16 rounded-lg bg-white z-10">
+        <h1 className="text-primary-500 text-2xl p-4 text-center underline underline-offset-4 capitalize font-semibold">
           Get in touch
         </h1>
 
-        <section className="mt-10 grid md:grid-cols-5 gap-10 grid-cols-1">
-          <form className="w-full md:col-span-3">
+        <section className="mt-10 flex gap-10">
+          <form className="w-full md:col-span-3 flex flex-col gap-3">
             <h3 className="text-md md:text-xl text-gray-400 font-semibold mb-4 tracking-wider">
               Leave us a message
             </h3>
@@ -47,7 +52,7 @@ const Contact = () => {
               Send
             </button>
           </form>
-          <div className="w-full md:col-span-2">
+          <div className="w-full md:col-span-2 flex flex-col gap-4">
             <p className="flex  text-lg items-center gap-3 text-gray-300">
               <FaLocationDot /> <span>Africa</span>
             </p>
@@ -55,9 +60,9 @@ const Contact = () => {
               <BsTelephone /> <span>09082009908</span>
             </p>
             <p className="flex  text-lg items-center gap-3 text-gray-300">
-              <FaRegEnvelope /> <span>4Herfrikaa@gmail.com</span>
+              <FaRegEnvelope /> <span>support@4herfrika.org</span>
             </p>
-            <ul className="flex items-center gap-4 text-gray-300 mt-4">
+            <ul className="flex items-center gap-6 text-gray-300 mt-4">
               <li>
                 <FaInstagram />
               </li>

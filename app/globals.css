@@ -62,6 +62,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
 a[data-active="true"] {
   color: theme("colors.primary.500");
   font-weight: theme("fontWeight.bold");
@@ -72,9 +78,8 @@ a:hover {
 }
 .faqbg {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-
+    linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 }
 @layer utilities {
   .text-balance {
