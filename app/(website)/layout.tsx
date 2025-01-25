@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Logo } from "@/components/Logo";
 import { NavbarLink } from "@/components/NavbarLink";
 import { MenubarButton } from "@/components/MenubarButton";
 import "../globals.css";
+import Logo from "./4herfrika-logo.svg"
 
 export default function WebLayout({
   children,
@@ -20,7 +20,7 @@ export default function WebLayout({
             <div className="flex lg:flex-1">
               <a href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">4Herfrika</span>
-                <Logo />
+                <Logo className="w-[90px] lg:w-[155px]" />
               </a>
             </div>
             <div className="flex lg:hidden">
@@ -206,18 +206,18 @@ export default function WebLayout({
                 <li>
                   <Link
                     className="text-white transition hover:text-white/75"
-                    href="tel:+234-123-456-7890"
+                    href="tel:+234-913-5506-626"
                   >
-                    +234-123-456-7890
+                    +234-913-5506-626
                   </Link>
                 </li>
 
                 <li>
                   <a
                     className="text-white transition hover:text-white/75"
-                    href="mailto:info@4herfrika.org"
+                    href="mailto:4herfrika@gmail.com"
                   >
-                    info@4herfrika.org
+                    4herfrika@gmail.com
                   </a>
                 </li>
               </ul>
@@ -270,15 +270,16 @@ export default function WebLayout({
             </div>
           </div>
 
-          <div className="mt-16 pt-6 flex flex-col justify-center items-center gap-4 sm:flex-row sm:justify-between">
+          <hr className="w-full bg-white opacity-25 mt-9 mb-6"/>
+
+          <div className="pt-6 flex flex-col justify-center items-center gap-4 sm:flex-row sm:justify-between">
             <p className="flex flex-row items-center gap-4 text-center text-sm text-gray-200 sm:text-left">
               <Link
                 href="/"
-                className="bg-white hover:bg-white/90 rounded-md px-2 pt-1 w-32"
+                className="bg-white hover:bg-white/90 rounded-md px-2 py-1 w-32"
               >
                 <Logo className="w-full h-fit" />
-              </Link>{" "}
-              &copy; {new Date().getFullYear()}.
+              </Link>
             </p>
 
             <ul className="flex justify-center gap-6 sm:justify-start">

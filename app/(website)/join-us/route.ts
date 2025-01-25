@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export function GET() {
-  return redirect("https://forms.gle/8Z8Z8Z8Z8Z8Z8Z8Z8");
+  return redirect("https://forms.gle/CNG5si72YtmSe4Hh6");
 }
