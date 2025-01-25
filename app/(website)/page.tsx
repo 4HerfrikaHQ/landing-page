@@ -114,15 +114,16 @@ export default async function HomePage() {
         />
       </section>
       {/* Explore Community Section */}
-      <section className="px-5 lg:px-0 container my-6 lg:my-8 gap-5 grid md:grid-cols-2 items-start mx-auto">
+      <section className="px-5 lg:px-0 container my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center mx-auto">
         <Community image="/assets/boss-divas.png" name="Boss Divas" description="A sub-community that caters to young female entrepreneurs with an extended vision to reach young girls in marginalized communities."/>
+        <div className='hidden lg:block h-[240px] w-[2px] bg-primary-500'/>
         <Community image="/assets/tech-divas.png" name="Tech Divas" description="A sub-community that caters to women in tech with an extended vision to reach rural communities with digital skills."/>
       </section>
       {/* Words of the street */}
       {testimonials.length && (
         <section className="lg:bg-neutral-400 lg:px-7 pt-6 lg:pt-20 pb-8 lg:pb-[90px] relative">
-          <AfricaLogo className="w-24 lg:w-2xs absolute -right-16 lg:-right-8 top-24 lg:top-8"/>
-          <AfricaLogo className="hidden lg:block absolute left-4 bottom-0"/>
+          <AfricaLogo className="w-24 lg:w-[270px] absolute -right-16 lg:-right-8 top-24 lg:top-8"/>
+          <AfricaLogo className="hidden lg:w-[270px] lg:block absolute left-4 bottom-0"/>
           <h1 className="text-gray-400 text-center text-xl sm:text-[67px] font-semibold mb-1 lg:mb-8">
             <span className="text-primary-500">Words</span> on The{" "}
             <span className="text-primary-500">Street</span>
