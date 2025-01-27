@@ -114,10 +114,11 @@ export default async function HomePage() {
         />
       </section>
       {/* Explore Community Section */}
-      <section className="px-5 lg:px-0 container my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center mx-auto">
+      <section className="px-5 lg:px-0 container my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center mx-auto relative">
         <Community image="/assets/boss-divas.png" name="Boss Divas" description="A sub-community that caters to young female entrepreneurs with an extended vision to reach young girls in marginalized communities."/>
         <div className='hidden lg:block h-[240px] w-[2px] bg-primary-500'/>
         <Community image="/assets/tech-divas.png" name="Tech Divas" description="A sub-community that caters to women in tech with an extended vision to reach rural communities with digital skills."/>
+        <div className='absolute size-[306px] bottom-0 right-0 bg-primary-500 opacity-30 blur-[374px]'/>
       </section>
       {/* Words of the street */}
       {testimonials.length && (
