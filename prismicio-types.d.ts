@@ -5,6 +5,335 @@ import type * as prismic from "@prismicio/client";
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
 /**
+ * Item in *About page → Statement Section*
+ */
+export interface AboutPageDocumentDataStatementSectionItem {
+  /**
+   * Title field in *About page → Statement Section*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Mission Statement / Vision Statement
+   * - **API ID Path**: about_page.statement_section[].title
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Description field in *About page → Statement Section*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: We envision 4herfrika in all tertiary institutions...
+   * - **API ID Path**: about_page.statement_section[].description
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  description: prismic.KeyTextField;
+
+  /**
+   * Image field in *About page → Statement Section*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.statement_section[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Image Position field in *About page → Statement Section*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.statement_section[].image_position
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  image_position: prismic.SelectField<"Left" | "Right">;
+}
+
+/**
+ * Item in *About page → Frequently Asked Questions*
+ */
+export interface AboutPageDocumentDataFrequentlyAskedQuestionsItem {
+  /**
+   * Question field in *About page → Frequently Asked Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.frequently_asked_questions[].question
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  question: prismic.KeyTextField;
+
+  /**
+   * Answer field in *About page → Frequently Asked Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.frequently_asked_questions[].answer
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  answer: prismic.KeyTextField;
+}
+
+type AboutPageDocumentDataSlicesSlice = never;
+
+/**
+ * Content for About page documents
+ */
+interface AboutPageDocumentData {
+  /**
+   * Hero Image field in *About page*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.hero_image
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  hero_image: prismic.ImageField<never>;
+
+  /**
+   * Statement Section field in *About page*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.statement_section[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  statement_section: prismic.GroupField<
+    Simplify<AboutPageDocumentDataStatementSectionItem>
+  >;
+
+  /**
+   * Frequently Asked Questions field in *About page*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.frequently_asked_questions[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  frequently_asked_questions: prismic.GroupField<
+    Simplify<AboutPageDocumentDataFrequentlyAskedQuestionsItem>
+  >;
+
+  /**
+   * Slice Zone field in *About page*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#slices
+   */
+  slices: prismic.SliceZone<AboutPageDocumentDataSlicesSlice> /**
+   * Meta Title field in *About page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: about_page.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */;
+  meta_title: prismic.KeyTextField;
+
+  /**
+   * Meta Description field in *About page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: about_page.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  meta_description: prismic.KeyTextField;
+
+  /**
+   * Meta Image field in *About page*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about_page.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  meta_image: prismic.ImageField<never>;
+}
+
+/**
+ * About page document from Prismic
+ *
+ * - **API ID**: `about_page`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type AboutPageDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<AboutPageDocumentData>,
+    "about_page",
+    Lang
+  >;
+
+/**
+ * Item in *Frequently Asked Question Section (About Page) → FAQ*
+ */
+export interface FaqDocumentDataFaqItem {
+  /**
+   * Question field in *Frequently Asked Question Section (About Page) → FAQ*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq.faq[].question
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  question: prismic.KeyTextField;
+
+  /**
+   * Answer field in *Frequently Asked Question Section (About Page) → FAQ*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq.faq[].answer
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  answer: prismic.KeyTextField;
+}
+
+/**
+ * Content for Frequently Asked Question Section (About Page) documents
+ */
+interface FaqDocumentData {
+  /**
+   * Title field in *Frequently Asked Question Section (About Page)*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * FAQ field in *Frequently Asked Question Section (About Page)*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq.faq[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  faq: prismic.GroupField<Simplify<FaqDocumentDataFaqItem>>;
+}
+
+/**
+ * Frequently Asked Question Section (About Page) document from Prismic
+ *
+ * - **API ID**: `faq`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type FaqDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<FaqDocumentData>, "faq", Lang>;
+
+/**
+ * Item in *FAQ Page → Frequently Asked Questions*
+ */
+export interface FaqPageDocumentDataFrequentlyAskedQuestionsItem {
+  /**
+   * FAQ Section field in *FAQ Page → Frequently Asked Questions*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq_page.frequently_asked_questions[].section
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  section: prismic.ContentRelationshipField<"faq">;
+}
+
+type FaqPageDocumentDataSlicesSlice = never;
+
+/**
+ * Content for FAQ Page documents
+ */
+interface FaqPageDocumentData {
+  /**
+   * Frequently Asked Questions field in *FAQ Page*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq_page.frequently_asked_questions[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  frequently_asked_questions: prismic.GroupField<
+    Simplify<FaqPageDocumentDataFrequentlyAskedQuestionsItem>
+  >;
+
+  /**
+   * Slice Zone field in *FAQ Page*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq_page.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#slices
+   */
+  slices: prismic.SliceZone<FaqPageDocumentDataSlicesSlice> /**
+   * Meta Title field in *FAQ Page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: faq_page.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */;
+  meta_title: prismic.KeyTextField;
+
+  /**
+   * Meta Description field in *FAQ Page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: faq_page.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  meta_description: prismic.KeyTextField;
+
+  /**
+   * Meta Image field in *FAQ Page*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq_page.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  meta_image: prismic.ImageField<never>;
+}
+
+/**
+ * FAQ Page document from Prismic
+ *
+ * - **API ID**: `faq_page`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type FaqPageDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<FaqPageDocumentData>,
+    "faq_page",
+    Lang
+  >;
+
+/**
  * Item in *Homepage → Testimonials*
  */
 export interface HomepageDocumentDataTestimonialsItem {
@@ -216,7 +545,11 @@ export type HomepageDocument<Lang extends string = string> =
     Lang
   >;
 
-export type AllDocumentTypes = HomepageDocument;
+export type AllDocumentTypes =
+  | AboutPageDocument
+  | FaqDocument
+  | FaqPageDocument
+  | HomepageDocument;
 
 declare module "@prismicio/client" {
   interface CreateClient {
@@ -239,6 +572,18 @@ declare module "@prismicio/client" {
 
   namespace Content {
     export type {
+      AboutPageDocument,
+      AboutPageDocumentData,
+      AboutPageDocumentDataStatementSectionItem,
+      AboutPageDocumentDataFrequentlyAskedQuestionsItem,
+      AboutPageDocumentDataSlicesSlice,
+      FaqDocument,
+      FaqDocumentData,
+      FaqDocumentDataFaqItem,
+      FaqPageDocument,
+      FaqPageDocumentData,
+      FaqPageDocumentDataFrequentlyAskedQuestionsItem,
+      FaqPageDocumentDataSlicesSlice,
       HomepageDocument,
       HomepageDocumentData,
       HomepageDocumentDataTestimonialsItem,

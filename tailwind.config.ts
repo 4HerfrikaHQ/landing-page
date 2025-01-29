@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.tsx",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@premieroctet/next-admin/dist/**/*.{js,ts,jsx,tsx}",
+    "./slices/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   presets: [require("@premieroctet/next-admin/preset")],
   theme: {
