@@ -177,6 +177,88 @@ export type AboutPageDocument<Lang extends string = string> =
   >;
 
 /**
+ * Content for Blog Post documents
+ */
+interface BlogPostDocumentData {
+  /**
+   * Title field in *Blog Post*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Cover Image field in *Blog Post*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.cover_image
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  cover_image: prismic.ImageField<never>;
+
+  /**
+   * Author field in *Blog Post*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.author
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  author: prismic.KeyTextField;
+
+  /**
+   * Content field in *Blog Post*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.content
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  content: prismic.RichTextField;
+
+  /**
+   * Related Posts field in *Blog Post*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.related_posts
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  related_posts: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Blog Post document from Prismic
+ *
+ * - **API ID**: `blog_post`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type BlogPostDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<BlogPostDocumentData>,
+    "blog_post",
+    Lang
+  >;
+
+/**
  * Item in *Frequently Asked Question Section (About Page) → FAQ*
  */
 export interface FaqDocumentDataFaqItem {
@@ -545,11 +627,121 @@ export type HomepageDocument<Lang extends string = string> =
     Lang
   >;
 
+/**
+ * Item in *Mentor → Links*
+ */
+export interface MentorDocumentDataLinksItem {
+  /**
+   * Title field in *Mentor → Links*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.links[].title
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  title: prismic.SelectField<"LinkedIn" | "X" | "Instagram">;
+
+  /**
+   * Link field in *Mentor → Links*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.links[].link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Content for Mentor documents
+ */
+interface MentorDocumentData {
+  /**
+   * Image field in *Mentor*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.image
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Name field in *Mentor*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.name
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * Role field in *Mentor*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.role
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  role: prismic.KeyTextField;
+
+  /**
+   * Description field in *Mentor*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.description
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  description: prismic.KeyTextField;
+
+  /**
+   * Links field in *Mentor*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.links[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  links: prismic.GroupField<Simplify<MentorDocumentDataLinksItem>>;
+
+  /**
+   * Availability field in *Mentor*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: mentor.availability
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  availability: prismic.KeyTextField;
+}
+
+/**
+ * Mentor document from Prismic
+ *
+ * - **API ID**: `mentor`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type MentorDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
+
 export type AllDocumentTypes =
   | AboutPageDocument
+  | BlogPostDocument
   | FaqDocument
   | FaqPageDocument
-  | HomepageDocument;
+  | HomepageDocument
+  | MentorDocument;
 
 declare module "@prismicio/client" {
   interface CreateClient {
@@ -577,6 +769,8 @@ declare module "@prismicio/client" {
       AboutPageDocumentDataStatementSectionItem,
       AboutPageDocumentDataFrequentlyAskedQuestionsItem,
       AboutPageDocumentDataSlicesSlice,
+      BlogPostDocument,
+      BlogPostDocumentData,
       FaqDocument,
       FaqDocumentData,
       FaqDocumentDataFaqItem,
@@ -588,6 +782,9 @@ declare module "@prismicio/client" {
       HomepageDocumentData,
       HomepageDocumentDataTestimonialsItem,
       HomepageDocumentDataSlicesSlice,
+      MentorDocument,
+      MentorDocumentData,
+      MentorDocumentDataLinksItem,
       AllDocumentTypes,
     };
   }
