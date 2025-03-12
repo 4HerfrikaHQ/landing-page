@@ -1,0 +1,115 @@
+{
+  "format": "page",
+  "id": "about_page",
+  "label": "About page",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "hero_image": {
+        "type": "Image",
+        "config": {
+          "label": "Hero Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "statement_section": {
+        "type": "Group",
+        "config": {
+          "label": "Statement Section",
+          "repeat": true,
+          "fields": {
+            "title": {
+              "type": "Text",
+              "config": {
+                "label": "Title",
+                "placeholder": "Mission Statement / Vision Statement"
+              }
+            },
+            "description": {
+              "type": "Text",
+              "config": {
+                "label": "Description",
+                "placeholder": "We envision 4herfrika in all tertiary institutions..."
+              }
+            },
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
+            "image_position": {
+              "type": "Select",
+              "config": {
+                "label": "Image Position",
+                "placeholder": "",
+                "options": ["Left", "Right"]
+              }
+            }
+          }
+        }
+      },
+      "frequently_asked_questions": {
+        "type": "Group",
+        "config": {
+          "label": "Frequently Asked Questions",
+          "repeat": true,
+          "fields": {
+            "question": {
+              "type": "Text",
+              "config": {
+                "label": "Question",
+                "placeholder": ""
+              }
+            },
+            "answer": {
+              "type": "Text",
+              "config": {
+                "label": "Answer",
+                "placeholder": ""
+              }
+            }
+          }
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {}
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "config": {
+          "label": "Meta Title",
+          "placeholder": "A title of the page used for social media and search engines"
+        },
+        "type": "Text"
+      },
+      "meta_description": {
+        "config": {
+          "label": "Meta Description",
+          "placeholder": "A brief summary of the page"
+        },
+        "type": "Text"
+      },
+      "meta_image": {
+        "config": {
+          "constraint": {
+            "height": 1260,
+            "width": 2400
+          },
+          "label": "Meta Image",
+          "thumbnails": []
+        },
+        "type": "Image"
+      }
+    }
+  }
+}

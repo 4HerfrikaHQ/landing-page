@@ -1,35 +1,30 @@
-import Image from "next/image";
 import { FaStar } from "react-icons/fa6";
+import {Content} from "@prismicio/client";
+import {PrismicImage} from "@prismicio/react";
 
 export function TestimonialCard({
-  image = "/assets/home/hero.webp",
-  name = "Adeleke Glory",
-  role = "Student, Lautech Campus",
-  rating = 5,
-  text = "4Herfrika has been an safe space for my growth, offering support, resources, and opportunities. It’s more than just a community; it's a",
+  testimonial
+}: {
+  testimonial: Content.HomepageDocument['data']['testimonials'][number]
 }) {
   return (
-    <div className="w-full h-full bg-primary-500/60 rounded-xl gap-2 sm:gap-0 pr-4 py-6 flex sm:items-center sm:flex-row flex-col px-4 sm:px-1">
-      <Image
-        src={image}
-        alt="member"
-        width={700}
-        height={700}
-        className=" w-24 object-cover aspect-square rounded-full  sm:-ml-12"
-      />
-      <div className="sm:px-4">
-        <p className="font-normal text-sm sm:text-md mb-5">{text}</p>
-        <div className="flex items-center flex-wrap sm:flex-nowrap gap-5 justify-between">
+    <div
+      className="testimonial-card min-h-36 snap-start relative w-[79vw] flex-shrink-0 md:w-full h-full bg-primary-500/80 rounded-2xl pl-8 md:pl-14 pr-5 lg:pr-10 py-4 lg:py-6 flex flex-col"
+      style={{boxShadow: "2.18px 10.91px 26.18px 0px rgba(0, 0, 0, 0.18)"}}
+    >
+      <PrismicImage className="size-11 lg:size-20 absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 object-cover rounded-full" field={testimonial.profile_picture} />
+      <div className='flex flex-col flex-grow h-full'>
+        <p className="text-[9px] lg:text-lg font-medium lg:leading-6 mb-auto lg:mb-6">{testimonial.testimonial}</p>
+        <div className="flex items-center justify-between">
           <div>
-            <h4 className="text-xl font-medium tracking-wider">
-              {name}
-              <span className="text-sm">, </span>
+            <h4 className="text-[10px] md:text-lg font-semibold lg:font-bold mb-1.5">
+              {testimonial.name}
             </h4>
-            <p className="text-sm">{role}</p>
+            <p className="text-[7px] lg:text-sm">{testimonial.role_and_location}</p>
           </div>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: rating }).map((_, i) => (
-              <FaStar key={i} />
+          <div className="flex items-center gap-0.5 md:gap-1">
+            {Array.from({ length: Number(testimonial.rating) }).map((_, i) => (
+              <FaStar key={i} className='text-[9px] md:text-lg' />
             ))}
           </div>
         </div>

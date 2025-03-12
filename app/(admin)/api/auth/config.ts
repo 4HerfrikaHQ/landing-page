@@ -12,7 +12,7 @@ const config: NextAuthConfig = {
   session: { strategy: "database" },
   secret: env.AUTH_SECRET,
   trustHost: true,
-  useSecureCookies: true,
+  useSecureCookies: process.env.NODE_ENV === 'production',
   basePath: "/api/auth",
   adapter: PrismaAdapter(prisma),
   pages: {

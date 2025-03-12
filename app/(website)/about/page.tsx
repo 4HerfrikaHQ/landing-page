@@ -1,82 +1,103 @@
 import Link from "next/link";
 import Image from "next/image";
-import FaqBody from "@/components/FaqBody";
-export default function About() {
+import {createClient} from "@/prismicio";
+import {Content} from "@prismicio/client";
+import {PrismicImage} from "@prismicio/react";
+import {Button} from "@/components/Button";
+import Squiggle from "./squiggle.svg";
+import UnderlineSquiggle from "./underline-squiggle.svg";
+import {ImageField, KeyTextField} from "@prismicio/types";
+import {cn} from "@/utils/cn";
+import FrequentlyAskedQuestion from "@/components/FAQ/FAQ";
+
+const StatementSection = ({title, description, image, position}: {
+  title: KeyTextField,
+  description: KeyTextField,
+  image: ImageField;
+  position: null | "Left" | "Right"
+}) => (
+  <div
+    className={
+      cn(
+        'flex items-center gap-x-8',
+        {
+          'flex-row-reverse': position === "Left"
+        }
+      )
+    }
+  >
+    <div className='mr-auto'>
+      <h4 className='text-3xl text-gray-400 w-fit font-semibold border-b-[3px] border-primary-500 mb-6 outline-offset-2'>
+        {title}
+      </h4>
+      <p className='text-xl text-gray-300'>
+        {description}
+      </p>
+    </div>
+    <figure className='rounded-xl overflow-hidden w-1/2 flex-shrink-0'>
+      <PrismicImage
+        className='aspect-[2.09] w-full'
+        field={image}
+      />
+    </figure>
+  </div>
+)
+
+export default async function About() {
+  const client = createClient();
+
+  const page = await client.getSingle<Content.AboutPageDocument>("about_page");
+
+  const {
+    hero_image,
+    statement_section,
+    frequently_asked_questions
+  } = page.data
+
   return (
-    <section>
-      <div className="bg-[url('/assets/about/hero.webp')] bg-no-repeat bg-cover bg-[10%_35%]">
-        <div className="flex flex-col items-center gap-12 justify-center w-full h-screen bg-overlay-gradient text-center text-white">
-          <h1 className="text-6xl">About 4HerFrika</h1>
-          <p className="capitalize text-xl">
-            At 4HerFrika, we strive to train, mentor, and empower women <br />
+    <>
+      <section className="relative h-[740px] w-screen">
+        <div className='absolute top-0 left-0 size-full'>
+          <PrismicImage field={hero_image} className='object-cover object-center size-full'/>
+          <div className='absolute top-0 left-0 size-full bg-black/70'/>
+        </div>
+        <div className="flex flex-col pt-32 items-center w-full h-full text-white relative">
+          <h1 className="text-[64px] font-bold mb-6">About 4HerFrika</h1>
+          <p className="capitalize text-2xl font-semibold mb-14">
+            At 4HerFrika, we strive to train, mentor, and empower women <br/>
             to become transformative leaders across Africa.
           </p>
-          <div className="flex gap-2 text-sm font-medium">
-            <Link
-              href="/"
-              className="py-2 px-6 border border-white rounded-full bg-transparent hover:border-transparent hover:bg-primary-500 hover:no-underline"
-            >
-              Make an Impact
-            </Link>
-            <Link
-              href="/"
-              className="py-2 px-6 border border-transparent rounded-full bg-primary-500 hover:bg-transparent hover:border-primary-500 hover:no-underline"
-            >
+          <div className='flex gap-x-6'>
+            <Button variant='outline-white'>
+              Make an impact
+            </Button>
+            <Button href='/contact-us' className='w-[200px]'>
               Contact Us
-            </Link>
+            </Button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="py-20 px-14 bg-[url('/assets/aboutLogo.png')] bg-no-repeat bg-[center_20rem]">
-        <div className="md:bg-[url('/assets/aboutVector.png')] bg-no-repeat bg-[right_1px]">
-          <div className="md:bg-[url('/assets/aboutFrame.png')] bg-no-repeat bg-[center_3rem] flex flex-col gap-24">
-            <h1 className="text-4xl text-center font-semibold text-gray-400">
-              Where Every Girl Achieve Their Goal
-            </h1>
-            <div className="flex flex-col gap-14 max-w-[1208px] mx-auto w-11/12">
-              <div className="flex flex-col md:flex-row gap-8">
-                <div className="flex flex-col gap-6 justify-center md:w-[528px]">
-                  <h4 className="text-3xl font-semibold underline decoration-[#EC008C] leading-10 text-gray-400">
-                    Mission Statement
-                  </h4>
-                  <p className="text-xl text-gray-300">
-                    To raise self sufficient leaders from university and high
-                    schools across Africa for community impact.
-                  </p>
-                </div>
-                <Image
-                  src="/assets/about/about1.png"
-                  width={648}
-                  height={309}
-                  alt="group of happy girls"
-                />
-              </div>
-              <div className="flex flex-col md:flex-row gap-8">
-                <Image
-                  src="/assets/about/about2.png"
-                  alt="4herfika t-shirt"
-                  width={648}
-                  height={309}
-                />
-
-                <div className="flex flex-col gap-6 justify-center md:w-[528px]">
-                  <h4 className="text-3xl font-semibold underline decoration-[#EC008C] leading-10 text-gray-400">
-                    Vision Statement
-                  </h4>
-                  <p className="text-xl text-gray-300 text-justify">
-                    We envision 4herfrika in all tertiary <br /> institutions
-                    across sub-Saharan Africa and to have impacted 2 million
-                    women and girls with tech and entrepreneurship by 2030.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+      <section className='py-20 px-28 relative flex flex-col items-center'>
+        <Squiggle className='absolute top-0 right-2.5'/>
+        <h2 className='text-3xl font-semibold mb-4'>
+          Where Every Girl Achieves Their Goal
+        </h2>
+        <UnderlineSquiggle width={284} className='mb-12'/>
+        <div className='space-y-12'>
+          {statement_section.map(section => (
+            <StatementSection
+              key={section.title}
+              title={section.title}
+              description={section.description}
+              image={section.image}
+              position={section.image_position}
+            />
+          ))}
         </div>
-      </div>
+      </section>
 
-      <div className="bg-primary-500/30 flex items-center w-full py-20">
+      <section className="bg-primary-500/30 flex items-center w-full py-20">
         <div className="max-w-[1339px] mx-auto flex flex-col md:flex-row gap-8">
           <div className="flex flex-col gap-10 justify-center items-center md:w-[426px]">
             <h1 className="text-5xl text-secondary-500 font-bold">
@@ -90,7 +111,8 @@ export default function About() {
             </Link>
           </div>
           <div className="flex  gap-8 text-center text-[#03065C]  flex-col md:flex-row font-bold md:w[884px]">
-            <div className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
+            <div
+              className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
               <Image
                 src="/assets/about/Empowerment.png"
                 alt="Empowerment icon"
@@ -100,7 +122,8 @@ export default function About() {
               />
               <p className="text-base">Empowerment</p>
             </div>
-            <div className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
+            <div
+              className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
               <Image
                 src="/assets/about/Growth.png"
                 alt="Community Development icon"
@@ -110,7 +133,8 @@ export default function About() {
               />
               <p className="text-base">Community Development</p>
             </div>
-            <div className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
+            <div
+              className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
               <Image
                 src="/assets/about/Leader.png"
                 alt="Leadership icon"
@@ -120,7 +144,8 @@ export default function About() {
               />
               <p className="text-base">Leadership</p>
             </div>
-            <div className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
+            <div
+              className="md:w-[200px] w-full h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
               <Image
                 src="/assets/about/Conversation.png"
                 alt="Mentorship icon"
@@ -132,8 +157,27 @@ export default function About() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <section className='pt-20 pb-14 px-[90px] flex flex-col items-center'>
+        <h2 className='text-[68px] text-gray-400 font-semibold mb-8'>
+          <span className='text-primary-500'>F</span>requently <span className='text-primary-500'>A</span>sked <span className='text-primary-500'>Q</span>uestions
+        </h2>
+        <p className='text-md font-medium text-gray-400 max-w-[625px] text-center mb-24'>
+          In this section you can find all the answers you are probably looking for. If you still struggle with finding one - don’t hesitate to <Link className='underline text-primary-500' href='/contact-us'>contact us</Link> directly.
+        </p>
+        <div className='space-y-6'>
+          {
+            frequently_asked_questions.map(question => (
+              <FrequentlyAskedQuestion question={String(question.question)} answer={String(question.answer)} key={question.question} />
+            ))
+          }
+        </div>
+        <Link href='/faq' className='text-primary-500 underline pr-5 self-end mt-16'>
+          See All FAQs
+        </Link>
+      </section>
       {/* <FaqBody /> */}
-    </section>
+    </>
   );
 }
