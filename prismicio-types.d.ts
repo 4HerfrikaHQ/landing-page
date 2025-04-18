@@ -344,6 +344,17 @@ type FaqPageDocumentDataSlicesSlice = never;
  */
 interface FaqPageDocumentData {
   /**
+   * Header IMage field in *FAQ Page*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: faq_page.header_image
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  header_image: prismic.ImageField<never>;
+
+  /**
    * Frequently Asked Questions field in *FAQ Page*
    *
    * - **Field Type**: Group
