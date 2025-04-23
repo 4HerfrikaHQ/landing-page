@@ -1,7 +1,7 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
-import {cn} from "@/utils/cn";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/utils/cn";
 import ChevronIcon from "./chevron.svg";
 
 const FrequentlyAskedQuestion = (
@@ -31,20 +31,20 @@ const FrequentlyAskedQuestion = (
 
   return (
     <section
-      className={cn('px-16 py-10 flex gap-x-16 items-center bg-white rounded-2xl cursor-pointer duration-200', {
+      className={cn('p-6 md:px-16 md:py-10 flex gap-x-16 items-center bg-white rounded-2xl cursor-pointer duration-200', {
         'bg-primary-500/60': isOpen
       })}
-      style={{boxShadow: "2px 10px 24px 0px rgba(0, 0, 0, 0.18)"}}
+      style={{ boxShadow: "2px 10px 24px 0px rgba(0, 0, 0, 0.18)" }}
       onClick={() => setIsOpen(!isOpen)}
     >
       <div className='flex-grow'>
-        <h4 className={cn('text-2xl text-gray-400 font-semibold duration-200', {
+        <h4 className={cn('text-md md:text-2xl text-gray-400 font-semibold duration-200', {
           'text-white': isOpen
         })}>
           {question}
         </h4>
         <div
-          style={{height: isOpen ? `${elementHeightRef.current}px` : 0}}
+          style={{ height: isOpen ? `${elementHeightRef.current}px` : 0 }}
           ref={answerElementRef}
           className='duration-200 overflow-hidden'
         >
@@ -54,7 +54,7 @@ const FrequentlyAskedQuestion = (
           </p>
         </div>
       </div>
-      <ChevronIcon className={cn('text-gray-400 w-16 duration-150', {'text-white rotate-180': isOpen})}/>
+      <ChevronIcon className={cn('text-gray-400 w-4 flex-shrink-0 md:w-16 duration-150', { 'text-white rotate-180': isOpen })} />
     </section>
   );
 };

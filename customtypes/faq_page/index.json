@@ -6,6 +6,14 @@
   "status": true,
   "json": {
     "Main": {
+      "header_image": {
+        "type": "Image",
+        "config": {
+          "label": "Header IMage",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
       "frequently_asked_questions": {
         "type": "Group",
         "config": {
