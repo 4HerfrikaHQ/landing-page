@@ -91,8 +91,8 @@ export default async function About() {
 			</section>
 
 			<section className="bg-primary-500/30 w-full py-12 md:py-20">
-				<div className="container mx-auto px-4 flex flex-col md:flex-row gap-8">
-					<div className="flex flex-col gap-10 justify-center items-center md:w-1/3">
+				<div className="container mx-auto px-4 flex flex-col lg:flex-row gap-8">
+					<div className="flex flex-col gap-10 justify-center items-center lg:w-1/3">
 						<h1 className="text-4xl md:text-5xl text-secondary-500 font-bold text-center">
 							Core Values
 						</h1>
@@ -103,7 +103,7 @@ export default async function About() {
 							Join Us
 						</Link>
 					</div>
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center text-[#03065C] md:w-2/3">
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center text-[#03065C] lg:w-2/3">
 						<div className="h-[242px] px-3.5 gap-4 border rounded border-secondary-500 justify-center flex flex-col items-center">
 							<Image
 								src="/assets/about/Empowerment.png"
