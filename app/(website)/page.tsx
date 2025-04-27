@@ -126,34 +126,36 @@ export default async function HomePage() {
 				<CurvedArrowIcon className="text-center mt-4 lg:mt-0 mx-auto mb-4 lg:mb-7 w-10 sm:w-12 md:w-14 lg:w-32" />
 			</section>
 
-			<section className="px-4 sm:px-6 md:px-8 lg:px-0 container my-8 lg:my-12 gap-6 sm:gap-8 flex flex-col lg:flex-row items-stretch mx-auto relative">
+			{/* Explore Community Section */}
+			<section className="px-5 lg:px-0 container my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center mx-auto relative">
 				<Community
 					image="/assets/boss-divas.png"
 					name="Boss Divas"
 					description="A sub-community that caters to young female entrepreneurs with an extended vision to reach young girls in marginalized communities."
 				/>
-				<div className="hidden lg:block h-[240px] w-[2px] bg-primary-500 self-center" />
+				<div className="hidden lg:block h-[240px] w-[2px] bg-primary-500" />
 				<Community
 					image="/assets/tech-divas.png"
 					name="Tech Divas"
 					description="A sub-community that caters to women in tech with an extended vision to reach rural communities with digital skills."
 				/>
-				<div className="absolute size-[306px] bottom-0 right-0 bg-primary-500/60 blur-[374px]" />
+				<div className="absolute size-[306px] bottom-0 right-0 bg-primary-500 opacity-30 blur-[374px]" />
 			</section>
-
-			{testimonials.length > 0 && (
-				<section className="lg:bg-neutral-400 px-4 sm:px-6 lg:px-7 pt-8 lg:pt-20 pb-8 lg:pb-[90px] relative">
-					<AfricaLogo className="w-16 sm:w-20 md:w-24 lg:w-[270px] absolute -right-8 sm:-right-12 lg:-right-8 top-16 sm:top-20 lg:top-8" />
-					<AfricaLogo className="hidden lg:block lg:w-[270px] absolute left-4 bottom-0" />
-					<h1 className="text-gray-400 text-center text-2xl sm:text-4xl md:text-5xl lg:text-[67px] font-semibold mb-3 lg:mb-8">
+			{/* Words of the street */}
+			{testimonials.length && (
+				<section className="lg:bg-neutral-400 lg:px-7 pt-6 lg:pt-20 pb-8 lg:pb-[90px] relative">
+					<AfricaLogo className="w-24 lg:w-[270px] absolute -right-16 lg:-right-8 top-24 lg:top-8" />
+					<AfricaLogo className="hidden lg:w-[270px] lg:block absolute left-4 bottom-0" />
+					<h1 className="text-gray-400 text-center text-xl sm:text-[67px] font-semibold mb-1 lg:mb-8">
 						<span className="text-primary-500">Words</span> on The{" "}
 						<span className="text-primary-500">Street</span>
 					</h1>
-					<p className="text-center text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 mb-6 lg:mb-12">
+					<p className="text-center text-sm lg:text-xl text-gray-400 mb-6 lg:mb-12">
 						Take a look at what our members say!
 					</p>
-					<div className="container mx-auto pb-10 px-4 sm:px-6 flex lg:grid grid-cols-2 gap-x-6 sm:gap-x-8 md:gap-x-12 lg:gap-x-24 gap-y-8 sm:gap-y-10 text-white scroll-p-8 snap-x snap-mandatory overflow-auto">
-						<div className="w-4 sm:w-6 block flex-shrink-0 lg:hidden" />
+					<div className="container mx-auto pb-10 pr-8 sm:pb-0 sm:px-10 flex lg:grid grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-10 text-white scroll-p-8 snap-x snap-mandatory overflow-auto">
+						{/*This component is just here to take up space for the mobile carousel logic to work properly*/}
+						<div className="w-8 block flex-shrink-0 lg:hidden" />
 						{testimonials.map((testimonial) => (
 							<TestimonialCard
 								key={testimonial.name}
