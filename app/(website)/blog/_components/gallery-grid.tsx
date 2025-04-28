@@ -56,6 +56,12 @@ const galleryItems = [
 			"https://images.pexels.com/photos/7648823/pexels-photo-7648823.jpeg",
 		alt: "Women's leadership panel",
 	},
+	{
+		id: 9,
+		imageUrl:
+			"https://images.pexels.com/photos/6347944/pexels-photo-6347944.jpeg",
+		alt: "Shows",
+	},
 ];
 
 // Define the structure of the gallery with section names and items by index
@@ -71,7 +77,7 @@ const galleryLayout = [
 		sectionName: "middle",
 		// Start with 2 empty slots (null), then image 1 that spans 2 rows, then image 2,
 		// then another empty slot (null), and finally images 3 and 4
-		items: [null, null, 1, 2, null, 3, 4],
+		items: [null, null, 1, 2, null, 3, 4, 8],
 		// Special layout info: span 2 rows for item at index 1
 		specialItems: {
 			"2": { rowSpan: 2 },
@@ -164,10 +170,10 @@ export function GalleryGrid() {
 				{/* Hero section with first image */}
 				<div className="flex flex-col md:flex-row justify-between items-start mb-10">
 					<div className="w-full md:w-1/2 mb-6 md:mb-0">
-						<h2 className="text-4xl font-bold max-w-sm text-[#333333]">
+						<h2 className="text-2xl sm:text-3xl md:text-4xl font-bold max-w-sm text-gray-700">
 							4HerFrika Impact Gallery
 						</h2>
-						<p className="text-lg text-gray-600 mt-3 max-w-md">
+						<p className="text-base sm:text-lg md:text-xl text-gray-600 mt-3 max-w-md">
 							Explore memorable moments and milestones captured through
 							4HerFrika&apos;s journey.
 						</p>
@@ -224,9 +230,9 @@ export function GalleryGrid() {
 									<div
 										key={`placeholder-${idx + 1}`}
 										className={cn(
-											"hidden md:block col-span-1",
-											colSpan > 1 ? `col-span-${colSpan}` : "",
-											rowSpan > 1 ? `row-span-${rowSpan}` : "",
+											"hidden md:block",
+											colSpan > 1 && `md:col-span-${colSpan}`,
+											rowSpan > 1 && `md:row-span-${rowSpan}`,
 										)}
 									/>
 								);
@@ -237,9 +243,9 @@ export function GalleryGrid() {
 								<div
 									key={item.item?.id || `middle-${idx}`}
 									className={cn(
-										"col-span-1",
-										colSpan > 1 ? `col-span-${colSpan}` : "",
-										rowSpan > 1 ? `row-span-${rowSpan}` : "",
+										"",
+										colSpan > 1 && `md:col-span-${colSpan}`,
+										rowSpan > 1 && `md:row-span-${rowSpan}`,
 									)}
 								>
 									<div
@@ -273,10 +279,7 @@ export function GalleryGrid() {
 							return (
 								<div
 									key={item.item?.id || `bottom-${idx}`}
-									className={cn(
-										"col-span-1",
-										colSpan > 1 ? `col-span-${colSpan}` : "",
-									)}
+									className={cn("", colSpan > 1 && `md:col-span-${colSpan}`)}
 								>
 									<div className="rounded-lg overflow-hidden h-[200px] relative">
 										{item.item && (

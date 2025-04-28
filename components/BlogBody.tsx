@@ -98,31 +98,33 @@ const BlogBody = () => {
 	const filteredPosts = posts.filter((post) => post.category === active);
 
 	return (
-		<div className="container mx-auto flex flex-col gap-8 py-20 sm:px-6 lg:px-8">
-			<div className="lg:w-full lg:gap-12 w-11/12 mx-auto overflow-x-auto flex gap-6 overflow-visible">
-				{postCategories?.map((item) => {
-					return (
-						<button
-							type="button"
-							key={`category-${item}`}
-							className={cn(
-								"shrink-0 font-xl w-fit cursor-pointer",
-								active === item
-									? "font-bold text-primary-500/100 underline"
-									: "font-light text-gray-300",
-							)}
-							onClick={() => setActive(item)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") setActive(item);
-							}}
-							role="tab"
-							aria-selected={active === item}
-							tabIndex={0}
-						>
-							{item}
-						</button>
-					);
-				})}
+		<div className="container mx-auto flex flex-col gap-8 py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
+			<div className="w-full overflow-x-auto scrollbar-hide">
+				<div className="inline-flex gap-6 pb-2">
+					{postCategories?.map((item) => {
+						return (
+							<button
+								type="button"
+								key={`category-${item}`}
+								className={cn(
+									"shrink-0 font-xl w-fit cursor-pointer whitespace-nowrap",
+									active === item
+										? "font-bold text-primary-500/100 underline"
+										: "font-light text-gray-300",
+								)}
+								onClick={() => setActive(item)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") setActive(item);
+								}}
+								role="tab"
+								aria-selected={active === item}
+								tabIndex={0}
+							>
+								{item}
+							</button>
+						);
+					})}
+				</div>
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 				{filteredPosts.length > 0 ? (
@@ -180,10 +182,10 @@ const BlogBody = () => {
 					</div>
 				)}
 			</div>
-			<div className="flex justify-end w-11/12 lg:w-full">
+			<div className="flex justify-end lg:w-full">
 				<Link
 					href="/"
-					className=" border  border-primary-500/100 rounded-full py-4 px-8 text-primary-500/100 text-xl font-normal"
+					className="border border-primary-500/100 rounded-full py-2 px-4 md:py-4 md:px-8 text-primary-500/100 text-base md:text-xl font-normal"
 				>
 					View All Projects
 				</Link>

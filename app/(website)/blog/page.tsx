@@ -42,40 +42,54 @@ export default function BlogPage() {
 				</div>
 			</div>
 			<BlogBody />
-			<div className="container mx-auto flex flex-col gap-12 py-20 px-4 sm:px-6 lg:px-8">
-				<h2 className="pl-[30px] lg:pl-0 font-bold text-4xl text-gray-600">
+			<div className="container mx-auto flex flex-col gap-12 py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
+				<h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-gray-700">
 					Upcoming Projects
 				</h2>
-				<div className="w-11/12 lg:w-full flex flex-col lg:flex-row gap-6 mx-auto">
-					<Image
-						width={312}
-						height={404}
-						alt="Upcoming"
-						src="/assets/blur.png"
-						className="w-full lg:w-[312px]"
-					/>
-					<Image
-						width={312}
-						height={404}
-						alt="Upcoming"
-						src="/assets/blur.png"
-						className="w-full lg:w-[312px]"
-					/>
-					<Image
-						width={312}
-						height={404}
-						alt="Upcoming"
-						src="/assets/blur.png"
-						className="w-full lg:w-[312px]"
-					/>
-					<Image
-						width={312}
-						height={404}
-						alt="Upcoming"
-						src="/assets/blur.png"
-						className="w-full lg:w-[312px]"
-					/>
-				</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+					{Array.from({ length: 4 }, (_, i) => (
+						<div
+							key={`project-${i + 1}`}
+							className="flex flex-col gap-4 overflow-hidden rounded-lg relative"
+						>
+							<div className="absolute inset-0 z-10 flex flex-col justify-center px-4">
+								<div className="bg-white py-1 px-2 rounded-full max-w-fit mt-4 flex items-center gap-2">
+									<div className="h-3 w-3">
+										<div className="h-full w-full rounded-full border-2 border-primary-500 border-t-transparent animate-[spin_1s_ease-in-out_infinite] before:content-[''] before:absolute before:w-1 before:h-1 before:rounded-full before:bg-primary-500 before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:-translate-y-1/2" />
+									</div>
+									<p className="text-xs font-normal">Coming Soon</p>
+								</div>
+								<p className="text-black/90 text-base font-semibold pt-3">
+									SkillUp with 4HerFrika
+								</p>
+							</div>
+							<div
+								className="h-[200px] bg-cover bg-center bg-no-repeat blur-sm"
+								style={{
+									backgroundImage:
+										"url('https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+								}}
+							/>
+							<div className="bg-black/10 p-6 flex flex-col gap-2 blur-sm">
+								<h3 className="text-xl font-semibold">
+									SkillUp with 4HerFrika
+								</h3>
+								<p className="text-gray-600">
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+								</p>
+								<div className="flex justify-between items-center mt-4">
+									<span className="text-sm text-gray-500">Coming Soon</span>
+									<button
+										type="button"
+										className="text-primary-500 font-medium"
+									>
+										Learn More →
+									</button>
+								</div>
+							</div>
+						</div>
+					))}
+				</div>{" "}
 			</div>
 
 			<GalleryGrid />
