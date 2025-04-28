@@ -7,7 +7,7 @@ export default function BlogPage() {
 	return (
 		<>
 			<div className="bg-neutral-500 py-12 sm:py-24">
-				<div className="container mx-auto w-11/12">
+				<div className="container mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="mx-auto w-full lg:mx-0">
 						<h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
 							Hi Divas,
@@ -36,14 +36,14 @@ export default function BlogPage() {
 							width={1320}
 							height={429}
 							alt="blog-img"
-							className="mt-16"
+							className="mt-16 hidden lg:block"
 						/>
 					</div>
 				</div>
 			</div>
 			<BlogBody />
-			<div className="container mx-auto flex flex-col gap-12 py-20">
-				<h2 className="pl-[30px] lg:pl-0 font-bold text-4xl text-[#333333]">
+			<div className="container mx-auto flex flex-col gap-12 py-20 px-4 sm:px-6 lg:px-8">
+				<h2 className="pl-[30px] lg:pl-0 font-bold text-4xl text-gray-600">
 					Upcoming Projects
 				</h2>
 				<div className="w-11/12 lg:w-full flex flex-col lg:flex-row gap-6 mx-auto">
@@ -78,11 +78,10 @@ export default function BlogPage() {
 				</div>
 			</div>
 
-			{/* 4HerFrika Impact Gallery with Masonry Grid Layout */}
 			<GalleryGrid />
 
 			<div className="w-full bg-neutral-500 pt-10 pb-14 gap-8 flex flex-col items-center px-6 lg:px-0">
-				<p className="text-[#333333] text-xl font-medium text-center">
+				<p className="text-gray-600 text-xl font-medium text-center">
 					To Partner and Donate to this organization, Please send us a mail. You
 					can also make direct donations.
 				</p>
