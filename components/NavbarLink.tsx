@@ -10,20 +10,20 @@ import type { FC } from "react";
  * Takes all the props of an anchor element.
  */
 export const NavbarLink: FC<React.ComponentProps<typeof Link>> = ({
-  href,
-  className,
-  children,
-  ...props
+	href,
+	className,
+	children,
+	...props
 }) => {
-  const pathname = usePathname();
-  return (
-    <Link
-      href={href ?? "/"}
-      className={`text-sm leading-6 text-gray-900 hover:text-gray-800  ${className}`}
-      data-active={pathname === href}
-      {...props}
-    >
-      {children}
-    </Link>
-  );
+	const pathname = usePathname();
+	return (
+		<Link
+			href={href ?? "/"}
+			className={`text-sm leading-6 text-gray-900 hover:text-gray-800  ${className}`}
+			data-active={pathname === href}
+			{...props}
+		>
+			{children}
+		</Link>
+	);
 };
