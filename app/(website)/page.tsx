@@ -142,32 +142,39 @@ export default async function HomePage() {
 				<div className="absolute size-[306px] bottom-0 right-0 bg-primary-500 opacity-30 blur-[374px]" />
 			</section>
 			{/* Words of the street */}
-			{testimonials.length && (
-				<section className="lg:bg-neutral-400 lg:px-7 pt-6 lg:pt-20 pb-8 lg:pb-[90px] relative">
-					<AfricaLogo className="w-24 lg:w-[270px] absolute -right-16 lg:-right-8 top-24 lg:top-8" />
-					<AfricaLogo className="hidden lg:w-[270px] lg:block absolute left-4 bottom-0" />
-					<h1 className="text-gray-400 text-center text-xl sm:text-[67px] font-semibold mb-1 lg:mb-8">
+			{testimonials.length > 0 && (
+				<section className="relative bg-neutral-400 px-4 pt-6 pb-8 lg:px-7 lg:pt-20 lg:pb-24">
+					<AfricaLogo className="w-24 absolute -right-12 top-24 lg:w-[270px] lg:-right-8 lg:top-8" />
+					<AfricaLogo className="hidden lg:block w-[270px] absolute left-4 bottom-0" />
+
+					<h1 className="text-center text-gray-400 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
 						<span className="text-primary-500">Words</span> on The{" "}
 						<span className="text-primary-500">Street</span>
 					</h1>
-					<p className="text-center text-sm lg:text-xl text-gray-400 mb-6 lg:mb-12">
+
+					<p className="text-center text-gray-400 text-base mb-8 lg:text-xl">
 						Take a look at what our members say!
 					</p>
-					<div className="container mx-auto pb-10 pr-8 sm:pb-0 sm:px-10 flex lg:grid grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-10 text-white scroll-p-8 snap-x snap-mandatory overflow-auto">
-						{/*This component is just here to take up space for the mobile carousel logic to work properly*/}
-						<div className="w-8 block flex-shrink-0 lg:hidden" />
-						{testimonials.map((testimonial) => (
-							<TestimonialCard
-								key={testimonial.name}
-								testimonial={testimonial}
-							/>
-						))}
+
+					<div className="container mx-auto px-2">
+						<div className="flex gap-8 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:gap-12 md:overflow-visible md:snap-none">
+							{/* Spacer for mobile snapping */}
+							<div className="flex-shrink-0 w-4 md:hidden" />
+
+							{testimonials.map((testimonial) => (
+								<TestimonialCard
+									key={testimonial.name}
+									testimonial={testimonial}
+								/>
+							))}
+						</div>
 					</div>
+
 					<TestimonialCarouselDots dotsCount={testimonials.length} />
 				</section>
 			)}
 
-			<section className="px-4 sm:px-6 md:px-7 container mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-6 sm:gap-8 w-full pt-8 sm:pt-12 lg:pt-20 pb-8 sm:pb-12 lg:pb-28">
+			<section className="px-4 sm:px-6 md:px-7 container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 sm:gap-8 w-full pt-8 sm:pt-12 lg:pt-20 pb-8 sm:pb-12 lg:pb-28">
 				<div>
 					<h3 className="text-gray-400 text-center lg:text-left text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold capitalize tracking-wide mb-3 sm:mb-4 lg:mb-6">
 						Become an ambassador{" "}
@@ -178,14 +185,22 @@ export default async function HomePage() {
 					<div className="lg:hidden relative w-full aspect-[1.16]">
 						<PrismicImage
 							field={ambassador_image}
-							className="object-cover rounded-xl"
+							className="object-cover rounded-xl w-full h-full"
 						/>
 					</div>
-					<div className="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-wrap justify-center lg:justify-start">
-						<Button href="/" variant="outline">
+					<div className="flex items-center gap-3 sm:gap-4 mt-8 lg:mt-0 lg:gap-6 flex-wrap justify-center lg:justify-start">
+						<Button
+							href="/"
+							variant="outline"
+							className="px-8 py-3 md:py-4 text-base md:text-xl"
+						>
 							View Projects
 						</Button>
-						<Button href={ambassador_link.text || "/"} isExternal>
+						<Button
+							className="px-8 py-3 md:py-4 text-base md:text-xl"
+							href={ambassador_link.text || "/"}
+							isExternal
+						>
 							Join Us
 						</Button>
 					</div>
@@ -193,7 +208,7 @@ export default async function HomePage() {
 				<div className="hidden lg:block relative w-full aspect-[1.16]">
 					<PrismicImage
 						field={ambassador_image}
-						className="object-cover rounded-xl"
+						className="object-cover rounded-xl w-full h-full"
 					/>
 				</div>
 			</section>

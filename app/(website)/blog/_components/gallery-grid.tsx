@@ -165,7 +165,7 @@ export function GalleryGrid() {
 	const bottomSection = getSection("bottom");
 
 	return (
-		<div className="bg-white py-16">
+		<div className="bg-white py-8 md:py-12 lg:py-16 xl:py-20">
 			<div className="mx-auto container px-4 sm:px-6 lg:px-8">
 				{/* Hero section with first image */}
 				<div className="flex flex-col md:flex-row justify-between items-start mb-10">
