@@ -9,7 +9,7 @@ export function TestimonialCard({
 }) {
 	return (
 		<div
-			className="testimonial-card min-h-36 snap-start relative w-[79vw] flex-shrink-0 md:w-full h-full bg-primary-500/70 rounded-2xl pl-8 md:pl-14 pr-5 lg:pr-10 py-4 lg:py-6 flex flex-col"
+			className="testimonial-card min-h-36 snap-start relative w-[79vw] flex-shrink-0 md:w-full h-full bg-primary-500/70 rounded-2xl pl-8 md:pl-14 pr-5 lg:pr-10 py-4 lg:py-6 flex flex-col text-white"
 			style={{ boxShadow: "2.18px 10.91px 26.18px 0px rgba(0, 0, 0, 0.18)" }}
 		>
 			<PrismicImage
