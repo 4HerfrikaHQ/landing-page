@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/utils/cn";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { FC } from "react";
@@ -19,7 +20,10 @@ export const NavbarLink: FC<React.ComponentProps<typeof Link>> = ({
 	return (
 		<Link
 			href={href ?? "/"}
-			className={`text-sm leading-6 text-gray-900 hover:text-gray-800  ${className}`}
+			className={cn(
+				"text-sm leading-6 text-gray-900 hover:text-gray-800",
+				className,
+			)}
 			data-active={pathname === href}
 			{...props}
 		>
