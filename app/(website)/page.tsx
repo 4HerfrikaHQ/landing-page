@@ -71,17 +71,17 @@ export default async function HomePage() {
 
 	return (
 		<section className="bg-white w-screen overflow-hidden">
-			<section className="px-4 sm:px-6 md:px-7 relative">
-				<div className="w-60 sm:w-72 md:w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 left-0 bg-primary-500/20 absolute blur-[374px]" />
-				<div className="w-60 sm:w-72 md:w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 right-0 bg-primary-500/20 absolute blur-[374px]" />
+			<section className="px-4 sm:px-6 md:px-7 relative ">
+				<div className="w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 left-0 bg-primary-500/20 absolute blur-[374px]" />
+				<div className="w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 right-0 bg-primary-500/20 absolute blur-[374px]" />
 				<HeroCurveIcon
 					width="100%"
 					className="w-full h-full left-0 -bottom-4 sm:-bottom-6 md:-bottom-8 lg:bottom-20 absolute -z-1"
 				/>
 
-				<section className="grid lg:grid-cols-[1fr_1.2fr] justify-between gap-6 sm:gap-8 w-full pt-6 sm:pt-8 md:pt-16 lg:pt-32 mx-auto relative z-1 md:container">
+				<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
 					<div className="w-full">
-						<h1 className="text-gray-400 text-center lg:text-left text-4xl lg:text-6xl leading-normal lg:leading-[96px] mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
+						<h1 className="text-gray-400 text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
 							Raising{" "}
 							<span className="text-primary-500">
 								World<span className="hidden lg:inline">-</span> <br /> class
@@ -93,7 +93,7 @@ export default async function HomePage() {
 							className="aspect-[1.16] mx-auto object-cover lg:hidden mb-4 w-full max-w-md"
 							width={278}
 						/>
-						<p className="text-lg lg:text-2xl text-gray-300 mb-6 lg:mb-14 tracking-wider max-w-[730px] text-center lg:text-left">
+						<p className="text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-gray-300 mb-6 lg:mb-14 tracking-wider xl:max-w-[730px] text-center lg:text-left">
 							4HERFRIKA is raising world class female leaders at the
 							intersection of business and technology
 						</p>
