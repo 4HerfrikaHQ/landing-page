@@ -115,10 +115,10 @@ export default async function HomePage() {
 							</Button>
 						</div>
 					</div>
-					<div className="hidden lg:block relative aspect-square self-end max-w-2xl">
+					<div className="hidden lg:block relative aspect-square self-end w-full">
 						<PrismicImage
 							field={hero_image}
-							className="aspect-[1.16] object-cover"
+							className="aspect-[1.16] object-cover w-full"
 							width={723}
 						/>
 					</div>

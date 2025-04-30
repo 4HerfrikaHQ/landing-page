@@ -133,7 +133,7 @@ export default function WebLayout({
 			</div>
 			{children}
 			<footer className="bg-secondary-500">
-				<div className="mx-auto max-w-screen-xl px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
+				<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
 					<div className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 						<div className="text-center sm:text-left">
 							<p className="font-bold text-gray-200 text-xl">Quick Links</p>
