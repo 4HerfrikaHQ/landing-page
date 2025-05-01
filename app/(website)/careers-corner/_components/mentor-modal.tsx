@@ -110,7 +110,7 @@ function Modal() {
 				</button>
 				{/* Content */}
 				<div className="p-6 sm:p-8 lg:p-16">
-					<h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-primary-500 mb-6 lg:mb-10">
+					<h2 className="text-2xl capitalize sm:text-3xl lg:text-4xl font-bold text-center text-primary-500 mb-6 lg:mb-10">
 						{displayName}
 					</h2>
 

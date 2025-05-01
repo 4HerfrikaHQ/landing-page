@@ -54,7 +54,7 @@ const CareersCorner = () => {
 						<h3 className="uppercase text-primary-500 text-lg">
 							featured mentor
 						</h3>
-						<h2 className="text-4xl font-semibold my-3 flex justify-between items-end gap-4 flex-wrap text-gray-400">
+						<h2 className="text-4xl font-semibold my-3 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 flex-wrap text-gray-400">
 							Adesewa
 							<span className="text-primary-500 text-sm">
 								Availability: Everyday, 11am - 7pm

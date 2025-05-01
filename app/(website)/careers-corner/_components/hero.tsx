@@ -18,7 +18,7 @@ export const CareersHero = () => {
 	}, []);
 
 	return (
-		<section className="overflow-hidden grid place-content-center relative h-screen w-screen">
+		<section className="overflow-hidden grid place-content-center relative h-[75dvh]">
 			<Image
 				src={"/assets/careers/Mask.png"}
 				alt=" "
@@ -33,15 +33,14 @@ export const CareersHero = () => {
 				height={1000}
 				className="absolute bottom-0 -right-10"
 			/>
-
-			<div className="w-[50vw] h-[50vh] min-w-62 relative grid place-content-center">
+			<div className="w-[50vw] h-[45vh] min-w-62 relative grid place-content-center">
 				{/* Add custom animations to profile images with shadows */}
 				<Image
 					src={"/assets/careers/Adesewa.png"}
 					alt="Adesewa"
 					width={700}
 					height={1000}
-					className="size-20 absolute top-1/3 -right-32 md:-right-32 object-cover object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
+					className="size-20 absolute top-1/4 -right-32 md:-right-32 object-cover object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
 					style={{
 						filter: "drop-shadow(0 0 10px rgba(156, 163, 175, 0.5))",
 					}}
@@ -51,7 +50,7 @@ export const CareersHero = () => {
 					alt="Dolapo"
 					width={700}
 					height={1000}
-					className="size-16 absolute -top-32 right-0 md:right-20 object-cover object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
+					className="size-16 absolute -top-20 right-0 md:right-20 object-cover object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
 					style={{
 						filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",
 					}}
@@ -61,7 +60,7 @@ export const CareersHero = () => {
 					alt="Ruphina"
 					width={700}
 					height={1000}
-					className="size-16 object-cover object-top absolute -top-32 left-0 md:left-20 aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
+					className="size-16 object-cover object-top absolute -top-20 left-0 md:left-20 aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
 					style={{
 						filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",
 					}}
@@ -71,7 +70,7 @@ export const CareersHero = () => {
 					alt="Sharon"
 					width={700}
 					height={1000}
-					className="size-16 object-cover absolute -top-4 -left-20 md:-left-24 object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
+					className="size-16 object-cover absolute -top-2 -left-20 md:-left-24 object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
 					style={{
 						filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",
 					}}
@@ -81,7 +80,7 @@ export const CareersHero = () => {
 					alt="Sosanya"
 					width={700}
 					height={1000}
-					className="size-12 object-cover object-top absolute -bottom-20 -left-20 aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
+					className="size-12 object-cover object-top absolute bottom-8 -left-20 aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
 					style={{
 						filter: "drop-shadow(0 0 6px rgba(156, 163, 175, 0.5))",
 					}}
@@ -91,7 +90,7 @@ export const CareersHero = () => {
 					alt="Hassanat"
 					width={700}
 					height={1000}
-					className="size-12 absolute -bottom-20 -right-20 object-cover object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
+					className="size-12 absolute bottom-8 -right-20 object-cover object-top aspect-square rounded-full profile-image shadow-lg shadow-primary-300/50"
 					style={{
 						filter: "drop-shadow(0 0 6px rgba(156, 163, 175, 0.5))",
 					}}
