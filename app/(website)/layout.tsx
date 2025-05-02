@@ -20,7 +20,7 @@ export default function WebLayout({
 						<div className="flex lg:flex-1">
 							<a href="/" className="-m-1.5 p-1.5">
 								<span className="sr-only">4Herfrika</span>
-								<Logo className="w-[90px] md:w-[120px] lg:w-[155px]" />
+								<Logo className="w-[120px] lg:w-[155px]" />
 							</a>
 						</div>
 						<div className="flex lg:hidden">
@@ -85,25 +85,34 @@ export default function WebLayout({
 							</div>
 							<div className="mt-6 flow-root">
 								<div className="-my-6 divide-y divide-gray-500/10">
-									<div className="space-y-2 py-6">
-										<NavbarLink href="/" className="-mx-3 block px-3 py-2">
+									<div className="space-y-2 py-6 ">
+										<NavbarLink
+											href="/"
+											className="-mx-3 block px-3 py-2 text-base"
+										>
 											Home
 										</NavbarLink>
-										<NavbarLink href="/about" className="-mx-3 block px-3 py-2">
+										<NavbarLink
+											href="/about"
+											className="-mx-3 block px-3 py-2 text-base"
+										>
 											About
 										</NavbarLink>
-										<NavbarLink href="/blog" className="-mx-3 block px-3 py-2">
+										<NavbarLink
+											href="/blog"
+											className="-mx-3 block px-3 py-2 text-base"
+										>
 											Blog
 										</NavbarLink>
 										<NavbarLink
 											href="/careers-corner"
-											className="-mx-3 block px-3 py-2"
+											className="-mx-3 block px-3 py-2 text-base"
 										>
 											Career Corner
 										</NavbarLink>
 										<NavbarLink
 											href="/contact-us"
-											className="-mx-3 block px-3 py-2 underline"
+											className="-mx-3 block px-3 py-2 text-base underline"
 										>
 											Contact Us
 										</NavbarLink>
@@ -124,12 +133,12 @@ export default function WebLayout({
 			</div>
 			{children}
 			<footer className="bg-secondary-500">
-				<div className="mx-auto max-w-screen-xl px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
+				<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
 					<div className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 						<div className="text-center sm:text-left">
-							<p className="font-bold text-gray-200">Quick Links</p>
+							<p className="font-bold text-gray-200 text-xl">Quick Links</p>
 
-							<ul className="mt-8 space-y-4 text-sm">
+							<ul className="mt-8 space-y-4 text-base">
 								<li>
 									<Link
 										className="text-white transition hover:text-white/75"
@@ -177,9 +186,9 @@ export default function WebLayout({
 						</div>
 
 						<div className="text-center sm:text-left">
-							<p className="font-bold text-gray-200">Legal</p>
+							<p className="font-bold text-gray-200 text-xl">Legal</p>
 
-							<ul className="mt-8 space-y-4 text-sm">
+							<ul className="mt-8 space-y-4 text-base">
 								<li>
 									<Link
 										className="text-white transition hover:text-white/75"
@@ -210,9 +219,9 @@ export default function WebLayout({
 						</div>
 
 						<div className="text-center sm:text-left">
-							<p className="font-bold text-gray-200">Contact Us</p>
+							<p className="font-bold text-gray-200 text-xl">Contact Us</p>
 
-							<ul className="mt-8 space-y-4 text-sm">
+							<ul className="mt-8 space-y-4 text-base">
 								<li>
 									<Link
 										className="text-white transition hover:text-white/75"
@@ -235,9 +244,9 @@ export default function WebLayout({
 
 						<div className="text-center sm:text-left md:col-span-4 lg:col-span-2">
 							<div className="bg-neutral-500/20 p-12 rounded-2xl md:mt-4 lg:-mt-8">
-								<p className="font-bold text-gray-200">Subscribe</p>
+								<p className="font-bold text-gray-200 text-2xl">Subscribe</p>
 
-								<div className="mx-auto mt-8 max-w-md sm:ms-0">
+								<div className="mx-auto mt-4 md:max-w-md sm:ms-0">
 									<form className="mt-4">
 										<div className="flex flex-row lg:items-start">
 											<label htmlFor="email" className="sr-only">
@@ -271,7 +280,7 @@ export default function WebLayout({
 												</svg>
 											</button>
 										</div>
-										<p className="text-xs text-gray-200 mt-2">
+										<p className="text-lg text-gray-200 mt-2">
 											Subscribe to our newsletter for the latest updates and
 											news
 										</p>
@@ -289,7 +298,7 @@ export default function WebLayout({
 								href="/"
 								className="bg-white hover:bg-white/90 rounded-md px-2 py-1 w-32"
 							>
-								<Logo className="w-full h-fit" />
+								<Logo className="w-full md:h-fit" />
 							</Link>
 						</p>
 
