@@ -1,6 +1,6 @@
 "use client";
 
-import type { NAV_LINKS } from "./_schema";
+import type { NAV_LINKS } from "./navigation";
 
 export const DropdownMenu = ({
 	item,

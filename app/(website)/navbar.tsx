@@ -6,7 +6,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import Logo from "./4herfrika-logo.svg";
-import { ACTION_BUTTONS, NAV_LINKS } from "./_schema";
+import { ACTION_BUTTONS, NAV_LINKS } from "./navigation";
 
 export const Navbar = () => {
 	const [hoveredItem, setHoveredItem] = useState<string | null>(null);
