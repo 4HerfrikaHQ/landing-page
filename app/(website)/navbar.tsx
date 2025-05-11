@@ -40,6 +40,7 @@ export const Navbar = () => {
 									key={link.name}
 									onMouseEnter={() => setHoveredItem(link.name)}
 									className="relative"
+									onMouseLeave={() => setHoveredItem(null)}
 								>
 									<button
 										type="button"
