@@ -1,25 +1,16 @@
-"use client";
-
 import { MenubarButton } from "@/components/MenubarButton";
 import { NavbarLink } from "@/components/NavbarLink";
 import type { Route } from "next";
 import Link from "next/link";
-import { useState } from "react";
 import Logo from "./4herfrika-logo.svg";
 import { ACTION_BUTTONS, NAV_LINKS } from "./navigation";
 
 export const Navbar = () => {
-	const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-	const hoveredDropdown = NAV_LINKS.find((link) => link.name === hoveredItem);
-
 	return (
 		<div className="relative">
-			<header
-				className="sticky inset-x-0 top-0 z-50 bg-white"
-				onMouseLeave={() => setHoveredItem(null)}
-			>
+			<header className="sticky inset-x-0 top-0 z-50 bg-white h-[90px]">
 				<nav
-					className="flex items-center justify-between p-6 lg:px-8"
+					className="flex items-center justify-between h-full px-6 lg:px-8"
 					aria-label="Global"
 				>
 					<div className="flex lg:flex-1">
@@ -33,18 +24,17 @@ export const Navbar = () => {
 						<MenubarButton />
 					</div>
 
-					<div className="hidden lg:flex lg:gap-x-8 text-gray-400">
-						{NAV_LINKS.slice(0, -1).map((link) =>
+					<div className="hidden relative lg:flex lg:items-center lg:gap-x-8 text-gray-400 h-full">
+						{NAV_LINKS.map((link) =>
 							link.dropdownItems ? (
 								<div
 									key={link.name}
-									onMouseEnter={() => setHoveredItem(link.name)}
-									className="relative"
-									onMouseLeave={() => setHoveredItem(null)}
+									className="relative group h-full flex items-center"
 								>
 									<button
 										type="button"
-										className="flex items-center gap-1 text-gray-600 hover:text-primary-500"
+										className="flex items-center gap-1 text-gray-900 hover:text-primary-500"
+										aria-haspopup="true"
 									>
 										{link.name}
 										<svg
@@ -57,19 +47,29 @@ export const Navbar = () => {
 											strokeWidth="2"
 											strokeLinecap="round"
 											strokeLinejoin="round"
-											className={`transition-transform ${
-												hoveredItem === link.name ? "rotate-180" : ""
-											}`}
+											className="transition-transform group-hover:rotate-180"
 										>
-											<title>Arrow Down</title>
+											<title>Arrow</title>
 											<polyline points="6 9 12 15 18 9" />
 										</svg>
 									</button>
+
+									<div className="absolute top-[75%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-white shadow-lg z-50 hidden group-hover:block rounded-md">
+										{link.dropdownItems.map((dropdownItem) => (
+											<Link
+												key={dropdownItem.name}
+												href={dropdownItem.href as Route}
+												className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 first:rounded-t-md last:rounded-b-md"
+											>
+												{dropdownItem.name}
+											</Link>
+										))}
+									</div>
 								</div>
 							) : (
 								<NavbarLink
 									key={link.name}
-									className="lg:text-base"
+									className="lg:text-base h-full flex items-center"
 									href={link.href as Route}
 								>
 									{link.name}
@@ -94,23 +94,6 @@ export const Navbar = () => {
 						))}
 					</div>
 				</nav>
-				{hoveredDropdown?.dropdownItems && (
-					<div
-						onMouseEnter={() => setHoveredItem(hoveredDropdown.name)}
-						onMouseLeave={() => setHoveredItem(null)}
-						className="absolute top-[70%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
-					>
-						{hoveredDropdown.dropdownItems.map((dropdownItem) => (
-							<Link
-								key={dropdownItem.name}
-								href={dropdownItem.href as Route}
-								className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-							>
-								{dropdownItem.name}
-							</Link>
-						))}
-					</div>
-				)}
 
 				{/* Mobile menu dialog */}
 				<dialog id="menu" className="lg:hidden" aria-modal="true">
@@ -150,33 +133,24 @@ export const Navbar = () => {
 								<div className="space-y-2 py-6">
 									{NAV_LINKS.map((link) => (
 										<div key={link.name}>
-											{link.dropdownItems ? (
-												<>
-													<NavbarLink
-														href={link.href as Route}
-														className="-mx-3 block px-3 py-2 text-base"
-													>
-														{link.name}
-													</NavbarLink>
-													<div className="ml-4 mt-1 space-y-1">
-														{link.dropdownItems.map((dropdownItem) => (
-															<NavbarLink
-																key={dropdownItem.name}
-																href={dropdownItem.href as Route}
-																className="-mx-3 block px-3 py-1 text-sm"
-															>
-																{dropdownItem.name}
-															</NavbarLink>
-														))}
-													</div>
-												</>
-											) : (
-												<NavbarLink
-													href={link.href as Route}
-													className="-mx-3 block px-3 py-2 text-base"
-												>
-													{link.name}
-												</NavbarLink>
+											<NavbarLink
+												href={link.href as Route}
+												className="-mx-3 block px-3 py-2 text-base"
+											>
+												{link.name}
+											</NavbarLink>
+											{link.dropdownItems && (
+												<div className="ml-4 mt-1 space-y-1">
+													{link.dropdownItems.map((dropdownItem) => (
+														<NavbarLink
+															key={dropdownItem.name}
+															href={dropdownItem.href as Route}
+															className="-mx-3 block px-3 py-1 text-sm"
+														>
+															{dropdownItem.name}
+														</NavbarLink>
+													))}
+												</div>
 											)}
 										</div>
 									))}
