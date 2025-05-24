@@ -54,7 +54,7 @@ export const Navbar = () => {
 										</svg>
 									</button>
 
-									<div className="absolute top-[75%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-white shadow-lg z-50 hidden group-hover:block rounded-md">
+									<div className="absolute top-[75%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-white shadow-lg z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform group-hover:translate-y-2 rounded-md">
 										{link.dropdownItems.map((dropdownItem) => (
 											<Link
 												key={dropdownItem.name}
