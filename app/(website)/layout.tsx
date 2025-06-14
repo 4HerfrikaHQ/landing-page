@@ -1,8 +1,7 @@
-import { MenubarButton } from "@/components/MenubarButton";
-import { NavbarLink } from "@/components/NavbarLink";
 import Link from "next/link";
 import "../globals.css";
 import Logo from "./4herfrika-logo.svg";
+import { Navbar } from "./navbar";
 
 export default function WebLayout({
 	children,
@@ -11,126 +10,7 @@ export default function WebLayout({
 }>) {
 	return (
 		<>
-			<div className="">
-				<header className="sticky inset-x-0 top-0 z-50 bg-white">
-					<nav
-						className="flex items-center justify-between p-6 lg:px-8"
-						aria-label="Global"
-					>
-						<div className="flex lg:flex-1">
-							<a href="/" className="-m-1.5 p-1.5">
-								<span className="sr-only">4Herfrika</span>
-								<Logo className="w-[120px] lg:w-[155px]" />
-							</a>
-						</div>
-						<div className="flex lg:hidden">
-							<MenubarButton />
-						</div>
-						<div className="hidden lg:flex lg:gap-x-8 text-gray-400">
-							<NavbarLink className="lg:text-base" href="/">
-								Home
-							</NavbarLink>
-							<NavbarLink className="lg:text-base" href="/about">
-								About
-							</NavbarLink>
-							<NavbarLink className="lg:text-base" href="/blog">
-								Blog
-							</NavbarLink>
-							<NavbarLink className="lg:text-base" href="/careers-corner">
-								Career Corner
-							</NavbarLink>
-						</div>
-						<div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-8">
-							<NavbarLink href="/contact-us" className="lg:text-base">
-								Contact Us
-							</NavbarLink>
-							<Link
-								href="/join-us"
-								className="text-base leading-6 text-white bg-primary-500 hover:bg-primary-400 py-2 px-8 rounded-full"
-							>
-								Join Us
-							</Link>
-						</div>
-					</nav>
-					<dialog id="menu" className="lg:hidden" aria-modal="true">
-						<div className="fixed inset-0 z-50" />
-						<div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-200/10">
-							<div className="flex items-center justify-between">
-								<Link href="/" className="-m-1.5 p-1.5">
-									<span className="sr-only">4Herfrika</span>
-									<Logo />
-								</Link>
-								<form
-									method="dialog"
-									className="-m-2.5 rounded-md p-2.5 text-gray-300"
-								>
-									<button type="submit">
-										<span className="sr-only">Close menu</span>
-										<svg
-											className="h-6 w-6"
-											fill="none"
-											viewBox="0 0 24 24"
-											strokeWidth="1.5"
-											stroke="currentColor"
-											aria-hidden="true"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												d="M6 18L18 6M6 6l12 12"
-											/>
-										</svg>
-									</button>
-								</form>
-							</div>
-							<div className="mt-6 flow-root">
-								<div className="-my-6 divide-y divide-gray-500/10">
-									<div className="space-y-2 py-6 ">
-										<NavbarLink
-											href="/"
-											className="-mx-3 block px-3 py-2 text-base"
-										>
-											Home
-										</NavbarLink>
-										<NavbarLink
-											href="/about"
-											className="-mx-3 block px-3 py-2 text-base"
-										>
-											About
-										</NavbarLink>
-										<NavbarLink
-											href="/blog"
-											className="-mx-3 block px-3 py-2 text-base"
-										>
-											Blog
-										</NavbarLink>
-										<NavbarLink
-											href="/careers-corner"
-											className="-mx-3 block px-3 py-2 text-base"
-										>
-											Career Corner
-										</NavbarLink>
-										<NavbarLink
-											href="/contact-us"
-											className="-mx-3 block px-3 py-2 text-base underline"
-										>
-											Contact Us
-										</NavbarLink>
-									</div>
-									<div className="py-6">
-										<a
-											href="/join-us" // TODO: replace with google form link
-											className="-mx-3 block rounded-lg px-3 py-2.5 text-base leading-7 text-gray-400 hover:bg-gray-50"
-										>
-											Join Us
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</dialog>
-				</header>
-			</div>
+			<Navbar />
 			{children}
 			<footer className="bg-secondary-500">
 				<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
