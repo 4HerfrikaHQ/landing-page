@@ -1,4 +1,3 @@
-import { Button } from "@/components/Button";
 import FrequentlyAskedQuestion from "@/components/FAQ/FAQ";
 import { createClient } from "@/prismicio";
 import { cn } from "@/utils/cn";
@@ -6,6 +5,8 @@ import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
 import type { ImageField, KeyTextField } from "@prismicio/types";
 import Link from "next/link";
+import Sponsors from "../_components/sponsors";
+import { CallForAction } from "./_components/call-for-action";
 import { OurCore } from "./_components/our-core";
 import { OurReach } from "./_components/our-reach";
 import Squiggle from "./squiggle.svg";
@@ -59,16 +60,12 @@ export default async function About() {
 				</div>
 				<div className="container mx-auto px-4 flex flex-col items-center min-h-full h-full justify-center text-white relative">
 					<h1 className="text-4xl md:text-[64px] font-bold mb-6 text-center">
-						About 4HerFrika
+						Who We Are
 					</h1>
 					<p className="capitalize text-xl max-w-3xl mx-auto md:text-2xl font-semibold mb-14 text-center">
 						At 4HerFrika, we strive to train, mentor, and empower women to
 						become transformative leaders across Africa.
 					</p>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-						<Button variant="outline-white">Make an impact</Button>
-						<Button href="/contact-us">Contact Us</Button>
-					</div>
 				</div>
 			</section>
 
@@ -93,6 +90,8 @@ export default async function About() {
 
 			<OurReach />
 			<OurCore />
+			<Sponsors />
+			<CallForAction />
 
 			<section className="py-12 md:pt-20 md:pb-14 px-4 md:px-[90px] flex flex-col items-center">
 				<h2 className="text-4xl md:text-[68px] text-gray-400 font-semibold mb-8 text-center">
@@ -100,7 +99,7 @@ export default async function About() {
 					<span className="text-primary-500">A</span>sked{" "}
 					<span className="text-primary-500">Q</span>uestions
 				</h2>
-				<p className="text-md font-medium text-gray-400 max-w-[625px] text-center mb-12 md:mb-24">
+				<p className="text-md md:text-lg font-medium text-gray-400 max-w-[625px] text-center mb-12 md:mb-24">
 					In this section you can find all the answers you are probably looking
 					for. If you still struggle with finding one - don&apos;t hesitate to{" "}
 					<Link className="underline text-primary-500" href="/contact-us">

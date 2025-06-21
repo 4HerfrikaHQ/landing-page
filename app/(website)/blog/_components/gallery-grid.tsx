@@ -2,6 +2,12 @@
 
 import { cn } from "@/utils/cn";
 import Image from "next/image";
+import Gallery1 from "../assets/gallery/gallery--1.jpg";
+import Gallery2 from "../assets/gallery/gallery--2.jpg";
+import Gallery3 from "../assets/gallery/gallery--3.jpg";
+import Gallery4 from "../assets/gallery/gallery--4.jpg";
+import Gallery6 from "../assets/gallery/gallery--6.jpg";
+import Gallery8 from "../assets/gallery/gallery--8.jpg";
 
 type SpecialItems = {
 	[key: string]: { rowSpan?: number; colSpan?: number };
@@ -10,21 +16,18 @@ type SpecialItems = {
 const galleryItems = [
 	{
 		id: 1,
-		imageUrl:
-			"https://images.pexels.com/photos/6347720/pexels-photo-6347720.jpeg",
-		alt: "Women supporting each other at a community event",
+		imageUrl: Gallery1.src,
+		alt: "bootcamp @lautech campus",
 	},
 	{
 		id: 2,
-		imageUrl:
-			"https://images.pexels.com/photos/7282816/pexels-photo-7282816.jpeg",
-		alt: "Planning session for community projects",
+		imageUrl: Gallery2.src,
+		alt: "lady speaking at @lautech bootcamp",
 	},
 	{
 		id: 3,
-		imageUrl:
-			"https://images.pexels.com/photos/6347888/pexels-photo-6347888.jpeg",
-		alt: "Educational outreach program",
+		imageUrl: Gallery3.src,
+		alt: "Lady Speaking at @FUTA launch session",
 	},
 	{
 		id: 4,
@@ -40,9 +43,8 @@ const galleryItems = [
 	},
 	{
 		id: 6,
-		imageUrl:
-			"https://images.pexels.com/photos/7433154/pexels-photo-7433154.jpeg",
-		alt: "Skills training workshop",
+		imageUrl: Gallery6.src,
+		alt: "4Herfrika launch @lautech",
 	},
 	{
 		id: 7,
@@ -52,19 +54,16 @@ const galleryItems = [
 	},
 	{
 		id: 8,
-		imageUrl:
-			"https://images.pexels.com/photos/7648823/pexels-photo-7648823.jpeg",
-		alt: "Women's leadership panel",
+		imageUrl: Gallery8.src,
+		alt: "4Herfrika launch @lautech group picture",
 	},
 	{
 		id: 9,
-		imageUrl:
-			"https://images.pexels.com/photos/6347944/pexels-photo-6347944.jpeg",
-		alt: "Shows",
+		imageUrl: Gallery4.src,
+		alt: "4herfrika launch @FUTA group picture",
 	},
 ];
 
-// Define the structure of the gallery with section names and items by index
 const galleryLayout = [
 	// Hero section with first image
 	{

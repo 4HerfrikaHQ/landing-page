@@ -1,14 +1,13 @@
-
 import { Button } from "@/components/Button";
 import { TestimonialCard } from "@/components/TestimonialCard";
 import { createClient } from "@/prismicio";
 import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
+import Sponsors from "../_components/sponsors";
 import AfricaLogo from "../africa-logo.svg";
-import TestimonialCarouselDots from "./_components/testimonial-carousel-dots";
-import Sponsors from "./_components/sponsors";
-import { Hero } from "./_components/hero";
 import { ExploreCommunity } from "./_components/explore-community";
+import { Hero } from "./_components/hero";
+import TestimonialCarouselDots from "./_components/testimonial-carousel-dots";
 
 export default async function HomePage() {
 	const client = createClient();
@@ -27,7 +26,12 @@ export default async function HomePage() {
 
 	return (
 		<section className="bg-white">
-			<Hero heroImage={heroImage} members={members} campuses={campuses} countries={countries} />
+			<Hero
+				heroImage={heroImage}
+				members={members}
+				campuses={campuses}
+				countries={countries}
+			/>
 			<Sponsors />
 			<ExploreCommunity />
 

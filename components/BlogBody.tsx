@@ -174,7 +174,7 @@ const BlogBody = () => {
 						);
 					})
 				) : (
-					<div className="col-span-full flex flex-col items-center justify-center py-12">
+					<div className="col-span-full flex flex-col items-center justify-center min-h-[430px]">
 						<p className="text-xl text-gray-500">No posts found for {active}</p>
 						<p className="text-sm text-gray-400">
 							Please check back later for updates
