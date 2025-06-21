@@ -2,8 +2,9 @@ import { MenubarButton } from "@/components/MenubarButton";
 import { NavbarLink } from "@/components/NavbarLink";
 import type { Route } from "next";
 import Link from "next/link";
-import Logo from "./4herfrika-logo.svg";
-import { ACTION_BUTTONS, NAV_LINKS } from "./navigation";
+import Logo from "../4herfrika-logo.svg";
+import { ACTION_BUTTONS, NAV_LINKS } from "../navigation";
+
 
 export const Navbar = () => {
 	return (
