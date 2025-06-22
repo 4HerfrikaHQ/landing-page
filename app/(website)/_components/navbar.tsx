@@ -5,11 +5,10 @@ import Link from "next/link";
 import Logo from "../4herfrika-logo.svg";
 import { ACTION_BUTTONS, NAV_LINKS } from "../navigation";
 
-
 export const Navbar = () => {
 	return (
 		<div className="relative">
-			<header className="sticky inset-x-0 top-0 z-50 bg-white h-[90px]">
+			<header className="sticky inset-x-0 top-0 z-50 bg-white h-16 lg:h-[90px]">
 				<nav
 					className="flex items-center justify-between h-full px-6 lg:px-8"
 					aria-label="Global"
@@ -20,12 +19,11 @@ export const Navbar = () => {
 							<Logo className="w-[120px] lg:w-[155px]" />
 						</a>
 					</div>
-
-					<div className="flex lg:hidden">
+					<div className="flex xl:hidden">
 						<MenubarButton />
 					</div>
 
-					<div className="hidden relative lg:flex lg:items-center lg:gap-x-8 text-gray-400 h-full">
+					<div className="hidden relative xl:flex xl:items-center xl:gap-x-8 text-gray-400 h-full">
 						{NAV_LINKS.map((link) =>
 							link.dropdownItems ? (
 								<div
@@ -78,8 +76,7 @@ export const Navbar = () => {
 							),
 						)}
 					</div>
-
-					<div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-4">
+					<div className="hidden xl:flex xl:flex-1 xl:justify-end xl:items-center gap-4">
 						{ACTION_BUTTONS.map((button) => (
 							<Link
 								key={button.name}
@@ -97,7 +94,7 @@ export const Navbar = () => {
 				</nav>
 
 				{/* Mobile menu dialog */}
-				<dialog id="menu" className="lg:hidden" aria-modal="true">
+				<dialog id="menu" className="xl:hidden" aria-modal="true">
 					<div className="fixed inset-0 z-50" />
 					<div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-200/10">
 						<div className="flex items-center justify-between">
@@ -182,6 +179,22 @@ export const Navbar = () => {
 								)}
 							</div>
 						))}
+
+						<div className="mt-6 space-y-2">
+							{ACTION_BUTTONS.map((button) => (
+								<Link
+									key={button.name}
+									href={button.href as Route}
+									className={`block w-full text-center text-base font-medium py-2 px-6 rounded-full transition-colors ${
+										button.isPrimary
+											? "bg-primary-500 text-white hover:bg-primary-400"
+											: "border border-primary-500 text-primary-500 hover:bg-primary-50"
+									}`}
+								>
+									{button.name}
+								</Link>
+							))}
+						</div>
 					</div>
 				</dialog>
 			</header>
