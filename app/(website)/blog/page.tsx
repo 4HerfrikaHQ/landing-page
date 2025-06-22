@@ -50,42 +50,37 @@ export default function BlogPage() {
 					{Array.from({ length: 4 }, (_, i) => (
 						<div
 							key={`project-${i + 1}`}
-							className="flex flex-col gap-4 overflow-hidden rounded-lg relative"
+							className="flex flex-col overflow-hidden rounded-lg"
 						>
-							<div className="absolute inset-0 z-10 flex flex-col justify-center px-4">
-								<div className="bg-white py-1 px-2 rounded-full max-w-fit mt-4 flex items-center gap-2">
-									<div className="h-3 w-3">
-										<div className="h-full w-full rounded-full border-2 border-primary-500 border-t-transparent animate-[spin_1s_ease-in-out_infinite] before:content-[''] before:absolute before:w-1 before:h-1 before:rounded-full before:bg-primary-500 before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:-translate-y-1/2" />
+							<div className="relative">
+								<div
+									className="h-[200px] bg-cover bg-center bg-no-repeat"
+									style={{
+										backgroundImage:
+											"url('https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+									}}
+								/>
+								<div className="absolute top-0 left-0 w-full px-4">
+									<div className="bg-white py-1 px-2 rounded-full max-w-fit mt-4 flex items-center gap-2">
+										<div className="h-3 w-3">
+											<div className="h-full w-full rounded-full border-2 border-primary-500 border-t-transparent animate-[spin_1s_ease-in-out_infinite] before:content-[''] before:absolute before:w-1 before:h-1 before:rounded-full before:bg-primary-500 before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:-translate-y-1/2" />
+										</div>
+										<p className="text-xs font-normal">Coming Soon</p>
 									</div>
-									<p className="text-xs font-normal">Coming Soon</p>
 								</div>
-								<p className="text-black/90 text-base font-semibold pt-3">
-									SkillUp with 4HerFrika
-								</p>
 							</div>
-							<div
-								className="h-[200px] bg-cover bg-center bg-no-repeat blur-sm"
-								style={{
-									backgroundImage:
-										"url('https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
-								}}
-							/>
-							<div className="bg-black/10 p-6 flex flex-col gap-2 blur-sm">
-								<h3 className="text-xl font-semibold">
+
+							<div className="p-4 bg-black/10">
+								<h3 className="text-xl font-semibold mb-2">
 									SkillUp with 4HerFrika
 								</h3>
-								<p className="text-gray-600">
+								<p className="text-gray-600 mb-4">
 									Lorem ipsum dolor sit amet, consectetur adipiscing elit...
 								</p>
-								<div className="flex justify-between items-center mt-4">
-									<span className="text-sm text-gray-500">Coming Soon</span>
-									<button
-										type="button"
-										className="text-primary-500 font-medium"
-									>
-										Learn More →
-									</button>
-								</div>
+
+								<button type="button" className="text-primary-500 font-medium">
+									Learn More →
+								</button>
 							</div>
 						</div>
 					))}
