@@ -75,7 +75,9 @@ export default function BlogPage() {
 									SkillUp with 4HerFrika
 								</h3>
 								<p className="text-gray-600 mb-4">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+									4HERFRIKA is raising world class female leaders at the
+									intersection of business and technology through innovative
+									training and mentorship programs...
 								</p>
 
 								<button type="button" className="text-primary-500 font-medium">
