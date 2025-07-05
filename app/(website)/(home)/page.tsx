@@ -35,37 +35,6 @@ export default async function HomePage() {
 			<Sponsors />
 			<ExploreCommunity />
 
-			{/* Words of the street */}
-			{testimonials.length > 0 && (
-				<section className="relative bg-neutral-400 px-4 py-12 lg:px-7 lg:pt-20 lg:pb-24 overflow-x-hidden">
-					<AfricaLogo className="w-24 absolute -right-12 top-24 lg:w-[270px] lg:-right-8 lg:top-8" />
-					<AfricaLogo className="hidden lg:block w-[270px] absolute left-4 bottom-0" />
-
-					<h1 className="text-center text-gray-400 text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
-						<span className="text-primary-500">Words</span> on The{" "}
-						<span className="text-primary-500">Street</span>
-					</h1>
-
-					<p className="text-center text-gray-400 text-lg mb-8 lg:text-xl">
-						Take a look at what our members say!
-					</p>
-
-					<div className="container mx-auto px-2">
-						<div className="flex gap-8 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:gap-12 md:overflow-visible md:snap-none h-full">
-							{/* Spacer for mobile snapping */}
-							<div className="flex-shrink-0 w-4 md:hidden" />
-
-							{testimonials.map((testimonial) => (
-								<div className="flex-shrink-0 h-full " key={testimonial.name}>
-									<TestimonialCard testimonial={testimonial} />
-								</div>
-							))}
-						</div>
-					</div>
-					<TestimonialCarouselDots dotsCount={testimonials.length} />
-				</section>
-			)}
-
 			<section className="px-4 sm:px-6 md:px-7 container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 sm:gap-8 w-full lg:pt-20 py-12 lg:pb-28">
 				<div>
 					<h3 className="text-gray-400 text-center lg:text-left text-3xl lg:text-4xl font-bold capitalize tracking-wide mb-3 sm:mb-4 lg:mb-6">
@@ -105,6 +74,36 @@ export default async function HomePage() {
 					/>
 				</div>
 			</section>
+			{/* Words of the street */}
+			{testimonials.length > 0 && (
+				<section className="relative bg-neutral-400 px-4 py-12 lg:px-7 lg:pt-20 lg:pb-24 overflow-x-hidden">
+					<AfricaLogo className="w-24 absolute -right-12 top-24 lg:w-[270px] lg:-right-8 lg:top-8" />
+					<AfricaLogo className="hidden lg:block w-[270px] absolute left-4 bottom-0" />
+
+					<h1 className="text-center text-gray-400 text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
+						<span className="text-primary-500">Words</span> on The{" "}
+						<span className="text-primary-500">Street</span>
+					</h1>
+
+					<p className="text-center text-gray-400 text-lg mb-8 lg:text-xl">
+						Take a look at what our members say!
+					</p>
+
+					<div className="container mx-auto px-2">
+						<div className="flex gap-8 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:gap-12 md:overflow-visible md:snap-none h-full">
+							{/* Spacer for mobile snapping */}
+							<div className="flex-shrink-0 w-4 md:hidden" />
+
+							{testimonials.map((testimonial) => (
+								<div className="flex-shrink-0 h-full " key={testimonial.name}>
+									<TestimonialCard testimonial={testimonial} />
+								</div>
+							))}
+						</div>
+					</div>
+					<TestimonialCarouselDots dotsCount={testimonials.length} />
+				</section>
+			)}
 		</section>
 	);
 }

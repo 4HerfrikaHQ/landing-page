@@ -1,5 +1,4 @@
 export const NAV_LINKS = [
-	{ name: "Home", href: "/" },
 	{ name: "About Us", href: "/about" },
 	{
 		name: "Projects",
@@ -10,7 +9,7 @@ export const NAV_LINKS = [
 		],
 	},
 	{ name: "Career Corner", href: "/careers-corner" },
-	{ name: "Blog", href: "/blog" },
+	{ name: "What We Do", href: "/blog" },
 	{ name: "Contact Us", href: "/contact-us" },
 ];
 
