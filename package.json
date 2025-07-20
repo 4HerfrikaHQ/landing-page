@@ -25,6 +25,7 @@
     "@prismicio/react": "^2.9.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "motion": "^12.23.3",
     "next": "14.2.15",
     "next-auth": "5.0.0-beta.23",
     "prisma-json-schema-generator": "5.1.5",
@@ -33,7 +34,7 @@
     "react-icons": "^5.3.0",
     "react-use": "17.5.1",
     "resend": "4.0.0",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.3.1",
     "zod": "3.23.8"
   },
   "devDependencies": {

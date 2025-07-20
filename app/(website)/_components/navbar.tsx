@@ -3,7 +3,7 @@ import { NavbarLink } from "@/components/NavbarLink";
 import type { Route } from "next";
 import Link from "next/link";
 import Logo from "../4herfrika-logo.svg";
-import { ACTION_BUTTONS, NAV_LINKS } from "../navigation";
+import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
 
 export const Navbar = () => {
 	return (
@@ -24,7 +24,7 @@ export const Navbar = () => {
 					</div>
 
 					<div className="hidden relative xl:flex xl:items-center xl:gap-x-8 text-gray-400 h-full">
-						{NAV_LINKS.map((link) =>
+						{NAV_LINKS.map((link: Navlink) =>
 							link.dropdownItems ? (
 								<div
 									key={link.name}
@@ -126,7 +126,7 @@ export const Navbar = () => {
 							</form>
 						</div>
 
-						{NAV_LINKS.map((link) => (
+						{NAV_LINKS.map((link: Navlink) => (
 							<div key={link.name}>
 								{link.dropdownItems ? (
 									<div className="space-y-1">

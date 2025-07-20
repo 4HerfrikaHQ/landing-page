@@ -1,4 +1,6 @@
 import { Button } from "@/components/Button";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { JOIN_FORM_LINK } from "@/utils/constants";
 import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
@@ -19,6 +21,27 @@ export const Hero = ({
 	countries,
 	members,
 }: HeroProps) => {
+	const typewriterWords = [
+		{
+			text: "Raising",
+		},
+		{
+			text: "World",
+			className: "text-primary-500",
+		},
+		{
+			text: "-",
+			className: "hidden lg:inline text-primary-500",
+		},
+		{
+			text: "class",
+			className: "text-primary-500",
+		},
+		{
+			text: "women",
+		},
+	];
+
 	return (
 		<section className="px-4 sm:px-6 md:px-7 relative overflow-x-hidden">
 			<div className="w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 left-0 bg-primary-500/20 absolute blur-[374px]" />
@@ -30,22 +53,31 @@ export const Hero = ({
 
 			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
 				<div className="w-full">
-					<h1 className="text-gray-400 text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
+					{/* <TypewriterEffectSmooth
+						className="text-gray-400 text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize"
+						words={typewriterWords}
+					/> */}
+
+					<p className="text-gray-400 text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
 						Raising{" "}
 						<span className="text-primary-500">
-							World<span className="hidden lg:inline">-</span> <br /> class
+							World<span className="hidden lg:inline">-</span>Class
 						</span>{" "}
-						women
-					</h1>
+						Women
+					</p>
 					<PrismicImage
 						field={heroImage}
 						className="aspect-[1.16] mx-auto object-cover lg:hidden mb-4 w-full max-w-md"
 						width={278}
 					/>
-					<p className="text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-gray-300 mb-6 lg:mb-14 tracking-wider xl:max-w-[730px] text-center lg:text-left">
-						4HERFRIKA is raising world class female leaders at the intersection
-						of business and technology
-					</p>
+					<TextGenerateEffect
+						words="4HERFRIKA is raising world class female leaders at the intersection
+								of business and technology"
+						className="mx-auto max-w-2xl py-4 lg:py-0 mb-6 lg:mb-14 tracking-wider xl:max-w-[730px] text-center lg:text-left"
+						textClassName="text-gray-300 text-lg lg:text-2xl"
+						filter={false}
+						duration={0.5}
+					/>
 					<div className="flex items-center gap-3 sm:gap-4 lg:gap-5 justify-center lg:justify-start flex-wrap">
 						<Button
 							href="/about"
@@ -64,7 +96,7 @@ export const Hero = ({
 						</Button>
 					</div>
 				</div>
-				<div className="hidden lg:block relative aspect-square self-end w-full">
+				<div className="hidden lg:block flex-shrink-0 relative aspect-square self-end w-full">
 					<PrismicImage
 						field={heroImage}
 						className="aspect-[1.16] object-cover w-full"

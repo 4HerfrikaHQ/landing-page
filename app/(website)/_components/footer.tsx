@@ -8,49 +8,45 @@ export const Footer = () => {
 				<div className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 					<div className="text-center sm:text-left">
 						<p className="font-bold text-gray-200 text-xl">Quick Links</p>
-
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
+									href="/projects"
 									className="text-white transition hover:text-white/75"
-									href="/"
 								>
-									Home
-								</Link>
-							</li>
-
-							<li>
-								<Link
-									className="text-white transition hover:text-white/75"
-									href="/about"
-								>
-									About Us
-								</Link>
-							</li>
-
-							<li>
-								<Link
-									className="text-white transition hover:text-white/75"
-									href="/"
-								>
-									Boss Divas
-								</Link>
-							</li>
-
-							<li>
-								<Link
-									className="text-white transition hover:text-white/75"
-									href="/"
-								>
-									Tech Divas
+									Projects
 								</Link>
 							</li>
 							<li>
 								<Link
-									className="text-white transition hover:text-white/75"
 									href="/careers-corner"
+									className="text-white transition hover:text-white/75"
 								>
 									Become an Ambassador
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/volunteer"
+									className="text-white transition hover:text-white/75"
+								>
+									Volunteer as a Mentor
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/donate"
+									className="text-white transition hover:text-white/75"
+								>
+									Donate
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/faq"
+									className="text-white transition hover:text-white/75"
+								>
+									FAQs
 								</Link>
 							</li>
 						</ul>
@@ -58,32 +54,29 @@ export const Footer = () => {
 
 					<div className="text-center sm:text-left">
 						<p className="font-bold text-gray-200 text-xl">Legal</p>
-
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
+									href="/terms"
 									className="text-white transition hover:text-white/75"
-									href="/faq"
 								>
-									FAQs
+									Terms
 								</Link>
 							</li>
-
 							<li>
 								<Link
+									href="/privacy"
 									className="text-white transition hover:text-white/75"
-									href="/blog"
 								>
-									What We Do
+									Privacy
 								</Link>
 							</li>
-
 							<li>
 								<Link
+									href="/cookies"
 									className="text-white transition hover:text-white/75"
-									href="/contact-us"
 								>
-									Support
+									Cookies
 								</Link>
 							</li>
 						</ul>
@@ -91,24 +84,30 @@ export const Footer = () => {
 
 					<div className="text-center sm:text-left">
 						<p className="font-bold text-gray-200 text-xl">Contact Us</p>
-
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
-								<Link
+								<a
+									href="tel:+2349082009908"
 									className="text-white transition hover:text-white/75"
-									href="tel:+234-913-5506-626"
 								>
-									+234-913-5506-626
-								</Link>
+									+234(0)9082009908
+								</a>
 							</li>
-
 							<li>
 								<a
-									className="text-white transition hover:text-white/75"
 									href="mailto:4herfrika@gmail.com"
+									className="text-white transition hover:text-white/75"
 								>
 									4herfrika@gmail.com
 								</a>
+							</li>
+							<li>
+								<Link
+									href="/contact-us"
+									className="text-white transition hover:text-white/75"
+								>
+									Support
+								</Link>
 							</li>
 						</ul>
 					</div>
@@ -172,33 +171,9 @@ export const Footer = () => {
 						</Link>
 					</p>
 
-					<ul className="flex justify-center gap-6 sm:justify-start">
-						<li>
-							<Link
-								href="/"
-								className="text-white transition hover:text-primary-500/75"
-							>
-								Terms
-							</Link>
-						</li>
-						<li>
-							<Link
-								href="/"
-								className="text-white transition hover:text-primary-500/75"
-							>
-								Privacy
-							</Link>
-						</li>
-
-						<li>
-							<a
-								href="/"
-								className="text-white transition hover:text-primary-500/75"
-							>
-								Cookies
-							</a>
-						</li>
-					</ul>
+					<p className="text-sm text-white text-center">
+						&copy; {new Date().getFullYear()} 4HerFrika. All rights reserved.
+					</p>
 
 					<ul className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
 						<li>
