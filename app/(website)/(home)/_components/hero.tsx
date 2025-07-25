@@ -42,14 +42,10 @@ export const Hero = ({
 						className="aspect-[1.16] mx-auto object-cover lg:hidden mb-4 w-full max-w-md"
 						width={278}
 					/>
-					{/* <TextGenerateEffect
-						words="4HERFRIKA is raising world class female leaders at the intersection
-								of business and technology"
-						className="mx-auto max-w-2xl py-4 lg:py-0 mb-6 lg:mb-14 tracking-wider xl:max-w-[730px] text-center lg:text-left"
-						textClassName="text-gray-300 text-lg lg:text-2xl"
-						filter={false}
-						duration={0.5}
-					/> */}
+					<p className="text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-gray-300 mb-6 lg:mb-14 tracking-wider xl:max-w-[730px] text-center lg:text-left">
+						4HERFRIKA is raising world class female leaders at the intersection
+						of business and technology
+					</p>
 					<div className="flex items-center gap-3 sm:gap-4 lg:gap-5 justify-center lg:justify-start flex-wrap">
 						<Button
 							href="/about"
