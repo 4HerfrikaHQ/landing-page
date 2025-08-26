@@ -178,7 +178,7 @@ export const Footer = () => {
 					<ul className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
 						<li>
 							<a
-								href="/" // TODO: Add facebook links
+								href="https://www.linkedin.com/company/4herfrika"
 								rel="noreferrer"
 								target="_blank"
 								className="text-white transition hover:text-neutral-500/75 block p-4 border-[1.5px] border-neutral-500/30 rounded-full"
@@ -210,7 +210,7 @@ export const Footer = () => {
 
 						<li>
 							<a
-								href="/" // TODO: Add Instagram link
+								href="https://www.instagram.com/4herfrika?igsh=MXN1dDZzcjc2d3dwaA=="
 								rel="noreferrer"
 								target="_blank"
 								className="text-white transition hover:text-neutral-500/75 block p-4 border-[1.5px] border-neutral-500/30 rounded-full"
@@ -234,7 +234,7 @@ export const Footer = () => {
 
 						<li>
 							<a
-								href="/" // TODO: Change to X link
+								href="https://twitter.com/4herfrika"
 								rel="noreferrer"
 								target="_blank"
 								className="text-white transition hover:text-neutral-500/75 block p-4 border-[1.5px] border-neutral-500/30 rounded-full"
