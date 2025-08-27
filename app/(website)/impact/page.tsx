@@ -70,10 +70,18 @@ export default function ReportPage() {
       word.style.transitionDelay = `${index * 0.15}s`
     })
 
+    if (storyTitleRef.current) {
+      storyTitleRef.current.style.opacity = "1"
+    }
+
     const motionSplit = SplitText.create(".motion-description", { type: "lines" });
     (motionSplit.lines as Array<HTMLDivElement>).forEach((line, index) => {
       line.style.transitionDelay = `${index * 0.2}s`
     })
+
+    if (motionDescriptionRef.current) {
+      motionDescriptionRef.current.style.opacity = "1"
+    }
 
     const milestoneSplit = SplitText.create(".milestones-header", { type: "words" });
     (milestoneSplit.words as Array<HTMLDivElement>).forEach((line, index) => {
@@ -103,7 +111,7 @@ export default function ReportPage() {
         </div>
         <Squiggle className="squiggle absolute left-0 top-1/2 -translate-y-1/2 w-screen" />
         <Image src={earth} alt="Earth Icon" className="mx-auto max-w-xl relative earth w-[43vw]" />
-        <div className="w-[224px] h-6 rounded-[50%] bg-[#0B0B0B8C] blur-[20px] earth-platform" />
+        <div className="w-[160px] md:w-[224px] h-6 rounded-[50%] bg-[#0B0B0B8C] blur-[20px] earth-platform" />
       </div>
       <p ref={motionDescriptionRef} className="max-w-6xl text-center text-black text-lg md:text-[32px] font-light mx-auto mb-20 md:mb-52 motion-description px-6">
         What started in a single campus in Nigeria has now spread across 25 campuses in Nigeria, Ghana, Sierra Leone, Kenya, and Cameroon. In just one year, 4herfrika has become a community where girls discover their voices, grow their skills, and prepare to lead Africa’s future.
