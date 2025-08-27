@@ -1,3 +1,4 @@
+"use client";
 import yearReport from "./year-report.png";
 import Image from "next/image";
 import earth from "./earth.png";
@@ -12,19 +13,34 @@ import right from "./right.jpg";
 import beginning from "./beginning.jpeg";
 import { Button } from "@/components/Button";
 import { FaArrowRight } from "react-icons/fa";
+import { useAnimateOnScroll } from "@/app/hooks/useAnimateOnScroll";
+import { useRef } from "react";
+import "./report.scss";
 
 export default function ReportPage() {
+  const animatedSectionRef = useRef<HTMLDivElement>(null);
+
+  useAnimateOnScroll([
+    {
+      ref: animatedSectionRef,
+      className: "show",
+      threshold: 0.3,
+    }
+  ]);
+
   return (
-    <>
+    <div className="w-screen overflow-hidden">
       <Image src={yearReport} alt="Yearly report" className="mx-auto max-w-full" />
       <h1 className="text-5xl font-bold text-black mx-auto mt-28 mb-24 text-center">
         Our Story in Motion
       </h1>
-      <div className="relative flex flex-col items-center mb-32">
-        <F4herfrikaLogo className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-        <Squiggle className="absolute left-0 top-1/2 -translate-y-1/2 w-screen" />
-        <Image src={earth} alt="Earth Icon" className="mx-auto max-w-xl relative" />
-        <div className="w-[224px] h-6 rounded-[50%] bg-[#0B0B0B8C] blur-[20px]" />
+      <div ref={animatedSectionRef} className="relative flex flex-col items-center mb-32">
+        <div className="logo-wrapper absolute">
+          <F4herfrikaLogo className="w-[96vw]" />
+        </div>
+        <Squiggle className="squiggle absolute left-0 top-1/2 -translate-y-1/2 w-screen" />
+        <Image src={earth} alt="Earth Icon" className="mx-auto max-w-xl relative earth" />
+        <div className="w-[224px] h-6 rounded-[50%] bg-[#0B0B0B8C] blur-[20px] earth-platform" />
       </div>
       <p className="max-w-6xl text-center text-black text-[32px] font-light mx-auto mb-52">
         What started in a single campus in Nigeria has now spread across 25 campuses in Nigeria, Ghana, Sierra Leone, Kenya, and Cameroon. In just one year, 4herfrika has become a community where girls discover their voices, grow their skills, and prepare to lead Africa’s future.
@@ -68,7 +84,7 @@ export default function ReportPage() {
         </div>
         <Image src={beginning} alt="Just the beginning" className="w-full h-[540px] object-cover" />
       </div>
-    </>
+    </div>
 
   )
 }
