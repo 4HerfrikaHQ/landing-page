@@ -110,6 +110,19 @@
     }
 }
 
+.story-title {
+    &>div {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: 400ms ease-out;
+    }
+
+    &.show>div {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
 .never-touched-section {
     height: 0px;
     transition: 1.3s var(--ease-out-expo);

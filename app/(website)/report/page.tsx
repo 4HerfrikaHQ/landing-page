@@ -18,13 +18,14 @@ import { useRef } from "react";
 import "./report.scss";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+//@ts-ignore
 import { SplitText } from "./splittext"
 
-console.log(SplitText)
 gsap.registerPlugin(useGSAP); // register the hook to avoid React version discrepancies
 gsap.registerPlugin(SplitText); // register the hook to avoid React version discrepancies
 
 export default function ReportPage() {
+  const storyTitleRef = useRef<HTMLDivElement>(null);
   const motionSectionRef = useRef<HTMLDivElement>(null);
   const motionDescriptionRef = useRef<HTMLDivElement>(null);
   const milestoneRef = useRef<HTMLDivElement>(null);
@@ -32,6 +33,10 @@ export default function ReportPage() {
 
   useAnimateOnScroll([
     {
+      ref: storyTitleRef,
+      className: "show",
+      threshold: 0.3,
+    }, {
       ref: motionSectionRef,
       className: "show",
       threshold: 0.3,
@@ -55,8 +60,12 @@ export default function ReportPage() {
   ]);
 
   useGSAP(() => {
-    const motionSplit = SplitText.create(".motion-description", { type: "lines" });
+    const storyTitleSplit = SplitText.create(".story-title", { type: "words" });
+    (storyTitleSplit.words as Array<HTMLDivElement>).forEach((word, index) => {
+      word.style.transitionDelay = `${index * 0.15}s`
+    })
 
+    const motionSplit = SplitText.create(".motion-description", { type: "lines" });
     (motionSplit.lines as Array<HTMLDivElement>).forEach((line, index) => {
       line.style.transitionDelay = `${index * 0.2}s`
     })
@@ -81,7 +90,7 @@ export default function ReportPage() {
   return (
     <div className="w-screen overflow-hidden">
       <Image src={yearReport} alt="Yearly report" className="mx-auto max-w-full" />
-      <h1 className="text-5xl font-bold text-black mx-auto mt-28 mb-24 text-center">
+      <h1 ref={storyTitleRef} className="text-5xl font-bold text-black mx-auto mt-28 mb-24 text-center story-title">
         Our Story in Motion
       </h1>
       <div ref={motionSectionRef} className="relative flex flex-col items-center mb-32">
