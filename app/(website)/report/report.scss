@@ -155,11 +155,13 @@
 
 .beginning-text {
     &>div {
+        transform: translateY(10px);
         opacity: 0;
-        transition: 300ms ease-out;
+        transition: 500ms ease-out;
     }
 
     .show &>div {
+        transform: translateY(0px);
         opacity: 1;
     }
 }

@@ -87,10 +87,8 @@ export default function ReportPage() {
 
     const beginningTextSplit = SplitText.create(".beginning-text", { type: "lines" });
     (beginningTextSplit.lines as Array<HTMLDivElement>).forEach((line, index) => {
-      line.style.transitionDelay = `${index * 0.1}s`
+      line.style.transitionDelay = `${index * 0.2}s`
     })
-
-    neverTouchedRef.current.style.setProperty('--actual-height', `${neverTouchedRef.current.scrollHeight}px`)
   })
 
   return (
