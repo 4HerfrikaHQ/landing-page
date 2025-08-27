@@ -71,3 +71,62 @@
         opacity: 1;
     }
 }
+
+.motion-description {
+    &>div {
+        transform: translateY(10px);
+        opacity: 0;
+        transition: 500ms ease-out;
+    }
+
+    &.show>div {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+.milestones-header {
+    &>div {
+        transform: translateY(20px);
+        opacity: 0;
+        transition: 500ms ease-in-out;
+    }
+
+    .show &>div {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+.milestones-list {
+    li {
+        opacity: 0;
+        transition: 300ms ease-in;
+        /*transition-delay: 1.5s;*/
+    }
+
+    .show & li {
+        opacity: 1;
+    }
+}
+
+.never-touched-section {
+    height: 0px;
+    transition: 1.3s var(--ease-out-expo);
+    overflow: hidden;
+
+    .description {
+        opacity: 0;
+        transition: 0.3s ease-out;
+        transition-delay: 0.8s;
+    }
+
+
+    &.show {
+        height: var(--actual-height);
+
+        .description {
+            opacity: 1;
+        }
+    }
+}
