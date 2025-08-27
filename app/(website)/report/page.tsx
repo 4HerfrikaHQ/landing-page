@@ -54,8 +54,7 @@ export default function ReportPage() {
     {
       ref: neverTouchedRef,
       className: "show",
-      threshold: 1,
-      rootMargin: "1000px 0"
+      threshold: 0.5,
     },
   ]);
 
@@ -127,12 +126,12 @@ export default function ReportPage() {
         <p className="px-20 text-black text-[32px] text-center mb-32 description">
           In one year, we’ve seen girls who never touched a computer now designing products, coding software, and leading change in their schools and communities.
         </p>
-        <div className="relative mb-40">
+        <div className="relative mb-40 never-touched-images">
           <Image src={left} alt="Girls" className="w-[30vw] h-[565px] object-cover absolute rotate-[-25deg] left-0 top-32" />
           <Image src={right} alt="Girls" className="w-[30vw] h-[565px] object-cover absolute rotate-[25deg] right-0 top-32" />
           <Image src={middle} alt="Girls" className="w-[30vw] h-[565px] object-cover mx-auto relative" />
         </div>
-        <Button href="/" className="mx-auto w-fit">
+        <Button href="/" className="mx-auto w-fit download-report">
           Download our report
         </Button>
         <span className="h-36 block" />

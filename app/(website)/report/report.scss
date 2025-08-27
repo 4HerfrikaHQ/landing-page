@@ -124,22 +124,31 @@
 }
 
 .never-touched-section {
-    height: 0px;
-    transition: 1.3s var(--ease-out-expo);
-    overflow: hidden;
 
-    .description {
+    .description,
+    .download-report {
         opacity: 0;
         transition: 0.3s ease-out;
-        transition-delay: 0.8s;
     }
 
 
     &.show {
         height: var(--actual-height);
 
-        .description {
+        .description,
+        .download-report {
             opacity: 1;
         }
+    }
+}
+
+.never-touched-images {
+    transform: translateY(40px);
+    opacity: 0;
+    transition: 0.3s ease-out;
+
+    .show & {
+        transform: translateY(0px);
+        opacity: 1;
     }
 }

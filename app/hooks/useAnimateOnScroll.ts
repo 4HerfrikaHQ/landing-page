@@ -10,56 +10,10 @@ interface AnimationConfig {
 }
 
 export function useAnimateOnScroll(configs: AnimationConfig[]) {
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const observersRef = useRef<IntersectionObserver[]>([]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const target = entry.target as HTMLElement;
-            const config = configs.find(config => {
-              if (config.ref?.current) {
-                return config.ref.current === target;
-              }
-              if (config.selector) {
-                return target.matches(config.selector);
-              }
-              return false;
-            });
-
-            if (config) {
-              target.classList.add(config.className || 'show');
-              
-              if (config.once !== false) {
-                observer.unobserve(target);
-              }
-            }
-          } else {
-            const target = entry.target as HTMLElement;
-            const config = configs.find(config => {
-              if (config.ref?.current) {
-                return config.ref.current === target;
-              }
-              if (config.selector) {
-                return target.matches(config.selector);
-              }
-              return false;
-            });
-
-            if (config && config.once === false) {
-              target.classList.remove(config.className || 'show');
-            }
-          }
-        });
-      },
-      {
-        threshold: configs[0]?.threshold || 0.3,
-        rootMargin: configs[0]?.rootMargin || '0px'
-      }
-    );
-
-    observerRef.current = observer;
+    const observers: IntersectionObserver[] = [];
 
     configs.forEach((config) => {
       let element: HTMLElement | null = null;
@@ -71,14 +25,41 @@ export function useAnimateOnScroll(configs: AnimationConfig[]) {
       }
 
       if (element) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const target = entry.target as HTMLElement;
+                target.classList.add(config.className || 'show');
+                
+                if (config.once !== false) {
+                  observer.unobserve(target);
+                }
+              } else {
+                if (config.once === false) {
+                  const target = entry.target as HTMLElement;
+                  target.classList.remove(config.className || 'show');
+                }
+              }
+            });
+          },
+          {
+            threshold: config.threshold || 0.3,
+            rootMargin: config.rootMargin || '0px'
+          }
+        );
+
         observer.observe(element);
+        observers.push(observer);
       }
     });
 
+    observersRef.current = observers;
+
     return () => {
-      observer.disconnect();
+      observers.forEach(observer => observer.disconnect());
     };
   }, [configs]);
 
-  return observerRef;
+  return observersRef;
 }
