@@ -30,6 +30,7 @@ export default function ReportPage() {
   const motionDescriptionRef = useRef<HTMLDivElement>(null);
   const milestoneRef = useRef<HTMLDivElement>(null);
   const neverTouchedRef = useRef<HTMLDivElement>(null);
+  const justTheBeginningRef = useRef<HTMLDivElement>(null);
 
   useAnimateOnScroll([
     {
@@ -56,6 +57,11 @@ export default function ReportPage() {
       className: "show",
       threshold: 0.5,
     },
+    {
+      ref: justTheBeginningRef,
+      className: "show",
+      threshold: .8,
+    },
   ]);
 
   useGSAP(() => {
@@ -79,11 +85,12 @@ export default function ReportPage() {
       line.style.transitionDelay = `${(index * 0.1) + 0.4}s`
     })
 
-    if (neverTouchedRef.current) {
-      neverTouchedRef.current.style.setProperty('--actual-height', `${neverTouchedRef.current.scrollHeight}px`)
-    }
+    const beginningTextSplit = SplitText.create(".beginning-text", { type: "lines" });
+    (beginningTextSplit.lines as Array<HTMLDivElement>).forEach((line, index) => {
+      line.style.transitionDelay = `${index * 0.1}s`
+    })
 
-    console.log(motionSplit.lines)
+    neverTouchedRef.current.style.setProperty('--actual-height', `${neverTouchedRef.current.scrollHeight}px`)
   })
 
   return (
@@ -136,17 +143,17 @@ export default function ReportPage() {
         </Button>
         <span className="h-36 block" />
       </div>
-      <div className="p-20 grid grid-cols-[1.5fr_1fr] gap-x-24 items-center">
+      <div ref={justTheBeginningRef} className="p-20 grid grid-cols-[1.5fr_1fr] gap-x-24 items-center just-the-beginning">
         <div>
-          <h4 className="text-[32px] leading-normal mb-12">
+          <h4 className="text-[32px] leading-normal mb-12 beginning-text">
             This is just the beginning. By 2030, 4herfrika envisions 2 million women and girls empowered across Africa. Together, we can make it happen
           </h4>
-          <Button href="/" className="w-fit gap-x-1">
+          <Button href="/" className="w-fit gap-x-1 beginning-button">
             Go to Homepage
             <FaArrowRight />
           </Button>
         </div>
-        <Image src={beginning} alt="Just the beginning" className="w-full h-[540px] object-cover" />
+        <Image src={beginning} alt="Just the beginning" className="w-full h-[540px] object-cover beginning-image" />
       </div>
     </div>
 
