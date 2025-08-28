@@ -11,7 +11,7 @@ export const Footer = () => {
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
-									href="/projects"
+									href="/blog"
 									className="text-white transition hover:text-white/75"
 								>
 									Projects
@@ -27,7 +27,7 @@ export const Footer = () => {
 							</li>
 							<li>
 								<Link
-									href="/volunteer"
+									href="/careers-corner"
 									className="text-white transition hover:text-white/75"
 								>
 									Volunteer as a Mentor
@@ -69,14 +69,6 @@ export const Footer = () => {
 									className="text-white transition hover:text-white/75"
 								>
 									Privacy
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/cookies"
-									className="text-white transition hover:text-white/75"
-								>
-									Cookies
 								</Link>
 							</li>
 						</ul>
