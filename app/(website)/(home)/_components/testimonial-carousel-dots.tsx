@@ -34,7 +34,9 @@ const TestimonialCarouselDots = ({ dotsCount }: { dotsCount: number }) => {
 				},
 			);
 
-			testimonialCards.forEach((card) => observer.observe(card));
+			for (const card of testimonialCards) {
+				observer.observe(card);
+			}
 		}
 	}, []);
 
@@ -42,7 +44,7 @@ const TestimonialCarouselDots = ({ dotsCount }: { dotsCount: number }) => {
 		<div className="mt-5 flex gap-x-2.5 justify-center md:hidden">
 			{Array.from({ length: dotsCount }).map((_, index) => (
 				<span
-					key={index}
+					key={`dot-${index + 1}`}
 					className={cn("flex size-2.5 bg-primary-500 rounded-xl", {
 						"opacity-20": activeDot !== index,
 					})}

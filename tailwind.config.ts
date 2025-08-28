@@ -19,6 +19,20 @@ const config: Config = {
       backgroundSize: {
         hero: "200px, 100%",
       },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        marquee2: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+      },
+      animation: {
+        marquee: 'marquee var(--animation-duration, 25s) linear infinite',
+        marquee2: 'marquee2 var(--animation-duration, 25s) linear infinite',
+      },
       colors: {
         primary: {
           100: "rgb(var(--primary-100) / <alpha-value>)",
