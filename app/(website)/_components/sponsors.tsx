@@ -2,10 +2,10 @@ import Image from "next/image";
 
 const Sponsors = () => {
 	const sponsors = [
-		{ name: "FUSE", logo: "/sponsors/trybefuse.png" },
-		{ name: "Beepo", logo: "/sponsors/beepo.png" },
-		{ name: "Syncthesis", logo: "/sponsors/syncthesis.png" },
-		{ name: "Postman", logo: "/sponsors/postman.png" },
+		{ name: "FUSE", logo: "/assets/sponsors/trybefuse.png" },
+		{ name: "Beepo", logo: "/assets/sponsors/beepo.png" },
+		{ name: "Syncthesis", logo: "/assets/sponsors/syncthesis.png" },
+		{ name: "Postman", logo: "/assets/sponsors/postman.png" },
 	];
 
 	return (
