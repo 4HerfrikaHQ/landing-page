@@ -2,7 +2,7 @@ export const NAV_LINKS = [
 	{ name: "About Us", href: "/about" },
 	{
 		name: "Projects",
-		href: "/blog",
+		href: "/projects",
 	},
 	{ name: "Career Corner", href: "/careers-corner" },
 	{ name: "Blog", href: "/blog" },
