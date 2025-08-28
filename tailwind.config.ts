@@ -30,8 +30,8 @@ const config: Config = {
         },
       },
       animation: {
-        marquee: 'marquee 25s linear infinite',
-        marquee2: 'marquee2 25s linear infinite',
+        marquee: 'marquee var(--animation-duration, 25s) linear infinite',
+        marquee2: 'marquee2 var(--animation-duration, 25s) linear infinite',
       },
       colors: {
         primary: {
