@@ -110,7 +110,7 @@ const CareersCorner = () => {
 											alt={mentor.name}
 											width={700}
 											height={1000}
-											className="hover:scale-105 transition-transform duration-300"
+											className="hover:scale-105 max-h-[285px] object-cover transition-transform duration-300"
 										/>
 									</div>
 									<p className="text-center text-md mt-3 uppercase font-bold text-white">
