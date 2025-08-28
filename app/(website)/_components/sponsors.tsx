@@ -1,15 +1,11 @@
-import Beepo from "@/app/(website)/(home)/assets/sponsors/beepo.png";
-import Postman from "@/app/(website)/(home)/assets/sponsors/postman.png";
-import Syncthesis from "@/app/(website)/(home)/assets/sponsors/syncthesis.png";
-import Trybefuse from "@/app/(website)/(home)/assets/sponsors/trybefuse.png";
 import Image from "next/image";
 
 const Sponsors = () => {
 	const sponsors = [
-		{ name: "FUSE", logo: Trybefuse.src },
-		{ name: "Beepo", logo: Beepo.src },
-		{ name: "Syncthesis", logo: Syncthesis.src },
-		{ name: "Postman", logo: Postman.src },
+		{ name: "FUSE", logo: "/sponsors/trybefuse.png" },
+		{ name: "Beepo", logo: "/sponsors/beepo.png" },
+		{ name: "Syncthesis", logo: "/sponsors/syncthesis.png" },
+		{ name: "Postman", logo: "/sponsors/postman.png" },
 	];
 
 	return (
