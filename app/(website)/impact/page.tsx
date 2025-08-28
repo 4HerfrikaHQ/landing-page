@@ -20,6 +20,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 //@ts-ignore
 import { SplitText } from "./splittext";
+import Link from "next/link";
 
 gsap.registerPlugin(useGSAP); // register the hook to avoid React version discrepancies
 gsap.registerPlugin(SplitText); // register the hook to avoid React version discrepancies
@@ -205,7 +206,13 @@ export default function ReportPage() {
 						className="col-span-2 w-full h-full md:w-[30vw] md:h-[565px] object-cover md:absolute md:rotate-[-25deg] left-0 md:top-32"
 					/>
 				</div>
-				<Button href="/" className="mx-auto w-fit download-report">
+				<Button
+					href={"/reports/4herfrika-Annual-report.pdf" as never}
+					className="mx-auto w-fit download-report"
+					target="_blank"
+					rel="noopener noreferrer"
+					download
+				>
 					Download our report
 				</Button>
 				<span className="h-12 md:h-36 block" />
