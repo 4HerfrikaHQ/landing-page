@@ -1,15 +1,15 @@
-import { MenubarButton } from "@/components/MenubarButton";
-import { NavbarLink } from "@/components/NavbarLink";
 import type { Route } from "next";
 import Link from "next/link";
+import { MenubarButton } from "@/components/MenubarButton";
+import { NavbarLink } from "@/components/NavbarLink";
 import Logo from "../4herfrika-logo.svg";
 import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
-import { YearOneReport }  from "./year-one-report"
+import { YearOneReport } from "./year-one-report";
 
 export const Navbar = () => {
 	return (
 		<div className="relative">
-		  <YearOneReport/>
+			<YearOneReport />
 			<header className="sticky inset-x-0 top-0 z-50 bg-white h-16 lg:h-[90px]">
 				<nav
 					className="flex items-center justify-between h-full px-6 lg:px-8"

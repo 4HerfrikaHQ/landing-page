@@ -1,7 +1,8 @@
 "use client";
 
-import { cn } from "@/utils/cn";
 import Image from "next/image";
+import { Button } from "@/components/Button";
+import { cn } from "@/utils/cn";
 import Gallery1 from "../assets/gallery/gallery--1.jpg";
 import Gallery2 from "../assets/gallery/gallery--2.jpg";
 import Gallery3 from "../assets/gallery/gallery--3.jpg";
@@ -166,7 +167,6 @@ export function GalleryGrid() {
 	return (
 		<div className="bg-white py-8 md:py-12 lg:py-16 xl:py-20">
 			<div className="mx-auto container px-4 sm:px-6 lg:px-8">
-				{/* Hero section with first image */}
 				<div className="flex flex-col md:flex-row justify-between items-start mb-10">
 					<div className="w-full md:w-1/2 mb-6 md:mb-0">
 						<h2 className="text-2xl sm:text-3xl md:text-4xl font-bold max-w-sm text-gray-700">
@@ -177,9 +177,11 @@ export function GalleryGrid() {
 							4HerFrika&apos;s journey.
 						</p>
 						<div className="mt-6">
-							<button
-								type="button"
-								className="inline-flex items-center border border-pink-500 text-pink-500 rounded-full py-2 px-6 hover:bg-pink-50 transition-colors"
+							<Button
+								href="https://drive.google.com/drive/folders/1T9pPsObVV-x7UxGu70cj2XcX5PZNcw3g"
+								isExternal
+								variant="outline"
+								className="inline-flex items-center border border-pink-500 text-pink-500 rounded-full py-2 px-6"
 							>
 								<span>View all Photos</span>
 								<svg
@@ -197,7 +199,7 @@ export function GalleryGrid() {
 										d="M14 5l7 7m0 0l-7 7m7-7H3"
 									/>
 								</svg>
-							</button>
+							</Button>
 						</div>
 					</div>
 

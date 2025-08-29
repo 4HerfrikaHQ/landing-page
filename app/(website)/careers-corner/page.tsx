@@ -1,6 +1,6 @@
-import { counsellingMentors } from "@/utils/details";
 import Image from "next/image";
 import Link from "next/link";
+import { counsellingMentors } from "@/utils/details";
 import { CareersHero } from "./_components/hero";
 import MentorForm from "./_components/mentor-form";
 import MentorDetailsModal, {
@@ -11,8 +11,6 @@ import MentorDetailsModal, {
 const CareersCorner = () => {
 	return (
 		<section className="overflow-x-hidden">
-			{/* Mentor Details Modal - Client Component */}
-
 			<CareersHero />
 
 			{/* Featured Mentor Section */}

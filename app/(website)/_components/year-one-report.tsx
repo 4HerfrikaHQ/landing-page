@@ -4,17 +4,19 @@ import { usePathname } from "next/navigation";
 
 export function YearOneReport() {
 	const pathname = usePathname();
-
 	if (pathname === "/impact") return null;
 
 	return (
-		<div className="w-full h-14 bg-primary-400 flex items-center justify-center text-white font-medium whitespace-pre">
-			<span>
-				Check out our Year-One Landscape report{" "}
-				<Link href="/impact" className="font-bold">
-					here!
-				</Link>
-			</span>
-		</div>
+		<Link
+			href="/impact"
+			aria-label="Check out our Year-One Landscape report"
+			className="sticky top-0 z-50 block w-full group"
+		>
+			<div className="h-14 w-full bg-primary-500 text-white flex items-center justify-center text-sm sm:text-base font-medium cursor-pointer select-none hover:underline">
+				<span className="animate-pulse group-hover:animate-none">
+					Check out our Year-One Landscape report here!
+				</span>
+			</div>
+		</Link>
 	);
 }

@@ -1,8 +1,8 @@
+import type { Content } from "@prismicio/client";
+import { PrismicImage } from "@prismicio/react";
 import { Button } from "@/components/Button";
 import { TestimonialCard } from "@/components/TestimonialCard";
 import { createClient } from "@/prismicio";
-import type { Content } from "@prismicio/client";
-import { PrismicImage } from "@prismicio/react";
 import Sponsors from "../_components/sponsors";
 import AfricaLogo from "../africa-logo.svg";
 import { ExploreCommunity } from "./_components/explore-community";
@@ -59,7 +59,7 @@ export default async function HomePage() {
 						</Button>
 
 						<Button
-							className=" px-8 py-3 md:py-4 text-base md:text-xl"
+							className="px-8 py-3 md:py-4 text-base md:text-xl"
 							href={ambassador_link.text || "/"}
 							isExternal
 						>
