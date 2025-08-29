@@ -6,10 +6,12 @@ import { GalleryGrid } from "../blog/_components/gallery-grid";
 export default function ProjectsPage() {
 	return (
 		<main className="bg-white">
-			<section className="relative overflow-hidden">
-				<div className="mx-auto max-w-7xl px-4 pt-16 md:pt-20 pb-20 md:pb-28">
-					<div className="relative">
-						<div className="lg:pr-[46%]">
+			<section className="relative">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 pb-20 md:pb-28">
+					{/* Grid on desktop; stack on mobile/tablet */}
+					<div className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
+						{/* Copy */}
+						<div className="lg:col-span-7 max-w-2xl">
 							<span className="inline-flex items-center gap-2 rounded-full border border-pink-100 bg-pink-50 px-3 py-1 text-xs font-medium text-pink-700">
 								Projects
 							</span>
@@ -36,54 +38,40 @@ export default function ProjectsPage() {
 								>
 									Start a Chapter
 								</Button>
-
 								<Button
 									href="/about"
 									variant="outline"
-									className="w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
+									className="px-8 py-3 md:py-4 text-base md:text-xl"
 								>
 									Learn more
 								</Button>
 							</div>
 						</div>
 
-						<div className="hidden lg:block absolute -top-16 right-[-56px] w-[48%] z-0">
+						{/* Art */}
+						<div className="mt-10 lg:mt-0 lg:col-span-5">
 							<div className="p-[10px] rounded-[30px] bg-[linear-gradient(135deg,#ff3ea5_0%,#a855f7_100%)] [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)] shadow-[0_18px_40px_rgba(233,30,99,0.20)]">
-								<div className="relative h-[540px] rounded-[24px] overflow-hidden bg-gray-300 [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
+								<div className="relative aspect-[4/5] rounded-[24px] overflow-hidden bg-gray-300 [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
 									<Image
 										src="https://images.unsplash.com/photo-1559323940-a48fb049eb23?q=80&auto=format&fit=crop&w=1600"
 										alt="Young woman resting with thoughtful gaze"
 										fill
 										priority
 										className="object-cover"
-										sizes="(min-width:1024px) 48vw, 100vw"
+										sizes="(min-width:1024px) 40vw, 100vw"
 									/>
 									<div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
 								</div>
 							</div>
-
-							<div className="mt-4 ml-10 mr-5 h-10 rounded-[24px] bg-pink-500/20 blur-2xl" />
-						</div>
-
-						<div className="lg:hidden mt-10">
-							<div className="p-[6px] rounded-2xl bg-[linear-gradient(135deg,#ff3ea5_0%,#a855f7_100%)] [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
-								<div className="relative h-[320px] rounded-xl overflow-hidden bg-gray-300 [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
-									<Image
-										src="https://images.unsplash.com/photo-1559323940-a48fb049eb23?q=80&auto=format&fit=crop&w=1200"
-										alt="Young woman resting with thoughtful gaze"
-										fill
-										className="object-cover"
-										sizes="100vw"
-									/>
-								</div>
-							</div>
+							<div className="mt-4 h-10 rounded-[24px] bg-pink-500/20 blur-2xl" />
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<section className="px-4 pt-24 md:pt-28">
-				<div className="mx-auto max-w-9xl text-center">
+			{/* INTRO */}
+			<section className="px-4 sm:px-6 lg:px-8 pt-24 md:pt-28">
+				<div className="mx-auto max-w-7xl text-center">
 					<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
 						4HerAfrika
 					</h2>
@@ -97,28 +85,29 @@ export default function ProjectsPage() {
 				</div>
 			</section>
 
-			<section className="px-4 pt-16 md:pt-20">
-				<div className="mx-auto max-w-9xl">
+			{/* FEATURED PROJECT A */}
+			<section className="px-4 sm:px-6 lg:px-8 pt-16 md:pt-20">
+				<div className="mx-auto max-w-7xl">
 					<div className="rounded-3xl bg-white border border-gray-200 overflow-hidden">
 						<div className="grid md:grid-cols-2">
-							<div className="relative h-64 md:h-full">
+							<div className="relative aspect-[4/3] md:h-full">
 								<Image
-									src="https://images.unsplash.com/photo-1635606906861-a3ac61bc1c78?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGFmcmljYSUyMHVuaXRlfGVufDB8fDB8fHww"
+									src="https://images.unsplash.com/photo-1635606906861-a3ac61bc1c78?w=1200&auto=format&fit=crop&q=70"
 									alt="StopTheViolence project poster"
 									fill
 									className="object-cover md:rounded-l-3xl"
-									sizes="(min-width: 768px) 50vw, 100vw"
+									sizes="(min-width: 1024px) 50vw, 100vw"
 								/>
 							</div>
 
-							<div className="p-10 lg:p-12 flex flex-col justify-center">
-								<p className="text-lg md:text-xl text-gray-500">
+							<div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+								<p className="text-base md:text-lg lg:text-xl text-gray-500">
 									17+ chapters established in 2+ African countries.
 								</p>
-								<h3 className="mt-3 text-3xl md:text-4xl font-extrabold text-gray-900">
+								<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900">
 									The ‘StopTheViolence’ Project
 								</h3>
-								<p className="mt-5 text-lg md:text-xl text-gray-600 leading-relaxed">
+								<p className="mt-5 text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed">
 									The StopTheViolence project delves into these causes,
 									exploring their effects and potential consequences on
 									students’ lives.
@@ -152,16 +141,17 @@ export default function ProjectsPage() {
 				</div>
 			</section>
 
-			<section className="px-4 pt-20 md:pt-24 pb-28">
-				<div className="mx-auto max-w-9xl grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+			{/* FEATURED PROJECT B */}
+			<section className="px-4 sm:px-6 lg:px-8 pt-20 md:pt-24 pb-28">
+				<div className="mx-auto max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
 					<div>
-						<p className="text-lg md:text-xl font-medium text-gray-700">
+						<p className="text-base md:text-lg lg:text-xl font-medium text-gray-700">
 							200+ girls trained since launch.
 						</p>
-						<h3 className="mt-3 text-3xl md:text-4xl font-extrabold text-gray-900">
+						<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900">
 							TechUp4Her
 						</h3>
-						<p className="mt-5 text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl">
+						<p className="mt-5 text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-xl">
 							A digital skills bootcamp for girls, from zero knowledge to
 							tech-savvy in UI/UX Design, Web Dev, and Digital Literacy.
 						</p>
@@ -196,7 +186,7 @@ export default function ProjectsPage() {
 							alt="TechUp4Her bootcamp session"
 							fill
 							className="object-cover"
-							sizes="(min-width: 768px) 50vw, 100vw"
+							sizes="(min-width: 1024px) 50vw, 100vw"
 						/>
 						<div className="absolute bottom-4 right-4 rounded-full bg-pink-600 text-white text-xs font-medium px-4 py-1.5">
 							4Herfrika | Campus Bootcamp
@@ -205,35 +195,7 @@ export default function ProjectsPage() {
 				</div>
 			</section>
 
-			<section className="px-4 pt-20 md:pt-28 pb-28">
-				<div className="mx-auto max-w-9xl text-center">
-					<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-						Want to Support a Project?
-					</h2>
-					<p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-gray-600 leading-relaxed">
-						You can donate to a specific project, volunteer, or help us scale to
-						more campuses.
-					</p>
-
-					<div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-						<Button
-							href="/careers-corner"
-							variant="outline"
-							className="rounded-full px-6 py-3 text-sm md:text-base border-pink-500 text-pink-600 hover:bg-pink-50"
-						>
-							Volunteer With Us
-						</Button>
-
-						<Button
-							href="/donate"
-							variant="solid"
-							className="rounded-full px-6 py-3 text-sm md:text-base bg-pink-600 hover:bg-pink-700 text-white"
-						>
-							Sponsor a Project
-						</Button>
-					</div>
-				</div>
-			</section>
+			{/* GALLERY */}
 			<section>
 				<GalleryGrid />
 			</section>
