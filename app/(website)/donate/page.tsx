@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import BankDetails from "./_components/bank-details";
 
@@ -54,12 +55,14 @@ export default function DonationPage() {
 										<br className="hidden sm:block" />
 										Women Across Africa
 									</h2>
-									<button
+									<Link
+										href="#bank-details"
+										scroll={true}
 										className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 sm:py-4 px-8 sm:px-12 rounded-full text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-										aria-label="Donate anonymously"
+										aria-label="Go to bank details"
 									>
-										Donate Anonymously
-									</button>
+										Donate Now
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -80,8 +83,10 @@ export default function DonationPage() {
 				</div>
 			</section>
 
-			{/* Bank Details */}
-			<section className="py-14 sm:py-16 md:py-20 px-4 border-t border-gray-100 bg-white">
+			<section
+				id="bank-details"
+				className="py-14 sm:py-16 md:py-20 px-4 border-t border-gray-100 bg-white"
+			>
 				<div className="max-w-5xl mx-auto">
 					<div className="text-center mb-8 sm:mb-10 md:mb-12">
 						<h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -93,14 +98,7 @@ export default function DonationPage() {
 							2,000,000 women and girls with tech and entrepreneurship by 2030.
 						</p>
 					</div>
-
-					<BankDetails
-						accountNumber="0000000000"
-						beneficiaryName="4HerAfrika"
-						sortCode="OW17B7F3D"
-						iban="CH93 0076 2011 6238 5295 7"
-						swift="POFICHBEXXX"
-					/>
+					<BankDetails />
 				</div>
 			</section>
 		</div>

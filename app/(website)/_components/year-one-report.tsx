@@ -10,15 +10,10 @@ export function YearOneReport() {
 		<Link
 			href="/impact"
 			aria-label="Check out our Year-One Landscape report"
-			className="sticky top-0 z-50 block w-full"
+			className="sticky top-0 z-50 block w-full group"
 		>
-			<div
-				className="h-14 w-full bg-primary-500 text-white
-                   flex items-center justify-center
-                   text-sm sm:text-base font-medium
-                   cursor-pointer select-none underline"
-			>
-				<span className="animate-pulse">
+			<div className="h-14 w-full bg-primary-500 text-white flex items-center justify-center text-sm sm:text-base font-medium cursor-pointer select-none hover:underline">
+				<span className="animate-pulse group-hover:animate-none">
 					Check out our Year-One Landscape report here!
 				</span>
 			</div>
