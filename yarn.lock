@@ -1548,6 +1548,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@formspree/core@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@formspree/core@npm:4.0.0"
+  dependencies:
+    "@stripe/stripe-js": "npm:^5.7.0"
+  checksum: 10c0/632f6f29d64a41c12918cf95700ae63b362f21975cfb42ac81ba8aa89e5dbaa7b528143635cabdb0df1a345f94202e9bd52321baf95f8033a2f427fc3c747743
+  languageName: node
+  linkType: hard
+
+"@formspree/react@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@formspree/react@npm:3.0.0"
+  dependencies:
+    "@formspree/core": "npm:^4.0.0"
+    "@stripe/react-stripe-js": "npm:^3.1.1"
+    "@stripe/stripe-js": "npm:^5.7.0"
+  peerDependencies:
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0
+  checksum: 10c0/b3426928f770a82ebfdae94bd33abb47f8589afb3b7ecdcb46739cc283459ca676be99251d5024c4c446a85b9e95826e1acafa2c532193559205950993edf561
+  languageName: node
+  linkType: hard
+
 "@gsap/react@npm:^2.1.2":
   version: 2.1.2
   resolution: "@gsap/react@npm:2.1.2"
@@ -4096,6 +4119,26 @@ __metadata:
     prettier: "npm:^3.0.3"
     prismic-ts-codegen: "npm:^0.1.23"
   checksum: 10c0/56cc5e1c7d20107bc6fdcfdf38fc3b3d7981b2b5a77c31484f373601c39d895374c29c09ffc5db4ccdb8a27ff8bce2fe2abd001544a1c2e59001327ea7c6584b
+  languageName: node
+  linkType: hard
+
+"@stripe/react-stripe-js@npm:^3.1.1":
+  version: 3.9.2
+  resolution: "@stripe/react-stripe-js@npm:3.9.2"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ">=1.44.1 <8.0.0"
+    react: ">=16.8.0 <20.0.0"
+    react-dom: ">=16.8.0 <20.0.0"
+  checksum: 10c0/a082fd6c7347f3debd7cc5e4bf01e655061d4d21a2bf9e5c47ab721bf7bcd05075f75cfa0b7eee953b8622611cffa7b34ccd80283cd57f08a22b6fa348f32253
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^5.7.0":
+  version: 5.10.0
+  resolution: "@stripe/stripe-js@npm:5.10.0"
+  checksum: 10c0/0309007baaf939931de0e18ec8230bdfa41b1644cd5f65d72168ef0a05ea4d14da9a95ff628c94f9f1e222577296369b7490534803ce1ce18d08a557ae562644
   languageName: node
   linkType: hard
 
@@ -8364,6 +8407,7 @@ __metadata:
   dependencies:
     "@auth/prisma-adapter": "npm:2.7.1"
     "@biomejs/biome": "npm:^1.8.3"
+    "@formspree/react": "npm:^3.0.0"
     "@gsap/react": "npm:^2.1.2"
     "@libsql/client": "npm:0.14.0"
     "@premieroctet/next-admin": "npm:6.1.6"
@@ -8398,6 +8442,7 @@ __metadata:
     sass: "npm:^1.91.0"
     sharp: "npm:0.33.5"
     slice-machine-ui: "npm:^2.12.2"
+    sonner: "npm:^2.0.7"
     tailwind-merge: "npm:^3.3.1"
     tailwindcss: "npm:3.4.1"
     typescript: "npm:5.5"
@@ -10081,7 +10126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -11125,6 +11170,16 @@ __metadata:
     ip-address: "npm:^9.0.5"
     smart-buffer: "npm:^4.2.0"
   checksum: 10c0/d54a52bf9325165770b674a67241143a3d8b4e4c8884560c4e0e078aace2a728dffc7f70150660f51b85797c4e1a3b82f9b7aa25e0a0ceae1a243365da5c51a7
+  languageName: node
+  linkType: hard
+
+"sonner@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "sonner@npm:2.0.7"
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: 10c0/6966ab5e892ed6aab579a175e4a24f3b48747f0fc21cb68c3e33cb41caa7a0eebeb098c210545395e47a18d585eb8734ae7dd12d2bd18c8a3294a1ee73f997d9
   languageName: node
   linkType: hard
 
