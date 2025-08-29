@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const outfitSans = Outfit({
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 

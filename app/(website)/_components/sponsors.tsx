@@ -5,6 +5,7 @@ const Sponsors = () => {
 		{ name: "FUSE", logo: "/assets/sponsors/trybefuse.png" },
 		{ name: "Beepo", logo: "/assets/sponsors/beepo.png" },
 		{ name: "Syncthesis", logo: "/assets/sponsors/syncthesis.png" },
+		{ name: "Kubesmith", logo: "/assets/sponsors/kubesmith.png" },
 		{ name: "Postman", logo: "/assets/sponsors/postman.png" },
 	];
 
