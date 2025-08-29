@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "2.7.1",
+    "@formspree/react": "^3.0.0",
     "@gsap/react": "^2.1.2",
     "@libsql/client": "0.14.0",
     "@premieroctet/next-admin": "6.1.6",
@@ -37,6 +38,7 @@
     "react-use": "17.5.1",
     "resend": "4.0.0",
     "sass": "^1.91.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "zod": "3.23.8"
   },
