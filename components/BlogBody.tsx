@@ -1,8 +1,8 @@
 "use client";
-import { cn } from "@/utils/cn";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { cn } from "@/utils/cn";
 
 const posts = [
 	{
@@ -184,7 +184,7 @@ const BlogBody = () => {
 			</div>
 			<div className="flex justify-end lg:w-full">
 				<Link
-					href="/"
+					href="/projects"
 					className="border border-primary-500/100 rounded-full py-2 px-4 md:py-4 md:px-8 text-primary-500/100 text-base md:text-xl font-normal"
 				>
 					View All Projects

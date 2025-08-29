@@ -1,6 +1,6 @@
+import { Button } from "@/components/Button";
 import Image from "next/image";
 import React from "react";
-import { Button } from "@/components/Button";
 import { GalleryGrid } from "../blog/_components/gallery-grid";
 
 export default function ProjectsPage() {
@@ -85,11 +85,14 @@ export default function ProjectsPage() {
 			<section className="px-4 pt-24 md:pt-28">
 				<div className="mx-auto max-w-9xl text-center">
 					<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-						4Herfrika
+						4HerAfrika
 					</h2>
 					<p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-gray-600 leading-relaxed">
-						Lorem ipsum dolor sit amet consectetur. Sed tincidunt eget morbi
-						congue nunc enim. Venenatis sapien sit amet egestas.
+						4HerAfrika is a movement dedicated to empowering young women across
+						Africa through technology, leadership, and entrepreneurship. We
+						build grassroots-driven programs that equip girls with digital
+						skills, connect them to mentorship, and support them in becoming
+						leaders and changemakers in their communities.
 					</p>
 				</div>
 			</section>
@@ -165,7 +168,7 @@ export default function ProjectsPage() {
 
 						<div className="mt-8">
 							<Button
-								href="/projects/techup4her"
+								href="/projects/girls-tech-bootcamp"
 								variant="outline"
 								className="px-6 py-3 text-base md:text-lg max-w-[max-content]"
 							>

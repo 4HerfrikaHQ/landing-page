@@ -29,6 +29,7 @@ function CopyRow({ label, value, field, big, onCopy, copied }: CopyRowProps) {
 				</span>
 
 				<button
+					type="button"
 					onClick={() => onCopy(value, field)}
 					className={`ml-auto inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs sm:text-sm transition-all
             ${
@@ -76,7 +77,6 @@ export default function BankDetails() {
 				</div>
 			</div>
 
-			{/* Body */}
 			<div className="bg-white px-6 py-8 space-y-6">
 				<CopyRow
 					label="Account Number"
