@@ -6,10 +6,8 @@ const config: Config = {
 		"./app/**/*.tsx",
 		"./components/**/*.tsx",
 		"./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
-		"./node_modules/@premieroctet/next-admin/dist/**/*.{js,ts,jsx,tsx}",
 		"./slices/**/*.{js,ts,jsx,tsx,mdx}",
 	],
-	presets: [require("@premieroctet/next-admin/preset")],
 	theme: {
 		extend: {
 			backgroundImage: {
@@ -62,28 +60,6 @@ const config: Config = {
 				gray: {
 					400: "rgb(var(--gray-400) / <alpha-value>)",
 					300: "rgb(var(--gray-300) / <alpha-value>)",
-				},
-				nextadmin: {
-					brand: {
-						default: "rgb(var(--primary-500) / <alpha-value>)",
-						emphasis: "rgb(var(--primary-400) / <alpha-value>)",
-						subtle: "rgb(var(--primary-500) / <alpha-value>)",
-					},
-					menu: {
-						default: "rgb(var(--primary-500) / <alpha-value>)",
-						emphasis: "rgb(var(--primary-400) / <alpha-value>)",
-						muted: "rgb(var(--neutral-500) / <alpha-value>)",
-					},
-				},
-				get "dark-nextadmin"() {
-					return {
-						// @ts-expect-error - this is a getter
-						...this.nextadmin,
-						menu: {
-							default: "rgb(var(--neutral-500) / <alpha-value>)",
-							emphasis: "rgb(var(--neutral-400) / <alpha-value>)",
-						},
-					};
 				},
 			},
 		},
