@@ -1,16 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	typedRoutes: true,
 	experimental: {
-		typedRoutes: true,
 		webpackBuildWorker: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: process.env.NODE_ENV === "production",
 	},
 	typescript: {
 		ignoreBuildErrors: process.env.NODE_ENV === "production",
 	},
 	productionBrowserSourceMaps: false,
+	turbopack: {},
 	webpack: (config, { dev }) => {
 		if (config.cache && !dev) {
 			config.cache = Object.freeze({
