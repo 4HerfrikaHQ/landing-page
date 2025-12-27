@@ -8,7 +8,14 @@ const nextConfig = {
 		ignoreBuildErrors: process.env.NODE_ENV === "production",
 	},
 	productionBrowserSourceMaps: false,
-	turbopack: {},
+	turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
 	webpack: (config, { dev }) => {
 		if (config.cache && !dev) {
 			config.cache = Object.freeze({
