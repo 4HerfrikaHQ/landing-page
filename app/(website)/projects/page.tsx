@@ -51,7 +51,7 @@ export default function ProjectsPage() {
 						{/* Art */}
 						<div className="mt-10 lg:mt-0 lg:col-span-5">
 							<div className="p-[10px] rounded-[30px] bg-[linear-gradient(135deg,#ff3ea5_0%,#a855f7_100%)] [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)] shadow-[0_18px_40px_rgba(233,30,99,0.20)]">
-								<div className="relative aspect-[4/5] rounded-[24px] overflow-hidden bg-gray-300 [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
+								<div className="relative aspect-4/5 rounded-[24px] overflow-hidden bg-gray-300 [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
 									<Image
 										src="https://images.unsplash.com/photo-1559323940-a48fb049eb23?q=80&auto=format&fit=crop&w=1600"
 										alt="Young woman resting with thoughtful gaze"
@@ -60,7 +60,7 @@ export default function ProjectsPage() {
 										className="object-cover"
 										sizes="(min-width:1024px) 40vw, 100vw"
 									/>
-									<div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+									<div className="absolute inset-0 bg-linear-to-t from-black/15 via-transparent to-transparent" />
 								</div>
 							</div>
 							<div className="mt-4 h-10 rounded-[24px] bg-pink-500/20 blur-2xl" />
@@ -90,7 +90,7 @@ export default function ProjectsPage() {
 				<div className="mx-auto max-w-7xl">
 					<div className="rounded-3xl bg-white border border-gray-200 overflow-hidden">
 						<div className="grid md:grid-cols-2">
-							<div className="relative aspect-[4/3] md:h-full">
+							<div className="relative aspect-4/3 md:h-full">
 								<Image
 									src="https://images.unsplash.com/photo-1635606906861-a3ac61bc1c78?w=1200&auto=format&fit=crop&q=70"
 									alt="StopTheViolence project poster"
@@ -117,7 +117,7 @@ export default function ProjectsPage() {
 									<Button
 										href="/projects/stop-the-violence"
 										variant="outline"
-										className="px-6 py-3 text-base md:text-lg max-w-[max-content]"
+										className="px-6 py-3 text-base md:text-lg max-w-max"
 									>
 										<span className="mr-2">Explore Project</span>
 										<svg
@@ -160,7 +160,7 @@ export default function ProjectsPage() {
 							<Button
 								href="/projects/girls-tech-bootcamp"
 								variant="outline"
-								className="px-6 py-3 text-base md:text-lg max-w-[max-content]"
+								className="px-6 py-3 text-base md:text-lg max-w-max"
 							>
 								<span className="mr-2">See Details</span>
 								<svg

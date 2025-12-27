@@ -92,10 +92,10 @@ export default async function HomePage() {
 					<div className="container mx-auto px-2">
 						<div className="flex gap-8 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:gap-12 md:overflow-visible md:snap-none h-full">
 							{/* Spacer for mobile snapping */}
-							<div className="flex-shrink-0 w-4 md:hidden" />
+							<div className="shrink-0 w-4 md:hidden" />
 
 							{testimonials.map((testimonial) => (
-								<div className="flex-shrink-0 h-full " key={testimonial.name}>
+								<div className="shrink-0 h-full " key={testimonial.name}>
 									<TestimonialCard testimonial={testimonial} />
 								</div>
 							))}

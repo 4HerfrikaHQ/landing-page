@@ -117,7 +117,7 @@ function Modal() {
 					<div className="grid lg:grid-cols-2 gap-6 lg:gap-16">
 						{/* Profile Image */}
 						<div className="flex justify-center">
-							<div className="w-full max-w-md rounded-md shadow-md relative aspect-[3/4] h-[300px] sm:h-[400px]">
+							<div className="w-full max-w-md rounded-md shadow-md relative aspect-3/4 h-[300px] sm:h-[400px]">
 								<Image
 									src={mentor.image}
 									alt={mentor.name}

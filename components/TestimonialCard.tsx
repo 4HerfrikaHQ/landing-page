@@ -8,12 +8,12 @@ export function TestimonialCard({
 	testimonial: Content.HomepageDocument["data"]["testimonials"][number];
 }) {
 	return (
-		<div className="testimonial-card min-h-36 snap-start relative w-[79vw] flex-shrink-0 md:w-full h-full bg-primary-500/70 rounded-2xl pl-8 md:pl-14 pr-5 lg:pr-10 py-4 lg:py-6 flex flex-col text-white md:shadow-[2.18px_10.91px_26.18px_0px_rgba(0,0,0,0.18)]">
+		<div className="testimonial-card min-h-36 snap-start relative w-[79vw] shrink-0 md:w-full h-full bg-primary-500/70 rounded-2xl pl-8 md:pl-14 pr-5 lg:pr-10 py-4 lg:py-6 flex flex-col text-white md:shadow-[2.18px_10.91px_26.18px_0px_rgba(0,0,0,0.18)]">
 			<PrismicImage
 				className="size-11 lg:size-20 absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 object-cover rounded-full"
 				field={testimonial.profile_picture}
 			/>
-			<div className="flex flex-col flex-grow h-full justify-between">
+			<div className="flex flex-col grow h-full justify-between">
 				<p className="text-base lg:text-lg font-medium lg:leading-6 mb-4 lg:mb-6">
 					{testimonial.testimonial}
 				</p>

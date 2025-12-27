@@ -96,7 +96,7 @@ export default function BankDetails() {
 			</div>
 
 			{/* Footer strip */}
-			<div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 px-6 py-4 border-t border-gray-200">
+			<div className="bg-linear-to-r from-gray-50 via-white to-gray-50 px-6 py-4 border-t border-gray-200">
 				<p className="text-xs sm:text-sm text-gray-600 text-center">
 					Thank you for your support ❤️ Every contribution helps us make a bigger
 					impact.

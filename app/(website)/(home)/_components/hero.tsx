@@ -64,7 +64,7 @@ export const Hero = ({
 						</Button>
 					</div>
 				</div>
-				<div className="hidden lg:block flex-shrink-0 relative aspect-square self-end w-full">
+				<div className="hidden lg:block shrink-0 relative aspect-square self-end w-full">
 					<PrismicImage
 						field={heroImage}
 						className="aspect-[1.16] object-cover w-full"

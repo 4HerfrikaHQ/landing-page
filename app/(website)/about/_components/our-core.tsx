@@ -30,7 +30,7 @@ const coreValues = [
 
 export const OurCore = () => {
 	return (
-		<section className="bg-gradient-to-br from-pink-100 via-purple-50 to-pink-100 w-full py-16 md:py-24 relative overflow-hidden">
+		<section className="bg-linear-to-br from-pink-100 via-purple-50 to-pink-100 w-full py-16 md:py-24 relative overflow-hidden">
 			<div className="absolute inset-0 opacity-20">
 				<div className="absolute top-10 left-6 w-24 h-24 md:w-32 md:h-32 bg-pink-200 rounded-full blur-xl" />
 				<div className="absolute bottom-10 right-6 w-28 h-28 md:w-40 md:h-40 bg-purple-200 rounded-full blur-xl" />
@@ -66,7 +66,7 @@ export const OurCore = () => {
 						<div key={pos} className={`absolute ${pos}`}>
 							<div className="relative">
 								<div
-									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br ${coreValues[i].bg} rounded-full opacity-30 blur-sm transform`}
+									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-linear-to-br ${coreValues[i].bg} rounded-full opacity-30 blur-sm transform`}
 								/>
 								<div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 w-36 lg:w-40 text-center">
 									<div className="mb-3">
@@ -102,7 +102,7 @@ export const OurCore = () => {
 								className="relative w-full h-full max-w-xs flex flex-col"
 							>
 								<div
-									className={`absolute inset-0 w-full h-full bg-gradient-to-br ${card.bg} rounded-2xl opacity-20 blur-sm`}
+									className={`absolute inset-0 w-full h-full bg-linear-to-br ${card.bg} rounded-2xl opacity-20 blur-sm`}
 								/>
 								<div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50 text-center h-full flex flex-col">
 									<div className="mb-2">
@@ -114,7 +114,7 @@ export const OurCore = () => {
 											className="mx-auto"
 										/>
 									</div>
-									<p className="text-gray-700 font-medium text-sm flex-grow">
+									<p className="text-gray-700 font-medium text-sm grow">
 										{card.text}
 									</p>
 								</div>

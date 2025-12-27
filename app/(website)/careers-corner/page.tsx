@@ -17,7 +17,7 @@ const CareersCorner = () => {
 			<section className="bg-neutral-200">
 				<section className="container mx-auto h-full grid md:grid-cols-2 grid-cols-1 gap-10 items-center py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
 					<div className="relative w-full h-[600px]">
-						<div className="absolute -bottom-12 -right-10 size-40 rounded-full aspect-square border-[50px] z-10 border-white" />
+						<div className="absolute -bottom-12 -right-10 size-40 rounded-full aspect-square border-50 z-10 border-white" />
 						<Image
 							src="/assets/careers/Star-2.png"
 							alt="star"

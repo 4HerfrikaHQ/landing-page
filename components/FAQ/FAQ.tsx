@@ -41,7 +41,7 @@ const FrequentlyAskedQuestion = ({
 			style={{ boxShadow: "2px 10px 24px 0px rgba(0, 0, 0, 0.18)" }}
 			onClick={() => setIsOpen(!isOpen)}
 		>
-			<div className="flex-grow">
+			<div className="grow">
 				<h4
 					className={cn(
 						"text-md md:text-2xl text-gray-400 font-semibold duration-200",
@@ -61,7 +61,7 @@ const FrequentlyAskedQuestion = ({
 				</div>
 			</div>
 			<ChevronIcon
-				className={cn("text-gray-400 w-4 flex-shrink-0 md:w-16 duration-150", {
+				className={cn("text-gray-400 w-4 shrink-0 md:w-16 duration-150", {
 					"text-white rotate-180": isOpen,
 				})}
 			/>

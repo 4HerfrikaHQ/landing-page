@@ -129,7 +129,7 @@ const FaqDetails = () => {
 	return (
 		<>
 			<main className="w-full">
-				<div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16  sm:px-6 lg:px-8">
+				<div className="mx-auto max-w-(--breakpoint-xl) px-4 pb-6 pt-16  sm:px-6 lg:px-8">
 					<div className=" text-black">
 						<div>
 							<h1 className="md:text-[60px] text-[34px] lg:text-[67px] font-semibold text-center">

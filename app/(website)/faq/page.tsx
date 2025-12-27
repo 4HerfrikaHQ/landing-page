@@ -35,7 +35,7 @@ export default async function FAQPage() {
     <>
       <div className="faqbg lg:pb-24 md:pb-16 pb-14 relative">
         {page.data.header_image.url && <img src={page.data.header_image.url} className="absolute top-0 left-0 w-full h-full object-cover brightness-50" />}
-        <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16  sm:px-6 lg:px-8 relative">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 pb-6 pt-16  sm:px-6 lg:px-8 relative">
           <div className="text-center text-white">
             <h2 className="text-[32px] leading-10 ">FAQs</h2>
             <h1 className="lg:text-[64px] text-4xl leading-[80px] mt-1 font-bold md:text-6xl">

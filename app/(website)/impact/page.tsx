@@ -198,7 +198,7 @@ export default function ReportPage() {
 					<Image
 						src={right}
 						alt="Girls"
-						className="w-full h-full md:w-[30vw] md:h-[565px] object-cover md:absolute md:rotate-[25deg] right-0 md:top-32"
+						className="w-full h-full md:w-[30vw] md:h-[565px] object-cover md:absolute md:rotate-25 right-0 md:top-32"
 					/>
 					<Image
 						src={left}
