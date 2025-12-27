@@ -68,11 +68,6 @@ select:focus {
   outline: none;
 }
 
-a[data-active="true"] {
-  color: theme("colors.primary.500");
-  font-weight: theme("fontWeight.bold");
-}
-
 a:hover {
   text-decoration: underline;
 }
