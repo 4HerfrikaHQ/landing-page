@@ -32,8 +32,7 @@
     "contactUs": "Wasiliana nasi"
   },
   "home": {
-    "heroTitle": "Kulea wanawake {highlight}",
-    "heroHighlight": "wa kiwango cha dunia",
+    "heroTitle": "Kulea wanawake <highlight>wa kiwango cha dunia</highlight>",
     "heroDescription": "4HERFRIKA inalelea viongozi wa kike wa kiwango cha dunia katika makutano ya biashara na teknolojia",
     "becomeAmbassador": "Kuwa balozi",
     "wordsOnStreet": "<pink>Watu</pink> wanasema <pink>nini</pink>",

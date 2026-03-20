@@ -32,8 +32,7 @@
     "contactUs": "Contact Us"
   },
   "home": {
-    "heroTitle": "Raising {highlight} Women",
-    "heroHighlight": "World-Class",
+    "heroTitle": "Raising <highlight>World-Class</highlight> Women",
     "heroDescription": "4HERFRIKA is raising world class female leaders at the intersection of business and technology",
     "becomeAmbassador": "Become an ambassador",
     "wordsOnStreet": "<pink>Words</pink> on The <pink>Street</pink>",

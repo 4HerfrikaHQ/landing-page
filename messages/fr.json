@@ -32,8 +32,7 @@
     "contactUs": "Contactez-nous"
   },
   "home": {
-    "heroTitle": "Former des femmes {highlight}",
-    "heroHighlight": "de classe mondiale",
+    "heroTitle": "Former des femmes <highlight>de classe mondiale</highlight>",
     "heroDescription": "4HERFRIKA forme des femmes leaders de classe mondiale à l'intersection des affaires et de la technologie",
     "becomeAmbassador": "Devenir ambassadrice",
     "wordsOnStreet": "<pink>Ce qu'on</pink> en <pink>dit</pink>",
