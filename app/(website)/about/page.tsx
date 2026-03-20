@@ -9,8 +9,8 @@ import Sponsors from "../_components/sponsors";
 import { CallForAction } from "./_components/call-for-action";
 import { OurCore } from "./_components/our-core";
 import { OurReach } from "./_components/our-reach";
-import Squiggle from "./squiggle.svg";
-import UnderlineSquiggle from "./underline-squiggle.svg";
+import Squiggle from "./squiggle";
+import UnderlineSquiggle from "./underline-squiggle";
 
 const StatementSection = ({
 	title,

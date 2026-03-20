@@ -18,7 +18,7 @@ export default function BlogPage() {
 								&apos;The Pink Blog&apos;
 							</span>
 						</p>
-						<p className="text-xl font-light text-[#333333] mt-2">
+						<p className="text-xl font-light text-gray-400 mt-2">
 							This is a safe space created just for you, with experiences of
 							women from all walks of life targeted to help you find your mojo
 							and beauty in this chaos called LIFE

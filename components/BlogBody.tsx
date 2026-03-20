@@ -132,7 +132,7 @@ const BlogBody = () => {
 						return (
 							<div
 								key={item.id}
-								className="flex flex-col gap-7 bg-[#F2F2F2] rounded-[6px]"
+								className="flex flex-col gap-7 bg-neutral-500 rounded-[6px]"
 							>
 								<div className="relative w-full h-[221px]">
 									<Image
@@ -144,27 +144,27 @@ const BlogBody = () => {
 								</div>
 								<div className="relative px-3 pb-4 flex flex-col gap-3">
 									<div className="absolute -top-10 bg-white px-1.5 py-1.5 flex gap-2.5 rounded-[20px] items-center">
-										<div className="w-3 h-3 rounded-full bg-[#03065C]" />
-										<p className="text-[#03065C] text-xs font-normal">
+										<div className="w-3 h-3 rounded-full bg-secondary-500" />
+										<p className="text-secondary-500 text-xs font-normal">
 											{item.location}
 										</p>
 									</div>
 									<div className="flex flex-col gap-2">
-										<h2 className="text-base font-normal text-[#333333]">
+										<h2 className="text-base font-normal text-gray-400">
 											{item.title}
 										</h2>
-										<p className="text-sm font-normal text-[#555555]">
+										<p className="text-sm font-normal text-gray-300">
 											{item.description}
 										</p>
 									</div>
 									<div className="flex justify-between items-center">
-										<p className="font-normal text-sm text-[#333333]">
+										<p className="font-normal text-sm text-gray-400">
 											{item.date} {"                  "}
 											{item.datetime}
 										</p>
 										<Link
 											href="/"
-											className="text-[#EC008C] font-normal text-sm"
+											className="text-primary-500 font-normal text-sm"
 										>
 											Read More
 										</Link>

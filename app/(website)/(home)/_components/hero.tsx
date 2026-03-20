@@ -3,8 +3,8 @@ import { JOIN_FORM_LINK } from "@/utils/constants";
 import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
 import { Statistic } from "../../_components/statistic";
-import CurvedArrowIcon from "../../curved-arrow.svg";
-import HeroCurveIcon from "../../hero-curve.svg";
+import CurvedArrowIcon from "../../curved-arrow";
+import HeroCurveIcon from "../../hero-curve";
 
 interface HeroProps {
 	heroImage: Content.HomepageDocumentData["hero_image"];

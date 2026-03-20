@@ -4,7 +4,7 @@ import { Button } from "@/components/Button";
 import { TestimonialCard } from "@/components/TestimonialCard";
 import { createClient } from "@/prismicio";
 import Sponsors from "../_components/sponsors";
-import AfricaLogo from "../africa-logo.svg";
+import AfricaLogo from "../africa-logo";
 import { ExploreCommunity } from "./_components/explore-community";
 import { Hero } from "./_components/hero";
 import TestimonialCarouselDots from "./_components/testimonial-carousel-dots";

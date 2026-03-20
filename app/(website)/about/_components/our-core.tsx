@@ -43,9 +43,9 @@ export const OurCore = () => {
 				</h1>
 
 				<div className="hidden md:flex justify-center items-center min-h-[600px] lg:min-h-[700px] relative">
-					<div className="w-[400px] h-[400px] lg:w-[600px] lg:h-[600px] border border-[#03065C66] rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#03065C05]" />
-					<div className="w-[350px] h-[350px] lg:w-[500px] lg:h-[500px] border border-[#03065C66] rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#03065C0D]" />
-					<div className="w-[280px] h-[280px] lg:w-[400px] lg:h-[400px] border border-[#D4EAEA] rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#03065C0D]" />
+					<div className="w-[400px] h-[400px] lg:w-[600px] lg:h-[600px] border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/2" />
+					<div className="w-[350px] h-[350px] lg:w-[500px] lg:h-[500px] border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
+					<div className="w-[280px] h-[280px] lg:w-[400px] lg:h-[400px] border border-surface-teal rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
 
 					<div className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto">
 						<Image

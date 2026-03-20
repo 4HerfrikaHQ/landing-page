@@ -2,7 +2,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { MenubarButton } from "@/components/MenubarButton";
 import { NavbarLink } from "@/components/NavbarLink";
-import Logo from "../4herfrika-logo.svg";
+import Logo from "../4herfrika-logo";
 import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
 import { YearOneReport } from "./year-one-report";
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "../4herfrika-logo.svg";
+import Logo from "../4herfrika-logo";
 
 export const Footer = () => {
 	return (

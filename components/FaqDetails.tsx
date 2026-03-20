@@ -162,7 +162,7 @@ const FaqDetails = () => {
 										</button>
 										{openIndices.includes(index) && (
 											<div
-												className="py-4 px-8 bg-[#a91b6f] rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
+												className="py-4 px-8 bg-primary-700 rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
 												onClick={() => toggleFAQ(index)}
 											>
 												<div className="">
@@ -224,7 +224,7 @@ const FaqDetails = () => {
 										</button>
 										{openIndices1.includes(index) && (
 											<div
-												className="py-4 px-8 bg-[#a91b6f] rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
+												className="py-4 px-8 bg-primary-700 rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
 												onClick={() =>
 													toggle1FAQ(index)
 												}
@@ -288,7 +288,7 @@ const FaqDetails = () => {
 										</button>
 										{openIndices2.includes(index) && (
 											<div
-												className="py-4 px-8 bg-[#a91b6f] rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
+												className="py-4 px-8 bg-primary-700 rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
 												onClick={() =>
 													toggle2FAQ(index)
 												}
@@ -353,7 +353,7 @@ const FaqDetails = () => {
 										</button>
 										{openIndices3.includes(index) && (
 											<div
-												className="py-4 px-8 bg-[#a91b6f] rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
+												className="py-4 px-8 bg-primary-700 rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
 												onClick={() =>
 													toggle3FAQ(index)
 												}
@@ -417,7 +417,7 @@ const FaqDetails = () => {
 										</button>
 										{openIndices4.includes(index) && (
 											<div
-												className="py-4 px-8 bg-[#a91b6f] rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
+												className="py-4 px-8 bg-primary-700 rounded-md mt-2 w-full flex  gap-4 items-center justify-between"
 												onClick={() =>
 													toggle4FAQ(index)
 												}

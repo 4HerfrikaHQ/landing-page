@@ -51,7 +51,7 @@ export default async function FAQPage() {
               <input
                 type="text"
                 placeholder="Search here"
-                className="ml-2 w-full border-none outline-none bg-transparent text-gray-600 placeholder-[#53686A] text-base font-inter"
+                className="ml-2 w-full border-none outline-none bg-transparent text-gray-600 placeholder-placeholder text-base font-inter"
               />
             </div>
           </div>
@@ -77,10 +77,10 @@ export default async function FAQPage() {
           ))
         }
       </div>
-      <div class="md:pt-16 px-8 pb-10">
-        <div class="p-8 bg-neutral-400 rounded-2xl flex flex-col gap-y-8 md:flex-row md:items-center justify-between">
+      <div className="md:pt-16 px-8 pb-10">
+        <div className="p-8 bg-neutral-400 rounded-2xl flex flex-col gap-y-8 md:flex-row md:items-center justify-between">
           <div>
-            <h4 class="text-primary-500/60 font-semibold text-2xl mb-2">
+            <h4 className="text-primary-500/60 font-semibold text-2xl mb-2">
               Still have questions?
             </h4>
             <p className="text-xl text-primary-500/60">

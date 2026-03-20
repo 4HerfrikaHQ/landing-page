@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/cn";
 import { useEffect, useRef, useState } from "react";
-import ChevronIcon from "./chevron.svg";
+import ChevronIcon from "./chevron";
 
 const FrequentlyAskedQuestion = ({
 	question,
