@@ -121,11 +121,14 @@
     "contactField": "Contact",
     "emailPlaceholder": "email@gmail",
     "linkedin": "Linkedin",
-    "uploadHeadshot": "Télécharger une photo professionnelle",
-    "attachFile": "Joindre un fichier. La taille du fichier ne doit pas dépasser 10 Mo",
-    "fileSizeError": "La taille du fichier dépasse la limite de 10 Mo",
+    "uploadHeadshot": "Photo professionnelle",
+    "headshotUrlPlaceholder": "https://lien-vers-votre-photo.com",
     "invalidEmail": "Veuillez entrer une adresse e-mail valide",
-    "receiveUpdates": "Je souhaite recevoir des mises à jour et des conseils sur le mentorat de 4HerFrika."
+    "receiveUpdates": "Je souhaite recevoir des mises à jour et des conseils sur le mentorat de 4HerFrika.",
+    "submitting": "Envoi en cours...",
+    "successMessage": "Candidature soumise avec succès !",
+    "successDescription": "Merci pour votre intérêt à devenir mentor. Nous vous contacterons bientôt.",
+    "errorMessage": "Échec de l'envoi de la candidature. Veuillez vérifier vos informations et réessayer."
   },
   "donate": {
     "title": "Soutenez notre mission",

@@ -121,11 +121,14 @@
     "contactField": "Contact",
     "emailPlaceholder": "email@gmail",
     "linkedin": "Linkedin",
-    "uploadHeadshot": "Upload a Professional Headshot",
-    "attachFile": "Attach file. File size of your documents should not exceed 10MB",
-    "fileSizeError": "File size exceeds 10MB limit",
+    "uploadHeadshot": "Professional Headshot",
+    "headshotUrlPlaceholder": "https://link-to-your-headshot-image.com",
     "invalidEmail": "Please, enter valid email address",
-    "receiveUpdates": "I would like to receive updates and tips on mentoring from 4HerFrika."
+    "receiveUpdates": "I would like to receive updates and tips on mentoring from 4HerFrika.",
+    "submitting": "Submitting...",
+    "successMessage": "Application submitted successfully!",
+    "successDescription": "Thank you for your interest in becoming a mentor. We'll be in touch soon.",
+    "errorMessage": "Failed to submit application. Please check your inputs and try again."
   },
   "donate": {
     "title": "Support Our Mission",
