@@ -1,31 +1,32 @@
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import Forherfirka from "@/app/[locale]/(website)/about/assets/iphone-mockup.png";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-const coreValues = [
+const coreValueKeys = [
 	{
 		bg: "from-purple-200 to-pink-200",
 		image: "/assets/about/Empowerment.png",
 		alt: "Empowerment icon",
-		text: "Empowerment",
+		textKey: "empowerment" as const,
 	},
 	{
 		bg: "from-green-200 to-blue-200",
 		image: "/assets/about/Growth.png",
 		alt: "Community Development icon",
-		text: "Community Development",
+		textKey: "communityDevelopment" as const,
 	},
 	{
 		bg: "from-blue-200 to-purple-200",
 		image: "/assets/about/Leader.png",
 		alt: "Leadership icon",
-		text: "Leadership",
+		textKey: "leadership" as const,
 	},
 	{
 		bg: "from-orange-200 to-pink-200",
 		image: "/assets/about/Conversation.png",
 		alt: "Mentorship icon",
-		text: "Mentorship",
+		textKey: "mentorship" as const,
 	},
 ];
 
@@ -49,7 +50,7 @@ export const OurCore = async () => {
 					<div className="w-[350px] h-[350px] lg:w-[500px] lg:h-[500px] border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
 					<div className="w-[280px] h-[280px] lg:w-[400px] lg:h-[400px] border border-surface-teal rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
 
-					<div className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto">
+					<FadeIn className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto" initial={{ opacity: 0, scale: 0.9 }}>
 						<Image
 							src={Forherfirka.src}
 							alt="4herfrika iphone mockup"
@@ -57,7 +58,7 @@ export const OurCore = async () => {
 							width={Forherfirka.width}
 							className="object-contain"
 						/>
-					</div>
+					</FadeIn>
 
 					{[
 						"top-8 left-8 xl:left-16",
@@ -65,41 +66,34 @@ export const OurCore = async () => {
 						"bottom-8 left-8 xl:left-16",
 						"bottom-8 right-8 xl:right-16",
 					].map((pos, i) => (
-						<div key={pos} className={`absolute ${pos}`}>
+						<FadeIn key={pos} delay={0.1 * (i + 1)} className={`absolute ${pos}`}>
 							<div className="relative">
 								<div
-									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br ${coreValues[i].bg} rounded-full opacity-30 blur-sm transform`}
+									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br ${coreValueKeys[i].bg} rounded-full opacity-30 blur-sm transform`}
 								/>
 								<div className="relative bg-background/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-border w-36 lg:w-40 text-center">
 									<div className="mb-3">
 										<Image
-											src={coreValues[i].image}
-											alt={coreValues[i].alt}
+											src={coreValueKeys[i].image}
+											alt={coreValueKeys[i].alt}
 											width={50}
 											height={50}
 											className="mx-auto"
 										/>
 									</div>
 									<p className="text-foreground font-medium text-sm lg:text-base">
-										{coreValues[i].text}
+										{t(coreValueKeys[i].textKey)}
 									</p>
 								</div>
 							</div>
-						</div>
+						</FadeIn>
 					))}
 				</div>
 
 				<div className="flex flex-col md:hidden items-center gap-6">
-					{/* <Image
-						src={Forherfirka.src}
-						alt="4herfrika iphone mockup"
-						height={Forherfirka.height}
-						width={Forherfirka.width}
-						className="w-40 h-auto object-contain mb-6"
-					/> */}
-					<div className="grid grid-cols-2 gap-10">
-						{coreValues.map((card) => (
-							<div
+					<StaggerContainer className="grid grid-cols-2 gap-10">
+						{coreValueKeys.map((card) => (
+							<StaggerItem
 								key={card.image}
 								className="relative w-full h-full max-w-xs flex flex-col"
 							>
@@ -117,12 +111,12 @@ export const OurCore = async () => {
 										/>
 									</div>
 									<p className="text-foreground font-medium text-sm flex-grow">
-										{card.text}
+										{t(card.textKey)}
 									</p>
 								</div>
-							</div>
+							</StaggerItem>
 						))}
-					</div>
+					</StaggerContainer>
 				</div>
 			</div>
 		</section>
