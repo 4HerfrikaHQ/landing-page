@@ -1,32 +1,32 @@
 "use client";
 
-import type { Route } from "next";
-import Link from "next/link";
-import { useState } from "react";
-import { ChevronDown, Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
 	Sheet,
 	SheetContent,
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { ChevronDown, Menu } from "lucide-react";
+import type { Route } from "next";
 import { useTranslations } from "next-intl";
-import Logo from "../4herfrika-logo";
+import Link from "next/link";
+import { useState } from "react";
+import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "./_schema";
+import Logo from "./icons/4herfrika-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { NavbarLink } from "./navbar-link";
-import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
 
 const NAV_LINK_KEYS: Record<string, string> = {
 	"About Us": "aboutUs",
-	"Projects": "projects",
+	Projects: "projects",
 	"Career Corner": "careerCorner",
-	"Blog": "blog",
+	Blog: "blog",
 	"Contact Us": "contactUs",
 };
 
 const ACTION_BUTTON_KEYS: Record<string, string> = {
-	"Donate": "donate",
+	Donate: "donate",
 	"Join Us": "joinUs",
 };
 
