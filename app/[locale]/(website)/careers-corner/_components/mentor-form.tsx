@@ -120,15 +120,14 @@ export default function MentorForm() {
 					<ValidationError prefix="Headshot URL" field="headshotUrl" errors={state.errors} />
 				</div>
 
-				<div className="flex items-start gap-2">
+				<div className="flex items-center gap-2">
 					<input type="hidden" name="receiveUpdates" value={receiveUpdates ? "yes" : "no"} />
 					<Checkbox
 						id="updates"
 						checked={receiveUpdates}
 						onCheckedChange={(checked) => setReceiveUpdates(checked as boolean)}
-						className="mt-0.5"
 					/>
-					<Label htmlFor="updates" className="text-foreground font-normal">
+					<Label htmlFor="updates" className="text-foreground font-normal leading-none">
 						{t("receiveUpdates")}
 					</Label>
 				</div>
