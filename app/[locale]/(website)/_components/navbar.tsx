@@ -10,34 +10,9 @@ import { MobileNav } from "./mobile-nav";
 import { NavbarLink } from "./navbar-link";
 import { YearOneReport } from "./year-one-report";
 
-const NAV_LINK_KEYS: Record<string, string> = {
-	"About Us": "aboutUs",
-	Projects: "projects",
-	"Career Corner": "careerCorner",
-	Blog: "blog",
-	"Contact Us": "contactUs",
-};
-
-const ACTION_BUTTON_KEYS: Record<string, string> = {
-	Donate: "donate",
-	"Join Us": "joinUs",
-};
-
 export const Navbar = async () => {
 	const tn = await getTranslations("nav");
 	const tc = await getTranslations("common");
-
-	const getNavName = (name: string) => {
-		const key = NAV_LINK_KEYS[name];
-		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
-		return key ? tn(key as any) : name;
-	};
-
-	const getActionName = (name: string) => {
-		const key = ACTION_BUTTON_KEYS[name];
-		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
-		return key ? tc(key as any) : name;
-	};
 
 	return (
 		<div className="relative">
@@ -62,7 +37,7 @@ export const Navbar = async () => {
 						{NAV_LINKS.map((link: Navlink) =>
 							link.dropdownItems ? (
 								<div
-									key={link.name}
+									key={link.nameKey}
 									className="relative group h-full flex items-center"
 								>
 									<Button
@@ -71,29 +46,29 @@ export const Navbar = async () => {
 										className="flex items-center gap-1 text-foreground hover:text-primary-500"
 										aria-haspopup="true"
 									>
-										{getNavName(link.name)}
+										{tn(link.nameKey)}
 										<ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
 									</Button>
 
 									<div className="absolute top-[75%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-background shadow-lg z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform group-hover:translate-y-2 rounded-md">
 										{link.dropdownItems.map((dropdownItem) => (
 											<Link
-												key={dropdownItem.name}
+												key={dropdownItem.nameKey}
 												href={dropdownItem.href as Route}
 												className="block px-4 py-2 text-sm text-foreground hover:bg-muted first:rounded-t-md last:rounded-b-md"
 											>
-												{getNavName(dropdownItem.name)}
+												{tn(dropdownItem.nameKey)}
 											</Link>
 										))}
 									</div>
 								</div>
 							) : (
 								<NavbarLink
-									key={link.name}
+									key={link.nameKey}
 									className="lg:text-base h-full flex items-center"
 									href={link.href as Route}
 								>
-									{getNavName(link.name)}
+									{tn(link.nameKey)}
 								</NavbarLink>
 							),
 						)}
@@ -102,7 +77,7 @@ export const Navbar = async () => {
 						<LocaleSwitcher />
 						{ACTION_BUTTONS.map((button) => (
 							<Link
-								key={button.name}
+								key={button.nameKey}
 								href={button.href as Route}
 								className={`text-base font-medium py-2 px-6 rounded-full transition-colors ${
 									button.isPrimary
@@ -110,7 +85,7 @@ export const Navbar = async () => {
 										: "border border-primary-500 text-primary-500 hover:bg-primary-50"
 								}`}
 							>
-								{getActionName(button.name)}
+								{tc(button.nameKey)}
 							</Link>
 						))}
 					</div>

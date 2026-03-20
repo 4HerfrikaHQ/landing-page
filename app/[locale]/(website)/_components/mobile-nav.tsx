@@ -17,35 +17,10 @@ import Logo from "./icons/4herfrika-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { NavbarLink } from "./navbar-link";
 
-const NAV_LINK_KEYS: Record<string, string> = {
-	"About Us": "aboutUs",
-	Projects: "projects",
-	"Career Corner": "careerCorner",
-	Blog: "blog",
-	"Contact Us": "contactUs",
-};
-
-const ACTION_BUTTON_KEYS: Record<string, string> = {
-	Donate: "donate",
-	"Join Us": "joinUs",
-};
-
 export const MobileNav = () => {
 	const [open, setOpen] = useState(false);
 	const tn = useTranslations("nav");
 	const tc = useTranslations("common");
-
-	const getNavName = (name: string) => {
-		const key = NAV_LINK_KEYS[name];
-		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
-		return key ? tn(key as any) : name;
-	};
-
-	const getActionName = (name: string) => {
-		const key = ACTION_BUTTON_KEYS[name];
-		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
-		return key ? tc(key as any) : name;
-	};
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
@@ -77,31 +52,31 @@ export const MobileNav = () => {
 
 				<nav className="mt-6">
 					{NAV_LINKS.map((link: Navlink) => (
-						<div key={link.name}>
+						<div key={link.nameKey}>
 							{link.dropdownItems ? (
 								<div className="space-y-1">
 									<input
 										type="checkbox"
-										id={`mobile-dropdown-${link.name}`}
+										id={`mobile-dropdown-${link.nameKey}`}
 										className="peer hidden"
 									/>
 									<label
-										htmlFor={`mobile-dropdown-${link.name}`}
+										htmlFor={`mobile-dropdown-${link.nameKey}`}
 										className="flex cursor-pointer items-center justify-between -mx-3 px-3 py-2 text-base text-foreground"
 									>
-										<span>{getNavName(link.name)}</span>
+										<span>{tn(link.nameKey)}</span>
 										<ChevronDown className="h-4 w-4 transition-transform duration-300 peer-checked:rotate-180" />
 									</label>
 
 									<div className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-40">
 										{link.dropdownItems.map((dropdownItem) => (
 											<NavbarLink
-												key={dropdownItem.name}
+												key={dropdownItem.nameKey}
 												href={dropdownItem.href as Route}
 												className="-mx-3 block px-3 py-2 text-base text-foreground"
 												onClick={() => setOpen(false)}
 											>
-												{getNavName(dropdownItem.name)}
+												{tn(dropdownItem.nameKey)}
 											</NavbarLink>
 										))}
 									</div>
@@ -112,7 +87,7 @@ export const MobileNav = () => {
 									className="-mx-3 block px-3 py-2 text-base"
 									onClick={() => setOpen(false)}
 								>
-									{getNavName(link.name)}
+									{tn(link.nameKey)}
 								</NavbarLink>
 							)}
 						</div>
@@ -122,14 +97,14 @@ export const MobileNav = () => {
 				<div className="mt-6 space-y-2">
 					{ACTION_BUTTONS.map((button) => (
 						<Button
-							key={button.name}
+							key={button.nameKey}
 							href={button.href as Route}
 							variant={button.isPrimary ? "solid" : "outline"}
 							size="lg"
 							className="w-full justify-center"
 							onClick={() => setOpen(false)}
 						>
-							{getActionName(button.name)}
+							{tc(button.nameKey)}
 						</Button>
 					))}
 				</div>
