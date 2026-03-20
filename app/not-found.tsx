@@ -23,7 +23,7 @@ export default function RootNotFound() {
 								alt="Person looking at map"
 								width={400}
 								height={400}
-								className="mx-auto h-75 object-cover"
+								className="mx-auto h-75 w-auto object-cover"
 								priority
 							/>
 						</div>
