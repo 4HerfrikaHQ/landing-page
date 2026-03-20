@@ -38,7 +38,7 @@ export default async function LocaleLayout({
 	setRequestLocale(locale as Locale);
 
 	return (
-		<html lang={locale}>
+		<html lang={locale} data-scroll-behavior="smooth">
 			<body className={`${outfitSans.className} antialiased`}>
 				<NextIntlClientProvider>
 					{children}
