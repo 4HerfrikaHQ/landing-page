@@ -2,9 +2,17 @@ import FAQ from "@/app/[locale]/(website)/(home)/_components/faq-section";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
+import { hasLocale } from "next-intl";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { getFaqPage } from "./_actions";
 
-export default async function FAQPage() {
+export default async function FAQPage({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	if (!hasLocale(routing.locales, locale)) return null;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("faq");
 	const page = await getFaqPage();
 
 	return (
@@ -21,13 +29,12 @@ export default async function FAQPage() {
 				)}
 				<div className="mx-auto max-w-7xl px-4 pb-6 pt-16  sm:px-6 lg:px-8 relative">
 					<div className="text-center text-white">
-						<h2 className="text-[32px] leading-10 ">FAQs</h2>
+						<h2 className="text-[32px] leading-10 ">{t("title")}</h2>
 						<h1 className="lg:text-[64px] text-4xl leading-20 mt-1 font-bold md:text-6xl">
-							Ask Us Anything
+							{t("askAnything")}
 						</h1>
 						<p className="font-medium lg:text-2xl text-base md:mt-8 mt-2 lg:mb-21 mb-7 md:mb-15 md:text-xl ">
-							In this section you can find all the answers you are probably
-							looking for
+							{t("description")}
 						</p>
 						<div className="flex justify-center mx-auto items-center bg-background rounded-[8.35px] shadow-md px-4 py-3 w-80 ">
 							<Search
@@ -37,7 +44,7 @@ export default async function FAQPage() {
 
 							<input
 								type="text"
-								placeholder="Search here"
+								placeholder={t("searchPlaceholder")}
 								className="ml-2 w-full border-none outline-none bg-transparent text-muted-foreground placeholder-placeholder text-base font-inter"
 							/>
 						</div>
@@ -83,16 +90,15 @@ export default async function FAQPage() {
 				<div className="p-8 bg-muted rounded-2xl flex flex-col gap-y-8 md:flex-row md:items-center justify-between">
 					<div>
 						<h4 className="text-primary-500/60 font-semibold text-2xl mb-2">
-							Still have questions?
+							{t("stillHaveQuestions")}
 						</h4>
 						<p className="text-xl text-primary-500/60">
-							Can’t find the answer you’re looking for? Please chat to our
-							friendly team.
+							{t("cantFindAnswer")}
 						</p>
 					</div>
 
 					<Button href="mailto:support@4herfrika.org" isExternal size="lg">
-						Get in touch
+						{t("getInTouch")}
 					</Button>
 				</div>
 			</div>

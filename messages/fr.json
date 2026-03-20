@@ -8,58 +8,128 @@
     "readMore": "Lire la suite",
     "contactUs": "Contactez-nous",
     "sendMail": "Envoyer un mail",
-    "payDirectly": "Payer directement"
+    "payDirectly": "Payer directement",
+    "backToHome": "Retour à l'accueil",
+    "tryAgain": "Réessayer",
+    "comingSoon": "Bientôt disponible",
+    "becomeAmbassador": "Devenir ambassadrice",
+    "volunteerAsMentor": "Devenir mentor bénévole",
+    "downloadReport": "Télécharger notre rapport",
+    "goToHomepage": "Aller à la page d'accueil",
+    "bookACall": "Réserver un appel",
+    "messageOnLinkedin": "Écrire sur LinkedIn",
+    "submit": "Envoyer",
+    "exploreProject": "Explorer le projet",
+    "seeDetails": "Voir les détails",
+    "startAChapter": "Créer un chapitre"
   },
   "nav": {
-    "aboutUs": "\u00c0 propos",
+    "aboutUs": "À propos",
     "projects": "Projets",
-    "careerCorner": "Espace carri\u00e8re",
+    "careerCorner": "Espace carrière",
     "blog": "Blog",
     "contactUs": "Contactez-nous"
   },
   "home": {
     "heroTitle": "Former des femmes {highlight}",
     "heroHighlight": "de classe mondiale",
-    "heroDescription": "4HERFRIKA forme des femmes leaders de classe mondiale \u00e0 l'intersection des affaires et de la technologie",
+    "heroDescription": "4HERFRIKA forme des femmes leaders de classe mondiale à l'intersection des affaires et de la technologie",
     "becomeAmbassador": "Devenir ambassadrice",
-    "wordsOnStreet": "Ce qu'on en dit",
-    "wordsOnStreetSub": "D\u00e9couvrez ce que nos membres disent !",
-    "supportedBy": "Soutenu par :"
+    "wordsOnStreet": "<pink>Ce qu'on</pink> en <pink>dit</pink>",
+    "wordsOnStreetSub": "Découvrez ce que nos membres disent !",
+    "supportedBy": "Soutenu par :",
+    "exploreCampus": "Campus 4HerFrika",
+    "campusDescription": "Nous agissons à travers des communautés au sein des établissements d'enseignement supérieur",
+    "exploreAcademy": "Académie 4HerFrika",
+    "academyDescription": "Plateforme d'apprentissage en ligne pour le développement des compétences"
   },
   "about": {
     "whoWeAre": "Qui sommes-nous",
-    "aboutDescription": "Chez 4HerFrika, nous nous effor\u00e7ons de former, encadrer et autonomiser les femmes pour qu'elles deviennent des leaders transformatrices \u00e0 travers l'Afrique.",
-    "whereEveryGirl": "O\u00f9 chaque fille atteint son objectif",
+    "aboutDescription": "Chez 4HerFrika, nous nous efforçons de former, encadrer et autonomiser les femmes pour qu'elles deviennent des leaders transformatrices à travers l'Afrique.",
+    "whereEveryGirl": "Où chaque fille atteint son objectif",
     "coreValues": "Valeurs fondamentales",
-    "faq": "Questions fr\u00e9quemment pos\u00e9es",
-    "faqDescription": "Dans cette section, vous trouverez toutes les r\u00e9ponses que vous recherchez probablement. Si vous avez encore des difficult\u00e9s, n'h\u00e9sitez pas \u00e0 nous contacter directement."
+    "faq": "Questions fréquemment posées",
+    "faqDescription": "Dans cette section, vous trouverez toutes les réponses que vous recherchez probablement. Si vous avez encore des difficultés, n'hésitez pas à nous contacter directement."
   },
   "blog": {
     "greeting": "Salut les Divas,",
     "welcome": "Bienvenue sur",
     "blogName": "'Le Blog Rose'",
-    "description": "C'est un espace s\u00fbr cr\u00e9\u00e9 juste pour vous, avec des exp\u00e9riences de femmes de tous horizons destin\u00e9es \u00e0 vous aider \u00e0 trouver votre force et beaut\u00e9 dans ce chaos appel\u00e9 LA VIE",
+    "description": "C'est un espace sûr créé juste pour vous, avec des expériences de femmes de tous horizons destinées à vous aider à trouver votre force et beauté dans ce chaos appelé LA VIE",
     "searchPlaceholder": "Rechercher un article"
   },
   "faq": {
     "title": "FAQ",
     "askAnything": "Posez-nous vos questions",
-    "description": "Dans cette section, vous trouverez toutes les r\u00e9ponses que vous recherchez probablement",
+    "description": "Dans cette section, vous trouverez toutes les réponses que vous recherchez probablement",
     "searchPlaceholder": "Rechercher ici",
     "stillHaveQuestions": "Vous avez encore des questions ?",
-    "cantFindAnswer": "Vous ne trouvez pas la r\u00e9ponse que vous cherchez ? Contactez notre \u00e9quipe.",
+    "cantFindAnswer": "Vous ne trouvez pas la réponse que vous cherchez ? Contactez notre équipe.",
     "getInTouch": "Nous contacter"
   },
   "footer": {
     "quickLinks": "Liens rapides",
-    "legal": "Mentions l\u00e9gales",
+    "legal": "Mentions légales",
     "terms": "Conditions",
-    "privacy": "Confidentialit\u00e9",
+    "privacy": "Confidentialité",
     "contactUs": "Contactez-nous",
     "support": "Support",
     "subscribe": "S'abonner",
     "emailPlaceholder": "Adresse e-mail",
-    "subscribeDescription": "Abonnez-vous \u00e0 notre newsletter pour les derni\u00e8res mises \u00e0 jour et nouvelles",
-    "allRightsReserved": "Tous droits r\u00e9serv\u00e9s."
+    "subscribeDescription": "Abonnez-vous à notre newsletter pour les dernières mises à jour et nouvelles",
+    "allRightsReserved": "Tous droits réservés."
+  },
+  "careers": {
+    "title": "Espace carrière",
+    "heroText": "Bienvenue dans l'« Espace carrière », où vous pouvez réserver un appel gratuit de 10 minutes avec un mentor pour poser vos questions",
+    "searchMentor": "Rechercher un mentor",
+    "featuredMentor": "Mentor en vedette",
+    "bookCounseling": "Réserver un conseil en orientation professionnelle",
+    "counselingDescription": "Vous pouvez réserver un appel gratuit de 10 minutes avec un mentor pour poser vos questions.",
+    "details": "Détails",
+    "becomeMentor": "Vous souhaitez devenir mentor ?",
+    "becomeMentorDescription": "Partagez vos motivations pour devenir mentor et faites le premier pas avec nous"
+  },
+  "donate": {
+    "title": "Soutenez notre mission",
+    "description": "Votre don nous aide à atteindre plus de filles et à créer un changement durable dans les régions défavorisées.",
+    "bankDetails": "Coordonnées bancaires",
+    "accountNumber": "Numéro de compte",
+    "accountName": "Titulaire du compte",
+    "copy": "Copier",
+    "copied": "Copié",
+    "thankYou": "Merci pour votre soutien. Chaque contribution nous aide à avoir un plus grand impact."
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "name": "Nom",
+    "email": "Adresse e-mail",
+    "message": "Message",
+    "send": "Envoyer",
+    "phone": "Téléphone",
+    "location": "Adresse"
+  },
+  "impact": {
+    "storyInMotion": "Notre histoire en marche",
+    "milestones": "Les jalons de la première année",
+    "girlsMentored": "Plus de 3 000 filles accompagnées",
+    "campusesReached": "Plus de 25 campus touchés",
+    "graduates": "Plus de 1 000 diplômées de la Tech Academy",
+    "academies": "3 académies florissantes : Tech, Business, Climat.",
+    "neverTouched": "En un an, nous avons vu des filles qui n'avaient jamais touché un ordinateur concevoir des produits, coder des logiciels et mener le changement dans leurs écoles et leurs communautés.",
+    "justTheBeginning": "Ce n'est que le début. D'ici 2030, 4herfrika ambitionne d'autonomiser 2 millions de femmes et de filles à travers l'Afrique. Ensemble, nous pouvons y arriver"
+  },
+  "projects": {
+    "title": "Projets",
+    "heroTitle": "Chez 4HerFrika, nous croyons en l'action, pas seulement en les rêves.",
+    "heroDescription": "Nos projets sont ancrés dans les communautés, axés sur l'impact et conçus pour élever les filles à travers l'Afrique grâce à l'éducation, la technologie et le leadership.",
+    "intro": "4HerAfrika",
+    "introDescription": "4HerAfrika est un mouvement dédié à l'autonomisation des jeunes femmes à travers l'Afrique par la technologie, le leadership et l'entrepreneuriat."
+  },
+  "notFound": {
+    "title": "Oups ! Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "backToHome": "Retour à l'accueil",
+    "tryAgain": "Réessayer"
   }
 }

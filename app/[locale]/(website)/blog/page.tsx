@@ -1,11 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
+import { hasLocale } from "next-intl";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { Suspense } from "react";
 import BlogBody from "./_components/blog-body";
 import { GalleryGrid } from "./_components/gallery-grid";
 
-export default function BlogPage() {
+export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	if (!hasLocale(routing.locales, locale)) return null;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("blog");
 	return (
 		<>
 			{/* Hero Section */}
@@ -13,18 +21,16 @@ export default function BlogPage() {
 				<div className="container mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="mx-auto w-full lg:mx-0">
 						<h2 className="text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-							Hi Divas,
+							{t("greeting")}
 						</h2>
 						<p className="mt-3 text-xl leading-8 text-muted-foreground font-semibold">
-							Welcome to{" "}
+							{t("welcome")}{" "}
 							<span className="text-primary-500">
-								&apos;The Pink Blog&apos;
+								{t("blogName")}
 							</span>
 						</p>
 						<p className="text-xl font-light text-foreground mt-2">
-							This is a safe space created just for you, with experiences of
-							women from all walks of life targeted to help you find your mojo
-							and beauty in this chaos called LIFE
+							{t("description")}
 						</p>
 						<div className="flex gap-4 mt-6 border border-primary-500 rounded-[20px] items-center px-8">
 							<Search
@@ -34,7 +40,7 @@ export default function BlogPage() {
 							<input
 								type="text"
 								className="py-4 flex-1 rounded-[20px] bg-transparent outline-0"
-								placeholder="Search for Post"
+								placeholder={t("searchPlaceholder")}
 							/>
 						</div>
 						<Image

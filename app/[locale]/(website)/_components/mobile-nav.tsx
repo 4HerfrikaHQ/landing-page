@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import Logo from "../4herfrika-logo";
+import { LocaleSwitcher } from "./locale-switcher";
 import { NavbarLink } from "./navbar-link";
 import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
 
@@ -103,6 +104,10 @@ export const MobileNav = () => {
 							{button.name}
 						</Button>
 					))}
+				</div>
+
+				<div className="mt-6 border-t border-border pt-4">
+					<LocaleSwitcher />
 				</div>
 			</SheetContent>
 		</Sheet>

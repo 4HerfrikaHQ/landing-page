@@ -3,6 +3,10 @@ import { PrismicImage } from "@prismicio/react";
 import type { ImageField, KeyTextField } from "@prismicio/types";
 import type { Route } from "next";
 import Link from "next/link";
+import { hasLocale } from "next-intl";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import FrequentlyAskedQuestion from "../(home)/_components/faq-section";
 import Sponsors from "../_components/sponsors";
 import { CallForAction } from "./_components/call-for-action";
@@ -40,7 +44,11 @@ const StatementSection = ({
 	</div>
 );
 
-export default async function About() {
+export default async function About({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	if (!hasLocale(routing.locales, locale)) return null;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("about");
 	const page = await getAboutPage();
 
 	const { hero_image, statement_section, frequently_asked_questions } =
@@ -58,11 +66,10 @@ export default async function About() {
 				</div>
 				<div className="container mx-auto px-4 flex flex-col items-center min-h-full h-full justify-center text-white relative">
 					<h1 className="text-4xl md:text-[64px] font-bold mb-6 text-center">
-						Who We Are
+						{t("whoWeAre")}
 					</h1>
 					<p className="capitalize text-xl max-w-3xl mx-auto md:text-2xl font-semibold mb-14 text-center">
-						At 4HerFrika, we strive to train, mentor, and empower women to
-						become transformative leaders across Africa.
+						{t("aboutDescription")}
 					</p>
 				</div>
 			</section>
@@ -70,7 +77,7 @@ export default async function About() {
 			<section className="py-12 md:py-20 px-4 xl:px-28 relative flex flex-col items-center">
 				<Squiggle className="absolute top-0 right-2.5 hidden md:block" />
 				<h2 className="text-2xl md:text-3xl font-semibold mb-4 text-center">
-					Where Every Girl Achieves Their Goal
+					{t("whereEveryGirl")}
 				</h2>
 				<UnderlineSquiggle width={284} className="mb-12" />
 				<div className="space-y-12 w-full max-w-7xl">
@@ -93,17 +100,10 @@ export default async function About() {
 
 			<section className="py-12 md:pt-20 md:pb-14 px-4 md:px-22.5 flex flex-col items-center">
 				<h2 className="text-4xl md:text-[68px] text-foreground font-semibold mb-8 text-center">
-					<span className="text-primary-500">F</span>requently{" "}
-					<span className="text-primary-500">A</span>sked{" "}
-					<span className="text-primary-500">Q</span>uestions
+					{t("faq")}
 				</h2>
 				<p className="text-md md:text-lg font-medium text-foreground max-w-156.25 text-center mb-12 md:mb-24">
-					In this section you can find all the answers you are probably looking
-					for. If you still struggle with finding one - don&apos;t hesitate to{" "}
-					<Link className="underline text-primary-500" href={"/contact-us" as Route}>
-						contact us
-					</Link>{" "}
-					directly.
+					{t("faqDescription")}
 				</p>
 				<div className="space-y-6 w-full max-w-4xl">
 					{frequently_asked_questions.map((question) => (

@@ -8,7 +8,20 @@
     "readMore": "Soma zaidi",
     "contactUs": "Wasiliana nasi",
     "sendMail": "Tuma barua pepe",
-    "payDirectly": "Lipa moja kwa moja"
+    "payDirectly": "Lipa moja kwa moja",
+    "backToHome": "Rudi nyumbani",
+    "tryAgain": "Jaribu tena",
+    "comingSoon": "Inakuja hivi karibuni",
+    "becomeAmbassador": "Kuwa balozi",
+    "volunteerAsMentor": "Jitolee kuwa mshauri",
+    "downloadReport": "Pakua ripoti yetu",
+    "goToHomepage": "Nenda ukurasa wa nyumbani",
+    "bookACall": "Weka miadi ya simu",
+    "messageOnLinkedin": "Tuma ujumbe kwenye LinkedIn",
+    "submit": "Wasilisha",
+    "exploreProject": "Chunguza mradi",
+    "seeDetails": "Tazama maelezo",
+    "startAChapter": "Anzisha tawi"
   },
   "nav": {
     "aboutUs": "Kuhusu sisi",
@@ -22,9 +35,13 @@
     "heroHighlight": "wa kiwango cha dunia",
     "heroDescription": "4HERFRIKA inalelea viongozi wa kike wa kiwango cha dunia katika makutano ya biashara na teknolojia",
     "becomeAmbassador": "Kuwa balozi",
-    "wordsOnStreet": "Watu wanasema nini",
+    "wordsOnStreet": "<pink>Watu</pink> wanasema <pink>nini</pink>",
     "wordsOnStreetSub": "Tazama wanachama wetu wanasema nini!",
-    "supportedBy": "Tunaungwa mkono na:"
+    "supportedBy": "Tunaungwa mkono na:",
+    "exploreCampus": "Kampasi za 4HerFrika",
+    "campusDescription": "Tunafanya kazi kupitia jumuiya ndogo katika vyuo vikuu na taasisi za elimu ya juu",
+    "exploreAcademy": "Akademia ya 4HerFrika",
+    "academyDescription": "Jukwaa la kujifunza mtandaoni kwa maendeleo ya ujuzi"
   },
   "about": {
     "whoWeAre": "Sisi ni nani",
@@ -61,5 +78,58 @@
     "emailPlaceholder": "Anwani ya barua pepe",
     "subscribeDescription": "Jiandikishe kwa jarida letu kwa habari na taarifa za hivi karibuni",
     "allRightsReserved": "Haki zote zimehifadhiwa."
+  },
+  "careers": {
+    "title": "Kona ya kazi",
+    "heroText": "Karibu kwenye 'Kona ya Kazi', ambapo unaweza kuweka miadi ya simu ya dakika 10 na mshauri bila malipo kuuliza maswali",
+    "searchMentor": "Tafuta mshauri",
+    "featuredMentor": "Mshauri mashuhuri",
+    "bookCounseling": "Weka miadi ya ushauri wa kazi",
+    "counselingDescription": "Unaweza kuweka miadi ya simu ya dakika 10 na mshauri bila malipo kuuliza maswali.",
+    "details": "Maelezo",
+    "becomeMentor": "Unataka kuwa mshauri?",
+    "becomeMentorDescription": "Shiriki sababu yako ya kutaka kuwa mshauri na uchukue hatua ya kwanza pamoja nasi"
+  },
+  "donate": {
+    "title": "Unga mkono dhamira yetu",
+    "description": "Mchango wako unatusaidia kuwafikia wasichana wengi zaidi na kuleta mabadiliko endelevu katika maeneo yenye uhitaji.",
+    "bankDetails": "Taarifa za benki",
+    "accountNumber": "Nambari ya akaunti",
+    "accountName": "Jina la akaunti",
+    "copy": "Nakili",
+    "copied": "Imenakiliwa",
+    "thankYou": "Asante kwa msaada wako. Kila mchango unatusaidia kuwa na athari kubwa zaidi."
+  },
+  "contact": {
+    "title": "Wasiliana nasi",
+    "name": "Jina",
+    "email": "Anwani ya barua pepe",
+    "message": "Ujumbe",
+    "send": "Tuma",
+    "phone": "Simu",
+    "location": "Mahali"
+  },
+  "impact": {
+    "storyInMotion": "Hadithi yetu inaendelea",
+    "milestones": "Mafanikio ya mwaka wa kwanza",
+    "girlsMentored": "Wasichana zaidi ya 3,000 wameshauriwa",
+    "campusesReached": "Kampasi zaidi ya 25 zimefikiwa",
+    "graduates": "Wahitimu zaidi ya 1,000 katika Akademia ya Teknolojia",
+    "academies": "Akademia 3 zinazostawi: Teknolojia, Biashara, Hali ya hewa.",
+    "neverTouched": "Katika mwaka mmoja, tumeona wasichana ambao hawakuwahi kushika kompyuta sasa wanaunda bidhaa, kuandika programu, na kuongoza mabadiliko katika shule na jamii zao.",
+    "justTheBeginning": "Hii ni mwanzo tu. Ifikapo 2030, 4herfrika inatarajia kuwawezesha wanawake na wasichana milioni 2 kote Afrika. Kwa pamoja, tunaweza kufanikisha hili"
+  },
+  "projects": {
+    "title": "Miradi",
+    "heroTitle": "Katika 4HerFrika, tunaamini katika kutenda, si kuota tu.",
+    "heroDescription": "Miradi yetu inaongozwa na jamii, inalenga athari, na imeundwa kuinua wasichana kote Afrika kupitia elimu, teknolojia, na uongozi.",
+    "intro": "4HerAfrika",
+    "introDescription": "4HerAfrika ni harakati inayojikita katika kuwawezesha vijana wa kike kote Afrika kupitia teknolojia, uongozi, na ujasiriamali."
+  },
+  "notFound": {
+    "title": "Lo! Ukurasa haujapatikana",
+    "description": "Ukurasa unaoutafuta haupo au umehamishwa.",
+    "backToHome": "Rudi nyumbani",
+    "tryAgain": "Jaribu tena"
   }
 }

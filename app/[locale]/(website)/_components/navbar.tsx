@@ -4,6 +4,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import Logo from "../4herfrika-logo";
 import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
+import { LocaleSwitcher } from "./locale-switcher";
 import { MobileNav } from "./mobile-nav";
 import { NavbarLink } from "./navbar-link";
 import { YearOneReport } from "./year-one-report";
@@ -23,7 +24,8 @@ export const Navbar = () => {
 							<Logo className="w-30 lg:w-38.75" />
 						</Link>
 					</div>
-					<div className="flex xl:hidden">
+					<div className="flex items-center gap-2 xl:hidden">
+						<LocaleSwitcher />
 						<MobileNav />
 					</div>
 
@@ -67,6 +69,7 @@ export const Navbar = () => {
 						)}
 					</div>
 					<div className="hidden xl:flex xl:flex-1 xl:justify-end xl:items-center gap-4">
+						<LocaleSwitcher />
 						{ACTION_BUTTONS.map((button) => (
 							<Link
 								key={button.name}

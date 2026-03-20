@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { Toaster } from "sonner";
 import { routing } from "@/i18n/routing";
@@ -34,7 +35,7 @@ export default async function LocaleLayout({
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
-	setRequestLocale(locale);
+	setRequestLocale(locale as Locale);
 
 	return (
 		<html lang={locale}>

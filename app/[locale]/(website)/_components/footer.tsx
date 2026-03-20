@@ -2,15 +2,17 @@ import type { Route } from "next";
 import Link from "next/link";
 import { ArrowRight, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
 import Logo from "../4herfrika-logo";
 
-export const Footer = () => {
+export const Footer = async () => {
+	const t = await getTranslations("footer");
 	return (
 		<footer className="bg-secondary-500">
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
 				<div className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 					<div className="text-center sm:text-left">
-						<p className="font-bold text-muted-foreground text-xl">Quick Links</p>
+						<p className="font-bold text-muted-foreground text-xl">{t("quickLinks")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
@@ -56,14 +58,14 @@ export const Footer = () => {
 					</div>
 
 					<div className="text-center sm:text-left">
-						<p className="font-bold text-muted-foreground text-xl">Legal</p>
+						<p className="font-bold text-muted-foreground text-xl">{t("legal")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
 									href={"/terms" as Route}
 									className="text-white transition hover:text-white/75"
 								>
-									Terms
+									{t("terms")}
 								</Link>
 							</li>
 							<li>
@@ -71,14 +73,14 @@ export const Footer = () => {
 									href={"/privacy" as Route}
 									className="text-white transition hover:text-white/75"
 								>
-									Privacy
+									{t("privacy")}
 								</Link>
 							</li>
 						</ul>
 					</div>
 
 					<div className="text-center sm:text-left">
-						<p className="font-bold text-muted-foreground text-xl">Contact Us</p>
+						<p className="font-bold text-muted-foreground text-xl">{t("contactUs")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<a
@@ -101,7 +103,7 @@ export const Footer = () => {
 									href={"/contact-us" as Route}
 									className="text-white transition hover:text-white/75"
 								>
-									Support
+									{t("support")}
 								</Link>
 							</li>
 						</ul>
@@ -109,19 +111,19 @@ export const Footer = () => {
 
 					<div className="text-center sm:text-left md:col-span-4 lg:col-span-2">
 						<div className="bg-muted/20 p-12 rounded-2xl md:mt-4 lg:-mt-8">
-							<p className="font-bold text-muted-foreground text-2xl">Subscribe</p>
+							<p className="font-bold text-muted-foreground text-2xl">{t("subscribe")}</p>
 
 							<div className="mx-auto mt-4 md:max-w-md sm:ms-0">
 								<form className="mt-4">
 									<div className="flex flex-row lg:items-start">
 										<label htmlFor="email" className="sr-only">
-											Email Address
+											{t("emailPlaceholder")}
 										</label>
 
 										<input
 											className="w-full rounded-tl-md rounded-bl-md border-border px-6 py-3 shadow-sm placeholder:text-primary-500/60 focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs"
 											type="email"
-											placeholder="Email Address"
+											placeholder={t("emailPlaceholder")}
 										/>
 
 										<Button
@@ -132,7 +134,7 @@ export const Footer = () => {
 										</Button>
 									</div>
 									<p className="text-lg text-muted-foreground mt-2">
-										Subscribe to our newsletter for the latest updates and news
+										{t("subscribeDescription")}
 									</p>
 								</form>
 							</div>
@@ -153,7 +155,7 @@ export const Footer = () => {
 					</p>
 
 					<p className="text-sm text-white text-center">
-						&copy; {new Date().getFullYear()} 4HerFrika. All rights reserved.
+						&copy; {new Date().getFullYear()} 4HerFrika. {t("allRightsReserved")}
 					</p>
 
 					<ul className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">

@@ -8,7 +8,20 @@
     "readMore": "Read More",
     "contactUs": "Contact Us",
     "sendMail": "Send a Mail",
-    "payDirectly": "Pay Directly"
+    "payDirectly": "Pay Directly",
+    "backToHome": "Back to Home",
+    "tryAgain": "Try Again",
+    "comingSoon": "Coming Soon",
+    "becomeAmbassador": "Become an Ambassador",
+    "volunteerAsMentor": "Volunteer as a Mentor",
+    "downloadReport": "Download our report",
+    "goToHomepage": "Go to Homepage",
+    "bookACall": "Book a call",
+    "messageOnLinkedin": "Message on LinkedIn",
+    "submit": "Submit",
+    "exploreProject": "Explore Project",
+    "seeDetails": "See Details",
+    "startAChapter": "Start a Chapter"
   },
   "nav": {
     "aboutUs": "About Us",
@@ -22,9 +35,13 @@
     "heroHighlight": "World-Class",
     "heroDescription": "4HERFRIKA is raising world class female leaders at the intersection of business and technology",
     "becomeAmbassador": "Become an ambassador",
-    "wordsOnStreet": "Words on The Street",
+    "wordsOnStreet": "<pink>Words</pink> on The <pink>Street</pink>",
     "wordsOnStreetSub": "Take a look at what our members say!",
-    "supportedBy": "Supported By:"
+    "supportedBy": "Supported By:",
+    "exploreCampus": "4HerFrika Campuses",
+    "campusDescription": "We operate through bite-sized communities in tertiary institutions",
+    "exploreAcademy": "4HerFrika Academy",
+    "academyDescription": "Online learning platform for skill development"
   },
   "about": {
     "whoWeAre": "Who We Are",
@@ -61,5 +78,58 @@
     "emailPlaceholder": "Email Address",
     "subscribeDescription": "Subscribe to our newsletter for the latest updates and news",
     "allRightsReserved": "All rights reserved."
+  },
+  "careers": {
+    "title": "Career Corner",
+    "heroText": "Welcome to 'Career Corner', where you can book a 10 mins call with a mentor for free to ask questions",
+    "searchMentor": "Search mentor",
+    "featuredMentor": "Featured Mentor",
+    "bookCounseling": "Book a career counseling",
+    "counselingDescription": "You can book a 10 mins call with a mentor for free to ask questions.",
+    "details": "Details",
+    "becomeMentor": "Wanna Become A Mentor?",
+    "becomeMentorDescription": "Share your purpose for becoming a mentor and take the first step with us"
+  },
+  "donate": {
+    "title": "Support Our Mission",
+    "description": "Your donation helps us reach more girls and create sustainable change across underserved regions.",
+    "bankDetails": "Bank Details",
+    "accountNumber": "Account Number",
+    "accountName": "Account Name",
+    "copy": "Copy",
+    "copied": "Copied",
+    "thankYou": "Thank you for your support. Every contribution helps us make a bigger impact."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email Address",
+    "message": "Message",
+    "send": "Send",
+    "phone": "Phone",
+    "location": "Location"
+  },
+  "impact": {
+    "storyInMotion": "Our Story in Motion",
+    "milestones": "Milestones of Year One",
+    "girlsMentored": "3,000+ girls mentored",
+    "campusesReached": "25+ campuses reached",
+    "graduates": "1,000+ graduates in Tech Academy",
+    "academies": "3 thriving academies: Tech, Business, Climate.",
+    "neverTouched": "In one year, we've seen girls who never touched a computer now designing products, coding software, and leading change in their schools and communities.",
+    "justTheBeginning": "This is just the beginning. By 2030, 4herfrika envisions 2 million women and girls empowered across Africa. Together, we can make it happen"
+  },
+  "projects": {
+    "title": "Projects",
+    "heroTitle": "At 4HerFrika, We Believe In Doing, Not Just Dreaming.",
+    "heroDescription": "Our Projects are grassroots-driven, impact-focused, and designed to uplift girls across Africa through education, technology, and leadership.",
+    "intro": "4HerAfrika",
+    "introDescription": "4HerAfrika is a movement dedicated to empowering young women across Africa through technology, leadership, and entrepreneurship."
+  },
+  "notFound": {
+    "title": "Oops! Page Not Found",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "backToHome": "Back to Home",
+    "tryAgain": "Try Again"
   }
 }

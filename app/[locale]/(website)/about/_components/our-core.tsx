@@ -1,4 +1,5 @@
 import Forherfirka from "@/app/[locale]/(website)/about/assets/iphone-mockup.png";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
 const coreValues = [
@@ -28,7 +29,8 @@ const coreValues = [
 	},
 ];
 
-export const OurCore = () => {
+export const OurCore = async () => {
+	const t = await getTranslations("about");
 	return (
 		<section className="bg-gradient-to-br from-pink-100 via-purple-50 to-pink-100 w-full py-16 md:py-24 relative overflow-hidden">
 			<div className="absolute inset-0 opacity-20">
@@ -39,7 +41,7 @@ export const OurCore = () => {
 
 			<div className="container mx-auto px-4 relative">
 				<h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground font-bold text-center mb-12 md:mb-16">
-					Core Values
+					{t("coreValues")}
 				</h1>
 
 				<div className="hidden md:flex justify-center items-center min-h-[600px] lg:min-h-[700px] relative">
