@@ -1,6 +1,9 @@
 {
-  "repositoryName": "4herfrika-admin",
-  "adapter": "@slicemachine/adapter-next",
-  "libraries": ["./slices"],
-  "localSliceSimulatorURL": "http://localhost:3000/slice-simulator"
+	"libraries": ["./slices"],
+	"adapter": {
+		"resolve": "@slicemachine/adapter-next",
+		"options": {}
+	},
+	"repositoryName": "4herfrika-admin",
+	"localSliceSimulatorURL": "http://localhost:3000/slice-simulator"
 }

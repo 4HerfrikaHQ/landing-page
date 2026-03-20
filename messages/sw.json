@@ -1,0 +1,65 @@
+{
+  "common": {
+    "donate": "Changia",
+    "joinUs": "Jiunge nasi",
+    "learnMore": "Jifunze zaidi",
+    "getStarted": "Anza sasa",
+    "viewProjects": "Tazama miradi",
+    "readMore": "Soma zaidi",
+    "contactUs": "Wasiliana nasi",
+    "sendMail": "Tuma barua pepe",
+    "payDirectly": "Lipa moja kwa moja"
+  },
+  "nav": {
+    "aboutUs": "Kuhusu sisi",
+    "projects": "Miradi",
+    "careerCorner": "Kona ya kazi",
+    "blog": "Blogu",
+    "contactUs": "Wasiliana nasi"
+  },
+  "home": {
+    "heroTitle": "Kulea wanawake {highlight}",
+    "heroHighlight": "wa kiwango cha dunia",
+    "heroDescription": "4HERFRIKA inalelea viongozi wa kike wa kiwango cha dunia katika makutano ya biashara na teknolojia",
+    "becomeAmbassador": "Kuwa balozi",
+    "wordsOnStreet": "Watu wanasema nini",
+    "wordsOnStreetSub": "Tazama wanachama wetu wanasema nini!",
+    "supportedBy": "Tunaungwa mkono na:"
+  },
+  "about": {
+    "whoWeAre": "Sisi ni nani",
+    "aboutDescription": "Katika 4HerFrika, tunajitahidi kufundisha, kushauri, na kuwawezesha wanawake kuwa viongozi wa mabadiliko kote Afrika.",
+    "whereEveryGirl": "Ambapo kila msichana anafikia lengo lake",
+    "coreValues": "Maadili ya msingi",
+    "faq": "Maswali yanayoulizwa mara kwa mara",
+    "faqDescription": "Katika sehemu hii unaweza kupata majibu yote unayoyatafuta. Ikiwa bado una shida kupata jibu - usisite kuwasiliana nasi moja kwa moja."
+  },
+  "blog": {
+    "greeting": "Habari Diva,",
+    "welcome": "Karibu kwenye",
+    "blogName": "'Blogu ya Pink'",
+    "description": "Hii ni nafasi salama iliyoundwa kwa ajili yako, yenye uzoefu wa wanawake kutoka kila mahali unaolenga kukusaidia kupata nguvu na uzuri wako katika machafuko haya yanayoitwa MAISHA",
+    "searchPlaceholder": "Tafuta makala"
+  },
+  "faq": {
+    "title": "Maswali",
+    "askAnything": "Tuulize chochote",
+    "description": "Katika sehemu hii unaweza kupata majibu yote unayoyatafuta",
+    "searchPlaceholder": "Tafuta hapa",
+    "stillHaveQuestions": "Bado una maswali?",
+    "cantFindAnswer": "Huwezi kupata jibu unalotafuta? Tafadhali ongea na timu yetu.",
+    "getInTouch": "Wasiliana nasi"
+  },
+  "footer": {
+    "quickLinks": "Viungo vya haraka",
+    "legal": "Kisheria",
+    "terms": "Masharti",
+    "privacy": "Faragha",
+    "contactUs": "Wasiliana nasi",
+    "support": "Msaada",
+    "subscribe": "Jiandikishe",
+    "emailPlaceholder": "Anwani ya barua pepe",
+    "subscribeDescription": "Jiandikishe kwa jarida letu kwa habari na taarifa za hivi karibuni",
+    "allRightsReserved": "Haki zote zimehifadhiwa."
+  }
+}

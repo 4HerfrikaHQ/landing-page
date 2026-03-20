@@ -1,0 +1,65 @@
+{
+  "common": {
+    "donate": "Donate",
+    "joinUs": "Join Us",
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "viewProjects": "View Projects",
+    "readMore": "Read More",
+    "contactUs": "Contact Us",
+    "sendMail": "Send a Mail",
+    "payDirectly": "Pay Directly"
+  },
+  "nav": {
+    "aboutUs": "About Us",
+    "projects": "Projects",
+    "careerCorner": "Career Corner",
+    "blog": "Blog",
+    "contactUs": "Contact Us"
+  },
+  "home": {
+    "heroTitle": "Raising {highlight} Women",
+    "heroHighlight": "World-Class",
+    "heroDescription": "4HERFRIKA is raising world class female leaders at the intersection of business and technology",
+    "becomeAmbassador": "Become an ambassador",
+    "wordsOnStreet": "Words on The Street",
+    "wordsOnStreetSub": "Take a look at what our members say!",
+    "supportedBy": "Supported By:"
+  },
+  "about": {
+    "whoWeAre": "Who We Are",
+    "aboutDescription": "At 4HerFrika, we strive to train, mentor, and empower women to become transformative leaders across Africa.",
+    "whereEveryGirl": "Where Every Girl Achieves Their Goal",
+    "coreValues": "Core Values",
+    "faq": "Frequently Asked Questions",
+    "faqDescription": "In this section you can find all the answers you are probably looking for. If you still struggle with finding one - don't hesitate to contact us directly."
+  },
+  "blog": {
+    "greeting": "Hi Divas,",
+    "welcome": "Welcome to",
+    "blogName": "'The Pink Blog'",
+    "description": "This is a safe space created just for you, with experiences of women from all walks of life targeted to help you find your mojo and beauty in this chaos called LIFE",
+    "searchPlaceholder": "Search for Post"
+  },
+  "faq": {
+    "title": "FAQs",
+    "askAnything": "Ask Us Anything",
+    "description": "In this section you can find all the answers you are probably looking for",
+    "searchPlaceholder": "Search here",
+    "stillHaveQuestions": "Still have questions?",
+    "cantFindAnswer": "Can't find the answer you're looking for? Please chat to our friendly team.",
+    "getInTouch": "Get in touch"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "contactUs": "Contact Us",
+    "support": "Support",
+    "subscribe": "Subscribe",
+    "emailPlaceholder": "Email Address",
+    "subscribeDescription": "Subscribe to our newsletter for the latest updates and news",
+    "allRightsReserved": "All rights reserved."
+  }
+}
