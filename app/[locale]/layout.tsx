@@ -43,8 +43,8 @@ export default async function LocaleLayout({
 				<NextIntlClientProvider>
 					{children}
 				</NextIntlClientProvider>
+				<Toaster position="top-right" richColors closeButton />
 			</body>
-			<Toaster position="top-right" richColors closeButton />
 		</html>
 	);
 }

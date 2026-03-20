@@ -12,7 +12,7 @@ export const Footer = async () => {
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
 				<div className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 					<div className="text-center sm:text-left">
-						<p className="font-bold text-muted-foreground text-xl">{t("quickLinks")}</p>
+						<p className="font-bold text-primary-500 text-xl">{t("quickLinks")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
@@ -58,7 +58,7 @@ export const Footer = async () => {
 					</div>
 
 					<div className="text-center sm:text-left">
-						<p className="font-bold text-muted-foreground text-xl">{t("legal")}</p>
+						<p className="font-bold text-primary-500 text-xl">{t("legal")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
@@ -80,7 +80,7 @@ export const Footer = async () => {
 					</div>
 
 					<div className="text-center sm:text-left">
-						<p className="font-bold text-muted-foreground text-xl">{t("contactUs")}</p>
+						<p className="font-bold text-primary-500 text-xl">{t("contactUs")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<a
@@ -111,7 +111,7 @@ export const Footer = async () => {
 
 					<div className="text-center sm:text-left md:col-span-4 lg:col-span-2">
 						<div className="bg-muted/20 p-12 rounded-2xl md:mt-4 lg:-mt-8">
-							<p className="font-bold text-muted-foreground text-2xl">{t("subscribe")}</p>
+							<p className="font-bold text-white text-2xl">{t("subscribe")}</p>
 
 							<div className="mx-auto mt-4 md:max-w-md sm:ms-0">
 								<form className="mt-4">
@@ -133,7 +133,7 @@ export const Footer = async () => {
 											<ArrowRight className="h-4 w-4 text-white" />
 										</Button>
 									</div>
-									<p className="text-lg text-muted-foreground mt-2">
+									<p className="text-lg text-white/60 mt-2">
 										{t("subscribeDescription")}
 									</p>
 								</form>
@@ -145,7 +145,7 @@ export const Footer = async () => {
 				<hr className="w-full bg-white opacity-25 mt-9 mb-6" />
 
 				<div className="pt-3 flex flex-col justify-center items-center gap-4 sm:flex-row sm:justify-between">
-					<p className="flex flex-row items-center gap-4 text-center text-sm text-muted-foreground sm:text-left">
+					<p className="flex flex-row items-center gap-4 text-center text-sm text-white/60 sm:text-left">
 						<Link
 							href={"/" as Route}
 							className="bg-background hover:bg-background/90 rounded-md px-2 py-1 w-32"

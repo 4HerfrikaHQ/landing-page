@@ -87,12 +87,12 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 				</section>
 			</section>
 
-			<section className="bg-primary-400 bg-opacity-10 py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
+			<section className="bg-primary-500 py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
 				<section className="container mx-auto">
-					<h2 className="text-foreground text-4xl text-center font-semibold mb-3">
+					<h2 className="text-white text-4xl text-center font-semibold mb-3">
 						{t("bookCounseling")}
 					</h2>
-					<p className="text-center text-muted-foreground">
+					<p className="text-center text-white/70">
 						{t("counselingDescription")}
 					</p>
 					<section className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">

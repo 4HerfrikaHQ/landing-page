@@ -34,7 +34,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 						alt={mentor.name}
 						width={700}
 						height={1000}
-						className="hover:scale-105 max-h-71.25 object-cover transition-transform duration-300"
+						className="hover:scale-105 h-64 w-full object-cover object-top transition-transform duration-300"
 					/>
 				</div>
 				<p className="text-center text-md mt-3 uppercase font-bold text-white">
