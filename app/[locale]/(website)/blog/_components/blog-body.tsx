@@ -27,6 +27,7 @@ function PostCard({
 				<Image
 					src={post.cover}
 					fill
+					sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
 					alt={post.title}
 					className="rounded-t-md object-cover"
 				/>
