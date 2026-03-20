@@ -1,3 +1,4 @@
+import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
@@ -20,36 +21,42 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 			<div className="bg-muted py-12 md:py-16 lg:py-20">
 				<div className="container mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="mx-auto w-full lg:mx-0">
-						<h2 className="text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-							{t("greeting")}
-						</h2>
-						<p className="mt-3 text-xl leading-8 text-muted-foreground font-semibold">
-							{t("welcome")}{" "}
-							<span className="text-primary-500">
-								{t("blogName")}
-							</span>
-						</p>
-						<p className="text-xl font-light text-foreground mt-2">
-							{t("description")}
-						</p>
-						<div className="flex gap-4 mt-6 border border-primary-500 rounded-[20px] items-center px-8">
-							<Search
-								className="h-5.5 w-5.5 text-muted-foreground"
-								strokeWidth={2}
+						<FadeIn>
+							<h2 className="text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+								{t("greeting")}
+							</h2>
+							<p className="mt-3 text-xl leading-8 text-muted-foreground font-semibold">
+								{t("welcome")}{" "}
+								<span className="text-primary-500">
+									{t("blogName")}
+								</span>
+							</p>
+							<p className="text-xl font-light text-foreground mt-2">
+								{t("description")}
+							</p>
+						</FadeIn>
+						<FadeIn delay={0.2}>
+							<div className="flex gap-4 mt-6 border border-primary-500 rounded-[20px] items-center px-8">
+								<Search
+									className="h-5.5 w-5.5 text-muted-foreground"
+									strokeWidth={2}
+								/>
+								<input
+									type="text"
+									className="py-4 flex-1 rounded-[20px] bg-transparent outline-0"
+									placeholder={t("searchPlaceholder")}
+								/>
+							</div>
+						</FadeIn>
+						<FadeIn delay={0.3}>
+							<Image
+								src="/assets/blog-hero.png"
+								width={1320}
+								height={429}
+								alt="blog-img"
+								className="mt-16 hidden lg:block"
 							/>
-							<input
-								type="text"
-								className="py-4 flex-1 rounded-[20px] bg-transparent outline-0"
-								placeholder={t("searchPlaceholder")}
-							/>
-						</div>
-						<Image
-							src="/assets/blog-hero.png"
-							width={1320}
-							height={429}
-							alt="blog-img"
-							className="mt-16 hidden lg:block"
-						/>
+						</FadeIn>
 					</div>
 				</div>
 			</div>

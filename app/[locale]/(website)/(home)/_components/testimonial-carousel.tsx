@@ -8,6 +8,7 @@ import {
 	CarouselPrevious,
 	CarouselNext,
 } from "@/components/ui/carousel";
+import { FadeIn } from "@/components/motion";
 import { TestimonialCard } from "./testimonial-card";
 
 export function TestimonialCarousel({
@@ -16,6 +17,7 @@ export function TestimonialCarousel({
 	testimonials: Content.HomepageDocument["data"]["testimonials"];
 }) {
 	return (
+		<FadeIn>
 		<Carousel
 			opts={{ align: "start", loop: true }}
 			className="w-full"
@@ -35,5 +37,6 @@ export function TestimonialCarousel({
 				<CarouselNext className="static translate-y-0" />
 			</div>
 		</Carousel>
+		</FadeIn>
 	);
 }

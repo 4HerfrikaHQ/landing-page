@@ -1,3 +1,4 @@
+import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import type { Route } from "next";
@@ -21,6 +22,7 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 
 			<section className="bg-muted">
 				<section className="container mx-auto h-full grid md:grid-cols-2 grid-cols-1 gap-10 items-center py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
+					<FadeIn direction="left">
 					<div className="relative w-full h-150">
 						<div className="absolute -bottom-12 -right-10 size-40 rounded-full aspect-square border-50 z-10 border-white" />
 						<Image
@@ -53,6 +55,8 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 							className="object-cover object-top shadow-xl"
 						/>
 					</div>
+					</FadeIn>
+					<FadeIn direction="right">
 					<div>
 						<h3 className="uppercase text-primary-500 text-lg">
 							{t("featuredMentor")}
@@ -84,6 +88,7 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 							</Button>
 						</div>
 					</div>
+					</FadeIn>
 				</section>
 			</section>
 
@@ -95,11 +100,15 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 					<p className="text-center text-white/70">
 						{t("counselingDescription")}
 					</p>
-					<section className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+					<StaggerContainer className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
 						{COUNSELLING_MENTORS.map((mentor) => (
-							<MentorCard key={mentor.name + mentor.bio} mentor={mentor} />
+							<StaggerItem key={mentor.name + mentor.bio}>
+								<HoverCard>
+									<MentorCard mentor={mentor} />
+								</HoverCard>
+							</StaggerItem>
 						))}
-					</section>
+					</StaggerContainer>
 				</section>
 			</section>
 

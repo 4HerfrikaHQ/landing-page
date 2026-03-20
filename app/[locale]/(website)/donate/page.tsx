@@ -1,3 +1,4 @@
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
@@ -13,6 +14,7 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 		<div className="min-h-screen bg-background">
 			<section className="py-12 sm:py-14 md:py-16 px-4 bg-muted">
 				<div className="max-w-7xl mx-auto relative">
+					<FadeIn>
 					<div className="text-center mb-10 sm:mb-12 md:mb-16">
 						<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground md:text-foreground mb-6 sm:mb-8 leading-tight">
 							{t("heroTitle")}
@@ -23,9 +25,10 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 							{t("heroVision")}
 						</p>
 					</div>
+					</FadeIn>
 
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 items-center">
-						<div className="relative">
+					<StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 items-center">
+						<StaggerItem className="relative">
 							<div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl transform sm:rotate-1 md:rotate-3 hover:rotate-0 transition-transform duration-300">
 								<Image
 									src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1200&auto=format&fit=crop&q=75"
@@ -36,8 +39,8 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 									priority
 								/>
 							</div>
-						</div>
-						<div className="relative">
+						</StaggerItem>
+						<StaggerItem className="relative">
 							<div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl isolation-isolate">
 								<Image
 									src="https://images.unsplash.com/photo-1710093072228-8c3129f27357?w=1200&auto=format&fit=crop&q=75"
@@ -61,8 +64,8 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 									</Link>
 								</div>
 							</div>
-						</div>
-						<div className="relative">
+						</StaggerItem>
+						<StaggerItem className="relative">
 							<div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl transform -sm:rotate-1 md:-rotate-3 hover:rotate-0 transition-transform duration-300">
 								<Image
 									src="https://images.unsplash.com/photo-1554796104-5c39d0551b52?w=1200&auto=format&fit=crop&q=75"
@@ -72,8 +75,8 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 									className="w-full h-56 xs:h-64 sm:h-80 md:h-96 object-cover"
 								/>
 							</div>
-						</div>
-					</div>
+						</StaggerItem>
+					</StaggerContainer>
 				</div>
 			</section>
 
@@ -81,6 +84,7 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 				id="bank-details"
 				className="py-14 sm:py-16 md:py-20 px-4 border-t border-border bg-background"
 			>
+				<FadeIn>
 				<div className="max-w-5xl mx-auto">
 					<div className="text-center mb-8 sm:mb-10 md:mb-12">
 						<h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
@@ -92,6 +96,7 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 					</div>
 					<BankDetails />
 				</div>
+				</FadeIn>
 			</section>
 		</div>
 	);

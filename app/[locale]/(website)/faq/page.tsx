@@ -1,5 +1,6 @@
 import FAQ from "@/app/[locale]/(website)/(home)/_components/faq-section";
 import { Button } from "@/components/ui/button";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import { hasLocale } from "next-intl";
@@ -27,6 +28,7 @@ export default async function FAQPage({ params }: { params: Promise<{ locale: st
 						height={500}
 					/>
 				)}
+				<FadeIn>
 				<div className="mx-auto max-w-7xl px-4 pb-6 pt-16  sm:px-6 lg:px-8 relative">
 					<div className="text-center text-white">
 						<h2 className="text-[32px] leading-10 ">{t("title")}</h2>
@@ -50,6 +52,7 @@ export default async function FAQPage({ params }: { params: Promise<{ locale: st
 						</div>
 					</div>
 				</div>
+				</FadeIn>
 			</div>
 			<div className="pt-20">
 				{page.data.frequently_asked_questions.map(({ section }) => {
@@ -73,19 +76,21 @@ export default async function FAQPage({ params }: { params: Promise<{ locale: st
 									</span>
 								))}
 							</h1>
-							<div className="grid gap-y-6 w-full px-8 md:px-0 md:w-3/4 mx-auto">
+							<StaggerContainer className="grid gap-y-6 w-full px-8 md:px-0 md:w-3/4 mx-auto">
 								{sectionData.faq.map((faq) => (
-									<FAQ
-										question={faq.question}
-										answer={faq.answer}
-										key={faq.question}
-									/>
+									<StaggerItem key={faq.question}>
+										<FAQ
+											question={faq.question}
+											answer={faq.answer}
+										/>
+									</StaggerItem>
 								))}
-							</div>
+							</StaggerContainer>
 						</div>
 					);
 				})}
 			</div>
+			<FadeIn>
 			<div className="md:pt-16 px-8 pb-10">
 				<div className="p-8 bg-muted rounded-2xl flex flex-col gap-y-8 md:flex-row md:items-center justify-between">
 					<div>
@@ -102,6 +107,7 @@ export default async function FAQPage({ params }: { params: Promise<{ locale: st
 					</Button>
 				</div>
 			</div>
+			</FadeIn>
 		</>
 	);
 }

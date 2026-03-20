@@ -1,3 +1,4 @@
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import {
 	Instagram,
 	Linkedin,
@@ -24,6 +25,7 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 				className="object-cover absolute top-0 w-full"
 				fill
 			/>
+			<FadeIn>
 			<section className="shadow-lg max-w-5xl container mx-auto p-16 rounded-lg bg-background z-10">
 				<h1 className="text-primary-500 text-2xl p-4 text-center underline underline-offset-4 capitalize font-semibold">
 					{t("getInTouch")}
@@ -31,10 +33,13 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 
 				<section className="mt-10 flex gap-10">
 					<ContactForm />
-					<div className="w-full md:col-span-2 flex flex-col gap-4">
+					<StaggerContainer className="w-full md:col-span-2 flex flex-col gap-4">
+						<StaggerItem>
 						<p className="flex text-lg items-center gap-3 text-muted-foreground">
 							<MapPin className="h-5 w-5" /> <span>Africa</span>
 						</p>
+						</StaggerItem>
+						<StaggerItem>
 						<p className="flex text-lg items-center gap-3 text-muted-foreground my-3">
 							<Phone className="h-5 w-5" />
 							<a
@@ -44,6 +49,8 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								+234(0)9082009908
 							</a>
 						</p>
+						</StaggerItem>
+						<StaggerItem>
 						<p className="flex text-lg items-center gap-3 text-muted-foreground">
 							<Mail className="h-5 w-5" />
 							<a
@@ -53,6 +60,8 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								4herfrika@gmail.com
 							</a>
 						</p>
+						</StaggerItem>
+						<StaggerItem>
 						<ul className="flex items-center gap-6 text-muted-foreground mt-4">
 							<li>
 								<a
@@ -85,6 +94,8 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								</a>
 							</li>
 						</ul>
+						</StaggerItem>
+						<StaggerItem>
 						<div className="relative w-full min-h-48 mt-7">
 							<Image
 								src="/assets/contact/map.jpg"
@@ -93,9 +104,11 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								className="object-cover rounded-md"
 							/>
 						</div>
-					</div>
+						</StaggerItem>
+					</StaggerContainer>
 				</section>
 			</section>
+			</FadeIn>
 		</section>
 	);
 };

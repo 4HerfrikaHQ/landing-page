@@ -1,5 +1,6 @@
 "use client";
 
+import { StaggerContainer, StaggerItem, HoverCard } from "@/components/motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Route } from "next";
 import Image from "next/image";
@@ -85,15 +86,19 @@ export default function BlogBody() {
 					const catPosts = allPosts.filter(([, post]) => post.category === cat);
 					return (
 						<TabsContent key={`panel-${cat}`} value={cat}>
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
+							<StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
 								{catPosts.length > 0 ? (
 									catPosts.map(([slug, post]) => (
-										<PostCard key={slug} slug={slug} post={post} />
+										<StaggerItem key={slug}>
+											<HoverCard className="h-full rounded-md">
+												<PostCard slug={slug} post={post} />
+											</HoverCard>
+										</StaggerItem>
 									))
 								) : (
 									<EmptyState category={cat} />
 								)}
-							</div>
+							</StaggerContainer>
 						</TabsContent>
 					);
 				})}

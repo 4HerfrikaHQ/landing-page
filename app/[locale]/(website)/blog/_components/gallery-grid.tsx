@@ -1,5 +1,6 @@
 "use client";
 
+import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "lucide-react";
@@ -169,7 +170,7 @@ export function GalleryGrid() {
 		<div className="bg-background py-8 md:py-12 lg:py-16 xl:py-20">
 			<div className="mx-auto container px-4 sm:px-6 lg:px-8">
 				<div className="flex flex-col md:flex-row justify-between items-start mb-10">
-					<div className="w-full md:w-1/2 mb-6 md:mb-0">
+					<FadeIn direction="left" className="w-full md:w-1/2 mb-6 md:mb-0">
 						<h2 className="text-2xl sm:text-3xl md:text-4xl font-bold max-w-sm text-foreground">
 							4HerFrika Impact Gallery
 						</h2>
@@ -188,10 +189,10 @@ export function GalleryGrid() {
 								<ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
 							</Button>
 						</div>
-					</div>
+					</FadeIn>
 
 					{heroItems.length > 0 && heroItems[0].item && (
-						<div className="w-full md:w-1/2 md:pl-8">
+						<FadeIn direction="right" delay={0.15} className="w-full md:w-1/2 md:pl-8">
 							<div className="rounded-lg overflow-hidden h-50 relative">
 								<Image
 									src={heroItems[0].item.imageUrl || "/placeholder.svg"}
@@ -201,13 +202,13 @@ export function GalleryGrid() {
 									className="object-cover hover:scale-105 transition-transform duration-300"
 								/>
 							</div>
-						</div>
+						</FadeIn>
 					)}
 				</div>
 
 				{/* Middle section - 2x3 grid layout */}
 				{middleItems.length > 0 && (
-					<div className={cn("grid gap-4 mb-10", middleSection?.gridClass)}>
+					<StaggerContainer className={cn("grid gap-4 mb-10", middleSection?.gridClass)}>
 						{middleItems.map((item, idx) => {
 							const rowSpan = item.specialLayout.rowSpan || 1;
 							const colSpan = item.specialLayout.colSpan || 1;
@@ -228,7 +229,7 @@ export function GalleryGrid() {
 
 							// For actual image items
 							return (
-								<div
+								<StaggerItem
 									key={item.item?.id || `middle-${idx}`}
 									className={cn(
 										"",
@@ -252,20 +253,20 @@ export function GalleryGrid() {
 											/>
 										)}
 									</div>
-								</div>
+								</StaggerItem>
 							);
 						})}
-					</div>
+					</StaggerContainer>
 				)}
 
 				{/* Bottom section with last image spanning 2 columns */}
 				{bottomItems.length > 0 && (
-					<div className={cn("grid gap-4", bottomSection?.gridClass)}>
+					<StaggerContainer className={cn("grid gap-4", bottomSection?.gridClass)}>
 						{bottomItems.map((item, idx) => {
 							const colSpan = item.specialLayout.colSpan || 1;
 
 							return (
-								<div
+								<StaggerItem
 									key={item.item?.id || `bottom-${idx}`}
 									className={cn("", colSpan > 1 && `md:col-span-${colSpan}`)}
 								>
@@ -280,10 +281,10 @@ export function GalleryGrid() {
 											/>
 										)}
 									</div>
-								</div>
+								</StaggerItem>
 							);
 						})}
-					</div>
+					</StaggerContainer>
 				)}
 			</div>
 		</div>

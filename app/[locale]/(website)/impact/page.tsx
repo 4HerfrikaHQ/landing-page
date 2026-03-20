@@ -1,3 +1,4 @@
+import { FadeIn, StaggerContainer, StaggerItem, TextReveal } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import type { Locale } from "next-intl";
@@ -29,18 +30,20 @@ export default async function ReportPage({ params }: { params: Promise<{ locale:
 				className="mx-auto max-w-full"
 			/>
 			<h1 className="text-3xl md:text-5xl font-bold text-foreground mx-auto my-16 md:my-28 text-center">
-				{t("storyInMotion")}
+				<TextReveal>{t("storyInMotion")}</TextReveal>
 			</h1>
 			<div className="relative flex flex-col items-center mb-20 md:mb-32">
 				<div className="absolute overflow-x-hidden left-[2vw] top-1/2 -translate-y-1/2 w-[96vw]">
 					<F4herfrikaLogo className="w-[96vw]" />
 				</div>
 				<Squiggle className="absolute left-0 top-1/2 -translate-y-1/2 w-screen" />
+				<FadeIn initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }}>
 				<Image
 					src={earth}
 					alt="Earth Icon"
 					className="mx-auto max-w-xl relative w-[43vw]"
 				/>
+				</FadeIn>
 				<div className="w-40 md:w-56 h-6 rounded-[50%] bg-black/55 blur-[20px]" />
 			</div>
 			<p className="max-w-6xl text-center text-foreground text-lg md:text-[32px] font-light mx-auto mb-20 md:mb-52 px-6">
@@ -50,14 +53,14 @@ export default async function ReportPage({ params }: { params: Promise<{ locale:
 				<h2 className="text-3xl md:text-5xl text-foreground font-semibold mb-12">
 					{t("milestones")}
 				</h2>
-				<ul className="list-disc text-center space-y-4 md:space-y-6 text-lg md:text-2xl">
-					<li className="w-fit mx-auto">{t("girlsMentored")}</li>
-					<li className="w-fit mx-auto">{t("campusesReached")}</li>
-					<li className="w-fit mx-auto">{t("graduates")}</li>
-					<li className="w-fit mx-auto">
+				<StaggerContainer className="list-disc text-center space-y-4 md:space-y-6 text-lg md:text-2xl" style={{ listStyleType: "disc" }}>
+					<StaggerItem><li className="w-fit mx-auto">{t("girlsMentored")}</li></StaggerItem>
+					<StaggerItem><li className="w-fit mx-auto">{t("campusesReached")}</li></StaggerItem>
+					<StaggerItem><li className="w-fit mx-auto">{t("graduates")}</li></StaggerItem>
+					<StaggerItem><li className="w-fit mx-auto">
 						{t("academies")}
-					</li>
-				</ul>
+					</li></StaggerItem>
+				</StaggerContainer>
 				<div className="grid grid-cols-2 gap-4 px-6 mt-12 md:mt-0">
 					<Image
 						src={milestone1}
@@ -107,6 +110,7 @@ export default async function ReportPage({ params }: { params: Promise<{ locale:
 				</Button>
 				<span className="h-12 md:h-36 block" />
 			</div>
+			<FadeIn>
 			<div className="px-6 pt-12 pb-8 md:p-20 grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-y-8 gap-x-24 items-center">
 				<div>
 					<h4 className="text-lg md:text-[32px] leading-normal mb-12">
@@ -123,6 +127,7 @@ export default async function ReportPage({ params }: { params: Promise<{ locale:
 					className="w-full h-135 object-cover"
 				/>
 			</div>
+			</FadeIn>
 		</div>
 	);
 }

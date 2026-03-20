@@ -2,6 +2,7 @@
 
 import type React from "react";
 
+import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -65,6 +66,7 @@ export default function MentorForm() {
 		"h-auto rounded-none border-0 border-b border-border px-0 py-2 focus-visible:border-border focus-visible:ring-0 placeholder:text-muted-foreground";
 
 	return (
+		<FadeIn>
 		<div className="container max-w-3xl mx-auto py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
 			<h1 className="text-4xl font-bold text-center mb-2">
 				{t("becomeMentor")}
@@ -183,5 +185,6 @@ export default function MentorForm() {
 				</Button>
 			</form>{" "}
 		</div>
+		</FadeIn>
 	);
 }

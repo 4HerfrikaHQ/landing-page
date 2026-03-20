@@ -1,5 +1,6 @@
 "use client";
 
+import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -57,6 +58,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 			</div>
 
 			<DialogContent className="sm:max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 lg:p-16">
+				<FadeIn>
 				<DialogHeader>
 					<DialogTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-primary-500 mb-6 lg:mb-10">
 						{displayName}
@@ -146,6 +148,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 						</div>
 					</div>
 				</div>
+				</FadeIn>
 			</DialogContent>
 		</Dialog>
 	);

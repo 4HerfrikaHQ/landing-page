@@ -1,5 +1,6 @@
 import academy from "@/app/[locale]/(website)/(home)/assets/about-us/academy.png";
 import campus from "@/app/[locale]/(website)/(home)/assets/about-us/campus.png";
+import { StaggerContainer, StaggerItem } from "@/components/motion";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -10,28 +11,32 @@ export const ExploreCommunity = async () => {
 	const t = await getTranslations("home");
 
 	return (
-		<section className="px-4 sm:px-6 md:px-7 container mx-auto my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center lg:py-6">
-			<Community
-				image={campus.src}
-				name={t("ourCampuses")}
-				description={t("ourCampusesDescription")}
-				link={{
-					label: t("exploreCampuses"),
-					href: "/",
-				}}
-			/>
+		<StaggerContainer className="px-4 sm:px-6 md:px-7 container mx-auto my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center lg:py-6">
+			<StaggerItem>
+				<Community
+					image={campus.src}
+					name={t("ourCampuses")}
+					description={t("ourCampusesDescription")}
+					link={{
+						label: t("exploreCampuses"),
+						href: "/",
+					}}
+				/>
+			</StaggerItem>
 			<div className="hidden lg:block h-60 w-0.5 bg-primary-500" />
-			<Community
-				image={academy.src}
-				name={t("ourAcademy")}
-				description={t("ourAcademyDescription")}
-				link={{
-					label: t("exploreLearningTracks"),
-					href: "/",
-				}}
-			/>
+			<StaggerItem>
+				<Community
+					image={academy.src}
+					name={t("ourAcademy")}
+					description={t("ourAcademyDescription")}
+					link={{
+						label: t("exploreLearningTracks"),
+						href: "/",
+					}}
+				/>
+			</StaggerItem>
 			<div className="absolute size-76.5 bottom-0 right-0 bg-primary-500 opacity-30 blur-[374px]" />
-		</section>
+		</StaggerContainer>
 	);
 };
 

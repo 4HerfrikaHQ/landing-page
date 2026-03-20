@@ -4,14 +4,15 @@ import { ArrowRight, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
 import Logo from "../4herfrika-logo";
+import { StaggerContainer, StaggerItem } from "@/components/motion";
 
 export const Footer = async () => {
 	const t = await getTranslations("footer");
 	return (
 		<footer className="bg-secondary-500">
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
-				<div className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
-					<div className="text-center sm:text-left">
+				<StaggerContainer className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5" staggerDelay={0.12}>
+					<StaggerItem className="text-center sm:text-left">
 						<p className="font-bold text-primary-500 text-xl">{t("quickLinks")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
@@ -55,9 +56,9 @@ export const Footer = async () => {
 								</Link>
 							</li>
 						</ul>
-					</div>
+					</StaggerItem>
 
-					<div className="text-center sm:text-left">
+					<StaggerItem className="text-center sm:text-left">
 						<p className="font-bold text-primary-500 text-xl">{t("legal")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
@@ -77,9 +78,9 @@ export const Footer = async () => {
 								</Link>
 							</li>
 						</ul>
-					</div>
+					</StaggerItem>
 
-					<div className="text-center sm:text-left">
+					<StaggerItem className="text-center sm:text-left">
 						<p className="font-bold text-primary-500 text-xl">{t("contactUs")}</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
@@ -107,9 +108,9 @@ export const Footer = async () => {
 								</Link>
 							</li>
 						</ul>
-					</div>
+					</StaggerItem>
 
-					<div className="text-center sm:text-left md:col-span-4 lg:col-span-2">
+					<StaggerItem className="text-center sm:text-left md:col-span-4 lg:col-span-2">
 						<div className="bg-muted/20 p-12 rounded-2xl md:mt-4 lg:-mt-8">
 							<p className="font-bold text-white text-2xl">{t("subscribe")}</p>
 
@@ -139,8 +140,8 @@ export const Footer = async () => {
 								</form>
 							</div>
 						</div>
-					</div>
-				</div>
+					</StaggerItem>
+				</StaggerContainer>
 
 				<hr className="w-full bg-white opacity-25 mt-9 mb-6" />
 
@@ -158,8 +159,8 @@ export const Footer = async () => {
 						&copy; {new Date().getFullYear()} 4HerFrika. {t("allRightsReserved")}
 					</p>
 
-					<ul className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
-						<li>
+					<StaggerContainer className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start" staggerDelay={0.08}>
+						<StaggerItem>
 							<a
 								href="https://www.linkedin.com/company/4herfrika"
 								rel="noreferrer"
@@ -169,8 +170,8 @@ export const Footer = async () => {
 								<span className="sr-only">LinkedIn</span>
 								<Linkedin className="h-3 w-3" />
 							</a>
-						</li>
-						<li>
+						</StaggerItem>
+						<StaggerItem>
 							<a
 								href="https://www.instagram.com/4herfrika"
 								rel="noreferrer"
@@ -180,8 +181,8 @@ export const Footer = async () => {
 								<span className="sr-only">Instagram</span>
 								<Instagram className="h-3 w-3" />
 							</a>
-						</li>
-						<li>
+						</StaggerItem>
+						<StaggerItem>
 							<a
 								href="https://twitter.com/4herfrika"
 								rel="noreferrer"
@@ -191,8 +192,8 @@ export const Footer = async () => {
 								<span className="sr-only">X</span>
 								<Twitter className="h-3 w-3" />
 							</a>
-						</li>
-					</ul>
+						</StaggerItem>
+					</StaggerContainer>
 				</div>
 			</div>
 		</footer>

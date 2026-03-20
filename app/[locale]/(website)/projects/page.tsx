@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { FadeIn, TextReveal } from "@/components/motion";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import type { Locale } from "next-intl";
@@ -26,7 +27,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 							</span>
 
 							<h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
-								{t("heroTitle")}
+								<TextReveal>{t("heroTitle")}</TextReveal>
 							</h1>
 
 							<p className="mt-6 max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed">
@@ -52,7 +53,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 						</div>
 
 						{/* Art */}
-						<div className="mt-10 lg:mt-0 lg:col-span-5">
+						<FadeIn direction="right" delay={0.2} className="mt-10 lg:mt-0 lg:col-span-5">
 							<div className="p-2.5 rounded-[30px] bg-[linear-gradient(135deg,#ff3ea5_0%,#a855f7_100%)] [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)] shadow-[0_18px_40px_rgba(233,30,99,0.20)]">
 								<div className="relative aspect-4/5 rounded-[24px] overflow-hidden bg-accent [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
 									<Image
@@ -67,21 +68,23 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 								</div>
 							</div>
 							<div className="mt-4 h-10 rounded-[24px] bg-pink-500/20 blur-2xl" />
-						</div>
+						</FadeIn>
 					</div>
 				</div>
 			</section>
 
 			{/* INTRO */}
 			<section className="px-4 sm:px-6 lg:px-8 pt-24 md:pt-28">
-				<div className="mx-auto max-w-7xl text-center">
-					<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
-						{t("intro")}
-					</h2>
-					<p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
-						{t("introFullDescription")}
-					</p>
-				</div>
+				<FadeIn>
+					<div className="mx-auto max-w-7xl text-center">
+						<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+							{t("intro")}
+						</h2>
+						<p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
+							{t("introFullDescription")}
+						</p>
+					</div>
+				</FadeIn>
 			</section>
 
 			{/* FEATURED PROJECT A */}
@@ -89,38 +92,42 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 				<div className="mx-auto max-w-7xl">
 					<div className="rounded-3xl bg-background border border-border overflow-hidden">
 						<div className="grid md:grid-cols-2">
-							<div className="relative aspect-4/3 md:h-full">
-								<Image
-									src="https://images.unsplash.com/photo-1635606906861-a3ac61bc1c78?w=1200&auto=format&fit=crop&q=70"
-									alt="StopTheViolence project poster"
-									fill
-									className="object-cover md:rounded-l-3xl"
-									sizes="(min-width: 1024px) 50vw, 100vw"
-								/>
-							</div>
-
-							<div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">
-								<p className="text-base md:text-lg lg:text-xl text-muted-foreground">
-									{t("stopTheViolenceStats")}
-								</p>
-								<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground">
-									{t("stopTheViolenceTitle")}
-								</h3>
-								<p className="mt-5 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed">
-									{t("stopTheViolenceDescription")}
-								</p>
-
-								<div className="mt-8">
-									<Button
-										href={"/projects/stop-the-violence" as Route}
-										variant="outline"
-										className="px-6 py-3 text-base md:text-lg max-w-max"
-									>
-										<span className="mr-2">{tc("exploreProject")}</span>
-										<ArrowRight className="h-4 w-4" aria-hidden="true" />
-									</Button>
+							<FadeIn direction="left">
+								<div className="relative aspect-4/3 md:h-full">
+									<Image
+										src="https://images.unsplash.com/photo-1635606906861-a3ac61bc1c78?w=1200&auto=format&fit=crop&q=70"
+										alt="StopTheViolence project poster"
+										fill
+										className="object-cover md:rounded-l-3xl"
+										sizes="(min-width: 1024px) 50vw, 100vw"
+									/>
 								</div>
-							</div>
+							</FadeIn>
+
+							<FadeIn direction="right" delay={0.15}>
+								<div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+									<p className="text-base md:text-lg lg:text-xl text-muted-foreground">
+										{t("stopTheViolenceStats")}
+									</p>
+									<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground">
+										{t("stopTheViolenceTitle")}
+									</h3>
+									<p className="mt-5 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed">
+										{t("stopTheViolenceDescription")}
+									</p>
+
+									<div className="mt-8">
+										<Button
+											href={"/projects/stop-the-violence" as Route}
+											variant="outline"
+											className="px-6 py-3 text-base md:text-lg max-w-max"
+										>
+											<span className="mr-2">{tc("exploreProject")}</span>
+											<ArrowRight className="h-4 w-4" aria-hidden="true" />
+										</Button>
+									</div>
+								</div>
+							</FadeIn>
 						</div>
 					</div>
 				</div>
@@ -128,41 +135,45 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 
 			<section className="px-4 sm:px-6 lg:px-8 pt-20 md:pt-24 pb-28">
 				<div className="mx-auto max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-					<div>
-						<p className="text-base md:text-lg lg:text-xl font-medium text-foreground">
-							{t("techUp4HerStats")}
-						</p>
-						<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground">
-							{t("techUp4HerTitle")}
-						</h3>
-						<p className="mt-5 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
-							{t("techUp4HerDescription")}
-						</p>
+					<FadeIn direction="left">
+						<div>
+							<p className="text-base md:text-lg lg:text-xl font-medium text-foreground">
+								{t("techUp4HerStats")}
+							</p>
+							<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground">
+								{t("techUp4HerTitle")}
+							</h3>
+							<p className="mt-5 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
+								{t("techUp4HerDescription")}
+							</p>
 
-						<div className="mt-8">
-							<Button
-								href={"/projects/girls-tech-bootcamp" as Route}
-								variant="outline"
-								className="px-6 py-3 text-base md:text-lg max-w-max"
-							>
-								<span className="mr-2">{tc("seeDetails")}</span>
-								<ArrowRight className="h-4 w-4" aria-hidden="true" />
-							</Button>
+							<div className="mt-8">
+								<Button
+									href={"/projects/girls-tech-bootcamp" as Route}
+									variant="outline"
+									className="px-6 py-3 text-base md:text-lg max-w-max"
+								>
+									<span className="mr-2">{tc("seeDetails")}</span>
+									<ArrowRight className="h-4 w-4" aria-hidden="true" />
+								</Button>
+							</div>
 						</div>
-					</div>
+					</FadeIn>
 
-					<div className="relative h-64 sm:h-80 md:h-96 rounded-3xl overflow-hidden border border-border">
-						<Image
-							src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&auto=format&fit=crop&w=1400"
-							alt="TechUp4Her bootcamp session"
-							fill
-							className="object-cover"
-							sizes="(min-width: 1024px) 50vw, 100vw"
-						/>
-						<div className="absolute bottom-4 right-4 rounded-full bg-pink-600 text-white text-xs font-medium px-4 py-1.5">
-							{t("campusBootcamp")}
+					<FadeIn direction="right" delay={0.15}>
+						<div className="relative h-64 sm:h-80 md:h-96 rounded-3xl overflow-hidden border border-border">
+							<Image
+								src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&auto=format&fit=crop&w=1400"
+								alt="TechUp4Her bootcamp session"
+								fill
+								className="object-cover"
+								sizes="(min-width: 1024px) 50vw, 100vw"
+							/>
+							<div className="absolute bottom-4 right-4 rounded-full bg-pink-600 text-white text-xs font-medium px-4 py-1.5">
+								{t("campusBootcamp")}
+							</div>
 						</div>
-					</div>
+					</FadeIn>
 				</div>
 			</section>
 			<section>

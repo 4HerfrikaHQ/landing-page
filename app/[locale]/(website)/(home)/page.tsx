@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { FadeIn } from "@/components/motion";
 import { PrismicImage } from "@prismicio/react";
 import type { Route } from "next";
 import { hasLocale } from "next-intl";
@@ -42,6 +43,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 			<ExploreCommunity />
 
 			<section className="px-4 sm:px-6 md:px-7 container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 sm:gap-8 w-full lg:pt-20 py-12 lg:pb-28">
+				<FadeIn direction="right">
 				<div>
 					<h3 className="text-foreground text-center lg:text-left text-3xl lg:text-4xl font-bold capitalize tracking-wide mb-3 sm:mb-4 lg:mb-6">
 						{t("becomeAmbassador")}{" "}
@@ -73,12 +75,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 						</Button>
 					</div>
 				</div>
+				</FadeIn>
+				<FadeIn direction="left">
 				<div className="hidden lg:block relative w-full aspect-[1.16]">
 					<PrismicImage
 						field={ambassador_image}
 						className="object-cover rounded-xl w-full h-full"
 					/>
 				</div>
+				</FadeIn>
 			</section>
 			{/* Words of the street */}
 			{testimonials.length > 0 && (
@@ -86,6 +91,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 					<AfricaLogo className="w-24 absolute -right-12 top-24 lg:w-67.5 lg:-right-8 lg:top-8" />
 					<AfricaLogo className="hidden lg:block w-67.5 absolute left-4 bottom-0" />
 
+					<FadeIn>
 					<h1 className="text-center text-foreground text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
 						{t.rich("wordsOnStreet", {
 							pink: (chunks) => <span className="text-primary-500">{chunks}</span>,
@@ -95,6 +101,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 					<p className="text-center text-foreground text-lg mb-8 lg:text-xl">
 						{t("wordsOnStreetSub")}
 					</p>
+					</FadeIn>
 
 					<div className="container mx-auto px-2">
 						<TestimonialCarousel testimonials={testimonials} />

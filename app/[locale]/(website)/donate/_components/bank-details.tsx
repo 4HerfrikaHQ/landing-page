@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FadeIn } from "@/components/motion";
 import { Check, ClipboardCopy, Landmark } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -76,6 +77,7 @@ export default function BankDetails() {
 	};
 
 	return (
+		<FadeIn>
 		<div className="rounded-2xl overflow-hidden border border-border shadow-sm">
 			<div className="px-6 py-5 border-b border-border bg-muted flex items-center gap-3">
 				<div className="inline-flex items-center justify-center w-10 h-10 bg-accent rounded-xl">
@@ -117,5 +119,6 @@ export default function BankDetails() {
 				</p>
 			</div>
 		</div>
+		</FadeIn>
 	);
 }
