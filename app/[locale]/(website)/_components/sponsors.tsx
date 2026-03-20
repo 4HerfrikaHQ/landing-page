@@ -1,11 +1,14 @@
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-const Sponsors = () => {
+const Sponsors = async () => {
+	const t = await getTranslations("home");
+
 	return (
 		<section className="py-10 pb-0 sm:pb-10 my-6 lg:my-8">
 			<div className="container mx-auto px-4 sm:px-6">
 				<h1 className="text-center text-foreground text-2xl sm:text-3xl lg:text-4xl font-bold capitalize tracking-wide mb-6">
-					Supported By:
+					{t("supportedBy")}
 				</h1>
 			</div>
 

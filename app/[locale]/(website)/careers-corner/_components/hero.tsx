@@ -2,10 +2,13 @@
 
 import { Search } from "lucide-react";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { PROFILE_IMAGES } from "../_schema";
 
 export const CareersHero = () => {
+	const t = useTranslations("careers");
+
 	return (
 		<section className="overflow-hidden grid place-content-center relative h-screen w-screen">
 			<Image
@@ -53,10 +56,7 @@ export const CareersHero = () => {
 				))}
 
 				<h1 className="z-20 text-foreground text-center text-2xl md:text-3xl font-normal max-w-4xl">
-					Welcome to{" "}
-					<span className="text-primary-500">&apos;Career Corner&apos;</span>,
-					where you can book a 10 mins call with a mentor for free to ask
-					questions
+					{t("heroText")}
 				</h1>
 				<form className="w-72 mx-auto shadow-inner shadow-primary-200/40 mt-6 flex items-center gap-4 px-4 py-3 rounded-full">
 					<span className="bg-muted bg-opacity-50 rounded-full p-2 aspect-square grid place-content-center">
@@ -64,7 +64,7 @@ export const CareersHero = () => {
 					</span>
 					<input
 						type="text"
-						placeholder="Search mentor"
+						placeholder={t("searchMentor")}
 						className="bg-transparent w-full"
 					/>
 				</form>

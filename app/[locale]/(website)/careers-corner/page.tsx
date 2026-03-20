@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import type { Route } from "next";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Link from "next/link";
 import { CareersHero } from "./_components/hero";
 import MentorForm from "./_components/mentor-form";
 import { MentorCard } from "./_components/mentor-modal";
 import { COUNSELLING_MENTORS } from "./_schema";
 
-const CareersCorner = () => {
+const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }) => {
+	const { locale } = await params;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("careers");
+	const tc = await getTranslations("common");
+
 	return (
 		<section className="overflow-x-hidden">
 			<CareersHero />
@@ -48,12 +55,12 @@ const CareersCorner = () => {
 					</div>
 					<div>
 						<h3 className="uppercase text-primary-500 text-lg">
-							featured mentor
+							{t("featuredMentor")}
 						</h3>
 						<h2 className="text-4xl font-semibold my-3 flex justify-between items-end gap-4 flex-wrap text-foreground">
 							Adesewa
 							<span className="text-primary-500 text-sm">
-								Availability: Everyday, 11am - 7pm
+								{t("availability")}
 							</span>{" "}
 						</h2>
 						<p className="text-foreground mb-4 capitalize">
@@ -70,10 +77,10 @@ const CareersCorner = () => {
 						<div className="flex flex-col md:flex-row items-center gap-5 my-7 w-full justify-between">
 							<Link href={"/" as Route} className="underline text-primary-500">
 								{" "}
-								Message on Linkedin
+								{tc("messageOnLinkedin")}
 							</Link>
 							<Button variant="solid" size="lg" className="w-1/2">
-								Book a call
+								{tc("bookACall")}
 							</Button>
 						</div>
 					</div>
@@ -83,10 +90,10 @@ const CareersCorner = () => {
 			<section className="bg-primary-400 bg-opacity-10 py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
 				<section className="container mx-auto">
 					<h2 className="text-foreground text-4xl text-center font-semibold mb-3">
-						Book a career counseling
+						{t("bookCounseling")}
 					</h2>
 					<p className="text-center text-muted-foreground">
-						You can book a 10 mins call with a mentor for free to ask questions.
+						{t("counselingDescription")}
 					</p>
 					<section className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
 						{COUNSELLING_MENTORS.map((mentor) => (

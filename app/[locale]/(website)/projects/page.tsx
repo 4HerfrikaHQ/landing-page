@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import React from "react";
 import { GalleryGrid } from "../blog/_components/gallery-grid";
 
-export default function ProjectsPage() {
+export default async function ProjectsPage({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("projects");
+	const tc = await getTranslations("common");
+
 	return (
 		<main className="bg-background">
 			<section className="relative">
@@ -15,21 +22,15 @@ export default function ProjectsPage() {
 						{/* Copy */}
 						<div className="lg:col-span-7 max-w-2xl">
 							<span className="inline-flex items-center gap-2 rounded-full border border-pink-100 bg-pink-50 px-3 py-1 text-xs font-medium text-pink-700">
-								Projects
+								{t("title")}
 							</span>
 
 							<h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
-								At 4HerFrika, We
-								<br className="hidden sm:block" />
-								Believe In Doing, Not
-								<br className="hidden sm:block" />
-								Just Dreaming.
+								{t("heroTitle")}
 							</h1>
 
 							<p className="mt-6 max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed">
-								Our Projects are grassroots-driven, impact-focused, and designed
-								to uplift girls across Africa through education, technology, and
-								leadership.
+								{t("heroDescription")}
 							</p>
 
 							<div className="mt-10 flex flex-col sm:flex-row gap-4">
@@ -38,14 +39,14 @@ export default function ProjectsPage() {
 									variant="solid"
 									className="px-8 py-3 md:py-4 text-base md:text-xl"
 								>
-									Start a Chapter
+									{tc("startAChapter")}
 								</Button>
 								<Button
 									href={"/about" as Route}
 									variant="outline"
 									className="px-8 py-3 md:py-4 text-base md:text-xl"
 								>
-									Learn more
+									{tc("learnMore")}
 								</Button>
 							</div>
 						</div>
@@ -75,14 +76,10 @@ export default function ProjectsPage() {
 			<section className="px-4 sm:px-6 lg:px-8 pt-24 md:pt-28">
 				<div className="mx-auto max-w-7xl text-center">
 					<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
-						4HerAfrika
+						{t("intro")}
 					</h2>
 					<p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
-						4HerAfrika is a movement dedicated to empowering young women across
-						Africa through technology, leadership, and entrepreneurship. We
-						build grassroots-driven programs that equip girls with digital
-						skills, connect them to mentorship, and support them in becoming
-						leaders and changemakers in their communities.
+						{t("introFullDescription")}
 					</p>
 				</div>
 			</section>
@@ -104,15 +101,13 @@ export default function ProjectsPage() {
 
 							<div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">
 								<p className="text-base md:text-lg lg:text-xl text-muted-foreground">
-									17+ chapters established in 2+ African countries.
+									{t("stopTheViolenceStats")}
 								</p>
 								<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground">
-									The ‘StopTheViolence’ Project
+									{t("stopTheViolenceTitle")}
 								</h3>
 								<p className="mt-5 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed">
-									The StopTheViolence project delves into these causes,
-									exploring their effects and potential consequences on
-									students’ lives.
+									{t("stopTheViolenceDescription")}
 								</p>
 
 								<div className="mt-8">
@@ -121,7 +116,7 @@ export default function ProjectsPage() {
 										variant="outline"
 										className="px-6 py-3 text-base md:text-lg max-w-max"
 									>
-										<span className="mr-2">Explore Project</span>
+										<span className="mr-2">{tc("exploreProject")}</span>
 										<ArrowRight className="h-4 w-4" aria-hidden="true" />
 									</Button>
 								</div>
@@ -135,14 +130,13 @@ export default function ProjectsPage() {
 				<div className="mx-auto max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
 					<div>
 						<p className="text-base md:text-lg lg:text-xl font-medium text-foreground">
-							200+ girls trained since launch.
+							{t("techUp4HerStats")}
 						</p>
 						<h3 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground">
-							TechUp4Her
+							{t("techUp4HerTitle")}
 						</h3>
 						<p className="mt-5 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
-							A digital skills bootcamp for girls, from zero knowledge to
-							tech-savvy in UI/UX Design, Web Dev, and Digital Literacy.
+							{t("techUp4HerDescription")}
 						</p>
 
 						<div className="mt-8">
@@ -151,7 +145,7 @@ export default function ProjectsPage() {
 								variant="outline"
 								className="px-6 py-3 text-base md:text-lg max-w-max"
 							>
-								<span className="mr-2">See Details</span>
+								<span className="mr-2">{tc("seeDetails")}</span>
 								<ArrowRight className="h-4 w-4" aria-hidden="true" />
 							</Button>
 						</div>
@@ -166,7 +160,7 @@ export default function ProjectsPage() {
 							sizes="(min-width: 1024px) 50vw, 100vw"
 						/>
 						<div className="absolute bottom-4 right-4 rounded-full bg-pink-600 text-white text-xs font-medium px-4 py-1.5">
-							4Herfrika | Campus Bootcamp
+							{t("campusBootcamp")}
 						</div>
 					</div>
 				</div>

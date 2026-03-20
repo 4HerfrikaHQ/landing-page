@@ -21,7 +21,8 @@
     "submit": "Wasilisha",
     "exploreProject": "Chunguza mradi",
     "seeDetails": "Tazama maelezo",
-    "startAChapter": "Anzisha tawi"
+    "startAChapter": "Anzisha tawi",
+    "yearOneReport": "Angalia ripoti yetu ya mandhari ya mwaka wa kwanza hapa!"
   },
   "nav": {
     "aboutUs": "Kuhusu sisi",
@@ -41,7 +42,16 @@
     "exploreCampus": "Kampasi za 4HerFrika",
     "campusDescription": "Tunafanya kazi kupitia jumuiya ndogo katika vyuo vikuu na taasisi za elimu ya juu",
     "exploreAcademy": "Akademia ya 4HerFrika",
-    "academyDescription": "Jukwaa la kujifunza mtandaoni kwa maendeleo ya ujuzi"
+    "academyDescription": "Jukwaa la kujifunza mtandaoni kwa maendeleo ya ujuzi",
+    "ourCampuses": "Kampasi zetu",
+    "ourCampusesDescription": "Kampasi moja kwa wakati, tunakuza udada. Katika vyuo vikuu zaidi ya 20 barani Afrika, matawi ya 4Herfrika yanaandaa matukio, warsha na vikao vya ushauri — kujenga uongozi, jumuiya na uhusiano.",
+    "exploreCampuses": "Chunguza kampasi",
+    "ourAcademy": "Akademia yetu",
+    "ourAcademyDescription": "Kujifunza kwa mtandao. Athari ya kweli. Kupitia Akademia zetu za Teknolojia, Biashara na Hali ya Hewa, vijana wa kike wanapata ujuzi wa vitendo, ushauri na ujasiri wa kuongoza kwa ujasiri katika ulimwengu wa leo.",
+    "exploreLearningTracks": "Chunguza njia za kujifunza",
+    "members": "wanachama",
+    "campuses": "kampasi",
+    "africanCountries": "nchi za kiafrika"
   },
   "about": {
     "whoWeAre": "Sisi ni nani",
@@ -88,7 +98,18 @@
     "counselingDescription": "Unaweza kuweka miadi ya simu ya dakika 10 na mshauri bila malipo kuuliza maswali.",
     "details": "Maelezo",
     "becomeMentor": "Unataka kuwa mshauri?",
-    "becomeMentorDescription": "Shiriki sababu yako ya kutaka kuwa mshauri na uchukue hatua ya kwanza pamoja nasi"
+    "becomeMentorDescription": "Shiriki sababu yako ya kutaka kuwa mshauri na uchukue hatua ya kwanza pamoja nasi",
+    "availability": "Upatikanaji: Kila siku, 11am - 7pm",
+    "whyMentor": "Tuambie kwa nini unataka kuwa mshauri...",
+    "occupation": "Kazi/Stack ya teknolojia",
+    "contactField": "Mawasiliano",
+    "emailPlaceholder": "email@gmail",
+    "linkedin": "Linkedin",
+    "uploadHeadshot": "Pakia picha ya kitaalamu",
+    "attachFile": "Ambatisha faili. Ukubwa wa faili haupaswi kuzidi MB 10",
+    "fileSizeError": "Ukubwa wa faili umezidi kikomo cha MB 10",
+    "invalidEmail": "Tafadhali, weka anwani sahihi ya barua pepe",
+    "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika."
   },
   "donate": {
     "title": "Unga mkono dhamira yetu",
@@ -98,7 +119,16 @@
     "accountName": "Jina la akaunti",
     "copy": "Nakili",
     "copied": "Imenakiliwa",
-    "thankYou": "Asante kwa msaada wako. Kila mchango unatusaidia kuwa na athari kubwa zaidi."
+    "thankYou": "Asante kwa msaada wako. Kila mchango unatusaidia kuwa na athari kubwa zaidi.",
+    "heroTitle": "Toa mchango kwa",
+    "heroOrg": "4HERFRIKA",
+    "heroVision": "Maono yetu ni kuathiri wanawake na wasichana milioni 2 kwa teknolojia na ujasiriamali ifikapo 2030.",
+    "donateToEmpower": "Changia kuwawezesha wanawake kote Afrika",
+    "donateNow": "Changia sasa",
+    "helpEmpower": "Tusaidie kuwawezesha wanawake kote Afrika",
+    "helpDescription": "Mchango wako unafadhili ufadhili wa masomo, mafunzo ya teknolojia na ushauri ili kusaidia na kulea wanawake wa kiwango cha dunia. Maono yetu ni kuathiri wanawake na wasichana 2,000,000 kwa teknolojia na ujasiriamali ifikapo 2030.",
+    "bankName": "Providus Bank",
+    "bankTransferNote": "Tumia taarifa za akaunti hapa chini kufanya uhamisho wako"
   },
   "contact": {
     "title": "Wasiliana nasi",
@@ -107,7 +137,14 @@
     "message": "Ujumbe",
     "send": "Tuma",
     "phone": "Simu",
-    "location": "Mahali"
+    "location": "Mahali",
+    "getInTouch": "Wasiliana nasi",
+    "leaveMessage": "Tuachie ujumbe",
+    "messagePlaceholder": "Ujumbe wako",
+    "sending": "Inatuma...",
+    "successMessage": "Ujumbe umetumwa kwa mafanikio!",
+    "successDescription": "Asante kwa kuwasiliana nasi. Tutakujibu hivi karibuni.",
+    "errorMessage": "Imeshindwa kutuma ujumbe. Tafadhali angalia maelezo yako na ujaribu tena."
   },
   "impact": {
     "storyInMotion": "Hadithi yetu inaendelea",
@@ -117,19 +154,32 @@
     "graduates": "Wahitimu zaidi ya 1,000 katika Akademia ya Teknolojia",
     "academies": "Akademia 3 zinazostawi: Teknolojia, Biashara, Hali ya hewa.",
     "neverTouched": "Katika mwaka mmoja, tumeona wasichana ambao hawakuwahi kushika kompyuta sasa wanaunda bidhaa, kuandika programu, na kuongoza mabadiliko katika shule na jamii zao.",
-    "justTheBeginning": "Hii ni mwanzo tu. Ifikapo 2030, 4herfrika inatarajia kuwawezesha wanawake na wasichana milioni 2 kote Afrika. Kwa pamoja, tunaweza kufanikisha hili"
+    "justTheBeginning": "Hii ni mwanzo tu. Ifikapo 2030, 4herfrika inatarajia kuwawezesha wanawake na wasichana milioni 2 kote Afrika. Kwa pamoja, tunaweza kufanikisha hili",
+    "whatStarted": "Kilichoanza katika kampasi moja nchini Nigeria sasa kimeenea hadi kampasi 25 nchini Nigeria, Ghana, Sierra Leone, Kenya na Kamerun. Katika mwaka mmoja tu, 4herfrika imekuwa jumuiya ambapo wasichana wanagundua sauti zao, kukuza ujuzi wao, na kujiandaa kuongoza mustakabali wa Afrika."
   },
   "projects": {
     "title": "Miradi",
     "heroTitle": "Katika 4HerFrika, tunaamini katika kutenda, si kuota tu.",
     "heroDescription": "Miradi yetu inaongozwa na jamii, inalenga athari, na imeundwa kuinua wasichana kote Afrika kupitia elimu, teknolojia, na uongozi.",
     "intro": "4HerAfrika",
-    "introDescription": "4HerAfrika ni harakati inayojikita katika kuwawezesha vijana wa kike kote Afrika kupitia teknolojia, uongozi, na ujasiriamali."
+    "introDescription": "4HerAfrika ni harakati inayojikita katika kuwawezesha vijana wa kike kote Afrika kupitia teknolojia, uongozi, na ujasiriamali.",
+    "introFullDescription": "4HerAfrika ni harakati inayojikita katika kuwawezesha vijana wa kike kote Afrika kupitia teknolojia, uongozi, na ujasiriamali. Tunajenga programu zinazoongozwa na jamii ambazo zinawapa wasichana ujuzi wa kidijitali, kuwaunganisha na ushauri, na kuwasaidia kuwa viongozi na waletaji mabadiliko katika jamii zao.",
+    "stopTheViolenceStats": "Matawi 17+ yaliyoanzishwa katika nchi 2+ za Afrika.",
+    "stopTheViolenceTitle": "Mradi wa 'StopTheViolence'",
+    "stopTheViolenceDescription": "Mradi wa StopTheViolence unachunguza sababu hizi, athari zake na matokeo yanayowezekana katika maisha ya wanafunzi.",
+    "techUp4HerStats": "Wasichana 200+ wamefunzwa tangu uzinduzi.",
+    "techUp4HerTitle": "TechUp4Her",
+    "techUp4HerDescription": "Bootcamp ya ujuzi wa kidijitali kwa wasichana, kutoka ujuzi sifuri hadi utaalamu wa teknolojia katika UI/UX Design, Web Dev, na Ujuzi wa Kidijitali.",
+    "campusBootcamp": "4Herfrika | Bootcamp ya Kampasi"
   },
   "notFound": {
     "title": "Lo! Ukurasa haujapatikana",
     "description": "Ukurasa unaoutafuta haupo au umehamishwa.",
     "backToHome": "Rudi nyumbani",
-    "tryAgain": "Jaribu tena"
+    "tryAgain": "Jaribu tena",
+    "venturedOff": "Inaonekana umejitosa nje ya njia ya kawaida...",
+    "couldntFind": "Hatukuweza kupata ukurasa uliokuwa ukitafuta, lakini usijali!",
+    "everyDetour": "Kila kupotea ni fursa ya kugundua kitu kipya.",
+    "takeMeHome": "Nirudi nyumbani"
   }
 }

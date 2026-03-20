@@ -21,7 +21,8 @@
     "submit": "Submit",
     "exploreProject": "Explore Project",
     "seeDetails": "See Details",
-    "startAChapter": "Start a Chapter"
+    "startAChapter": "Start a Chapter",
+    "yearOneReport": "Check out our Year-One Landscape report here!"
   },
   "nav": {
     "aboutUs": "About Us",
@@ -41,7 +42,16 @@
     "exploreCampus": "4HerFrika Campuses",
     "campusDescription": "We operate through bite-sized communities in tertiary institutions",
     "exploreAcademy": "4HerFrika Academy",
-    "academyDescription": "Online learning platform for skill development"
+    "academyDescription": "Online learning platform for skill development",
+    "ourCampuses": "Our Campuses",
+    "ourCampusesDescription": "One campus at a time, we're growing a sisterhood. Across 20+ African universities, 4Herfrika chapters host events, workshops, and mentorship sessions — building leadership, community, and connection.",
+    "exploreCampuses": "Explore Campuses",
+    "ourAcademy": "Our Academy",
+    "ourAcademyDescription": "Virtual learning. Real impact. Through our Tech, Business, and Climate Academies, young women gain practical skills, mentorship, and confidence to lead boldly in today's world.",
+    "exploreLearningTracks": "Explore Learning Tracks",
+    "members": "members",
+    "campuses": "campuses",
+    "africanCountries": "african countries"
   },
   "about": {
     "whoWeAre": "Who We Are",
@@ -88,7 +98,18 @@
     "counselingDescription": "You can book a 10 mins call with a mentor for free to ask questions.",
     "details": "Details",
     "becomeMentor": "Wanna Become A Mentor?",
-    "becomeMentorDescription": "Share your purpose for becoming a mentor and take the first step with us"
+    "becomeMentorDescription": "Share your purpose for becoming a mentor and take the first step with us",
+    "availability": "Availability: Everyday, 11am - 7pm",
+    "whyMentor": "Tell us why you want to become a mentor...",
+    "occupation": "Occupation/Tech Stack",
+    "contactField": "Contact",
+    "emailPlaceholder": "email@gmail",
+    "linkedin": "Linkedin",
+    "uploadHeadshot": "Upload a Professional Headshot",
+    "attachFile": "Attach file. File size of your documents should not exceed 10MB",
+    "fileSizeError": "File size exceeds 10MB limit",
+    "invalidEmail": "Please, enter valid email address",
+    "receiveUpdates": "I would like to receive updates and tips on mentoring from 4HerFrika."
   },
   "donate": {
     "title": "Support Our Mission",
@@ -98,7 +119,16 @@
     "accountName": "Account Name",
     "copy": "Copy",
     "copied": "Copied",
-    "thankYou": "Thank you for your support. Every contribution helps us make a bigger impact."
+    "thankYou": "Thank you for your support. Every contribution helps us make a bigger impact.",
+    "heroTitle": "Make a Donation to",
+    "heroOrg": "4HERFRIKA",
+    "heroVision": "Our Vision is to impact 2 million women and girls with tech and entrepreneurship by 2030.",
+    "donateToEmpower": "Donate to Empower Women Across Africa",
+    "donateNow": "Donate Now",
+    "helpEmpower": "Help us Empower Women Across Africa",
+    "helpDescription": "Your donation funds scholarships, tech training, and mentorship to support and raise world-class women. Our vision is to impact 2,000,000 women and girls with tech and entrepreneurship by 2030.",
+    "bankName": "Providus Bank",
+    "bankTransferNote": "Use the account details below to make your transfer"
   },
   "contact": {
     "title": "Contact Us",
@@ -107,7 +137,14 @@
     "message": "Message",
     "send": "Send",
     "phone": "Phone",
-    "location": "Location"
+    "location": "Location",
+    "getInTouch": "Get in touch",
+    "leaveMessage": "Leave us a message",
+    "messagePlaceholder": "Your Message",
+    "sending": "Sending...",
+    "successMessage": "Message sent successfully!",
+    "successDescription": "Thank you for getting in touch. We'll get back to you soon.",
+    "errorMessage": "Failed to send message. Please check your inputs and try again."
   },
   "impact": {
     "storyInMotion": "Our Story in Motion",
@@ -117,19 +154,32 @@
     "graduates": "1,000+ graduates in Tech Academy",
     "academies": "3 thriving academies: Tech, Business, Climate.",
     "neverTouched": "In one year, we've seen girls who never touched a computer now designing products, coding software, and leading change in their schools and communities.",
-    "justTheBeginning": "This is just the beginning. By 2030, 4herfrika envisions 2 million women and girls empowered across Africa. Together, we can make it happen"
+    "justTheBeginning": "This is just the beginning. By 2030, 4herfrika envisions 2 million women and girls empowered across Africa. Together, we can make it happen",
+    "whatStarted": "What started in a single campus in Nigeria has now spread across 25 campuses in Nigeria, Ghana, Sierra Leone, Kenya, and Cameroon. In just one year, 4herfrika has become a community where girls discover their voices, grow their skills, and prepare to lead Africa's future."
   },
   "projects": {
     "title": "Projects",
     "heroTitle": "At 4HerFrika, We Believe In Doing, Not Just Dreaming.",
     "heroDescription": "Our Projects are grassroots-driven, impact-focused, and designed to uplift girls across Africa through education, technology, and leadership.",
     "intro": "4HerAfrika",
-    "introDescription": "4HerAfrika is a movement dedicated to empowering young women across Africa through technology, leadership, and entrepreneurship."
+    "introDescription": "4HerAfrika is a movement dedicated to empowering young women across Africa through technology, leadership, and entrepreneurship.",
+    "introFullDescription": "4HerAfrika is a movement dedicated to empowering young women across Africa through technology, leadership, and entrepreneurship. We build grassroots-driven programs that equip girls with digital skills, connect them to mentorship, and support them in becoming leaders and changemakers in their communities.",
+    "stopTheViolenceStats": "17+ chapters established in 2+ African countries.",
+    "stopTheViolenceTitle": "The 'StopTheViolence' Project",
+    "stopTheViolenceDescription": "The StopTheViolence project delves into these causes, exploring their effects and potential consequences on students' lives.",
+    "techUp4HerStats": "200+ girls trained since launch.",
+    "techUp4HerTitle": "TechUp4Her",
+    "techUp4HerDescription": "A digital skills bootcamp for girls, from zero knowledge to tech-savvy in UI/UX Design, Web Dev, and Digital Literacy.",
+    "campusBootcamp": "4Herfrika | Campus Bootcamp"
   },
   "notFound": {
     "title": "Oops! Page Not Found",
     "description": "The page you are looking for doesn't exist or has been moved.",
     "backToHome": "Back to Home",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "venturedOff": "It looks like you've ventured off the beaten path...",
+    "couldntFind": "We couldn't find the page you were looking for, but don't worry!",
+    "everyDetour": "Every detour is an opportunity to discover something new.",
+    "takeMeHome": "Take me home"
   }
 }

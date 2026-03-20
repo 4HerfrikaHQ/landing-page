@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Check, ClipboardCopy, Landmark } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 function CopyRow({
@@ -11,6 +12,8 @@ function CopyRow({
 	big,
 	onCopy,
 	copied,
+	copyLabel,
+	copiedLabel,
 }: {
 	label: string;
 	value: string;
@@ -18,6 +21,8 @@ function CopyRow({
 	big?: boolean;
 	onCopy: (text: string, field: string) => void;
 	copied: string;
+	copyLabel: string;
+	copiedLabel: string;
 }) {
 	return (
 		<div className="group">
@@ -44,12 +49,12 @@ function CopyRow({
 					{copied === field ? (
 						<>
 							<Check className="h-3.5 w-3.5 text-green-600" />
-							Copied
+							{copiedLabel}
 						</>
 					) : (
 						<>
 							<ClipboardCopy className="h-3.5 w-3.5" />
-							Copy
+							{copyLabel}
 						</>
 					)}
 				</Button>
@@ -60,6 +65,7 @@ function CopyRow({
 
 export default function BankDetails() {
 	const [copied, setCopied] = useState("");
+	const t = useTranslations("donate");
 
 	const copy = async (text: string, field: string) => {
 		try {
@@ -76,35 +82,38 @@ export default function BankDetails() {
 					<Landmark className="h-5 w-5 text-muted-foreground" />
 				</div>
 				<div>
-					<h3 className="text-xl font-bold text-foreground">Providus Bank</h3>
+					<h3 className="text-xl font-bold text-foreground">{t("bankName")}</h3>
 					<p className="text-muted-foreground text-xs sm:text-sm">
-						Use the account details below to make your transfer
+						{t("bankTransferNote")}
 					</p>
 				</div>
 			</div>
 
 			<div className="bg-background px-6 py-8 space-y-6">
 				<CopyRow
-					label="Account Number"
+					label={t("accountNumber")}
 					value="6506487134"
 					field="account"
 					big
 					onCopy={copy}
 					copied={copied}
+					copyLabel={t("copy")}
+					copiedLabel={t("copied")}
 				/>
 				<CopyRow
-					label="Account Name"
+					label={t("accountName")}
 					value="Ademide Adedamola"
 					field="name"
 					onCopy={copy}
 					copied={copied}
+					copyLabel={t("copy")}
+					copiedLabel={t("copied")}
 				/>
 			</div>
 
 			<div className="bg-linear-to-r from-muted via-white to-muted px-6 py-4 border-t border-border">
 				<p className="text-xs sm:text-sm text-muted-foreground text-center">
-					Thank you for your support. Every contribution helps us make a bigger
-					impact.
+					{t("thankYou")}
 				</p>
 			</div>
 		</div>

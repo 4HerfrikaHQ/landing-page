@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import F4herfrikaLogo from "./4herfrika";
 import beginning from "./beginning.jpg";
@@ -13,7 +15,12 @@ import right from "./right.jpg";
 import Squiggle from "./squiggle";
 import yearReport from "./year-report.jpg";
 
-export default function ReportPage() {
+export default async function ReportPage({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("impact");
+	const tc = await getTranslations("common");
+
 	return (
 		<div className="w-screen overflow-hidden">
 			<Image
@@ -22,7 +29,7 @@ export default function ReportPage() {
 				className="mx-auto max-w-full"
 			/>
 			<h1 className="text-3xl md:text-5xl font-bold text-foreground mx-auto my-16 md:my-28 text-center">
-				Our Story in Motion
+				{t("storyInMotion")}
 			</h1>
 			<div className="relative flex flex-col items-center mb-20 md:mb-32">
 				<div className="absolute overflow-x-hidden left-[2vw] top-1/2 -translate-y-1/2 w-[96vw]">
@@ -37,21 +44,18 @@ export default function ReportPage() {
 				<div className="w-40 md:w-56 h-6 rounded-[50%] bg-black/55 blur-[20px]" />
 			</div>
 			<p className="max-w-6xl text-center text-foreground text-lg md:text-[32px] font-light mx-auto mb-20 md:mb-52 px-6">
-				What started in a single campus in Nigeria has now spread across 25
-				campuses in Nigeria, Ghana, Sierra Leone, Kenya, and Cameroon. In just
-				one year, 4herfrika has become a community where girls discover their
-				voices, grow their skills, and prepare to lead Africa&apos;s future.
+				{t("whatStarted")}
 			</p>
 			<div className="bg-surface-pink pt-16 md:pt-30 pb-44 md:pb-105 flex flex-col text-center relative">
 				<h2 className="text-3xl md:text-5xl text-foreground font-semibold mb-12">
-					Milestones of Year One
+					{t("milestones")}
 				</h2>
 				<ul className="list-disc text-center space-y-4 md:space-y-6 text-lg md:text-2xl">
-					<li className="w-fit mx-auto">3,000+ girls mentored</li>
-					<li className="w-fit mx-auto">25+ campuses reached</li>
-					<li className="w-fit mx-auto">1,000+ graduates in Tech Academy</li>
+					<li className="w-fit mx-auto">{t("girlsMentored")}</li>
+					<li className="w-fit mx-auto">{t("campusesReached")}</li>
+					<li className="w-fit mx-auto">{t("graduates")}</li>
 					<li className="w-fit mx-auto">
-						3 thriving academies: Tech, Business, Climate.
+						{t("academies")}
 					</li>
 				</ul>
 				<div className="grid grid-cols-2 gap-4 px-6 mt-12 md:mt-0">
@@ -75,9 +79,7 @@ export default function ReportPage() {
 			<div className="bg-surface-indigo -mt-24 md:-mt-36 relative z-10 rounded-t-[100px] md:rounded-t-[248px]">
 				<span className="h-12 md:h-32 block" />
 				<p className="px-8 md:px-20 text-foreground text-lg md:text-[32px] text-center mb-12 md:mb-32">
-					In one year, we&apos;ve seen girls who never touched a computer now
-					designing products, coding software, and leading change in their
-					schools and communities.
+					{t("neverTouched")}
 				</p>
 				<div className="relative mb-8 md:mb-40 grid grid-cols-2 md:flex gap-4 px-6">
 					<Image
@@ -101,19 +103,17 @@ export default function ReportPage() {
 					isExternal
 					className="mx-auto w-fit"
 				>
-					Download our report
+					{tc("downloadReport")}
 				</Button>
 				<span className="h-12 md:h-36 block" />
 			</div>
 			<div className="px-6 pt-12 pb-8 md:p-20 grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-y-8 gap-x-24 items-center">
 				<div>
 					<h4 className="text-lg md:text-[32px] leading-normal mb-12">
-						This is just the beginning. By 2030, 4herfrika envisions 2 million
-						women and girls empowered across Africa. Together, we can make it
-						happen
+						{t("justTheBeginning")}
 					</h4>
 					<Button href="/" className="w-fit gap-x-1">
-						Go to Homepage
+						{tc("goToHomepage")}
 						<ArrowRight className="h-4 w-4" />
 					</Button>
 				</div>

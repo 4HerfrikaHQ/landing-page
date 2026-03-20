@@ -1,31 +1,32 @@
 import academy from "@/app/[locale]/(website)/(home)/assets/about-us/academy.png";
 import campus from "@/app/[locale]/(website)/(home)/assets/about-us/campus.png";
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export const ExploreCommunity = () => {
+export const ExploreCommunity = async () => {
+	const t = await getTranslations("home");
+
 	return (
 		<section className="px-4 sm:px-6 md:px-7 container mx-auto my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center lg:py-6">
 			<Community
 				image={campus.src}
-				name="Our Campuses"
-				description="One campus at a time, we’re growing a sisterhood.
-      Across 20+ African universities, 4Herfrika chapters host events, workshops, and mentorship sessions — building leadership, community, and connection."
+				name={t("ourCampuses")}
+				description={t("ourCampusesDescription")}
 				link={{
-					label: "Explore Campuses",
+					label: t("exploreCampuses"),
 					href: "/",
 				}}
 			/>
 			<div className="hidden lg:block h-60 w-0.5 bg-primary-500" />
 			<Community
 				image={academy.src}
-				name="Our Academy"
-				description="Virtual learning. Real impact.
-      Through our Tech, Business, and Climate Academies, young women gain practical skills, mentorship, and confidence to lead boldly in today’s world."
+				name={t("ourAcademy")}
+				description={t("ourAcademyDescription")}
 				link={{
-					label: "Explore Learning Tracks",
+					label: t("exploreLearningTracks"),
 					href: "/",
 				}}
 			/>

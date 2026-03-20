@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { cn } from "@/utils/cn";
 import { ValidationError, useForm } from "@formspree/react";
+import { useTranslations } from "next-intl";
 import type React from "react";
 import { toast } from "sonner";
 
@@ -15,6 +16,7 @@ interface FormSubmitEvent extends React.FormEvent<HTMLFormElement> {
 
 const ContactForm = () => {
 	const [state, submit, reset] = useForm("xovnjbdq");
+	const t = useTranslations("contact");
 
 	const handleFormSubmit = (e: FormSubmitEvent) => {
 		if (state.submitting) return;
@@ -25,11 +27,10 @@ const ContactForm = () => {
 			success: () => {
 				e.target.reset();
 				reset();
-				return "Message sent successfully!";
+				return t("successMessage");
 			},
-			description:
-				"Thank you for getting in touch. We'll get back to you soon.",
-			error: "Failed to send message. Please check your inputs and try again.",
+			description: t("successDescription"),
+			error: t("errorMessage"),
 		});
 	};
 
@@ -42,14 +43,14 @@ const ContactForm = () => {
 			onSubmit={handleFormSubmit}
 		>
 			<h3 className="text-md md:text-xl text-foreground font-semibold mb-4 tracking-wider">
-				Leave us a message
+				{t("leaveMessage")}
 			</h3>
 
 			<Input
 				type="text"
 				name="name"
 				className={inputClassName}
-				placeholder="Name"
+				placeholder={t("name")}
 				required
 			/>
 			<ValidationError prefix="Name" field="name" errors={state.errors} />
@@ -58,7 +59,7 @@ const ContactForm = () => {
 				type="email"
 				name="email"
 				className={cn(inputClassName, "my-7")}
-				placeholder="Email Address"
+				placeholder={t("email")}
 				required
 			/>
 			<ValidationError prefix="Email" field="email" errors={state.errors} />
@@ -66,7 +67,7 @@ const ContactForm = () => {
 			<Textarea
 				name="message"
 				className={cn(inputClassName, "h-32 resize-none")}
-				placeholder="Your Message"
+				placeholder={t("messagePlaceholder")}
 				required
 			/>
 			<ValidationError prefix="Message" field="message" errors={state.errors} />
@@ -76,7 +77,7 @@ const ContactForm = () => {
 				disabled={state.submitting}
 				className="bg-primary-500 rounded-md w-full text-center text-white hover:bg-opacity-80 mt-5 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
 			>
-				{state.submitting ? "Sending..." : "Send"}
+				{state.submitting ? t("sending") : t("send")}
 			</Button>
 		</form>
 	);

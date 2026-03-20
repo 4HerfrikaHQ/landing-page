@@ -1,15 +1,44 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Logo from "../4herfrika-logo";
-import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
+import { NAV_LINKS, ACTION_BUTTONS, type Navlink } from "../navigation";
 import { LocaleSwitcher } from "./locale-switcher";
 import { MobileNav } from "./mobile-nav";
 import { NavbarLink } from "./navbar-link";
 import { YearOneReport } from "./year-one-report";
 
-export const Navbar = () => {
+const NAV_LINK_KEYS: Record<string, string> = {
+	"About Us": "aboutUs",
+	"Projects": "projects",
+	"Career Corner": "careerCorner",
+	"Blog": "blog",
+	"Contact Us": "contactUs",
+};
+
+const ACTION_BUTTON_KEYS: Record<string, string> = {
+	"Donate": "donate",
+	"Join Us": "joinUs",
+};
+
+export const Navbar = async () => {
+	const tn = await getTranslations("nav");
+	const tc = await getTranslations("common");
+
+	const getNavName = (name: string) => {
+		const key = NAV_LINK_KEYS[name];
+		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
+		return key ? tn(key as any) : name;
+	};
+
+	const getActionName = (name: string) => {
+		const key = ACTION_BUTTON_KEYS[name];
+		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
+		return key ? tc(key as any) : name;
+	};
+
 	return (
 		<div className="relative">
 			<YearOneReport />
@@ -41,7 +70,7 @@ export const Navbar = () => {
 										className="flex items-center gap-1 text-foreground hover:text-primary-500"
 										aria-haspopup="true"
 									>
-										{link.name}
+										{getNavName(link.name)}
 										<ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
 									</Button>
 
@@ -52,7 +81,7 @@ export const Navbar = () => {
 												href={dropdownItem.href as Route}
 												className="block px-4 py-2 text-sm text-foreground hover:bg-muted first:rounded-t-md last:rounded-b-md"
 											>
-												{dropdownItem.name}
+												{getNavName(dropdownItem.name)}
 											</Link>
 										))}
 									</div>
@@ -63,7 +92,7 @@ export const Navbar = () => {
 									className="lg:text-base h-full flex items-center"
 									href={link.href as Route}
 								>
-									{link.name}
+									{getNavName(link.name)}
 								</NavbarLink>
 							),
 						)}
@@ -80,7 +109,7 @@ export const Navbar = () => {
 										: "border border-primary-500 text-primary-500 hover:bg-primary-50"
 								}`}
 							>
-								{button.name}
+								{getActionName(button.name)}
 							</Link>
 						))}
 					</div>

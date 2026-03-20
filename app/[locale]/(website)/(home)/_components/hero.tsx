@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
+import { getTranslations } from "next-intl/server";
 import { Statistic } from "../../_components/statistic";
 import CurvedArrowIcon from "../../curved-arrow";
 import HeroCurveIcon from "../../hero-curve";
@@ -13,12 +14,15 @@ interface HeroProps {
 	campuses: Content.HomepageDocumentData["campuses"];
 }
 
-export const Hero = ({
+export const Hero = async ({
 	heroImage,
 	campuses,
 	countries,
 	members,
 }: HeroProps) => {
+	const t = await getTranslations("home");
+	const tc = await getTranslations("common");
+
 	return (
 		<section className="px-4 sm:px-6 md:px-7 relative overflow-x-hidden">
 			<div className="w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 left-0 bg-primary-500/20 absolute blur-[374px]" />
@@ -31,11 +35,13 @@ export const Hero = ({
 			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
 				<div className="w-full">
 					<p className="text-foreground text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
-						Raising{" "}
-						<span className="text-primary-500">
-							World<span className="hidden lg:inline">-</span>Class
-						</span>{" "}
-						Women
+						{t.rich("heroTitle", {
+							highlight: (chunks) => (
+								<span className="text-primary-500">
+									{chunks}
+								</span>
+							),
+						})}
 					</p>
 					<PrismicImage
 						field={heroImage}
@@ -43,8 +49,7 @@ export const Hero = ({
 						width={278}
 					/>
 					<p className="text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-muted-foreground mb-6 lg:mb-14 tracking-wider xl:max-w-182.5 text-center lg:text-left">
-						4HERFRIKA is raising world class female leaders at the intersection
-						of business and technology
+						{t("heroDescription")}
 					</p>
 					<div className="flex items-center gap-3 sm:gap-4 lg:gap-5 justify-center lg:justify-start flex-wrap">
 						<Button
@@ -52,7 +57,7 @@ export const Hero = ({
 							variant="outline"
 							className="w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
 						>
-							Learn more
+							{tc("learnMore")}
 						</Button>
 						<Button
 							href={JOIN_FORM_LINK}
@@ -60,7 +65,7 @@ export const Hero = ({
 							variant="solid"
 							className="w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
 						>
-							Get started
+							{tc("getStarted")}
 						</Button>
 					</div>
 				</div>
@@ -73,11 +78,11 @@ export const Hero = ({
 				</div>
 			</section>
 			<section className="py-12 md:py-16 mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-0 z-10 relative">
-				<Statistic value={members} label="members" />
+				<Statistic value={members} label={t("members")} />
 				<hr className="hidden sm:block border h-16 md:h-20 lg:h-24 w-0 border-primary-500 mx-4 md:mx-8 lg:mx-24" />
-				<Statistic value={campuses} label="campuses" />
+				<Statistic value={campuses} label={t("campuses")} />
 				<hr className="hidden sm:block border h-16 md:h-20 lg:h-24 w-0 border-primary-500 mx-4 md:mx-8 lg:mx-24" />
-				<Statistic value={countries} label="african countries" />
+				<Statistic value={countries} label={t("africanCountries")} />
 			</section>
 			<CurvedArrowIcon className="text-center mt-4 mx-auto mb-7 w-24 lg:w-32" />
 		</section>

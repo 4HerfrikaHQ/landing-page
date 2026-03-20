@@ -11,13 +11,41 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 import Logo from "../4herfrika-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { NavbarLink } from "./navbar-link";
 import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
 
+const NAV_LINK_KEYS: Record<string, string> = {
+	"About Us": "aboutUs",
+	"Projects": "projects",
+	"Career Corner": "careerCorner",
+	"Blog": "blog",
+	"Contact Us": "contactUs",
+};
+
+const ACTION_BUTTON_KEYS: Record<string, string> = {
+	"Donate": "donate",
+	"Join Us": "joinUs",
+};
+
 export const MobileNav = () => {
 	const [open, setOpen] = useState(false);
+	const tn = useTranslations("nav");
+	const tc = useTranslations("common");
+
+	const getNavName = (name: string) => {
+		const key = NAV_LINK_KEYS[name];
+		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
+		return key ? tn(key as any) : name;
+	};
+
+	const getActionName = (name: string) => {
+		const key = ACTION_BUTTON_KEYS[name];
+		// biome-ignore lint/suspicious/noExplicitAny: translation key is dynamic
+		return key ? tc(key as any) : name;
+	};
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
@@ -61,7 +89,7 @@ export const MobileNav = () => {
 										htmlFor={`mobile-dropdown-${link.name}`}
 										className="flex cursor-pointer items-center justify-between -mx-3 px-3 py-2 text-base text-foreground"
 									>
-										<span>{link.name}</span>
+										<span>{getNavName(link.name)}</span>
 										<ChevronDown className="h-4 w-4 transition-transform duration-300 peer-checked:rotate-180" />
 									</label>
 
@@ -73,7 +101,7 @@ export const MobileNav = () => {
 												className="-mx-3 block px-3 py-2 text-base text-foreground"
 												onClick={() => setOpen(false)}
 											>
-												{dropdownItem.name}
+												{getNavName(dropdownItem.name)}
 											</NavbarLink>
 										))}
 									</div>
@@ -84,7 +112,7 @@ export const MobileNav = () => {
 									className="-mx-3 block px-3 py-2 text-base"
 									onClick={() => setOpen(false)}
 								>
-									{link.name}
+									{getNavName(link.name)}
 								</NavbarLink>
 							)}
 						</div>
@@ -101,7 +129,7 @@ export const MobileNav = () => {
 							className="w-full justify-center"
 							onClick={() => setOpen(false)}
 						>
-							{button.name}
+							{getActionName(button.name)}
 						</Button>
 					))}
 				</div>

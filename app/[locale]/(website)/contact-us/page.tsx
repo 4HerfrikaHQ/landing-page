@@ -6,10 +6,16 @@ import {
 	Phone,
 	Twitter,
 } from "lucide-react";
+import type { Locale } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import ContactForm from "./_components/contact-form";
 
-const Contact = () => {
+const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
+	const { locale } = await params;
+	setRequestLocale(locale as Locale);
+	const t = await getTranslations("contact");
+
 	return (
 		<section className="h-screen grid py-10">
 			<Image
@@ -20,7 +26,7 @@ const Contact = () => {
 			/>
 			<section className="shadow-lg max-w-5xl container mx-auto p-16 rounded-lg bg-background z-10">
 				<h1 className="text-primary-500 text-2xl p-4 text-center underline underline-offset-4 capitalize font-semibold">
-					Get in touch
+					{t("getInTouch")}
 				</h1>
 
 				<section className="mt-10 flex gap-10">
