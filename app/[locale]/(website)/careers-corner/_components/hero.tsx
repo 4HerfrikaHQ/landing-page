@@ -10,7 +10,7 @@ export const CareersHero = () => {
 	const t = useTranslations("careers");
 
 	return (
-		<section className="overflow-hidden grid place-content-center relative h-screen w-screen">
+		<section className="overflow-hidden grid place-content-center relative min-h-[60vh] w-full pt-28 pb-16">
 			<Image
 				src="/assets/careers/Mask.png"
 				alt=" "
@@ -26,7 +26,7 @@ export const CareersHero = () => {
 				className="absolute bottom-0 -right-10"
 			/>
 
-			<div className="w-[50vw] h-[50vh] min-w-62 relative grid place-content-center">
+			<div className="w-[50vw] min-w-62 relative grid place-content-center">
 				{PROFILE_IMAGES.map((profile, index) => (
 					<motion.div
 						key={profile.alt}
