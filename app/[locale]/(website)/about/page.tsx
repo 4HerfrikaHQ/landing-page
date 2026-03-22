@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cn } from "@/utils/cn";
 import { FadeIn } from "@/components/motion";
 import { PrismicImage } from "@prismicio/react";
@@ -53,6 +54,12 @@ const StatementSection = ({
 		</div>
 	</FadeIn>
 );
+
+export const metadata: Metadata = {
+	title: "About Us — Our Mission, Vision & Core Values",
+	description:
+		"4Herfrika trains, mentors, and empowers women to become transformative leaders across Africa. Our vision: impact 2 million women with tech and entrepreneurship by 2030.",
+};
 
 export default async function About({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;

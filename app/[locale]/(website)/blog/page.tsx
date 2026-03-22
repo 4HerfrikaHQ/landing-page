@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
@@ -9,6 +10,12 @@ import { routing } from "@/i18n/routing";
 import { Suspense } from "react";
 import BlogBody from "./_components/blog-body";
 import { GalleryGrid } from "./_components/gallery-grid";
+
+export const metadata: Metadata = {
+	title: "The Pink Blog — Stories of Women Leading Change in Africa",
+	description:
+		"Read inspiring stories, experiences, and insights from women across Africa navigating tech, business, and leadership. A safe space to find your mojo.",
+};
 
 export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;

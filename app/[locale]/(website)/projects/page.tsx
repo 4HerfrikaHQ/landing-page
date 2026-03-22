@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { FadeIn, TextReveal } from "@/components/motion";
 import { ArrowRight } from "lucide-react";
@@ -7,6 +8,12 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import React from "react";
 import { GalleryGrid } from "../blog/_components/gallery-grid";
+
+export const metadata: Metadata = {
+	title: "Projects — Grassroots Initiatives Uplifting Girls Across Africa",
+	description:
+		"Explore 4Herfrika's impact-focused projects: StopTheViolence outreach, TechUp4Her bootcamps, campus chapters, and more — all designed to empower girls through education and technology.",
+};
 
 export default async function ProjectsPage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Calendar, Clock, User } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -16,6 +17,20 @@ import {
 
 export function generateStaticParams() {
 	return Object.keys(projects).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+	const { slug } = await params;
+	const project = projects[slug as ProjectSlug];
+	if (!project) return {};
+	return {
+		title: project.title,
+		description: project.content.slice(0, 160).replace(/\n/g, " ").trim(),
+	};
 }
 
 export default async function ProjectPage({

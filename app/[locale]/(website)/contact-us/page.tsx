@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import {
 	Instagram,
@@ -111,6 +112,12 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 			</FadeIn>
 		</section>
 	);
+};
+
+export const metadata: Metadata = {
+	title: "Contact Us — Get in Touch with 4Herfrika",
+	description:
+		"Have questions about our programs, partnerships, or campus chapters? Reach out to the 4Herfrika team — we'd love to hear from you.",
 };
 
 export default Contact;
