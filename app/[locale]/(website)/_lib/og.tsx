@@ -21,11 +21,11 @@ export async function generateOGImage(title: string, subtitle?: string) {
 				justifyContent: "center",
 				alignItems: "flex-start",
 				padding: "60px 80px",
-				background: "linear-gradient(135deg, #0a0a2e 0%, #1a0a3e 100%)",
+				backgroundColor: "#ffffff",
 				fontFamily: "sans-serif",
 			}}
 		>
-			{/* Pink accent bar */}
+			{/* Pink accent bar at top */}
 			<div
 				style={{
 					position: "absolute",
@@ -34,6 +34,20 @@ export async function generateOGImage(title: string, subtitle?: string) {
 					width: "100%",
 					height: "6px",
 					background: "linear-gradient(90deg, #ec008c 0%, #f500c9 100%)",
+					display: "flex",
+				}}
+			/>
+
+			{/* Soft pink background glow */}
+			<div
+				style={{
+					position: "absolute",
+					top: "-100px",
+					right: "-100px",
+					width: "500px",
+					height: "500px",
+					borderRadius: "50%",
+					background: "#FFF4FC",
 					display: "flex",
 				}}
 			/>
@@ -47,7 +61,7 @@ export async function generateOGImage(title: string, subtitle?: string) {
 					position: "absolute",
 					right: "60px",
 					bottom: "40px",
-					opacity: 0.12,
+					opacity: 0.08,
 				}}
 				alt=""
 			/>
@@ -72,7 +86,7 @@ export async function generateOGImage(title: string, subtitle?: string) {
 				style={{
 					fontSize: title.length > 50 ? "48px" : "56px",
 					fontWeight: 700,
-					color: "#ffffff",
+					color: "#03065c",
 					marginTop: "40px",
 					lineHeight: 1.15,
 					maxWidth: "900px",
@@ -86,7 +100,7 @@ export async function generateOGImage(title: string, subtitle?: string) {
 				<p
 					style={{
 						fontSize: "24px",
-						color: "#b0b0d0",
+						color: "#555555",
 						marginTop: "20px",
 						lineHeight: 1.4,
 						maxWidth: "800px",
@@ -104,12 +118,24 @@ export async function generateOGImage(title: string, subtitle?: string) {
 					left: "80px",
 					fontSize: "18px",
 					color: "#ec008c",
-					opacity: 0.8,
 					display: "flex",
 				}}
 			>
 				4herfrika.org
 			</div>
+
+			{/* Bottom border */}
+			<div
+				style={{
+					position: "absolute",
+					bottom: 0,
+					left: 0,
+					width: "100%",
+					height: "4px",
+					background: "linear-gradient(90deg, #03065c 0%, #ec008c 100%)",
+					display: "flex",
+				}}
+			/>
 		</div>,
 		size,
 	);
