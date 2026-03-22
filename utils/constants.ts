@@ -1,1 +1,0 @@
-export const JOIN_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdAc4tbTbcdh1CIjO0C8eoSL7bNWzBlT1aykd8Vcm67PDnprw/viewform"
