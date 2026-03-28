@@ -18,12 +18,13 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 	const t = await getTranslations("contact");
 
 	return (
-		<section className="h-screen grid py-10">
+		<section className="h-screen grid py-10 relative">
 			<Image
 				src="/assets/contact/background.png"
 				alt="hero"
 				className="object-cover absolute top-0 w-full"
 				fill
+				sizes="100vw"
 			/>
 			<FadeIn>
 			<section className="shadow-lg max-w-5xl container mx-auto p-16 rounded-lg bg-background z-10">
@@ -101,6 +102,7 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								src="/assets/contact/map.jpg"
 								alt="map"
 								fill
+								sizes="(max-width: 768px) 100vw, 50vw"
 								className="object-cover rounded-md"
 							/>
 						</div>

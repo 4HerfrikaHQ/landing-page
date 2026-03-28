@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function RootNotFound() {
 	return (
-		<html lang="en">
+		<html lang="en" data-scroll-behavior="smooth">
 			<body>
 				<div className="md:min-h-screen flex flex-col items-center justify-center px-4 py-5">
 					<div className="max-w-md w-full text-center space-y-4">
@@ -24,6 +24,7 @@ export default function RootNotFound() {
 								width={400}
 								height={400}
 								className="mx-auto h-75 object-cover"
+								style={{ width: "auto" }}
 								priority
 							/>
 						</div>

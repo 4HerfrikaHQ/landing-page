@@ -55,6 +55,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 								height={429}
 								alt="blog-img"
 								className="mt-16 hidden lg:block"
+								loading="eager"
 							/>
 						</FadeIn>
 					</div>
