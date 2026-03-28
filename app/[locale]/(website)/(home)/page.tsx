@@ -25,6 +25,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 	if (!hasLocale(routing.locales, locale)) return null;
 	setRequestLocale(locale as Locale);
 	const t = await getTranslations("home");
+	const tc = await getTranslations("common");
 	const page = await getHomepage();
 
 	const {
@@ -70,7 +71,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 							variant="outline"
 							className="px-8 py-3 md:py-4 text-base md:text-xl"
 						>
-							View Projects
+							{tc("viewProjects")}
 						</Button>
 
 						<Button
@@ -78,7 +79,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 							href={(ambassador_link.text || "/") as Route}
 							isExternal
 						>
-							Join Us
+							{tc("joinUs")}
 						</Button>
 					</div>
 				</div>

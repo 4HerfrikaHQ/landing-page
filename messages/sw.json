@@ -22,7 +22,8 @@
     "exploreProject": "Chunguza mradi",
     "seeDetails": "Tazama maelezo",
     "startAChapter": "Anzisha tawi",
-    "yearOneReport": "Angalia ripoti yetu ya mandhari ya mwaka wa kwanza hapa!"
+    "yearOneReport": "Angalia ripoti yetu ya mandhari ya mwaka wa kwanza hapa!",
+    "home": "Nyumbani"
   },
   "nav": {
     "aboutUs": "Kuhusu sisi",
@@ -125,7 +126,10 @@
     "attachFile": "Ambatisha faili. Ukubwa wa faili haupaswi kuzidi MB 10",
     "fileSizeError": "Ukubwa wa faili umezidi kikomo cha MB 10",
     "invalidEmail": "Tafadhali, weka anwani sahihi ya barua pepe",
-    "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika."
+    "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika.",
+    "availableTimes": "Nyakati zinazopatikana:",
+    "notMentioned": "Haijatajwa",
+    "mentorComingSoon": "Taarifa zaidi kuhusu mshauri huyu zitapatikana hivi karibuni."
   },
   "donate": {
     "title": "Unga mkono dhamira yetu",

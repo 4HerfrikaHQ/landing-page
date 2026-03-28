@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Calendar, Clock, User } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Streamdown } from "streamdown";
@@ -36,14 +37,17 @@ export default async function BlogPostPage({
 
 	if (!post) notFound();
 
+	const tc = await getTranslations("common");
+	const tn = await getTranslations("nav");
+
 	return (
 		<main className="bg-background">
 			<section className="px-4 pt-6 md:pt-10 pb-20">
 				<div className="mx-auto max-w-4xl">
 					<Breadcrumbs
 						items={[
-							{ label: "Home", href: "/" },
-							{ label: "Blog", href: "/blog" },
+							{ label: tc("home"), href: "/" },
+							{ label: tn("blog"), href: "/blog" },
 							{ label: post.title },
 						]}
 					/>

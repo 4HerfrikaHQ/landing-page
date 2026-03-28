@@ -22,7 +22,8 @@
     "exploreProject": "Explore Project",
     "seeDetails": "See Details",
     "startAChapter": "Start a Chapter",
-    "yearOneReport": "Check out our Year-One Landscape report here!"
+    "yearOneReport": "Check out our Year-One Landscape report here!",
+    "home": "Home"
   },
   "nav": {
     "aboutUs": "About Us",
@@ -125,7 +126,10 @@
     "attachFile": "Attach file. File size of your documents should not exceed 10MB",
     "fileSizeError": "File size exceeds 10MB limit",
     "invalidEmail": "Please, enter valid email address",
-    "receiveUpdates": "I would like to receive updates and tips on mentoring from 4HerFrika."
+    "receiveUpdates": "I would like to receive updates and tips on mentoring from 4HerFrika.",
+    "availableTimes": "Available times:",
+    "notMentioned": "Not Mentioned",
+    "mentorComingSoon": "More information about this mentor will be available soon."
   },
   "donate": {
     "title": "Support Our Mission",

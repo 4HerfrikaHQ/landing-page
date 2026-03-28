@@ -22,7 +22,8 @@
     "exploreProject": "Explorer le projet",
     "seeDetails": "Voir les détails",
     "startAChapter": "Créer un chapitre",
-    "yearOneReport": "Découvrez notre rapport paysager de la première année ici !"
+    "yearOneReport": "Découvrez notre rapport paysager de la première année ici !",
+    "home": "Accueil"
   },
   "nav": {
     "aboutUs": "À propos",
@@ -125,7 +126,10 @@
     "attachFile": "Joindre un fichier. La taille du fichier ne doit pas dépasser 10 Mo",
     "fileSizeError": "La taille du fichier dépasse la limite de 10 Mo",
     "invalidEmail": "Veuillez entrer une adresse e-mail valide",
-    "receiveUpdates": "Je souhaite recevoir des mises à jour et des conseils sur le mentorat de 4HerFrika."
+    "receiveUpdates": "Je souhaite recevoir des mises à jour et des conseils sur le mentorat de 4HerFrika.",
+    "availableTimes": "Horaires disponibles :",
+    "notMentioned": "Non mentionné",
+    "mentorComingSoon": "Plus d'informations sur ce mentor seront bientôt disponibles."
   },
   "donate": {
     "title": "Soutenez notre mission",

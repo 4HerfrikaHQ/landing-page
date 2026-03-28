@@ -10,6 +10,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { format, parseISO } from "date-fns";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { Mentor } from "../_schema";
 
@@ -24,6 +25,8 @@ function formatTime(timeString: string) {
 }
 
 export function MentorCard({ mentor }: { mentor: Mentor }) {
+	const t = useTranslations("careers");
+	const tc = useTranslations("common");
 	const displayName = mentor.nickname || mentor.name;
 
 	return (
@@ -53,7 +56,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 						/>
 					}
 				>
-					Details
+					{t("details")}
 				</DialogTrigger>
 			</div>
 
@@ -95,7 +98,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 							{mentor.availability && mentor.availability.length > 0 ? (
 								<div className="mb-4">
 									<h4 className="text-primary-500 text-xs font-medium mb-2">
-										Available times:
+										{t("availableTimes")}
 									</h4>
 									<p className="text-foreground text-xs">
 										{mentor.availability.map((slot, index) => (
@@ -112,9 +115,9 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 							) : (
 								<div className="mb-4">
 									<h4 className="text-primary-500 font-medium mb-2">
-										Available times:
+										{t("availableTimes")}
 									</h4>
-									<p className="text-foreground">Not Mentioned</p>
+									<p className="text-foreground">{t("notMentioned")}</p>
 								</div>
 							)}
 
@@ -123,7 +126,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 									<p className="whitespace-pre-line">{mentor.bio}</p>
 								) : (
 									<p className="whitespace-pre-line">
-										More information about this mentor will be available soon.
+										{t("mentorComingSoon")}
 									</p>
 								)}
 							</div>
@@ -135,7 +138,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 								href={mentor.linkedinUrl || "/"}
 								isExternal
 							>
-								Message on LinkedIn
+								{tc("messageOnLinkedin")}
 							</Button>
 							<Button
 								variant="solid"
@@ -144,7 +147,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 								isExternal
 								className="w-full sm:w-auto"
 							>
-								Book a call
+								{tc("bookACall")}
 							</Button>
 						</div>
 					</div>
