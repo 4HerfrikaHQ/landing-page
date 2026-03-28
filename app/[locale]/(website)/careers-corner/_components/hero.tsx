@@ -17,6 +17,7 @@ export const CareersHero = () => {
 				width={700}
 				height={1000}
 				className="absolute top-0 -left-28 h-full"
+				style={{ width: "auto" }}
 			/>
 			<Image
 				src="/assets/careers/Mask2.png"
@@ -24,6 +25,7 @@ export const CareersHero = () => {
 				width={700}
 				height={1000}
 				className="absolute bottom-0 -right-10"
+				style={{ width: "auto" }}
 			/>
 
 			<div className="w-[50vw] min-w-62 relative grid place-content-center">
