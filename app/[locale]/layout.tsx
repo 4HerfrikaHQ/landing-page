@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 		"digital skills Africa",
 		"women entrepreneurship Africa",
 		"campus tech bootcamp",
-		"4HerAfrika",
+		"4Herfrika",
 	],
 	authors: [{ name: "4Herfrika", url: "https://4herfrika.org" }],
 	creator: "4Herfrika",
