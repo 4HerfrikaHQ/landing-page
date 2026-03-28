@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
 	typedRoutes: true,
 	productionBrowserSourceMaps: false,
 	images: {
-		qualities: [100, 75],
 		remotePatterns: [
 			{
 				protocol: "https",

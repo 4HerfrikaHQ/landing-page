@@ -52,7 +52,6 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 							src={"/assets/careers/Adesewa.png"}
 							alt="/"
 							fill
-							sizes="(max-width: 768px) 100vw, 50vw"
 							className="object-cover object-top shadow-xl"
 						/>
 					</div>

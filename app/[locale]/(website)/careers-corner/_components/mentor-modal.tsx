@@ -73,7 +73,6 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 								src={mentor.image}
 								alt={mentor.name}
 								fill
-								sizes="(max-width: 768px) 100vw, 400px"
 								className="rounded-md object-cover object-top"
 								quality={100}
 								priority

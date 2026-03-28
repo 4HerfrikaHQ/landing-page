@@ -27,7 +27,6 @@ export default async function NotFoundPage() {
 							width={400}
 							height={400}
 							className="mx-auto h-75 object-cover"
-							style={{ width: "auto" }}
 							priority
 						/>
 					</div>
