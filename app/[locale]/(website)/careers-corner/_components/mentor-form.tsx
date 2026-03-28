@@ -6,60 +6,38 @@ import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FileText, Upload, X } from "lucide-react";
+import { ValidationError, useForm } from "@formspree/react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ImageIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+interface FormSubmitEvent extends React.FormEvent<HTMLFormElement> {
+	target: HTMLFormElement;
+}
 
 export default function MentorForm() {
-	const [email, setEmail] = useState("");
-	const [emailError, setEmailError] = useState(false);
-	const [file, setFile] = useState<File | null>(null);
-	const [fileError, setFileError] = useState("");
-	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [state, submit, reset] = useForm("xovnjbdq");
+	const [receiveUpdates, setReceiveUpdates] = useState(false);
 	const t = useTranslations("careers");
 	const tc = useTranslations("common");
 
-	const validateEmail = (email: string) => {
-		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return regex.test(email);
-	};
+	const handleFormSubmit = (e: FormSubmitEvent) => {
+		if (state.submitting) return;
 
-	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-		setEmailError(!validateEmail(e.target.value) && e.target.value !== "");
-	};
+		const submission = submit(e);
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const selectedFile = e.target.files?.[0] || null;
-
-		if (selectedFile) {
-			// Check file size (10MB = 10 * 1024 * 1024 bytes)
-			if (selectedFile.size > 10 * 1024 * 1024) {
-				setFileError(t("fileSizeError"));
-				setFile(null);
-				return;
-			}
-
-			setFile(selectedFile);
-			setFileError("");
-		}
-	};
-
-	const handleFileClick = () => {
-		fileInputRef.current?.click();
-	};
-
-	const removeFile = () => {
-		setFile(null);
-		if (fileInputRef.current) {
-			fileInputRef.current.value = "";
-		}
-	};
-
-	const handleKeyPress = (e: React.KeyboardEvent) => {
-		if (e.key === "Enter" || e.key === " ") {
-			handleFileClick();
-		}
+		toast.promise(submission, {
+			success: () => {
+				e.target.reset();
+				setReceiveUpdates(false);
+				reset();
+				return t("successMessage");
+			},
+			description: t("successDescription"),
+			error: t("errorMessage"),
+		});
 	};
 
 	const inputClassName =
@@ -74,116 +52,94 @@ export default function MentorForm() {
 			<p className="text-muted-foreground text-center mb-8">
 				{t("becomeMentorDescription")}
 			</p>
-			<form className="space-y-10">
+			<form className="space-y-10" onSubmit={handleFormSubmit}>
 				<div>
 					<Input
 						type="text"
+						name="motivation"
 						placeholder={t("whyMentor")}
 						className={inputClassName}
+						required
 					/>
+					<ValidationError prefix="Motivation" field="motivation" errors={state.errors} />
 				</div>
 
 				<div>
 					<Input
 						type="text"
+						name="occupation"
 						placeholder={t("occupation")}
 						className={inputClassName}
+						required
 					/>
+					<ValidationError prefix="Occupation" field="occupation" errors={state.errors} />
 				</div>
 
 				<div>
-					<Input type="text" placeholder={t("contactField")} className={inputClassName} />
+					<Input
+						type="text"
+						name="contact"
+						placeholder={t("contactField")}
+						className={inputClassName}
+					/>
+					<ValidationError prefix="Contact" field="contact" errors={state.errors} />
 				</div>
 
 				<div>
 					<Input
 						type="email"
+						name="email"
 						placeholder={t("emailPlaceholder")}
-						value={email}
-						onChange={handleEmailChange}
 						className={inputClassName}
+						required
 					/>
-					{emailError && (
-						<p className="text-pink-500 text-sm mt-1">
-							{t("invalidEmail")}
-						</p>
-					)}
+					<ValidationError prefix="Email" field="email" errors={state.errors} />
 				</div>
 
 				<div>
 					<Input
-						type="text"
+						type="url"
+						name="linkedin"
 						placeholder={t("linkedin")}
 						className={inputClassName}
 					/>
+					<ValidationError prefix="LinkedIn" field="linkedin" errors={state.errors} />
 				</div>
 
 				<div>
-					<input
-						type="file"
-						ref={fileInputRef}
-						onChange={handleFileChange}
-						className="hidden"
-						accept="image/*"
+					<div className="flex items-center gap-2 mb-2 text-muted-foreground">
+						<ImageIcon className="h-4 w-4" />
+						<span className="text-sm">{t("uploadHeadshot")}</span>
+					</div>
+					<Input
+						type="url"
+						name="headshotUrl"
+						placeholder={t("headshotUrlPlaceholder")}
+						className={inputClassName}
 					/>
-
-					{!file ? (
-						<div
-							onClick={handleFileClick}
-							onKeyDown={handleKeyPress}
-							// biome-ignore lint/a11y/useSemanticElements: <explanation>
-							role="button"
-							tabIndex={0}
-							className="border border-dashed border-border rounded p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-muted transition-colors"
-						>
-							<Upload className="h-6 w-6 text-foreground mb-2" />
-							<p className="text-foreground">{t("uploadHeadshot")}</p>
-						</div>
-					) : (
-						<div className="border border-border rounded p-4">
-							<div className="flex items-center justify-between">
-								<div className="flex items-center space-x-2">
-									<FileText className="h-5 w-5 text-foreground" />
-									<span className="text-sm text-foreground truncate max-w-62.5">
-										{file.name}
-									</span>
-								</div>
-								<Button
-									type="button"
-									variant="ghost"
-									size="icon"
-									onClick={removeFile}
-									className="text-foreground hover:text-foreground"
-								>
-									<X className="h-5 w-5" />
-								</Button>
-							</div>
-						</div>
-					)}
-
-					{fileError && (
-						<p className="text-pink-500 text-sm mt-1">{fileError}</p>
-					)}
+					<ValidationError prefix="Headshot URL" field="headshotUrl" errors={state.errors} />
 				</div>
 
-				<p className="text-foreground text-xs">
-					{t("attachFile")}
-				</p>
-
-				<div className="flex items-start">
-					<input type="checkbox" id="updates" className="mt-1 mr-2" />
-					<Label htmlFor="updates" className="text-foreground font-normal">
+				<div className="flex items-center gap-2">
+					<input type="hidden" name="receiveUpdates" value={receiveUpdates ? "yes" : "no"} />
+					<Checkbox
+						id="updates"
+						checked={receiveUpdates}
+						onCheckedChange={(checked) => setReceiveUpdates(checked as boolean)}
+					/>
+					<Label htmlFor="updates" className="text-foreground font-normal leading-none">
 						{t("receiveUpdates")}
 					</Label>
 				</div>
 
 				<Button
 					type="submit"
-					className="w-full bg-pink-500 text-white py-3 rounded font-medium hover:bg-pink-600 transition-colors"
+					disabled={state.submitting}
+					className="w-full bg-pink-500 text-white py-3 rounded font-medium hover:bg-pink-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					{tc("submit")}
+					{state.submitting ? t("submitting") : tc("submit")}
 				</Button>
-			</form>{" "}
+			</form>
 		</div>
 		</FadeIn>
 	);

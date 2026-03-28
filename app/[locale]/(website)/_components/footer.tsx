@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
-import Logo from "../4herfrika-logo";
+import Logo from "./icons/4herfrika-logo";
 import { StaggerContainer, StaggerItem } from "@/components/motion";
 
 export const Footer = async () => {

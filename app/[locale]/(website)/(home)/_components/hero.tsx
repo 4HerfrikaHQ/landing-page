@@ -4,8 +4,8 @@ import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
 import { getTranslations } from "next-intl/server";
 import { Statistic } from "../../_components/statistic";
-import CurvedArrowIcon from "../../curved-arrow";
-import HeroCurveIcon from "../../hero-curve";
+import CurvedArrowIcon from "../../_components/icons/curved-arrow";
+import HeroCurveIcon from "../../_components/icons/hero-curve";
 import { JOIN_FORM_LINK } from "../_schema";
 
 interface HeroProps {

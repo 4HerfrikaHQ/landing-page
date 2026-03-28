@@ -7,7 +7,7 @@ import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import Sponsors from "../_components/sponsors";
-import AfricaLogo from "../africa-logo";
+import AfricaLogo from "../_components/icons/africa-logo";
 import { getHomepage } from "./_actions";
 import { ExploreCommunity } from "./_components/explore-community";
 import { Hero } from "./_components/hero";

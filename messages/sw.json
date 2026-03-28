@@ -121,11 +121,14 @@
     "contactField": "Mawasiliano",
     "emailPlaceholder": "email@gmail",
     "linkedin": "Linkedin",
-    "uploadHeadshot": "Pakia picha ya kitaalamu",
-    "attachFile": "Ambatisha faili. Ukubwa wa faili haupaswi kuzidi MB 10",
-    "fileSizeError": "Ukubwa wa faili umezidi kikomo cha MB 10",
+    "uploadHeadshot": "Picha ya kitaalamu",
+    "headshotUrlPlaceholder": "https://kiungo-cha-picha-yako.com",
     "invalidEmail": "Tafadhali, weka anwani sahihi ya barua pepe",
-    "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika."
+    "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika.",
+    "submitting": "Inatuma...",
+    "successMessage": "Maombi yametumwa kwa mafanikio!",
+    "successDescription": "Asante kwa nia yako ya kuwa mshauri. Tutawasiliana nawe hivi karibuni.",
+    "errorMessage": "Imeshindwa kutuma maombi. Tafadhali angalia maelezo yako na ujaribu tena."
   },
   "donate": {
     "title": "Unga mkono dhamira yetu",
