@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion";
 import { PrismicImage } from "@prismicio/react";
@@ -12,6 +13,12 @@ import { getHomepage } from "./_actions";
 import { ExploreCommunity } from "./_components/explore-community";
 import { Hero } from "./_components/hero";
 import { TestimonialCarousel } from "./_components/testimonial-carousel";
+
+export const metadata: Metadata = {
+	title: "Home — Raising World-Class Women in Tech & Business",
+	description:
+		"4Herfrika empowers women across 25+ African university campuses with tech bootcamps, mentorship, and leadership programs. Join 3,000+ members building Africa's future.",
+};
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;

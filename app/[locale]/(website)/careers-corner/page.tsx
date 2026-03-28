@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -115,6 +116,12 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 			<MentorForm />
 		</section>
 	);
+};
+
+export const metadata: Metadata = {
+	title: "Career Corner — Free Mentorship & Career Guidance",
+	description:
+		"Book a free 10-minute call with experienced mentors in tech and business. Get career guidance, ask questions, and take the next step in your professional journey.",
 };
 
 export default CareersCorner;

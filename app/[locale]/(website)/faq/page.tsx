@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import FAQ from "@/app/[locale]/(website)/(home)/_components/faq-section";
 import { Button } from "@/components/ui/button";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
@@ -8,6 +9,12 @@ import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getFaqPage } from "./_actions";
+
+export const metadata: Metadata = {
+	title: "FAQ — Common Questions About 4Herfrika Programs",
+	description:
+		"Find answers about 4Herfrika's campus chapters, tech academies, mentorship programs, and how to get involved as a member, mentor, or ambassador.",
+};
 
 export default async function FAQPage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Calendar, Clock, User } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -9,6 +10,20 @@ import { FEATURED_POSTS, type PostSlug, formatPostDate, readTime } from "../_sch
 
 export function generateStaticParams() {
 	return Object.keys(FEATURED_POSTS).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+	const { slug } = await params;
+	const post = FEATURED_POSTS[slug as PostSlug];
+	if (!post) return {};
+	return {
+		title: post.title,
+		description: post.excerpt,
+	};
 }
 
 export default async function BlogPostPage({

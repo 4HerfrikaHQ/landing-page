@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import BankDetails from "./_components/bank-details";
+
+export const metadata: Metadata = {
+	title: "Donate — Fund Scholarships, Tech Training & Mentorship",
+	description:
+		"Your donation funds scholarships, digital skills bootcamps, and mentorship for women across Africa. Help us reach our goal of impacting 2 million women by 2030.",
+};
 
 export default async function DonationPage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
