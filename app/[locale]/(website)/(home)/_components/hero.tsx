@@ -71,7 +71,7 @@ export const Hero = async ({
 								variant="solid"
 								className="w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
 							>
-								{tc("getStarted")}
+								{tc("joinCommunity")}
 							</Button>
 						</div>
 					</FadeIn>
