@@ -82,6 +82,25 @@ export async function createMentor(
 	return {};
 }
 
+export async function updateMentor(
+	id: string,
+	formData: FormData,
+): Promise<{ error?: string }> {
+	const name = formData.get("name") as string;
+	const position = (formData.get("position") as string) || "";
+	const bio = (formData.get("bio") as string) || undefined;
+	const nickname = (formData.get("nickname") as string) || undefined;
+	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
+
+	await db
+		.update(schema.mentors)
+		.set({ name, position, bio, nickname, linkedin_url })
+		.where(eq(schema.mentors.id, id));
+
+	revalidatePath("/dashboard/admin/mentors");
+	return {};
+}
+
 export async function uploadMentorImage(
 	mentorId: string,
 	formData: FormData,

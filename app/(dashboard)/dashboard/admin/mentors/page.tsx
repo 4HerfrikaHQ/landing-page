@@ -7,15 +7,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { format } from "date-fns";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getMentorsForAdmin } from "./_actions";
-import { AvatarUpload } from "./_components/avatar-upload";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
+import { MentorTableRow } from "./_components/mentor-table-row";
 import { SearchInput } from "./_components/search-input";
 import { StatusFilter } from "./_components/status-filter";
-import { ToggleActiveButton } from "./_components/toggle-active-button";
 
 export default async function MentorsPage({
 	searchParams,
@@ -70,24 +68,7 @@ export default async function MentorsPage({
 							</TableRow>
 						) : (
 							mentors.map((mentor) => (
-								<TableRow key={mentor.id}>
-									<TableCell className="w-10">
-										<AvatarUpload id={mentor.id} name={mentor.name} image={mentor.image} />
-									</TableCell>
-									<TableCell className="font-medium text-gray-900">
-										{mentor.name}
-									</TableCell>
-									<TableCell className="text-gray-600 capitalize">
-										{mentor.position}
-									</TableCell>
-									<TableCell className="text-gray-600">{mentor.email}</TableCell>
-									<TableCell className="text-gray-400 text-sm">
-										{format(mentor.created_at, "MMM d, yyyy")}
-									</TableCell>
-									<TableCell>
-										<ToggleActiveButton id={mentor.id} active={mentor.active} />
-									</TableCell>
-								</TableRow>
+								<MentorTableRow key={mentor.id} mentor={mentor} />
 							))
 						)}
 					</TableBody>
