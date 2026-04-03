@@ -11,7 +11,6 @@ export const mentors = pgTable("mentors", {
 	position: text("position").notNull(),
 	image: text("image"),
 	linkedin_url: text("linkedin_url"),
-	booking_url: text("booking_url"),
 	nickname: text("nickname"),
 	created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

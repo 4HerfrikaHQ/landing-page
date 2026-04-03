@@ -15,6 +15,13 @@
       "when": 1775213428426,
       "tag": "0001_little_lake",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775217843724,
+      "tag": "0002_aspiring_rocket_racer",
+      "breakpoints": true
     }
   ]
 }
