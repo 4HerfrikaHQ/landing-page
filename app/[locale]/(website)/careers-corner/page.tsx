@@ -9,13 +9,14 @@ import Link from "next/link";
 import { CareersHero } from "./_components/hero";
 import MentorForm from "./_components/mentor-form";
 import { MentorCard } from "./_components/mentor-modal";
-import { COUNSELLING_MENTORS } from "./_schema";
+import { getMentors } from "./_actions";
 
 const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }) => {
 	const { locale } = await params;
 	setRequestLocale(locale as Locale);
 	const t = await getTranslations("careers");
 	const tc = await getTranslations("common");
+	const mentors = await getMentors();
 
 	return (
 		<section className="overflow-x-hidden">
@@ -103,8 +104,8 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 						{t("counselingDescription")}
 					</p>
 					<StaggerContainer className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-						{COUNSELLING_MENTORS.map((mentor) => (
-							<StaggerItem key={mentor.name + mentor.bio}>
+						{mentors.map((mentor) => (
+							<StaggerItem key={mentor.id}>
 								<HoverCard>
 									<MentorCard mentor={mentor} />
 								</HoverCard>
