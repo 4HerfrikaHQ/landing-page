@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
 	Sheet,
 	SheetClose,
@@ -15,28 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { PlusIcon } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 import { createMentor } from "../_actions";
-
-function Field({
-	label,
-	name,
-	type = "text",
-	required,
-}: {
-	label: string;
-	name: string;
-	type?: string;
-	required?: boolean;
-}) {
-	return (
-		<div className="flex flex-col gap-1.5">
-			<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-				{label}
-				{required && <span className="text-red-400 ml-0.5">*</span>}
-			</label>
-			<Input name={name} type={type} required={required} className="h-9 text-sm" />
-		</div>
-	);
-}
+import { Field } from "@/components/ui/field";
 
 export function CreateMentorSheet() {
 	const [open, setOpen] = useState(false);
