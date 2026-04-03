@@ -29,6 +29,13 @@
       "when": 1775218753958,
       "tag": "0003_wandering_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775219929800,
+      "tag": "0004_mentor_avatars_bucket",
+      "breakpoints": true
     }
   ]
 }
