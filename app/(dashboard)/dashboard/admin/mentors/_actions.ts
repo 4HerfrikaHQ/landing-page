@@ -36,6 +36,9 @@ export async function getMentorsForAdmin(
 			position: schema.mentors.position,
 			image: schema.mentors.image,
 			email: schema.users.email,
+			bio: schema.mentors.bio,
+			nickname: schema.mentors.nickname,
+			linkedin_url: schema.mentors.linkedin_url,
 			active: schema.mentors.active,
 			created_at: schema.mentors.created_at,
 		})
