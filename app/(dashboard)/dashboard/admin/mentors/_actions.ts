@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/auth";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { and, eq, ilike, or, SQL } from "drizzle-orm";
@@ -22,16 +23,18 @@ export async function getMentorsForAdmin(
   switch (status) {
     case "active":
       filters.push(eq(schema.mentors.active, true))
+      break;
     case "inactive":
       filters.push(eq(schema.mentors.active, false))
+      break;
   }
-
 
   return db
 		.select({
 			id: schema.mentors.id,
 			name: schema.mentors.name,
 			position: schema.mentors.position,
+			image: schema.mentors.image,
 			email: schema.users.email,
 			active: schema.mentors.active,
 			created_at: schema.mentors.created_at,
