@@ -5,15 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1774793566288,
-      "tag": "0000_mature_surge",
+      "when": 1775212909237,
+      "tag": "0000_bumpy_sentry",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1774793590329,
-      "tag": "0001_user_supabase_trigger",
+      "when": 1775213428426,
+      "tag": "0001_little_lake",
       "breakpoints": true
     }
   ]
