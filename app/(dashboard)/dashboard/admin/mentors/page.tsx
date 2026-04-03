@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getMentorsForAdmin } from "./_actions";
+import { AvatarUpload } from "./_components/avatar-upload";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { SearchInput } from "./_components/search-input";
 import { StatusFilter } from "./_components/status-filter";
@@ -52,6 +53,7 @@ export default async function MentorsPage({
 				<Table>
 					<TableHeader>
 						<TableRow className="bg-gray-50">
+							<TableHead className="w-10" />
 							<TableHead className="font-medium text-gray-600">Name</TableHead>
 							<TableHead className="font-medium text-gray-600">Position</TableHead>
 							<TableHead className="font-medium text-gray-600">Email</TableHead>
@@ -62,13 +64,16 @@ export default async function MentorsPage({
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={5} className="text-center text-gray-400 py-12">
+								<TableCell colSpan={6} className="text-center text-gray-400 py-12">
 									No mentors yet.
 								</TableCell>
 							</TableRow>
 						) : (
 							mentors.map((mentor) => (
 								<TableRow key={mentor.id}>
+									<TableCell className="w-10">
+										<AvatarUpload id={mentor.id} name={mentor.name} image={mentor.image} />
+									</TableCell>
 									<TableCell className="font-medium text-gray-900">
 										{mentor.name}
 									</TableCell>
