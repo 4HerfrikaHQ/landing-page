@@ -38,6 +38,7 @@ export function MentorCard({ mentor }: { mentor: MentorWithAvailability }) {
 						alt={mentor.name}
 						width={700}
 						height={1000}
+						unoptimized={mentor.image?.includes("localhost") ?? true}
 						className="hover:scale-105 h-64 w-full object-cover object-top transition-transform duration-300"
 					/>
 				</div>
@@ -78,12 +79,7 @@ export function MentorCard({ mentor }: { mentor: MentorWithAvailability }) {
 								fill
 								sizes="(max-width: 768px) 100vw, 400px"
 								className="rounded-md object-cover object-top"
-								quality={100}
-								priority
-								style={{
-									imageRendering: "crisp-edges",
-									WebkitFontSmoothing: "antialiased",
-								}}
+								unoptimized={mentor.image?.includes("localhost") ?? true}
 							/>
 						</div>
 					</div>
