@@ -34,17 +34,17 @@ export default async function MentorsPage({
 					<p className="text-sm text-gray-500 mt-1">{mentors.length} total</p>
 				</div>
 				<div className="flex items-center gap-2">
-					<Suspense>
-						<SearchInput />
-					</Suspense>
 					<CreateMentorSheet />
 				</div>
 			</div>
 
-			<div className="mb-4">
+			<div className="mb-4 flex items-center justify-between">
 				<Suspense>
 					<StatusFilter />
-				</Suspense>
+        </Suspense>
+        <Suspense>
+						<SearchInput />
+					</Suspense>
 			</div>
 
 			<div className="border rounded-lg overflow-hidden">
