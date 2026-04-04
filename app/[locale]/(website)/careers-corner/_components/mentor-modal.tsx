@@ -139,7 +139,7 @@ export function MentorCard({ mentor }: { mentor: MentorWithAvailability }) {
 							<Button
 								variant="solid"
 								size="lg"
-								href={mentor.booking_url || "/"}
+								href={""}
 								isExternal
 								className="w-full sm:w-auto"
 							>
