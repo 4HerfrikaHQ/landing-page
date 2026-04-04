@@ -3,7 +3,7 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { eq } from "drizzle-orm";
 import { createServerClient } from "@supabase/ssr";
-import type { User } from "@supabase/supabase-js";
+import type { AuthError, User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
 
@@ -30,7 +30,6 @@ export async function createClient() {
 	);
 }
 
-/** Step 1 of OTP login — sends a 6-digit code to the user's email */
 export async function sendOtp(email: string) {
 	const supabase = await createClient();
 	return supabase.auth.signInWithOtp({
@@ -39,10 +38,21 @@ export async function sendOtp(email: string) {
 	});
 }
 
-/** Step 2 of OTP login — verifies the code and sets the session cookie */
-export async function verifyOtp(email: string, token: string) {
+export async function verifyOtp(email: string, token: string): Promise<{ error: AuthError }> {
 	const supabase = await createClient();
-	return supabase.auth.verifyOtp({ email, token, type: "email" });
+  const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
+
+  if (error) {
+    return { error }
+  }
+
+  const user = await currentDbUser();
+
+  if (user.role === "super_admin") {
+    redirect("/dashboard/admin")
+  } else {
+    redirect("/dashboard/mentor")
+  }
 }
 
 export async function logout() {
