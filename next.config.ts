@@ -5,7 +5,10 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
 	typedRoutes: true,
-	productionBrowserSourceMaps: false,
+  productionBrowserSourceMaps: false,
+  experimental: {
+    authInterrupts: true
+	},
 	images: {
 		qualities: [100, 75],
 		remotePatterns: [
