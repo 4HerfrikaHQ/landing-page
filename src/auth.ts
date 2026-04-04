@@ -58,7 +58,7 @@ export async function verifyOtp(email: string, token: string): Promise<{ error: 
 export async function logout() {
 	const supabase = await createClient();
 	await supabase.auth.signOut();
-	redirect("/login");
+	redirect("/dashboard/login");
 }
 
 /** Gets the Supabase auth user. Calls unauthorized() if not logged in. */
