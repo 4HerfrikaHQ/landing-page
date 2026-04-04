@@ -107,10 +107,11 @@ function validateSlots(slots: SlotRow[]): Map<string, string> {
 
     for (let i = 1; i < sorted.length; i++) {
       const current = sorted[i];
-      const previous = sorted[i - 1]
+      const previous = sorted[i - 1];
 			if (current.start_time < previous.end_time) {
-				errors.set(sorted[i].tempId, "Overlaps with another slot");
-				errors.set(sorted[i - 1].tempId, "Overlaps with another slot");
+				const fmt = (t: string) => TIME_OPTIONS.find((o) => o.value === t)?.label ?? t;
+				errors.set(current.tempId, `Overlaps with ${fmt(previous.start_time)} – ${fmt(previous.end_time)}`);
+				errors.set(previous.tempId, `Overlaps with ${fmt(current.start_time)} – ${fmt(current.end_time)}`);
 			}
 		}
 	}
