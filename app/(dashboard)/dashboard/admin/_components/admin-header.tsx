@@ -1,6 +1,7 @@
 "use client";
 
 import { logout } from "@/src/auth";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTransition } from "react";
@@ -46,7 +47,7 @@ export function AdminHeader() {
 							<span className="text-gray-900 font-medium">{crumb.label}</span>
 						) : (
 							<Link
-								href={crumb.href}
+								href={crumb.href as Route}
 								className="text-gray-400 hover:text-gray-600 transition-colors"
 							>
 								{crumb.label}
