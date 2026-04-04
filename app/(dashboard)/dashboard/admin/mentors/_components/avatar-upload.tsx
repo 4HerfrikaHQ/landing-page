@@ -4,6 +4,7 @@ import { CameraIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { uploadMentorImage } from "../_actions";
+import { toast } from "sonner";
 
 export function AvatarUpload({
 	id,
@@ -35,7 +36,7 @@ export function AvatarUpload({
 		if (!file) return;
 
 		if (file.size > 4 * 1024 * 1024) {
-			alert("Image must be under 4MB.");
+			toast.error("Image must be under 4MB.");
 			return;
 		}
 
@@ -49,13 +50,14 @@ export function AvatarUpload({
 				const result = await uploadMentorImage(id, formData);
 				if (result.error) {
 					setPreview(image);
-					alert(`Upload failed: ${result.error}`);
+					toast.error(`Upload failed: ${result.error}`);
 				} else if (result.url) {
-					setPreview(result.url);
+          setPreview(result.url);
+					toast.success("Successfully updated avatar")
 				}
 			} catch (err) {
 				setPreview(image);
-				alert(`Upload failed: ${String(err)}`);
+				toast.error(`Upload failed: ${String(err)}`);
 			}
 		});
 	}
