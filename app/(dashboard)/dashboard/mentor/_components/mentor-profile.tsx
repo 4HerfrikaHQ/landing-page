@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { getMentorProfile, updateMyProfile, uploadMyImage } from "../_actions";
 import { DbMentorWithAvailability } from "@/src/db/schema/tables"
+import { toast } from "sonner";
 
 type Tab = "profile" | "availability";
 
@@ -48,19 +49,30 @@ export function MentorProfile({ user, mentor: dbMentor }: { user: DbUser; mentor
 
 	function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
-		if (!file) return;
-		if (file.size > 4 * 1024 * 1024) { alert("Image must be under 4MB."); return; }
+
+    if (!file) return;
+
+    if (file.size > 4 * 1024 * 1024) {
+      toast.error("Image must be under 4MB.");
+      return;
+    }
+
 		setPreview(URL.createObjectURL(file));
 		const formData = new FormData();
 		formData.append("file", file);
-		startUploadTransition(async () => {
+
+    startUploadTransition(async () => {
 			try {
 				const result = await uploadMyImage(formData);
-				if (result.error) { setPreview(dbMentor.image); alert(`Upload failed: ${result.error}`); }
-				else if (result.url) setPreview(result.url);
+        if (result.error) {
+          setPreview(dbMentor.image);
+          toast.error(`Upload failed: ${result.error}`);
+        } else if (result.url) {
+          setPreview(result.url);
+				}
 			} catch (err) {
 				setPreview(dbMentor.image);
-				alert(`Upload failed: ${String(err)}`);
+				toast.error(`Upload failed: ${String(err)}`);
 			}
 		});
 	}
