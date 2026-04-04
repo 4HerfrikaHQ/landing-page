@@ -26,13 +26,14 @@ export async function uploadMentorAvatar(
 		if (uploadError) return { error: uploadError.message };
 
 		const { data } = adminClient.storage.from("mentor-avatars").getPublicUrl(path);
+		const url = `${data.publicUrl}?t=${Date.now()}`;
 
 		await db
 			.update(schema.mentors)
-			.set({ image: data.publicUrl })
+			.set({ image: url })
 			.where(eq(schema.mentors.id, mentorId));
 
-		return { url: data.publicUrl };
+		return { url };
 	} catch (err) {
 		return { error: String(err) };
 	}
