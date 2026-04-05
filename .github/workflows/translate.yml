@@ -1,0 +1,25 @@
+name: Auto-translate
+
+on:
+  push:
+    branches: [main]
+    paths: [messages/en.json]
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run translate --all
+        env:
+          GT_API_KEY: ${{ secrets.GT_API_KEY }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update translations"
+          file_pattern: "messages/*.json"
