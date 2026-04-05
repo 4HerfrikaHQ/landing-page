@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Toaster } from "sonner";
 import { routing } from "@/i18n/routing";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-
-const outfitSans = Outfit({
-	weight: ["300", "400", "500", "600", "700"],
-	subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
 	metadataBase: new URL("https://4herfrika.org"),
@@ -92,13 +85,8 @@ export default async function LocaleLayout({
 	setRequestLocale(locale as Locale);
 
 	return (
-		<html lang={locale} data-scroll-behavior="smooth">
-			<body className={`${outfitSans.className} antialiased`}>
-				<NextIntlClientProvider>
-					{children}
-				</NextIntlClientProvider>
-				<Toaster position="top-right" richColors closeButton />
-			</body>
-		</html>
+		<NextIntlClientProvider>
+			{children}
+		</NextIntlClientProvider>
 	);
 }
