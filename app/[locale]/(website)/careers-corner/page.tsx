@@ -14,9 +14,12 @@ import { getMentors } from "./_actions";
 const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }) => {
 	const { locale } = await params;
 	setRequestLocale(locale as Locale);
-	const t = await getTranslations("careers");
-	const tc = await getTranslations("common");
-	const mentors = await getMentors();
+
+  const [tCareers, tCommon, mentors] = await Promise.all([
+		getTranslations("careers"),
+		getTranslations("common"),
+		getMentors()
+	]);
 
 	return (
 		<section className="overflow-x-hidden">
@@ -62,12 +65,12 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 					<FadeIn direction="right">
 					<div>
 						<h3 className="uppercase text-primary-500 text-lg">
-							{t("featuredMentor")}
+							{tCareers("featuredMentor")}
 						</h3>
 						<h2 className="text-4xl font-semibold my-3 flex justify-between items-end gap-4 flex-wrap text-foreground">
 							Adesewa
 							<span className="text-primary-500 text-sm">
-								{t("availability")}
+								{tCareers("availability")}
 							</span>{" "}
 						</h2>
 						<p className="text-foreground mb-4 capitalize">
@@ -84,10 +87,10 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 						<div className="flex flex-col md:flex-row items-center gap-5 my-7 w-full justify-between">
 							<Link href={"/" as Route} className="underline text-primary-500">
 								{" "}
-								{tc("messageOnLinkedin")}
+								{tCommon("messageOnLinkedin")}
 							</Link>
 							<Button variant="solid" size="lg" className="w-1/2">
-								{tc("bookACall")}
+								{tCommon("bookACall")}
 							</Button>
 						</div>
 					</div>
@@ -98,10 +101,10 @@ const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }
 			<section className="bg-primary-500 py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
 				<section className="container mx-auto">
 					<h2 className="text-white text-4xl text-center font-semibold mb-3">
-						{t("bookCounseling")}
+						{tCareers("bookCounseling")}
 					</h2>
 					<p className="text-center text-white/70">
-						{t("counselingDescription")}
+						{tCareers("counselingDescription")}
 					</p>
 					<StaggerContainer className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
 						{mentors.map((mentor) => (
