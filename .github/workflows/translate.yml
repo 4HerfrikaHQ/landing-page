@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths: [messages/en.json]
+  workflow_dispatch:
 
 jobs:
   translate:
