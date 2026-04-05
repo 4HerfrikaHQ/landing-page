@@ -6,12 +6,16 @@ export function Field({
 	type = "text",
 	required,
 	defaultValue,
+	value,
+	onChange,
 }: {
 	label: string;
 	name: string;
 	type?: string;
 	required?: boolean;
 	defaultValue?: string;
+	value?: string;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 	return (
 		<div className="flex flex-col gap-1.5">
@@ -24,6 +28,8 @@ export function Field({
 				type={type}
 				required={required}
 				defaultValue={defaultValue}
+				value={value}
+				onChange={onChange}
 				className="h-9 text-sm"
 			/>
 		</div>

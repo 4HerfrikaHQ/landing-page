@@ -12,7 +12,7 @@ import {
 import { format, parse } from "date-fns";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import type { MentorWithAvailability } from "../_actions";
+import { DbMentorWithAvailability } from "@/src/db/schema/tables"
 
 function formatTime(timeString: string) {
 	try {
@@ -24,7 +24,7 @@ function formatTime(timeString: string) {
 	}
 }
 
-export function MentorCard({ mentor }: { mentor: MentorWithAvailability }) {
+export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	const t = useTranslations("careers");
 	const tc = useTranslations("common");
 	const displayName = mentor.nickname || mentor.name;
