@@ -1,0 +1,1 @@
+ALTER TABLE "mentors" ADD COLUMN "active" boolean DEFAULT false NOT NULL;
