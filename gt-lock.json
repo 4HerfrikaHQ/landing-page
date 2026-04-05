@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "branchId": "",
+  "entries": [
+    {
+      "fileId": "5d9e5048516ec2fe83ca06813e79c3b8b44c6c96294f25c7311db311e28eeaee",
+      "versionId": "7662278c7fa95cdcf3cd6bde0c6fa9f2594fe37b67c993ff84a8f7f4fc98d0e2",
+      "translations": {
+        "fr": {
+          "updatedAt": "2026-04-04T09:50:46.891Z",
+          "fileName": "messages/fr.json",
+          "postProcessHash": "0ed932822428496c4977b6f6f18b1eb5e03cacad9f793b82f2f6396c05e35b90"
+        }
+      },
+      "fileName": "messages/en.json",
+      "staged": false
+    }
+  ]
+}
