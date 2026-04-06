@@ -153,20 +153,11 @@ export async function toggleMentorActive(
 	id: string,
 	active: boolean,
 ): Promise<{ error?: string }> {
-	// If trying to activate, check that all required details are filled
 	if (active) {
-		const mentor = await db
-			.select({
-				name: schema.mentors.name,
-				position: schema.mentors.position,
-				image: schema.mentors.image,
-				bio: schema.mentors.bio,
-				linkedin_url: schema.mentors.linkedin_url,
-			})
-			.from(schema.mentors)
-			.where(eq(schema.mentors.id, id))
-			.limit(1)
-			.then((rows) => rows[0]);
+    const mentor = await db.query.mentors.findFirst({
+      where: eq(schema.mentors.id, id),
+      with: { availability: true },
+    })
 
 		if (!mentor) {
 			return { error: "Mentor not found" };
@@ -176,7 +167,13 @@ export async function toggleMentorActive(
 			return {
 				error: "Cannot activate mentor. Please ensure name, position, image, bio, and LinkedIn URL are all set.",
 			};
-		}
+    }
+
+    if (mentor.availability.length === 0) {
+      return {
+        error: "Cannot activate a mentor without any availability slots"
+      }
+    }
 	}
 
 	await db
