@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useTransition } from "react";
 import { toggleMentorActive } from "../_actions";
+import { toast } from "sonner";
 
 export function ToggleActiveButton({
 	id,
@@ -20,7 +21,11 @@ export function ToggleActiveButton({
 
 	function handleChange(checked: boolean) {
 		startTransition(async () => {
-			await toggleMentorActive(id, checked);
+      const { error } = await toggleMentorActive(id, checked);
+
+      if (error) {
+        toast.error(error)
+      }
 		});
 	}
 
