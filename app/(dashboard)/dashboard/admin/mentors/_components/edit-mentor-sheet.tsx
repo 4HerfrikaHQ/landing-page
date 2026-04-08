@@ -29,7 +29,7 @@ type Mentor = {
 export function EditMentorSheet({
 	mentor,
 	open,
-	onOpenChange,
+	onOpenChange: _onOpenChange,
 }: {
 	mentor: Mentor;
 	open: boolean;
@@ -45,16 +45,18 @@ export function EditMentorSheet({
 		if (tab === "availability" && availabilitySlots === null) {
 			getAvailability(mentor.id).then(setAvailabilitySlots);
 		}
-	}, [tab, mentor.id, availabilitySlots]);
+  }, [tab, mentor.id, availabilitySlots]);
 
-	// Reset state when sheet closes
-	useEffect(() => {
-		if (!open) {
-			setTab("details");
+  const onOpenChange = (open: boolean) => {
+    if (open === false) {
+      // Reset state
+      setTab("details");
 			setError(null);
 			setAvailabilitySlots(null);
-		}
-	}, [open]);
+    }
+
+    return _onOpenChange(open)
+	}
 
 	function handleSubmit(formData: FormData) {
 		setError(null);
