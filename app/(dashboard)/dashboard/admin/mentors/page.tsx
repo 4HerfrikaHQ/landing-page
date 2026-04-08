@@ -19,7 +19,7 @@ export default async function MentorsPage({
 	searchParams,
 }: {
 	searchParams: Promise<{ q?: string; status?: "active" | "inactive" }>;
-}) {
+  }) {
 	const user = await currentDbUser();
 	if (user.role !== "super_admin") unauthorized();
 
