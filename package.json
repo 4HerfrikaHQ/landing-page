@@ -54,6 +54,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^11.0.0",
+    "@vercel/config": "^0.2.1",
     "drizzle-kit": "^0.31.10",
     "lint-staged": "^15.2.10",
     "postcss": "^8",
