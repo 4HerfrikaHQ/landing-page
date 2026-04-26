@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/auth";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { and, eq, ilike, or, SQL } from "drizzle-orm";
@@ -108,45 +108,9 @@ export async function uploadMentorImage(
 	mentorId: string,
 	formData: FormData,
 ): Promise<{ url?: string; error?: string }> {
-	try {
-		const file = formData.get("file") as File;
-
-		console.log("[uploadMentorImage] file:", file?.name, file?.size, file?.type);
-		console.log("[uploadMentorImage] supabase url:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-		console.log("[uploadMentorImage] service key set:", !!process.env.SUPABASE_SERVICE_ROLE_KEY);
-
-		if (!file?.name) return { error: "No file received." };
-
-		const ext = file.name.split(".").pop();
-		const path = `${mentorId}.${ext}`;
-
-		const adminClient = createAdminClient(
-			process.env.NEXT_PUBLIC_SUPABASE_URL!,
-			process.env.SUPABASE_SERVICE_ROLE_KEY!,
-		);
-
-		const { error: uploadError } = await adminClient.storage
-			.from("mentor-avatars")
-			.upload(path, file, { upsert: true, contentType: file.type });
-
-		if (uploadError) {
-			console.error("[uploadMentorImage] storage error:", uploadError);
-			return { error: uploadError.message };
-		}
-
-		const { data } = adminClient.storage.from("mentor-avatars").getPublicUrl(path);
-
-		await db
-			.update(schema.mentors)
-			.set({ image: data.publicUrl })
-			.where(eq(schema.mentors.id, mentorId));
-
-		revalidatePath("/dashboard/admin/mentors");
-		return { url: data.publicUrl };
-	} catch (err) {
-		console.error("[uploadMentorImage] uncaught:", err);
-		return { error: String(err) };
-	}
+	const result = await uploadMentorAvatar(mentorId, formData);
+	if (!result.error) revalidatePath("/dashboard/admin/mentors");
+	return result;
 }
 
 export async function toggleMentorActive(

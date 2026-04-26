@@ -1,5 +1,6 @@
 import { pgTable, timestamp, uuid, text, boolean } from "drizzle-orm/pg-core";
 import { users } from "./users";
+import { DbAvailability } from "./availability";
 
 export const mentors = pgTable("mentors", {
 	id: uuid("id").primaryKey().defaultRandom(),
@@ -18,3 +19,7 @@ export const mentors = pgTable("mentors", {
 
 export type DbMentor = typeof mentors.$inferSelect;
 export type DbMentorInsert = typeof mentors.$inferInsert;
+
+export type DbMentorWithAvailability = DbMentor & {
+  availability: DbAvailability[]
+};
