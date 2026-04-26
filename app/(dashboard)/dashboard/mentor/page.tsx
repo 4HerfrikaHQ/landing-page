@@ -11,12 +11,12 @@ export default async function MentorDashboardPage() {
 				<p className="text-sm text-gray-500">
 					Your mentor profile hasn't been set up yet. Contact an admin.
 				</p>
-		<div>
-			<h1>Mentor Dashboard</h1>
-			<p>Welcome, {user.role}</p>
-		</div>
-	);
-}
+      <div>
+        <h1>Mentor Dashboard</h1>
+        <p>Welcome, {user.role}</p>
+      </div>
+    );
+  }
 
 	return <MentorProfile user={user} mentor={mentor} />;
 }
