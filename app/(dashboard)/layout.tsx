@@ -6,5 +6,6 @@ export default async function DashboardLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	await currentUser();
 	return <TooltipProvider>{children}</TooltipProvider>;
 }
