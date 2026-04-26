@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { currentUser } from "@/src/auth";
 
 export default async function DashboardLayout({
@@ -6,5 +7,5 @@ export default async function DashboardLayout({
 	children: React.ReactNode;
 }) {
 	await currentUser();
-	return <>{children}</>;
+	return <TooltipProvider>{children}</TooltipProvider>;
 }

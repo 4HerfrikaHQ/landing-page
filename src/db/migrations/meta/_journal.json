@@ -15,6 +15,27 @@
       "when": 1775213428426,
       "tag": "0001_little_lake",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775217843724,
+      "tag": "0002_aspiring_rocket_racer",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775218753958,
+      "tag": "0003_wandering_ego",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775219929800,
+      "tag": "0004_mentor_avatars_bucket",
+      "breakpoints": true
     }
   ]
 }
