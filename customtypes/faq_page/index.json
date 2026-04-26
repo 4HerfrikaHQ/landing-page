@@ -1,0 +1,71 @@
+{
+  "format": "page",
+  "id": "faq_page",
+  "label": "FAQ Page",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "header_image": {
+        "type": "Image",
+        "config": {
+          "label": "Header IMage",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "frequently_asked_questions": {
+        "type": "Group",
+        "config": {
+          "label": "Frequently Asked Questions",
+          "repeat": true,
+          "fields": {
+            "section": {
+              "type": "Link",
+              "config": {
+                "label": "FAQ Section",
+                "select": "document",
+                "customtypes": ["faq"],
+                "repeat": false
+              }
+            }
+          }
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {}
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Title",
+          "placeholder": "A title of the page used for social media and search engines"
+        }
+      },
+      "meta_description": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Description",
+          "placeholder": "A brief summary of the page"
+        }
+      },
+      "meta_image": {
+        "type": "Image",
+        "config": {
+          "label": "Meta Image",
+          "constraint": {
+            "width": 2400,
+            "height": 1260
+          },
+          "thumbnails": []
+        }
+      }
+    }
+  }
+}

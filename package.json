@@ -9,7 +9,7 @@
     "lint": "lint-staged",
     "format": "biome format . --write",
     "lint:fix": "bun lint --apply",
-    "slicemachine": "start-slicemachine",
+    "prismic:slicemachine": "start-slicemachine",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",

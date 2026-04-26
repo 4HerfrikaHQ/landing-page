@@ -1,0 +1,46 @@
+{
+  "id": "blog_content",
+  "type": "SharedSlice",
+  "name": "BlogContent",
+  "description": "BlogContent",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Paragraph",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "text": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Text",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,strong,em,heading1,heading2,heading3,o-list-item,list-item"
+          }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "quote",
+      "name": "Quote",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "text": {
+          "type": "Text",
+          "config": {
+            "label": "Text",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
