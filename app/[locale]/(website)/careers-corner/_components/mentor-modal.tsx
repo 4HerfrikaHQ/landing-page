@@ -9,14 +9,14 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { format, parseISO } from "date-fns";
+import { format, parse } from "date-fns";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import type { Mentor } from "../_schema";
+import type { MentorWithAvailability } from "../_actions";
 
 function formatTime(timeString: string) {
 	try {
-		const date = parseISO(timeString);
+		const date = parse(timeString, "HH:mm:ss", new Date());
 		return format(date, "h:mm a");
 	} catch (error) {
 		console.log("Error parsing time:", error);
@@ -24,7 +24,7 @@ function formatTime(timeString: string) {
 	}
 }
 
-export function MentorCard({ mentor }: { mentor: Mentor }) {
+export function MentorCard({ mentor }: { mentor: MentorWithAvailability }) {
 	const t = useTranslations("careers");
 	const tc = useTranslations("common");
 	const displayName = mentor.nickname || mentor.name;
@@ -34,10 +34,11 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 			<div className="h-full w-full bg-secondary-500 bg-opacity-20 p-2 rounded-md hover:shadow-lg transition-shadow duration-300">
 				<div className="overflow-hidden rounded-md">
 					<Image
-						src={mentor.image}
+						src={mentor.image ?? ""}
 						alt={mentor.name}
 						width={700}
 						height={1000}
+						unoptimized={mentor.image?.includes("localhost") ?? true}
 						className="hover:scale-105 h-64 w-full object-cover object-top transition-transform duration-300"
 					/>
 				</div>
@@ -73,17 +74,12 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 					<div className="flex justify-center">
 						<div className="w-full max-w-md rounded-md shadow-md relative aspect-3/4 h-75 sm:h-100">
 							<Image
-								src={mentor.image}
+								src={mentor.image ?? ""}
 								alt={mentor.name}
 								fill
 								sizes="(max-width: 768px) 100vw, 400px"
 								className="rounded-md object-cover object-top"
-								quality={100}
-								priority
-								style={{
-									imageRendering: "crisp-edges",
-									WebkitFontSmoothing: "antialiased",
-								}}
+								unoptimized={mentor.image?.includes("localhost") ?? true}
 							/>
 						</div>
 					</div>
@@ -102,8 +98,8 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 									</h4>
 									<p className="text-foreground text-xs">
 										{mentor.availability.map((slot, index) => (
-											<span key={formatTime(slot.time.start)}>
-												{`${slot.day}, ${formatTime(slot.time.start)} - ${formatTime(slot.time.end)} ${slot.timezone}`}
+											<span key={formatTime(slot.start_time)}>
+												{`${slot.day}, ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)} ${slot.timezone}`}
 												{index < mentor.availability.length - 2 ? ", " : ""}
 												{index === mentor.availability.length - 2
 													? " and "
@@ -135,7 +131,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 						<div className="flex flex-col items-center sm:flex-row gap-4 sm:gap-6 mt-6">
 							<Button
 								variant="link"
-								href={mentor.linkedinUrl || "/"}
+								href={mentor.linkedin_url || "/"}
 								isExternal
 							>
 								{tc("messageOnLinkedin")}
@@ -143,7 +139,7 @@ export function MentorCard({ mentor }: { mentor: Mentor }) {
 							<Button
 								variant="solid"
 								size="lg"
-								href={mentor.bookingUrl || "/"}
+								href={""}
 								isExternal
 								className="w-full sm:w-auto"
 							>
