@@ -10,6 +10,7 @@ import { BlogSection } from "./_components/blog-section";
 import { Suspense } from "react";
 import { getBlogPosts, getCategories } from "./_actions";
 import { Button } from "@/components/ui/button";
+import { SubmitStoryModal } from "./_components/submit-story-modal";
 
 const circle = (size: "big" | "small", extra: string) => {
 	const base = "absolute rounded-full border-[#F13EA8]";
@@ -111,7 +112,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 						We welcome voices from across Africa. Share your experience, insights, or
 						perspective with our community.
 					</p>
-					<button>Submit story</button>
+					<SubmitStoryModal categories={categories} />
 				</div>
 			</section>
 		</>
