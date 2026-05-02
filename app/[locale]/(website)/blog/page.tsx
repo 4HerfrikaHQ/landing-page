@@ -11,6 +11,15 @@ import { SubmitStoryModal } from "./_components/submit-story-modal";
 import { getBlogPosts, getCategories } from "./_actions";
 import { Button } from "@/components/ui/button";
 
+const circle = (size: "big" | "small", extra: string) => {
+	const base = "absolute rounded-full border-[#F13EA8]";
+	const variant =
+		size === "big"
+			? "size-50 border-50 sm:border-[100px]"
+			: "size-35 border-[30px] sm:border-[60px]";
+	return `${base} ${variant} ${extra}`;
+};
+
 export const metadata: Metadata = {
 	title: "The Pink Blog — Stories of Women Leading Change in Africa",
 	description:
@@ -65,10 +74,10 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 			<BlogSection posts={posts} categories={categories} />
 
 			<section className="my-16 h-[420px] sm:h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
-				<div className="absolute top-0 -translate-y-[50%] left-1 sm:left-9 size-[200px] sm:size-[470px] rounded-full border-[50px] sm:border-[100px] border-[#F13EA8]" />
-				<div className="absolute top-0 -translate-y-[50%] right-4 sm:right-50 sm:right-[400px] size-[140px] sm:size-[262px] rounded-full border-[30px] sm:border-[60px] border-[#F13EA8]" />
-				<div className="absolute bottom-0 left-4 sm:left-32 sm:left-64 translate-y-[50%] size-[140px] sm:size-[270px] h-[140px] sm:h-[262px] rounded-full border-[30px] sm:border-[60px] border-[#F13EA8]" />
-				<div className="absolute bottom-0 right-4 sm:right-12 size-[250px] sm:size-[480px] translate-y-[50%] rounded-full border-[50px] sm:border-[100px] border-[#F13EA8]" />
+				<div className={circle("big", "top-0 -translate-y-[50%] left-1 sm:left-9 sm:size-[470px]")} />
+				<div className={circle("small", "top-0 -translate-y-[50%] right-4 sm:right-50 sm:size-[262px]")} />
+				<div className={circle("small", "bottom-0 left-4 sm:left-64 translate-y-[50%] sm:size-[270px] h-[140px] sm:h-[262px]")} />
+				<div className={circle("big", "bottom-0 right-4 sm:right-12 translate-y-[50%] sm:size-120")} />
 
         <div className="relative z-10 flex flex-col justify-center items-center text-center max-w-[733px] mx-auto h-full">
          	<h2 className="text-[32px] sm:text-[56px] font-bold leading-[1.4] text-white mb-4 sm:mb-6">
