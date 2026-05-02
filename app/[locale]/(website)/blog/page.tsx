@@ -111,7 +111,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 						We welcome voices from across Africa. Share your experience, insights, or
 						perspective with our community.
 					</p>
-					<SubmitStoryModal categories={categories} />
+					<button>Submit story</button>
 				</div>
 			</section>
 		</>
