@@ -16,7 +16,12 @@ export function BlogSection({ posts, categories }: Props) {
     defaultValue: "all",
   });
 
-  //todo: only show categories that have posts
+  const usedCategoryUids = new Set(
+    posts.map((post) => (post.data.category as { uid?: string })?.uid).filter(Boolean)
+  );
+
+  const visibleCategories = categories.filter((cat) => usedCategoryUids.has(cat.uid));
+
   const filtered = activeCategory === "all"
     ? posts
     : posts.filter((post) => {
@@ -46,7 +51,7 @@ export function BlogSection({ posts, categories }: Props) {
         >
           All
         </button>
-        {categories.map((cat) => (
+        {visibleCategories.map((cat) => (
           <button
             key={cat.uid}
             type="button"
