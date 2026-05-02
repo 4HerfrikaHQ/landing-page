@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { FeaturedStory } from "@/components/featured-story";
 import { BlogSection } from "./_components/blog-section";
+import { Suspense } from "react";
 import { getBlogPosts, getCategories } from "./_actions";
 import { Button } from "@/components/ui/button";
 
@@ -70,7 +71,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 				</section>
 			)}
 
-			<BlogSection posts={posts} categories={categories} />
+			<Suspense><BlogSection posts={posts} categories={categories} /></Suspense>
 
 			<section className="my-16 h-[420px] sm:h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
 				<div className={circle("big", "top-0 -translate-y-[50%] left-1 sm:left-9 sm:size-[470px]")} />
