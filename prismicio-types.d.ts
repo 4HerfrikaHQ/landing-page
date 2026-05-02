@@ -337,10 +337,11 @@ interface BlogPostDocumentData {
   cover_image: prismic.ImageField<never>;
 
   /**
-   * Submitted Story field in *Blog Post*
+   * Was Submitted On Website field in *Blog Post*
    *
    * - **Field Type**: Boolean
    * - **Placeholder**: *None*
+   * - **Default Value**: false
    * - **API ID Path**: blog_post.submitted_story
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/fields/boolean
