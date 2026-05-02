@@ -7,7 +7,6 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { FeaturedStory } from "@/components/featured-story";
 import { BlogSection } from "./_components/blog-section";
-import { SubmitStoryModal } from "./_components/submit-story-modal";
 import { getBlogPosts, getCategories } from "./_actions";
 import { Button } from "@/components/ui/button";
 
