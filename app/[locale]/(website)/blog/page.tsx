@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import { FadeIn } from "@/components/motion";
-import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import Image from "next/image";
 import { hasLocale } from "next-intl";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { Suspense } from "react";
-import BlogBody from "./_components/blog-body";
-import { GalleryGrid } from "./_components/gallery-grid";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { FeaturedStory } from "@/components/featured-story";
+import { BlogSection } from "./_components/blog-section";
+import { SubmitStoryModal } from "./_components/submit-story-modal";
+import { getBlogPosts, getCategories } from "./_actions";
 
 export const metadata: Metadata = {
 	title: "The Pink Blog — Stories of Women Leading Change in Africa",
@@ -21,79 +20,93 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) return null;
 	setRequestLocale(locale as Locale);
-	const t = await getTranslations("blog");
+
+	const [posts, categories] = await Promise.all([getBlogPosts(), getCategories()]);
+	const featured = posts[0];
+
 	return (
 		<>
-			{/* Hero Section */}
-			<div className="bg-muted py-12 md:py-16 lg:py-20">
-				<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="mx-auto w-full lg:mx-0">
-						<FadeIn>
-							<h2 className="text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-								{t("greeting")}
-							</h2>
-							<p className="mt-3 text-xl leading-8 text-muted-foreground font-semibold">
-								{t("welcome")}{" "}
-								<span className="text-primary-500">
-									{t("blogName")}
-								</span>
-							</p>
-							<p className="text-xl font-light text-foreground mt-2">
-								{t("description")}
-							</p>
-						</FadeIn>
-						<FadeIn delay={0.2}>
-							<div className="flex gap-4 mt-6 border border-primary-500 rounded-[20px] items-center px-8">
-								<Search
-									className="h-5.5 w-5.5 text-muted-foreground"
-									strokeWidth={2}
-								/>
-								<input
-									type="text"
-									className="py-4 flex-1 rounded-[20px] bg-transparent outline-0"
-									placeholder={t("searchPlaceholder")}
-								/>
-							</div>
-						</FadeIn>
-						<FadeIn delay={0.3}>
-							<Image
-								src="/assets/blog-hero.png"
-								width={1320}
-								height={429}
-								alt="blog-img"
-								className="mt-16 hidden lg:block"
-								loading="eager"
-							/>
-						</FadeIn>
-					</div>
-				</div>
-			</div>
-
-			{/* Blog Posts with Category Tabs */}
-			<Suspense>
-				<BlogBody />
-			</Suspense>
-
-			{/* Gallery Section */}
-			<GalleryGrid />
-
-			{/* CTA Section */}
-			<div className="w-full bg-muted py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
-				<div className="container mx-auto flex flex-col items-center gap-8">
-					<p className="text-muted-foreground text-xl font-medium text-center">
-						To Partner and Donate to this organization, Please send us a mail. You
-						can also make direct donations.
+			<section
+				className="-mt-16 lg:-mt-[90px] pt-16 lg:pt-[90px] flex flex-col items-center justify-center text-center px-4 min-h-[580px]"
+				style={{
+					background: "linear-gradient(180deg, rgba(236,0,140,0.18) 0%, rgba(236,0,140,0.08) 35%, rgba(255,255,255,1) 65%)",
+				}}
+			>
+				<div className="max-w-3xl mx-auto flex flex-col items-center gap-6 mt-16">
+					<h1 className="text-5xl lg:text-[64px] font-bold leading-[1.1] text-foreground">
+						Stories, Insights &amp; Perspectives
+					</h1>
+					<p className="text-lg lg:text-2xl text-foreground/60 max-w-2xl">
+						Exploring the realities, challenges, and opportunities shaping women and girls
+						across Africa — through stories, opinions, and lived experiences.
 					</p>
-					<div className="flex flex-col md:flex-row gap-6">
-						<Button variant="outline" size="lg" href="/contact-us">
-							Send a Mail
-						</Button>
-						<Button size="lg" href="/donate">
-							Pay Directly
-						</Button>
-					</div>
+					<Link
+						href="#blog-grid"
+						className="inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:!no-underline hover:brightness-90 transition-all"
+					>
+						Read Latest Stories
+						<ArrowRight className="size-5" />
+					</Link>
 				</div>
-			</div>
+			</section>
+
+			{featured && (
+				<section className="container mx-auto px-4 sm:px-6 lg:px-8 py-18">
+					<FeaturedStory
+						uid={featured.uid ?? ""}
+						title={featured.data.title ?? ""}
+						description={featured.data.description ?? ""}
+						imageUrl={featured.data.cover_image?.url ?? ""}
+					/>
+				</section>
+			)}
+
+			<BlogSection posts={posts} categories={categories} />
+
+			<section className="my-16 h-[600px] relative overflow-hidden rounded-[40px] bg-[rgba(236,0,140,0.7)] px-8 lg:px-24 py-20">
+				<div className="absolute top-0 -translate-y-[50%] left-9 size-[470px] rounded-full border-[100px] border-[rgba(236,0,140,0.2)]" />
+				<div className="absolute top-0 -translate-y-[50%] right-[400px] size-[262px] rounded-full border-[60px] border-[rgba(236,0,140,0.2)]" />
+				<div className="absolute bottom-0 left-64 translate-y-[50%] size-[270px] h-[262px] rounded-full border-[60px] border-[rgba(236,0,140,0.2)]" />
+				<div className="absolute bottom-0 right-12 size-[480px] translate-y-[50%] rounded-full border-[100px] border-[rgba(236,0,140,0.2)]" />
+
+				<div className="relative z-10 flex flex-col items-center gap-8 text-center max-w-[733px] mx-auto">
+					<div className="flex flex-col gap-6">
+						<h2 className="text-[56px] font-bold leading-[1.4] text-white">
+							Stay Connected
+						</h2>
+						<p className="text-lg text-white">
+							Get stories, opportunities, and insights delivered directly to you.
+						</p>
+					</div>
+					<form className="flex w-full gap-2">
+						<input
+							type="email"
+							placeholder="Enter your email"
+							className="flex-1 h-14 rounded-full bg-white px-6 text-base outline-none text-foreground placeholder:text-[#979797]"
+						/>
+						<button
+							type="submit"
+							className="h-14 rounded-full bg-primary-700 text-white px-8 text-base font-medium hover:brightness-110 transition-all shrink-0 flex items-center gap-2"
+						>
+							Subscribe
+							<ArrowRight className="size-5" />
+						</button>
+					</form>
+				</div>
+			</section>
+
+			<section className="pt-12 pb-20 px-4 text-center">
+				<div className="max-w-2xl mx-auto flex flex-col items-center">
+					<h2 className="text-4xl lg:text-[48px] font-semibold text-[#333333] pb-9">
+						Have a Story to Share?
+					</h2>
+					<p className="text-xl lg:text-2xl text-[#333333]/80 leading-relaxed pb-14">
+						We welcome voices from across Africa. Share your experience, insights, or
+						perspective with our community.
+					</p>
+					<SubmitStoryModal categories={categories} />
+				</div>
+			</section>
 		</>
 	);
 }

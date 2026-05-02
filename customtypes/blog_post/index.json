@@ -33,6 +33,13 @@
           "placeholder": ""
         }
       },
+      "description": {
+        "type": "Text",
+        "config": {
+          "label": "description",
+          "placeholder": ""
+        }
+      },
       "author": {
         "type": "Text",
         "config": {
