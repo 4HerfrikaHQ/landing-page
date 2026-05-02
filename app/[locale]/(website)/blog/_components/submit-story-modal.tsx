@@ -56,7 +56,7 @@ export function SubmitStoryModal({ categories }: Props) {
 		if (fileInputRef.current) fileInputRef.current.value = "";
 	}
 
-	if (state?.success && open) {
+	if (state && "success" in state && open) {
 		return (
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogTrigger
