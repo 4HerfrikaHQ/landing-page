@@ -64,27 +64,27 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 
 			<BlogSection posts={posts} categories={categories} />
 
-			<section className="my-16 h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-8 lg:px-24 py-20">
-				<div className="absolute top-0 -translate-y-[50%] left-9 size-[470px] rounded-full border-[100px] border-[#F13EA8]" />
-				<div className="absolute top-0 -translate-y-[50%] right-[400px] size-[262px] rounded-full border-[60px] border-[#F13EA8]" />
-				<div className="absolute bottom-0 left-64 translate-y-[50%] size-[270px] h-[262px] rounded-full border-[60px] border-[#F13EA8]" />
-				<div className="absolute bottom-0 right-12 size-[480px] translate-y-[50%] rounded-full border-[100px] border-[#F13EA8]" />
+			<section className="my-16 h-[420px] sm:h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
+				<div className="absolute top-0 -translate-y-[50%] left-1 sm:left-9 size-[200px] sm:size-[470px] rounded-full border-[50px] sm:border-[100px] border-[#F13EA8]" />
+				<div className="absolute top-0 -translate-y-[50%] right-4 sm:right-50 sm:right-[400px] size-[140px] sm:size-[262px] rounded-full border-[30px] sm:border-[60px] border-[#F13EA8]" />
+				<div className="absolute bottom-0 left-4 sm:left-32 sm:left-64 translate-y-[50%] size-[140px] sm:size-[270px] h-[140px] sm:h-[262px] rounded-full border-[30px] sm:border-[60px] border-[#F13EA8]" />
+				<div className="absolute bottom-0 right-4 sm:right-12 size-[250px] sm:size-[480px] translate-y-[50%] rounded-full border-[50px] sm:border-[100px] border-[#F13EA8]" />
 
         <div className="relative z-10 flex flex-col justify-center items-center text-center max-w-[733px] mx-auto h-full">
-         	<h2 className="text-[56px] font-bold leading-[1.4] text-white mb-6">
+         	<h2 className="text-[32px] sm:text-[56px] font-bold leading-[1.4] text-white mb-4 sm:mb-6">
 							Stay Connected
 					</h2>
-					<p className="text-lg text-white mb-20">
+					<p className="text-base sm:text-lg text-white mb-10 sm:mb-20">
 						Get stories, opportunities, and insights delivered directly to you.
 					</p>
-					<form className="flex w-full gap-4">
+					<form className="flex flex-col sm:flex-row w-full max-w-[420px] sm:max-w-none gap-3 sm:gap-4">
 						<input
 							type="email"
 							placeholder="Enter your email"
-							className="flex-1 h-14 rounded-full bg-white px-6 text-base outline-none text-foreground placeholder:text-[#979797]"
+							className="sm:flex-1 shrink-0 h-14 rounded-full bg-white px-6 text-base outline-none text-foreground placeholder:text-[#979797]"
 						/>
 						<Button
-							className="bg-[#EC008C] gap-2"
+							className="bg-[#EC008C] gap-2 w-full sm:w-auto"
 						>
 							Subscribe
 							<ArrowRight className="size-5" />
