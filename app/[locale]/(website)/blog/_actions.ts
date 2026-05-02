@@ -121,11 +121,8 @@ export async function submitStory(
 				title,
 				description,
 				author: name,
-				// Migration API only needs `{ id }` — library reuses read types which expect full ImageField shape
-				cover_image: (imageId ? { id: imageId } : {}) as any,
-				// Migration API takes a simple link object — library reuses read types which expect FilledContentRelationshipField
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				category: { link_type: "Document", id: categoryId } as any,
+				cover_image: imageId ? { id: imageId } : {},
+				category: { link_type: "Document", id: categoryId },
 				submitted_story: true,
 				slices: [
 					{
@@ -140,7 +137,8 @@ export async function submitStory(
 
 		console.log("[submit-story] Creating Prismic document:", JSON.stringify(docData, null, 2));
 
-		migration.createDocument(docData, `Submitted: ${title}`);
+		// Migration API accepts simpler write shapes than the library's read types
+		// (ImageField → { id }, ContentRelationshipField → { link_type, id }, etc.)
 		let documentId: string | null = null;
 
 		await writeClient.migrate(migration, {
