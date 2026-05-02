@@ -28,7 +28,7 @@ export function BlogSection({ posts, categories }: Props) {
     const isActive = activeCategory === category
 
     return cn(
-      "rounded-full h-12 px-6 text-base font-medium transition-colors duration-200 cursor-pointer",
+      "rounded-full h-9 sm:h-12 px-4 sm:px-6 text-sm sm:text-base font-medium transition-colors duration-200 cursor-pointer",
       {
         "bg-primary-500 text-white": isActive,
         "bg-white border border-[#E0E0E0] text-[#636363] hover:border-primary-500 hover:text-primary-500": !isActive
