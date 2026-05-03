@@ -11,6 +11,8 @@ import { components } from "@/slices";
 import { computeReadTime, formatPrismicDate, getBlogPosts } from "../_actions";
 import { getBlogPost, getRelatedPosts, formatPrismicDateShort } from "./_actions";
 
+export const revalidate = 86400;
+
 export async function generateStaticParams() {
 	const posts = await getBlogPosts();
 	return posts.map((post) => ({ slug: post.uid }));
