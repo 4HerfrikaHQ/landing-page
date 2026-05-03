@@ -9,7 +9,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
 const buttonVariants = cva(
-	"inline-flex shrink-0 items-center justify-center font-normal whitespace-nowrap transition-all duration-300 outline-none select-none hover:no-underline disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
+	"inline-flex shrink-0 items-center justify-center font-normal whitespace-nowrap transition-all duration-300 outline-none select-none hover:no-underline! disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
 	{
 		variants: {
 			variant: {
