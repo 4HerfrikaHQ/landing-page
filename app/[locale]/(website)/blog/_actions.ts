@@ -115,8 +115,10 @@ export async function submitStory(
 
 		console.log("[submit-story] Creating Prismic document:", JSON.stringify(docData, null, 2));
 
-		// Migration API accepts simpler write shapes than the library's read types
-		// (ImageField → { id }, ContentRelationshipField → { link_type, id }, etc.)
+		// Migration API write shapes are looser than the library's read types
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		migration.createDocument(docData as any, `Submitted: ${title}`);
+
 		let documentId: string | null = null;
 
 		await writeClient.migrate(migration, {
@@ -125,7 +127,12 @@ export async function submitStory(
 					documentId = (event.data as any)?.document?.document?.id ?? null;
 				}
 			},
-    });
+		});
+
+		if (!documentId) {
+			console.error("[submit-story] Document was not created — no ID returned from migration");
+			return { error: "Failed to create your story draft. Please try again." };
+		}
 
 		const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -143,11 +150,7 @@ export async function submitStory(
 				<blockquote style="border-left:3px solid #ec008c;padding-left:12px;color:#555">
 					${story.slice(0, 500)}${story.length > 500 ? "…" : ""}
 				</blockquote>
-				<p>${
-					documentId
-						? `<a href="https://4herfrika-admin.prismic.io/builder/pages/${documentId}">Open draft in Prismic</a>`
-						: ""
-				}</p>
+				<p><a href="https://4herfrika-admin.prismic.io/builder/pages/${documentId}">Open draft in Prismic</a></p>
 			`,
 		});
 
