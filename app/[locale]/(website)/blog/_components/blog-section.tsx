@@ -4,7 +4,7 @@ import { BlogCard } from "@/components/blog-card";
 import { cn } from "@/utils/cn";
 import { useQueryState } from "nuqs";
 import type { Content } from "@prismicio/client";
-import { computeReadTime, formatPrismicDate } from "../_actions";
+import { computeReadTime, formatPrismicDate } from "../_utils";
 
 type Props = {
   posts: Content.BlogPostDocument[];
