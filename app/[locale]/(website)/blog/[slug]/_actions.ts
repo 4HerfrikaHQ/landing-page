@@ -2,8 +2,11 @@ import type { Content } from "@prismicio/client";
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 
-export async function getBlogPost(uid: string) {
-	const client = createClient();
+export async function getBlogPost(
+	uid: string,
+	previewData?: Record<string, unknown>,
+) {
+	const client = createClient({ previewData });
 	return client.getByUID("blog_post", uid, {
 		fetchLinks: ["blog_category.name", "blog_category.uid"],
 	});
@@ -13,8 +16,9 @@ export async function getRelatedPosts(
 	currentId: string,
 	categoryId: string | null,
 	limit = 4,
+	previewData?: Record<string, unknown>,
 ): Promise<Content.BlogPostDocument[]> {
-	const client = createClient();
+	const client = createClient({ previewData });
 	const notCurrent = prismic.filter.not("document.id", currentId);
 
 	if (!categoryId) {

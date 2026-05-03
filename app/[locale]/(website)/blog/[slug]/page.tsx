@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Calendar, Clock, Share2, User } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SliceZone } from "@prismicio/react";
@@ -42,15 +43,18 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
 
+  const { isEnabled } = await draftMode();
+  const previewData = isEnabled ? {} : undefined;
+
   let post;
   try {
-    post = await getBlogPost(slug);
+    post = await getBlogPost(slug, previewData);
   } catch {
     notFound();
   }
 
   const category = post.data.category as { id?: string; data?: { name?: string } };
-  const related = await getRelatedPosts(post.id, category?.id ?? null);
+  const related = await getRelatedPosts(post.id, category?.id ?? null, 4, previewData);
 
   const tc = await getTranslations("common");
   const tn = await getTranslations("nav");
