@@ -1,0 +1,81 @@
+{
+  "format": "custom",
+  "id": "mentor",
+  "label": "Mentor",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "image": {
+        "type": "Image",
+        "config": {
+          "label": "Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "name": {
+        "type": "Text",
+        "config": {
+          "label": "Name",
+          "placeholder": ""
+        }
+      },
+      "role": {
+        "type": "Text",
+        "config": {
+          "label": "Role",
+          "placeholder": ""
+        }
+      },
+      "description": {
+        "type": "Text",
+        "config": {
+          "label": "Description",
+          "placeholder": ""
+        }
+      },
+      "links": {
+        "type": "Group",
+        "config": {
+          "label": "Links",
+          "repeat": true,
+          "fields": {
+            "title": {
+              "type": "Select",
+              "config": {
+                "label": "Title",
+                "placeholder": "",
+                "options": ["LinkedIn", "X", "Instagram"]
+              }
+            },
+            "link": {
+              "type": "Link",
+              "config": {
+                "label": "Link",
+                "placeholder": "",
+                "select": null,
+                "allowTargetBlank": false,
+                "allowText": false,
+                "repeat": false
+              }
+            }
+          }
+        }
+      },
+      "availability": {
+        "type": "Text",
+        "config": {
+          "label": "Availability",
+          "placeholder": ""
+        }
+      }
+    }
+  }
+}
