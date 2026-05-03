@@ -1,0 +1,150 @@
+{
+  "format": "page",
+  "id": "homepage",
+  "label": "Homepage",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "hero_image": {
+        "type": "Image",
+        "config": {
+          "label": "Hero Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "testimonials": {
+        "type": "Group",
+        "config": {
+          "label": "Testimonials",
+          "repeat": true,
+          "fields": {
+            "profile_picture": {
+              "type": "Image",
+              "config": {
+                "label": "Profile Picture",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
+            "testimonial": {
+              "type": "Text",
+              "config": {
+                "label": "Testimonial",
+                "placeholder": ""
+              }
+            },
+            "name": {
+              "type": "Text",
+              "config": {
+                "label": "Name",
+                "placeholder": ""
+              }
+            },
+            "role_and_location": {
+              "type": "Text",
+              "config": {
+                "label": "Role and Location",
+                "placeholder": "Founder, ReadEvolve"
+              }
+            },
+            "rating": {
+              "type": "Select",
+              "config": {
+                "label": "Rating",
+                "placeholder": "",
+                "options": ["1", "2", "3", "4", "5"]
+              }
+            }
+          }
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {}
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Title",
+          "placeholder": "A title of the page used for social media and search engines"
+        }
+      },
+      "meta_description": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Description",
+          "placeholder": "A brief summary of the page"
+        }
+      },
+      "meta_image": {
+        "type": "Image",
+        "config": {
+          "label": "Meta Image",
+          "constraint": {
+            "width": 2400,
+            "height": 1260
+          },
+          "thumbnails": []
+        }
+      }
+    },
+    "Become an Ambassador": {
+      "ambassador_description": {
+        "type": "Text",
+        "config": {
+          "label": "Description",
+          "placeholder": ""
+        }
+      },
+      "ambassador_link": {
+        "type": "Link",
+        "config": {
+          "label": "Register Link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": false,
+          "repeat": false
+        }
+      },
+      "ambassador_image": {
+        "type": "Image",
+        "config": {
+          "label": "Ambassador Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      }
+    },
+    "Statistics": {
+      "members": {
+        "type": "Number",
+        "config": {
+          "label": "Members",
+          "placeholder": ""
+        }
+      },
+      "campuses": {
+        "type": "Number",
+        "config": {
+          "label": "Campuses",
+          "placeholder": ""
+        }
+      },
+      "countries": {
+        "type": "Number",
+        "config": {
+          "label": "Countries",
+          "placeholder": ""
+        }
+      }
+    }
+  }
+}

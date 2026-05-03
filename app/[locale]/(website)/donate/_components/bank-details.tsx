@@ -104,7 +104,7 @@ export default function BankDetails() {
 				/>
 				<CopyRow
 					label={t("accountName")}
-					value="Ademide Adedamola"
+					value="Ademide Ademola"
 					field="name"
 					onCopy={copy}
 					copied={copied}

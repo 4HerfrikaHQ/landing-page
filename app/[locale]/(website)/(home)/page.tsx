@@ -67,7 +67,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 					</div>
 					<div className="flex items-center gap-3 sm:gap-4 mt-8 lg:mt-0 lg:gap-6 flex-wrap justify-center lg:justify-start">
 						<Button
-							href={"/" as Route}
+							href={"/projects" as Route}
 							variant="outline"
 							className="px-8 py-3 md:py-4 text-base md:text-xl"
 						>

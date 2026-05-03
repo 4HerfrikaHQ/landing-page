@@ -107,7 +107,8 @@ export const Navbar = async () => {
 									button.isPrimary
 										? "bg-primary-500 text-white hover:bg-primary-400"
 										: "border border-primary-500 text-primary-500 hover:bg-primary-50"
-								}`}
+                  }`}
+								target={button.name === "Join Us" ? "_blank" : "_self"}
 							>
 								{getActionName(button.name)}
 							</Link>

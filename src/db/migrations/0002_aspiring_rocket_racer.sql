@@ -1,0 +1,1 @@
+ALTER TABLE "mentors" DROP COLUMN "booking_url";
