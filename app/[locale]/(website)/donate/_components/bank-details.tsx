@@ -94,7 +94,7 @@ export default function BankDetails() {
 			<div className="bg-background px-6 py-8 space-y-6">
 				<CopyRow
 					label={t("accountNumber")}
-					value="6506487134"
+					value="1312053588"
 					field="account"
 					big
 					onCopy={copy}
