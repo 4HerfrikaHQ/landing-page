@@ -104,7 +104,7 @@ export default function BankDetails() {
 				/>
 				<CopyRow
 					label={t("accountName")}
-					value="Ademide Ademola"
+					value="4HERFRIKA YOUTH EMPOWERMENT INITIATIVE"
 					field="name"
 					onCopy={copy}
 					copied={copied}
