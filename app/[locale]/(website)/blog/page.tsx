@@ -102,18 +102,6 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 				</div>
 			</section>
 
-			<section className="pt-12 pb-20 px-4 text-center">
-				<div className="max-w-2xl mx-auto flex flex-col items-center">
-					<h2 className="text-4xl lg:text-[48px] font-semibold text-[#333333] pb-9">
-						Have a Story to Share?
-					</h2>
-					<p className="text-xl lg:text-2xl text-[#333333]/80 leading-relaxed pb-14">
-						We welcome voices from across Africa. Share your experience, insights, or
-						perspective with our community.
-					</p>
-					<button>Submit story</button>
-				</div>
-			</section>
-		</>
+			</>
 	);
 }
