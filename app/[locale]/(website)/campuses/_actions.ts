@@ -6,6 +6,7 @@ import { createClient } from "@/prismicio";
 import {
 	USE_STUBS,
 	stubGetCampus,
+	stubGetCampusCountries,
 	stubGetCampuses,
 	stubGetCampusesTotal,
 	stubSearchCampuses,
@@ -33,16 +34,19 @@ export async function searchCampuses({
 	page,
 	pageSize,
 	query,
+	country,
 }: {
 	page: number;
 	pageSize: number;
 	query?: string;
+	country?: string;
 }): Promise<Content.CampusDocument[]> {
-	if (USE_STUBS) return stubSearchCampuses({ page, pageSize, query });
+	if (USE_STUBS) return stubSearchCampuses({ page, pageSize, query, country });
 	const client = createClient();
 	const filters: string[] = [];
 	const trimmed = query?.trim();
 	if (trimmed) filters.push(prismic.filter.fulltext("document", trimmed));
+	if (country) filters.push(prismic.filter.at("my.campus.country", country));
 
 	const res = await client.getByType<Content.CampusDocument>("campus", {
 		filters,
@@ -51,6 +55,18 @@ export async function searchCampuses({
 		pageSize,
 	});
 	return res.results;
+}
+
+export async function getCampusCountries(): Promise<string[]> {
+	if (USE_STUBS) return stubGetCampusCountries();
+	const client = createClient();
+	const all = await client
+		.getAllByType<Content.CampusDocument>("campus")
+		.catch(() => []);
+	const set = new Set(
+		all.map((c) => c.data.country).filter((v): v is string => Boolean(v)),
+	);
+	return Array.from(set).sort();
 }
 
 export async function getCampusesTotal(): Promise<number> {

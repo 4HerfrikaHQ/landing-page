@@ -2,7 +2,7 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import type { Content } from "@prismicio/client";
 import { PrismicNextImage } from "@prismicio/next";
 import { PrismicRichText } from "@prismicio/react";
-import { Calendar, MapPin, User, Users } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -11,6 +11,19 @@ import { ProjectContent } from "../../projects/_components/project-content";
 import { getCampus, getCampuses } from "../_actions";
 import { OtherCampuses } from "../_components/other-campuses";
 import { QuickActions } from "../_components/quick-actions";
+
+function StatTile({ label, value }: { label: string; value: string }) {
+	return (
+		<div className="rounded-2xl border border-[#E0E0E0] bg-white p-5 md:p-6">
+			<dt className="text-xs font-medium uppercase tracking-wide text-primary-500">
+				{label}
+			</dt>
+			<dd className="mt-2 text-xl md:text-2xl font-semibold text-foreground leading-tight">
+				{value}
+			</dd>
+		</div>
+	);
+}
 
 export async function generateStaticParams() {
 	const campuses = await getCampuses().catch(() => []);
@@ -76,6 +89,12 @@ export default async function CampusPage({
 						<h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-foreground">
 							{name}
 						</h1>
+						{location && location !== name && (
+							<p className="text-base md:text-lg text-foreground/60 inline-flex items-center gap-2">
+								<MapPin className="h-4 w-4" aria-hidden />
+								{location}
+							</p>
+						)}
 
 						<div className="relative rounded-2xl overflow-hidden border border-border h-44 sm:h-56 md:h-90 lg:h-110">
 							<PrismicNextImage
@@ -87,56 +106,36 @@ export default async function CampusPage({
 							/>
 						</div>
 
-						<ul className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-							{location && (
-								<li className="inline-flex items-center gap-2">
-									<MapPin className="h-4 w-4" aria-hidden />
-									<span>{location}</span>
-								</li>
-							)}
-							{lead_ambassador && (
-								<li className="inline-flex items-center gap-2">
-									<User className="h-4 w-4" aria-hidden />
-									<span>
-										{t("ambassadorLabel")}: {lead_ambassador}
-									</span>
-								</li>
-							)}
+						<dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
 							{founded_date && (
-								<li className="inline-flex items-center gap-2">
-									<Calendar className="h-4 w-4" aria-hidden />
-									<span>
-										{t("foundedLabel")}:{" "}
-										{new Date(founded_date).toLocaleDateString(undefined, {
-											year: "numeric",
-											month: "short",
-										})}
-									</span>
-								</li>
+								<StatTile
+									label={t("foundedLabel")}
+									value={new Date(founded_date).toLocaleDateString(undefined, {
+										year: "numeric",
+										month: "short",
+									})}
+								/>
 							)}
 							{typeof member_count === "number" && (
-								<li className="inline-flex items-center gap-2">
-									<Users className="h-4 w-4" aria-hidden />
-									<span>
-										{member_count} {t("membersLabel")}
-									</span>
-								</li>
+								<StatTile
+									label={t("membersLabel")}
+									value={member_count.toLocaleString()}
+								/>
 							)}
-							<li className="inline-flex items-center gap-2">
-								<Calendar className="h-4 w-4" aria-hidden />
-								<span>
-									{t("lastUpdatedLabel")}:{" "}
-									{new Date(campus.last_publication_date).toLocaleDateString(
-										undefined,
-										{
-											year: "numeric",
-											month: "short",
-											day: "numeric",
-										},
-									)}
-								</span>
-							</li>
-						</ul>
+							{lead_ambassador && (
+								<StatTile label={t("ambassadorLabel")} value={lead_ambassador} />
+							)}
+						</dl>
+
+						<p className="text-xs text-foreground/60 inline-flex items-center gap-2">
+							<Calendar className="h-3.5 w-3.5" aria-hidden />
+							{t("lastUpdatedLabel")}:{" "}
+							{new Date(campus.last_publication_date).toLocaleDateString(undefined, {
+								year: "numeric",
+								month: "short",
+								day: "numeric",
+							})}
+						</p>
 					</header>
 
 					<div className="mt-8 md:mt-10 border-t border-border pt-8">

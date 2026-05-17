@@ -6,7 +6,7 @@ import { hasLocale } from "next-intl";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { getCampusesTotal, searchCampuses } from "./_actions";
+import { getCampusCountries, getCampusesTotal, searchCampuses } from "./_actions";
 import { CampusesBrowser } from "./_components/campuses-browser";
 import { CampusesEmptyState } from "./_components/empty-state";
 import { QuickActions } from "./_components/quick-actions";
@@ -29,9 +29,10 @@ export default async function CampusesPage({
 	setRequestLocale(locale as Locale);
 	const t = await getTranslations("campuses");
 
-	const [initialCampuses, total] = await Promise.all([
+	const [initialCampuses, total, countries] = await Promise.all([
 		searchCampuses({ page: 0, pageSize: PAGE_SIZE }).catch(() => []),
 		getCampusesTotal().catch(() => 0),
+		getCampusCountries().catch(() => []),
 	]);
 	const featured = initialCampuses[0];
 
@@ -82,7 +83,7 @@ export default async function CampusesPage({
 				{total === 0 ? (
 					<CampusesEmptyState />
 				) : (
-					<CampusesBrowser initialCampuses={initialCampuses} />
+					<CampusesBrowser initialCampuses={initialCampuses} countries={countries} />
 				)}
 			</section>
 

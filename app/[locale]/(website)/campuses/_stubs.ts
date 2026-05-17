@@ -241,17 +241,26 @@ export function stubSearchCampuses({
 	page,
 	pageSize,
 	query,
+	country,
 }: {
 	page: number;
 	pageSize: number;
 	query?: string;
+	country?: string;
 }): Content.CampusDocument[] {
 	const trimmed = query?.trim();
-	const filtered = trimmed
-		? STUB_DOCS.filter((d) => matches(d, trimmed))
-		: STUB_DOCS;
+	let filtered = STUB_DOCS;
+	if (country) filtered = filtered.filter((d) => d.data.country === country);
+	if (trimmed) filtered = filtered.filter((d) => matches(d, trimmed));
 	const start = page * pageSize;
 	return filtered.slice(start, start + pageSize);
+}
+
+export function stubGetCampusCountries(): string[] {
+	const set = new Set(
+		STUB_DOCS.map((d) => d.data.country).filter((v): v is string => Boolean(v)),
+	);
+	return Array.from(set).sort();
 }
 
 export function stubGetCampusesTotal(): number {
