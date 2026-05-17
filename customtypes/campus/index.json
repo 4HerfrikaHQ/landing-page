@@ -122,6 +122,42 @@
           "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,embed"
         }
       },
+      "related_projects": {
+        "type": "Group",
+        "config": {
+          "label": "Related Projects",
+          "repeat": true,
+          "fields": {
+            "title": {
+              "type": "Text",
+              "config": { "label": "Title", "placeholder": "" }
+            },
+            "summary": {
+              "type": "Text",
+              "config": { "label": "Summary", "placeholder": "" }
+            },
+            "slug": {
+              "type": "Text",
+              "config": {
+                "label": "Project Slug",
+                "placeholder": "e.g. girls-tech-bootcamp"
+              }
+            },
+            "category": {
+              "type": "Text",
+              "config": { "label": "Category", "placeholder": "" }
+            },
+            "cover_image": {
+              "type": "Image",
+              "config": {
+                "label": "Cover Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            }
+          }
+        }
+      },
       "testimonials": {
         "type": "Group",
         "config": {
