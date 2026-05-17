@@ -13,10 +13,13 @@ type Stub = {
 	foundedDate: string;
 	memberCount: number;
 	body: string[];
+	milestones?: { date: string; title: string; description?: string }[];
 	programs?: { name: string; description: string }[];
 	gallery: { url: string; caption: string }[];
 	lastUpdated: string;
 };
+
+const DEFAULT_MILESTONES: { date: string; title: string; description?: string }[] = [];
 
 const DEFAULT_PROGRAMS = [
 	{
@@ -50,6 +53,34 @@ const STUBS: Stub[] = [
 			"UNILAG is where 4Herfrika started. In year one we ran weekly tech circles in the Faculty of Engineering, hosted three campus-wide career fairs, and graduated 86 women from our intro-to-software bootcamp.",
 			"Today the chapter spans three faculties, with active leads in Computer Science, Business, and Mass Communication. Members meet every Wednesday for skill-share sessions and monthly for mentor pairing.",
 			"Our biggest moment so far: the StopTheViolence schools outreach we ran across Lagos Mainland — driven entirely by UNILAG volunteers.",
+		],
+		milestones: [
+			{
+				date: "2023-09-12",
+				title: "Chapter founded",
+				description: "Officially launched in the Faculty of Engineering.",
+			},
+			{
+				date: "2024-02-04",
+				title: "First Tech Academy cohort",
+				description: "86 women graduated from the intro-to-software bootcamp.",
+			},
+			{
+				date: "2024-09-15",
+				title: "StopTheViolence outreach",
+				description: "Reached 700 students across Lagos Mainland schools.",
+			},
+			{
+				date: "2025-03-10",
+				title: "Three faculties active",
+				description:
+					"Chapter expanded into Business and Mass Communication faculties.",
+			},
+			{
+				date: "2026-04-22",
+				title: "412 active members",
+				description: "Largest chapter in the network as of this update.",
+			},
 		],
 		programs: [
 			{
@@ -132,6 +163,24 @@ const STUBS: Stub[] = [
 		body: [
 			"Legon is our first chapter outside Nigeria and the home of our climate-focused programming. The chapter has driven two campus-wide tree planting initiatives and a women-in-renewables career week.",
 			"The leadership team partners closely with the university's Centre for Climate Change to anchor every event in current research.",
+		],
+		milestones: [
+			{
+				date: "2024-03-04",
+				title: "Chapter founded",
+				description: "First 4Herfrika chapter outside Nigeria.",
+			},
+			{
+				date: "2024-08-20",
+				title: "Tree planting initiative",
+				description: "Planted 300 trees across the Legon campus.",
+			},
+			{
+				date: "2025-05-12",
+				title: "Women-in-renewables career week",
+				description:
+					"Partnered with the Centre for Climate Change for a five-day showcase.",
+			},
 		],
 		programs: [
 			{
@@ -258,6 +307,11 @@ function toCampusDoc(s: Stub): Content.CampusDocument {
 				type: "paragraph",
 				text,
 				spans: [],
+			})),
+			milestones: (s.milestones ?? DEFAULT_MILESTONES).map((m) => ({
+				date: m.date,
+				title: m.title,
+				description: m.description ?? null,
 			})),
 			programs: (s.programs ?? DEFAULT_PROGRAMS).map((p) => ({
 				name: p.name,
