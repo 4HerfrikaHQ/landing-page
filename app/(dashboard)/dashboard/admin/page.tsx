@@ -68,6 +68,14 @@ export default async function AdminDashboardPage() {
 					<p className="text-sm text-gray-500">Pending applications</p>
 					<p className="text-xs text-primary-500 mt-4">Review →</p>
 				</Link>
+
+				<Link
+					href={"/dashboard/admin/bookings" as Route}
+					className="group border rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all bg-white no-underline! hover:no-underline!"
+				>
+					<p className="text-sm text-gray-500">Bookings</p>
+					<p className="text-xs text-primary-500 mt-4">See all →</p>
+				</Link>
 			</div>
 		</div>
 	);

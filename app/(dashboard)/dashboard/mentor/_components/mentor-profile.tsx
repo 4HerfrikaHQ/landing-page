@@ -89,7 +89,15 @@ export function MentorProfile({ user, mentor: dbMentor }: { user: DbUser; mentor
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<header className="sticky top-0 z-10 flex items-center justify-between h-11 px-8 border-b bg-white/90 backdrop-blur-sm">
-				<span className="text-sm font-medium text-gray-400">Mentor Portal</span>
+				<div className="flex items-center gap-4 text-sm">
+					<span className="font-medium text-gray-400">Mentor Portal</span>
+					<nav className="flex items-center gap-3 text-xs">
+						<a href="/dashboard/mentor" className="text-gray-900 font-medium">Profile</a>
+						<a href="/dashboard/mentor/bookings" className="text-gray-400 hover:text-gray-600">Bookings</a>
+						<a href="/dashboard/mentor/mentees" className="text-gray-400 hover:text-gray-600">Mentees</a>
+						<a href="/dashboard/mentor/stats" className="text-gray-400 hover:text-gray-600">Stats</a>
+					</nav>
+				</div>
 				<button
 					onClick={() => startSignOutTransition(async () => { await logout(); })}
 					disabled={isSigningOut}
