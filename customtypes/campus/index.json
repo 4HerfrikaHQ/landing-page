@@ -122,6 +122,34 @@
           "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,embed"
         }
       },
+      "events": {
+        "type": "Group",
+        "config": {
+          "label": "Upcoming Events",
+          "repeat": true,
+          "fields": {
+            "date": { "type": "Date", "config": { "label": "Date" } },
+            "title": {
+              "type": "Text",
+              "config": { "label": "Title", "placeholder": "" }
+            },
+            "location": {
+              "type": "Text",
+              "config": { "label": "Location", "placeholder": "" }
+            },
+            "link": {
+              "type": "Link",
+              "config": {
+                "label": "Link",
+                "select": null,
+                "allowTargetBlank": true,
+                "allowText": false,
+                "repeat": false
+              }
+            }
+          }
+        }
+      },
       "milestones": {
         "type": "Group",
         "config": {

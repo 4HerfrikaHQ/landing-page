@@ -865,6 +865,43 @@ export type MentorDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
 
 /**
+ * Item in *Campus → Upcoming Events*
+ */
+export interface CampusDocumentDataEventsItem {
+  /**
+   * Date field in *Campus → Upcoming Events*
+   *
+   * - **Field Type**: Date
+   * - **API ID Path**: campus.events[].date
+   */
+  date: prismic.DateField;
+
+  /**
+   * Title field in *Campus → Upcoming Events*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.events[].title
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Location field in *Campus → Upcoming Events*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.events[].location
+   */
+  location: prismic.KeyTextField;
+
+  /**
+   * Link field in *Campus → Upcoming Events*
+   *
+   * - **Field Type**: Link
+   * - **API ID Path**: campus.events[].link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
  * Item in *Campus → Lead Ambassador Socials*
  */
 export interface CampusDocumentDataLeadAmbassadorSocialsItem {
@@ -1061,6 +1098,13 @@ interface CampusDocumentData {
   milestones: prismic.GroupField<Simplify<CampusDocumentDataMilestonesItem>>;
 
   /**
+   * Upcoming Events field in *Campus*
+   *
+   * - **API ID Path**: campus.events[]
+   */
+  events: prismic.GroupField<Simplify<CampusDocumentDataEventsItem>>;
+
+  /**
    * Programs field in *Campus*
    *
    * - **API ID Path**: campus.programs[]
@@ -1202,6 +1246,7 @@ declare module "@prismicio/client" {
       BlogPostDocumentDataSlicesSlice,
       CampusDocument,
       CampusDocumentData,
+      CampusDocumentDataEventsItem,
       CampusDocumentDataGalleryItem,
       CampusDocumentDataLeadAmbassadorSocialsItem,
       CampusDocumentDataMilestonesItem,

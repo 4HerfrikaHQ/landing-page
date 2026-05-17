@@ -21,6 +21,12 @@ type Stub = {
 	memberCount: number;
 	body: string[];
 	milestones?: { date: string; title: string; description?: string }[];
+	events?: {
+		date: string;
+		title: string;
+		location?: string;
+		link?: string;
+	}[];
 	programs?: { name: string; description: string }[];
 	gallery: { url: string; caption: string }[];
 	lastUpdated: string;
@@ -96,6 +102,23 @@ const STUBS: Stub[] = [
 				date: "2026-04-22",
 				title: "412 active members",
 				description: "Largest chapter in the network as of this update.",
+			},
+		],
+		events: [
+			{
+				date: "2026-06-08",
+				title: "Tech Academy Cohort 5 kickoff",
+				location: "Faculty of Engineering Auditorium",
+			},
+			{
+				date: "2026-06-22",
+				title: "Mentorship pairing night",
+				location: "Faculty of Business",
+			},
+			{
+				date: "2026-07-13",
+				title: "Career fair: Lagos tech employers",
+				location: "Multipurpose Hall",
 			},
 		],
 		programs: [
@@ -204,6 +227,18 @@ const STUBS: Stub[] = [
 				title: "Women-in-renewables career week",
 				description:
 					"Partnered with the Centre for Climate Change for a five-day showcase.",
+			},
+		],
+		events: [
+			{
+				date: "2026-06-15",
+				title: "Climate hackathon",
+				location: "Centre for Climate Change",
+			},
+			{
+				date: "2026-07-04",
+				title: "Mentor mixer",
+				location: "Legon Hall",
 			},
 		],
 		programs: [
@@ -347,6 +382,14 @@ function toCampusDoc(s: Stub): Content.CampusDocument {
 				type: "paragraph",
 				text,
 				spans: [],
+			})),
+			events: (s.events ?? []).map((e) => ({
+				date: e.date,
+				title: e.title,
+				location: e.location ?? null,
+				link: e.link
+					? { link_type: "Web", url: e.link, target: "_blank" }
+					: { link_type: "Any" },
 			})),
 			milestones: (s.milestones ?? DEFAULT_MILESTONES).map((m) => ({
 				date: m.date,
