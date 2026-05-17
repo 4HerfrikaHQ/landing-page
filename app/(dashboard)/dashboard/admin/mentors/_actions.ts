@@ -72,6 +72,24 @@ export async function createMentor(
 
 	if (!dbUser) return { error: "User record not found after invite." };
 
+	const baseSlug = (nickname || name)
+		.toLowerCase()
+		.normalize("NFKD")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/(^-|-$)/g, "");
+	let slug = baseSlug || "mentor";
+	let n = 1;
+	while (true) {
+		const exists = await db
+			.select({ id: schema.mentors.id })
+			.from(schema.mentors)
+			.where(eq(schema.mentors.slug, slug))
+			.limit(1);
+		if (exists.length === 0) break;
+		n += 1;
+		slug = `${baseSlug}-${n}`;
+	}
+
 	await db.insert(schema.mentors).values({
 		user_id: dbUser.id,
 		name,
@@ -79,6 +97,7 @@ export async function createMentor(
 		bio,
 		nickname,
 		linkedin_url,
+		slug,
 	});
 
 	revalidatePath("/dashboard/admin/mentors");
