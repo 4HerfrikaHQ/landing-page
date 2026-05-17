@@ -122,6 +122,38 @@
           "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,embed"
         }
       },
+      "testimonials": {
+        "type": "Group",
+        "config": {
+          "label": "Testimonials",
+          "repeat": true,
+          "fields": {
+            "quote": {
+              "type": "Text",
+              "config": { "label": "Quote", "placeholder": "" }
+            },
+            "name": {
+              "type": "Text",
+              "config": { "label": "Name", "placeholder": "" }
+            },
+            "role": {
+              "type": "Text",
+              "config": {
+                "label": "Role",
+                "placeholder": "e.g. Final-year Computer Science"
+              }
+            },
+            "photo": {
+              "type": "Image",
+              "config": {
+                "label": "Photo",
+                "constraint": {},
+                "thumbnails": []
+              }
+            }
+          }
+        }
+      },
       "events": {
         "type": "Group",
         "config": {

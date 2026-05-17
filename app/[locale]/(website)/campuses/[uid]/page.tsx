@@ -67,6 +67,7 @@ export default async function CampusPage({
 		programs,
 		milestones,
 		events,
+		testimonials,
 		lead_ambassador,
 		lead_ambassador_role,
 		lead_ambassador_bio,
@@ -208,6 +209,67 @@ export default async function CampusPage({
 														{program.description}
 													</p>
 												)}
+											</div>
+										</li>
+									),
+								)}
+							</ul>
+						</section>
+					)}
+
+					{testimonials && testimonials.length > 0 && (
+						<section className="mt-12 md:mt-16">
+							<FadeIn>
+								<h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+									{t("testimonialsTitle")}
+								</h2>
+							</FadeIn>
+							<ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+								{testimonials.map(
+									(
+										tst: Content.CampusDocumentDataTestimonialsItem,
+										i: number,
+									) => (
+										<li
+											key={`testimonial-${i + 1}`}
+											className="rounded-2xl bg-muted p-6 md:p-7 flex flex-col"
+										>
+											<svg
+												aria-hidden
+												className="size-8 text-primary-500 mb-3"
+												viewBox="0 0 24 24"
+												fill="currentColor"
+											>
+												<path d="M7 7h3v3H7v3H4V7h3zm10 0h3v3h-3v3h-3V7h3z" />
+											</svg>
+											<p className="text-base md:text-lg text-foreground leading-relaxed">
+												{tst.quote}
+											</p>
+											<div className="mt-5 flex items-center gap-3">
+												{tst.photo?.url ? (
+													<div className="relative size-10 rounded-full overflow-hidden shrink-0">
+														<PrismicNextImage
+															field={tst.photo}
+															fill
+															sizes="40px"
+															className="object-cover"
+														/>
+													</div>
+												) : (
+													<div className="size-10 rounded-full bg-primary-500/10 text-primary-500 flex items-center justify-center font-bold shrink-0">
+														{(tst.name ?? "").charAt(0)}
+													</div>
+												)}
+												<div className="min-w-0">
+													<p className="text-sm font-semibold text-foreground truncate">
+														{tst.name}
+													</p>
+													{tst.role && (
+														<p className="text-xs text-[#636363] truncate">
+															{tst.role}
+														</p>
+													)}
+												</div>
 											</div>
 										</li>
 									),
