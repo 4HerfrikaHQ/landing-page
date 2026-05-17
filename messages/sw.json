@@ -85,6 +85,68 @@
     "description": "Hii ni nafasi salama iliyoundwa kwa ajili yako, yenye uzoefu wa wanawake kutoka kila mahali unaolenga kukusaidia kupata nguvu na uzuri wako katika machafuko haya yanayoitwa MAISHA",
     "searchPlaceholder": "Tafuta makala"
   },
+  "campuses": {
+    "heroTitle": "Vyuo Vyetu",
+    "heroSubtitle": "Chuo kimoja baada ya kingine, tunajenga udada.",
+    "heroDescription": "Katika vyuo vikuu vya Afrika, matawi ya 4Herfrika hupanga matukio, warsha na mafunzo — kujenga uongozi, jumuiya na uhusiano.",
+    "searchPlaceholder": "Tafuta kwa chuo, chuo kikuu, au nchi",
+    "noResultsTitle": "Hakuna vyuo vinavyolingana na \"{query}\"",
+    "noResultsHint": "Jaribu jina jingine, chuo kikuu, au nchi.",
+    "loadingMore": "Sogeza ili kuona zaidi",
+    "endOfList": "Umefika mwisho — ndio vyuo vyetu vyote kwa sasa.",
+    "empty": {
+      "badge": "Vyuo vya kwanza vinakuja hivi karibuni",
+      "title": "Udada wetu unaanza tu",
+      "description": "Hadithi za vyuo bado zinaandikwa. Unataka 4Herfrika iwe chuoni kwako, au utusaidie kufika huko? Tuambie — tunasikiliza.",
+      "primaryCta": "Tuletee chuoni kwako",
+      "secondaryCta": "Kuwa balozi"
+    },
+    "breadcrumb": "Vyuo",
+    "ambassadorLabel": "Balozi mkuu",
+    "foundedLabel": "Ilianzishwa",
+    "membersLabel": "wanachama",
+    "lastUpdatedLabel": "Imesasishwa mwisho",
+    "galleryTitle": "Matukio kutoka chuo hiki",
+    "exploreOtherTitle": "Gundua vyuo vingine",
+    "exploreOtherDescription": "Ona kinachoendelea katika udada wetu.",
+    "viewAllCampuses": "Tazama vyuo vyote",
+    "quickActionsTitle": "Kuwa sehemu ya harakati hii",
+    "quickActionsDescription": "Iwe unataka kuchangia, kuwa mshauri, au kuleta 4Herfrika chuoni kwako — kuna nafasi kwa ajili yako.",
+    "ctaDonate": "Changia",
+    "ctaBecomeMentor": "Kuwa Mshauri",
+    "ctaContact": "Tuletee chuoni kwako",
+    "notFound": {
+      "title": "Hatukupata chuo hicho",
+      "description": "Tumetafuta, lakini chuo hiki bado sio sehemu ya udada wetu.",
+      "invite": "Ikiwa ungependa 4Herfrika iwe chuoni kwako, wasiliana nasi — tunafungua matawi mapya kila wakati.",
+      "contactCta": "Wasiliana nasi",
+      "browseCta": "Tazama vyuo vyote"
+    }
+  },
+  "academy": {
+    "comingSoonBadge": "Inakuja hivi karibuni",
+    "heroTitle": "4Herfrika Academy",
+    "heroDescription": "Mafunzo ya mtandaoni. Athari halisi. Njia za Tech, Biashara, na Hali ya Hewa zilizotengenezwa kwa wanawake wa Afrika tayari kuongoza.",
+    "joinWaitlist": "Jiunge na orodha ya kusubiri",
+    "contactUs": "Wasiliana nasi",
+    "tracksTitle": "Utakachojifunza",
+    "tracks": {
+      "tech": {
+        "title": "Tech Academy",
+        "description": "Kambi za vitendo za programu, data, ubunifu na bidhaa — kukuandaa kwa kazi."
+      },
+      "business": {
+        "title": "Business Academy",
+        "description": "Jenga ujuzi wa ujasiriamali na uongozi wa kuanzisha na kuongoza."
+      },
+      "climate": {
+        "title": "Climate Academy",
+        "description": "Jifunze jinsi ya kujenga maisha endelevu na kuongoza hatua ya hali ya hewa katika Afrika."
+      }
+    },
+    "waitlistTitle": "Kuwa wa kwanza",
+    "waitlistDescription": "Tuachie maelezo yako na tutakujulisha mara Academy itakapofunguliwa."
+  },
   "faq": {
     "title": "Maswali",
     "askAnything": "Tuulize chochote",

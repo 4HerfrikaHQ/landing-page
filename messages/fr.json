@@ -85,6 +85,68 @@
     "description": "C'est un espace sûr créé juste pour vous, avec des expériences de femmes de tous horizons destinées à vous aider à trouver votre force et beauté dans ce chaos appelé LA VIE",
     "searchPlaceholder": "Rechercher un article"
   },
+  "campuses": {
+    "heroTitle": "Nos Campus",
+    "heroSubtitle": "Un campus à la fois, nous bâtissons une sororité.",
+    "heroDescription": "À travers les universités africaines, les sections 4Herfrika organisent des événements, des ateliers et des séances de mentorat — pour cultiver le leadership, la communauté et le lien.",
+    "searchPlaceholder": "Rechercher par campus, université ou pays",
+    "noResultsTitle": "Aucun campus ne correspond à « {query} »",
+    "noResultsHint": "Essayez un autre nom, université ou pays.",
+    "loadingMore": "Faites défiler pour voir plus",
+    "endOfList": "Vous avez atteint la fin — c'est tout pour le moment.",
+    "empty": {
+      "badge": "Les premiers campus arrivent",
+      "title": "Notre sororité ne fait que commencer",
+      "description": "Les récits des campus s'écrivent encore. Vous voulez 4Herfrika sur votre campus, ou nous aider à y arriver ? Dites-le-nous — nous écoutons.",
+      "primaryCta": "Amenez-nous sur votre campus",
+      "secondaryCta": "Devenir ambassadrice"
+    },
+    "breadcrumb": "Campus",
+    "ambassadorLabel": "Ambassadrice principale",
+    "foundedLabel": "Fondé",
+    "membersLabel": "membres",
+    "lastUpdatedLabel": "Dernière mise à jour",
+    "galleryTitle": "Moments de ce campus",
+    "exploreOtherTitle": "Découvrez d'autres campus",
+    "exploreOtherDescription": "Voyez ce qui se passe dans notre sororité.",
+    "viewAllCampuses": "Voir tous les campus",
+    "quickActionsTitle": "Rejoignez le mouvement",
+    "quickActionsDescription": "Que vous souhaitiez donner, mentorer ou amener 4Herfrika sur votre campus — il y a une place pour vous.",
+    "ctaDonate": "Faire un don",
+    "ctaBecomeMentor": "Devenir mentor",
+    "ctaContact": "Amenez-nous sur votre campus",
+    "notFound": {
+      "title": "Nous n'avons pas trouvé ce campus",
+      "description": "Nous avons cherché, mais ce campus ne fait pas encore partie de notre sororité.",
+      "invite": "Si vous aimeriez voir 4Herfrika sur votre campus, écrivez-nous — nous ouvrons sans cesse de nouvelles sections.",
+      "contactCta": "Nous contacter",
+      "browseCta": "Voir tous les campus"
+    }
+  },
+  "academy": {
+    "comingSoonBadge": "Bientôt disponible",
+    "heroTitle": "4Herfrika Academy",
+    "heroDescription": "Apprentissage en ligne. Impact réel. Des parcours Tech, Business et Climat conçus pour les femmes africaines prêtes à diriger.",
+    "joinWaitlist": "Rejoindre la liste d'attente",
+    "contactUs": "Nous contacter",
+    "tracksTitle": "Ce que vous apprendrez",
+    "tracks": {
+      "tech": {
+        "title": "Tech Academy",
+        "description": "Bootcamps pratiques en logiciel, données, design et produit — pour vous préparer à l'emploi."
+      },
+      "business": {
+        "title": "Business Academy",
+        "description": "Développez les compétences entrepreneuriales et de leadership pour lancer et diriger."
+      },
+      "climate": {
+        "title": "Climate Academy",
+        "description": "Apprenez à bâtir un avenir durable et à mener l'action climatique à travers l'Afrique."
+      }
+    },
+    "waitlistTitle": "Soyez les premières",
+    "waitlistDescription": "Laissez-nous vos coordonnées et nous vous préviendrons dès l'ouverture des inscriptions."
+  },
   "faq": {
     "title": "FAQ",
     "askAnything": "Posez-nous vos questions",

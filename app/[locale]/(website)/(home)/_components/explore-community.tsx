@@ -19,7 +19,7 @@ export const ExploreCommunity = async () => {
 					description={t("ourCampusesDescription")}
 					link={{
 						label: t("exploreCampuses"),
-						href: "/",
+						href: "/campuses",
 					}}
 				/>
 			</StaggerItem>
@@ -31,7 +31,7 @@ export const ExploreCommunity = async () => {
 					description={t("ourAcademyDescription")}
 					link={{
 						label: t("exploreLearningTracks"),
-						href: "/",
+						href: "/academy",
 					}}
 				/>
 			</StaggerItem>
