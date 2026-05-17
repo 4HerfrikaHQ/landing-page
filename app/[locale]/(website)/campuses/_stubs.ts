@@ -28,6 +28,12 @@ type Stub = {
 		link?: string;
 	}[];
 	programs?: { name: string; description: string }[];
+	testimonials?: {
+		quote: string;
+		name: string;
+		role?: string;
+		photo?: string;
+	}[];
 	gallery: { url: string; caption: string }[];
 	lastUpdated: string;
 };
@@ -102,6 +108,30 @@ const STUBS: Stub[] = [
 				date: "2026-04-22",
 				title: "412 active members",
 				description: "Largest chapter in the network as of this update.",
+			},
+		],
+		testimonials: [
+			{
+				quote:
+					"I came in shy and unsure if I belonged in tech. Two semesters later I'm leading my own study group and shipping side projects.",
+				name: "Ifeoma O.",
+				role: "200-level Computer Science",
+				photo:
+					"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=200&q=80",
+			},
+			{
+				quote:
+					"The career fair is genuinely the reason I got my first internship. Three of my friends from the chapter got offers too.",
+				name: "Bisola A.",
+				role: "Mass Communication alum, '25",
+				photo:
+					"https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=200&q=80",
+			},
+			{
+				quote:
+					"My mentor through 4Herfrika has changed how I think about my own career trajectory.",
+				name: "Chiamaka N.",
+				role: "Final-year Business Administration",
 			},
 		],
 		events: [
@@ -227,6 +257,22 @@ const STUBS: Stub[] = [
 				title: "Women-in-renewables career week",
 				description:
 					"Partnered with the Centre for Climate Change for a five-day showcase.",
+			},
+		],
+		testimonials: [
+			{
+				quote:
+					"Joining the Legon chapter helped me find my voice on climate. I'm now leading our women-in-renewables outreach.",
+				name: "Esi K.",
+				role: "Climate Studies, 300-level",
+				photo:
+					"https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+			},
+			{
+				quote:
+					"The mentor pairings are next level. Mine is based in Nairobi and we meet every other week.",
+				name: "Naomi A.",
+				role: "Business School, final year",
 			},
 		],
 		events: [
@@ -382,6 +428,21 @@ function toCampusDoc(s: Stub): Content.CampusDocument {
 				type: "paragraph",
 				text,
 				spans: [],
+			})),
+			testimonials: (s.testimonials ?? []).map((tst, i) => ({
+				quote: tst.quote,
+				name: tst.name,
+				role: tst.role ?? null,
+				photo: tst.photo
+					? {
+						url: tst.photo,
+						dimensions: { width: 200, height: 200 },
+						alt: tst.name,
+						copyright: null,
+						edit: { x: 0, y: 0, zoom: 1, background: "transparent" },
+						id: `stub-tst-${s.uid}-${i}`,
+					}
+					: { url: null, dimensions: null, alt: null, copyright: null },
 			})),
 			events: (s.events ?? []).map((e) => ({
 				date: e.date,
