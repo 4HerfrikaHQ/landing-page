@@ -17,7 +17,7 @@ export const CallForAction = async () => {
 				<p className="text-base sm:text-lg md:text-xl text-muted-foreground">
 					{t("callForActionDescription")}
 				</p>
-				<div className="flex flex-row gap-3 md:gap-4 lg:gap-6 mt-6 md:mt-8 lg:mt-10">
+				<div className="flex flex-col sm:flex-row gap-3 md:gap-4 lg:gap-6 mt-6 md:mt-8 lg:mt-10">
 					<Button
 						href="/projects"
 						variant="outline"

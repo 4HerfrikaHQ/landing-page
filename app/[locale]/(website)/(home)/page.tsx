@@ -7,7 +7,6 @@ import { hasLocale } from "next-intl";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import Sponsors from "../_components/sponsors";
 import AfricaLogo from "../africa-logo";
 import { getHomepage } from "./_actions";
 import { ExploreCommunity } from "./_components/explore-community";
@@ -47,7 +46,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 				campuses={campuses}
 				countries={countries}
 			/>
-			<Sponsors />
 			<ExploreCommunity />
 
 			<section className="px-4 sm:px-6 md:px-7 container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 sm:gap-8 w-full lg:pt-20 py-12 lg:pb-28">
