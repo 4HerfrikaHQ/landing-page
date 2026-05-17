@@ -13,9 +13,25 @@ type Stub = {
 	foundedDate: string;
 	memberCount: number;
 	body: string[];
+	programs?: { name: string; description: string }[];
 	gallery: { url: string; caption: string }[];
 	lastUpdated: string;
 };
+
+const DEFAULT_PROGRAMS = [
+	{
+		name: "Tech Academy",
+		description: "Intensive software and data bootcamps run each semester.",
+	},
+	{
+		name: "Mentorship Circles",
+		description: "Weekly small-group mentoring with industry leaders.",
+	},
+	{
+		name: "Career Fair",
+		description: "Annual recruiter showcase with partner companies.",
+	},
+];
 
 const STUBS: Stub[] = [
 	{
@@ -34,6 +50,28 @@ const STUBS: Stub[] = [
 			"UNILAG is where 4Herfrika started. In year one we ran weekly tech circles in the Faculty of Engineering, hosted three campus-wide career fairs, and graduated 86 women from our intro-to-software bootcamp.",
 			"Today the chapter spans three faculties, with active leads in Computer Science, Business, and Mass Communication. Members meet every Wednesday for skill-share sessions and monthly for mentor pairing.",
 			"Our biggest moment so far: the StopTheViolence schools outreach we ran across Lagos Mainland — driven entirely by UNILAG volunteers.",
+		],
+		programs: [
+			{
+				name: "Tech Academy",
+				description:
+					"Flagship 12-week bootcamp in software engineering, data, and design across the Faculty of Engineering.",
+			},
+			{
+				name: "Mentorship Circles",
+				description:
+					"Weekly small-group mentoring with senior women in tech, business, and media.",
+			},
+			{
+				name: "StopTheViolence Outreach",
+				description:
+					"Schools outreach across Lagos Mainland on gender-based violence awareness.",
+			},
+			{
+				name: "Campus Career Fair",
+				description:
+					"Annual recruiter showcase pairing members with partner companies hiring graduates.",
+			},
 		],
 		gallery: [
 			{
@@ -94,6 +132,22 @@ const STUBS: Stub[] = [
 		body: [
 			"Legon is our first chapter outside Nigeria and the home of our climate-focused programming. The chapter has driven two campus-wide tree planting initiatives and a women-in-renewables career week.",
 			"The leadership team partners closely with the university's Centre for Climate Change to anchor every event in current research.",
+		],
+		programs: [
+			{
+				name: "Climate Academy",
+				description:
+					"Modules on renewable energy careers, run with the university's Centre for Climate Change.",
+			},
+			{
+				name: "Entrepreneurship Lab",
+				description:
+					"Member-led venture incubator with monthly pitch sessions.",
+			},
+			{
+				name: "Mentorship Circles",
+				description: "Cross-Africa mentor pairings with bi-weekly group sessions.",
+			},
 		],
 		gallery: [
 			{
@@ -204,6 +258,10 @@ function toCampusDoc(s: Stub): Content.CampusDocument {
 				type: "paragraph",
 				text,
 				spans: [],
+			})),
+			programs: (s.programs ?? DEFAULT_PROGRAMS).map((p) => ({
+				name: p.name,
+				description: p.description,
 			})),
 			gallery: s.gallery.map((g, i) => ({
 				image: {
