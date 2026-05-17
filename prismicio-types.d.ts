@@ -865,6 +865,51 @@ export type MentorDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
 
 /**
+ * Item in *Campus → Related Projects*
+ */
+export interface CampusDocumentDataRelatedProjectsItem {
+  /**
+   * Title field in *Campus → Related Projects*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.related_projects[].title
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Summary field in *Campus → Related Projects*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.related_projects[].summary
+   */
+  summary: prismic.KeyTextField;
+
+  /**
+   * Slug field in *Campus → Related Projects*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.related_projects[].slug
+   */
+  slug: prismic.KeyTextField;
+
+  /**
+   * Category field in *Campus → Related Projects*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.related_projects[].category
+   */
+  category: prismic.KeyTextField;
+
+  /**
+   * Cover Image field in *Campus → Related Projects*
+   *
+   * - **Field Type**: Image
+   * - **API ID Path**: campus.related_projects[].cover_image
+   */
+  cover_image: prismic.ImageField<never>;
+}
+
+/**
  * Item in *Campus → Testimonials*
  */
 export interface CampusDocumentDataTestimonialsItem {
@@ -1151,6 +1196,15 @@ interface CampusDocumentData {
   >;
 
   /**
+   * Related Projects field in *Campus*
+   *
+   * - **API ID Path**: campus.related_projects[]
+   */
+  related_projects: prismic.GroupField<
+    Simplify<CampusDocumentDataRelatedProjectsItem>
+  >;
+
+  /**
    * Programs field in *Campus*
    *
    * - **API ID Path**: campus.programs[]
@@ -1297,6 +1351,7 @@ declare module "@prismicio/client" {
       CampusDocumentDataLeadAmbassadorSocialsItem,
       CampusDocumentDataMilestonesItem,
       CampusDocumentDataProgramsItem,
+      CampusDocumentDataRelatedProjectsItem,
       CampusDocumentDataTestimonialsItem,
       FaqDocument,
       FaqDocumentData,

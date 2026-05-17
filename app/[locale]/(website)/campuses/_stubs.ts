@@ -34,6 +34,13 @@ type Stub = {
 		role?: string;
 		photo?: string;
 	}[];
+	relatedProjects?: {
+		title: string;
+		summary: string;
+		slug: string;
+		category?: string;
+		coverUrl: string;
+	}[];
 	gallery: { url: string; caption: string }[];
 	lastUpdated: string;
 };
@@ -108,6 +115,26 @@ const STUBS: Stub[] = [
 				date: "2026-04-22",
 				title: "412 active members",
 				description: "Largest chapter in the network as of this update.",
+			},
+		],
+		relatedProjects: [
+			{
+				title: "StopTheViolence: Akoka High School Outreach",
+				summary:
+					"700 students sensitized on gender-based violence. UNILAG volunteers led every session.",
+				slug: "stop-the-violence",
+				category: "Outreach",
+				coverUrl:
+					"https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80",
+			},
+			{
+				title: "Girls Tech Bootcamp",
+				summary:
+					"86 women graduated from our intro-to-software bootcamp in the first UNILAG cohort.",
+				slug: "girls-tech-bootcamp",
+				category: "TechUp4Her",
+				coverUrl:
+					"https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=1200&q=80",
 			},
 		],
 		testimonials: [
@@ -257,6 +284,17 @@ const STUBS: Stub[] = [
 				title: "Women-in-renewables career week",
 				description:
 					"Partnered with the Centre for Climate Change for a five-day showcase.",
+			},
+		],
+		relatedProjects: [
+			{
+				title: "Women in Renewables Career Week",
+				summary:
+					"Five-day showcase partnering with the Centre for Climate Change.",
+				slug: "girls-tech-bootcamp",
+				category: "Climate",
+				coverUrl:
+					"https://images.unsplash.com/photo-1559131397-f94da358f7ca?auto=format&fit=crop&w=1200&q=80",
 			},
 		],
 		testimonials: [
@@ -428,6 +466,20 @@ function toCampusDoc(s: Stub): Content.CampusDocument {
 				type: "paragraph",
 				text,
 				spans: [],
+			})),
+			related_projects: (s.relatedProjects ?? []).map((p, i) => ({
+				title: p.title,
+				summary: p.summary,
+				slug: p.slug,
+				category: p.category ?? null,
+				cover_image: {
+					url: p.coverUrl,
+					dimensions: { width: 1200, height: 800 },
+					alt: p.title,
+					copyright: null,
+					edit: { x: 0, y: 0, zoom: 1, background: "transparent" },
+					id: `stub-rp-${s.uid}-${i}`,
+				},
 			})),
 			testimonials: (s.testimonials ?? []).map((tst, i) => ({
 				quote: tst.quote,

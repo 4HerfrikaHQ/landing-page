@@ -6,6 +6,7 @@ import { Calendar, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { BlogCard } from "@/components/blog-card";
 import { Breadcrumbs } from "../../projects/_components/breadcrumbs";
 import { ProjectContent } from "../../projects/_components/project-content";
 import { getCampus, getCampuses } from "../_actions";
@@ -68,6 +69,7 @@ export default async function CampusPage({
 		milestones,
 		events,
 		testimonials,
+		related_projects,
 		lead_ambassador,
 		lead_ambassador_role,
 		lead_ambassador_bio,
@@ -214,6 +216,36 @@ export default async function CampusPage({
 									),
 								)}
 							</ul>
+						</section>
+					)}
+
+					{related_projects && related_projects.length > 0 && (
+						<section className="mt-12 md:mt-16">
+							<FadeIn>
+								<h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+									{t("relatedProjectsTitle")}
+								</h2>
+							</FadeIn>
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+								{related_projects.map(
+									(
+										p: Content.CampusDocumentDataRelatedProjectsItem,
+										i: number,
+									) => (
+										<BlogCard
+											key={`related-${i + 1}`}
+											uid={p.slug ?? ""}
+											href={`/projects/${p.slug}`}
+											category={p.category ?? ""}
+											title={p.title ?? ""}
+											description={p.summary ?? ""}
+											date=""
+											imageUrl={p.cover_image?.url ?? ""}
+											readMoreLabel={tc("readMore")}
+										/>
+									),
+								)}
+							</div>
 						</section>
 					)}
 
