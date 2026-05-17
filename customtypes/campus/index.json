@@ -1,0 +1,106 @@
+{
+  "format": "page",
+  "id": "campus",
+  "label": "Campus",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "name": {
+        "type": "Text",
+        "config": {
+          "label": "Name",
+          "placeholder": "e.g. University of Lagos"
+        }
+      },
+      "university": {
+        "type": "Text",
+        "config": {
+          "label": "University",
+          "placeholder": ""
+        }
+      },
+      "country": {
+        "type": "Text",
+        "config": {
+          "label": "Country",
+          "placeholder": ""
+        }
+      },
+      "summary": {
+        "type": "Text",
+        "config": {
+          "label": "Summary",
+          "placeholder": "Short blurb shown on the campuses list"
+        }
+      },
+      "cover_image": {
+        "type": "Image",
+        "config": {
+          "label": "Cover Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "lead_ambassador": {
+        "type": "Text",
+        "config": {
+          "label": "Lead Ambassador",
+          "placeholder": ""
+        }
+      },
+      "founded_date": {
+        "type": "Date",
+        "config": {
+          "label": "Founded Date"
+        }
+      },
+      "member_count": {
+        "type": "Number",
+        "config": {
+          "label": "Member Count",
+          "placeholder": ""
+        }
+      },
+      "body": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Body",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,embed"
+        }
+      },
+      "gallery": {
+        "type": "Group",
+        "config": {
+          "label": "Gallery",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
+            "caption": {
+              "type": "Text",
+              "config": {
+                "label": "Caption",
+                "placeholder": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

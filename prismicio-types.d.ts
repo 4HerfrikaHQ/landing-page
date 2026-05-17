@@ -864,10 +864,116 @@ interface MentorDocumentData {
 export type MentorDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
 
+/**
+ * Item in *Campus → Gallery*
+ */
+export interface CampusDocumentDataGalleryItem {
+  /**
+   * Image field in *Campus → Gallery*
+   *
+   * - **Field Type**: Image
+   * - **API ID Path**: campus.gallery[].image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Caption field in *Campus → Gallery*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.gallery[].caption
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for Campus documents
+ */
+interface CampusDocumentData {
+  /**
+   * Name field in *Campus*
+   *
+   * - **API ID Path**: campus.name
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * University field in *Campus*
+   *
+   * - **API ID Path**: campus.university
+   */
+  university: prismic.KeyTextField;
+
+  /**
+   * Country field in *Campus*
+   *
+   * - **API ID Path**: campus.country
+   */
+  country: prismic.KeyTextField;
+
+  /**
+   * Summary field in *Campus*
+   *
+   * - **API ID Path**: campus.summary
+   */
+  summary: prismic.KeyTextField;
+
+  /**
+   * Cover Image field in *Campus*
+   *
+   * - **API ID Path**: campus.cover_image
+   */
+  cover_image: prismic.ImageField<never>;
+
+  /**
+   * Lead Ambassador field in *Campus*
+   *
+   * - **API ID Path**: campus.lead_ambassador
+   */
+  lead_ambassador: prismic.KeyTextField;
+
+  /**
+   * Founded Date field in *Campus*
+   *
+   * - **API ID Path**: campus.founded_date
+   */
+  founded_date: prismic.DateField;
+
+  /**
+   * Member Count field in *Campus*
+   *
+   * - **API ID Path**: campus.member_count
+   */
+  member_count: prismic.NumberField;
+
+  /**
+   * Body field in *Campus*
+   *
+   * - **API ID Path**: campus.body
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * Gallery field in *Campus*
+   *
+   * - **API ID Path**: campus.gallery[]
+   */
+  gallery: prismic.GroupField<Simplify<CampusDocumentDataGalleryItem>>;
+}
+
+/**
+ * Campus document from Prismic
+ *
+ * - **API ID**: `campus`
+ * - **Repeatable**: `true`
+ */
+export type CampusDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<CampusDocumentData>, "campus", Lang>;
+
 export type AllDocumentTypes =
   | AboutPageDocument
   | BlogCategoryDocument
   | BlogPostDocument
+  | CampusDocument
   | FaqDocument
   | FaqPageDocument
   | HomepageDocument
@@ -979,6 +1085,9 @@ declare module "@prismicio/client" {
       BlogPostDocument,
       BlogPostDocumentData,
       BlogPostDocumentDataSlicesSlice,
+      CampusDocument,
+      CampusDocumentData,
+      CampusDocumentDataGalleryItem,
       FaqDocument,
       FaqDocumentData,
       FaqDocumentDataFaqItem,

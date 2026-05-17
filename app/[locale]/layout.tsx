@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { QueryProvider } from "@/components/providers/query-provider";
 import { NextIntlClientProvider } from "next-intl";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -86,7 +87,7 @@ export default async function LocaleLayout({
 
 	return (
 		<NextIntlClientProvider>
-			{children}
+			<QueryProvider>{children}</QueryProvider>
 		</NextIntlClientProvider>
 	);
 }

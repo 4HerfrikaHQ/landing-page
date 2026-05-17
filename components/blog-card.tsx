@@ -11,9 +11,11 @@ type BlogCardProps = {
 	title: string;
 	description: string;
 	date: string;
-	readTime: string;
+	readTime?: string;
 	imageUrl: string;
 	className?: string;
+	href?: string;
+	readMoreLabel?: string;
 };
 
 export function BlogCard({
@@ -25,10 +27,13 @@ export function BlogCard({
 	readTime,
 	imageUrl,
 	className,
+	href,
+	readMoreLabel = "Read More",
 }: BlogCardProps) {
+	const resolvedHref = (href ?? `/blog/${uid}`) as Route;
 	return (
 		<Link
-			href={`/blog/${uid}` as Route}
+			href={resolvedHref}
 			className={cn("group flex flex-col w-full no-underline hover:no-underline!", className)}
 		>
 			<div className="relative h-60 w-full overflow-hidden rounded-[14px]">
@@ -55,14 +60,16 @@ export function BlogCard({
 				<div className="mt-6 flex items-center justify-between">
 					<div className="flex items-center gap-4">
 						<span className="text-sm text-[#999999]">{date}</span>
-						<div className="flex items-center gap-1">
-							<Clock className="size-4 text-[#999999]" />
-							<span className="text-sm text-[#999999]">{readTime}</span>
-						</div>
+						{readTime && (
+							<div className="flex items-center gap-1">
+								<Clock className="size-4 text-[#999999]" />
+								<span className="text-sm text-[#999999]">{readTime}</span>
+							</div>
+						)}
 					</div>
 
 					<div className="flex items-center gap-1">
-						<span className="text-sm font-medium text-primary-500">Read More</span>
+						<span className="text-sm font-medium text-primary-500">{readMoreLabel}</span>
 						<ArrowRight className="size-4 text-primary-500 transition-transform duration-200 group-hover:translate-x-1" />
 					</div>
 				</div>
