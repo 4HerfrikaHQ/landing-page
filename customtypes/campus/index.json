@@ -77,6 +77,23 @@
           "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,embed"
         }
       },
+      "programs": {
+        "type": "Group",
+        "config": {
+          "label": "Programs",
+          "repeat": true,
+          "fields": {
+            "name": {
+              "type": "Text",
+              "config": { "label": "Name", "placeholder": "e.g. Tech Academy" }
+            },
+            "description": {
+              "type": "Text",
+              "config": { "label": "Description", "placeholder": "" }
+            }
+          }
+        }
+      },
       "gallery": {
         "type": "Group",
         "config": {

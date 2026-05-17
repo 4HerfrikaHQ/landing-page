@@ -62,6 +62,7 @@ export default async function CampusPage({
 		cover_image,
 		body,
 		gallery,
+		programs,
 		lead_ambassador,
 		founded_date,
 		member_count,
@@ -143,6 +144,43 @@ export default async function CampusPage({
 							<PrismicRichText field={body} />
 						</ProjectContent>
 					</div>
+
+					{programs && programs.length > 0 && (
+						<section className="mt-12 md:mt-16">
+							<FadeIn>
+								<h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+									{t("programsTitle")}
+								</h2>
+							</FadeIn>
+							<ul className="divide-y divide-[#E0E0E0] border-y border-[#E0E0E0]">
+								{programs.map(
+									(
+										program: Content.CampusDocumentDataProgramsItem,
+										i: number,
+									) => (
+										<li
+											key={`program-${i + 1}`}
+											className="grid grid-cols-[64px_1fr] md:grid-cols-[140px_1fr] gap-5 md:gap-10 py-6 md:py-8 group transition-colors hover:bg-muted/40 px-2 md:px-4 -mx-2 md:-mx-4"
+										>
+											<span className="text-4xl md:text-6xl font-extrabold text-primary-500 leading-none tracking-tight">
+												{`0${i + 1}`}
+											</span>
+											<div>
+												<h3 className="text-xl md:text-3xl font-semibold text-foreground leading-tight">
+													{program.name}
+												</h3>
+												{program.description && (
+													<p className="mt-3 text-base md:text-lg text-[#636363] max-w-3xl">
+														{program.description}
+													</p>
+												)}
+											</div>
+										</li>
+									),
+								)}
+							</ul>
+						</section>
+					)}
 
 					{gallery && gallery.length > 0 && (
 						<section className="mt-12 md:mt-16">
