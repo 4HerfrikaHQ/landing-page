@@ -1,5 +1,6 @@
 import { addDays, addMinutes, isAfter, isBefore, startOfDay } from "date-fns";
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
+import ical, { ICalCalendarMethod } from "ical-generator";
 import type { DayOfWeek } from "@/src/db/schema/tables/availability";
 
 const DAY_INDEX: Record<DayOfWeek, number> = {
@@ -98,3 +99,43 @@ function rangesOverlap(
 ): boolean {
 	return aStart.getTime() < bEnd.getTime() && bStart.getTime() < aEnd.getTime();
 }
+
+// ---------- .ics ----------
+
+export function buildBookingIcs(params: {
+	uid: string;
+	method: "REQUEST" | "CANCEL";
+	summary: string;
+	description: string;
+	startAtUtc: Date;
+	endAtUtc: Date;
+	meetUrl: string;
+	mentorName: string;
+	mentorEmail: string;
+	menteeName: string;
+	menteeEmail: string;
+}): string {
+	const cal = ical({
+		name: "4HerFrika mentorship",
+		method:
+			params.method === "REQUEST"
+				? ICalCalendarMethod.REQUEST
+				: ICalCalendarMethod.CANCEL,
+	});
+	cal.createEvent({
+		id: params.uid,
+		start: params.startAtUtc,
+		end: params.endAtUtc,
+		summary: params.summary,
+		description: params.description,
+		location: params.meetUrl,
+		url: params.meetUrl,
+		organizer: { name: "4HerFrika", email: "hello@4herfrika.org" },
+		attendees: [
+			{ name: params.mentorName, email: params.mentorEmail, rsvp: true },
+			{ name: params.menteeName, email: params.menteeEmail, rsvp: true },
+		],
+	});
+	return cal.toString();
+}
+
