@@ -36,14 +36,12 @@ export function MilestonesTimeline({
 							className="absolute left-6 md:left-1/2 top-3 -translate-x-1/2 size-3 rounded-full bg-primary-500 ring-4 ring-background"
 						/>
 
-						{/* Mobile: date pill (always) above card */}
 						<div className="md:hidden pl-14 mb-3">
 							<span className="inline-flex items-center rounded-full bg-primary-500 text-white text-xs font-semibold px-3 py-1">
 								{formatDate(m.date)}
 							</span>
 						</div>
 
-						{/* Desktop date column */}
 						<div
 							className={
 								right
@@ -56,7 +54,6 @@ export function MilestonesTimeline({
 							</span>
 						</div>
 
-						{/* Card column */}
 						<div
 							className={
 								right

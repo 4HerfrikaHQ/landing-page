@@ -865,6 +865,27 @@ export type MentorDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
 
 /**
+ * Item in *Campus → Lead Ambassador Socials*
+ */
+export interface CampusDocumentDataLeadAmbassadorSocialsItem {
+  /**
+   * Platform field in *Campus → Lead Ambassador Socials*
+   *
+   * - **Field Type**: Select
+   * - **API ID Path**: campus.lead_ambassador_socials[].platform
+   */
+  platform: prismic.SelectField<"LinkedIn" | "X" | "Instagram">;
+
+  /**
+   * URL field in *Campus → Lead Ambassador Socials*
+   *
+   * - **Field Type**: Link
+   * - **API ID Path**: campus.lead_ambassador_socials[].url
+   */
+  url: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
  * Item in *Campus → Milestones*
  */
 export interface CampusDocumentDataMilestonesItem {
@@ -980,6 +1001,36 @@ interface CampusDocumentData {
    * - **API ID Path**: campus.lead_ambassador
    */
   lead_ambassador: prismic.KeyTextField;
+
+  /**
+   * Lead Ambassador Role field in *Campus*
+   *
+   * - **API ID Path**: campus.lead_ambassador_role
+   */
+  lead_ambassador_role: prismic.KeyTextField;
+
+  /**
+   * Lead Ambassador Photo field in *Campus*
+   *
+   * - **API ID Path**: campus.lead_ambassador_photo
+   */
+  lead_ambassador_photo: prismic.ImageField<never>;
+
+  /**
+   * Lead Ambassador Bio field in *Campus*
+   *
+   * - **API ID Path**: campus.lead_ambassador_bio
+   */
+  lead_ambassador_bio: prismic.KeyTextField;
+
+  /**
+   * Lead Ambassador Socials field in *Campus*
+   *
+   * - **API ID Path**: campus.lead_ambassador_socials[]
+   */
+  lead_ambassador_socials: prismic.GroupField<
+    Simplify<CampusDocumentDataLeadAmbassadorSocialsItem>
+  >;
 
   /**
    * Founded Date field in *Campus*
@@ -1152,6 +1203,7 @@ declare module "@prismicio/client" {
       CampusDocument,
       CampusDocumentData,
       CampusDocumentDataGalleryItem,
+      CampusDocumentDataLeadAmbassadorSocialsItem,
       CampusDocumentDataMilestonesItem,
       CampusDocumentDataProgramsItem,
       FaqDocument,

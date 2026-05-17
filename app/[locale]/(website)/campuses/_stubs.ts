@@ -10,6 +10,13 @@ type Stub = {
 	summary: string;
 	cover: string;
 	leadAmbassador: string;
+	leadAmbassadorRole?: string;
+	leadAmbassadorPhoto?: string;
+	leadAmbassadorBio?: string;
+	leadAmbassadorSocials?: {
+		platform: "LinkedIn" | "X" | "Instagram";
+		url: string;
+	}[];
 	foundedDate: string;
 	memberCount: number;
 	body: string[];
@@ -47,6 +54,15 @@ const STUBS: Stub[] = [
 		cover:
 			"https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80",
 		leadAmbassador: "Adesuwa Eze",
+		leadAmbassadorRole: "Chapter President · Final-year Computer Science",
+		leadAmbassadorPhoto:
+			"https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80",
+		leadAmbassadorBio:
+			"Adesuwa has led the UNILAG chapter since launch, scaling it from 12 founding members to 412. She's a former Andela fellow and runs the StopTheViolence outreach end-to-end.",
+		leadAmbassadorSocials: [
+			{ platform: "LinkedIn", url: "https://linkedin.com/in/adesuwa" },
+			{ platform: "X", url: "https://x.com/adesuwa" },
+		],
 		foundedDate: "2023-09-12",
 		memberCount: 412,
 		body: [
@@ -158,6 +174,14 @@ const STUBS: Stub[] = [
 		cover:
 			"https://images.unsplash.com/photo-1606761568499-6d2451b23c66?auto=format&fit=crop&w=1600&q=80",
 		leadAmbassador: "Akosua Mensah",
+		leadAmbassadorRole: "Chapter Lead · Climate Studies",
+		leadAmbassadorPhoto:
+			"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=80",
+		leadAmbassadorBio:
+			"Akosua launched the Legon chapter after returning from a UN Youth Climate Summit. She partners with the university's Centre for Climate Change to anchor every Academy event in current research.",
+		leadAmbassadorSocials: [
+			{ platform: "LinkedIn", url: "https://linkedin.com/in/akosua" },
+		],
 		foundedDate: "2024-03-04",
 		memberCount: 198,
 		body: [
@@ -301,6 +325,22 @@ function toCampusDoc(s: Stub): Content.CampusDocument {
 				id: `stub-img-${s.uid}`,
 			},
 			lead_ambassador: s.leadAmbassador,
+			lead_ambassador_role: s.leadAmbassadorRole ?? null,
+			lead_ambassador_bio: s.leadAmbassadorBio ?? null,
+			lead_ambassador_photo: s.leadAmbassadorPhoto
+				? {
+					url: s.leadAmbassadorPhoto,
+					dimensions: { width: 600, height: 600 },
+					alt: s.leadAmbassador,
+					copyright: null,
+					edit: { x: 0, y: 0, zoom: 1, background: "transparent" },
+					id: `stub-lead-${s.uid}`,
+				}
+				: { url: null, dimensions: null, alt: null, copyright: null },
+			lead_ambassador_socials: (s.leadAmbassadorSocials ?? []).map((soc) => ({
+				platform: soc.platform,
+				url: { link_type: "Web", url: soc.url, target: "_blank" },
+			})),
 			founded_date: s.foundedDate,
 			member_count: s.memberCount,
 			body: s.body.map((text) => ({

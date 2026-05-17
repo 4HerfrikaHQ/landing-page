@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "../../projects/_components/breadcrumbs";
 import { ProjectContent } from "../../projects/_components/project-content";
 import { getCampus, getCampuses } from "../_actions";
+import { MeetTheLead } from "../_components/meet-the-lead";
 import { MilestonesTimeline } from "../_components/milestones-timeline";
 import { OtherCampuses } from "../_components/other-campuses";
 import { QuickActions } from "../_components/quick-actions";
@@ -66,6 +67,10 @@ export default async function CampusPage({
 		programs,
 		milestones,
 		lead_ambassador,
+		lead_ambassador_role,
+		lead_ambassador_bio,
+		lead_ambassador_photo,
+		lead_ambassador_socials,
 		founded_date,
 		member_count,
 	} = campus.data;
@@ -109,7 +114,7 @@ export default async function CampusPage({
 							/>
 						</div>
 
-						<dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+						<dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
 							{founded_date && (
 								<StatTile
 									label={t("foundedLabel")}
@@ -124,9 +129,6 @@ export default async function CampusPage({
 									label={t("membersLabel")}
 									value={member_count.toLocaleString()}
 								/>
-							)}
-							{lead_ambassador && (
-								<StatTile label={t("ambassadorLabel")} value={lead_ambassador} />
 							)}
 						</dl>
 
@@ -146,6 +148,17 @@ export default async function CampusPage({
 							<PrismicRichText field={body} />
 						</ProjectContent>
 					</div>
+
+					{lead_ambassador && (
+						<MeetTheLead
+							heading={t("meetTheLeadTitle")}
+							name={lead_ambassador}
+							role={lead_ambassador_role}
+							bio={lead_ambassador_bio}
+							photo={lead_ambassador_photo}
+							socials={lead_ambassador_socials}
+						/>
+					)}
 
 					{milestones && milestones.length > 0 && (
 						<section className="mt-12 md:mt-16">
