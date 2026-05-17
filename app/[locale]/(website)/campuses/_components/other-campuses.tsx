@@ -1,8 +1,6 @@
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
+import { BlogCard } from "@/components/blog-card";
 import { Button } from "@/components/ui/button";
-import type { Content } from "@prismicio/client";
 import { getTranslations } from "next-intl/server";
-import { CampusCard } from "./campus-card";
 import { getCampuses } from "../_actions";
 
 export async function OtherCampuses({ currentUid }: { currentUid: string }) {
@@ -15,30 +13,38 @@ export async function OtherCampuses({ currentUid }: { currentUid: string }) {
 
 	return (
 		<section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-			<div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-				<FadeIn>
-					<div>
-						<h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
-							{t("exploreOtherTitle")}
-						</h2>
-						<p className="mt-2 text-base md:text-lg text-muted-foreground">
-							{t("exploreOtherDescription")}
-						</p>
-					</div>
-				</FadeIn>
-				<FadeIn>
-					<Button variant="outline" href="/campuses">
-						{t("viewAllCampuses")}
-					</Button>
-				</FadeIn>
+			<div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+				<div>
+					<h2 className="text-3xl md:text-4xl lg:text-[42px] font-semibold text-foreground">
+						{t("exploreOtherTitle")}
+					</h2>
+					<p className="mt-2 text-base md:text-lg text-foreground/60">
+						{t("exploreOtherDescription")}
+					</p>
+				</div>
+				<Button variant="outline" href="/campuses">
+					{t("viewAllCampuses")}
+				</Button>
 			</div>
-			<StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{others.map((campus) => (
-					<StaggerItem key={campus.id}>
-						<CampusCard campus={campus} readMoreLabel={tc("readMore")} />
-					</StaggerItem>
+					<BlogCard
+						key={campus.id}
+						uid={campus.uid ?? ""}
+						href={`/campuses/${campus.uid}`}
+						category={campus.data.country ?? campus.data.university ?? ""}
+						title={campus.data.name ?? ""}
+						description={campus.data.summary ?? ""}
+						date={new Date(campus.last_publication_date).toLocaleDateString(undefined, {
+							year: "numeric",
+							month: "short",
+							day: "numeric",
+						})}
+						imageUrl={campus.data.cover_image?.url ?? ""}
+						readMoreLabel={tc("readMore")}
+					/>
 				))}
-			</StaggerContainer>
+			</div>
 		</section>
 	);
 }

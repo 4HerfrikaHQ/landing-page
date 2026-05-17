@@ -1,5 +1,4 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
-import { createClient } from "@/prismicio";
 import type { Content } from "@prismicio/client";
 import { PrismicNextImage } from "@prismicio/next";
 import { PrismicRichText } from "@prismicio/react";
@@ -9,15 +8,12 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "../../projects/_components/breadcrumbs";
 import { ProjectContent } from "../../projects/_components/project-content";
-import { getCampus } from "../_actions";
+import { getCampus, getCampuses } from "../_actions";
 import { OtherCampuses } from "../_components/other-campuses";
 import { QuickActions } from "../_components/quick-actions";
 
 export async function generateStaticParams() {
-	const client = createClient();
-	const campuses = await client
-		.getAllByType<Content.CampusDocument>("campus")
-		.catch(() => []);
+	const campuses = await getCampuses().catch(() => []);
 	return campuses.map((c) => ({ uid: c.uid }));
 }
 

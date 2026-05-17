@@ -3,8 +3,16 @@
 import * as prismic from "@prismicio/client";
 import type { Content } from "@prismicio/client";
 import { createClient } from "@/prismicio";
+import {
+	USE_STUBS,
+	stubGetCampus,
+	stubGetCampuses,
+	stubGetCampusesTotal,
+	stubSearchCampuses,
+} from "./_stubs";
 
 export async function getCampuses() {
+	if (USE_STUBS) return stubGetCampuses();
 	const client = createClient();
 	return client.getAllByType<Content.CampusDocument>("campus", {
 		orderings: [{ field: "document.last_publication_date", direction: "desc" }],
@@ -12,6 +20,11 @@ export async function getCampuses() {
 }
 
 export async function getCampus(uid: string) {
+	if (USE_STUBS) {
+		const doc = stubGetCampus(uid);
+		if (!doc) throw new Error("Campus not found");
+		return doc;
+	}
 	const client = createClient();
 	return client.getByUID<Content.CampusDocument>("campus", uid);
 }
@@ -25,6 +38,7 @@ export async function searchCampuses({
 	pageSize: number;
 	query?: string;
 }): Promise<Content.CampusDocument[]> {
+	if (USE_STUBS) return stubSearchCampuses({ page, pageSize, query });
 	const client = createClient();
 	const filters: string[] = [];
 	const trimmed = query?.trim();
@@ -40,6 +54,7 @@ export async function searchCampuses({
 }
 
 export async function getCampusesTotal(): Promise<number> {
+	if (USE_STUBS) return stubGetCampusesTotal();
 	const client = createClient();
 	const res = await client.getByType<Content.CampusDocument>("campus", {
 		pageSize: 1,

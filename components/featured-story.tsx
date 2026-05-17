@@ -11,6 +11,9 @@ type FeaturedStoryProps = {
 	description: string;
 	imageUrl: string;
 	className?: string;
+	label?: string;
+	href?: string;
+	ctaLabel?: string;
 };
 
 export function FeaturedStory({
@@ -19,7 +22,11 @@ export function FeaturedStory({
 	description,
 	imageUrl,
 	className,
+	label = "Featured Story",
+	href,
+	ctaLabel = "Read Full Story",
 }: FeaturedStoryProps) {
+	const resolvedHref = (href ?? `/blog/${uid}`) as Route;
 	return (
 		<div
 			className={cn(
@@ -39,7 +46,7 @@ export function FeaturedStory({
 			<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 			<div className="relative z-10 flex max-w-[768px] flex-col gap-4 sm:gap-6">
 				<span className="inline-flex w-fit items-center rounded-full bg-primary-500 px-3 py-1 sm:px-4 sm:py-[6.5px] text-xs sm:text-sm font-medium text-white">
-					Featured Story
+					{label}
 				</span>
 
 				<h2 className="text-[28px] sm:text-[42px] font-bold leading-[1.2] text-white">
@@ -51,10 +58,10 @@ export function FeaturedStory({
 				</p>
 
 				<Link
-					href={`/blog/${uid}` as Route}
+					href={resolvedHref}
 					className="flex w-fit items-center gap-2 text-white hover:!no-underline"
 				>
-					<span className="text-sm sm:text-base font-medium">Read Full Story</span>
+					<span className="text-sm sm:text-base font-medium">{ctaLabel}</span>
 					<ArrowRight className="size-4 sm:size-5 transition-transform duration-300 group-hover:translate-x-1" />
 				</Link>
 			</div>

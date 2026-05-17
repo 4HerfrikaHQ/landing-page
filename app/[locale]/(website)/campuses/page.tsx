@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { FadeIn } from "@/components/motion";
-import UnderlineSquiggle from "../about/underline-squiggle";
+import { FeaturedStory } from "@/components/featured-story";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { hasLocale } from "next-intl";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -32,33 +33,52 @@ export default async function CampusesPage({
 		searchCampuses({ page: 0, pageSize: PAGE_SIZE }).catch(() => []),
 		getCampusesTotal().catch(() => 0),
 	]);
+	const featured = initialCampuses[0];
 
 	return (
 		<main className="bg-background">
-			<section className="bg-muted py-16 md:py-24 lg:py-28">
-				<div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-					<FadeIn>
-						<h1 className="text-pretty text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground">
-							{t("heroTitle")}
-						</h1>
-					</FadeIn>
-					<UnderlineSquiggle width={220} className="mt-4 mb-6" />
-					<FadeIn delay={0.1}>
-						<p className="text-lg md:text-xl text-muted-foreground max-w-3xl">
-							{t("heroDescription")}
-						</p>
-					</FadeIn>
-					{total > 0 && (
-						<FadeIn delay={0.15}>
-							<p className="mt-6 text-sm md:text-base font-semibold tracking-wider text-primary-500 uppercase">
-								{total} {t("breadcrumb")}
-							</p>
-						</FadeIn>
-					)}
+			<section
+				className="-mt-16 lg:-mt-[90px] pt-16 lg:pt-[90px] flex flex-col items-center justify-center text-center px-4 min-h-[580px]"
+				style={{
+					background:
+						"linear-gradient(180deg, rgba(236,0,140,0.18) 0%, rgba(236,0,140,0.08) 45%, rgba(255,255,255,1) 85%)",
+				}}
+			>
+				<div className="max-w-3xl mx-auto flex flex-col items-center gap-6 mt-16">
+					<h1 className="text-5xl lg:text-[64px] font-bold leading-[1.1] text-foreground">
+						{t("heroTitle")}
+					</h1>
+					<p className="text-lg lg:text-2xl text-foreground/60 max-w-2xl">
+						{t("heroDescription")}
+					</p>
+					<Link
+						href="#campuses-grid"
+						className="inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:!no-underline hover:brightness-90 transition-all"
+					>
+						{t("browseCampusesCta")}
+						<ArrowRight className="size-5" />
+					</Link>
 				</div>
 			</section>
 
-			<section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+			{featured && (
+				<section className="container mx-auto px-4 sm:px-6 lg:px-8 py-18">
+					<FeaturedStory
+						uid={featured.uid ?? ""}
+						href={`/campuses/${featured.uid}`}
+						title={featured.data.name ?? ""}
+						description={featured.data.summary ?? ""}
+						imageUrl={featured.data.cover_image?.url ?? ""}
+						label={t("featuredLabel")}
+						ctaLabel={t("readCampusStory")}
+					/>
+				</section>
+			)}
+
+			<section
+				id="campuses-grid"
+				className="container mx-auto px-4 sm:px-6 lg:px-8 pb-18"
+			>
 				{total === 0 ? (
 					<CampusesEmptyState />
 				) : (
