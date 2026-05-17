@@ -77,6 +77,24 @@
           "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,embed"
         }
       },
+      "milestones": {
+        "type": "Group",
+        "config": {
+          "label": "Milestones",
+          "repeat": true,
+          "fields": {
+            "date": { "type": "Date", "config": { "label": "Date" } },
+            "title": {
+              "type": "Text",
+              "config": { "label": "Title", "placeholder": "" }
+            },
+            "description": {
+              "type": "Text",
+              "config": { "label": "Description", "placeholder": "" }
+            }
+          }
+        }
+      },
       "programs": {
         "type": "Group",
         "config": {

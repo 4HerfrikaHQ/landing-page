@@ -865,6 +865,35 @@ export type MentorDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
 
 /**
+ * Item in *Campus → Milestones*
+ */
+export interface CampusDocumentDataMilestonesItem {
+  /**
+   * Date field in *Campus → Milestones*
+   *
+   * - **Field Type**: Date
+   * - **API ID Path**: campus.milestones[].date
+   */
+  date: prismic.DateField;
+
+  /**
+   * Title field in *Campus → Milestones*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.milestones[].title
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Description field in *Campus → Milestones*
+   *
+   * - **Field Type**: Text
+   * - **API ID Path**: campus.milestones[].description
+   */
+  description: prismic.KeyTextField;
+}
+
+/**
  * Item in *Campus → Programs*
  */
 export interface CampusDocumentDataProgramsItem {
@@ -972,6 +1001,13 @@ interface CampusDocumentData {
    * - **API ID Path**: campus.body
    */
   body: prismic.RichTextField;
+
+  /**
+   * Milestones field in *Campus*
+   *
+   * - **API ID Path**: campus.milestones[]
+   */
+  milestones: prismic.GroupField<Simplify<CampusDocumentDataMilestonesItem>>;
 
   /**
    * Programs field in *Campus*
@@ -1116,6 +1152,7 @@ declare module "@prismicio/client" {
       CampusDocument,
       CampusDocumentData,
       CampusDocumentDataGalleryItem,
+      CampusDocumentDataMilestonesItem,
       CampusDocumentDataProgramsItem,
       FaqDocument,
       FaqDocumentData,

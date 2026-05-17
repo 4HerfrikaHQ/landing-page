@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "../../projects/_components/breadcrumbs";
 import { ProjectContent } from "../../projects/_components/project-content";
 import { getCampus, getCampuses } from "../_actions";
+import { MilestonesTimeline } from "../_components/milestones-timeline";
 import { OtherCampuses } from "../_components/other-campuses";
 import { QuickActions } from "../_components/quick-actions";
 
@@ -63,6 +64,7 @@ export default async function CampusPage({
 		body,
 		gallery,
 		programs,
+		milestones,
 		lead_ambassador,
 		founded_date,
 		member_count,
@@ -144,6 +146,20 @@ export default async function CampusPage({
 							<PrismicRichText field={body} />
 						</ProjectContent>
 					</div>
+
+					{milestones && milestones.length > 0 && (
+						<section className="mt-12 md:mt-16">
+							<FadeIn>
+								<h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+									{t("milestonesTitle")}
+								</h2>
+							</FadeIn>
+							<MilestonesTimeline
+								milestones={milestones}
+								label={t("milestonesTitle")}
+							/>
+						</section>
+					)}
 
 					{programs && programs.length > 0 && (
 						<section className="mt-12 md:mt-16">
