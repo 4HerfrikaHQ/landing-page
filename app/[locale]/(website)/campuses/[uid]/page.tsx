@@ -66,6 +66,7 @@ export default async function CampusPage({
 		gallery,
 		programs,
 		milestones,
+		events,
 		lead_ambassador,
 		lead_ambassador_role,
 		lead_ambassador_bio,
@@ -75,6 +76,10 @@ export default async function CampusPage({
 		member_count,
 	} = campus.data;
 	const location = [university, country].filter(Boolean).join(", ");
+	const upcomingEvents = (events ?? []).filter(
+		(e: Content.CampusDocumentDataEventsItem) =>
+			e.date ? new Date(e.date).getTime() >= Date.now() : false,
+	);
 
 	return (
 		<main className="bg-background">
@@ -206,6 +211,48 @@ export default async function CampusPage({
 											</div>
 										</li>
 									),
+								)}
+							</ul>
+						</section>
+					)}
+
+					{upcomingEvents.length > 0 && (
+						<section className="mt-12 md:mt-16">
+							<FadeIn>
+								<h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+									{t("upcomingEventsTitle")}
+								</h2>
+							</FadeIn>
+							<ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+								{upcomingEvents.map(
+									(e: Content.CampusDocumentDataEventsItem, i: number) => {
+										const d = e.date ? new Date(e.date) : null;
+										return (
+											<li
+												key={`event-${i + 1}`}
+												className="rounded-2xl border border-[#E0E0E0] bg-white p-5 md:p-6 flex gap-5 items-start"
+											>
+												{d && (
+													<div className="shrink-0 rounded-2xl bg-primary-500/10 text-primary-500 w-16 md:w-20 text-center py-3 md:py-4">
+														<div className="text-xs font-semibold uppercase tracking-wide">
+															{d.toLocaleDateString(undefined, { month: "short" })}
+														</div>
+														<div className="text-2xl md:text-3xl font-bold leading-none mt-1">
+															{d.getDate()}
+														</div>
+													</div>
+												)}
+												<div className="flex-1 min-w-0">
+													<h3 className="text-base md:text-lg font-semibold text-foreground leading-tight">
+														{e.title}
+													</h3>
+													{e.location && (
+														<p className="mt-1 text-sm text-[#636363]">{e.location}</p>
+													)}
+												</div>
+											</li>
+										);
+									},
 								)}
 							</ul>
 						</section>
