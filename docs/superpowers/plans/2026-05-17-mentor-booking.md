@@ -18,6 +18,45 @@ These supersede anything below that conflicts with them. When dispatching tasks,
 
 **R1. No vitest.** Task 0.2 is dropped. The `*.test.ts` artifacts in Tasks 0.5 (booking-tokens) and 4.1 (slots) are skipped. We implement those files carefully and verify via the dev server. The Task 0.1 install drops `vitest` and `@vitest/ui` from the dev-deps list. Phase 11's `bun test` step is removed.
 
+**R3. Route-folder convention.** All page-specific server actions, schemas, and components are colocated in their route folder, not in global `src/db/actions/<feature>/` or `src/lib/`. Each route looks like:
+
+```
+some-route/
+├── page.tsx        # thin coordinator
+├── _actions.ts     # all server actions for this route
+├── _schema.ts      # zod schemas; types via z.infer
+├── _components/    # route-specific components
+└── _hooks/         # route-specific hooks (if any)
+```
+
+Helpers go into `src/lib/` (or another global location) **only when ≥3 unique routes import them**. Two callers = keep colocated with the primary route and import from the secondary. For this feature, the global helpers are:
+- `src/lib/safe-action.ts` (used by every action route)
+- `src/lib/booking-tokens.ts` (apply page → onboard, manage, feedback, cron = ≥3)
+- `src/lib/google-calendar.ts` (create, cancel, reschedule = 3)
+- `src/lib/ics.ts` (create, cancel, reschedule, cron-cancel = ≥3)
+- `src/lib/email/booking.ts` (create, cancel, reschedule, cron = ≥3)
+- `src/lib/slots.ts` (mentor detail page action, manage/reschedule action, create action = 3)
+- `components/booking/slot-picker.tsx` (component reused by mentor detail + manage pages — components live in `components/` per existing pattern, OK even at 2 callers)
+
+Everything else moves to the route folder. Concrete remap (replaces the per-task file paths below):
+
+| Original plan path | New colocated path |
+|---|---|
+| `src/db/actions/applications/{schemas,submit}.ts` | `app/[locale]/(website)/careers-corner/apply/_schema.ts` + `_actions.ts` |
+| `src/db/actions/applications/{approve,reject}.ts` | `app/(dashboard)/dashboard/admin/applications/_actions.ts` (+ `_schema.ts` for inputs) |
+| `src/db/actions/mentor-onboarding/{schemas,complete}.ts` | `app/[locale]/(website)/careers-corner/onboard/[token]/_schema.ts` + `_actions.ts` |
+| `src/db/actions/bookings/list-slots.ts` | `app/[locale]/(website)/careers-corner/[slug]/_actions.ts` (slot fetcher lives with the mentor detail page; manage page imports from here) |
+| `src/db/actions/bookings/{schemas,create}.ts` | `app/[locale]/(website)/careers-corner/[slug]/_schema.ts` + `_actions.ts` |
+| `src/db/actions/bookings/{cancel,reschedule}.ts` | `app/[locale]/(website)/bookings/[token]/_actions.ts` (+ `_schema.ts`) |
+| `src/db/actions/feedback/{schemas,submit}.ts` | `app/[locale]/(website)/bookings/[token]/feedback/_schema.ts` + `_actions.ts` |
+| `src/db/actions/mentor-booking-settings/*` | Mentor dashboard route folder when we wire that screen |
+
+**Zod conventions:**
+- Choices/discriminants use `z.enum([...])` and export both the enum **and** `z.infer` type: `export const StatusEnum = z.enum(['a','b']); export type Status = z.infer<typeof StatusEnum>;`
+- Form types derive from schemas: `export type FormInput = z.infer<typeof FormSchema>`. Never hand-type a parallel TS shape.
+
+**Awaited return types:** Any client component that receives data fetched by a server function types its prop as `Awaited<ReturnType<typeof getX>>`. No hand-typed DB-mirror interfaces.
+
 **R2. Mentor surfaces extend `/careers-corner`, not a parallel `/mentors`.** Path remap (apply globally to every file path, import path, route reference, and revalidatePath call in the plan):
 - `app/[locale]/(website)/mentors/` → `app/[locale]/(website)/careers-corner/`
 - The new "mentors directory page" task (Task 4.4) **modifies** the existing `careers-corner/page.tsx` to add search/filter + slug-based links; it does not create a new page file.
