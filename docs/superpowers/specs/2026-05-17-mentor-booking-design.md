@@ -2,7 +2,11 @@
 
 **Date:** 2026-05-17
 **Branch:** `feat/mentor-booking` (off `main`)
-**Status:** Draft, awaiting review
+**Status:** Approved, in implementation
+
+**Revisions:**
+- 2026-05-17: dropped vitest — pure-logic modules verified by careful implementation + manual smoke through the dev server. Codebase has no existing test framework; introducing one just for 3 files was net-negative.
+- 2026-05-17: mentor surfaces live under `/careers-corner` (extends existing page), not a parallel `/mentors` directory. Application form at `/careers-corner/apply`. Per-mentor detail/booking at `/careers-corner/[slug]`. Onboarding signed-link at `/careers-corner/onboard/[token]`.
 
 ## 1. Goal
 
@@ -41,6 +45,8 @@ To add:
 | `date-fns-tz` | IANA timezone-aware date math for slot computation |
 | `ical-generator` | `.ics` attachment generation |
 | `googleapis` | Google Calendar + Meet API client |
+
+(No test framework added — see §15.)
 
 New env vars (managed via `vercel env`):
 
@@ -250,10 +256,10 @@ Tokens are stateless. Revocation is implicit: cancelled bookings render a "this 
 
 ### Public (`app/[locale]/(website)/...`)
 
-- `mentors/page.tsx` — directory of active mentors (cards).
-- `mentors/[slug]/page.tsx` — profile + slot picker + booking form.
-- `mentors/apply/page.tsx` — shareable application form (LinkedIn/IG link).
-- `mentors/onboard/[token]/page.tsx` — approved-applicant self-serve onboarding (profile + availability).
+- `careers-corner/page.tsx` — existing mentor browse surface; extend with search/filter.
+- `careers-corner/[slug]/page.tsx` — profile + slot picker + booking form.
+- `careers-corner/apply/page.tsx` — shareable application form (LinkedIn/IG link).
+- `careers-corner/onboard/[token]/page.tsx` — approved-applicant self-serve onboarding (profile + availability).
 - `bookings/[token]/page.tsx` — manage (cancel / reschedule).
 - `bookings/[token]/feedback/page.tsx` — feedback form.
 
@@ -308,11 +314,11 @@ Templates live in `src/emails/`:
 
 ```
 app/[locale]/(website)/
-  mentors/
-    page.tsx
-    apply/page.tsx
-    [slug]/page.tsx
-    onboard/[token]/page.tsx
+  careers-corner/
+    page.tsx                 # existing — add search/filter
+    apply/page.tsx           # shareable application form
+    [slug]/page.tsx          # per-mentor profile + booking
+    onboard/[token]/page.tsx # approved-applicant onboarding
   bookings/
     [token]/page.tsx
     [token]/feedback/page.tsx
@@ -361,11 +367,15 @@ src/lib/
 src/emails/             # React Email components (or plain HTML strings)
 ```
 
-## 15. Testing strategy
+## 15. Verification strategy
 
-- **Pure functions** (`slots.ts`, `booking-tokens.ts`, `.ics` generator): unit tests with vitest. Slot computation has the most edge cases — cover DST transitions, TZ conversions, buffer overlaps, lead/horizon bounds.
-- **Server actions:** integration tests against a local Supabase, using next-safe-action's testable form. Mock `googleapis` and Resend at module level.
-- **Cron endpoint:** integration test that seeds bookings at known offsets and asserts each query selects the right rows and updates the right `*_sent_at` column.
+The codebase has no test framework today. Introducing one just for this feature would add an unmaintained surface.
+
+- **Pure functions** (`slots.ts`, `booking-tokens.ts`, `.ics` generator): implement carefully, exercise via the dev server. The slot picker UI doubles as a manual harness — load it in multiple timezones (browser `Intl` override) and verify expected slots appear. DST transitions verified by changing the system clock or seeding mentor availability around a DST boundary date.
+- **Server actions:** verified by smoke through the dev server end-to-end.
+- **Cron endpoint:** invoked locally with `curl -H "Authorization: Bearer $CRON_SECRET" …` after seeding bookings at known offsets. Confirm each path fires once per booking.
+
+If we later decide we want automated coverage, vitest is the natural fit and the pure-logic modules above are the obvious first home for tests.
 
 ## 16. Rollout
 

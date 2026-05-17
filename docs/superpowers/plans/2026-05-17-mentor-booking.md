@@ -12,6 +12,22 @@
 
 **Branch:** `feat/mentor-booking` (off `main`)
 
+## Plan revisions (2026-05-17, applied during execution)
+
+These supersede anything below that conflicts with them. When dispatching tasks, apply these changes:
+
+**R1. No vitest.** Task 0.2 is dropped. The `*.test.ts` artifacts in Tasks 0.5 (booking-tokens) and 4.1 (slots) are skipped. We implement those files carefully and verify via the dev server. The Task 0.1 install drops `vitest` and `@vitest/ui` from the dev-deps list. Phase 11's `bun test` step is removed.
+
+**R2. Mentor surfaces extend `/careers-corner`, not a parallel `/mentors`.** Path remap (apply globally to every file path, import path, route reference, and revalidatePath call in the plan):
+- `app/[locale]/(website)/mentors/` → `app/[locale]/(website)/careers-corner/`
+- The new "mentors directory page" task (Task 4.4) **modifies** the existing `careers-corner/page.tsx` to add search/filter + slug-based links; it does not create a new page file.
+- All `/mentors/[slug]`, `/mentors/apply`, `/mentors/onboard/[token]` references → `/careers-corner/...`.
+
+**PR split (stacked branches):**
+- PR 1 on `feat/mentor-booking` (off `main`): Phases 0, 1, 2 — foundation, schema, application flow.
+- PR 2 on `feat/mentor-booking-core` (off PR 1): Phases 3, 4, 5 — onboarding, booking creation, Google Meet, confirmation emails.
+- PR 3 on `feat/mentor-booking-lifecycle` (off PR 2): Phases 6–10 — cron, cancel/reschedule, feedback, dashboards.
+
 **Testing convention:** The codebase has no test framework today. We add `vitest` and use it **only** for pure-logic modules where bugs are silent and dangerous — slot computation, token sign/verify, `.ics` generation. Everything else is verified via `bunx tsc --noEmit` + manual smoke through the dev server. The plan calls this out per task.
 
 ---
