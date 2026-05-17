@@ -55,6 +55,51 @@
           "placeholder": ""
         }
       },
+      "lead_ambassador_role": {
+        "type": "Text",
+        "config": {
+          "label": "Lead Ambassador Role",
+          "placeholder": "e.g. Chapter President, Final-year CS"
+        }
+      },
+      "lead_ambassador_photo": {
+        "type": "Image",
+        "config": {
+          "label": "Lead Ambassador Photo",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "lead_ambassador_bio": {
+        "type": "Text",
+        "config": { "label": "Lead Ambassador Bio", "placeholder": "" }
+      },
+      "lead_ambassador_socials": {
+        "type": "Group",
+        "config": {
+          "label": "Lead Ambassador Socials",
+          "repeat": true,
+          "fields": {
+            "platform": {
+              "type": "Select",
+              "config": {
+                "label": "Platform",
+                "options": ["LinkedIn", "X", "Instagram"]
+              }
+            },
+            "url": {
+              "type": "Link",
+              "config": {
+                "label": "URL",
+                "select": null,
+                "allowTargetBlank": true,
+                "allowText": false,
+                "repeat": false
+              }
+            }
+          }
+        }
+      },
       "founded_date": {
         "type": "Date",
         "config": {
