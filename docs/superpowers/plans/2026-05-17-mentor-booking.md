@@ -743,7 +743,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const ADMIN_INBOX = process.env.ADMIN_EMAIL ?? 'team@4herfrika.org';
-const FROM = process.env.RESEND_FROM ?? '4HerFrika <no-reply@4herfrika.org>';
+const FROM = process.env.RESEND_FROM_HEADER ?? '4HerFrika <no-reply@4herfrika.org>';
 
 export async function sendMentorApplicationReceivedEmail(params: {
   applicationId: string;
@@ -2123,7 +2123,7 @@ import { Resend } from 'resend';
 import { formatInTimeZone } from 'date-fns-tz';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.RESEND_FROM ?? '4HerFrika <bookings@4herfrika.org>';
+const FROM = process.env.RESEND_FROM_HEADER ?? '4HerFrika <bookings@4herfrika.org>';
 
 type Common = {
   mentorName: string;
