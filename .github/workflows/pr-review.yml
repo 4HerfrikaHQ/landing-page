@@ -17,6 +17,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      actions: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
@@ -33,6 +35,7 @@ jobs:
           anthropic_api_key: ${{ secrets.DEEPSEEK_API_KEY }}
 
           claude_args: >-
+            --debug
             --allowedTools
             "mcp__github_inline_comment__create_inline_comment,
             Bash(gh pr checkout:*),
@@ -77,3 +80,13 @@ jobs:
             - Missing edge cases or error handling
 
             Use `mcp__github_inline_comment__create_inline_comment` for each inline comment. Be specific — explain *why* something is an issue, not just that it exists. If the code looks good, no need to leave busywork comments.
+
+      - name: Upload debug transcript
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-debug-transcript-${{ github.run_id }}
+          path: |
+            ~/.claude/projects/**/transcripts/*.jsonl
+            ~/.claude/debug/*.log
+          retention-days: 7
