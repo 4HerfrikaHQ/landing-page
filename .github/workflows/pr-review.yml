@@ -1,0 +1,77 @@
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
+
+jobs:
+  review:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Review PR with Claude Code (DeepSeek)
+        uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_BASE_URL: https://api.deepseek.com/anthropic
+          ANTHROPIC_DEFAULT_OPUS_MODEL: deepseek-v4-pro
+          ANTHROPIC_DEFAULT_SONNET_MODEL: deepseek-v4-pro
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: deepseek-v4-flash
+          CLAUDE_CODE_SUBAGENT_MODEL: deepseek-v4-flash
+          PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.pr_number || github.event.pull_request.number }}
+        with:
+          anthropic_api_key: ${{ secrets.DEEPSEEK_API_KEY }}
+
+          claude_args: >-
+            --allowedTools
+            "mcp__github_inline_comment__create_inline_comment,
+            Bash(gh pr diff:*),
+            Bash(gh pr view:*),
+            Bash(cat:*),
+            Bash(find:*),
+            Bash(gh pr comment:*),
+            Bash(echo:*)"
+
+          prompt: |
+            You are reviewing PR #${{ github.event_name == 'workflow_dispatch' && github.event.inputs.pr_number || github.event.pull_request.number }}.
+
+            Start by gathering context:
+            - Run `gh pr diff $PR_NUMBER` to get the full diff
+            - Run `gh pr view $PR_NUMBER` to get the PR title, description, and metadata
+
+            ## Step 1 — Summary comment
+            First, check if a summary has already been posted by running:
+            `gh pr view $PR_NUMBER --comments --json comments --jq '.comments[].body' | grep -q '<!-- pr-review-summary -->'`
+
+            If the marker is found, skip the summary — it's already been posted. Move directly to Step 2.
+
+            If this is the first run, post a single summary comment via `gh pr comment $PR_NUMBER --body "..."` that explains the PR in plain language. The comment MUST include `<!-- pr-review-summary -->` on its own line at the very top so future runs detect it and skip re-posting.
+
+            The summary should cover:
+            - **What it does** — high-level purpose of the changes
+            - **How it works** — key implementation details and design choices
+            - **What's affected** — files, modules, APIs, or systems touched
+            - **Notable patterns** — any architectural decisions, trade-offs, or things a reviewer should know before diving in
+
+            Keep it concise but thorough. Use markdown headings so it's easy to scan.
+
+            ## Step 2 — Inline review
+            After the summary is posted, go through the diff and leave inline comments on specific lines for:
+
+            - Bugs or logic errors
+            - Security vulnerabilities
+            - Performance issues
+            - Architectural concerns
+            - Missing edge cases or error handling
+
+            Use `mcp__github_inline_comment__create_inline_comment` for each inline comment. Be specific — explain *why* something is an issue, not just that it exists. If the code looks good, no need to leave busywork comments.
