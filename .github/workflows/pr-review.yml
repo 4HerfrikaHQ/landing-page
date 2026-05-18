@@ -46,13 +46,13 @@ jobs:
             Task,
             Write,
             Edit,
-            mcp__github_inline_comment__create_inline_comment,
             Bash(gh pr checkout:*),
             Bash(gh pr diff:*),
             Bash(gh pr view:*),
             Bash(cat:*),
             Bash(find:*),
             Bash(gh pr comment:*),
+            Bash(gh api:*),
             Bash(echo:*)"
 
           prompt: |
@@ -80,7 +80,17 @@ jobs:
             Keep it concise but thorough. Use markdown headings so it's easy to scan.
 
             ## Step 2 — Inline review
-            Go through the diff file by file. For each file, read the full source with `cat` to understand context. Use `mcp__github_inline_comment__create_inline_comment` for any feedback tied to a specific line. NEVER use `gh pr comment` for review feedback — that tool is only for the summary.
+            Go through the diff file by file. For each file, read the full source with `cat` to understand context. Post inline review comments via the GitHub API:
+
+            ```
+            gh api repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/comments \
+              -f body="your comment" \
+              -f commit_id="$(gh pr view $PR_NUMBER --json headRefOid --jq .headRefOid)" \
+              -f path="path/to/file.ts" \
+              -f line=42
+            ```
+
+            NEVER use `gh pr comment` for review feedback — that tool is only for the summary.
 
             Look for bugs, security issues, perf problems, confusing code, missing transactions, platform constraints, edge cases — whatever stands out. If the code is fine, say nothing.
 
