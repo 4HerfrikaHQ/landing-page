@@ -1,10 +1,7 @@
+import { routing } from "@/i18n/routing";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
-import { hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
 	metadataBase: new URL("https://4herfrika.org"),
@@ -78,15 +75,7 @@ export default async function LocaleLayout({
 	children: React.ReactNode;
 	params: Promise<{ locale: string }>;
 }) {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) {
-		notFound();
-	}
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 
-	return (
-		<NextIntlClientProvider>
-			{children}
-		</NextIntlClientProvider>
-	);
+	return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
 }
