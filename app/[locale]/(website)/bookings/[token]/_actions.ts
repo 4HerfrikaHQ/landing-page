@@ -1,41 +1,30 @@
 "use server";
 
-import { and, eq, gte, lt, ne } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { Resend } from "resend";
-import { formatInTimeZone } from "date-fns-tz";
 import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { availability } from "@/src/db/schema/tables/availability";
-import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { actionClient, ActionError } from "@/src/lib/safe-action";
 import {
 	signBookingToken,
 	verifyBookingToken,
 } from "@/src/lib/booking-tokens";
 import {
-	createMeetEvent,
 	deleteMeetEvent,
 	sendBookingConfirmationMentee,
 	sendBookingConfirmationMentor,
 } from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
-import {
-	buildBookingIcs,
-	computeSlots,
-} from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
+import { buildBookingIcs } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
 import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
-
-const FROM = "4herfrika <hello@4herfrika.org>";
-
-function fmt(date: Date, tz: string): string {
-	return formatInTimeZone(date, tz, "EEEE, MMM d, yyyy 'at' HH:mm zzz");
-}
-
-function siteUrl(): string {
-	return process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
-}
+import {
+	loadRescheduleContext,
+	sendCancellationEmails,
+	siteUrl,
+	swapMeetEvent,
+	validateNewSlot,
+} from "./_helpers";
 
 /** Server-only loader for the manage page. Verifies the token and returns the booking. */
 export async function loadBookingFromToken(token: string) {
@@ -58,51 +47,6 @@ export async function loadBookingFromToken(token: string) {
 		.where(eq(mentors.id, booking.mentor_id))
 		.limit(1);
 	return { ok: true as const, booking, mentor };
-}
-
-async function sendCancellationEmails(params: {
-	mentorName: string;
-	mentorEmail: string;
-	menteeName: string;
-	menteeEmail: string;
-	startAtUtc: Date;
-	menteeTimezone: string;
-	reason?: string;
-	icsAttachment: string;
-}) {
-	const resend = new Resend(process.env.RESEND_API_KEY);
-	const recipients = [
-		{
-			email: params.menteeEmail,
-			name: params.menteeName,
-			tz: params.menteeTimezone,
-		},
-		{
-			email: params.mentorEmail,
-			name: params.mentorName,
-			tz: params.menteeTimezone,
-		},
-	];
-	await Promise.all(
-		recipients.map((r) =>
-			resend.emails.send({
-				from: FROM,
-				to: r.email,
-				subject: `Cancelled: call on ${fmt(params.startAtUtc, r.tz)}`,
-				text: `Hi ${r.name},
-
-The call on ${fmt(params.startAtUtc, r.tz)} has been cancelled.${params.reason ? `\n\nReason: ${params.reason}` : ""}
-
-— 4HerFrika`,
-				attachments: [
-					{
-						filename: "cancel.ics",
-						content: Buffer.from(params.icsAttachment).toString("base64"),
-					},
-				],
-			}),
-		),
-	);
 }
 
 export const cancelBooking = actionClient
@@ -136,14 +80,16 @@ export const cancelBooking = actionClient
 			console.warn("[cancel] google delete failed", e);
 		}
 
-		await db
-			.update(bookings)
-			.set({
-				status: "cancelled",
-				cancel_reason: parsedInput.reason ?? null,
-				cancelled_at: new Date(),
-			})
-			.where(eq(bookings.id, booking.id));
+		await db.transaction(async (tx) => {
+			await tx
+				.update(bookings)
+				.set({
+					status: "cancelled",
+					cancel_reason: parsedInput.reason ?? null,
+					cancelled_at: new Date(),
+				})
+				.where(eq(bookings.id, booking.id));
+		});
 
 		if (mentor && mentorUser?.email) {
 			const ics = buildBookingIcs({
@@ -178,111 +124,52 @@ export const cancelBooking = actionClient
 export const rescheduleBooking = actionClient
 	.schema(RescheduleBookingSchema)
 	.action(async ({ parsedInput }) => {
-		const verified = verifyBookingToken(parsedInput.token);
-		if (!verified.ok || verified.action !== "manage") {
-			throw new ActionError("Invalid link");
-		}
-
-		const [booking] = await db
-			.select()
-			.from(bookings)
-			.where(eq(bookings.id, verified.bookingId))
-			.limit(1);
-		if (!booking || booking.status === "cancelled") {
-			throw new ActionError("Booking not active");
-		}
-
-		const [mentorRow] = await db
-			.select({ mentor: mentors, user: users })
-			.from(mentors)
-			.leftJoin(users, eq(users.id, mentors.user_id))
-			.where(eq(mentors.id, booking.mentor_id))
-			.limit(1);
-		const mentor = mentorRow?.mentor;
-		const mentorUser = mentorRow?.user;
-		if (!mentor) throw new ActionError("Mentor missing");
-		if (!mentorUser?.email) throw new ActionError("Mentor email missing");
-
-		const [settings] = await db
-			.select()
-			.from(mentorBookingSettings)
-			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
-			.limit(1);
-		if (!settings) throw new ActionError("Settings missing");
+		const { booking, mentor, mentorUser, settings } =
+			await loadRescheduleContext(parsedInput.token);
 
 		const newStart = new Date(parsedInput.newStartAtUtc);
 		const newEnd = new Date(
 			newStart.getTime() + settings.session_duration_minutes * 60_000,
 		);
 
-		const dayStart = new Date(newStart);
-		dayStart.setUTCHours(0, 0, 0, 0);
-		const dayEnd = new Date(dayStart);
-		dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
-
-		const templates = await db
-			.select()
-			.from(availability)
-			.where(eq(availability.mentor_id, mentor.id));
-		const existing = await db
-			.select({ startUtc: bookings.start_at, endUtc: bookings.end_at })
-			.from(bookings)
-			.where(
-				and(
-					eq(bookings.mentor_id, mentor.id),
-					ne(bookings.status, "cancelled"),
-					ne(bookings.id, booking.id),
-					gte(bookings.start_at, dayStart),
-					lt(bookings.start_at, dayEnd),
-				),
-			);
-		const slots = computeSlots({
-			availabilityTemplates: templates,
-			existingBookings: existing,
-			settings,
-			fromUtc: dayStart,
-			toUtc: dayEnd,
-			now: new Date(),
+		const { mentorTimezone } = await validateNewSlot({
+			mentorId: mentor.id,
+			bookingId: booking.id,
+			newStartUtc: newStart,
+			sessionDurationMinutes: settings.session_duration_minutes,
 		});
-		if (!slots.some((s) => s.startUtc === newStart.toISOString())) {
-			throw new ActionError("That slot is not available.");
-		}
 
-		try {
-			await deleteMeetEvent(booking.google_event_id);
-		} catch (e) {
-			console.warn("[reschedule] google delete failed", e);
-		}
-
-		const { eventId, meetUrl } = await createMeetEvent({
+		const { eventId, meetUrl } = await swapMeetEvent({
+			oldEventId: booking.google_event_id,
 			summary: `4HerFrika: ${booking.mentee_name} ↔ ${mentor.name}`,
 			description: `Purpose: ${booking.purpose}`,
 			startAtUtc: newStart,
 			endAtUtc: newEnd,
-			mentorEmail: mentorUser.email,
+			mentorEmail: mentorUser.email!,
 			menteeEmail: booking.mentee_email,
 		});
 
-		await db
-			.update(bookings)
-			.set({
-				start_at: newStart,
-				end_at: newEnd,
-				meet_url: meetUrl,
-				google_event_id: eventId,
-				reschedule_count: booking.reschedule_count + 1,
-				updated_at: new Date(),
-				reminder_24h_sent_at: null,
-				reminder_1h_sent_at: null,
-			})
-			.where(eq(bookings.id, booking.id));
+		await db.transaction(async (tx) => {
+			await tx
+				.update(bookings)
+				.set({
+					start_at: newStart,
+					end_at: newEnd,
+					meet_url: meetUrl,
+					google_event_id: eventId,
+					reschedule_count: booking.reschedule_count + 1,
+					updated_at: new Date(),
+					reminder_24h_sent_at: null,
+					reminder_1h_sent_at: null,
+				})
+				.where(eq(bookings.id, booking.id));
+		});
 
 		const manageToken = signBookingToken({
 			bookingId: booking.id,
 			action: "manage",
 			expiresAt: newStart.getTime(),
 		});
-		const mentorTz = templates[0]?.timezone ?? "UTC";
 		const ics = buildBookingIcs({
 			uid: booking.id,
 			method: "REQUEST",
@@ -292,7 +179,7 @@ export const rescheduleBooking = actionClient
 			endAtUtc: newEnd,
 			meetUrl,
 			mentorName: mentor.name,
-			mentorEmail: mentorUser.email,
+			mentorEmail: mentorUser.email!,
 			menteeName: booking.mentee_name,
 			menteeEmail: booking.mentee_email,
 		});
@@ -300,28 +187,29 @@ export const rescheduleBooking = actionClient
 		await Promise.all([
 			sendBookingConfirmationMentee({
 				mentorName: mentor.name,
-				mentorEmail: mentorUser.email,
+				mentorEmail: mentorUser.email!,
 				menteeName: booking.mentee_name,
 				menteeEmail: booking.mentee_email,
 				startAtUtc: newStart,
 				endAtUtc: newEnd,
 				meetUrl,
 				menteeTimezone: booking.mentee_timezone,
-				mentorTimezone: mentorTz,
+				mentorTimezone,
 				purpose: booking.purpose,
 				icsAttachment: ics,
 				manageUrl: `${siteUrl()}/bookings/${manageToken}`,
+				sessionDurationMinutes: settings.session_duration_minutes,
 			}),
 			sendBookingConfirmationMentor({
 				mentorName: mentor.name,
-				mentorEmail: mentorUser.email,
+				mentorEmail: mentorUser.email!,
 				menteeName: booking.mentee_name,
 				menteeEmail: booking.mentee_email,
 				startAtUtc: newStart,
 				endAtUtc: newEnd,
 				meetUrl,
 				menteeTimezone: booking.mentee_timezone,
-				mentorTimezone: mentorTz,
+				mentorTimezone,
 				purpose: booking.purpose,
 				icsAttachment: ics,
 				intake: {
