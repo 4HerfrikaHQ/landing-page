@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { MentorApplicationStatus } from "@/src/db/schema/tables/mentor-applications";
-import type { listMentorApplications } from "../_actions";
+import {
+	MentorApplicationStatus,
+	type DbMentorApplication,
+} from "@/src/db/schema/tables/mentor-applications";
 import { RowActions } from "./row-actions";
 
-type Row = Awaited<ReturnType<typeof listMentorApplications>>[number];
+type Row = DbMentorApplication;
 type Status = MentorApplicationStatus;
 
 export function ApplicationsTable({ rows }: { rows: Row[] }) {
