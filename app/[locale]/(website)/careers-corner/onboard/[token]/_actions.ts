@@ -1,18 +1,22 @@
 "use server";
 
+import { db } from "@/src/db";
+import { uploadMentorAvatar } from "@/src/db/actions/mentors";
+import { availability } from "@/src/db/schema/tables/availability";
+import { mentors } from "@/src/db/schema/tables/mentors";
+import { verifyBookingToken } from "@/src/lib/booking-tokens";
+import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { db } from "@/src/db";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { availability } from "@/src/db/schema/tables/availability";
-import { actionClient, ActionError } from "@/src/lib/safe-action";
-import { verifyBookingToken } from "@/src/lib/booking-tokens";
 import { CompleteOnboardingSchema } from "./_schema";
 
 export async function loadMentorFromToken(token: string) {
 	const verified = verifyBookingToken(token);
 	if (!verified.ok || verified.action !== "mentor_onboard") {
-		return { ok: false as const, reason: verified.ok ? "wrong_action" : verified.reason };
+		return {
+			ok: false as const,
+			reason: verified.ok ? "wrong_action" : verified.reason,
+		};
 	}
 	const [mentor] = await db
 		.select()
@@ -71,3 +75,16 @@ export const completeMentorOnboarding = actionClient
 		revalidatePath(`/careers-corner/${mentor.slug}`);
 		return { slug: mentor.slug };
 	});
+
+export async function uploadOnboardingPhoto(
+	token: string,
+	formData: FormData,
+): Promise<{ url?: string; error?: string }> {
+	const verified = verifyBookingToken(token);
+	if (!verified.ok || verified.action !== "mentor_onboard") {
+		return {
+			error: `Invalid link: ${verified.ok ? "wrong_action" : verified.reason}`,
+		};
+	}
+	return uploadMentorAvatar(verified.bookingId, formData);
+}

@@ -1,16 +1,17 @@
 "use client";
 
-import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import type { Route } from "next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
+import type { Route } from "next";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { completeMentorOnboarding } from "../_actions";
 import { CompleteOnboardingSchema } from "../_schema";
+import { ProfilePhotoUpload } from "./profile-photo-upload";
 
 export function OnboardingForm({
 	token,
@@ -70,11 +71,18 @@ export function OnboardingForm({
 			</div>
 
 			<div className="space-y-1.5">
-				<Label>Profile photo URL (optional)</Label>
-				<Input type="url" {...form.register("image")} />
-				<p className="text-xs text-gray-500">
-					Paste an image URL — native upload comes later.
-				</p>
+				<Label>Profile photo (optional)</Label>
+				<input type="hidden" {...form.register("image")} />
+				<ProfilePhotoUpload
+					token={token}
+					value={form.watch("image") ?? ""}
+					onChange={(url) =>
+						form.setValue("image", url, {
+							shouldDirty: true,
+							shouldValidate: true,
+						})
+					}
+				/>
 			</div>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">
