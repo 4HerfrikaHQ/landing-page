@@ -31,7 +31,7 @@ export default async function MenteesPage() {
 }
 
 async function MenteesContent({ mentorId }: { mentorId: string }) {
-	const rows = await db
+	const mentees = await db
 		.select({
 			email: bookings.mentee_email,
 			name: sql<string>`max(${bookings.mentee_name})`,
@@ -53,26 +53,26 @@ async function MenteesContent({ mentorId }: { mentorId: string }) {
 			</header>
 
 			<div className="space-y-3">
-				{rows.length === 0 && (
+				{mentees.length === 0 && (
 					<p className="text-sm text-gray-500">No mentees yet.</p>
 				)}
-				{rows.map((r) => (
+				{mentees.map((mentee) => (
 					<article
-						key={r.email}
+						key={mentee.email}
 						className="rounded-lg border p-4 text-sm bg-white"
 					>
 						<p className="font-medium text-gray-900">
-							{r.name}{" "}
+							{mentee.name}{" "}
 							<a
-								href={`mailto:${r.email}`}
+								href={`mailto:${mentee.email}`}
 								className="font-normal text-gray-500 underline"
 							>
-								{r.email}
+								{mentee.email}
 							</a>
 						</p>
 						<p className="text-gray-500">
-							{r.total} session{r.total === 1 ? "" : "s"} · last:{" "}
-							{formatInTimeZone(new Date(r.lastAt), "UTC", "MMM d, yyyy")}
+							{mentee.total} session{mentee.total === 1 ? "" : "s"} · last:{" "}
+							{formatInTimeZone(new Date(mentee.lastAt), "UTC", "MMM d, yyyy")}
 						</p>
 					</article>
 				))}
