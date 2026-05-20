@@ -32,6 +32,23 @@ export type ComputedSlot = {
 	endUtc: string;
 };
 
+/**
+ * Compute bookable slots for a mentor over the `[fromUtc, toUtc)` range.
+ *
+ * Walks each UTC day in the range and, for every availability window whose
+ * weekday matches in the window's local timezone, fans out fixed-length slots
+ * of `settings.session_duration_minutes`. Slot start/end are converted to UTC
+ * via the window's IANA `timezone` so DST transitions are handled correctly.
+ *
+ * Filters applied per slot:
+ * - `min_lead_hours` — slots before `now + min_lead_hours` are skipped.
+ * - `max_horizon_days` — slots beyond `now + max_horizon_days` are skipped.
+ * - `buffer_minutes` — each existing booking is widened by `±buffer_minutes`
+ *   before overlap-checking, so back-to-back calls leave breathing room.
+ *
+ * Slots are de-duplicated by UTC start (windows that overlap across days or
+ * timezones won't double-count) and returned sorted ascending.
+ */
 export function computeSlots(opts: {
 	availabilityTemplates: Template[];
 	existingBookings: Booking[];
@@ -102,6 +119,17 @@ function rangesOverlap(
 
 // ---------- .ics ----------
 
+/**
+ * Build an RFC 5545 `.ics` calendar payload for a booking confirmation or
+ * cancellation, returned as a string ready to attach to an email.
+ *
+ * Uses `ical-generator` so RFC 5545 escaping (commas, semicolons, newlines in
+ * `SUMMARY`/`DESCRIPTION`/`LOCATION`) is handled for us instead of hand-rolling
+ * the ics text. The `method` controls how mail clients react: `REQUEST` shows
+ * the event as a new invite, `CANCEL` removes it from the recipient's
+ * calendar. `uid` must be stable across REQUEST + CANCEL for the same booking
+ * so clients can match them up.
+ */
 export function buildBookingIcs(params: {
 	uid: string;
 	method: "REQUEST" | "CANCEL";
