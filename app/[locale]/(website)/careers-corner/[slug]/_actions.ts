@@ -230,7 +230,7 @@ export const listMentorSlots = actionClient
 			.limit(1);
 		if (!settings) throw new ActionError("Mentor booking settings missing");
 
-		const templates = await db
+		const availabilityWindows = await db
 			.select()
 			.from(availability)
 			.where(eq(availability.mentor_id, mentor.id));
@@ -251,7 +251,7 @@ export const listMentorSlots = actionClient
 			);
 
 		const slots = computeSlots({
-			availabilityTemplates: templates,
+			availabilityTemplates: availabilityWindows,
 			existingBookings: existing,
 			settings,
 			fromUtc,
@@ -261,7 +261,7 @@ export const listMentorSlots = actionClient
 
 		return {
 			mentorId: mentor.id,
-			mentorTimezone: templates[0]?.timezone ?? "UTC",
+			mentorTimezone: availabilityWindows[0]?.timezone ?? "UTC",
 			slots,
 		};
 	});
@@ -314,7 +314,7 @@ export const createBooking = actionClient
 		const dayEnd = new Date(dayStart);
 		dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
 
-		const templates = await db
+		const availabilityWindows = await db
 			.select()
 			.from(availability)
 			.where(eq(availability.mentor_id, mentor.id));
@@ -330,7 +330,7 @@ export const createBooking = actionClient
 				),
 			);
 		const slots = computeSlots({
-			availabilityTemplates: templates,
+			availabilityTemplates: availabilityWindows,
 			existingBookings: existing,
 			settings,
 			fromUtc: dayStart,
@@ -381,7 +381,7 @@ export const createBooking = actionClient
 			expiresAt: startAt.getTime(),
 		});
 		const manageUrl = `${siteUrl()}/bookings/${manageToken}`;
-		const mentorTz = templates[0]?.timezone ?? "UTC";
+		const mentorTz = availabilityWindows[0]?.timezone ?? "UTC";
 		const ics = buildBookingIcs({
 			uid: booking.id,
 			method: "REQUEST",
