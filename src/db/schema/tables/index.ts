@@ -40,4 +40,7 @@ export type {
 	DbBookingFeedbackInsert,
 } from "./booking-feedback";
 
+export { bookingTokens } from "./booking-tokens";
+export type { DbBookingToken, DbBookingTokenInsert } from "./booking-tokens";
+
 export * from "./relations";
