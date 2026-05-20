@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { Gender } from "@/src/db/schema/tables/mentor-applications";
 import { CareerStage } from "@/src/db/schema/tables/bookings";
+import { Gender } from "@/src/db/schema/tables/mentor-applications";
+import { z } from "zod";
 
 export const ListSlotsSchema = z.object({
 	mentorSlug: z.string().min(1),

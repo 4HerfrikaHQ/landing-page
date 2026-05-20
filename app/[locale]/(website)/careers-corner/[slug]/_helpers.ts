@@ -1,7 +1,7 @@
+import type { DayOfWeek } from "@/src/db/schema/tables/availability";
 import { addDays, addMinutes, isAfter, isBefore, startOfDay } from "date-fns";
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
 import ical, { ICalCalendarMethod } from "ical-generator";
-import type { DayOfWeek } from "@/src/db/schema/tables/availability";
 
 const DAY_INDEX: Record<DayOfWeek, number> = {
 	Sunday: 0,
@@ -57,7 +57,14 @@ export function computeSlots(opts: {
 	toUtc: Date;
 	now: Date;
 }): ComputedSlot[] {
-	const { availabilityTemplates, existingBookings, settings, fromUtc, toUtc, now } = opts;
+	const {
+		availabilityTemplates,
+		existingBookings,
+		settings,
+		fromUtc,
+		toUtc,
+		now,
+	} = opts;
 
 	const earliest = addMinutes(now, settings.min_lead_hours * 60);
 	const latest = addDays(now, settings.max_horizon_days);
@@ -67,18 +74,31 @@ export function computeSlots(opts: {
 	for (let d = startOfDay(fromUtc); isBefore(d, toUtc); d = addDays(d, 1)) {
 		for (const tpl of availabilityTemplates) {
 			const localDateStr = formatInTimeZone(d, tpl.timezone, "yyyy-MM-dd");
-			const localDayName = formatInTimeZone(d, tpl.timezone, "EEEE") as DayOfWeek;
+			const localDayName = formatInTimeZone(
+				d,
+				tpl.timezone,
+				"EEEE",
+			) as DayOfWeek;
 			if (DAY_INDEX[localDayName] !== DAY_INDEX[tpl.day]) continue;
 
 			// availability stores "HH:MM:SS" — trim to HH:MM for ISO compatibility
 			const start = tpl.start_time.slice(0, 5);
 			const end = tpl.end_time.slice(0, 5);
-			const windowStartUtc = fromZonedTime(`${localDateStr}T${start}:00`, tpl.timezone);
-			const windowEndUtc = fromZonedTime(`${localDateStr}T${end}:00`, tpl.timezone);
+			const windowStartUtc = fromZonedTime(
+				`${localDateStr}T${start}:00`,
+				tpl.timezone,
+			);
+			const windowEndUtc = fromZonedTime(
+				`${localDateStr}T${end}:00`,
+				tpl.timezone,
+			);
 
 			for (
 				let s = windowStartUtc;
-				!isAfter(addMinutes(s, settings.session_duration_minutes), windowEndUtc);
+				!isAfter(
+					addMinutes(s, settings.session_duration_minutes),
+					windowEndUtc,
+				);
 				s = addMinutes(s, settings.session_duration_minutes)
 			) {
 				const slotEnd = addMinutes(s, settings.session_duration_minutes);
@@ -166,4 +186,3 @@ export function buildBookingIcs(params: {
 	});
 	return cal.toString();
 }
-

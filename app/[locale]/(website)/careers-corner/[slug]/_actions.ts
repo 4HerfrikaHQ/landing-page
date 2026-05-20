@@ -1,17 +1,17 @@
 "use server";
 
-import { and, eq, gte, lt, ne, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { Resend } from "resend";
-import { formatInTimeZone } from "date-fns-tz";
 import { db } from "@/src/db";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { users } from "@/src/db/schema/tables/users";
 import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
-import { actionClient, ActionError } from "@/src/lib/safe-action";
+import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
+import { ActionError, actionClient } from "@/src/lib/safe-action";
+import { formatInTimeZone } from "date-fns-tz";
+import { and, eq, gte, lt, ne, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
 import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
@@ -38,9 +38,14 @@ async function getGoogleAccessToken(): Promise<string> {
 		}),
 	});
 	if (!res.ok) {
-		throw new Error(`Google token exchange failed: ${res.status} ${await res.text()}`);
+		throw new Error(
+			`Google token exchange failed: ${res.status} ${await res.text()}`,
+		);
 	}
-	const json = (await res.json()) as { access_token: string; expires_in: number };
+	const json = (await res.json()) as {
+		access_token: string;
+		expires_in: number;
+	};
 	cachedAccessToken = {
 		token: json.access_token,
 		expiresAt: Date.now() + json.expires_in * 1000,
@@ -95,14 +100,15 @@ export async function createMeetEvent(params: {
 	const data = (await res.json()) as {
 		id?: string;
 		hangoutLink?: string;
-		conferenceData?: { entryPoints?: { entryPointType?: string; uri?: string }[] };
+		conferenceData?: {
+			entryPoints?: { entryPointType?: string; uri?: string }[];
+		};
 	};
 	const eventId = data.id;
 	const meetUrl =
 		data.hangoutLink ??
-		data.conferenceData?.entryPoints?.find(
-			(e) => e.entryPointType === "video",
-		)?.uri;
+		data.conferenceData?.entryPoints?.find((e) => e.entryPointType === "video")
+			?.uri;
 	if (!eventId || !meetUrl) throw new Error("Failed to create Meet event");
 	return { eventId, meetUrl };
 }

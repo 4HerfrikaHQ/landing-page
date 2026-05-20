@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { formatInTimeZone } from "date-fns-tz";
+import { SlotPicker } from "@/components/booking/slot-picker";
 import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { SlotPicker } from "@/components/booking/slot-picker";
+import { formatInTimeZone } from "date-fns-tz";
+import { useState } from "react";
 import { BookingForm } from "./booking-form";
 
 export function BookingSection({

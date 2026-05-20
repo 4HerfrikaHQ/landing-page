@@ -1,13 +1,13 @@
 "use client";
 
-import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { createBooking } from "../_actions";
 import { CreateBookingSchema } from "../_schema";
 
@@ -44,9 +44,7 @@ export function BookingForm({
 			},
 			actionProps: {
 				onSuccess: () => {
-					toast.success(
-						"Booked! Check your email for the calendar invite.",
-					);
+					toast.success("Booked! Check your email for the calendar invite.");
 					queryClient.invalidateQueries({ queryKey: ["slots", mentorSlug] });
 					onSuccess();
 				},

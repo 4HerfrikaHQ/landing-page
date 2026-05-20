@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { getMentorBySlug } from "./_actions";
 import { BookingSection } from "./_components/booking-section";
 
