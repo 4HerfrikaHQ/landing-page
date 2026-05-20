@@ -1,3 +1,32 @@
+/**
+ * Signed action tokens for one-shot booking links emailed to users.
+ *
+ * We email links like `/.../{token}` that let an unauthenticated recipient
+ * perform exactly one action against a known booking (or mentor record, in
+ * the onboarding case). The token is an HMAC-SHA256 signed payload — no
+ * server-side session, no DB lookup required to validate.
+ *
+ * Payload shape: { bookingId, action, expiresAt }
+ *   - `bookingId` — the resource the token grants access to. For
+ *     `mentor_onboard` this is actually the mentor id (the action predates
+ *     the rename and we kept the field name to avoid a token format change).
+ *   - `action` — one of `BookingTokenAction`:
+ *       * `manage`         — recipient (mentee) manages an existing booking
+ *                            (reschedule / cancel).
+ *       * `feedback`       — recipient leaves post-call feedback.
+ *       * `mentor_onboard` — approved applicant finishes their mentor
+ *                            profile + sets availability.
+ *   - `expiresAt` — absolute ms-since-epoch deadline. After this the token
+ *     is rejected with `reason: "expired"`. Callers pick the lifetime per
+ *     action (e.g. 30 days for onboarding).
+ *
+ * Requires `BOOKING_TOKEN_SECRET` to be set; we throw at sign/verify time
+ * rather than at module load so test runners can import without the env.
+ *
+ * Encoding: `<base64url(JSON payload)>.<base64url(HMAC-SHA256)>`. Signature
+ * comparison is constant-time via `timingSafeEqual`.
+ */
+
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 
@@ -30,12 +59,24 @@ function secret(): Buffer {
 	return Buffer.from(s);
 }
 
+/**
+ * Sign a booking action payload and return the URL-safe token string.
+ * Throws if `BOOKING_TOKEN_SECRET` is not set. Caller is responsible for
+ * setting `expiresAt` appropriately for the action.
+ */
 export function signBookingToken(payload: Payload): string {
 	const body = b64url(JSON.stringify(payload));
 	const sig = createHmac("sha256", secret()).update(body).digest();
 	return `${body}.${b64url(sig)}`;
 }
 
+/**
+ * Verify a token. Returns a discriminated union — on success the parsed
+ * payload is spread onto the result; on failure `reason` distinguishes
+ * `malformed` (bad shape / not JSON), `bad_signature` (HMAC mismatch), and
+ * `expired` (signature valid but past `expiresAt`). Never throws on bad
+ * input — only if the signing secret is missing.
+ */
 export function verifyBookingToken(token: string): VerifyResult {
 	const parts = token.split(".");
 	if (parts.length !== 2) return { ok: false, reason: "malformed" };
