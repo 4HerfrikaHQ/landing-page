@@ -1,3 +1,10 @@
+/**
+ * Booking reminder cron handler.
+ *
+ * Schedule lives in Supabase `pg_cron` (the hobby Vercel tier blocks
+ * sub-daily crons). Supabase pings this endpoint every 5 minutes with
+ * `Authorization: Bearer ${CRON_SECRET}`.
+ */
 import { NextResponse } from "next/server";
 import { and, eq, gte, isNull, lt, lte, ne } from "drizzle-orm";
 import { Resend } from "resend";
