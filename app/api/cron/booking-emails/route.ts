@@ -82,28 +82,8 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 		const rows = await loadDueBookings("reminder_1h_sent_at", lower, upper);
 		for (const b of rows) {
 			await Promise.all([
-				resend.emails.send({
-					from: FROM,
-					to: b.mentee_email,
-					subject: `Starting soon: your call with ${b.mentorName}`,
-					text: `Hi ${b.mentee_name},
-
-Your call starts at ${fmt(b.start_at, b.mentee_timezone)}. Join here: ${b.meet_url}
-
-— 4HerFrika`,
-				}),
-				b.mentorEmail
-					? resend.emails.send({
-							from: FROM,
-							to: b.mentorEmail,
-							subject: `In ~1 hour: call with ${b.mentee_name}`,
-							text: `Hi ${b.mentorName},
-
-Your call with ${b.mentee_name} starts at ${fmt(b.start_at, b.mentorTimezone ?? b.mentee_timezone)}. Join here: ${b.meet_url}
-
-— 4HerFrika`,
-						})
-					: Promise.resolve(),
+				sendMenteeReminder(resend, b),
+				sendMentorReminder(resend, b),
 			]);
 			await db
 				.update(bookings)
@@ -202,6 +182,36 @@ Thanks again for showing up. If there's anything you wanted to follow up with ${
 	}
 
 	return NextResponse.json({ ok: true, counts });
+}
+
+type DueBooking = Awaited<ReturnType<typeof loadDueBookings>>[number];
+
+async function sendMenteeReminder(resend: Resend, b: DueBooking) {
+	if (!b.mentee_email) return;
+	await resend.emails.send({
+		from: FROM,
+		to: b.mentee_email,
+		subject: `Starting soon: your call with ${b.mentorName}`,
+		text: `Hi ${b.mentee_name},
+
+Your call starts at ${fmt(b.start_at, b.mentee_timezone)}. Join here: ${b.meet_url}
+
+— 4HerFrika`,
+	});
+}
+
+async function sendMentorReminder(resend: Resend, b: DueBooking) {
+	if (!b.mentorEmail) return;
+	await resend.emails.send({
+		from: FROM,
+		to: b.mentorEmail,
+		subject: `In ~1 hour: call with ${b.mentee_name}`,
+		text: `Hi ${b.mentorName},
+
+Your call with ${b.mentee_name} starts at ${fmt(b.start_at, b.mentorTimezone ?? b.mentee_timezone)}. Join here: ${b.meet_url}
+
+— 4HerFrika`,
+	});
 }
 
 async function loadDueBookings(
