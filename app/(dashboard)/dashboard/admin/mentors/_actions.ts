@@ -5,6 +5,7 @@ import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { and, eq, ilike, or, SQL } from "drizzle-orm";
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorsForAdmin(
@@ -76,19 +77,12 @@ export async function createMentor(
 		.toLowerCase()
 		.normalize("NFKD")
 		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/(^-|-$)/g, "");
-	let slug = baseSlug || "mentor";
-	let n = 1;
-	while (true) {
-		const exists = await db
-			.select({ id: schema.mentors.id })
-			.from(schema.mentors)
-			.where(eq(schema.mentors.slug, slug))
-			.limit(1);
-		if (exists.length === 0) break;
-		n += 1;
-		slug = `${baseSlug}-${n}`;
-	}
+		.replace(/(^-|-$)/g, "") || "mentor";
+	const suffix = createHash("sha256")
+		.update(`${Date.now()}-${baseSlug}`)
+		.digest("hex")
+		.slice(0, 8);
+	const slug = `${baseSlug}-${suffix}`;
 
 	await db.insert(schema.mentors).values({
 		user_id: dbUser.id,

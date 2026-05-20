@@ -1,6 +1,7 @@
 "use server";
 
 import { desc, eq } from "drizzle-orm";
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { db } from "@/src/db";
@@ -82,18 +83,11 @@ export const approveMentorApplication = adminAction
 			throw new ActionError("Application is not pending");
 
 		const baseSlug = slugify(app.name);
-		let slug = baseSlug;
-		let n = 1;
-		while (true) {
-			const exists = await db
-				.select({ id: mentors.id })
-				.from(mentors)
-				.where(eq(mentors.slug, slug))
-				.limit(1);
-			if (exists.length === 0) break;
-			n += 1;
-			slug = `${baseSlug}-${n}`;
-		}
+		const suffix = createHash("sha256")
+			.update(`${Date.now()}-${baseSlug}`)
+			.digest("hex")
+			.slice(0, 8);
+		const slug = `${baseSlug}-${suffix}`;
 
 		const result = await db.transaction(async (tx) => {
 			const [mentor] = await tx
