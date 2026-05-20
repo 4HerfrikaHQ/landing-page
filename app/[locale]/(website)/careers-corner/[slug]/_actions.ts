@@ -124,7 +124,7 @@ export async function deleteMeetEvent(eventId: string): Promise<void> {
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
-function fmt(date: Date, tz: string): string {
+function formatInTz(date: Date, tz: string): string {
 	return formatInTimeZone(date, tz, "EEEE, MMM d, yyyy 'at' HH:mm zzz");
 }
 
@@ -156,7 +156,7 @@ export async function sendBookingConfirmationMentee(
 		subject: `Confirmed: your call with ${p.mentorName}`,
 		text: `Hi ${p.menteeName},
 
-Your 30-minute call with ${p.mentorName} is confirmed for ${fmt(p.startAtUtc, p.menteeTimezone)}.
+Your 30-minute call with ${p.mentorName} is confirmed for ${formatInTz(p.startAtUtc, p.menteeTimezone)}.
 
 Join here: ${p.meetUrl}
 
@@ -185,12 +185,12 @@ export async function sendBookingConfirmationMentor(
 	await resend.emails.send({
 		from: FROM,
 		to: p.mentorEmail,
-		subject: `New booking: ${p.menteeName} on ${fmt(p.startAtUtc, p.mentorTimezone)}`,
+		subject: `New booking: ${p.menteeName} on ${formatInTz(p.startAtUtc, p.mentorTimezone)}`,
 		text: `Hi ${p.mentorName},
 
 You have a new mentee booking.
 
-When: ${fmt(p.startAtUtc, p.mentorTimezone)}
+When: ${formatInTz(p.startAtUtc, p.mentorTimezone)}
 Meet: ${p.meetUrl}
 
 Mentee: ${p.menteeName} <${p.menteeEmail}>
