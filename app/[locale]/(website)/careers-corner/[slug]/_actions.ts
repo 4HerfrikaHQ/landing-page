@@ -147,7 +147,7 @@ type ConfirmationCommon = {
 };
 
 export async function sendBookingConfirmationMentee(
-	p: ConfirmationCommon & { manageUrl: string },
+	p: ConfirmationCommon & { manageUrl: string; sessionDurationMinutes: number },
 ) {
 	const resend = new Resend(process.env.RESEND_API_KEY);
 	await resend.emails.send({
@@ -156,7 +156,7 @@ export async function sendBookingConfirmationMentee(
 		subject: `Confirmed: your call with ${p.mentorName}`,
 		text: `Hi ${p.menteeName},
 
-Your 30-minute call with ${p.mentorName} is confirmed for ${formatInTz(p.startAtUtc, p.menteeTimezone)}.
+Your ${p.sessionDurationMinutes}-minute call with ${p.mentorName} is confirmed for ${formatInTz(p.startAtUtc, p.menteeTimezone)}.
 
 Join here: ${p.meetUrl}
 
@@ -411,6 +411,7 @@ export const createBooking = actionClient
 					purpose: parsedInput.purpose,
 					icsAttachment: ics,
 					manageUrl,
+					sessionDurationMinutes: settings.session_duration_minutes,
 				}),
 				sendBookingConfirmationMentor({
 					mentorName: mentor.name,
