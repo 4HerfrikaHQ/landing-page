@@ -93,7 +93,7 @@ export const approveMentorApplication = adminAction
 			const [mentor] = await tx
 				.insert(mentors)
 				.values({
-					user_id: ctx.user.id,
+					user_id: ctx.id,
 					name: app.name,
 					position: app.position,
 					bio: app.bio,
@@ -110,7 +110,7 @@ export const approveMentorApplication = adminAction
 				.set({
 					status: "approved",
 					reviewed_at: new Date(),
-					reviewed_by: ctx.user.id,
+					reviewed_by: ctx.id,
 					mentor_id: mentor.id,
 				})
 				.where(eq(mentorApplications.id, app.id));
@@ -152,7 +152,7 @@ export const rejectMentorApplication = adminAction
 				status: "rejected",
 				reject_reason: parsedInput.reason ?? null,
 				reviewed_at: new Date(),
-				reviewed_by: ctx.user.id,
+				reviewed_by: ctx.id,
 			})
 			.where(eq(mentorApplications.id, app.id));
 

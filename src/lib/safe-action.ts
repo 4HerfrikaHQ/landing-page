@@ -21,7 +21,7 @@ export const adminAction = actionClient.use(async ({ next }) => {
 	if (user.role !== "super_admin") {
 		throw new ActionError("Unauthorized");
 	}
-	return next({ ctx: { user } });
+	return next({ ctx: user });
 });
 
 export const mentorAction = actionClient.use(async ({ next }) => {
@@ -34,7 +34,7 @@ export const mentorAction = actionClient.use(async ({ next }) => {
 	if (user.role !== "mentor") {
 		throw new ActionError("Unauthorized");
 	}
-	return next({ ctx: { user } });
+	return next({ ctx: user });
 });
 
 export { ActionError };
