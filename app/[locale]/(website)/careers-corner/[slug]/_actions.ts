@@ -353,26 +353,41 @@ export const createBooking = actionClient
 			menteeEmail: parsedInput.mentee_email,
 		});
 
-		// Insert booking
-		const [booking] = await db
-			.insert(bookings)
-			.values({
-				mentor_id: mentor.id,
-				mentee_name: parsedInput.mentee_name,
-				mentee_email: parsedInput.mentee_email,
-				mentee_gender: parsedInput.mentee_gender,
-				purpose: parsedInput.purpose,
-				mentee_phone: parsedInput.mentee_phone || null,
-				mentee_linkedin: parsedInput.mentee_linkedin || null,
-				mentee_country: parsedInput.mentee_country || null,
-				mentee_career_stage: parsedInput.mentee_career_stage,
-				start_at: startAt,
-				end_at: endAt,
-				mentee_timezone: parsedInput.menteeTimezone,
-				meet_url: meetUrl,
-				google_event_id: eventId,
-			})
-			.returning();
+		// Insert booking inside a transaction. The Google Meet event already exists at
+		// this point — if the insert fails we compensate by deleting it so we don't
+		// leak orphaned calendar events.
+		let booking: typeof bookings.$inferSelect;
+		try {
+			booking = await db.transaction(async (tx) => {
+				const [row] = await tx
+					.insert(bookings)
+					.values({
+						mentor_id: mentor.id,
+						mentee_name: parsedInput.mentee_name,
+						mentee_email: parsedInput.mentee_email,
+						mentee_gender: parsedInput.mentee_gender,
+						purpose: parsedInput.purpose,
+						mentee_phone: parsedInput.mentee_phone || null,
+						mentee_linkedin: parsedInput.mentee_linkedin || null,
+						mentee_country: parsedInput.mentee_country || null,
+						mentee_career_stage: parsedInput.mentee_career_stage,
+						start_at: startAt,
+						end_at: endAt,
+						mentee_timezone: parsedInput.menteeTimezone,
+						meet_url: meetUrl,
+						google_event_id: eventId,
+					})
+					.returning();
+				return row;
+			});
+		} catch (e) {
+			// Compensate: the Meet event was created before the insert. Roll it back
+			// so we don't leak an orphan calendar event the user can't see.
+			await deleteMeetEvent(eventId).catch((err) =>
+				console.error("[booking] failed to compensate Meet event", err),
+			);
+			throw e;
+		}
 
 		// Side effects — best-effort emails
 		const manageToken = signBookingToken({
@@ -434,10 +449,12 @@ export const createBooking = actionClient
 					},
 				}),
 			]);
-			await db
-				.update(bookings)
-				.set({ confirmation_sent_at: new Date() })
-				.where(eq(bookings.id, booking.id));
+			await db.transaction(async (tx) => {
+				await tx
+					.update(bookings)
+					.set({ confirmation_sent_at: new Date() })
+					.where(eq(bookings.id, booking.id));
+			});
 		} catch (e) {
 			console.error("[booking] confirmation email failed", e);
 		}
