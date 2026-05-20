@@ -121,20 +121,14 @@ export const cancelBooking = actionClient
 		if (!booking) throw new ActionError("Booking not found");
 		if (booking.status === "cancelled") return { ok: true };
 
-		const [mentor] = await db
-			.select()
+		const [mentorRow] = await db
+			.select({ mentor: mentors, user: users })
 			.from(mentors)
+			.leftJoin(users, eq(users.id, mentors.user_id))
 			.where(eq(mentors.id, booking.mentor_id))
 			.limit(1);
-		const mentorUser = mentor
-			? (
-					await db
-						.select()
-						.from(users)
-						.where(eq(users.id, mentor.user_id))
-						.limit(1)
-				)[0]
-			: undefined;
+		const mentor = mentorRow?.mentor;
+		const mentorUser = mentorRow?.user ?? undefined;
 
 		try {
 			await deleteMeetEvent(booking.google_event_id);
@@ -198,18 +192,15 @@ export const rescheduleBooking = actionClient
 			throw new ActionError("Booking not active");
 		}
 
-		const [mentor] = await db
-			.select()
+		const [mentorRow] = await db
+			.select({ mentor: mentors, user: users })
 			.from(mentors)
+			.leftJoin(users, eq(users.id, mentors.user_id))
 			.where(eq(mentors.id, booking.mentor_id))
 			.limit(1);
+		const mentor = mentorRow?.mentor;
+		const mentorUser = mentorRow?.user;
 		if (!mentor) throw new ActionError("Mentor missing");
-
-		const [mentorUser] = await db
-			.select()
-			.from(users)
-			.where(eq(users.id, mentor.user_id))
-			.limit(1);
 		if (!mentorUser?.email) throw new ActionError("Mentor email missing");
 
 		const [settings] = await db
