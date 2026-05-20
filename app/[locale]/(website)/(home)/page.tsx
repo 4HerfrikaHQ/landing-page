@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion";
 import { PrismicImage } from "@prismicio/react";
 import type { Route } from "next";
-import { hasLocale } from "next-intl";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import Sponsors from "../_components/sponsors";
 import AfricaLogo from "../africa-logo";
 import { getHomepage } from "./_actions";
@@ -21,9 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) return null;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("home");
 	const tc = await getTranslations("common");
 	const page = await getHomepage();

@@ -3,8 +3,8 @@ import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/m
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import type { Route } from "next";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import Link from "next/link";
 import { CareersHero } from "./_components/hero";
 import MentorForm from "./_components/mentor-form";
@@ -12,8 +12,7 @@ import { MentorCard } from "./_components/mentor-modal";
 import { getMentors } from "./_actions";
 
 const CareersCorner = async ({ params }: { params: Promise<{ locale: string }> }) => {
-	const { locale } = await params;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 
   const [tCareers, tCommon, mentors] = await Promise.all([
 		getTranslations("careers"),

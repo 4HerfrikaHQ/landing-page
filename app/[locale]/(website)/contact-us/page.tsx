@@ -8,14 +8,13 @@ import {
 	Phone,
 	Twitter,
 } from "lucide-react";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import Image from "next/image";
 import ContactForm from "./_components/contact-form";
 
 const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
-	const { locale } = await params;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("contact");
 
 	return (

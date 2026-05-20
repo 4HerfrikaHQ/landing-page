@@ -3,10 +3,8 @@ import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
-import { hasLocale } from "next-intl";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { Suspense } from "react";
 import BlogBody from "./_components/blog-body";
 import { GalleryGrid } from "./_components/gallery-grid";
@@ -18,9 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) return null;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("blog");
 	return (
 		<>

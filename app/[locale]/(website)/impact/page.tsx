@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { FadeIn, StaggerContainer, StaggerItem, TextReveal } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import Image from "next/image";
 import F4herfrikaLogo from "./4herfrika";
 import beginning from "./beginning.jpg";
@@ -24,8 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ReportPage({ params }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("impact");
 	const tc = await getTranslations("common");
 
