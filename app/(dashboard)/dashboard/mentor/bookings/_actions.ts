@@ -1,6 +1,6 @@
 "use server";
 
-import { and, asc, desc, eq, gte, lt } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, lt } from "drizzle-orm";
 import { currentDbUser } from "@/src/auth";
 import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
@@ -22,7 +22,7 @@ export async function loadMentorBookings() {
 	}
 
 	const now = new Date();
-	const [upcoming, past, feedbackRows] = await Promise.all([
+	const [upcoming, past] = await Promise.all([
 		db
 			.select()
 			.from(bookings)
@@ -41,8 +41,18 @@ export async function loadMentorBookings() {
 			)
 			.orderBy(desc(bookings.start_at))
 			.limit(50),
-		db.select().from(bookingFeedback),
 	]);
+
+	const allBookingIds = [
+		...upcoming.map((b) => b.id),
+		...past.map((b) => b.id),
+	];
+	const feedbackRows = allBookingIds.length
+		? await db
+				.select()
+				.from(bookingFeedback)
+				.where(inArray(bookingFeedback.booking_id, allBookingIds))
+		: [];
 
 	const feedbackByBooking = Object.fromEntries(
 		feedbackRows.map((f) => [f.booking_id, f]),
