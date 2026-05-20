@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { MentorApplicationStatus } from "@/src/db/schema/tables/mentor-applications";
 import type { listMentorApplications } from "../_actions";
 import { RowActions } from "./row-actions";
 
 type Row = Awaited<ReturnType<typeof listMentorApplications>>[number];
-type Status = Row["status"];
+type Status = MentorApplicationStatus;
 
 export function ApplicationsTable({ rows }: { rows: Row[] }) {
 	const [tab, setTab] = useState<Status>("pending");
@@ -20,7 +21,7 @@ export function ApplicationsTable({ rows }: { rows: Row[] }) {
 				<TabsTrigger value="approved">Approved</TabsTrigger>
 				<TabsTrigger value="rejected">Rejected</TabsTrigger>
 			</TabsList>
-			{(["pending", "approved", "rejected"] as Status[]).map((s) => (
+			{MentorApplicationStatus.options.map((s) => (
 				<TabsContent key={s} value={s}>
 					<div className="mt-4 space-y-3">
 						{filtered.length === 0 && (
