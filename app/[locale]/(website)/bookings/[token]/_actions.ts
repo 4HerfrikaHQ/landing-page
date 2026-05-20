@@ -1,23 +1,19 @@
 "use server";
 
-import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { db } from "@/src/db";
-import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { users } from "@/src/db/schema/tables/users";
-import { actionClient, ActionError } from "@/src/lib/safe-action";
-import {
-	signBookingToken,
-	verifyBookingToken,
-} from "@/src/lib/booking-tokens";
 import {
 	deleteMeetEvent,
 	sendBookingConfirmationMentee,
 	sendBookingConfirmationMentor,
 } from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
 import { buildBookingIcs } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
-import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
+import { db } from "@/src/db";
+import { bookings } from "@/src/db/schema/tables/bookings";
+import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
+import { signBookingToken, verifyBookingToken } from "@/src/lib/booking-tokens";
+import { ActionError, actionClient } from "@/src/lib/safe-action";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import {
 	loadRescheduleContext,
 	sendCancellationEmails,
@@ -25,6 +21,7 @@ import {
 	swapMeetEvent,
 	validateNewSlot,
 } from "./_helpers";
+import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
 
 /** Server-only loader for the manage page. Verifies the token and returns the booking. */
 export async function loadBookingFromToken(token: string) {
@@ -136,7 +133,6 @@ export const rescheduleBooking = actionClient
 			mentorId: mentor.id,
 			bookingId: booking.id,
 			newStartUtc: newStart,
-			sessionDurationMinutes: settings.session_duration_minutes,
 		});
 
 		const { eventId, meetUrl } = await swapMeetEvent({

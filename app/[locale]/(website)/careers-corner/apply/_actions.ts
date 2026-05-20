@@ -1,10 +1,10 @@
 "use server";
 
-import { eq } from "drizzle-orm";
-import { Resend } from "resend";
 import { db } from "@/src/db";
 import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
-import { actionClient, ActionError } from "@/src/lib/safe-action";
+import { ActionError, actionClient } from "@/src/lib/safe-action";
+import { eq } from "drizzle-orm";
+import { Resend } from "resend";
 import { SubmitApplicationSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";

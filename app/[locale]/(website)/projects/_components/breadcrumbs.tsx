@@ -19,7 +19,9 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
 									{item.label}
 								</Link>
 							) : (
-								<span className="px-1.5 py-1 text-foreground">{item.label}</span>
+								<span className="px-1.5 py-1 text-foreground">
+									{item.label}
+								</span>
 							)}
 							{!isLast && <span className="mx-1 text-muted-foreground">/</span>}
 						</li>

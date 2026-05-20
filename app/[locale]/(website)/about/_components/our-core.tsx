@@ -1,5 +1,5 @@
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import Forherfirka from "@/app/[locale]/(website)/about/assets/iphone-mockup.png";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
@@ -50,7 +50,10 @@ export const OurCore = async () => {
 					<div className="w-[350px] h-[350px] lg:w-[500px] lg:h-[500px] border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
 					<div className="w-[280px] h-[280px] lg:w-[400px] lg:h-[400px] border border-surface-teal rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
 
-					<FadeIn className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto" initial={{ opacity: 0, scale: 0.9 }}>
+					<FadeIn
+						className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto"
+						initial={{ opacity: 0, scale: 0.9 }}
+					>
 						<Image
 							src={Forherfirka.src}
 							alt="4herfrika iphone mockup"
@@ -66,7 +69,11 @@ export const OurCore = async () => {
 						"bottom-8 left-8 xl:left-16",
 						"bottom-8 right-8 xl:right-16",
 					].map((pos, i) => (
-						<FadeIn key={pos} delay={0.1 * (i + 1)} className={`absolute ${pos}`}>
+						<FadeIn
+							key={pos}
+							delay={0.1 * (i + 1)}
+							className={`absolute ${pos}`}
+						>
 							<div className="relative">
 								<div
 									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br ${coreValueKeys[i].bg} rounded-full opacity-30 blur-sm transform`}

@@ -1,9 +1,9 @@
-import { and, eq, sql } from "drizzle-orm";
 import { currentDbUser } from "@/src/auth";
 import { db } from "@/src/db";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { bookings } from "@/src/db/schema/tables/bookings";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
+import { bookings } from "@/src/db/schema/tables/bookings";
+import { mentors } from "@/src/db/schema/tables/mentors";
+import { and, eq, sql } from "drizzle-orm";
 import { MentorSubpageHeader } from "../_components/mentor-subpage-header";
 
 export default async function MentorStatsPage() {

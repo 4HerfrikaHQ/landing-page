@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatInTimeZone } from "date-fns-tz";
 import type { loadMentorBookings } from "../_actions";
 
@@ -21,9 +21,7 @@ export function BookingsTabs({
 	return (
 		<Tabs defaultValue="upcoming">
 			<TabsList>
-				<TabsTrigger value="upcoming">
-					Upcoming ({upcoming.length})
-				</TabsTrigger>
+				<TabsTrigger value="upcoming">Upcoming ({upcoming.length})</TabsTrigger>
 				<TabsTrigger value="past">Past ({past.length})</TabsTrigger>
 			</TabsList>
 			<TabsContent value="upcoming">
@@ -57,10 +55,7 @@ function BookingList({
 			{rows.map((b) => {
 				const fb = showFeedback ? feedbackByBooking?.[b.id] : undefined;
 				return (
-					<article
-						key={b.id}
-						className="rounded-lg border p-4 bg-white"
-					>
+					<article key={b.id} className="rounded-lg border p-4 bg-white">
 						<header className="flex items-start justify-between gap-3">
 							<div>
 								<p className="font-medium text-gray-900">

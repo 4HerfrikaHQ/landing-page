@@ -4,7 +4,7 @@ import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Logo from "../4herfrika-logo";
-import { NAV_LINKS, ACTION_BUTTONS, type Navlink } from "../navigation";
+import { ACTION_BUTTONS, NAV_LINKS, type Navlink } from "../navigation";
 import { LocaleSwitcher } from "./locale-switcher";
 import { MobileNav } from "./mobile-nav";
 import { NavbarLink } from "./navbar-link";
@@ -12,14 +12,14 @@ import { YearOneReport } from "./year-one-report";
 
 const NAV_LINK_KEYS: Record<string, string> = {
 	"About Us": "aboutUs",
-	"Projects": "projects",
+	Projects: "projects",
 	"Career Corner": "careerCorner",
-	"Blog": "blog",
+	Blog: "blog",
 	"Contact Us": "contactUs",
 };
 
 const ACTION_BUTTON_KEYS: Record<string, string> = {
-	"Donate": "donate",
+	Donate: "donate",
 	"Join Us": "joinUs",
 };
 
@@ -65,7 +65,8 @@ export const Navbar = async () => {
 									key={link.name}
 									className="relative group h-full flex items-center"
 								>
-									<Button variant="ghost"
+									<Button
+										variant="ghost"
 										type="button"
 										className="flex items-center gap-1 text-foreground hover:text-primary-500"
 										aria-haspopup="true"
@@ -107,7 +108,7 @@ export const Navbar = async () => {
 									button.isPrimary
 										? "bg-primary-500 text-white hover:bg-primary-400"
 										: "border border-primary-500 text-primary-500 hover:bg-primary-50"
-                  }`}
+								}`}
 								target={button.name === "Join Us" ? "_blank" : "_self"}
 							>
 								{getActionName(button.name)}

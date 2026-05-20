@@ -3,8 +3,8 @@
 import { CameraIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { uploadMentorImage } from "../_actions";
 import { toast } from "sonner";
+import { uploadMentorImage } from "../_actions";
 
 export function AvatarUpload({
 	id,
@@ -52,8 +52,8 @@ export function AvatarUpload({
 					setPreview(image);
 					toast.error(`Upload failed: ${result.error}`);
 				} else if (result.url) {
-          setPreview(result.url);
-					toast.success("Successfully updated avatar")
+					setPreview(result.url);
+					toast.success("Successfully updated avatar");
 				}
 			} catch (err) {
 				setPreview(image);

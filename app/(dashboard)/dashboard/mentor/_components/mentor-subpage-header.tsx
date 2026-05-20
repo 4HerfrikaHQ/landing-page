@@ -1,10 +1,20 @@
 import type { Route } from "next";
 import Link from "next/link";
 
-export function MentorSubpageHeader({ active }: { active: "bookings" | "mentees" | "stats" }) {
+export function MentorSubpageHeader({
+	active,
+}: { active: "bookings" | "mentees" | "stats" }) {
 	const items: { key: typeof active; label: string; href: Route }[] = [
-		{ key: "bookings", label: "Bookings", href: "/dashboard/mentor/bookings" as Route },
-		{ key: "mentees", label: "Mentees", href: "/dashboard/mentor/mentees" as Route },
+		{
+			key: "bookings",
+			label: "Bookings",
+			href: "/dashboard/mentor/bookings" as Route,
+		},
+		{
+			key: "mentees",
+			label: "Mentees",
+			href: "/dashboard/mentor/mentees" as Route,
+		},
 		{ key: "stats", label: "Stats", href: "/dashboard/mentor/stats" as Route },
 	];
 

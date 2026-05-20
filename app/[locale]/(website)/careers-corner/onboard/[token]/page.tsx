@@ -1,6 +1,6 @@
+import { AvailabilityEditor } from "@/components/availability-editor";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { AvailabilityEditor } from "@/components/availability-editor";
 import { loadMentorFromToken } from "./_actions";
 import { OnboardingForm } from "./_components/onboarding-form";
 

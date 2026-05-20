@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
+import { SlotPicker } from "@/components/booking/slot-picker";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { SlotPicker } from "@/components/booking/slot-picker";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { cancelBooking, rescheduleBooking } from "../_actions";
 
 export function ManageActions({
@@ -75,8 +75,7 @@ export function ManageActions({
 					<Button
 						disabled={!newStart || reschedule.isPending}
 						onClick={() =>
-							newStart &&
-							reschedule.execute({ token, newStartAtUtc: newStart })
+							newStart && reschedule.execute({ token, newStartAtUtc: newStart })
 						}
 					>
 						{reschedule.isPending ? "Rescheduling…" : "Confirm new time"}

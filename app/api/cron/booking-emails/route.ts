@@ -5,16 +5,17 @@
  * sub-daily crons). Supabase pings this endpoint every 5 minutes with
  * `Authorization: Bearer ${CRON_SECRET}`.
  */
-import { NextResponse } from "next/server";
-import { and, eq, gte, isNull, lt, lte, ne } from "drizzle-orm";
-import { Resend } from "resend";
-import { formatInTimeZone } from "date-fns-tz";
+
 import { db } from "@/src/db";
+import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { availability } from "@/src/db/schema/tables/availability";
 import { signBookingToken } from "@/src/lib/booking-tokens";
+import { formatInTimeZone } from "date-fns-tz";
+import { and, eq, gte, isNull, lt, lte, ne } from "drizzle-orm";
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -30,7 +31,9 @@ function siteUrl(): string {
 }
 
 export async function GET(req: Request) {
-	if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+	if (
+		req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`
+	) {
 		return NextResponse.json({ ok: false }, { status: 401 });
 	}
 

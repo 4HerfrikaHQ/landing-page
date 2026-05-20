@@ -1,11 +1,11 @@
 "use server";
 
-import { and, asc, desc, eq, gte, inArray, lt } from "drizzle-orm";
 import { currentDbUser } from "@/src/auth";
 import { db } from "@/src/db";
+import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
-import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
+import { and, asc, desc, eq, gte, inArray, lt } from "drizzle-orm";
 
 export async function loadMentorBookings() {
 	const user = await currentDbUser();
@@ -27,18 +27,13 @@ export async function loadMentorBookings() {
 			.select()
 			.from(bookings)
 			.where(
-				and(
-					eq(bookings.mentor_id, mentor.id),
-					gte(bookings.start_at, now),
-				),
+				and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now)),
 			)
 			.orderBy(asc(bookings.start_at)),
 		db
 			.select()
 			.from(bookings)
-			.where(
-				and(eq(bookings.mentor_id, mentor.id), lt(bookings.start_at, now)),
-			)
+			.where(and(eq(bookings.mentor_id, mentor.id), lt(bookings.start_at, now)))
 			.orderBy(desc(bookings.start_at))
 			.limit(50),
 	]);

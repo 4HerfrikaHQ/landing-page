@@ -1,4 +1,3 @@
-import { currentDbUser } from "@/src/auth";
 import {
 	Table,
 	TableBody,
@@ -7,6 +6,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { currentDbUser } from "@/src/auth";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getMentorsForAdmin } from "./_actions";
@@ -41,10 +41,10 @@ export default async function MentorsPage({
 			<div className="mb-4 flex items-center justify-between">
 				<Suspense>
 					<StatusFilter />
-        </Suspense>
-        <Suspense>
-						<SearchInput />
-					</Suspense>
+				</Suspense>
+				<Suspense>
+					<SearchInput />
+				</Suspense>
 			</div>
 
 			<div className="border rounded-lg overflow-hidden">
@@ -53,16 +53,25 @@ export default async function MentorsPage({
 						<TableRow className="bg-gray-50">
 							<TableHead className="w-10" />
 							<TableHead className="font-medium text-gray-600">Name</TableHead>
-							<TableHead className="font-medium text-gray-600">Position</TableHead>
+							<TableHead className="font-medium text-gray-600">
+								Position
+							</TableHead>
 							<TableHead className="font-medium text-gray-600">Email</TableHead>
-							<TableHead className="font-medium text-gray-600">Joined</TableHead>
-							<TableHead className="font-medium text-gray-600">Active</TableHead>
+							<TableHead className="font-medium text-gray-600">
+								Joined
+							</TableHead>
+							<TableHead className="font-medium text-gray-600">
+								Active
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={6} className="text-center text-gray-400 py-12">
+								<TableCell
+									colSpan={6}
+									className="text-center text-gray-400 py-12"
+								>
 									No mentors yet.
 								</TableCell>
 							</TableRow>

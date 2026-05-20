@@ -1,19 +1,19 @@
-import { and, eq, gte, lt, ne } from "drizzle-orm";
-import { Resend } from "resend";
-import { formatInTimeZone } from "date-fns-tz";
-import { db } from "@/src/db";
-import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { users } from "@/src/db/schema/tables/users";
-import { availability } from "@/src/db/schema/tables/availability";
-import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
-import { ActionError } from "@/src/lib/safe-action";
-import { verifyBookingToken } from "@/src/lib/booking-tokens";
 import {
 	createMeetEvent,
 	deleteMeetEvent,
 } from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
 import { computeSlots } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
+import { db } from "@/src/db";
+import { availability } from "@/src/db/schema/tables/availability";
+import { bookings } from "@/src/db/schema/tables/bookings";
+import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
+import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
+import { verifyBookingToken } from "@/src/lib/booking-tokens";
+import { ActionError } from "@/src/lib/safe-action";
+import { formatInTimeZone } from "date-fns-tz";
+import { and, eq, gte, lt, ne } from "drizzle-orm";
+import { Resend } from "resend";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
@@ -67,9 +67,8 @@ export async function validateNewSlot(params: {
 	mentorId: string;
 	bookingId: string;
 	newStartUtc: Date;
-	sessionDurationMinutes: number;
 }) {
-	const { mentorId, bookingId, newStartUtc, sessionDurationMinutes } = params;
+	const { mentorId, bookingId, newStartUtc } = params;
 
 	const dayStart = new Date(newStartUtc);
 	dayStart.setUTCHours(0, 0, 0, 0);
@@ -108,8 +107,6 @@ export async function validateNewSlot(params: {
 		toUtc: dayEnd,
 		now: new Date(),
 	});
-
-	void sessionDurationMinutes;
 
 	if (!slots.some((s) => s.startUtc === newStartUtc.toISOString())) {
 		throw new ActionError("That slot is not available.");

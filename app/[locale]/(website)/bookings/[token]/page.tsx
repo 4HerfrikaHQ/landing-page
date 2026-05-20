@@ -1,6 +1,6 @@
+import { formatInTimeZone } from "date-fns-tz";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { formatInTimeZone } from "date-fns-tz";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";
 

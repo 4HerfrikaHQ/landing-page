@@ -4,13 +4,14 @@ import { currentDbUser } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
-import { DbMentorWithAvailability } from "@/src/db/schema/tables";
+import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-
-export async function getMentorProfile(): Promise<DbMentorWithAvailability | undefined> {
-  const user = await currentDbUser();
+export async function getMentorProfile(): Promise<
+	DbMentorWithAvailability | undefined
+> {
+	const user = await currentDbUser();
 
 	return db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),
@@ -44,8 +45,8 @@ export async function uploadMyImage(
 ): Promise<{ url?: string; error?: string }> {
 	try {
 		const mentor = await getMentorProfile();
-    if (!mentor) return { error: "Mentor profile not found." };
-    const result = await uploadMentorAvatar(mentor.id, formData);
+		if (!mentor) return { error: "Mentor profile not found." };
+		const result = await uploadMentorAvatar(mentor.id, formData);
 		if (!result.error) revalidatePath("/dashboard/mentor");
 		return result;
 	} catch (err) {
