@@ -1,15 +1,15 @@
 "use server";
 
-import { desc, eq } from "drizzle-orm";
 import { createHash } from "node:crypto";
-import { revalidatePath } from "next/cache";
-import { Resend } from "resend";
 import { db } from "@/src/db";
 import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
-import { mentors } from "@/src/db/schema/tables/mentors";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
-import { adminAction, ActionError } from "@/src/lib/safe-action";
+import { mentors } from "@/src/db/schema/tables/mentors";
 import { signBookingToken } from "@/src/lib/booking-tokens";
+import { ActionError, adminAction } from "@/src/lib/safe-action";
+import { desc, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
 import { ApproveApplicationSchema, RejectApplicationSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";

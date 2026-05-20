@@ -1,5 +1,5 @@
-import { unauthorized } from "next/navigation";
 import { currentDbUser } from "@/src/auth";
+import { unauthorized } from "next/navigation";
 import { listMentorApplications } from "./_actions";
 import { ApplicationsTable } from "./_components/applications-table";
 

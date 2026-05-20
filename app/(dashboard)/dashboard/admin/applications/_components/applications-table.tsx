@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-	MentorApplicationStatus,
 	type DbMentorApplication,
+	MentorApplicationStatus,
 } from "@/src/db/schema/tables/mentor-applications";
+import { useState } from "react";
 import { RowActions } from "./row-actions";
 
 type Row = DbMentorApplication;
@@ -30,10 +30,7 @@ export function ApplicationsTable({ rows }: { rows: Row[] }) {
 							<p className="text-sm text-gray-500">No applications.</p>
 						)}
 						{filtered.map((row) => (
-							<article
-								key={row.id}
-								className="rounded-lg border p-4 bg-white"
-							>
+							<article key={row.id} className="rounded-lg border p-4 bg-white">
 								<header className="flex items-start justify-between gap-4">
 									<div>
 										<h3 className="font-medium text-gray-900">{row.name}</h3>

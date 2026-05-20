@@ -1,15 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-	approveMentorApplication,
-	rejectMentorApplication,
-} from "../_actions";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { approveMentorApplication, rejectMentorApplication } from "../_actions";
 
 export function RowActions({ applicationId }: { applicationId: string }) {
 	const router = useRouter();

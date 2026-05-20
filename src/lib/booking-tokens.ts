@@ -30,7 +30,11 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 
-export const BookingTokenAction = z.enum(["manage", "feedback", "mentor_onboard"]);
+export const BookingTokenAction = z.enum([
+	"manage",
+	"feedback",
+	"mentor_onboard",
+]);
 export type BookingTokenAction = z.infer<typeof BookingTokenAction>;
 
 const PayloadSchema = z.object({
@@ -98,6 +102,7 @@ export function verifyBookingToken(token: string): VerifyResult {
 		})(),
 	);
 	if (!parsed.success) return { ok: false, reason: "malformed" };
-	if (Date.now() > parsed.data.expiresAt) return { ok: false, reason: "expired" };
+	if (Date.now() > parsed.data.expiresAt)
+		return { ok: false, reason: "expired" };
 	return { ok: true, ...parsed.data };
 }
