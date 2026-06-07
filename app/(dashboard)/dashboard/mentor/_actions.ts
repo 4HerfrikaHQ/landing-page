@@ -5,7 +5,8 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
-import { eq } from "drizzle-orm";
+import { bookings } from "@/src/db/schema/tables/bookings";
+import { and, countDistinct, eq, gte, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorProfile(): Promise<
@@ -38,6 +39,51 @@ export async function updateMyProfile(
 
 	revalidatePath("/dashboard/mentor");
 	return {};
+}
+
+export async function getMentorOverview() {
+	const mentor = await getMentorProfile();
+	if (!mentor) return null;
+
+	const now = new Date();
+	const weekAhead = new Date(now);
+	weekAhead.setDate(weekAhead.getDate() + 7);
+
+	const [counts] = await db
+		.select({
+			upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now} and ${bookings.start_at} < ${weekAhead} and ${bookings.status} = 'confirmed')::int`,
+			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
+			total: sql<number>`count(*)::int`,
+		})
+		.from(bookings)
+		.where(eq(bookings.mentor_id, mentor.id));
+
+	const [{ mentees } = { mentees: 0 }] = await db
+		.select({ mentees: countDistinct(bookings.mentee_email) })
+		.from(bookings)
+		.where(eq(bookings.mentor_id, mentor.id));
+
+	const recent = await db
+		.select({
+			id: bookings.id,
+			menteeName: bookings.mentee_name,
+			menteeEmail: bookings.mentee_email,
+			startAt: bookings.start_at,
+			status: bookings.status,
+		})
+		.from(bookings)
+		.where(and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now)))
+		.orderBy(bookings.start_at)
+		.limit(5);
+
+	return {
+		mentor,
+		upcomingThisWeek: counts?.upcoming ?? 0,
+		completed: counts?.completed ?? 0,
+		total: counts?.total ?? 0,
+		mentees: Number(mentees ?? 0),
+		recent,
+	};
 }
 
 export async function uploadMyImage(
