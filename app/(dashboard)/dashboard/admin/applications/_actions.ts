@@ -5,7 +5,7 @@ import { db } from "@/src/db";
 import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
-import { mintOnboardingToken } from "@/src/lib/booking-tokens";
+import { signBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -118,9 +118,10 @@ export const approveMentorApplication = adminAction
 			return { mentorId: mentor.id };
 		});
 
-		const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-		const token = await mintOnboardingToken({
-			mentorId: result.mentorId,
+		const expiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000;
+		const token = signBookingToken({
+			bookingId: result.mentorId,
+			action: "mentor_onboard",
 			expiresAt,
 		});
 		await sendApprovalEmail({

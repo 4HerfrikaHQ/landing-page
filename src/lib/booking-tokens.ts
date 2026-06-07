@@ -1,35 +1,50 @@
 /**
- * Booking action tokens.
+ * Signed action tokens for booking links emailed to users.
  *
- * Two flavors:
- *  - JWT (HS256 via `jsonwebtoken`) for stateless actions reusable until
- *    expiry: `manage` (reschedule / cancel) and `feedback` (post-call
- *    survey). No DB round-trip on verify.
- *  - DB-backed opaque tokens (uuid + `booking_tokens` row) for one-shot
- *    actions: `mentor_onboard`. Single-use (consume marks `used_at`),
- *    revocable, supports peek-then-consume so the onboarding form can be
- *    loaded multiple times before final submission.
+ * We email links like `/.../{token}` that let an unauthenticated recipient
+ * perform an action against a known booking (or mentor record, in the
+ * onboarding case). The token is a JWT (HS256 via `jsonwebtoken`) — no
+ * server-side session, no DB lookup required to validate. Tokens are
+ * reusable until they expire.
  *
- * Requires BOOKING_TOKEN_SECRET (HS256 key for JWT). We throw at sign/verify
- * time rather than module-load so test runners can import without env.
+ * Payload shape: { bookingId, action, expiresAt }
+ *   - `bookingId` — the resource the token grants access to. For
+ *     `mentor_onboard` this is actually the mentor id (the action predates
+ *     the rename and we kept the field name to avoid a token format change).
+ *   - `action` — one of `BookingTokenAction`:
+ *       * `manage`         — recipient (mentee) manages an existing booking
+ *                            (reschedule / cancel).
+ *       * `feedback`       — recipient leaves post-call feedback.
+ *       * `mentor_onboard` — approved applicant finishes their mentor
+ *                            profile + sets availability.
+ *   - `expiresAt` — absolute ms-since-epoch deadline. After this the token
+ *     is rejected with `reason: "expired"`. Callers pick the lifetime per
+ *     action (e.g. 30 days for onboarding). The same value drives the JWT
+ *     `exp` claim, so verification rejects expired tokens without a DB hit.
+ *
+ * Requires `BOOKING_TOKEN_SECRET` to be set; we throw at sign/verify time
+ * rather than at module load so test runners can import without the env.
  */
 
-import { db } from "@/src/db";
-import { bookingTokens } from "@/src/db/schema/tables/booking-tokens";
-import { and, eq, isNull } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
-export const JwtTokenAction = z.enum(["manage", "feedback"]);
-export type JwtTokenAction = z.infer<typeof JwtTokenAction>;
+export const BookingTokenAction = z.enum([
+	"manage",
+	"feedback",
+	"mentor_onboard",
+]);
+export type BookingTokenAction = z.infer<typeof BookingTokenAction>;
 
-export type JwtPayload = {
-	bookingId: string;
-	action: JwtTokenAction;
-};
+const PayloadSchema = z.object({
+	bookingId: z.string(),
+	action: BookingTokenAction,
+	expiresAt: z.number(),
+});
+type Payload = z.infer<typeof PayloadSchema>;
 
-type JwtVerifyResult =
-	| ({ ok: true } & JwtPayload)
+type VerifyResult =
+	| ({ ok: true } & Payload)
 	| { ok: false; reason: "malformed" | "bad_signature" | "expired" };
 
 function secret(): string {
@@ -39,27 +54,34 @@ function secret(): string {
 }
 
 /**
- * Sign a stateless action token. `expiresAt` is a JS timestamp (ms since
- * epoch). Caller picks the lifetime per action.
+ * Sign a booking action payload and return the JWT token string. Throws if
+ * `BOOKING_TOKEN_SECRET` is not set. Caller is responsible for setting
+ * `expiresAt` (ms since epoch) appropriately for the action; it doubles as
+ * the JWT `exp` claim.
  */
-export function signJwtToken(payload: JwtPayload, expiresAt: number): string {
-	const expSec = Math.floor(expiresAt / 1000);
+export function signBookingToken(payload: Payload): string {
 	const nowSec = Math.floor(Date.now() / 1000);
+	const expSec = Math.floor(payload.expiresAt / 1000);
 	return jwt.sign(payload, secret(), {
 		algorithm: "HS256",
 		expiresIn: Math.max(0, expSec - nowSec),
 	});
 }
 
-export function verifyJwtToken(token: string): JwtVerifyResult {
+/**
+ * Verify a token. Returns a discriminated union — on success the parsed
+ * payload is spread onto the result; on failure `reason` distinguishes
+ * `malformed` (bad shape), `bad_signature` (wrong/garbage token), and
+ * `expired` (signature valid but past `expiresAt`). Never throws on bad
+ * input — only if the signing secret is missing.
+ */
+export function verifyBookingToken(token: string): VerifyResult {
 	try {
 		const decoded = jwt.verify(token, secret(), { algorithms: ["HS256"] });
 		if (typeof decoded !== "object" || decoded === null) {
 			return { ok: false, reason: "malformed" };
 		}
-		const parsed = z
-			.object({ bookingId: z.string(), action: JwtTokenAction })
-			.safeParse(decoded);
+		const parsed = PayloadSchema.safeParse(decoded);
 		if (!parsed.success) return { ok: false, reason: "malformed" };
 		return { ok: true, ...parsed.data };
 	} catch (e) {
@@ -69,85 +91,4 @@ export function verifyJwtToken(token: string): JwtVerifyResult {
 			return { ok: false, reason: "bad_signature" };
 		return { ok: false, reason: "malformed" };
 	}
-}
-
-/**
- * Mint a one-shot opaque onboarding token. Returns the uuid which is the
- * token itself. Stored in `booking_tokens` with `expires_at` and
- * unset `used_at`.
- */
-export async function mintOnboardingToken(params: {
-	mentorId: string;
-	expiresAt: Date;
-}): Promise<string> {
-	const [row] = await db
-		.insert(bookingTokens)
-		.values({
-			mentor_id: params.mentorId,
-			action: "mentor_onboard",
-			expires_at: params.expiresAt,
-		})
-		.returning({ id: bookingTokens.id });
-	return row.id;
-}
-
-type OnboardingTokenResult =
-	| { ok: true; mentorId: string }
-	| { ok: false; reason: "not_found" | "expired" | "used" };
-
-async function lookupOnboardingToken(
-	token: string,
-): Promise<OnboardingTokenResult> {
-	// basic uuid sanity — otherwise drizzle throws on cast
-	if (
-		!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-			token,
-		)
-	) {
-		return { ok: false, reason: "not_found" };
-	}
-	const [row] = await db
-		.select()
-		.from(bookingTokens)
-		.where(
-			and(
-				eq(bookingTokens.id, token),
-				eq(bookingTokens.action, "mentor_onboard"),
-			),
-		)
-		.limit(1);
-	if (!row) return { ok: false, reason: "not_found" };
-	if (row.used_at) return { ok: false, reason: "used" };
-	if (row.expires_at.getTime() < Date.now())
-		return { ok: false, reason: "expired" };
-	return { ok: true, mentorId: row.mentor_id };
-}
-
-/**
- * Read an onboarding token without consuming it. Use on every GET of the
- * onboarding page so the same link can be opened multiple times before the
- * final submit.
- */
-export async function peekOnboardingToken(
-	token: string,
-): Promise<OnboardingTokenResult> {
-	return lookupOnboardingToken(token);
-}
-
-/**
- * Consume the onboarding token: validates, then atomically marks `used_at`.
- * Returns `used` if another concurrent submit already consumed it.
- */
-export async function consumeOnboardingToken(
-	token: string,
-): Promise<OnboardingTokenResult> {
-	const lookup = await lookupOnboardingToken(token);
-	if (!lookup.ok) return lookup;
-	const result = await db
-		.update(bookingTokens)
-		.set({ used_at: new Date() })
-		.where(and(eq(bookingTokens.id, token), isNull(bookingTokens.used_at)))
-		.returning({ id: bookingTokens.id });
-	if (result.length === 0) return { ok: false, reason: "used" };
-	return { ok: true, mentorId: lookup.mentorId };
 }

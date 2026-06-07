@@ -15,7 +15,9 @@ export const OurReach = async () => {
 			<FadeIn>
 				<h1 className="text-3xl md:text-4xl font-semibold text-center">
 					{t.rich("weHaveReached", {
-						pink: (chunks) => <span className="text-primary-500">{chunks}</span>,
+						pink: (chunks) => (
+							<span className="text-primary-500">{chunks}</span>
+						),
 					})}
 				</h1>
 			</FadeIn>

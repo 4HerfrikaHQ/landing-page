@@ -8,7 +8,10 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function getAdmins() {
-	return db.select().from(schema.users).where(eq(schema.users.role, "super_admin"));
+	return db
+		.select()
+		.from(schema.users)
+		.where(eq(schema.users.role, "super_admin"));
 }
 
 export async function createAdmin(
@@ -50,9 +53,12 @@ export async function deleteAdmin(id: string): Promise<{ error?: string }> {
 		return { error: "You can't delete your own account." };
 	}
 
-  const [target] = await db.delete(schema.users).where(eq(schema.users.id, id)).returning()
+	const [target] = await db
+		.delete(schema.users)
+		.where(eq(schema.users.id, id))
+		.returning();
 
-  if (!target) return { error: "Admin not found." };
+	if (!target) return { error: "Admin not found." };
 
 	const supabase = await createClient();
 	const { error } = await supabase.auth.admin.deleteUser(target.auth_user_id);

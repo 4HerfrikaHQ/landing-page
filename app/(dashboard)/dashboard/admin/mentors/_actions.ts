@@ -1,36 +1,38 @@
 "use server";
 
+import { createHash } from "node:crypto";
 import { createClient } from "@/src/auth";
-import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
-import { and, eq, ilike, or, SQL } from "drizzle-orm";
-import { createHash } from "node:crypto";
+import { uploadMentorAvatar } from "@/src/db/actions/mentors";
+import { and, eq, ilike, or, type SQL } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorsForAdmin(
 	query?: string,
 	status?: "active" | "inactive",
 ) {
-  const filters: (SQL<unknown> | undefined)[] = [];
+	const filters: (SQL<unknown> | undefined)[] = [];
 
-  if (query) {
-    filters.push(or(
+	if (query) {
+		filters.push(
+			or(
 				ilike(schema.mentors.name, `%${query}%`),
 				ilike(schema.mentors.position, `%${query}%`),
-			))
-  }
+			),
+		);
+	}
 
-  switch (status) {
-    case "active":
-      filters.push(eq(schema.mentors.active, true))
-      break;
-    case "inactive":
-      filters.push(eq(schema.mentors.active, false))
-      break;
-  }
+	switch (status) {
+		case "active":
+			filters.push(eq(schema.mentors.active, true));
+			break;
+		case "inactive":
+			filters.push(eq(schema.mentors.active, false));
+			break;
+	}
 
-  return db
+	return db
 		.select({
 			id: schema.mentors.id,
 			name: schema.mentors.name,
@@ -73,11 +75,12 @@ export async function createMentor(
 
 	if (!dbUser) return { error: "User record not found after invite." };
 
-	const baseSlug = (nickname || name)
-		.toLowerCase()
-		.normalize("NFKD")
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/(^-|-$)/g, "") || "mentor";
+	const baseSlug =
+		(nickname || name)
+			.toLowerCase()
+			.normalize("NFKD")
+			.replace(/[^a-z0-9]+/g, "-")
+			.replace(/(^-|-$)/g, "") || "mentor";
 	const suffix = createHash("sha256")
 		.update(`${Date.now()}-${baseSlug}`)
 		.digest("hex")
@@ -131,26 +134,33 @@ export async function toggleMentorActive(
 	active: boolean,
 ): Promise<{ error?: string }> {
 	if (active) {
-    const mentor = await db.query.mentors.findFirst({
-      where: eq(schema.mentors.id, id),
-      with: { availability: true },
-    })
+		const mentor = await db.query.mentors.findFirst({
+			where: eq(schema.mentors.id, id),
+			with: { availability: true },
+		});
 
 		if (!mentor) {
 			return { error: "Mentor not found" };
 		}
 
-		if (!mentor.name || !mentor.position || !mentor.image || !mentor.bio || !mentor.linkedin_url) {
+		if (
+			!mentor.name ||
+			!mentor.position ||
+			!mentor.image ||
+			!mentor.bio ||
+			!mentor.linkedin_url
+		) {
 			return {
-				error: "Cannot activate mentor. Please ensure name, position, image, bio, and LinkedIn URL are all set.",
+				error:
+					"Cannot activate mentor. Please ensure name, position, image, bio, and LinkedIn URL are all set.",
 			};
-    }
+		}
 
-    if (mentor.availability.length === 0) {
-      return {
-        error: "Cannot activate a mentor without any availability slots"
-      }
-    }
+		if (mentor.availability.length === 0) {
+			return {
+				error: "Cannot activate a mentor without any availability slots",
+			};
+		}
 	}
 
 	await db

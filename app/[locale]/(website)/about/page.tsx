@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { cn } from "@/utils/cn";
 import { FadeIn } from "@/components/motion";
+import { routing } from "@/i18n/routing";
+import { cn } from "@/utils/cn";
 import { PrismicImage } from "@prismicio/react";
 import type { ImageField, KeyTextField } from "@prismicio/types";
+import type { Metadata } from "next";
 import type { Route } from "next";
-import Link from "next/link";
 import { hasLocale } from "next-intl";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import Link from "next/link";
 import FrequentlyAskedQuestion from "../(home)/_components/faq-section";
 import Sponsors from "../_components/sponsors";
+import { getAboutPage } from "./_actions";
 import { CallForAction } from "./_components/call-for-action";
 import { OurCore } from "./_components/our-core";
 import { OurReach } from "./_components/our-reach";
 import Squiggle from "./squiggle";
 import UnderlineSquiggle from "./underline-squiggle";
-import { getAboutPage } from "./_actions";
 
 const statementKeys = [
 	{ title: "missionTitle", description: "missionDescription" },
@@ -46,7 +46,9 @@ const StatementSection = ({
 				<h4 className="text-2xl md:text-3xl text-foreground w-fit font-semibold border-b-[3px] border-primary-500 mb-6 outline-offset-2">
 					{title}
 				</h4>
-				<p className="text-lg md:text-xl text-muted-foreground">{description}</p>
+				<p className="text-lg md:text-xl text-muted-foreground">
+					{description}
+				</p>
 			</div>
 			<figure className="rounded-xl overflow-hidden w-full md:w-1/2">
 				<PrismicImage className="aspect-[2.09] w-full" field={image} />
@@ -61,7 +63,9 @@ export const metadata: Metadata = {
 		"4Herfrika trains, mentors, and empowers women to become transformative leaders across Africa. Our vision: impact 2 million women with tech and entrepreneurship by 2030.",
 };
 
-export default async function About({ params }: { params: Promise<{ locale: string }> }) {
+export default async function About({
+	params,
+}: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) return null;
 	setRequestLocale(locale as Locale);
@@ -103,8 +107,16 @@ export default async function About({ params }: { params: Promise<{ locale: stri
 					{statement_section.map((section, index) => (
 						<StatementSection
 							key={section.title}
-							title={statementKeys[index] ? t(statementKeys[index].title) : String(section.title)}
-							description={statementKeys[index] ? t(statementKeys[index].description) : String(section.description)}
+							title={
+								statementKeys[index]
+									? t(statementKeys[index].title)
+									: String(section.title)
+							}
+							description={
+								statementKeys[index]
+									? t(statementKeys[index].description)
+									: String(section.description)
+							}
 							image={section.image}
 							position={section.image_position}
 							index={index}

@@ -1,4 +1,3 @@
-import { currentDbUser } from "@/src/auth";
 import {
 	Table,
 	TableBody,
@@ -7,6 +6,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { currentDbUser } from "@/src/auth";
 import { unauthorized } from "next/navigation";
 import { getAdmins } from "./_actions";
 import { AdminTableRow } from "./_components/admin-table-row";
@@ -34,19 +34,28 @@ export default async function AdminsPage() {
 						<TableRow className="bg-gray-50">
 							<TableHead className="font-medium text-gray-600">Name</TableHead>
 							<TableHead className="font-medium text-gray-600">Email</TableHead>
-							<TableHead className="font-medium text-gray-600">Joined</TableHead>
+							<TableHead className="font-medium text-gray-600">
+								Joined
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{admins.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={3} className="text-center text-gray-400 py-12">
+								<TableCell
+									colSpan={3}
+									className="text-center text-gray-400 py-12"
+								>
 									No admins yet.
 								</TableCell>
 							</TableRow>
 						) : (
 							admins.map((admin) => (
-								<AdminTableRow key={admin.id} admin={admin} currentUserId={user.id} />
+								<AdminTableRow
+									key={admin.id}
+									admin={admin}
+									currentUserId={user.id}
+								/>
 							))
 						)}
 					</TableBody>

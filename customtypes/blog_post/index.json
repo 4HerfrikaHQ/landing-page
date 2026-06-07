@@ -33,6 +33,13 @@
           "placeholder": ""
         }
       },
+      "description": {
+        "type": "Text",
+        "config": {
+          "label": "description",
+          "placeholder": ""
+        }
+      },
       "author": {
         "type": "Text",
         "config": {
@@ -46,6 +53,15 @@
           "label": "Cover Image",
           "constraint": {},
           "thumbnails": []
+        }
+      },
+      "submitted_story": {
+        "type": "Boolean",
+        "config": {
+          "label": "Was Submitted On Website",
+          "placeholder_false": "false",
+          "placeholder_true": "true",
+          "default_value": false
         }
       },
       "slices": {
