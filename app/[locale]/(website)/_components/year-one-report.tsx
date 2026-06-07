@@ -13,7 +13,7 @@ export function YearOneReport() {
 		<Link
 			href={"/impact" as Route}
 			aria-label={t("yearOneReport")}
-			className="sticky top-0 z-50 block w-full group"
+			className="sticky top-0 z-60 block w-full group"
 		>
 			<div className="h-14 w-full bg-primary-500 text-white flex items-center justify-center text-sm sm:text-base font-medium cursor-pointer select-none hover:underline">
 				<span className="animate-pulse group-hover:animate-none">
