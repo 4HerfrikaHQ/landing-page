@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { Gender } from "@/src/db/schema/tables/mentor-applications";
+import { z } from "zod";
 
 export const SubmitApplicationSchema = z.object({
 	name: z.string().min(2).max(120),

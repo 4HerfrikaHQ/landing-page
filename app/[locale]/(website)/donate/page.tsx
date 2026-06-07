@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
+import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 		"Your donation funds scholarships, digital skills bootcamps, and mentorship for women across Africa. Help us reach our goal of impacting 2 million women by 2030.",
 };
 
-export default async function DonationPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function DonationPage({
+	params,
+}: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
 	setRequestLocale(locale as Locale);
 	const t = await getTranslations("donate");
@@ -22,16 +24,16 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 			<section className="py-12 sm:py-14 md:py-16 px-4 bg-muted">
 				<div className="max-w-7xl mx-auto relative">
 					<FadeIn>
-					<div className="text-center mb-10 sm:mb-12 md:mb-16">
-						<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground md:text-foreground mb-6 sm:mb-8 leading-tight">
-							{t("heroTitle")}
-							<br />
-							<span className="text-foreground">{t("heroOrg")}</span>
-						</h1>
-						<p className="text-base sm:text-lg md:text-2xl text-foreground max-w-4xl mx-auto leading-relaxed">
-							{t("heroVision")}
-						</p>
-					</div>
+						<div className="text-center mb-10 sm:mb-12 md:mb-16">
+							<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground md:text-foreground mb-6 sm:mb-8 leading-tight">
+								{t("heroTitle")}
+								<br />
+								<span className="text-foreground">{t("heroOrg")}</span>
+							</h1>
+							<p className="text-base sm:text-lg md:text-2xl text-foreground max-w-4xl mx-auto leading-relaxed">
+								{t("heroVision")}
+							</p>
+						</div>
 					</FadeIn>
 
 					<StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 items-center">
@@ -92,17 +94,17 @@ export default async function DonationPage({ params }: { params: Promise<{ local
 				className="py-14 sm:py-16 md:py-20 px-4 border-t border-border bg-background"
 			>
 				<FadeIn>
-				<div className="max-w-5xl mx-auto">
-					<div className="text-center mb-8 sm:mb-10 md:mb-12">
-						<h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
-							{t("helpEmpower")}
-						</h2>
-						<p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-							{t("helpDescription")}
-						</p>
+					<div className="max-w-5xl mx-auto">
+						<div className="text-center mb-8 sm:mb-10 md:mb-12">
+							<h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
+								{t("helpEmpower")}
+							</h2>
+							<p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+								{t("helpDescription")}
+							</p>
+						</div>
+						<BankDetails />
 					</div>
-					<BankDetails />
-				</div>
 				</FadeIn>
 			</section>
 		</div>

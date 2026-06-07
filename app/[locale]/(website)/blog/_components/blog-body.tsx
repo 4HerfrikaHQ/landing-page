@@ -1,6 +1,6 @@
 "use client";
 
-import { StaggerContainer, StaggerItem, HoverCard } from "@/components/motion";
+import { HoverCard, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Route } from "next";
 import Image from "next/image";
@@ -36,7 +36,9 @@ function PostCard({
 				<h2 className="text-base font-semibold text-foreground group-hover:text-primary-500 transition-colors">
 					{post.title}
 				</h2>
-				<p className="text-sm text-muted-foreground line-clamp-3">{post.excerpt}</p>
+				<p className="text-sm text-muted-foreground line-clamp-3">
+					{post.excerpt}
+				</p>
 				<div className="flex justify-between items-center text-sm text-foreground">
 					<span>
 						{formatPostDate(post.date)} &middot; {readTime(post.content)}
@@ -51,7 +53,9 @@ function PostCard({
 function EmptyState({ category }: { category: string }) {
 	return (
 		<div className="col-span-full flex flex-col items-center justify-center min-h-[430px]">
-			<p className="text-xl text-muted-foreground">No posts found for {category}</p>
+			<p className="text-xl text-muted-foreground">
+				No posts found for {category}
+			</p>
 			<p className="text-sm text-foreground">
 				Please check back later for updates
 			</p>

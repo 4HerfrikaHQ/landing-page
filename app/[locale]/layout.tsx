@@ -1,9 +1,9 @@
+import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
 import { hasLocale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -84,9 +84,5 @@ export default async function LocaleLayout({
 	}
 	setRequestLocale(locale as Locale);
 
-	return (
-		<NextIntlClientProvider>
-			{children}
-		</NextIntlClientProvider>
-	);
+	return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
 }
