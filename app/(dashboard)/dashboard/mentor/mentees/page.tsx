@@ -4,6 +4,7 @@ import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { formatInTimeZone } from "date-fns-tz";
 import { desc, eq, sql } from "drizzle-orm";
+import { MentorSubpageHeader } from "../_components/mentor-subpage-header";
 
 export default async function MenteesPage() {
 	const user = await currentDbUser();
@@ -13,17 +14,20 @@ export default async function MenteesPage() {
 		.where(eq(mentors.user_id, user.id))
 		.limit(1);
 
-	if (!mentor) {
-		return (
-			<div className="p-8 max-w-3xl mx-auto">
-				<p className="text-sm text-gray-500">
-					No mentor profile linked to your account.
-				</p>
-			</div>
-		);
-	}
-
-	return <MenteesContent mentorId={mentor.id} />;
+	return (
+		<div className="min-h-screen bg-gray-50">
+			<MentorSubpageHeader active="mentees" />
+			{!mentor ? (
+				<div className="p-8 max-w-3xl mx-auto">
+					<p className="text-sm text-gray-500">
+						No mentor profile linked to your account.
+					</p>
+				</div>
+			) : (
+				<MenteesContent mentorId={mentor.id} />
+			)}
+		</div>
+	);
 }
 
 async function MenteesContent({ mentorId }: { mentorId: string }) {

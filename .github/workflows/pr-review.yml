@@ -1,0 +1,116 @@
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
+
+jobs:
+  review:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Review PR with Claude Code (DeepSeek)
+        uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_BASE_URL: https://api.deepseek.com/anthropic
+          ANTHROPIC_DEFAULT_OPUS_MODEL: deepseek-v4-pro
+          ANTHROPIC_DEFAULT_SONNET_MODEL: deepseek-v4-pro
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: deepseek-v4-flash
+          CLAUDE_CODE_SUBAGENT_MODEL: deepseek-v4-flash
+          PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.pr_number || github.event.pull_request.number }}
+        with:
+          anthropic_api_key: ${{ secrets.DEEPSEEK_API_KEY }}
+
+          classify_inline_comments: 'false'
+
+          claude_args: >-
+            --debug
+            --model deepseek-v4-pro
+            --allowedTools
+            "Read,
+            Grep,
+            Glob,
+            Task,
+            Write,
+            Edit,
+            Bash(gh pr checkout:*),
+            Bash(gh pr diff:*),
+            Bash(gh pr view:*),
+            Bash(cat:*),
+            Bash(find:*),
+            Bash(gh pr comment:*),
+            Bash(gh api:*),
+            Bash(echo:*)"
+
+          prompt: |
+            You are reviewing PR #${{ github.event_name == 'workflow_dispatch' && github.event.inputs.pr_number || github.event.pull_request.number }}.
+
+            Start by checking out the PR branch and gathering context:
+            - Run `gh pr checkout $PR_NUMBER` to switch to the PR's branch
+            - Run `gh pr diff $PR_NUMBER` to get the full diff
+            - Run `gh pr view $PR_NUMBER` to get the PR title, description, and metadata
+
+            ## Step 1 — Summary comment
+            First, check if a summary has already been posted by running:
+            `gh pr view $PR_NUMBER --comments --json comments --jq '.comments[].body' | grep -q '<!-- pr-review-summary -->'`
+
+            If the marker is found, skip the summary — it's already been posted. Move directly to Step 2.
+
+            If this is the first run, post a single summary comment via `gh pr comment $PR_NUMBER --body "..."` that explains the PR in plain language. The comment MUST include `<!-- pr-review-summary -->` on its own line at the very top so future runs detect it and skip re-posting.
+
+            The summary should cover:
+            - **What it does** — high-level purpose of the changes
+            - **How it works** — key implementation details and design choices
+            - **What's affected** — files, modules, APIs, or systems touched
+            - **Notable patterns** — any architectural decisions, trade-offs, or things a reviewer should know before diving in
+
+            Keep it concise but thorough. Use markdown headings so it's easy to scan.
+
+            ## Step 2 — Inline review
+            Go through the diff file by file. For each file, read the full source with `cat` to understand context. Post inline review comments via the GitHub API:
+
+            ```
+            gh api repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/comments \
+              -f body="your comment" \
+              -f commit_id="$(gh pr view $PR_NUMBER --json headRefOid --jq .headRefOid)" \
+              -f path="path/to/file.ts" \
+              -f line=42
+            ```
+
+            NEVER use `gh pr comment` for review feedback — that tool is only for the summary.
+
+            Look for bugs, security issues, perf problems, confusing code, missing transactions, platform constraints, edge cases — whatever stands out. If the code is fine, say nothing.
+
+      - name: Discover Claude Code artifacts
+        if: always()
+        run: |
+          echo "=== ~/.claude tree ==="
+          find ~/.claude -type f 2>/dev/null | head -50 || echo "(empty or missing)"
+          echo "=== /tmp claude files ==="
+          find /tmp -maxdepth 3 -name "*claude*" -o -name "*transcript*" 2>/dev/null | head -20 || echo "(none)"
+          echo "=== RUNNER_TEMP ==="
+          find "$RUNNER_TEMP" -maxdepth 3 -type f 2>/dev/null | head -20 || echo "(empty)"
+
+      - name: Upload debug transcript
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-debug-${{ github.run_id }}
+          path: |
+            ~/.claude/debug/*.txt
+            ~/.claude/projects/**/*.jsonl
+            /home/runner/work/_temp/claude-execution-output.json
+          retention-days: 7

@@ -5,7 +5,8 @@ import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
-import { type SQL, and, eq, ilike, or } from "drizzle-orm";
+import { and, eq, ilike, or, type SQL } from "drizzle-orm";
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorsForAdmin(

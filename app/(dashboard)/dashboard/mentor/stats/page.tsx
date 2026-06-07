@@ -4,6 +4,7 @@ import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { and, eq, sql } from "drizzle-orm";
+import { MentorSubpageHeader } from "../_components/mentor-subpage-header";
 
 export default async function MentorStatsPage() {
 	const user = await currentDbUser();
@@ -13,17 +14,20 @@ export default async function MentorStatsPage() {
 		.where(eq(mentors.user_id, user.id))
 		.limit(1);
 
-	if (!mentor) {
-		return (
-			<div className="p-8 max-w-3xl mx-auto">
-				<p className="text-sm text-gray-500">
-					No mentor profile linked to your account.
-				</p>
-			</div>
-		);
-	}
-
-	return <StatsContent mentorId={mentor.id} />;
+	return (
+		<div className="min-h-screen bg-gray-50">
+			<MentorSubpageHeader active="stats" />
+			{!mentor ? (
+				<div className="p-8 max-w-3xl mx-auto">
+					<p className="text-sm text-gray-500">
+						No mentor profile linked to your account.
+					</p>
+				</div>
+			) : (
+				<StatsContent mentorId={mentor.id} />
+			)}
+		</div>
+	);
 }
 
 async function StatsContent({ mentorId }: { mentorId: string }) {
