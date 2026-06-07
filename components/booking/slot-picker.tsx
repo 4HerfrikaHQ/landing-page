@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { addDays, endOfWeek, format, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { useAction } from "next-safe-action/hooks";
@@ -34,8 +34,11 @@ export function SlotPicker({
 	onSelect: (startUtc: string) => void;
 }) {
 	const [weekStart, setWeekStart] = useState(() =>
-		startOfWeek(new Date(), { weekStartsOn: 1 }),
+		startOfWeek(new Date(0), { weekStartsOn: 1 }),
 	);
+	useEffect(() => {
+		setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }));
+	}, []);
 	const [tz, setTz] = useState(
 		() => Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC",
 	);
