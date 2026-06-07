@@ -21,7 +21,6 @@
         "date-fns-tz": "^3.2.0",
         "drizzle-orm": "^0.45.2",
         "embla-carousel-react": "^8.6.0",
-        "googleapis": "^171.4.0",
         "ical-generator": "^10.2.0",
         "lucide-react": "^0.577.0",
         "motion": "^12.23.3",
