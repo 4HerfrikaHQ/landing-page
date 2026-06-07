@@ -1,17 +1,22 @@
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import CallForActionImage from "../assets/call-for-action.jpg";
 
 export const CallForAction = async () => {
 	const t = await getTranslations("about");
 	return (
 		<section className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 lg:pb-14 px-4 container mx-auto">
-			<FadeIn direction="right" className="flex flex-col justify-center order-2 lg:order-1">
+			<FadeIn
+				direction="right"
+				className="flex flex-col justify-center order-2 lg:order-1"
+			>
 				<h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 md:mb-4">
 					{t.rich("callForActionTitle", {
-						pink: (chunks) => <span className="text-primary-500">{chunks}</span>,
+						pink: (chunks) => (
+							<span className="text-primary-500">{chunks}</span>
+						),
 					})}
 				</h2>
 				<p className="text-base sm:text-lg md:text-xl text-muted-foreground">

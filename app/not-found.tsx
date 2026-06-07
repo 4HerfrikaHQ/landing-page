@@ -1,6 +1,6 @@
 import NotFoundImage from "@/app/assets/not-found.png";
-import Image from "next/image";
 import type { Route } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function RootNotFound() {
@@ -30,8 +30,8 @@ export default function RootNotFound() {
 						</div>
 
 						<p className="text-sm sm:text-base text-muted-foreground">
-							We couldn&apos;t find the page you were looking for, but don&apos;t
-							worry!
+							We couldn&apos;t find the page you were looking for, but
+							don&apos;t worry!
 							<br />
 							Every detour is an opportunity to discover something new.
 						</p>

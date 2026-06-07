@@ -7,8 +7,8 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTransition } from "react";
-import { toggleMentorActive } from "../_actions";
 import { toast } from "sonner";
+import { toggleMentorActive } from "../_actions";
 
 export function ToggleActiveButton({
 	id,
@@ -21,19 +21,17 @@ export function ToggleActiveButton({
 
 	function handleChange(checked: boolean) {
 		startTransition(async () => {
-      const { error } = await toggleMentorActive(id, checked);
+			const { error } = await toggleMentorActive(id, checked);
 
-      if (error) {
-        toast.error(error)
-      }
+			if (error) {
+				toast.error(error);
+			}
 		});
 	}
 
 	return (
 		<Tooltip>
-			<TooltipTrigger
-				render={<span className="inline-flex cursor-pointer" />}
-			>
+			<TooltipTrigger render={<span className="inline-flex cursor-pointer" />}>
 				<Switch
 					checked={active}
 					onCheckedChange={handleChange}

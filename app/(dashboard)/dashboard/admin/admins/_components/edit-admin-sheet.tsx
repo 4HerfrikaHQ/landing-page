@@ -10,7 +10,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { useTransition, useState } from "react";
+import { useState, useTransition } from "react";
 import { deleteAdmin, updateAdmin } from "../_actions";
 
 type Admin = {
@@ -68,7 +68,10 @@ export function EditAdminSheet({
 				if (!o) setError(null);
 			}}
 		>
-			<SheetContent className="flex flex-col sm:max-w-md p-0" showCloseButton={false}>
+			<SheetContent
+				className="flex flex-col sm:max-w-md p-0"
+				showCloseButton={false}
+			>
 				<SheetHeader className="px-6 pt-6 pb-4 border-b">
 					<SheetTitle className="text-base font-semibold text-gray-900">
 						Edit admin

@@ -1,6 +1,6 @@
 "use client";
-import { useTranslations } from "next-intl";
 import type { Route } from "next";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

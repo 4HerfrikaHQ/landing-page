@@ -1,6 +1,8 @@
 import Image from "next/image";
 
-export default function FourHerfrikaLogo({ className }: { className?: string }) {
+export default function FourHerfrikaLogo({
+	className,
+}: { className?: string }) {
 	return (
 		<Image
 			src="/assets/icons/4herfrika-logo.svg"

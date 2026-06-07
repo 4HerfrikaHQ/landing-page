@@ -3,6 +3,7 @@
 import * as prismic from "@prismicio/client";
 import { Resend } from "resend";
 import { createClient, repositoryName } from "@/prismicio";
+import type { Content } from "@prismicio/client";
 
 export async function getBlogPosts() {
 	const client = createClient();
@@ -164,5 +165,5 @@ export async function submitStory(
 		}
 		console.error("[submit-story] Full error:", JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
 		return { error: "Something went wrong. Please try again." };
-	}
+  }
 }
