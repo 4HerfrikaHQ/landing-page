@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import Analytics from "./analytics";
 import { repositoryName } from "@/prismicio";
+import { Providers } from "./providers";
 
 const outfitSans = Outfit({
   weight: ["300", "400", "500", "600", "700"],
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth">
       <body className={`${outfitSans.className} antialiased`}>
         <Analytics />
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Toaster position="top-right" richColors closeButton />
         <PrismicPreview repositoryName={repositoryName} />
       </body>
