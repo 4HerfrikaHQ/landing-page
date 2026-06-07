@@ -73,9 +73,7 @@ export default async function BlogPage({
 				</section>
 			)}
 
-			<Suspense>
-				<BlogSection posts={posts} categories={categories} />
-			</Suspense>
+			<Suspense><BlogSection posts={posts} categories={categories} featuredUid={featured?.uid} /></Suspense>
 
 			<section className="my-16 h-[420px] sm:h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
 				<div
