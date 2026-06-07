@@ -5,6 +5,7 @@ import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { and, eq, ilike, or, SQL } from "drizzle-orm";
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorsForAdmin(
@@ -72,6 +73,17 @@ export async function createMentor(
 
 	if (!dbUser) return { error: "User record not found after invite." };
 
+	const baseSlug = (nickname || name)
+		.toLowerCase()
+		.normalize("NFKD")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/(^-|-$)/g, "") || "mentor";
+	const suffix = createHash("sha256")
+		.update(`${Date.now()}-${baseSlug}`)
+		.digest("hex")
+		.slice(0, 8);
+	const slug = `${baseSlug}-${suffix}`;
+
 	await db.insert(schema.mentors).values({
 		user_id: dbUser.id,
 		name,
@@ -79,6 +91,7 @@ export async function createMentor(
 		bio,
 		nickname,
 		linkedin_url,
+		slug,
 	});
 
 	revalidatePath("/dashboard/admin/mentors");

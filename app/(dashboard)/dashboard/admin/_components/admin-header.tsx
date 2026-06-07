@@ -11,6 +11,7 @@ const SEGMENT_LABELS: Record<string, string> = {
 	admin: "Admin",
 	mentors: "Mentors",
 	admins: "Admins",
+	applications: "Applications",
 };
 
 export function AdminHeader() {
