@@ -1,9 +1,9 @@
+import WebLayout from "@/app/[locale]/(website)/layout";
 import NotFoundImage from "@/app/assets/not-found.png";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import WebLayout from "@/app/[locale]/(website)/layout";
 
 export default async function NotFoundPage() {
 	const t = await getTranslations("notFound");

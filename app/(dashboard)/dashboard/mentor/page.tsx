@@ -3,7 +3,10 @@ import { getMentorProfile } from "./_actions";
 import { MentorProfile } from "./_components/mentor-profile";
 
 export default async function MentorDashboardPage() {
-	const [user, mentor] = await Promise.all([currentDbUser(), getMentorProfile()]);
+	const [user, mentor] = await Promise.all([
+		currentDbUser(),
+		getMentorProfile(),
+	]);
 
 	if (!mentor) {
 		return (
@@ -11,9 +14,9 @@ export default async function MentorDashboardPage() {
 				<p className="text-sm text-gray-500">
 					Your mentor profile hasn't been set up yet. Contact an admin.
 				</p>
-      </div>
-    );
-  }
+			</div>
+		);
+	}
 
 	return <MentorProfile user={user} mentor={mentor} />;
 }

@@ -49,7 +49,10 @@ export function CreateAdminSheet() {
 				Add admin
 			</SheetTrigger>
 
-			<SheetContent className="flex flex-col sm:max-w-md p-0" showCloseButton={false}>
+			<SheetContent
+				className="flex flex-col sm:max-w-md p-0"
+				showCloseButton={false}
+			>
 				<SheetHeader className="px-6 pt-6 pb-4 border-b">
 					<SheetTitle className="text-base font-semibold text-gray-900">
 						Add admin

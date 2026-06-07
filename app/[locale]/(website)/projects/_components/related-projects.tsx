@@ -1,13 +1,13 @@
 "use client";
-import type { Route } from "next";
 import { ArrowUpRight } from "lucide-react";
+import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
 	type ProjectSlug,
 	projects,
 	readTime,
-	relatedProjects,
+	type relatedProjects,
 } from "../_schema";
 
 type RelatedItem = (typeof relatedProjects)[number];

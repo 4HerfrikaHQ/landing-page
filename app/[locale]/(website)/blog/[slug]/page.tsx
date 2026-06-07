@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { Calendar, Clock, User } from "lucide-react";
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -7,7 +7,12 @@ import { Streamdown } from "streamdown";
 import "streamdown/styles.css";
 import { Breadcrumbs } from "../../projects/_components/breadcrumbs";
 import { ProjectContent } from "../../projects/_components/project-content";
-import { FEATURED_POSTS, type PostSlug, formatPostDate, readTime } from "../_schema";
+import {
+	FEATURED_POSTS,
+	type PostSlug,
+	formatPostDate,
+	readTime,
+} from "../_schema";
 
 export function generateStaticParams() {
 	return Object.keys(FEATURED_POSTS).map((slug) => ({ slug }));

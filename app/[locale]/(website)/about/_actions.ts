@@ -1,5 +1,5 @@
-import type { Content } from "@prismicio/client";
 import { createClient } from "@/prismicio";
+import type { Content } from "@prismicio/client";
 
 export async function getAboutPage() {
 	const client = createClient();

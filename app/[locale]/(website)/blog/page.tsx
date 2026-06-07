@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
+import { routing } from "@/i18n/routing";
 import { Search } from "lucide-react";
-import Image from "next/image";
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import Image from "next/image";
 import { Suspense } from "react";
 import BlogBody from "./_components/blog-body";
 import { GalleryGrid } from "./_components/gallery-grid";
@@ -17,7 +17,9 @@ export const metadata: Metadata = {
 		"Read inspiring stories, experiences, and insights from women across Africa navigating tech, business, and leadership. A safe space to find your mojo.",
 };
 
-export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function BlogPage({
+	params,
+}: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) return null;
 	setRequestLocale(locale as Locale);
@@ -34,9 +36,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 							</h2>
 							<p className="mt-3 text-xl leading-8 text-muted-foreground font-semibold">
 								{t("welcome")}{" "}
-								<span className="text-primary-500">
-									{t("blogName")}
-								</span>
+								<span className="text-primary-500">{t("blogName")}</span>
 							</p>
 							<p className="text-xl font-light text-foreground mt-2">
 								{t("description")}
@@ -81,8 +81,8 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
 			<div className="w-full bg-muted py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
 				<div className="container mx-auto flex flex-col items-center gap-8">
 					<p className="text-muted-foreground text-xl font-medium text-center">
-						To Partner and Donate to this organization, Please send us a mail. You
-						can also make direct donations.
+						To Partner and Donate to this organization, Please send us a mail.
+						You can also make direct donations.
 					</p>
 					<div className="flex flex-col md:flex-row gap-6">
 						<Button variant="outline" size="lg" href="/contact-us">

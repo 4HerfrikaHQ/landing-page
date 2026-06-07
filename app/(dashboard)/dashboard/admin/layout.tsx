@@ -5,8 +5,8 @@ export default async function AdminLayout({
 	children,
 }: {
 	children: React.ReactNode;
-  }) {
-  await currentUser();
+}) {
+	await currentUser();
 
 	return (
 		<div className="min-h-screen bg-gray-50">

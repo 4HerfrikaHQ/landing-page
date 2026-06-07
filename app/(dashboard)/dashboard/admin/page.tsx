@@ -40,22 +40,41 @@ export default async function AdminDashboardPage() {
 					href="/dashboard/admin/mentors"
 					className="group border rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all bg-white no-underline! hover:no-underline!"
 				>
-					<p className="text-3xl font-semibold text-gray-900 mb-1">{mentorCount}</p>
-					<p className="text-sm text-gray-500">Mentors</p>
-					<p className="text-xs text-primary-500 mt-4">
-						Manage mentors →
+					<p className="text-3xl font-semibold text-gray-900 mb-1">
+						{mentorCount}
 					</p>
+					<p className="text-sm text-gray-500">Mentors</p>
+					<p className="text-xs text-primary-500 mt-4">Manage mentors →</p>
 				</Link>
 
 				<Link
 					href="/dashboard/admin/admins"
 					className="group border rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all bg-white no-underline! hover:no-underline!"
 				>
-					<p className="text-3xl font-semibold text-gray-900 mb-1">{adminCount}</p>
-					<p className="text-sm text-gray-500">Admins</p>
-					<p className="text-xs text-primary-500 mt-4 ">
-						Manage admins →
+					<p className="text-3xl font-semibold text-gray-900 mb-1">
+						{adminCount}
 					</p>
+					<p className="text-sm text-gray-500">Admins</p>
+					<p className="text-xs text-primary-500 mt-4 ">Manage admins →</p>
+				</Link>
+
+				<Link
+					href={"/dashboard/admin/applications" as Route}
+					className="group border rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all bg-white no-underline! hover:no-underline!"
+				>
+					<p className="text-3xl font-semibold text-gray-900 mb-1">
+						{pendingApplications}
+					</p>
+					<p className="text-sm text-gray-500">Pending applications</p>
+					<p className="text-xs text-primary-500 mt-4">Review →</p>
+				</Link>
+
+				<Link
+					href={"/dashboard/admin/bookings" as Route}
+					className="group border rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all bg-white no-underline! hover:no-underline!"
+				>
+					<p className="text-sm text-gray-500">Bookings</p>
+					<p className="text-xs text-primary-500 mt-4">See all →</p>
 				</Link>
 
 				<Link
