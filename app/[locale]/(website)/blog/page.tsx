@@ -26,7 +26,9 @@ export const metadata: Metadata = {
 		"Read inspiring stories, experiences, and insights from women across Africa navigating tech, business, and leadership. A safe space to find your mojo.",
 };
 
-export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function BlogPage({
+	params,
+}: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
 	if (!hasLocale(routing.locales, locale)) return null;
 	setRequestLocale(locale as Locale);

@@ -1,11 +1,11 @@
 import academy from "@/app/[locale]/(website)/(home)/assets/about-us/academy.png";
 import campus from "@/app/[locale]/(website)/(home)/assets/about-us/campus.png";
 import { StaggerContainer, StaggerItem } from "@/components/motion";
+import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 export const ExploreCommunity = async () => {
 	const t = await getTranslations("home");

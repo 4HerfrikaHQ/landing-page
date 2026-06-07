@@ -38,25 +38,27 @@ export function EditMentorSheet({
 	const [tab, setTab] = useState<Tab>("details");
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
-	const [availabilitySlots, setAvailabilitySlots] = useState<DbAvailability[] | null>(null);
+	const [availabilitySlots, setAvailabilitySlots] = useState<
+		DbAvailability[] | null
+	>(null);
 
 	// Load availability lazily on first switch to that tab
 	useEffect(() => {
 		if (tab === "availability" && availabilitySlots === null) {
 			getAvailability(mentor.id).then(setAvailabilitySlots);
 		}
-  }, [tab, mentor.id, availabilitySlots]);
+	}, [tab, mentor.id, availabilitySlots]);
 
-  const onOpenChange = (open: boolean) => {
-    if (open === false) {
-      // Reset state
-      setTab("details");
+	const onOpenChange = (open: boolean) => {
+		if (open === false) {
+			// Reset state
+			setTab("details");
 			setError(null);
 			setAvailabilitySlots(null);
-    }
+		}
 
-    return _onOpenChange(open)
-	}
+		return _onOpenChange(open);
+	};
 
 	function handleSubmit(formData: FormData) {
 		setError(null);
@@ -72,7 +74,10 @@ export function EditMentorSheet({
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="flex flex-col p-0 max-w-none! w-140!" showCloseButton={false}>
+			<SheetContent
+				className="flex flex-col p-0 max-w-none! w-140!"
+				showCloseButton={false}
+			>
 				<SheetHeader className="px-6 pt-6 pb-4 border-b">
 					<SheetTitle className="text-base font-semibold text-gray-900">
 						Edit mentor
@@ -104,7 +109,12 @@ export function EditMentorSheet({
 							action={handleSubmit}
 							className="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-4"
 						>
-							<Field label="Name" name="name" required defaultValue={mentor.name} />
+							<Field
+								label="Name"
+								name="name"
+								required
+								defaultValue={mentor.name}
+							/>
 
 							<div className="flex items-center gap-3 py-1">
 								<div className="h-px flex-1 bg-gray-100" />
@@ -112,8 +122,16 @@ export function EditMentorSheet({
 								<div className="h-px flex-1 bg-gray-100" />
 							</div>
 
-							<Field label="Position" name="position" defaultValue={mentor.position} />
-							<Field label="Nickname" name="nickname" defaultValue={mentor.nickname ?? ""} />
+							<Field
+								label="Position"
+								name="position"
+								defaultValue={mentor.position}
+							/>
+							<Field
+								label="Nickname"
+								name="nickname"
+								defaultValue={mentor.nickname ?? ""}
+							/>
 
 							<div className="flex flex-col gap-1.5">
 								<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">

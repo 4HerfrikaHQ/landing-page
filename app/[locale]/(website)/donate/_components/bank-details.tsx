@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion";
+import { Button } from "@/components/ui/button";
 import { Check, ClipboardCopy, Landmark } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -78,47 +78,49 @@ export default function BankDetails() {
 
 	return (
 		<FadeIn>
-		<div className="rounded-2xl overflow-hidden border border-border shadow-sm">
-			<div className="px-6 py-5 border-b border-border bg-muted flex items-center gap-3">
-				<div className="inline-flex items-center justify-center w-10 h-10 bg-accent rounded-xl">
-					<Landmark className="h-5 w-5 text-muted-foreground" />
+			<div className="rounded-2xl overflow-hidden border border-border shadow-sm">
+				<div className="px-6 py-5 border-b border-border bg-muted flex items-center gap-3">
+					<div className="inline-flex items-center justify-center w-10 h-10 bg-accent rounded-xl">
+						<Landmark className="h-5 w-5 text-muted-foreground" />
+					</div>
+					<div>
+						<h3 className="text-xl font-bold text-foreground">
+							{t("bankName")}
+						</h3>
+						<p className="text-muted-foreground text-xs sm:text-sm">
+							{t("bankTransferNote")}
+						</p>
+					</div>
 				</div>
-				<div>
-					<h3 className="text-xl font-bold text-foreground">{t("bankName")}</h3>
-					<p className="text-muted-foreground text-xs sm:text-sm">
-						{t("bankTransferNote")}
+
+				<div className="bg-background px-6 py-8 space-y-6">
+					<CopyRow
+						label={t("accountNumber")}
+						value="1312053588"
+						field="account"
+						big
+						onCopy={copy}
+						copied={copied}
+						copyLabel={t("copy")}
+						copiedLabel={t("copied")}
+					/>
+					<CopyRow
+						label={t("accountName")}
+						value="4HERFRIKA YOUTH EMPOWERMENT INITIATIVE"
+						field="name"
+						onCopy={copy}
+						copied={copied}
+						copyLabel={t("copy")}
+						copiedLabel={t("copied")}
+					/>
+				</div>
+
+				<div className="bg-linear-to-r from-muted via-white to-muted px-6 py-4 border-t border-border">
+					<p className="text-xs sm:text-sm text-muted-foreground text-center">
+						{t("thankYou")}
 					</p>
 				</div>
 			</div>
-
-			<div className="bg-background px-6 py-8 space-y-6">
-				<CopyRow
-					label={t("accountNumber")}
-					value="6506487134"
-					field="account"
-					big
-					onCopy={copy}
-					copied={copied}
-					copyLabel={t("copy")}
-					copiedLabel={t("copied")}
-				/>
-				<CopyRow
-					label={t("accountName")}
-					value="Ademide Ademola"
-					field="name"
-					onCopy={copy}
-					copied={copied}
-					copyLabel={t("copy")}
-					copiedLabel={t("copied")}
-				/>
-			</div>
-
-			<div className="bg-linear-to-r from-muted via-white to-muted px-6 py-4 border-t border-border">
-				<p className="text-xs sm:text-sm text-muted-foreground text-center">
-					{t("thankYou")}
-				</p>
-			</div>
-		</div>
 		</FadeIn>
 	);
 }

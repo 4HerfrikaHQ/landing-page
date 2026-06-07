@@ -25,15 +25,20 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 
 	return (
 		<>
-			<TableRow
-				onClick={() => setEditIsOpen(true)}
-				className="cursor-pointer"
-			>
+			<TableRow onClick={() => setEditIsOpen(true)} className="cursor-pointer">
 				<TableCell className="w-10" onClick={(e) => e.stopPropagation()}>
-					<AvatarUpload id={mentor.id} name={mentor.name} image={mentor.image} />
+					<AvatarUpload
+						id={mentor.id}
+						name={mentor.name}
+						image={mentor.image}
+					/>
 				</TableCell>
-				<TableCell className="font-medium text-gray-900">{mentor.name}</TableCell>
-				<TableCell className="text-gray-600 capitalize">{mentor.position}</TableCell>
+				<TableCell className="font-medium text-gray-900">
+					{mentor.name}
+				</TableCell>
+				<TableCell className="text-gray-600 capitalize">
+					{mentor.position}
+				</TableCell>
 				<TableCell className="text-gray-600">{mentor.email}</TableCell>
 				<TableCell className="text-gray-400 text-sm">
 					{format(mentor.created_at, "MMM d, yyyy")}

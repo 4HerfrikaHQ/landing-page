@@ -15,8 +15,8 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" data-scroll-behavior="smooth">
-      <body className={`${outfitSans.className} antialiased`}>
-        <Analytics/>
+			<body className={`${outfitSans.className} antialiased`}>
+				<Analytics />
 				{children}
 				<Toaster position="top-right" richColors closeButton />
 			</body>
