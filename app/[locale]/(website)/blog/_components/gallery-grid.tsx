@@ -1,6 +1,6 @@
 "use client";
 
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "lucide-react";
@@ -192,7 +192,11 @@ export function GalleryGrid() {
 					</FadeIn>
 
 					{heroItems.length > 0 && heroItems[0].item && (
-						<FadeIn direction="right" delay={0.15} className="w-full md:w-1/2 md:pl-8">
+						<FadeIn
+							direction="right"
+							delay={0.15}
+							className="w-full md:w-1/2 md:pl-8"
+						>
 							<div className="rounded-lg overflow-hidden h-50 relative">
 								<Image
 									src={heroItems[0].item.imageUrl || "/placeholder.svg"}
@@ -208,7 +212,9 @@ export function GalleryGrid() {
 
 				{/* Middle section - 2x3 grid layout */}
 				{middleItems.length > 0 && (
-					<StaggerContainer className={cn("grid gap-4 mb-10", middleSection?.gridClass)}>
+					<StaggerContainer
+						className={cn("grid gap-4 mb-10", middleSection?.gridClass)}
+					>
 						{middleItems.map((item, idx) => {
 							const rowSpan = item.specialLayout.rowSpan || 1;
 							const colSpan = item.specialLayout.colSpan || 1;
@@ -261,7 +267,9 @@ export function GalleryGrid() {
 
 				{/* Bottom section with last image spanning 2 columns */}
 				{bottomItems.length > 0 && (
-					<StaggerContainer className={cn("grid gap-4", bottomSection?.gridClass)}>
+					<StaggerContainer
+						className={cn("grid gap-4", bottomSection?.gridClass)}
+					>
 						{bottomItems.map((item, idx) => {
 							const colSpan = item.specialLayout.colSpan || 1;
 

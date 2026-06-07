@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/utils/cn";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const OPTIONS = [
 	{ label: "All", value: undefined },

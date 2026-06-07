@@ -9,10 +9,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { format, parse } from "date-fns";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { DbMentorWithAvailability } from "@/src/db/schema/tables"
 
 function formatTime(timeString: string) {
 	try {
@@ -63,91 +63,91 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 
 			<DialogContent className="sm:max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 lg:p-16">
 				<FadeIn>
-				<DialogHeader>
-					<DialogTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-primary-500 mb-6 lg:mb-10">
-						{displayName}
-					</DialogTitle>
-				</DialogHeader>
+					<DialogHeader>
+						<DialogTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-primary-500 mb-6 lg:mb-10">
+							{displayName}
+						</DialogTitle>
+					</DialogHeader>
 
-				<div className="grid lg:grid-cols-2 gap-6 lg:gap-16">
-					{/* Profile Image */}
-					<div className="flex justify-center">
-						<div className="w-full max-w-md rounded-md shadow-md relative aspect-3/4 h-75 sm:h-100">
-							<Image
-								src={mentor.image ?? ""}
-								alt={mentor.name}
-								fill
-								sizes="(max-width: 768px) 100vw, 400px"
-								className="rounded-md object-cover object-top"
-								unoptimized={mentor.image?.includes("localhost") ?? true}
-							/>
-						</div>
-					</div>
-
-					{/* Profile Information */}
-					<div className="flex flex-col">
-						<div>
-							<h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-2">
-								{mentor.position}
-							</h3>
-
-							{mentor.availability && mentor.availability.length > 0 ? (
-								<div className="mb-4">
-									<h4 className="text-primary-500 text-xs font-medium mb-2">
-										{t("availableTimes")}
-									</h4>
-									<p className="text-foreground text-xs">
-										{mentor.availability.map((slot, index) => (
-											<span key={formatTime(slot.start_time)}>
-												{`${slot.day}, ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)} ${slot.timezone}`}
-												{index < mentor.availability.length - 2 ? ", " : ""}
-												{index === mentor.availability.length - 2
-													? " and "
-													: ""}
-											</span>
-										))}
-									</p>
-								</div>
-							) : (
-								<div className="mb-4">
-									<h4 className="text-primary-500 font-medium mb-2">
-										{t("availableTimes")}
-									</h4>
-									<p className="text-foreground">{t("notMentioned")}</p>
-								</div>
-							)}
-
-							<div className="text-muted-foreground text-sm">
-								{mentor.bio ? (
-									<p className="whitespace-pre-line">{mentor.bio}</p>
-								) : (
-									<p className="whitespace-pre-line">
-										{t("mentorComingSoon")}
-									</p>
-								)}
+					<div className="grid lg:grid-cols-2 gap-6 lg:gap-16">
+						{/* Profile Image */}
+						<div className="flex justify-center">
+							<div className="w-full max-w-md rounded-md shadow-md relative aspect-3/4 h-75 sm:h-100">
+								<Image
+									src={mentor.image ?? ""}
+									alt={mentor.name}
+									fill
+									sizes="(max-width: 768px) 100vw, 400px"
+									className="rounded-md object-cover object-top"
+									unoptimized={mentor.image?.includes("localhost") ?? true}
+								/>
 							</div>
 						</div>
 
-						<div className="flex flex-col items-center sm:flex-row gap-4 sm:gap-6 mt-6">
-							<Button
-								variant="link"
-								href={mentor.linkedin_url || "/"}
-								isExternal
-							>
-								{tc("messageOnLinkedin")}
-							</Button>
-							<Button
-								variant="solid"
-								size="lg"
-								href="/"
-								isExternal
-								className="w-full sm:w-auto"
-							>
-								{tc("bookACall")}
-							</Button>
+						{/* Profile Information */}
+						<div className="flex flex-col">
+							<div>
+								<h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-2">
+									{mentor.position}
+								</h3>
+
+								{mentor.availability && mentor.availability.length > 0 ? (
+									<div className="mb-4">
+										<h4 className="text-primary-500 text-xs font-medium mb-2">
+											{t("availableTimes")}
+										</h4>
+										<p className="text-foreground text-xs">
+											{mentor.availability.map((slot, index) => (
+												<span key={formatTime(slot.start_time)}>
+													{`${slot.day}, ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)} ${slot.timezone}`}
+													{index < mentor.availability.length - 2 ? ", " : ""}
+													{index === mentor.availability.length - 2
+														? " and "
+														: ""}
+												</span>
+											))}
+										</p>
+									</div>
+								) : (
+									<div className="mb-4">
+										<h4 className="text-primary-500 font-medium mb-2">
+											{t("availableTimes")}
+										</h4>
+										<p className="text-foreground">{t("notMentioned")}</p>
+									</div>
+								)}
+
+								<div className="text-muted-foreground text-sm">
+									{mentor.bio ? (
+										<p className="whitespace-pre-line">{mentor.bio}</p>
+									) : (
+										<p className="whitespace-pre-line">
+											{t("mentorComingSoon")}
+										</p>
+									)}
+								</div>
+							</div>
+
+							<div className="flex flex-col items-center sm:flex-row gap-4 sm:gap-6 mt-6">
+								<Button
+									variant="link"
+									href={mentor.linkedin_url || "/"}
+									isExternal
+								>
+									{tc("messageOnLinkedin")}
+								</Button>
+								<Button
+									variant="solid"
+									size="lg"
+									href="/"
+									isExternal
+									className="w-full sm:w-auto"
+								>
+									{tc("bookACall")}
+								</Button>
+							</div>
 						</div>
 					</div>
-				</div>
 				</FadeIn>
 			</DialogContent>
 		</Dialog>

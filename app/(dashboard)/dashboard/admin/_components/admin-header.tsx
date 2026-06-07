@@ -11,6 +11,8 @@ const SEGMENT_LABELS: Record<string, string> = {
 	admin: "Admin",
 	mentors: "Mentors",
 	admins: "Admins",
+	applications: "Applications",
+	bookings: "Bookings",
 };
 
 export function AdminHeader() {
@@ -22,7 +24,8 @@ export function AdminHeader() {
 	const segments = pathname.split("/").filter(Boolean);
 	const adminIndex = segments.indexOf("admin");
 
-	const visibleSegments = adminIndex >= 0 ? segments.slice(adminIndex) : segments;
+	const visibleSegments =
+		adminIndex >= 0 ? segments.slice(adminIndex) : segments;
 
 	const crumbs = visibleSegments.map((seg, i) => {
 		const href = "/" + segments.slice(0, adminIndex + i + 1).join("/");

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import {
 	Sheet,
 	SheetClose,
@@ -14,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { PlusIcon } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 import { createMentor } from "../_actions";
-import { Field } from "@/components/ui/field";
 
 export function CreateMentorSheet() {
 	const [open, setOpen] = useState(false);
@@ -50,7 +50,10 @@ export function CreateMentorSheet() {
 				Add mentor
 			</SheetTrigger>
 
-			<SheetContent className="flex flex-col sm:max-w-md p-0" showCloseButton={false}>
+			<SheetContent
+				className="flex flex-col sm:max-w-md p-0"
+				showCloseButton={false}
+			>
 				<SheetHeader className="px-6 pt-6 pb-4 border-b">
 					<SheetTitle className="text-base font-semibold text-gray-900">
 						Add mentor

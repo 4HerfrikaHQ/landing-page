@@ -1,8 +1,8 @@
 "use client";
 
-import { sendOtp, verifyOtp } from "@/src/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { sendOtp, verifyOtp } from "@/src/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

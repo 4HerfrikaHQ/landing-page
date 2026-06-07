@@ -1,4 +1,4 @@
-import { generateOGImage, size, contentType } from "../../_lib/og";
+import { contentType, generateOGImage, size } from "../../_lib/og";
 import { type ProjectSlug, projects } from "../_schema";
 
 export { size, contentType };
