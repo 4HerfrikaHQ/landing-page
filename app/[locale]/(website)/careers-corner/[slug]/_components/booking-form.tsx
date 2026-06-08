@@ -49,7 +49,7 @@ export function BookingForm({
 					onSuccess();
 				},
 				onError: ({ error }) =>
-					toast.error(error.serverError ?? "Failed to book."),
+					toast.error(error.serverError ?? error.fetchError ?? "Failed to book. Please try again."),
 			},
 		},
 	);
