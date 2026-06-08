@@ -1,10 +1,11 @@
 /**
- * Signed action tokens for one-shot booking links emailed to users.
+ * Signed action tokens for booking links emailed to users.
  *
  * We email links like `/.../{token}` that let an unauthenticated recipient
- * perform exactly one action against a known booking (or mentor record, in
- * the onboarding case). The token is an HMAC-SHA256 signed payload — no
- * server-side session, no DB lookup required to validate.
+ * perform an action against a known booking (or mentor record, in the
+ * onboarding case). The token is a JWT (HS256 via `jsonwebtoken`) — no
+ * server-side session, no DB lookup required to validate. Tokens are
+ * reusable until they expire.
  *
  * Payload shape: { bookingId, action, expiresAt }
  *   - `bookingId` — the resource the token grants access to. For
@@ -18,16 +19,14 @@
  *                            profile + sets availability.
  *   - `expiresAt` — absolute ms-since-epoch deadline. After this the token
  *     is rejected with `reason: "expired"`. Callers pick the lifetime per
- *     action (e.g. 30 days for onboarding).
+ *     action (e.g. 30 days for onboarding). The same value drives the JWT
+ *     `exp` claim, so verification rejects expired tokens without a DB hit.
  *
  * Requires `BOOKING_TOKEN_SECRET` to be set; we throw at sign/verify time
  * rather than at module load so test runners can import without the env.
- *
- * Encoding: `<base64url(JSON payload)>.<base64url(HMAC-SHA256)>`. Signature
- * comparison is constant-time via `timingSafeEqual`.
  */
 
-import { createHmac, timingSafeEqual } from "node:crypto";
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 
 export const BookingTokenAction = z.enum([
@@ -48,61 +47,48 @@ type VerifyResult =
 	| ({ ok: true } & Payload)
 	| { ok: false; reason: "malformed" | "bad_signature" | "expired" };
 
-function b64url(input: Buffer | string): string {
-	const buf = typeof input === "string" ? Buffer.from(input) : input;
-	return buf.toString("base64url");
-}
-
-function b64urlDecode(input: string): Buffer {
-	return Buffer.from(input, "base64url");
-}
-
-function secret(): Buffer {
+function secret(): string {
 	const s = process.env.BOOKING_TOKEN_SECRET;
 	if (!s) throw new Error("BOOKING_TOKEN_SECRET not set");
-	return Buffer.from(s);
+	return s;
 }
 
 /**
- * Sign a booking action payload and return the URL-safe token string.
- * Throws if `BOOKING_TOKEN_SECRET` is not set. Caller is responsible for
- * setting `expiresAt` appropriately for the action.
+ * Sign a booking action payload and return the JWT token string. Throws if
+ * `BOOKING_TOKEN_SECRET` is not set. Caller is responsible for setting
+ * `expiresAt` (ms since epoch) appropriately for the action; it doubles as
+ * the JWT `exp` claim.
  */
 export function signBookingToken(payload: Payload): string {
-	const body = b64url(JSON.stringify(payload));
-	const sig = createHmac("sha256", secret()).update(body).digest();
-	return `${body}.${b64url(sig)}`;
+	const nowSec = Math.floor(Date.now() / 1000);
+	const expSec = Math.floor(payload.expiresAt / 1000);
+	return jwt.sign(payload, secret(), {
+		algorithm: "HS256",
+		expiresIn: Math.max(0, expSec - nowSec),
+	});
 }
 
 /**
  * Verify a token. Returns a discriminated union — on success the parsed
  * payload is spread onto the result; on failure `reason` distinguishes
- * `malformed` (bad shape / not JSON), `bad_signature` (HMAC mismatch), and
+ * `malformed` (bad shape), `bad_signature` (wrong/garbage token), and
  * `expired` (signature valid but past `expiresAt`). Never throws on bad
  * input — only if the signing secret is missing.
  */
 export function verifyBookingToken(token: string): VerifyResult {
-	const parts = token.split(".");
-	if (parts.length !== 2) return { ok: false, reason: "malformed" };
-	const [body, sigB64] = parts;
-	const expectedSig = createHmac("sha256", secret()).update(body).digest();
-	const givenSig = b64urlDecode(sigB64);
-	if (expectedSig.length !== givenSig.length)
-		return { ok: false, reason: "bad_signature" };
-	if (!timingSafeEqual(expectedSig, givenSig))
-		return { ok: false, reason: "bad_signature" };
-
-	const parsed = PayloadSchema.safeParse(
-		(() => {
-			try {
-				return JSON.parse(b64urlDecode(body).toString("utf8"));
-			} catch {
-				return null;
-			}
-		})(),
-	);
-	if (!parsed.success) return { ok: false, reason: "malformed" };
-	if (Date.now() > parsed.data.expiresAt)
-		return { ok: false, reason: "expired" };
-	return { ok: true, ...parsed.data };
+	try {
+		const decoded = jwt.verify(token, secret(), { algorithms: ["HS256"] });
+		if (typeof decoded !== "object" || decoded === null) {
+			return { ok: false, reason: "malformed" };
+		}
+		const parsed = PayloadSchema.safeParse(decoded);
+		if (!parsed.success) return { ok: false, reason: "malformed" };
+		return { ok: true, ...parsed.data };
+	} catch (e) {
+		if (e instanceof jwt.TokenExpiredError)
+			return { ok: false, reason: "expired" };
+		if (e instanceof jwt.JsonWebTokenError)
+			return { ok: false, reason: "bad_signature" };
+		return { ok: false, reason: "malformed" };
+	}
 }
