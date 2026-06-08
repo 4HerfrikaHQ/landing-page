@@ -1,7 +1,7 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import BankDetails from "./_components/bank-details";
@@ -15,8 +15,7 @@ export const metadata: Metadata = {
 export default async function DonationPage({
 	params,
 }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("donate");
 
 	return (

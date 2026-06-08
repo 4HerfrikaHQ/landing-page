@@ -1,12 +1,10 @@
 import FAQ from "@/app/[locale]/(website)/(home)/_components/faq-section";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import { routing } from "@/i18n/routing";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { Search } from "lucide-react";
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { getFaqPage } from "./_actions";
 
@@ -19,9 +17,7 @@ export const metadata: Metadata = {
 export default async function FAQPage({
 	params,
 }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) return null;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("faq");
 	const page = await getFaqPage();
 

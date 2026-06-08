@@ -1,13 +1,11 @@
 import { FadeIn } from "@/components/motion";
-import { routing } from "@/i18n/routing";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { cn } from "@/utils/cn";
 import { PrismicImage } from "@prismicio/react";
 import type { ImageField, KeyTextField } from "@prismicio/types";
 import type { Metadata } from "next";
 import type { Route } from "next";
-import { hasLocale } from "next-intl";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import FrequentlyAskedQuestion from "../(home)/_components/faq-section";
 import Sponsors from "../_components/sponsors";
@@ -66,9 +64,7 @@ export const metadata: Metadata = {
 export default async function About({
 	params,
 }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) return null;
-	setRequestLocale(locale as Locale);
+	await setLocaleFromParams(params);
 	const t = await getTranslations("about");
 	const page = await getAboutPage();
 
