@@ -36,12 +36,11 @@ export function SlotPicker({
 	const [weekStart, setWeekStart] = useState(() =>
 		startOfWeek(new Date(0), { weekStartsOn: 1 }),
 	);
+	const [tz, setTz] = useState("UTC");
 	useEffect(() => {
 		setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }));
+		setTz(Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC");
 	}, []);
-	const [tz, setTz] = useState(
-		() => Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC",
-	);
 
 	const fromUtc = useMemo(() => weekStart.toISOString(), [weekStart]);
 	const toUtc = useMemo(
