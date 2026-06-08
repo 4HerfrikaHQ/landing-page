@@ -51,7 +51,7 @@ export async function getMentorOverview() {
 
 	const [counts] = await db
 		.select({
-			upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now} and ${bookings.start_at} < ${weekAhead} and ${bookings.status} = 'confirmed')::int`,
+			upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now.toISOString()}::timestamptz and ${bookings.start_at} < ${weekAhead.toISOString()}::timestamptz and ${bookings.status} = 'confirmed')::int`,
 			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
 			total: sql<number>`count(*)::int`,
 		})
