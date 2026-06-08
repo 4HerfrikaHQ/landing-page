@@ -1,4 +1,5 @@
 import { currentUser } from "@/src/auth";
+import { redirect } from "next/navigation";
 import { MentorHeader } from "./_components/mentor-header";
 
 export default async function MentorLayout({
@@ -6,7 +7,8 @@ export default async function MentorLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	await currentUser();
+	const user = await currentUser().catch(() => null);
+	if (!user) redirect("/dashboard/login");
 
 	return (
 		<div className="min-h-screen bg-gray-50">

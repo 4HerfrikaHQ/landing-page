@@ -5,7 +5,7 @@ import { db } from "@/src/db";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
-import { and, asc, desc, eq, gte, inArray, lt } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, lt, ne } from "drizzle-orm";
 
 export async function loadMentorBookings() {
 	const user = await currentDbUser();
@@ -27,7 +27,7 @@ export async function loadMentorBookings() {
 			.select()
 			.from(bookings)
 			.where(
-				and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now)),
+				and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now), ne(bookings.status, "cancelled")),
 			)
 			.orderBy(asc(bookings.start_at)),
 		db

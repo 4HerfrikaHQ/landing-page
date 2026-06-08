@@ -6,7 +6,7 @@ import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { bookings } from "@/src/db/schema/tables/bookings";
-import { and, countDistinct, eq, gte, sql } from "drizzle-orm";
+import { and, countDistinct, eq, gte, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorProfile(): Promise<
@@ -72,7 +72,7 @@ export async function getMentorOverview() {
 			status: bookings.status,
 		})
 		.from(bookings)
-		.where(and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now)))
+		.where(and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now), ne(bookings.status, "cancelled")))
 		.orderBy(bookings.start_at)
 		.limit(5);
 
