@@ -75,7 +75,6 @@ export default async function BlogPostPage({
                 items={[
                   { label: tc("home"), href: "/" },
                   { label: tn("blog"), href: "/blog" },
-                  { label: "Blog Posts", href: "/blog" },
                   { label: post.data.title ?? "" },
                 ]}
               />
