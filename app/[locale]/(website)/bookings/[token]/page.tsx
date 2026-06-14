@@ -1,6 +1,7 @@
 import { formatInTimeZone } from "date-fns-tz";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import { getInitialWeekStart } from "../../careers-corner/[slug]/_actions";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";
 
@@ -16,6 +17,10 @@ export default async function ManageBookingPage({
 	if (!result.ok) return <ErrorBox reason={result.reason} />;
 
 	const { booking, mentor } = result;
+
+	const initialWeekStart = mentor
+		? await getInitialWeekStart(mentor.slug)
+		: null;
 
 	if (booking.status === "cancelled") {
 		return (
@@ -61,7 +66,11 @@ export default async function ManageBookingPage({
 				</p>
 			</div>
 			<div className="mt-6">
-				<ManageActions token={token} mentorSlug={mentor?.slug ?? ""} />
+				<ManageActions
+					token={token}
+					mentorSlug={mentor?.slug ?? ""}
+					initialWeekStart={initialWeekStart}
+				/>
 			</div>
 		</main>
 	);

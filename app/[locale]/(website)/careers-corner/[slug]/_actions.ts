@@ -8,7 +8,7 @@ import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { addDays } from "date-fns";
+import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -326,6 +326,22 @@ export async function getFirstAvailableSlotUtc(
 	});
 
 	return slots[0]?.startUtc ?? null;
+}
+
+/**
+ * Derives the Monday-based week start (ISO) of the mentor's first bookable slot,
+ * so a `SlotPicker` can initialise to the first week with availability. Returns
+ * null when nothing is bookable, in which case the picker falls back to the
+ * current week.
+ */
+export async function getInitialWeekStart(
+	mentorSlug: string,
+): Promise<string | null> {
+  const firstSlotUtc = await getFirstAvailableSlotUtc(mentorSlug);
+
+	return firstSlotUtc
+		? startOfWeek(new Date(firstSlotUtc), { weekStartsOn: 1 }).toISOString()
+		: null;
 }
 
 export const createBooking = actionClient

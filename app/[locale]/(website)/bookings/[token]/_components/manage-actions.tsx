@@ -12,9 +12,11 @@ import { cancelBooking, rescheduleBooking } from "../_actions";
 export function ManageActions({
 	token,
 	mentorSlug,
+	initialWeekStart,
 }: {
 	token: string;
 	mentorSlug: string;
+	initialWeekStart: string | null;
 }) {
 	const router = useRouter();
 	const [mode, setMode] = useState<"idle" | "cancel" | "reschedule">("idle");
@@ -68,6 +70,7 @@ export function ManageActions({
 			<div className="space-y-3">
 				<SlotPicker
 					mentorSlug={mentorSlug}
+					initialWeekStart={initialWeekStart}
 					selectedStartUtc={newStart}
 					onSelect={setNewStart}
 				/>
