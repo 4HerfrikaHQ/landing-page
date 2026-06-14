@@ -3,8 +3,8 @@
 import { createHash } from "node:crypto";
 import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
+import { insertDefaultBookingSettings } from "@/src/db/actions/mentors";
 import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
-import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
@@ -150,7 +150,7 @@ export const approveMentorApplication = adminAction
 				})
 				.returning({ id: mentors.id });
 
-			await tx.insert(mentorBookingSettings).values({ mentor_id: mentor.id });
+			await insertDefaultBookingSettings(tx, mentor.id);
 
 			await tx
 				.update(mentorApplications)

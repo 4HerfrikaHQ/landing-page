@@ -57,6 +57,13 @@
       "when": 1781451717337,
       "tag": "0007_seed_featured_mentor_state",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1781461830840,
+      "tag": "0008_backfill_mentor_booking_settings",
+      "breakpoints": true
     }
   ]
 }

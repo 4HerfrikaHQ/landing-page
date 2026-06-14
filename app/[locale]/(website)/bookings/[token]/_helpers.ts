@@ -52,12 +52,14 @@ export async function loadRescheduleContext(token: string) {
 	if (!mentor) throw new ActionError("Mentor missing");
 	if (!mentorUser?.email) throw new ActionError("Mentor email missing");
 
-	const [settings] = await db
+	const [settingsRow] = await db
 		.select()
 		.from(mentorBookingSettings)
 		.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 		.limit(1);
-	if (!settings) throw new ActionError("Settings missing");
+	if (!settingsRow)
+		throw new ActionError("Mentor booking settings missing");
+	const settings = settingsRow;
 
 	return { booking, mentor, mentorUser, settings };
 }
@@ -92,12 +94,14 @@ export async function validateNewSlot(params: {
 			),
 		);
 
-	const [settings] = await db
+	const [settingsRow] = await db
 		.select()
 		.from(mentorBookingSettings)
 		.where(eq(mentorBookingSettings.mentor_id, mentorId))
 		.limit(1);
-	if (!settings) throw new ActionError("Settings missing");
+	if (!settingsRow)
+		throw new ActionError("Mentor booking settings missing");
+	const settings = settingsRow;
 
 	const slots = computeSlots({
 		availabilityTemplates: templates,

@@ -1,7 +1,20 @@
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
+import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { eq } from "drizzle-orm";
+
+type Executor = Pick<typeof db, "insert">;
+
+export async function insertDefaultBookingSettings(
+	executor: Executor,
+	mentorId: string,
+): Promise<void> {
+	await executor
+		.insert(mentorBookingSettings)
+		.values({ mentor_id: mentorId })
+		.onConflictDoNothing({ target: mentorBookingSettings.mentor_id });
+}
 
 export async function uploadMentorAvatar(
 	mentorId: string,

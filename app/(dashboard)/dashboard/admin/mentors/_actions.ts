@@ -4,7 +4,10 @@ import { createHash } from "node:crypto";
 import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
-import { uploadMentorAvatar } from "@/src/db/actions/mentors";
+import {
+	insertDefaultBookingSettings,
+	uploadMentorAvatar,
+} from "@/src/db/actions/mentors";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
 import { and, eq, ilike, or, type SQL } from "drizzle-orm";
@@ -92,15 +95,20 @@ export async function createMentor(
 		.slice(0, 8);
 	const slug = `${baseSlug}-${suffix}`;
 
-	await db.insert(schema.mentors).values({
-		user_id: dbUser.id,
-		name,
-		position,
-		bio,
-		nickname,
-		linkedin_url,
-		slug,
-	});
+	const [mentor] = await db
+		.insert(schema.mentors)
+		.values({
+			user_id: dbUser.id,
+			name,
+			position,
+			bio,
+			nickname,
+			linkedin_url,
+			slug,
+		})
+		.returning({ id: schema.mentors.id });
+
+	await insertDefaultBookingSettings(db, mentor.id);
 
 	revalidatePath("/dashboard/admin/mentors");
 	return {};

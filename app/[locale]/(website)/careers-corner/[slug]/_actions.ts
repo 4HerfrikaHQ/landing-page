@@ -230,12 +230,14 @@ export const listMentorSlots = actionClient
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 
-		const [settings] = await db
+		const [settingsRow] = await db
 			.select()
 			.from(mentorBookingSettings)
 			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 			.limit(1);
-		if (!settings) throw new ActionError("Mentor booking settings missing");
+		if (!settingsRow)
+			throw new ActionError("Mentor booking settings missing");
+		const settings = settingsRow;
 
 		const availabilityWindows = await db
 			.select()
@@ -288,12 +290,13 @@ export async function getFirstAvailableSlotUtc(
 	const mentor = await getMentorBySlug(mentorSlug);
 	if (!mentor) return null;
 
-	const [settings] = await db
+	const [settingsRow] = await db
 		.select()
 		.from(mentorBookingSettings)
 		.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 		.limit(1);
-	if (!settings) return null;
+	if (!settingsRow) return null;
+	const settings = settingsRow;
 
 	const availabilityWindows = await db
 		.select()
@@ -358,12 +361,14 @@ export const createBooking = actionClient
 		const mentorEmail = mentorUser?.email;
 		if (!mentorEmail) throw new ActionError("Mentor email missing");
 
-		const [settings] = await db
+		const [settingsRow] = await db
 			.select()
 			.from(mentorBookingSettings)
 			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 			.limit(1);
-		if (!settings) throw new ActionError("Mentor booking settings missing");
+		if (!settingsRow)
+			throw new ActionError("Mentor booking settings missing");
+		const settings = settingsRow;
 
 		const startAt = new Date(parsedInput.startAtUtc);
 		const endAt = new Date(
