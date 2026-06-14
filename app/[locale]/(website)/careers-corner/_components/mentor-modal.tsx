@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { format, parse } from "date-fns";
+import { UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 
@@ -151,8 +152,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 								<Button
 									variant="solid"
 									size="lg"
-									href="/"
-									isExternal
+									href={`/careers-corner/${mentor.slug}`}
 									className="w-full sm:w-auto"
 								>
 									{tc("bookACall")}
