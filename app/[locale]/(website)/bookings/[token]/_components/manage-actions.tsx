@@ -93,13 +93,14 @@ export function ManageActions({
 
 	return (
 		<div className="flex gap-2">
-			<Button variant="outline" onClick={() => setMode("reschedule")}>
+			<Button variant="outline" size="sm" onClick={() => setMode("reschedule")}>
 				Reschedule
 			</Button>
 			<Button
 				variant="outline"
-				className="border-red-300 text-red-700 hover:bg-red-50"
-				onClick={() => setMode("cancel")}
+				className="border-red-300 text-red-700 hover:bg-red-50 hover:text-black"
+        onClick={() => setMode("cancel")}
+				size="sm"
 			>
 				Cancel
 			</Button>
