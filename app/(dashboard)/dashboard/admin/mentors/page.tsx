@@ -9,7 +9,7 @@ import {
 import { currentDbUser } from "@/src/auth";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getMentorsForAdmin } from "./_actions";
+import { getFeaturedMentorId, getMentorsForAdmin } from "./_actions";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorTableRow } from "./_components/mentor-table-row";
 import { SearchInput } from "./_components/search-input";
@@ -24,7 +24,10 @@ export default async function MentorsPage({
 	if (user.role !== "super_admin") unauthorized();
 
 	const { q, status } = await searchParams;
-	const mentors = await getMentorsForAdmin(q, status);
+	const [mentors, currentFeaturedId] = await Promise.all([
+		getMentorsForAdmin(q, status),
+		getFeaturedMentorId(),
+	]);
 
 	return (
 		<div className="p-8 max-w-5xl mx-auto">
@@ -63,13 +66,16 @@ export default async function MentorsPage({
 							<TableHead className="font-medium text-gray-600">
 								Active
 							</TableHead>
+							<TableHead className="font-medium text-gray-600">
+								Featured
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
 								<TableCell
-									colSpan={6}
+									colSpan={7}
 									className="text-center text-gray-400 py-12"
 								>
 									No mentors yet.
@@ -77,7 +83,11 @@ export default async function MentorsPage({
 							</TableRow>
 						) : (
 							mentors.map((mentor) => (
-								<MentorTableRow key={mentor.id} mentor={mentor} />
+								<MentorTableRow
+									key={mentor.id}
+									mentor={mentor}
+									currentFeaturedId={currentFeaturedId}
+								/>
 							))
 						)}
 					</TableBody>

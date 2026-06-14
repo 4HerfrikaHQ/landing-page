@@ -31,6 +31,12 @@ export type {
 	DbMentorBookingSettingsInsert,
 } from "./mentor-booking-settings";
 
+export { featuredMentorState } from "./featured-mentor-state";
+export type {
+	DbFeaturedMentorState,
+	DbFeaturedMentorStateInsert,
+} from "./featured-mentor-state";
+
 export { bookings, BookingStatus, CareerStage } from "./bookings";
 export type { DbBooking, DbBookingInsert } from "./bookings";
 

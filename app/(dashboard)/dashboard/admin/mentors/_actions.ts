@@ -5,8 +5,11 @@ import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
+import { ActionError, adminAction } from "@/src/lib/safe-action";
+import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
 import { and, eq, ilike, or, type SQL } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { SetFeaturedMentorSchema } from "./_schema";
 
 export async function getMentorsForAdmin(
 	query?: string,
@@ -173,3 +176,62 @@ export async function toggleMentorActive(
 	revalidatePath("/dashboard/admin/mentors");
 	return {};
 }
+
+export async function getFeaturedMentorId(): Promise<string | null> {
+	const [state] = await db
+		.select({ featured_mentor_id: schema.featuredMentorState.featured_mentor_id })
+		.from(schema.featuredMentorState)
+		.where(eq(schema.featuredMentorState.id, SINGLETON_ID))
+		.limit(1);
+	return state?.featured_mentor_id ?? null;
+}
+
+export const setFeaturedMentor = adminAction
+	.schema(SetFeaturedMentorSchema)
+	.action(async ({ parsedInput }) => {
+		const mentor = await db.query.mentors.findFirst({
+			where: eq(schema.mentors.id, parsedInput.mentorId),
+		});
+
+		if (!mentor || !mentor.active || !mentor.image) {
+			throw new ActionError(
+				"Mentor must be active and have a profile photo to be featured",
+			);
+		}
+
+		const now = new Date();
+
+		await db.transaction(async (tx) => {
+			const [state] = await tx
+				.select()
+				.from(schema.featuredMentorState)
+				.where(eq(schema.featuredMentorState.id, SINGLETON_ID))
+				.for("update")
+				.limit(1);
+
+			if (!state) {
+				throw new ActionError(
+					"featured_mentor_state singleton row is missing; run db:migrate to apply the seed migration.",
+				);
+			}
+
+			const windowOpen = !!state.cycle_end_at && now < state.cycle_end_at;
+
+			await tx
+				.update(schema.featuredMentorState)
+				.set({
+					featured_mentor_id: parsedInput.mentorId,
+					is_manual_override: true,
+					cycle_start_at: windowOpen ? state.cycle_start_at : now,
+					cycle_end_at: windowOpen
+						? state.cycle_end_at
+						: new Date(now.getTime() + CYCLE_MS),
+					updated_at: now,
+				})
+				.where(eq(schema.featuredMentorState.id, SINGLETON_ID));
+		});
+
+		revalidatePath("/careers-corner");
+		revalidatePath("/dashboard/admin/mentors");
+		return { ok: true };
+	});

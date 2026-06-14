@@ -43,6 +43,20 @@
       "when": 1779027382985,
       "tag": "0005_magenta_pixie",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781451005402,
+      "tag": "0006_spicy_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781451717337,
+      "tag": "0007_seed_featured_mentor_state",
+      "breakpoints": true
     }
   ]
 }

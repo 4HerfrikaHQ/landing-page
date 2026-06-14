@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { AvatarUpload } from "./avatar-upload";
 import { EditMentorSheet } from "./edit-mentor-sheet";
+import { FeatureMentorButton } from "./feature-mentor-button";
 import { ToggleActiveButton } from "./toggle-active-button";
 
 type Mentor = {
@@ -20,8 +21,15 @@ type Mentor = {
 	created_at: Date;
 };
 
-export function MentorTableRow({ mentor }: { mentor: Mentor }) {
+export function MentorTableRow({
+	mentor,
+	currentFeaturedId,
+}: {
+	mentor: Mentor;
+	currentFeaturedId: string | null;
+}) {
 	const [editIsOpen, setEditIsOpen] = useState(false);
+	const eligibleToFeature = mentor.active && !!mentor.image;
 
 	return (
 		<>
@@ -45,6 +53,14 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
+				</TableCell>
+				<TableCell onClick={(e) => e.stopPropagation()}>
+					{eligibleToFeature && (
+						<FeatureMentorButton
+							id={mentor.id}
+							isFeatured={currentFeaturedId === mentor.id}
+						/>
+					)}
 				</TableCell>
 			</TableRow>
 
