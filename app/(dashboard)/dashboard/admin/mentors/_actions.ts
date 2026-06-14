@@ -61,8 +61,10 @@ export async function createMentor(
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
 
 	const supabase = await createClient();
-	const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-		data: { name },
+	const { data, error } = await supabase.auth.admin.createUser({
+		email,
+		email_confirm: true,
+		user_metadata: { name },
 	});
 	if (error) return { error: error.message };
 
@@ -73,7 +75,7 @@ export async function createMentor(
 		.limit(1)
 		.then((rows) => rows[0]);
 
-	if (!dbUser) return { error: "User record not found after invite." };
+	if (!dbUser) return { error: "User record not found after creation." };
 
 	const baseSlug =
 		(nickname || name)
