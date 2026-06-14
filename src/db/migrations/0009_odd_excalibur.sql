@@ -1,0 +1,1 @@
+ALTER TABLE "mentor_booking_settings" ALTER COLUMN "min_lead_hours" SET DEFAULT 2;
