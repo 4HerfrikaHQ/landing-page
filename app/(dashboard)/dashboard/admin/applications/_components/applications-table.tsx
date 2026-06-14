@@ -33,15 +33,16 @@ export function ApplicationsTable({ rows }: { rows: Row[] }) {
 							<article key={row.id} className="rounded-lg border p-4 bg-white">
 								<header className="flex items-start justify-between gap-4">
 									<div>
-										<h3 className="font-medium text-gray-900">{row.name}</h3>
+										<h3 className="font-medium text-lg text-gray-900">{row.name}</h3>
 										<p className="text-sm text-gray-500">
-											{row.email} · {row.position}
+											<b>Email:</b> {row.email} · <b>Position:</b> {row.position}
 										</p>
 									</div>
 									<StatusBadge status={row.status} />
-								</header>
-								<p className="mt-3 text-sm whitespace-pre-wrap text-gray-700">
-									{row.motivation}
+                </header>
+								<p className="mt-3 text-sm whitespace-pre-wrap text-gray-700 wrap-break-word">
+                  <b>Motivation:</b><br />
+                  {row.motivation}
 								</p>
 								{row.linkedin_url && (
 									<p className="mt-2 text-xs text-gray-500">
