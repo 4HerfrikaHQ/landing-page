@@ -43,9 +43,9 @@ export function BookingSection({
 				onOpenChange={(o) => {
 					setOpen(o);
 					if (!o) setSelected(null);
-				}}
+        }}
 			>
-				<SheetContent className="overflow-y-auto sm:max-w-lg">
+				<SheetContent className="overflow-y-auto sm:max-w-2xl!">
 					<SheetHeader>
 						<SheetTitle>Book with {mentorName}</SheetTitle>
 						{selected && (

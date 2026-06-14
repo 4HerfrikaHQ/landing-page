@@ -57,7 +57,7 @@ export function BookingForm({
 	const errors = form.formState.errors;
 
 	return (
-		<form onSubmit={handleSubmitWithAction} className="space-y-4 z-100">
+		<form onSubmit={handleSubmitWithAction} className="space-y-4 z-[100]">
 			<input type="hidden" {...form.register("mentorSlug")} />
 			<input type="hidden" {...form.register("startAtUtc")} />
 			<input type="hidden" {...form.register("menteeTimezone")} />
@@ -80,7 +80,7 @@ export function BookingForm({
 						<option value="prefer_not_to_say">Prefer not to say</option>
 					</select>
 				</Field>
-				<Field label="Career stage (optional)">
+				<Field label="Career stage">
 					<select
 						className="w-full rounded border px-2 py-1.5 bg-white"
 						{...form.register("mentee_career_stage")}
