@@ -4,10 +4,17 @@
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { PROFILE_IMAGES } from "../_schema";
+import type { HeroMentor } from "../_actions";
+import { HERO_SLOTS } from "../_schema";
 
-export const CareersHero = () => {
+type CareersHeroProps = {
+	mentors: HeroMentor[];
+};
+
+export const CareersHero = ({ mentors }: CareersHeroProps) => {
 	const t = useTranslations("careers");
+
+	const floatingMentors = mentors.slice(0, HERO_SLOTS.length);
 
 	return (
 		<section className="overflow-hidden grid place-content-center relative min-h-[60vh] w-full pt-28 pb-16">
@@ -29,33 +36,38 @@ export const CareersHero = () => {
 			/>
 
 			<div className="w-[50vw] min-w-62 relative grid place-content-center">
-				{PROFILE_IMAGES.map((profile, index) => (
-					<motion.div
-						key={profile.alt}
-						className={`absolute ${profile.position}`}
-						animate={{
-							y: [0, -10, 5, 0],
-							rotate: [0, 3, -3, 0],
-						}}
-						transition={{
-							duration: profile.duration,
-							repeat: Number.POSITIVE_INFINITY,
-							ease: "easeInOut",
-							delay: index * 0.3,
-						}}
-					>
-						<Image
-							src={profile.src}
-							alt={profile.alt}
-							width={700}
-							height={1000}
-							className={`${profile.size} object-cover object-top aspect-square rounded-full shadow-lg shadow-primary-300/50`}
-							style={{
-								filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",
+				{floatingMentors.map((mentor, index) => {
+					const slot = HERO_SLOTS[index];
+
+					return (
+						<motion.div
+							key={mentor.slug}
+							className={`absolute ${slot.position}`}
+							animate={{
+								y: [0, -10, 5, 0],
+								rotate: [0, 3, -3, 0],
 							}}
-						/>
-					</motion.div>
-				))}
+							transition={{
+								duration: slot.duration,
+								repeat: Number.POSITIVE_INFINITY,
+								ease: "easeInOut",
+								delay: index * 0.3,
+							}}
+						>
+							<Image
+								src={mentor.image}
+								alt={mentor.name}
+								width={700}
+								height={1000}
+								unoptimized={mentor.image.includes("localhost")}
+								className={`${slot.size} object-cover object-top aspect-square rounded-full shadow-lg shadow-primary-300/50`}
+								style={{
+									filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",
+								}}
+							/>
+						</motion.div>
+					);
+				})}
 
 				<h1 className="z-20 text-foreground text-center text-2xl md:text-3xl font-normal max-w-4xl">
 					{t("heroText")}

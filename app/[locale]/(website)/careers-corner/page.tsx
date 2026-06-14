@@ -11,7 +11,7 @@ import { UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { getMentors } from "./_actions";
+import { getHeroMentors, getMentors } from "./_actions";
 import { BecomeAMentorForm } from "./_components/become-a-mentor-form";
 import { CareersHero } from "./_components/hero";
 import { MentorCard } from "./_components/mentor-modal";
@@ -22,18 +22,20 @@ const CareersCorner = async ({
 }: { params: Promise<{ locale: string }> }) => {
 	await setLocaleFromParams(params);
 
-	const [tCareers, tCommon, mentors, featured] = await Promise.all([
-		getTranslations("careers"),
-		getTranslations("common"),
-		getMentors(),
-		resolveFeaturedMentor(),
-	]);
+	const [tCareers, tCommon, mentors, heroMentors, featured] =
+		await Promise.all([
+			getTranslations("careers"),
+			getTranslations("common"),
+			getMentors(),
+			getHeroMentors(),
+			resolveFeaturedMentor(),
+		]);
 
 	const featuredName = featured ? featured.nickname || featured.name : null;
 
 	return (
 		<section className="overflow-x-hidden">
-			<CareersHero />
+			<CareersHero mentors={heroMentors} />
 
 			{featured && (
 				<section className="bg-muted">
