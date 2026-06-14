@@ -57,7 +57,7 @@ export function BookingForm({
 	const errors = form.formState.errors;
 
 	return (
-		<form onSubmit={handleSubmitWithAction} className="space-y-4">
+		<form onSubmit={handleSubmitWithAction} className="space-y-4 z-100">
 			<input type="hidden" {...form.register("mentorSlug")} />
 			<input type="hidden" {...form.register("startAtUtc")} />
 			<input type="hidden" {...form.register("menteeTimezone")} />
