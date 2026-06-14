@@ -7,10 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import { toast } from "sonner";
-import { submitMentorApplication } from "../_actions";
-import { SubmitApplicationSchema } from "../_schema";
+import { submitMentorApplication } from "../apply/_actions";
+import { SubmitApplicationSchema } from "../apply/_schema";
 
-export function ApplicationForm() {
+export function BecomeAMentorForm() {
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		submitMentorApplication,
 		zodResolver(SubmitApplicationSchema),

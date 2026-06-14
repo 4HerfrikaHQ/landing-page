@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { ApplicationForm } from "./_components/application-form";
+import { BecomeAMentorForm } from "../_components/become-a-mentor-form";
 
 export const metadata: Metadata = {
 	title: "Become a mentor — 4HerFrika",
@@ -27,7 +27,7 @@ export default async function ApplyPage({
 				out within a few days.
 			</p>
 			<div className="mt-10">
-				<ApplicationForm />
+				<BecomeAMentorForm />
 			</div>
 		</main>
 	);

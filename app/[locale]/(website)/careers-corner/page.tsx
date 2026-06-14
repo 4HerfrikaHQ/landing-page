@@ -12,8 +12,8 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import { getMentors } from "./_actions";
+import { BecomeAMentorForm } from "./_components/become-a-mentor-form";
 import { CareersHero } from "./_components/hero";
-import MentorForm from "./_components/mentor-form";
 import { MentorCard } from "./_components/mentor-modal";
 
 const CareersCorner = async ({
@@ -127,7 +127,17 @@ const CareersCorner = async ({
 				</section>
 			</section>
 
-			<MentorForm />
+			<FadeIn>
+				<section className="container max-w-3xl mx-auto py-8 md:py-12 lg:py-16 xl:py-20 px-4 sm:px-6 lg:px-8">
+					<h2 className="text-4xl font-bold text-center mb-2">
+						{tCareers("becomeMentor")}
+					</h2>
+					<p className="text-muted-foreground text-center mb-8">
+						{tCareers("becomeMentorDescription")}
+					</p>
+					<BecomeAMentorForm />
+				</section>
+			</FadeIn>
 		</section>
 	);
 };
