@@ -151,21 +151,14 @@ export async function toggleMentorActive(
 		if (
 			!mentor.name ||
 			!mentor.position ||
-			!mentor.image ||
-			!mentor.bio ||
-			!mentor.linkedin_url
+			!mentor.bio
 		) {
 			return {
 				error:
-					"Cannot activate mentor. Please ensure name, position, image, bio, and LinkedIn URL are all set.",
+					"Cannot activate mentor. Please ensure name, position, and bio are all set.",
 			};
 		}
 
-		if (mentor.availability.length === 0) {
-			return {
-				error: "Cannot activate a mentor without any availability slots",
-			};
-		}
 	}
 
 	await db
