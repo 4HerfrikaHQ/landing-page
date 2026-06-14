@@ -45,7 +45,7 @@ export function BlogSection({ posts, categories, featuredUid }: Props) {
   }
 
   return (
-    <section id="blog-grid" className="container mx-auto px-4 sm:px-6 lg:px-8 pb-18 lg:pb-18">
+    <section id="blog-grid" className="container mx-auto px-4 sm:px-6 lg:px-8 pb-18 lg:pb-18 scroll-m-8">
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
