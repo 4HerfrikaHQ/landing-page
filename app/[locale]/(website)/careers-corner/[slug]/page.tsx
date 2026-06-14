@@ -41,6 +41,7 @@ export default async function MentorDetailPage({
 						alt={mentor.name}
 						width={80}
 						height={80}
+						unoptimized={mentor.image.includes("localhost")}
 						className="rounded-full object-cover"
 					/>
 				)}
