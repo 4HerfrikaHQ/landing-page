@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/src/db";
+import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import { availability } from "@/src/db/schema/tables/availability";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
@@ -30,6 +31,20 @@ export async function loadMentorFromToken(token: string) {
 		.where(eq(availability.mentor_id, mentor.id));
 
 	return { ok: true as const, mentor, availability: slots };
+}
+
+export async function uploadOnboardingImage(
+	token: string,
+	formData: FormData,
+): Promise<{ url?: string; error?: string }> {
+	const verified = verifyBookingToken(token);
+	if (!verified.ok || verified.action !== "mentor_onboard") {
+		return {
+			error: `Invalid link: ${verified.ok ? "wrong_action" : verified.reason}`,
+		};
+  }
+
+	return uploadMentorAvatar(verified.bookingId, formData);
 }
 
 export const completeMentorOnboarding = actionClient

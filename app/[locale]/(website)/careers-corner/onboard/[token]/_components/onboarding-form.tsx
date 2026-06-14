@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { completeMentorOnboarding } from "../_actions";
 import { CompleteOnboardingSchema } from "../_schema";
+import { OnboardingAvatarUpload } from "./onboarding-avatar-upload";
 
 export function OnboardingForm({
 	token,
@@ -69,12 +70,19 @@ export function OnboardingForm({
 				<Input {...form.register("nickname")} />
 			</div>
 
+			<input type="hidden" {...form.register("image")} />
 			<div className="space-y-1.5">
-				<Label>Profile photo URL (optional)</Label>
-				<Input type="url" {...form.register("image")} />
-				<p className="text-xs text-gray-500">
-					Paste an image URL — native upload comes later.
-				</p>
+				<Label>Profile photo (optional)</Label>
+				<OnboardingAvatarUpload
+					token={token}
+					value={form.watch("image") ?? ""}
+					onChange={(url) =>
+						form.setValue("image", url, { shouldValidate: true })
+					}
+				/>
+				{errors.image && (
+					<p className="text-sm text-red-500">{errors.image.message}</p>
+				)}
 			</div>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">
