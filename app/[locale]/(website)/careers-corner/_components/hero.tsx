@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+// import { Search } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -60,7 +60,7 @@ export const CareersHero = () => {
 				<h1 className="z-20 text-foreground text-center text-2xl md:text-3xl font-normal max-w-4xl">
 					{t("heroText")}
 				</h1>
-				<form className="w-72 mx-auto shadow-inner shadow-primary-200/40 mt-6 flex items-center gap-4 px-4 py-3 rounded-full">
+				{/* <form className="w-72 mx-auto shadow-inner shadow-primary-200/40 mt-6 flex items-center gap-4 px-4 py-3 rounded-full">
 					<span className="bg-muted bg-opacity-50 rounded-full p-2 aspect-square grid place-content-center">
 						<Search className="h-4 w-4 text-white" />{" "}
 					</span>
@@ -69,7 +69,7 @@ export const CareersHero = () => {
 						placeholder={t("searchMentor")}
 						className="bg-transparent w-full"
 					/>
-				</form>
+				</form> */}
 			</div>
 		</section>
 	);
