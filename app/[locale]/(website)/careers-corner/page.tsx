@@ -10,7 +10,6 @@ import type { Metadata } from "next";
 import { UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
 import { getHeroMentors, getMentors } from "./_actions";
 import { BecomeAMentorForm } from "./_components/become-a-mentor-form";
 import { CareersHero } from "./_components/hero";
@@ -101,14 +100,14 @@ const CareersCorner = async ({
 								)}
 								<div className="flex flex-col md:flex-row items-center gap-5 my-7 w-full justify-between">
 									{featured.linkedin_url && (
-										<Link
+										<a
 											href={featured.linkedin_url}
 											target="_blank"
 											rel="noopener noreferrer"
 											className="underline text-primary-500"
 										>
 											{tCommon("messageOnLinkedin")}
-										</Link>
+										</a>
 									)}
 									<Button
 										variant="solid"
