@@ -1,9 +1,10 @@
+import { startOfWeek } from "date-fns";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getMentorBySlug } from "./_actions";
+import { getFirstAvailableSlotUtc, getMentorBySlug } from "./_actions";
 import { BookingSection } from "./_components/booking-section";
 
 export async function generateMetadata({
@@ -31,6 +32,11 @@ export default async function MentorDetailPage({
 
 	const mentor = await getMentorBySlug(slug);
 	if (!mentor) notFound();
+
+	const firstSlotUtc = await getFirstAvailableSlotUtc(mentor.slug);
+	const initialWeekStart = firstSlotUtc
+		? startOfWeek(new Date(firstSlotUtc), { weekStartsOn: 1 }).toISOString()
+		: null;
 
 	return (
 		<main className="mx-auto max-w-3xl px-4 py-12">
@@ -76,7 +82,11 @@ export default async function MentorDetailPage({
 					timezone.
 				</p>
 				<div className="mt-6">
-					<BookingSection mentorSlug={mentor.slug} mentorName={mentor.name} />
+					<BookingSection
+						mentorSlug={mentor.slug}
+						mentorName={mentor.name}
+						initialWeekStart={initialWeekStart}
+					/>
 				</div>
 			</section>
 		</main>

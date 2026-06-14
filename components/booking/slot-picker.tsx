@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { addDays, endOfWeek, format, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { useAction } from "next-safe-action/hooks";
@@ -26,19 +26,23 @@ const COMMON_TZS = [
 
 export function SlotPicker({
 	mentorSlug,
+	initialWeekStart,
 	selectedStartUtc,
 	onSelect,
 }: {
 	mentorSlug: string;
+	initialWeekStart: string | null;
 	selectedStartUtc: string | null;
 	onSelect: (startUtc: string) => void;
 }) {
 	const [weekStart, setWeekStart] = useState(() =>
-		startOfWeek(new Date(0), { weekStartsOn: 1 }),
+		initialWeekStart
+			? startOfWeek(new Date(initialWeekStart), { weekStartsOn: 1 })
+			: startOfWeek(new Date(), { weekStartsOn: 1 }),
 	);
 	const [tz, setTz] = useState("UTC");
+
 	useEffect(() => {
-		setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }));
 		setTz(Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC");
 	}, []);
 

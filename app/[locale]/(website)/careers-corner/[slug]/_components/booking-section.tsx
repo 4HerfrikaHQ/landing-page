@@ -14,9 +14,11 @@ import { BookingForm } from "./booking-form";
 export function BookingSection({
 	mentorSlug,
 	mentorName,
+	initialWeekStart,
 }: {
 	mentorSlug: string;
 	mentorName: string;
+	initialWeekStart: string | null;
 }) {
 	const [selected, setSelected] = useState<string | null>(null);
 	const [open, setOpen] = useState(false);
@@ -29,6 +31,7 @@ export function BookingSection({
 		<>
 			<SlotPicker
 				mentorSlug={mentorSlug}
+				initialWeekStart={initialWeekStart}
 				selectedStartUtc={selected}
 				onSelect={(s) => {
 					setSelected(s);

@@ -8,6 +8,7 @@ import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
+import { addDays } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -271,6 +272,61 @@ export const listMentorSlots = actionClient
 			slots,
 		};
 	});
+
+/**
+ * Server-side lookup of the first bookable slot over the mentor's full booking
+ * horizon (`now → now + max_horizon_days`), applying the same filters the
+ * visible grid uses (min_lead_hours, max_horizon_days, buffer, non-cancelled
+ * bookings). Returns the slot's ISO start, or null when nothing is bookable.
+ *
+ * Called directly from the mentor detail server component so the calendar can
+ * initialise to the first available week without a client round-trip.
+ */
+export async function getFirstAvailableSlotUtc(
+	mentorSlug: string,
+): Promise<string | null> {
+	const mentor = await getMentorBySlug(mentorSlug);
+	if (!mentor) return null;
+
+	const [settings] = await db
+		.select()
+		.from(mentorBookingSettings)
+		.where(eq(mentorBookingSettings.mentor_id, mentor.id))
+		.limit(1);
+	if (!settings) return null;
+
+	const availabilityWindows = await db
+		.select()
+		.from(availability)
+		.where(eq(availability.mentor_id, mentor.id));
+
+	const now = new Date();
+	const fromUtc = now;
+	const toUtc = addDays(now, settings.max_horizon_days);
+
+	const existing = await db
+		.select({ startUtc: bookings.start_at, endUtc: bookings.end_at })
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentor_id, mentor.id),
+				ne(bookings.status, "cancelled"),
+				gte(bookings.start_at, fromUtc),
+				lt(bookings.start_at, toUtc),
+			),
+		);
+
+	const slots = computeSlots({
+		availabilityTemplates: availabilityWindows,
+		existingBookings: existing,
+		settings,
+		fromUtc,
+		toUtc,
+		now,
+	});
+
+	return slots[0]?.startUtc ?? null;
+}
 
 export const createBooking = actionClient
 	.schema(CreateBookingSchema)
