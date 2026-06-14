@@ -142,13 +142,15 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 							</div>
 
 							<div className="flex flex-col items-center sm:flex-row gap-4 sm:gap-6 mt-6">
-								<Button
-									variant="link"
-									href={mentor.linkedin_url || "/"}
-									isExternal
-								>
-									{tc("messageOnLinkedin")}
-								</Button>
+								{mentor.linkedin_url && (
+									<Button
+										variant="link"
+										href={mentor.linkedin_url}
+										isExternal
+									>
+										{tc("messageOnLinkedin")}
+									</Button>
+								)}
 								<Button
 									variant="solid"
 									size="lg"
