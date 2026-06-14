@@ -33,14 +33,20 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 		<Dialog>
 			<div className="h-full w-full bg-secondary-500 bg-opacity-20 p-2 rounded-md hover:shadow-lg transition-shadow duration-300">
 				<div className="overflow-hidden rounded-md">
-					<Image
-						src={mentor.image ?? ""}
-						alt={mentor.name}
-						width={700}
-						height={1000}
-						unoptimized={mentor.image?.includes("localhost") ?? true}
-						className="hover:scale-105 h-64 w-full object-cover object-top transition-transform duration-300"
-					/>
+					{mentor.image ? (
+						<Image
+							src={mentor.image}
+							alt={mentor.name}
+							width={700}
+							height={1000}
+							unoptimized={mentor.image.includes("localhost")}
+							className="hover:scale-105 h-64 w-full object-cover object-top transition-transform duration-300"
+						/>
+					) : (
+						<div className="flex h-64 w-full items-center justify-center bg-secondary-500/40">
+							<UserRound className="size-20 text-white/70" />
+						</div>
+					)}
 				</div>
 				<p className="text-center text-md mt-3 uppercase font-bold text-white">
 					{mentor.name}
@@ -73,14 +79,20 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 						{/* Profile Image */}
 						<div className="flex justify-center">
 							<div className="w-full max-w-md rounded-md shadow-md relative aspect-3/4 h-75 sm:h-100">
-								<Image
-									src={mentor.image ?? ""}
-									alt={mentor.name}
-									fill
-									sizes="(max-width: 768px) 100vw, 400px"
-									className="rounded-md object-cover object-top"
-									unoptimized={mentor.image?.includes("localhost") ?? true}
-								/>
+								{mentor.image ? (
+									<Image
+										src={mentor.image}
+										alt={mentor.name}
+										fill
+										sizes="(max-width: 768px) 100vw, 400px"
+										className="rounded-md object-cover object-top"
+										unoptimized={mentor.image.includes("localhost")}
+									/>
+								) : (
+									<div className="flex h-full w-full items-center justify-center rounded-md bg-secondary-500/40">
+										<UserRound className="size-28 text-white/70" />
+									</div>
+								)}
 							</div>
 						</div>
 
