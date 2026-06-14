@@ -9,6 +9,14 @@ type OkLoaded = Extract<Loaded, { ok: true }>;
 type Booking = OkLoaded["upcoming"][number];
 type Feedback = OkLoaded["feedbackByBooking"][string];
 
+const CAREER_STAGE_LABELS: Record<string, string> = {
+	student: "Student",
+	early_career: "Early career",
+	mid_career: "Mid career",
+	founder: "Founder",
+	other: "Other",
+};
+
 export function BookingsTabs({
 	upcoming,
 	past,
@@ -87,17 +95,18 @@ function BookingList({
 						<p className="mt-3 whitespace-pre-wrap text-sm text-gray-700">
 							<strong>Purpose:</strong> {b.purpose}
 						</p>
+						{b.mentee_career_stage && (
+							<p className="mt-2 text-xs text-gray-500">
+								<strong>Career stage:</strong>{" "}
+								{CAREER_STAGE_LABELS[b.mentee_career_stage] ??
+									b.mentee_career_stage}
+							</p>
+						)}
 						{(b.mentee_phone ||
 							b.mentee_linkedin ||
-							b.mentee_country ||
-							b.mentee_career_stage) && (
+							b.mentee_country) && (
 							<p className="mt-2 text-xs text-gray-500">
-								{[
-									b.mentee_country,
-									b.mentee_career_stage,
-									b.mentee_phone,
-									b.mentee_linkedin,
-								]
+								{[b.mentee_country, b.mentee_phone, b.mentee_linkedin]
 									.filter(Boolean)
 									.join(" · ")}
 							</p>
