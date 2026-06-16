@@ -1,7 +1,10 @@
+import { FadeIn } from "@/components/motion";
+import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getInitialWeekStart, getMentorBySlug } from "./_actions";
 import { BookingSection } from "./_components/booking-section";
@@ -29,62 +32,112 @@ export default async function MentorDetailPage({
 	const { locale, slug } = await params;
 	setRequestLocale(locale as Locale);
 
-	const mentor = await getMentorBySlug(slug);
+	const [mentor, tc] = await Promise.all([
+		getMentorBySlug(slug),
+		getTranslations("common"),
+	]);
 	if (!mentor) notFound();
 
 	const initialWeekStart = await getInitialWeekStart(mentor.slug);
+	const displayName = mentor.nickname || mentor.name;
 
 	return (
-		<main className="mx-auto max-w-3xl px-4 py-12">
-			<header className="flex items-center gap-4">
-				{mentor.image && (
-					<Image
-						src={mentor.image}
-						alt={mentor.name}
-						width={80}
-						height={80}
-						unoptimized={mentor.image.includes("localhost")}
-						className="rounded-full object-cover"
-					/>
-				)}
-				<div>
-					<h1 className="text-2xl font-semibold text-gray-900">
-						{mentor.name}
-					</h1>
-					<p className="text-gray-500">{mentor.position}</p>
-					{mentor.linkedin_url && (
-						<a
-							href={mentor.linkedin_url}
-							target="_blank"
-							rel="noreferrer"
-							className="text-xs text-primary-500 underline mt-1 inline-block"
-						>
-							LinkedIn
-						</a>
-					)}
-				</div>
-			</header>
+		<main className="bg-muted">
+			<div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+				<FadeIn>
+					<Link
+						href="/careers-corner"
+						className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary-500 hover:no-underline!"
+					>
+						<ChevronLeft className="size-4" />
+						Back to mentors
+					</Link>
+				</FadeIn>
 
-			{mentor.bio && (
-				<p className="mt-6 whitespace-pre-wrap text-gray-700">{mentor.bio}</p>
-			)}
+				<div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start">
+					{/* Left: profile */}
+					<FadeIn direction="left">
+						<div className="rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8">
+							<div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+								<div className="relative shrink-0">
+									<div className="absolute -inset-2 rounded-full bg-surface-pink" />
+									<div className="relative size-28 overflow-hidden rounded-full ring-4 ring-primary-500/15 sm:size-32">
+										{mentor.image ? (
+											<Image
+												src={mentor.image}
+												alt={mentor.name}
+												fill
+												sizes="128px"
+												unoptimized={mentor.image.includes("localhost")}
+												className="object-cover object-top"
+											/>
+										) : (
+											<div className="flex h-full w-full items-center justify-center bg-secondary-500/30">
+												<UserRound className="size-12 text-secondary-500/70" />
+											</div>
+										)}
+									</div>
+								</div>
+								<div className="min-w-0">
+									<h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
+										{displayName}
+									</h1>
+									<p className="mt-1 capitalize text-muted-foreground">
+										{mentor.position}
+									</p>
+									{mentor.linkedin_url && (
+										<a
+											href={mentor.linkedin_url}
+											target="_blank"
+											rel="noreferrer"
+											className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-white px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary-500 hover:text-primary-500 hover:no-underline!"
+										>
+											<Linkedin className="size-4" />
+											{tc("messageOnLinkedin")}
+										</a>
+									)}
+								</div>
+							</div>
 
-			<section className="mt-12">
-				<h2 className="text-lg font-semibold text-gray-900">
-					Book a 30-minute call
-				</h2>
-				<p className="mt-1 text-sm text-gray-500">
-					Pick a time that works for you. Times are shown in your local
-					timezone.
-				</p>
-				<div className="mt-6">
-					<BookingSection
-						mentorSlug={mentor.slug}
-						mentorName={mentor.name}
-						initialWeekStart={initialWeekStart}
-					/>
+							{mentor.bio && (
+								<>
+									<div className="my-7 h-px bg-border/60" />
+									<p className="max-w-[65ch] whitespace-pre-wrap leading-relaxed text-foreground/80">
+										{mentor.bio}
+									</p>
+								</>
+							)}
+						</div>
+					</FadeIn>
+
+					{/* Right: sticky booking card */}
+					<FadeIn direction="right">
+						<div className="lg:sticky lg:top-24">
+							<div className="rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+								<div className="flex items-center gap-2">
+									<span className="flex size-9 items-center justify-center rounded-full bg-surface-pink text-primary-500">
+										<Clock className="size-5" />
+									</span>
+									<h2 className="text-lg font-semibold text-foreground">
+										Book a 30-min call
+									</h2>
+								</div>
+								<p className="mt-2 text-sm text-muted-foreground">
+									Pick a time that works for you. Times are shown in your local
+									timezone.
+								</p>
+								<div className="mt-6">
+									<BookingSection
+										mentorSlug={mentor.slug}
+										mentorName={mentor.name}
+										initialWeekStart={initialWeekStart}
+									/>
+								</div>
+							</div>
+						</div>
+					</FadeIn>
 				</div>
-			</section>
+			</div>
 		</main>
 	);
 }

@@ -235,8 +235,7 @@ export const listMentorSlots = actionClient
 			.from(mentorBookingSettings)
 			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 			.limit(1);
-		if (!settingsRow)
-			throw new ActionError("Mentor booking settings missing");
+		if (!settingsRow) throw new ActionError("Mentor booking settings missing");
 		const settings = settingsRow;
 
 		const availabilityWindows = await db
@@ -340,7 +339,7 @@ export async function getFirstAvailableSlotUtc(
 export async function getInitialWeekStart(
 	mentorSlug: string,
 ): Promise<string | null> {
-  const firstSlotUtc = await getFirstAvailableSlotUtc(mentorSlug);
+	const firstSlotUtc = await getFirstAvailableSlotUtc(mentorSlug);
 
 	return firstSlotUtc
 		? startOfWeek(new Date(firstSlotUtc), { weekStartsOn: 1 }).toISOString()
@@ -366,8 +365,7 @@ export const createBooking = actionClient
 			.from(mentorBookingSettings)
 			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 			.limit(1);
-		if (!settingsRow)
-			throw new ActionError("Mentor booking settings missing");
+		if (!settingsRow) throw new ActionError("Mentor booking settings missing");
 		const settings = settingsRow;
 
 		const startAt = new Date(parsedInput.startAtUtc);

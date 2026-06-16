@@ -57,8 +57,7 @@ export async function loadRescheduleContext(token: string) {
 		.from(mentorBookingSettings)
 		.where(eq(mentorBookingSettings.mentor_id, mentor.id))
 		.limit(1);
-	if (!settingsRow)
-		throw new ActionError("Mentor booking settings missing");
+	if (!settingsRow) throw new ActionError("Mentor booking settings missing");
 	const settings = settingsRow;
 
 	return { booking, mentor, mentorUser, settings };
@@ -99,8 +98,7 @@ export async function validateNewSlot(params: {
 		.from(mentorBookingSettings)
 		.where(eq(mentorBookingSettings.mentor_id, mentorId))
 		.limit(1);
-	if (!settingsRow)
-		throw new ActionError("Mentor booking settings missing");
+	if (!settingsRow) throw new ActionError("Mentor booking settings missing");
 	const settings = settingsRow;
 
 	const slots = computeSlots({
