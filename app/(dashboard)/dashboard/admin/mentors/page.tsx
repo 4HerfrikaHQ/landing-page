@@ -1,3 +1,6 @@
+import { EmptyState } from "@/components/dashboard/empty-state";
+import { FilterBar } from "@/components/dashboard/filter-bar";
+import { PageHeader } from "@/components/dashboard/page-header";
 import {
 	Table,
 	TableBody,
@@ -7,66 +10,87 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { currentDbUser } from "@/src/auth";
+import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getFeaturedMentorId, getMentorsForAdmin } from "./_actions";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
+import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
-import { SearchInput } from "./_components/search-input";
-import { StatusFilter } from "./_components/status-filter";
+import {
+	MentorFeaturedFilter,
+	MentorSortValue,
+	MentorStatusFilter,
+} from "./_schema";
 
 export default async function MentorsPage({
 	searchParams,
 }: {
-	searchParams: Promise<{ q?: string; status?: "active" | "inactive" }>;
+	searchParams: Promise<{
+		q?: string;
+		status?: string;
+		sort?: string;
+		featured?: string;
+	}>;
 }) {
 	const user = await currentDbUser();
 	if (user.role !== "super_admin") unauthorized();
 
-	const { q, status } = await searchParams;
+	const sp = await searchParams;
+	const status = MentorStatusFilter.safeParse(sp.status);
+	const sort = MentorSortValue.safeParse(sp.sort);
+	const featured = MentorFeaturedFilter.safeParse(sp.featured);
+
 	const [mentors, currentFeaturedId] = await Promise.all([
-		getMentorsForAdmin(q, status),
+		getMentorsForAdmin({
+			query: sp.q,
+			status: status.success ? status.data : undefined,
+			sort: sort.success ? sort.data : undefined,
+			featured: featured.success ? featured.data : undefined,
+		}),
 		getFeaturedMentorId(),
 	]);
 
 	return (
-		<div className="p-8 max-w-5xl mx-auto">
-			<div className="mb-6 flex items-center justify-between gap-4">
-				<div>
-					<h1 className="text-xl font-semibold text-gray-900">Mentors</h1>
-					<p className="text-sm text-gray-500 mt-1">{mentors.length} total</p>
-				</div>
-				<div className="flex items-center gap-2">
-					<CreateMentorSheet />
-				</div>
-			</div>
+		<div className="mx-auto max-w-5xl p-6 sm:p-8">
+			<PageHeader
+				title="Mentors"
+				subtitle={`${mentors.length} mentor${mentors.length === 1 ? "" : "s"}`}
+				action={<CreateMentorSheet />}
+			/>
 
-			<div className="mb-4 flex items-center justify-between">
+			<div className="mb-6">
 				<Suspense>
-					<StatusFilter />
-				</Suspense>
-				<Suspense>
-					<SearchInput />
+					<FilterBar>
+						<MentorFilters />
+					</FilterBar>
 				</Suspense>
 			</div>
 
-			<div className="border rounded-lg overflow-hidden">
+			<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
 				<Table>
 					<TableHeader>
-						<TableRow className="bg-gray-50">
+						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<TableHead className="font-medium text-gray-600">Name</TableHead>
-							<TableHead className="font-medium text-gray-600">
+							<TableHead className="font-medium text-muted-foreground">
+								Name
+							</TableHead>
+							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
-							<TableHead className="font-medium text-gray-600">Email</TableHead>
-							<TableHead className="font-medium text-gray-600">
+							<TableHead className="font-medium text-muted-foreground">
+								Email
+							</TableHead>
+							<TableHead className="font-medium text-muted-foreground">
+								Bookings
+							</TableHead>
+							<TableHead className="font-medium text-muted-foreground">
 								Joined
 							</TableHead>
-							<TableHead className="font-medium text-gray-600">
+							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
-							<TableHead className="font-medium text-gray-600">
+							<TableHead className="font-medium text-muted-foreground">
 								Featured
 							</TableHead>
 						</TableRow>
@@ -74,11 +98,13 @@ export default async function MentorsPage({
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell
-									colSpan={7}
-									className="text-center text-gray-400 py-12"
-								>
-									No mentors yet.
+								<TableCell colSpan={8} className="p-0">
+									<EmptyState
+										icon={Users}
+										title="No mentors match these filters"
+										description="Try adjusting the search or filters above."
+										className="border-0 bg-transparent"
+									/>
 								</TableCell>
 							</TableRow>
 						) : (

@@ -4,15 +4,52 @@ import { createClient } from "@/src/auth";
 import { currentDbUser } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
-import { eq } from "drizzle-orm";
+import { type SQL, and, asc, count, eq, ilike, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export async function getAdmins() {
-	return db
-		.select()
-		.from(schema.users)
-		.where(eq(schema.users.role, "super_admin"));
+interface AdminFilters {
+	query?: string;
+	page?: number;
+	pageSize?: number;
 }
+
+export async function getAdmins(filters: AdminFilters = {}) {
+	const { page = 1, pageSize = 20 } = filters;
+	const conditions: (SQL<unknown> | undefined)[] = [
+		eq(schema.users.role, "super_admin"),
+	];
+
+	if (filters.query) {
+		conditions.push(
+			or(
+				ilike(schema.users.name, `%${filters.query}%`),
+				ilike(schema.users.email, `%${filters.query}%`),
+			),
+		);
+	}
+
+	const where = and(...conditions);
+
+	const [rows, [{ total }]] = await Promise.all([
+		db
+			.select({
+				id: schema.users.id,
+				name: schema.users.name,
+				email: schema.users.email,
+				created_at: schema.users.created_at,
+			})
+			.from(schema.users)
+			.where(where)
+			.orderBy(asc(schema.users.name))
+			.limit(pageSize)
+			.offset((page - 1) * pageSize),
+		db.select({ total: count() }).from(schema.users).where(where),
+	]);
+
+	return { rows, total };
+}
+
+export type AdminRow = Awaited<ReturnType<typeof getAdmins>>["rows"][number];
 
 export async function createAdmin(
 	formData: FormData,

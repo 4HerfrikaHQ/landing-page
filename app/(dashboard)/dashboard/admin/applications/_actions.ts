@@ -4,12 +4,15 @@ import { createHash } from "node:crypto";
 import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { insertDefaultBookingSettings } from "@/src/db/actions/mentors";
-import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
+import {
+	MentorApplicationStatus,
+	mentorApplications,
+} from "@/src/db/schema/tables/mentor-applications";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
-import { desc, eq } from "drizzle-orm";
+import { type SQL, and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { ApproveApplicationSchema, RejectApplicationSchema } from "./_schema";
@@ -92,7 +95,9 @@ async function resolveApplicantUser(params: { email: string; name: string }) {
 			.limit(1)
 			.then((rows) => rows[0] ?? null);
 		if (fallback) return fallback.id;
-		throw new ActionError(`Could not create applicant account: ${error.message}`);
+		throw new ActionError(
+			`Could not create applicant account: ${error.message}`,
+		);
 	}
 
 	const dbUser = await db
@@ -105,12 +110,59 @@ async function resolveApplicantUser(params: { email: string; name: string }) {
 	return dbUser.id;
 }
 
-export async function listMentorApplications() {
-	return db
-		.select()
-		.from(mentorApplications)
-		.orderBy(desc(mentorApplications.created_at));
+interface ApplicationFilters {
+	status?: string;
+	query?: string;
+	sort?: string;
+	page?: number;
+	pageSize?: number;
 }
+
+export async function getApplications(filters: ApplicationFilters) {
+	const { page = 1, pageSize = 20 } = filters;
+
+	const status = MentorApplicationStatus.catch("pending").parse(filters.status);
+
+	const conditions: (SQL<unknown> | undefined)[] = [
+		eq(mentorApplications.status, status),
+	];
+
+	if (filters.query) {
+		conditions.push(
+			or(
+				ilike(mentorApplications.name, `%${filters.query}%`),
+				ilike(mentorApplications.email, `%${filters.query}%`),
+			),
+		);
+	}
+
+	const where = and(...conditions);
+	const orderBy =
+		filters.sort === "oldest"
+			? asc(mentorApplications.created_at)
+			: desc(mentorApplications.created_at);
+
+	const [rows, [{ total }], [{ pendingCount }]] = await Promise.all([
+		db
+			.select()
+			.from(mentorApplications)
+			.where(where)
+			.orderBy(orderBy)
+			.limit(pageSize)
+			.offset((page - 1) * pageSize),
+		db.select({ total: count() }).from(mentorApplications).where(where),
+		db
+			.select({ pendingCount: count() })
+			.from(mentorApplications)
+			.where(eq(mentorApplications.status, "pending")),
+	]);
+
+	return { rows, total, pendingCount };
+}
+
+export type ApplicationRow = Awaited<
+	ReturnType<typeof getApplications>
+>["rows"][number];
 
 export const approveMentorApplication = adminAction
 	.schema(ApproveApplicationSchema)

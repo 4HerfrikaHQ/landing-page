@@ -1,6 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import {
 	Sheet,
@@ -31,6 +40,7 @@ export function EditAdminSheet({
 	onOpenChange: (open: boolean) => void;
 }) {
 	const [error, setError] = useState<string | null>(null);
+	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const [isDeleting, startDeleteTransition] = useTransition();
 
@@ -52,7 +62,9 @@ export function EditAdminSheet({
 			const result = await deleteAdmin(admin.id);
 			if (result.error) {
 				setError(result.error);
+				setConfirmOpen(false);
 			} else {
+				setConfirmOpen(false);
 				onOpenChange(false);
 			}
 		});
@@ -69,11 +81,11 @@ export function EditAdminSheet({
 			}}
 		>
 			<SheetContent
-				className="flex flex-col sm:max-w-md p-0"
+				className="flex flex-col p-0 sm:max-w-md"
 				showCloseButton={false}
 			>
-				<SheetHeader className="px-6 pt-6 pb-4 border-b">
-					<SheetTitle className="text-base font-semibold text-gray-900">
+				<SheetHeader className="border-b px-6 pb-4 pt-6">
+					<SheetTitle className="text-base font-semibold text-foreground">
 						Edit admin
 					</SheetTitle>
 				</SheetHeader>
@@ -81,35 +93,60 @@ export function EditAdminSheet({
 				<form
 					id="edit-admin-form"
 					action={handleSubmit}
-					className="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-4"
+					className="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-5"
 				>
 					<Field label="Name" name="name" required defaultValue={admin.name} />
 
 					<div className="flex flex-col gap-1.5">
-						<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+						<span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
 							Email
-						</label>
-						<p className="text-sm text-gray-400">{admin.email}</p>
+						</span>
+						<p className="text-sm text-muted-foreground">{admin.email}</p>
 					</div>
 
 					{error && (
-						<p className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-md px-3 py-2">
+						<p className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-xs text-destructive">
 							{error}
 						</p>
 					)}
 				</form>
 
-				<SheetFooter className="px-6 py-4 border-t flex-row justify-between gap-2">
-					<Button
-						variant="ghost"
-						size="sm"
-						className="text-red-500 hover:text-red-600 hover:bg-red-50"
-						disabled={isDeleting || isSelf}
-						title={isSelf ? "You can't delete your own account" : undefined}
-						onClick={handleDelete}
-					>
-						{isDeleting ? "Deleting…" : "Delete"}
-					</Button>
+				<SheetFooter className="flex-row justify-between gap-2 border-t px-6 py-4">
+					<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+						<Button
+							variant="ghost"
+							size="sm"
+							className="text-destructive hover:bg-destructive/5 hover:text-destructive"
+							disabled={isDeleting || isSelf}
+							title={isSelf ? "You can't delete your own account" : undefined}
+							onClick={() => setConfirmOpen(true)}
+						>
+							{isDeleting ? "Deleting…" : "Delete"}
+						</Button>
+						<DialogContent showCloseButton={false}>
+							<DialogHeader>
+								<DialogTitle>Delete this admin?</DialogTitle>
+								<DialogDescription>
+									{admin.name} will lose access immediately and their account
+									will be removed. This can't be undone.
+								</DialogDescription>
+							</DialogHeader>
+							<DialogFooter>
+								<DialogClose render={<Button variant="outline" size="sm" />}>
+									Cancel
+								</DialogClose>
+								<Button
+									variant="solid"
+									size="sm"
+									className="bg-destructive text-white hover:bg-destructive/90"
+									disabled={isDeleting}
+									onClick={handleDelete}
+								>
+									{isDeleting ? "Deleting…" : "Delete admin"}
+								</Button>
+							</DialogFooter>
+						</DialogContent>
+					</Dialog>
 					<div className="flex gap-2">
 						<SheetClose render={<Button variant="ghost" size="sm" />}>
 							Cancel

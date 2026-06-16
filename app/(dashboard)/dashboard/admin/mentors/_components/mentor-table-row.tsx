@@ -19,6 +19,7 @@ type Mentor = {
 	linkedin_url: string | null;
 	active: boolean;
 	created_at: Date;
+	booking_count: number;
 };
 
 export function MentorTableRow({
@@ -41,14 +42,17 @@ export function MentorTableRow({
 						image={mentor.image}
 					/>
 				</TableCell>
-				<TableCell className="font-medium text-gray-900">
+				<TableCell className="font-medium text-foreground">
 					{mentor.name}
 				</TableCell>
-				<TableCell className="text-gray-600 capitalize">
+				<TableCell className="capitalize text-muted-foreground">
 					{mentor.position}
 				</TableCell>
-				<TableCell className="text-gray-600">{mentor.email}</TableCell>
-				<TableCell className="text-gray-400 text-sm">
+				<TableCell className="text-muted-foreground">{mentor.email}</TableCell>
+				<TableCell className="text-sm tabular-nums text-muted-foreground">
+					{Number(mentor.booking_count)}
+				</TableCell>
+				<TableCell className="text-sm text-muted-foreground">
 					{format(mentor.created_at, "MMM d, yyyy")}
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>

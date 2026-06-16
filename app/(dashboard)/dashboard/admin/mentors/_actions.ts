@@ -8,20 +8,37 @@ import {
 	insertDefaultBookingSettings,
 	uploadMentorAvatar,
 } from "@/src/db/actions/mentors";
-import { ActionError, adminAction } from "@/src/lib/safe-action";
+import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
-import { and, eq, ilike, or, type SQL } from "drizzle-orm";
+import { ActionError, adminAction } from "@/src/lib/safe-action";
+import {
+	type SQL,
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	ilike,
+	or,
+	sql,
+} from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { SetFeaturedMentorSchema } from "./_schema";
+import { type MentorSortValue, SetFeaturedMentorSchema } from "./_schema";
 
-export async function getMentorsForAdmin(
-	query?: string,
-	status?: "active" | "inactive",
-) {
-	const filters: (SQL<unknown> | undefined)[] = [];
+interface MentorAdminFilters {
+	query?: string;
+	status?: "active" | "inactive";
+	sort?: MentorSortValue;
+	/** When "featured"/"not_featured", filter against the singleton state. */
+	featured?: "featured" | "not_featured";
+}
+
+export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
+	const { query, status, sort = "name", featured } = filters;
+	const conditions: (SQL<unknown> | undefined)[] = [];
 
 	if (query) {
-		filters.push(
+		conditions.push(
 			or(
 				ilike(schema.mentors.name, `%${query}%`),
 				ilike(schema.mentors.position, `%${query}%`),
@@ -31,14 +48,23 @@ export async function getMentorsForAdmin(
 
 	switch (status) {
 		case "active":
-			filters.push(eq(schema.mentors.active, true));
+			conditions.push(eq(schema.mentors.active, true));
 			break;
 		case "inactive":
-			filters.push(eq(schema.mentors.active, false));
+			conditions.push(eq(schema.mentors.active, false));
 			break;
 	}
 
-	return db
+	const bookingCount = sql<number>`count(${bookings.id})`.as("booking_count");
+
+	const orderBy =
+		sort === "joined"
+			? desc(schema.mentors.created_at)
+			: sort === "bookings"
+				? desc(bookingCount)
+				: asc(schema.mentors.name);
+
+	const rows = await db
 		.select({
 			id: schema.mentors.id,
 			name: schema.mentors.name,
@@ -50,11 +76,28 @@ export async function getMentorsForAdmin(
 			linkedin_url: schema.mentors.linkedin_url,
 			active: schema.mentors.active,
 			created_at: schema.mentors.created_at,
+			booking_count: bookingCount,
 		})
 		.from(schema.mentors)
 		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
-		.where(and(...filters));
+		.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
+		.where(conditions.length ? and(...conditions) : undefined)
+		.groupBy(schema.mentors.id, schema.users.email)
+		.orderBy(orderBy);
+
+	if (featured) {
+		const featuredId = await getFeaturedMentorId();
+		return featured === "featured"
+			? rows.filter((m) => m.id === featuredId)
+			: rows.filter((m) => m.id !== featuredId);
+	}
+
+	return rows;
 }
+
+export type AdminMentorRow = Awaited<
+	ReturnType<typeof getMentorsForAdmin>
+>[number];
 
 export async function createMentor(
 	formData: FormData,
@@ -156,17 +199,12 @@ export async function toggleMentorActive(
 			return { error: "Mentor not found" };
 		}
 
-		if (
-			!mentor.name ||
-			!mentor.position ||
-			!mentor.bio
-		) {
+		if (!mentor.name || !mentor.position || !mentor.bio) {
 			return {
 				error:
 					"Cannot activate mentor. Please ensure name, position, and bio are all set.",
 			};
 		}
-
 	}
 
 	await db
@@ -180,7 +218,9 @@ export async function toggleMentorActive(
 
 export async function getFeaturedMentorId(): Promise<string | null> {
 	const [state] = await db
-		.select({ featured_mentor_id: schema.featuredMentorState.featured_mentor_id })
+		.select({
+			featured_mentor_id: schema.featuredMentorState.featured_mentor_id,
+		})
 		.from(schema.featuredMentorState)
 		.where(eq(schema.featuredMentorState.id, SINGLETON_ID))
 		.limit(1);

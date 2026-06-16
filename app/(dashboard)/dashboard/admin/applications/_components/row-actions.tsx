@@ -38,10 +38,10 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 					onChange={(e) => setReason(e.target.value)}
 				/>
 				<div className="flex gap-2">
-          <Button
-            size="sm"
+					<Button
+						size="sm"
 						variant="outline"
-						className="border-red-300 text-red-700 hover:bg-red-50"
+						className="border-destructive/40 text-destructive hover:bg-destructive/5"
 						onClick={() =>
 							reject.execute({ applicationId, reason: reason || undefined })
 						}
@@ -49,12 +49,12 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 					>
 						Confirm reject
 					</Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setShowReject(false)}
-          >
-            Cancel
+					<Button
+						size="sm"
+						variant="ghost"
+						onClick={() => setShowReject(false)}
+					>
+						Cancel
 					</Button>
 				</div>
 			</div>
@@ -65,17 +65,13 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 		<div className="flex gap-2">
 			<Button
 				onClick={() => approve.execute({ applicationId })}
-        disabled={approve.isPending}
-        size="sm"
+				disabled={approve.isPending}
+				size="sm"
 			>
 				{approve.isPending ? "Approving…" : "Approve"}
 			</Button>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={() => setShowReject(true)}
-      >
-        Reject
+			<Button size="sm" variant="outline" onClick={() => setShowReject(true)}>
+				Reject
 			</Button>
 		</div>
 	);

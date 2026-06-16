@@ -24,11 +24,11 @@ export function AdminTableRow({
 	return (
 		<>
 			<TableRow onClick={() => setEditIsOpen(true)} className="cursor-pointer">
-				<TableCell className="font-medium text-gray-900">
+				<TableCell className="font-medium text-foreground">
 					{admin.name}
 				</TableCell>
-				<TableCell className="text-gray-600">{admin.email}</TableCell>
-				<TableCell className="text-gray-400 text-sm">
+				<TableCell className="text-muted-foreground">{admin.email}</TableCell>
+				<TableCell className="text-sm text-muted-foreground">
 					{format(admin.created_at, "MMM d, yyyy")}
 				</TableCell>
 			</TableRow>
