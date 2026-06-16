@@ -1,82 +1,51 @@
-import { currentDbUser } from "@/src/auth";
-import { db } from "@/src/db";
-import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { formatInTimeZone } from "date-fns-tz";
-import { desc, eq, sql } from "drizzle-orm";
-import { MentorSubpageHeader } from "../_components/mentor-subpage-header";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { FadeIn } from "@/components/motion/fade-in";
+import { loadMentees } from "./_actions";
+import { MenteesGrid } from "./_components/mentees-grid";
 
-export default async function MenteesPage() {
-	const user = await currentDbUser();
-	const [mentor] = await db
-		.select()
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
+const PAGE_SIZE = 20;
 
-	return (
-		<div className="min-h-screen bg-gray-50">
-			<MentorSubpageHeader active="mentees" />
-			{!mentor ? (
-				<div className="p-8 max-w-3xl mx-auto">
-					<p className="text-sm text-gray-500">
-						No mentor profile linked to your account.
-					</p>
-				</div>
-			) : (
-				<MenteesContent mentorId={mentor.id} />
-			)}
-		</div>
-	);
-}
+export default async function MenteesPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ q?: string; sort?: string; page?: string }>;
+}) {
+	const sp = await searchParams;
+	const page = Math.max(1, Number(sp.page) || 1);
 
-async function MenteesContent({ mentorId }: { mentorId: string }) {
-	const mentees = await db
-		.select({
-			email: bookings.mentee_email,
-			name: sql<string>`max(${bookings.mentee_name})`,
-			total: sql<number>`count(*)::int`,
-			lastAt: sql<Date>`max(${bookings.start_at})`,
-		})
-		.from(bookings)
-		.where(eq(bookings.mentor_id, mentorId))
-		.groupBy(bookings.mentee_email)
-		.orderBy(desc(sql`max(${bookings.start_at})`));
+	const result = await loadMentees({
+		query: sp.q,
+		sort: sp.sort,
+		page,
+		pageSize: PAGE_SIZE,
+	});
 
-	return (
-		<div className="p-8 max-w-3xl mx-auto">
-			<header className="mb-8">
-				<h1 className="text-2xl font-semibold text-gray-900">Mentees</h1>
-				<p className="text-sm text-gray-500 mt-1">
-					Everyone who has booked a call with you.
+	if (!result.ok) {
+		return (
+			<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+				<p className="text-sm text-muted-foreground">
+					No mentor profile linked to your account.
 				</p>
-			</header>
-
-			<div className="space-y-3">
-				{mentees.length === 0 && (
-					<p className="text-sm text-gray-500">No mentees yet.</p>
-				)}
-				{mentees.map((mentee) => (
-					<article
-						key={mentee.email}
-						className="rounded-lg border p-4 text-sm bg-white"
-					>
-						<p className="font-medium text-gray-900">
-							{mentee.name}{" "}
-							<a
-								href={`mailto:${mentee.email}`}
-								className="font-normal text-gray-500 underline"
-							>
-								{mentee.email}
-							</a>
-						</p>
-						<p className="text-gray-500">
-							{mentee.total} session{mentee.total === 1 ? "" : "s"} · last:{" "}
-							{formatInTimeZone(new Date(mentee.lastAt), "UTC", "MMM d, yyyy")}
-						</p>
-					</article>
-				))}
 			</div>
+		);
+	}
+
+	return (
+		<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+			<FadeIn>
+				<PageHeader
+					title="Mentees"
+					subtitle="Everyone who has booked a call with you."
+				/>
+			</FadeIn>
+			<FadeIn delay={0.05}>
+				<MenteesGrid
+					mentees={result.rows}
+					page={page}
+					pageSize={PAGE_SIZE}
+					total={result.total}
+				/>
+			</FadeIn>
 		</div>
 	);
 }

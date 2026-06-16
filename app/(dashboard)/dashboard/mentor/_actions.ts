@@ -70,9 +70,16 @@ export async function getMentorOverview() {
 			menteeEmail: bookings.mentee_email,
 			startAt: bookings.start_at,
 			status: bookings.status,
+			meetUrl: bookings.meet_url,
 		})
 		.from(bookings)
-		.where(and(eq(bookings.mentor_id, mentor.id), gte(bookings.start_at, now), ne(bookings.status, "cancelled")))
+		.where(
+			and(
+				eq(bookings.mentor_id, mentor.id),
+				gte(bookings.start_at, now),
+				ne(bookings.status, "cancelled"),
+			),
+		)
 		.orderBy(bookings.start_at)
 		.limit(5);
 

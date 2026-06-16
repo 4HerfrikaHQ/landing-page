@@ -1,34 +1,32 @@
-import { currentDbUser } from "@/src/auth";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { FadeIn } from "@/components/motion/fade-in";
 import { getMentorProfile } from "../_actions";
 import { ProfileForm } from "./_components/profile-form";
 
 export default async function MentorProfilePage() {
-	const [user, mentor] = await Promise.all([
-		currentDbUser(),
-		getMentorProfile(),
-	]);
+	const mentor = await getMentorProfile();
 
 	if (!mentor) {
 		return (
-			<div className="p-8 max-w-3xl mx-auto">
-				<p className="text-sm text-gray-500">
+			<div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+				<p className="text-sm text-muted-foreground">
 					Your mentor profile hasn't been set up yet. Contact an admin.
 				</p>
 			</div>
 		);
 	}
 
-	const firstName = user.name.split(" ")[0];
-
 	return (
-		<div className="p-8 max-w-3xl mx-auto">
-			<header className="mb-8">
-				<h1 className="text-2xl font-semibold text-gray-900">
-					Hi, {firstName} 👋
-				</h1>
-				<p className="text-sm text-gray-500 mt-1">Manage your profile.</p>
-			</header>
-			<ProfileForm mentor={mentor} />
+		<div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+			<FadeIn>
+				<PageHeader
+					title="Your profile"
+					subtitle="This is what mentees see on your public mentor page."
+				/>
+			</FadeIn>
+			<FadeIn delay={0.05}>
+				<ProfileForm mentor={mentor} />
+			</FadeIn>
 		</div>
 	);
 }

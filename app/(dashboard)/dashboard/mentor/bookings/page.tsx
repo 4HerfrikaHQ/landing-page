@@ -1,44 +1,65 @@
-import { MentorSubpageHeader } from "../_components/mentor-subpage-header";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { FadeIn } from "@/components/motion/fade-in";
 import { loadMentorBookings } from "./_actions";
 import { BookingsTabs } from "./_components/bookings-tabs";
 
-export default async function MentorBookingsPage() {
-	const result = await loadMentorBookings();
-
-	return (
-		<div className="min-h-screen bg-gray-50">
-			<MentorSubpageHeader active="bookings" />
-			{!result.ok ? (
-				<div className="p-8 max-w-3xl mx-auto">
-					<p className="text-sm text-gray-500">
-						No mentor profile linked to your account.
-					</p>
-				</div>
-			) : (
-				<MentorBookingsContent result={result} />
-			)}
-		</div>
-	);
-}
-
-function MentorBookingsContent({
-	result,
+export default async function MentorBookingsPage({
+	searchParams,
 }: {
-	result: Extract<Awaited<ReturnType<typeof loadMentorBookings>>, { ok: true }>;
+	searchParams: Promise<{
+		tab?: string;
+		q?: string;
+		status?: string;
+		stage?: string;
+		page?: string;
+	}>;
 }) {
-	return (
-		<div className="p-8 max-w-5xl mx-auto">
-			<header className="mb-8">
-				<h1 className="text-2xl font-semibold text-gray-900">Bookings</h1>
-				<p className="text-sm text-gray-500 mt-1">
-					Mentees who have booked a call with you.
+	const sp = await searchParams;
+	const result = await loadMentorBookings({
+		tab: sp.tab,
+		query: sp.q,
+		status: sp.status,
+		stage: sp.stage,
+		page: Number(sp.page) || 1,
+	});
+
+	if (!result.ok) {
+		return (
+			<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+				<p className="text-sm text-muted-foreground">
+					No mentor profile linked to your account.
 				</p>
-			</header>
-			<BookingsTabs
-				upcoming={result.upcoming}
-				past={result.past}
-				feedbackByBooking={result.feedbackByBooking}
-			/>
+			</div>
+		);
+	}
+
+	const hasFilters = Boolean(
+		(sp.q ?? "") !== "" ||
+			(sp.status && sp.status !== "all") ||
+			(sp.stage && sp.stage !== "all"),
+	);
+
+	return (
+		<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+			<FadeIn>
+				<PageHeader
+					title="Bookings"
+					subtitle="Mentees who have booked a call with you."
+				/>
+			</FadeIn>
+			<FadeIn delay={0.05}>
+				<BookingsTabs
+					tab={result.tab}
+					rows={result.rows}
+					feedbackByBooking={result.feedbackByBooking}
+					upcomingCount={result.upcomingCount}
+					pastCount={result.pastCount}
+					page={result.page}
+					pageSize={result.pageSize}
+					total={result.total}
+					hasFilters={hasFilters}
+				/>
+			</FadeIn>
 		</div>
 	);
 }
