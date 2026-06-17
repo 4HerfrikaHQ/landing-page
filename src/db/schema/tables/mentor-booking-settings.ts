@@ -1,7 +1,7 @@
 import { pgTable, uuid, integer } from "drizzle-orm/pg-core";
 import { mentors } from "./mentors";
 
-const DEFAULT_MIN_LEAD_HOURS = 2;
+const DEFAULT_MIN_LEAD_HOURS = 24;
 
 export const mentorBookingSettings = pgTable("mentor_booking_settings", {
 	mentor_id: uuid("mentor_id")

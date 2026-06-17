@@ -71,6 +71,13 @@
       "when": 1781462630922,
       "tag": "0009_odd_excalibur",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1781692695948,
+      "tag": "0010_ordinary_white_queen",
+      "breakpoints": true
     }
   ]
 }
