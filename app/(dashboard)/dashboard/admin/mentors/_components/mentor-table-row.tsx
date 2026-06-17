@@ -44,6 +44,11 @@ export function MentorTableRow({
 				</TableCell>
 				<TableCell className="font-medium text-foreground">
 					{mentor.name}
+					{mentor.nickname ? (
+						<span className="block text-xs font-normal text-muted-foreground">
+							“{mentor.nickname}”
+						</span>
+					) : null}
 				</TableCell>
 				<TableCell className="capitalize text-muted-foreground">
 					{mentor.position}
@@ -59,12 +64,11 @@ export function MentorTableRow({
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
-					{eligibleToFeature && (
-						<FeatureMentorButton
-							id={mentor.id}
-							isFeatured={currentFeaturedId === mentor.id}
-						/>
-					)}
+					<FeatureMentorButton
+						id={mentor.id}
+						isFeatured={currentFeaturedId === mentor.id}
+						eligible={eligibleToFeature}
+					/>
 				</TableCell>
 			</TableRow>
 

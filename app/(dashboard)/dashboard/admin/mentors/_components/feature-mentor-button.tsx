@@ -16,9 +16,12 @@ import { setFeaturedMentor } from "../_actions";
 export function FeatureMentorButton({
 	id,
 	isFeatured,
+	eligible = true,
 }: {
 	id: string;
 	isFeatured: boolean;
+	/** A mentor must be active and have a photo before it can be featured. */
+	eligible?: boolean;
 }) {
 	const router = useRouter();
 
@@ -31,6 +34,12 @@ export function FeatureMentorButton({
 			toast.error(error.serverError ?? "Failed to feature mentor"),
 	});
 
+	const tooltip = !eligible
+		? "Add a photo and set the mentor active to feature them"
+		: isFeatured
+			? "Currently featured"
+			: "Feature this mentor";
+
 	return (
 		<Tooltip>
 			<TooltipTrigger
@@ -38,21 +47,23 @@ export function FeatureMentorButton({
 					<Button
 						variant="ghost"
 						size="icon"
-						onClick={() => feature.execute({ mentorId: id })}
-						disabled={feature.isPending || isFeatured}
+						onClick={() => eligible && feature.execute({ mentorId: id })}
+						disabled={feature.isPending || isFeatured || !eligible}
 					/>
 				}
 			>
 				<Star
 					className={cn(
 						"size-4",
-						isFeatured ? "fill-primary-500 text-primary-500" : "text-gray-400",
+						isFeatured
+							? "fill-primary-500 text-primary-500"
+							: eligible
+								? "text-gray-400"
+								: "text-gray-300",
 					)}
 				/>
 			</TooltipTrigger>
-			<TooltipContent>
-				{isFeatured ? "Currently featured" : "Feature this mentor"}
-			</TooltipContent>
+			<TooltipContent>{tooltip}</TooltipContent>
 		</Tooltip>
 	);
 }

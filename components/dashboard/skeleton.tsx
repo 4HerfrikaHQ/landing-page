@@ -1,8 +1,32 @@
 import { cn } from "@/utils/cn";
 
-/** A subtly pulsing placeholder block. */
 function SkeletonBlock({ className }: { className?: string }) {
-	return <div className={cn("animate-pulse rounded-md bg-muted", className)} />;
+	return (
+		<div
+			className={cn(
+				"animate-pulse rounded-md bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.04]",
+				className,
+			)}
+		/>
+	);
+}
+
+/**
+ * Skeleton that matches `PageHeader`'s box exactly (same wrapper, margins, and
+ * text line-heights) so swapping loading → loaded causes no vertical shift.
+ */
+export function SkeletonPageHeader({ action = false }: { action?: boolean }) {
+	return (
+		<div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+			<div className="space-y-1">
+				{/* h1 text-2xl → ~2rem line height */}
+				<SkeletonBlock className="h-8 w-48" />
+				{/* subtitle text-sm → ~1.25rem line height */}
+				<SkeletonBlock className="h-5 w-64" />
+			</div>
+			{action ? <SkeletonBlock className="h-10 w-32 rounded-full" /> : null}
+		</div>
+	);
 }
 
 interface SkeletonCardProps {

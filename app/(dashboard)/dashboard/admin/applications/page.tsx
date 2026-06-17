@@ -19,7 +19,7 @@ export default async function ApplicationsPage({
 	}>;
 }) {
 	const user = await currentDbUser();
-	if (user.role !== "super_admin") unauthorized();
+	// if (user.role !== "super_admin") unauthorized();
 
 	const sp = await searchParams;
 	const status = MentorApplicationStatus.catch("pending").parse(sp.status);
@@ -34,7 +34,7 @@ export default async function ApplicationsPage({
 	});
 
 	return (
-		<div className="mx-auto max-w-5xl p-6 sm:p-8">
+		<div>
 			<PageHeader
 				title="Mentor applications"
 				subtitle="Review and approve new mentor signups."

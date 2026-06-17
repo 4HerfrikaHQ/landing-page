@@ -1,32 +1,73 @@
-import { SkeletonBlock, SkeletonCard } from "@/components/dashboard/skeleton";
+import {
+	SkeletonBlock,
+	SkeletonPageHeader,
+} from "@/components/dashboard/skeleton";
 
-const TABS = ["a", "b", "c"];
-const CARDS = ["a", "b", "c", "d"];
+const TABS = ["pending", "approved", "rejected"];
+const ROWS = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-// Mirrors admin applications: 3-tab bar + filter bar + application cards.
+// Mirrors admin applications: header + 3-tab bar + filter bar + table.
 export default function AdminApplicationsLoading() {
 	return (
-		<div className="mx-auto max-w-5xl p-6 sm:p-8">
-			<div className="mb-8 space-y-2">
-				<SkeletonBlock className="h-7 w-56" />
-				<SkeletonBlock className="h-4 w-64" />
+		<div>
+			<SkeletonPageHeader />
+
+			<div className="mb-6 space-y-4">
+				<div className="flex flex-wrap gap-2">
+					{TABS.map((k) => (
+						<SkeletonBlock key={k} className="h-8 w-24 rounded-full" />
+					))}
+				</div>
+
+				<div className="flex flex-wrap items-center gap-3">
+					<SkeletonBlock className="h-10 w-64 rounded-full" />
+					<SkeletonBlock className="h-9 w-40 rounded-full" />
+				</div>
 			</div>
 
-			<div className="mb-6 flex gap-2">
-				{TABS.map((k) => (
-					<SkeletonBlock key={k} className="h-8 w-24 rounded-full" />
-				))}
-			</div>
-
-			<div className="mb-6 flex flex-wrap gap-3">
-				<SkeletonBlock className="h-10 w-64 rounded-full" />
-				<SkeletonBlock className="h-9 w-40 rounded-full" />
-			</div>
-
-			<div className="space-y-3">
-				{CARDS.map((k) => (
-					<SkeletonCard key={k} />
-				))}
+			<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+				<table className="w-full text-left text-sm">
+					<thead>
+						<tr className="bg-muted">
+							<th className="px-4 py-3">
+								<SkeletonBlock className="h-3 w-16" />
+							</th>
+							<th className="px-4 py-3">
+								<SkeletonBlock className="h-3 w-16" />
+							</th>
+							<th className="px-4 py-3">
+								<SkeletonBlock className="h-3 w-16" />
+							</th>
+							<th className="px-4 py-3">
+								<SkeletonBlock className="h-3 w-16" />
+							</th>
+							<th className="px-4 py-3">
+								<SkeletonBlock className="h-3 w-12" />
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{ROWS.map((k) => (
+							<tr key={k} className="border-t border-border/60">
+								<td className="px-4 py-3">
+									<SkeletonBlock className="h-4 w-32" />
+								</td>
+								<td className="px-4 py-3">
+									<SkeletonBlock className="h-4 w-48" />
+								</td>
+								<td className="px-4 py-3">
+									<SkeletonBlock className="h-4 w-28" />
+								</td>
+								<td className="px-4 py-3">
+									<SkeletonBlock className="h-4 w-20" />
+								</td>
+								<td className="px-4 py-3">
+									<SkeletonBlock className="h-6 w-20 rounded-full" />
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);

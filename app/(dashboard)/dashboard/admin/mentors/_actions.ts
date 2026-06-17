@@ -19,6 +19,7 @@ import {
 	desc,
 	eq,
 	ilike,
+	ne,
 	or,
 	sql,
 } from "drizzle-orm";
@@ -31,10 +32,19 @@ interface MentorAdminFilters {
 	sort?: MentorSortValue;
 	/** When "featured"/"not_featured", filter against the singleton state. */
 	featured?: "featured" | "not_featured";
+	page?: number;
+	pageSize?: number;
 }
 
 export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
-	const { query, status, sort = "name", featured } = filters;
+	const {
+		query,
+		status,
+		sort = "name",
+		featured,
+		page = 1,
+		pageSize = 20,
+	} = filters;
 	const conditions: (SQL<unknown> | undefined)[] = [];
 
 	if (query) {
@@ -55,6 +65,19 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			break;
 	}
 
+	// Resolve the featured filter into a SQL condition so pagination stays correct
+	// (the singleton featured mentor can't be filtered in-memory after limit/offset).
+	if (featured) {
+		const featuredId = await getFeaturedMentorId();
+		if (featured === "featured") {
+			if (!featuredId) return { rows: [], total: 0 };
+			conditions.push(eq(schema.mentors.id, featuredId));
+		} else if (featuredId) {
+			conditions.push(ne(schema.mentors.id, featuredId));
+		}
+	}
+
+	const where = conditions.length ? and(...conditions) : undefined;
 	const bookingCount = sql<number>`count(${bookings.id})`.as("booking_count");
 
 	const orderBy =
@@ -64,40 +87,42 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				? desc(bookingCount)
 				: asc(schema.mentors.name);
 
-	const rows = await db
-		.select({
-			id: schema.mentors.id,
-			name: schema.mentors.name,
-			position: schema.mentors.position,
-			image: schema.mentors.image,
-			email: schema.users.email,
-			bio: schema.mentors.bio,
-			nickname: schema.mentors.nickname,
-			linkedin_url: schema.mentors.linkedin_url,
-			active: schema.mentors.active,
-			created_at: schema.mentors.created_at,
-			booking_count: bookingCount,
-		})
-		.from(schema.mentors)
-		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
-		.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
-		.where(conditions.length ? and(...conditions) : undefined)
-		.groupBy(schema.mentors.id, schema.users.email)
-		.orderBy(orderBy);
+	const [rows, [{ total }]] = await Promise.all([
+		db
+			.select({
+				id: schema.mentors.id,
+				name: schema.mentors.name,
+				position: schema.mentors.position,
+				image: schema.mentors.image,
+				email: schema.users.email,
+				bio: schema.mentors.bio,
+				nickname: schema.mentors.nickname,
+				linkedin_url: schema.mentors.linkedin_url,
+				active: schema.mentors.active,
+				created_at: schema.mentors.created_at,
+				booking_count: bookingCount,
+			})
+			.from(schema.mentors)
+			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
+			.where(where)
+			.groupBy(schema.mentors.id, schema.users.email)
+			.orderBy(orderBy)
+			.limit(pageSize)
+			.offset((page - 1) * pageSize),
+		db
+			.select({ total: count() })
+			.from(schema.mentors)
+			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.where(where),
+	]);
 
-	if (featured) {
-		const featuredId = await getFeaturedMentorId();
-		return featured === "featured"
-			? rows.filter((m) => m.id === featuredId)
-			: rows.filter((m) => m.id !== featuredId);
-	}
-
-	return rows;
+	return { rows, total };
 }
 
 export type AdminMentorRow = Awaited<
 	ReturnType<typeof getMentorsForAdmin>
->[number];
+>["rows"][number];
 
 export async function createMentor(
 	formData: FormData,

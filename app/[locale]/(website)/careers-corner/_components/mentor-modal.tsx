@@ -10,10 +10,21 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
+import type { DayOfWeek } from "@/src/db/schema/tables/availability";
 import { format, parse } from "date-fns";
 import { CalendarClock, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+
+const DAY_ORDER: DayOfWeek[] = [
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday",
+];
 
 function formatTime(timeString: string) {
 	try {
@@ -29,6 +40,14 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	const t = useTranslations("careers");
 	const tc = useTranslations("common");
 	const displayName = mentor.nickname || mentor.name;
+	const availability = mentor.availability ?? [];
+	const timezones = Array.from(new Set(availability.map((slot) => slot.timezone)));
+	const slotsByDay = DAY_ORDER.map((day) => ({
+		day,
+		slots: availability
+			.filter((slot) => slot.day === day)
+			.sort((a, b) => a.start_time.localeCompare(b.start_time)),
+	})).filter((group) => group.slots.length > 0);
 
 	return (
 		<Dialog>
@@ -104,23 +123,40 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 									{mentor.position}
 								</h3>
 
-								{mentor.availability && mentor.availability.length > 0 ? (
+								{availability.length > 0 ? (
 									<div className="mb-5 rounded-2xl border border-border/60 bg-surface-pink/50 p-4">
-										<h4 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary-500">
+										<h4 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary-500">
 											<CalendarClock className="size-4" />
 											{t("availableTimes")}
 										</h4>
-										<p className="text-sm text-foreground/80">
-											{mentor.availability.map((slot, index) => (
-												<span key={formatTime(slot.start_time)}>
-													{`${slot.day}, ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)} ${slot.timezone}`}
-													{index < mentor.availability.length - 2 ? ", " : ""}
-													{index === mentor.availability.length - 2
-														? " and "
-														: ""}
-												</span>
+										<ul className="flex flex-col divide-y divide-border/50">
+											{slotsByDay.map(({ day, slots }) => (
+												<li
+													key={day}
+													className="flex items-start justify-between gap-3 py-1.5 text-sm first:pt-0 last:pb-0"
+												>
+													<span className="font-medium text-foreground">
+														{day}
+													</span>
+													<span className="flex flex-col items-end gap-0.5 text-foreground/70">
+														{slots.map((slot) => (
+															<span
+																key={slot.start_time}
+																className="tabular-nums"
+															>
+																{formatTime(slot.start_time)} – {formatTime(slot.end_time)}
+																{timezones.length > 1 ? ` ${slot.timezone}` : ""}
+															</span>
+														))}
+													</span>
+												</li>
 											))}
-										</p>
+										</ul>
+										{timezones.length === 1 ? (
+											<p className="mt-3 border-t border-border/50 pt-2 text-xs text-muted-foreground">
+												{t("timezoneNote", { timezone: timezones[0] })}
+											</p>
+										) : null}
 									</div>
 								) : (
 									<div className="mb-5">

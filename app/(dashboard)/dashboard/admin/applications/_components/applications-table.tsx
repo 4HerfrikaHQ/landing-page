@@ -7,13 +7,19 @@ import {
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
-import { StatusBadge } from "@/components/dashboard/status-badge";
+import {
+	Table,
+	TableBody,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import type { MentorApplicationStatus } from "@/src/db/schema/tables/mentor-applications";
 import { cn } from "@/utils/cn";
 import { Inbox } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";
 import type { ApplicationRow } from "../_actions";
-import { RowActions } from "./row-actions";
+import { ApplicationTableRow } from "./application-table-row";
 
 type Status = MentorApplicationStatus;
 
@@ -111,62 +117,42 @@ export function ApplicationsTable({
 				</FilterBar>
 			</div>
 
-			<div className="space-y-3">
-				{rows.length === 0 ? (
-					<EmptyState
-						icon={Inbox}
-						title={EMPTY_COPY[status].title}
-						description={EMPTY_COPY[status].description}
-					/>
-				) : (
-					rows.map((row) => (
-						<article
-							key={row.id}
-							className="rounded-2xl border border-border/60 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-						>
-							<header className="flex items-start justify-between gap-4">
-								<div>
-									<h3 className="font-heading text-lg font-medium text-foreground">
-										{row.name}
-									</h3>
-									<p className="mt-0.5 text-sm text-muted-foreground">
-										{row.email} · {row.position}
-									</p>
-								</div>
-								<StatusBadge status={row.status} />
-							</header>
-							<p className="mt-3 whitespace-pre-wrap break-words text-sm text-foreground/80">
-								<span className="font-medium text-foreground">Motivation</span>
-								<br />
-								{row.motivation}
-							</p>
-							{row.linkedin_url && (
-								<p className="mt-2 text-xs text-muted-foreground">
-									LinkedIn:{" "}
-									<a
-										className="underline underline-offset-2 hover:text-primary-500"
-										href={row.linkedin_url}
-										target="_blank"
-										rel="noreferrer"
-									>
-										{row.linkedin_url}
-									</a>
-								</p>
-							)}
-							{row.status === "pending" && (
-								<div className="mt-4">
-									<RowActions applicationId={row.id} />
-								</div>
-							)}
-							{row.status === "rejected" && row.reject_reason && (
-								<p className="mt-3 text-xs text-muted-foreground">
-									Reason: {row.reject_reason}
-								</p>
-							)}
-						</article>
-					))
-				)}
-			</div>
+			{rows.length === 0 ? (
+				<EmptyState
+					icon={Inbox}
+					title={EMPTY_COPY[status].title}
+					description={EMPTY_COPY[status].description}
+				/>
+			) : (
+				<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+					<Table>
+						<TableHeader>
+							<TableRow className="bg-muted">
+								<TableHead className="font-medium text-muted-foreground">
+									Name
+								</TableHead>
+								<TableHead className="font-medium text-muted-foreground">
+									Email
+								</TableHead>
+								<TableHead className="font-medium text-muted-foreground">
+									Position
+								</TableHead>
+								<TableHead className="font-medium text-muted-foreground">
+									Submitted
+								</TableHead>
+								<TableHead className="font-medium text-muted-foreground">
+									Status
+								</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{rows.map((row) => (
+								<ApplicationTableRow key={row.id} application={row} />
+							))}
+						</TableBody>
+					</Table>
+				</div>
+			)}
 
 			<Pagination page={page} pageSize={pageSize} total={total} />
 		</div>

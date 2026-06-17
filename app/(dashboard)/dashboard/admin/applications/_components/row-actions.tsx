@@ -8,7 +8,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { approveMentorApplication, rejectMentorApplication } from "../_actions";
 
-export function RowActions({ applicationId }: { applicationId: string }) {
+export function RowActions({
+	applicationId,
+	onDone,
+}: {
+	applicationId: string;
+	/** Called after a successful approve/reject (e.g. to close a detail sheet). */
+	onDone?: () => void;
+}) {
 	const router = useRouter();
 	const [showReject, setShowReject] = useState(false);
 	const [reason, setReason] = useState("");
@@ -17,6 +24,7 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 		onSuccess: () => {
 			toast.success("Approved. Onboarding email sent.");
 			router.refresh();
+			onDone?.();
 		},
 		onError: ({ error }) => toast.error(error.serverError ?? "Failed"),
 	});
@@ -25,6 +33,7 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 			toast.success("Rejected.");
 			setShowReject(false);
 			router.refresh();
+			onDone?.();
 		},
 		onError: ({ error }) => toast.error(error.serverError ?? "Failed"),
 	});

@@ -18,7 +18,8 @@ import {
 
 interface BookingFilters {
 	status?: string;
-	mentorId?: string;
+	/** Mentor slug (pretty URL value), resolved against `mentors.slug`. */
+	mentorSlug?: string;
 	/** ISO date (yyyy-mm-dd), inclusive lower bound on start_at. */
 	from?: string;
 	/** ISO date (yyyy-mm-dd), inclusive upper bound on start_at. */
@@ -28,9 +29,6 @@ interface BookingFilters {
 	pageSize?: number;
 }
 
-const UUID_RE =
-	/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 export async function getBookingsForAdmin(filters: BookingFilters) {
 	const { page = 1, pageSize = 50 } = filters;
 	const conditions: (SQL<unknown> | undefined)[] = [];
@@ -38,8 +36,8 @@ export async function getBookingsForAdmin(filters: BookingFilters) {
 	const status = BookingStatus.safeParse(filters.status);
 	if (status.success) conditions.push(eq(bookings.status, status.data));
 
-	if (filters.mentorId && UUID_RE.test(filters.mentorId)) {
-		conditions.push(eq(bookings.mentor_id, filters.mentorId));
+	if (filters.mentorSlug) {
+		conditions.push(eq(mentors.slug, filters.mentorSlug));
 	}
 
 	if (filters.from) {
@@ -104,7 +102,7 @@ export type AdminBookingRow = Awaited<
 
 export async function getMentorOptions() {
 	return db
-		.select({ id: mentors.id, name: mentors.name })
+		.select({ id: mentors.id, name: mentors.name, slug: mentors.slug })
 		.from(mentors)
 		.orderBy(asc(mentors.name));
 }

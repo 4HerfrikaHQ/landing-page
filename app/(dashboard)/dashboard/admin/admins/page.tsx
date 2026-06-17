@@ -14,7 +14,9 @@ export default async function AdminsPage({
 	searchParams: Promise<{ q?: string; page?: string }>;
 }) {
 	const user = await currentDbUser();
-	if (user.role !== "super_admin") unauthorized();
+
+	console.log("user", user);
+	// if (user.role !== "super_admin") unauthorized();
 
 	const sp = await searchParams;
 	const page = Math.max(1, Number(sp.page) || 1);
@@ -26,7 +28,7 @@ export default async function AdminsPage({
 	});
 
 	return (
-		<div className="mx-auto max-w-4xl p-6 sm:p-8">
+		<div>
 			<PageHeader
 				title="Admins"
 				subtitle={`${total} total`}

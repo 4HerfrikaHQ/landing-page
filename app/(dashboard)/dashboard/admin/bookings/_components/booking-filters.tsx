@@ -119,12 +119,18 @@ export function BookingFilters({ mentors }: { mentors: MentorOption[] }) {
 				}
 			>
 				<SelectTrigger className="h-10 w-full rounded-full border-[#E0E0E0] sm:w-56">
-					<SelectValue placeholder="All mentors" />
+					<SelectValue placeholder="All mentors">
+						{(value) =>
+							value && value !== ALL_MENTORS
+								? (mentors.find((m) => m.slug === value)?.name ?? "All mentors")
+								: "All mentors"
+						}
+					</SelectValue>
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value={ALL_MENTORS}>All mentors</SelectItem>
 					{mentors.map((mentorOption) => (
-						<SelectItem key={mentorOption.id} value={mentorOption.id}>
+						<SelectItem key={mentorOption.id} value={mentorOption.slug}>
 							{mentorOption.name}
 						</SelectItem>
 					))}

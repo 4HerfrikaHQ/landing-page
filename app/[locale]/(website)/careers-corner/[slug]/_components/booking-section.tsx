@@ -8,7 +8,7 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { formatInTimeZone } from "date-fns-tz";
-import { useState } from "react";
+import { useQueryState } from "nuqs";
 import { BookingForm } from "./booking-form";
 
 export function BookingSection({
@@ -20,13 +20,16 @@ export function BookingSection({
 	mentorName: string;
 	initialWeekStart: string | null;
 }) {
-	const [selected, setSelected] = useState<string | null>(null);
-	const [open, setOpen] = useState(false);
-	const tz =
+	const [selected, setSelected] = useQueryState("slot");
+	const [tzParam] = useQueryState("tz");
+
+	const localTz =
 		typeof Intl !== "undefined"
 			? Intl.DateTimeFormat().resolvedOptions().timeZone
 			: "UTC";
+	const tz = tzParam ?? localTz;
 
+	const open = selected != null;
 	const whenLabel = selected
 		? formatInTimeZone(new Date(selected), tz, "EEEE, MMM d 'at' HH:mm zzz")
 		: undefined;
@@ -37,15 +40,11 @@ export function BookingSection({
 				mentorSlug={mentorSlug}
 				initialWeekStart={initialWeekStart}
 				selectedStartUtc={selected}
-				onSelect={(s) => {
-					setSelected(s);
-					setOpen(true);
-				}}
+				onSelect={(s) => setSelected(s)}
 			/>
 			<Sheet
 				open={open}
 				onOpenChange={(o) => {
-					setOpen(o);
 					if (!o) setSelected(null);
 				}}
 			>
@@ -61,10 +60,7 @@ export function BookingSection({
 								whenLabel={whenLabel}
 								startAtUtc={selected}
 								menteeTimezone={tz}
-								onSuccess={() => {
-									setOpen(false);
-									setSelected(null);
-								}}
+								onSuccess={() => setSelected(null)}
 							/>
 						</div>
 					)}
