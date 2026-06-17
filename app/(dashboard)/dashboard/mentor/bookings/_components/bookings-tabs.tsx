@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import type { MentorBookingsResult } from "../_actions";
 import { BookingTab } from "../_schema";
+import { BookingActions } from "./booking-actions";
 
 type Booking = MentorBookingsResult["rows"][number];
 type Feedback = MentorBookingsResult["feedbackByBooking"][string];
@@ -53,6 +54,7 @@ export function BookingsTabs({
 	pageSize,
 	total,
 	hasFilters,
+	mentorSlug,
 }: {
 	tab: BookingTab;
 	rows: Booking[];
@@ -63,6 +65,7 @@ export function BookingsTabs({
 	pageSize: number;
 	total: number;
 	hasFilters: boolean;
+	mentorSlug: string;
 }) {
 	// Tab + page live in the URL; `shallow: false` re-runs the server query.
 	const [, setNav] = useQueryStates(
@@ -148,6 +151,8 @@ export function BookingsTabs({
 									feedback={
 										isUpcoming ? undefined : feedbackByBooking[booking.id]
 									}
+									mentorSlug={mentorSlug}
+									isUpcoming={isUpcoming}
 								/>
 							</StaggerItem>
 						))}
@@ -163,9 +168,13 @@ export function BookingsTabs({
 function BookingCard({
 	booking,
 	feedback,
+	mentorSlug,
+	isUpcoming,
 }: {
 	booking: Booking;
 	feedback?: Feedback;
+	mentorSlug: string;
+	isUpcoming: boolean;
 }) {
 	const contactLine = [
 		booking.mentee_country,
@@ -199,7 +208,7 @@ function BookingCard({
 					</div>
 					<div className="flex flex-wrap items-center gap-3 sm:justify-end">
 						<StatusBadge status={booking.status} />
-						{booking.status !== "cancelled" ? (
+						{isUpcoming && booking.status !== "cancelled" ? (
 							<Button
 								href={booking.meet_url}
 								isExternal
@@ -210,6 +219,13 @@ function BookingCard({
 								Join Meet
 							</Button>
 						) : null}
+						<BookingActions
+							bookingId={booking.id}
+							mentorSlug={mentorSlug}
+							startAtUtc={booking.start_at.toISOString()}
+							status={booking.status}
+							isUpcoming={isUpcoming}
+						/>
 					</div>
 				</div>
 
