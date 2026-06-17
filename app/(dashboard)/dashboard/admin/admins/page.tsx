@@ -16,7 +16,7 @@ export default async function AdminsPage({
 	const user = await currentDbUser();
 
 	console.log("user", user);
-	// if (user.role !== "super_admin") unauthorized();
+	if (user.role !== "super_admin") unauthorized();
 
 	const sp = await searchParams;
 	const page = Math.max(1, Number(sp.page) || 1);
