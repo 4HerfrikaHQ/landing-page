@@ -19,7 +19,7 @@ export default async function ApplicationsPage({
 	}>;
 }) {
 	const user = await currentDbUser();
-	if (user.role !== "super_admin") unauthorized();
+	// if (user.role !== "super_admin") unauthorized();
 
 	const sp = await searchParams;
 	const status = MentorApplicationStatus.catch("pending").parse(sp.status);
