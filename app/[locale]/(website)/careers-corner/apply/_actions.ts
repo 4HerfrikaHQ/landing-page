@@ -26,6 +26,20 @@ Review: ${siteUrl}/dashboard/admin/applications`,
 	});
 }
 
+async function sendApplicantConfirmation(params: { to: string; name: string }) {
+	const resend = new Resend(process.env.RESEND_API_KEY);
+	await resend.emails.send({
+		from: FROM,
+		to: params.to,
+		subject: "We received your 4HerFrika mentor application",
+		text: `Hi ${params.name},
+
+Thanks for applying to mentor with 4HerFrika! We've received your application and our team will review it shortly. We'll be in touch by email with the next steps.
+
+— 4HerFrika`,
+	});
+}
+
 export const submitMentorApplication = actionClient
 	.schema(SubmitApplicationSchema)
 	.action(async ({ parsedInput }) => {
@@ -62,6 +76,16 @@ export const submitMentorApplication = actionClient
 			name: parsedInput.name,
 			email: parsedInput.email,
 		});
+
+		// Best-effort acknowledgement to the applicant — never fails the submission.
+		try {
+			await sendApplicantConfirmation({
+				to: parsedInput.email,
+				name: parsedInput.name,
+			});
+		} catch (err) {
+			console.error("[apply] applicant confirmation email failed", err);
+		}
 
 		return { applicationId: row.id };
 	});
