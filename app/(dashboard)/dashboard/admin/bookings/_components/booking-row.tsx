@@ -1,8 +1,13 @@
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { formatInTimeZone } from "date-fns-tz";
 import type { AdminBookingRow } from "../_actions";
+import { NoShowButton } from "./no-show-button";
 
 export function BookingRow({ booking }: { booking: AdminBookingRow }) {
+	const canMarkNoShow =
+		booking.start_at < new Date() &&
+		booking.status !== "no_show" &&
+		booking.status !== "cancelled";
 	return (
 		<tr className="border-t border-border/60 transition-colors hover:bg-muted/40">
 			<td className="whitespace-nowrap px-4 py-3 text-foreground">
@@ -20,7 +25,10 @@ export function BookingRow({ booking }: { booking: AdminBookingRow }) {
 				</span>
 			</td>
 			<td className="px-4 py-3">
-				<StatusBadge status={booking.status} />
+				<div className="flex items-center justify-between gap-2">
+					<StatusBadge status={booking.status} />
+					{canMarkNoShow ? <NoShowButton bookingId={booking.id} /> : null}
+				</div>
 			</td>
 		</tr>
 	);
