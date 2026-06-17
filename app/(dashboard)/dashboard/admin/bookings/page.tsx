@@ -26,7 +26,7 @@ export default async function AdminBookingsPage({
 	}>;
 }) {
 	const user = await currentDbUser();
-	// if (user.role !== "super_admin") unauthorized();
+	if (user.role !== "super_admin") unauthorized();
 
 	const sp = await searchParams;
 	const page = Math.max(1, Number(sp.page) || 1);
