@@ -25,7 +25,7 @@ import {
 } from "drizzle-orm";
 import { BookingTab } from "./_schema";
 
-export const MENTOR_BOOKINGS_PAGE_SIZE = 10;
+const MENTOR_BOOKINGS_PAGE_SIZE = 10;
 
 interface MentorBookingsParams {
 	tab?: string;
