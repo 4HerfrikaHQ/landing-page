@@ -14,8 +14,6 @@ export default async function AdminsPage({
 	searchParams: Promise<{ q?: string; page?: string }>;
 }) {
 	const user = await currentDbUser();
-
-	console.log("user", user);
 	if (user.role !== "super_admin") unauthorized();
 
 	const sp = await searchParams;
