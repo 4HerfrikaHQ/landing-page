@@ -9,7 +9,7 @@ export default async function AdminLayout({
 	await currentUser();
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-muted">
 			<AdminHeader />
 			{children}
 		</div>

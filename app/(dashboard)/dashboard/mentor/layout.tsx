@@ -11,7 +11,7 @@ export default async function MentorLayout({
 	if (!user) redirect("/dashboard/login");
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-muted">
 			<MentorHeader />
 			{children}
 		</div>
