@@ -1,6 +1,7 @@
 "use server";
 
 import { currentDbUser } from "@/src/auth";
+import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { db } from "@/src/db";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import {
@@ -8,7 +9,15 @@ import {
 	CareerStage,
 	bookings,
 } from "@/src/db/schema/tables/bookings";
+import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
+import {
+	cancelBookingCore,
+	rescheduleBookingCore,
+} from "@/src/lib/booking-mutations";
+import { canReschedule } from "@/src/lib/booking-rules";
+import { ActionError, actionClient } from "@/src/lib/safe-action";
 import {
 	type SQL,
 	and,
@@ -23,7 +32,13 @@ import {
 	ne,
 	or,
 } from "drizzle-orm";
-import { BookingTab } from "./_schema";
+import { revalidatePath } from "next/cache";
+import {
+	BookingTab,
+	CancelMyBookingSchema,
+	MarkNoShowSchema,
+	RescheduleMyBookingSchema,
+} from "./_schema";
 
 const MENTOR_BOOKINGS_PAGE_SIZE = 10;
 
@@ -124,6 +139,7 @@ export async function loadMentorBookings(params: MentorBookingsParams = {}) {
 		pastCount,
 		rows,
 		feedbackByBooking,
+		mentorSlug: mentor.slug,
 	};
 }
 
@@ -131,3 +147,76 @@ export type MentorBookingsResult = Extract<
 	Awaited<ReturnType<typeof loadMentorBookings>>,
 	{ ok: true }
 >;
+
+/** Load a booking and assert it belongs to the logged-in mentor. */
+async function loadOwnBooking(bookingId: string) {
+	const user = await currentDbUser();
+	const [row] = await db
+		.select({
+			booking: bookings,
+			mentorId: mentors.id,
+			mentorName: mentors.name,
+			mentorSlug: mentors.slug,
+			mentorUserId: mentors.user_id,
+			mentorEmail: users.email,
+			sessionDuration: mentorBookingSettings.session_duration_minutes,
+		})
+		.from(bookings)
+		.innerJoin(mentors, eq(mentors.id, bookings.mentor_id))
+		.innerJoin(users, eq(users.id, mentors.user_id))
+		.leftJoin(
+			mentorBookingSettings,
+			eq(mentorBookingSettings.mentor_id, mentors.id),
+		)
+		.where(eq(bookings.id, bookingId))
+		.limit(1);
+	if (!row) throw new ActionError("Booking not found");
+	if (row.mentorUserId !== user.id) throw new ActionError("Not your booking");
+	return row;
+}
+
+export const rescheduleMyBooking = actionClient
+	.schema(RescheduleMyBookingSchema)
+	.action(async ({ parsedInput }) => {
+		const row = await loadOwnBooking(parsedInput.bookingId);
+		if (!canReschedule(row.booking.start_at.getTime(), Date.now())) {
+			throw new ActionError(
+				"Reschedules must be made at least 24 hours before the call.",
+			);
+		}
+		await rescheduleBookingCore({
+			booking: row.booking,
+			mentorId: row.mentorId,
+			mentorName: row.mentorName,
+			mentorSlug: row.mentorSlug,
+			mentorEmail: row.mentorEmail,
+			sessionDurationMinutes: row.sessionDuration ?? 30,
+			newStartUtc: new Date(parsedInput.newStartUtc),
+		});
+		revalidatePath("/dashboard/mentor/bookings");
+		return { ok: true };
+	});
+
+export const cancelMyBooking = actionClient
+	.schema(CancelMyBookingSchema)
+	.action(async ({ parsedInput }) => {
+		const row = await loadOwnBooking(parsedInput.bookingId);
+		await cancelBookingCore({
+			booking: row.booking,
+			mentorName: row.mentorName,
+			mentorSlug: row.mentorSlug,
+			mentorEmail: row.mentorEmail,
+			reason: parsedInput.reason,
+		});
+		revalidatePath("/dashboard/mentor/bookings");
+		return { ok: true };
+	});
+
+export const markMyBookingNoShow = actionClient
+	.schema(MarkNoShowSchema)
+	.action(async ({ parsedInput }) => {
+		const row = await loadOwnBooking(parsedInput.bookingId);
+		await setBookingNoShow(row.booking.id);
+		revalidatePath("/dashboard/mentor/bookings");
+		return { ok: true };
+	});

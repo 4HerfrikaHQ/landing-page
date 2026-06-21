@@ -6,6 +6,8 @@ import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { bookings } from "@/src/db/schema/tables/bookings";
+import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
+import { MinLeadHoursSchema } from "@/src/lib/booking-rules";
 import { and, countDistinct, eq, gte, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -38,6 +40,39 @@ export async function updateMyProfile(
 		.where(eq(schema.mentors.id, mentor.id));
 
 	revalidatePath("/dashboard/mentor");
+	return {};
+}
+
+export async function getMyBookingNotice(): Promise<{ minLeadHours: number }> {
+	const mentor = await getMentorProfile();
+	if (!mentor) return { minLeadHours: 24 };
+	const [row] = await db
+		.select({ minLeadHours: mentorBookingSettings.min_lead_hours })
+		.from(mentorBookingSettings)
+		.where(eq(mentorBookingSettings.mentor_id, mentor.id))
+		.limit(1);
+	return { minLeadHours: row?.minLeadHours ?? 24 };
+}
+
+export async function updateMyBookingNotice(
+	formData: FormData,
+): Promise<{ error?: string }> {
+	const mentor = await getMentorProfile();
+	if (!mentor) return { error: "Mentor profile not found." };
+
+	const parsed = MinLeadHoursSchema.safeParse(
+		Number(formData.get("minLeadHours")),
+	);
+	if (!parsed.success) {
+		return { error: "Enter a whole number of hours between 0 and 168." };
+	}
+
+	await db
+		.update(mentorBookingSettings)
+		.set({ min_lead_hours: parsed.data })
+		.where(eq(mentorBookingSettings.mentor_id, mentor.id));
+
+	revalidatePath("/dashboard/mentor/availability");
 	return {};
 }
 

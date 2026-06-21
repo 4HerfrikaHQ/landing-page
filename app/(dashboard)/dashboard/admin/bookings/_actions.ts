@@ -1,8 +1,10 @@
 "use server";
 
+import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { db } from "@/src/db";
 import { BookingStatus, bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { adminAction } from "@/src/lib/safe-action";
 import {
 	type SQL,
 	and,
@@ -15,6 +17,8 @@ import {
 	lt,
 	or,
 } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 interface BookingFilters {
 	status?: string;
@@ -108,3 +112,11 @@ export async function getMentorOptions() {
 }
 
 export type MentorOption = Awaited<ReturnType<typeof getMentorOptions>>[number];
+
+export const markBookingNoShow = adminAction
+	.schema(z.object({ bookingId: z.string().uuid() }))
+	.action(async ({ parsedInput }) => {
+		await setBookingNoShow(parsedInput.bookingId);
+		revalidatePath("/dashboard/admin/bookings");
+		return { ok: true };
+	});

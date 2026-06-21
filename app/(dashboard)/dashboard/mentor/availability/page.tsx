@@ -1,10 +1,14 @@
 import { AvailabilityEditor } from "@/components/availability-editor";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { FadeIn } from "@/components/motion/fade-in";
-import { getMentorProfile } from "../_actions";
+import { getMentorProfile, getMyBookingNotice } from "../_actions";
+import { BookingNoticeForm } from "./_components/booking-notice-form";
 
 export default async function MentorAvailabilityPage() {
-	const mentor = await getMentorProfile();
+	const [mentor, notice] = await Promise.all([
+		getMentorProfile(),
+		getMyBookingNotice(),
+	]);
 
 	if (!mentor) {
 		return (
@@ -25,6 +29,9 @@ export default async function MentorAvailabilityPage() {
 				/>
 			</FadeIn>
 			<FadeIn delay={0.05}>
+				<div className="mb-6">
+					<BookingNoticeForm initial={notice.minLeadHours} />
+				</div>
 				<AvailabilityEditor
 					mentorId={mentor.id}
 					initialSlots={mentor.availability}

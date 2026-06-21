@@ -58,6 +58,7 @@ export default async function MentorBookingsPage({
 					pageSize={result.pageSize}
 					total={result.total}
 					hasFilters={hasFilters}
+					mentorSlug={result.mentorSlug}
 				/>
 			</FadeIn>
 		</div>
