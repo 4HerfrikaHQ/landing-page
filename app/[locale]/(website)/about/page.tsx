@@ -8,11 +8,11 @@ import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import FrequentlyAskedQuestion from "../(home)/_components/faq-section";
-import Sponsors from "../_components/sponsors";
 import { getAboutPage } from "./_actions";
 import { CallForAction } from "./_components/call-for-action";
 import { OurCore } from "./_components/our-core";
 import { OurReach } from "./_components/our-reach";
+import { Sponsors } from "./_components/sponsors";
 import Squiggle from "./squiggle";
 import UnderlineSquiggle from "./underline-squiggle";
 
@@ -72,7 +72,7 @@ export default async function About({
 		page.data;
 
 	return (
-		<>
+		<div className="overflow-x-hidden">
 			<section className="relative min-h-125 xl:min-h-[70vh] w-full flex items-center justify-center">
 				<div className="absolute top-0 left-0 size-full">
 					<PrismicImage
@@ -149,6 +149,6 @@ export default async function About({
 					{t("seeAllFaqs")}
 				</Link>
 			</section>
-		</>
+		</div>
 	);
 }
