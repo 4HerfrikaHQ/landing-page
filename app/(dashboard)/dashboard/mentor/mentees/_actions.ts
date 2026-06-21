@@ -49,32 +49,35 @@ export async function loadMentees(params: LoadMenteesParams = {}) {
 			? desc(sql`count(*)`)
 			: desc(sql`max(${bookings.start_at})`);
 
-	const [rows, [{ total }]] = await Promise.all([
-		db
-			.select({
-				email: bookings.mentee_email,
-				name: sql<string>`max(${bookings.mentee_name})`,
-				total: sql<number>`count(*)::int`,
-				lastAt: sql<Date>`max(${bookings.start_at})`,
-			})
-			.from(bookings)
-			.where(where)
-			.groupBy(bookings.mentee_email)
-			.orderBy(orderBy)
-			.limit(pageSize)
-			.offset((page - 1) * pageSize),
-		// Total distinct mentees matching: count the grouped rows via a subquery.
-		db
-			.select({ total: count() })
-			.from(
-				db
-					.select({ email: bookings.mentee_email })
-					.from(bookings)
-					.where(where)
-					.groupBy(bookings.mentee_email)
-					.as("grouped_mentees"),
-			),
-	]);
+	// Total distinct mentees matching: count the grouped rows via a subquery.
+	const [{ total }] = await db
+		.select({ total: count() })
+		.from(
+			db
+				.select({ email: bookings.mentee_email })
+				.from(bookings)
+				.where(where)
+				.groupBy(bookings.mentee_email)
+				.as("grouped_mentees"),
+		);
+
+	const lastPage = Math.max(1, Math.ceil(total / pageSize));
+	// Clamp so shrinking the result set (via search) never lands on an empty page.
+	const clampedPage = Math.min(Math.max(1, page), lastPage);
+
+	const rows = await db
+		.select({
+			email: bookings.mentee_email,
+			name: sql<string>`max(${bookings.mentee_name})`,
+			total: sql<number>`count(*)::int`,
+			lastAt: sql<Date>`max(${bookings.start_at})`,
+		})
+		.from(bookings)
+		.where(where)
+		.groupBy(bookings.mentee_email)
+		.orderBy(orderBy)
+		.limit(pageSize)
+		.offset((clampedPage - 1) * pageSize);
 
 	// Normalize lastAt to an ISO string so it is serializable across the
 	// RSC → client boundary.
@@ -85,7 +88,7 @@ export async function loadMentees(params: LoadMenteesParams = {}) {
 		lastAt: new Date(mentee.lastAt).toISOString(),
 	}));
 
-	return { ok: true as const, rows: serialized, total };
+	return { ok: true as const, rows: serialized, total, page: clampedPage };
 }
 
 type LoadMenteesOk = Extract<

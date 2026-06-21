@@ -41,7 +41,7 @@ export default async function MenteesPage({
 			<FadeIn delay={0.05}>
 				<MenteesGrid
 					mentees={result.rows}
-					page={page}
+					page={result.page}
 					pageSize={PAGE_SIZE}
 					total={result.total}
 				/>
