@@ -1,13 +1,16 @@
 "use client";
 
+import { CameraIcon, CheckCircle2, Loader2Icon } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { toast } from "sonner";
+
+import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
-import { CameraIcon, Loader2Icon } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useRef, useState, useTransition } from "react";
-import { toast } from "sonner";
+
 import { updateMyProfile, uploadMyImage } from "../../_actions";
 
 export function ProfileForm({
@@ -23,6 +26,7 @@ export function ProfileForm({
 
 	const [preview, setPreview] = useState<string | null>(dbMentor.image);
 	const [error, setError] = useState<string | null>(null);
+	const [saved, setSaved] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const [isUploading, startUploadTransition] = useTransition();
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,114 +81,153 @@ export function ProfileForm({
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError(null);
+		setSaved(false);
 		startTransition(async () => {
 			const result = await updateMyProfile(new FormData(e.currentTarget));
-			if (result.error) setError(result.error);
+			if (result.error) {
+				setError(result.error);
+			} else {
+				setSaved(true);
+			}
 		});
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="flex flex-col gap-5">
-			<div className="flex items-center gap-4 mb-2">
-				<button
-					type="button"
-					onClick={() => fileInputRef.current?.click()}
-					className="group relative size-20 rounded-full overflow-hidden cursor-pointer shrink-0"
-				>
-					{preview ? (
-						<Image
-							src={preview}
-							alt={fields.name}
-							fill
-							className="object-cover object-top"
-							sizes="80px"
-							unoptimized
-						/>
-					) : (
-						<span className="flex size-full items-center justify-center bg-gray-100 text-gray-500 text-lg font-medium">
-							{initials}
-						</span>
-					)}
-					<span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-						{isUploading ? (
-							<Loader2Icon className="size-5 text-white animate-spin" />
-						) : (
-							<CameraIcon className="size-5 text-white" />
-						)}
-					</span>
-				</button>
-				<div>
-					<p className="text-sm font-medium text-gray-700">{fields.name}</p>
-					<p className="text-xs text-gray-400">Click photo to update</p>
-				</div>
-			</div>
-			<input
-				ref={fileInputRef}
-				type="file"
-				accept="image/jpeg,image/png,image/webp"
-				className="hidden"
-				onChange={handleImageChange}
-			/>
+		<form onSubmit={handleSubmit}>
+			<DataCard>
+				<DataCardSection className="space-y-8 p-6 sm:p-8">
+					{/* Avatar */}
+					<div className="flex items-center gap-5">
+						<button
+							type="button"
+							onClick={() => fileInputRef.current?.click()}
+							className="group relative size-24 shrink-0 cursor-pointer overflow-hidden rounded-full ring-1 ring-border/60"
+						>
+							{preview ? (
+								<Image
+									src={preview}
+									alt={fields.name}
+									fill
+									className="object-cover object-top"
+									sizes="96px"
+									unoptimized
+								/>
+							) : (
+								<span className="flex size-full items-center justify-center bg-surface-pink text-xl font-medium text-primary-500">
+									{initials}
+								</span>
+							)}
+							<span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+								{isUploading ? (
+									<Loader2Icon className="size-5 animate-spin text-white" />
+								) : (
+									<CameraIcon className="size-5 text-white" />
+								)}
+							</span>
+						</button>
+						<div>
+							<p className="font-heading text-base font-medium text-foreground">
+								{fields.name}
+							</p>
+							<p className="text-sm text-muted-foreground">
+								Click the photo to upload a new one (under 4MB).
+							</p>
+						</div>
+					</div>
+					<input
+						ref={fileInputRef}
+						type="file"
+						accept="image/jpeg,image/png,image/webp"
+						className="hidden"
+						onChange={handleImageChange}
+					/>
 
-			<Field
-				label="Name"
-				name="name"
-				required
-				value={fields.name}
-				onChange={(e) => setFields((f) => ({ ...f, name: e.target.value }))}
-			/>
-			<Field
-				label="Position"
-				name="position"
-				value={fields.position}
-				onChange={(e) => setFields((f) => ({ ...f, position: e.target.value }))}
-			/>
-			<Field
-				label="Nickname"
-				name="nickname"
-				value={fields.nickname}
-				onChange={(e) => setFields((f) => ({ ...f, nickname: e.target.value }))}
-			/>
+					{/* About you */}
+					<section className="space-y-5">
+						<h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+							About you
+						</h2>
+						<div className="grid gap-5 sm:grid-cols-2">
+							<Field
+								label="Name"
+								name="name"
+								required
+								value={fields.name}
+								onChange={(e) =>
+									setFields((f) => ({ ...f, name: e.target.value }))
+								}
+							/>
+							<Field
+								label="Position"
+								name="position"
+								value={fields.position}
+								onChange={(e) =>
+									setFields((f) => ({ ...f, position: e.target.value }))
+								}
+							/>
+							<Field
+								label="Nickname"
+								name="nickname"
+								value={fields.nickname}
+								onChange={(e) =>
+									setFields((f) => ({ ...f, nickname: e.target.value }))
+								}
+							/>
+							<Field
+								label="LinkedIn URL"
+								name="linkedin_url"
+								type="url"
+								value={fields.linkedin_url}
+								onChange={(e) =>
+									setFields((f) => ({ ...f, linkedin_url: e.target.value }))
+								}
+							/>
+						</div>
+						<div className="flex flex-col gap-1.5">
+							<label
+								htmlFor="bio"
+								className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
+							>
+								Bio
+							</label>
+							<Textarea
+								id="bio"
+								name="bio"
+								rows={4}
+								className="resize-none text-sm"
+								placeholder="A short introduction mentees will read first."
+								value={fields.bio}
+								onChange={(e) =>
+									setFields((f) => ({ ...f, bio: e.target.value }))
+								}
+							/>
+						</div>
+					</section>
 
-			<div className="flex flex-col gap-1.5">
-				<label
-					htmlFor="bio"
-					className="text-xs font-medium text-gray-500 uppercase tracking-wide"
-				>
-					Bio
-				</label>
-				<Textarea
-					id="bio"
-					name="bio"
-					rows={4}
-					className="text-sm resize-none"
-					placeholder="Short bio…"
-					value={fields.bio}
-					onChange={(e) => setFields((f) => ({ ...f, bio: e.target.value }))}
-				/>
-			</div>
+					{error ? (
+						<p className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+							{error}
+						</p>
+					) : null}
 
-			<Field
-				label="LinkedIn URL"
-				name="linkedin_url"
-				type="url"
-				value={fields.linkedin_url}
-				onChange={(e) =>
-					setFields((f) => ({ ...f, linkedin_url: e.target.value }))
-				}
-			/>
-
-			{error && (
-				<p className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-md px-3 py-2">
-					{error}
-				</p>
-			)}
-
-			<div className="flex justify-end">
-				<Button type="submit" variant="solid" size="sm" disabled={isPending}>
-					{isPending ? "Saving…" : "Save changes"}
-				</Button>
-			</div>
+					<div className="flex items-center justify-end gap-3 border-t border-border/60 pt-5">
+						{saved ? (
+							<span className="inline-flex items-center gap-1.5 text-sm text-green-600">
+								<CheckCircle2 className="size-4" />
+								Saved
+							</span>
+						) : null}
+						<Button
+							type="submit"
+							variant="solid"
+							size="sm"
+							disabled={isPending}
+						>
+							{isPending ? "Saving…" : "Save changes"}
+						</Button>
+					</div>
+				</DataCardSection>
+			</DataCard>
 		</form>
 	);
 }

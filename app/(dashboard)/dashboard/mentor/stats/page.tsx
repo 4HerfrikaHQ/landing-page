@@ -1,82 +1,84 @@
-import { currentDbUser } from "@/src/auth";
-import { db } from "@/src/db";
-import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
-import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { and, eq, sql } from "drizzle-orm";
-import { MentorSubpageHeader } from "../_components/mentor-subpage-header";
+import { CalendarDays, CheckCircle2, Star, UserX, XCircle } from "lucide-react";
 
-export default async function MentorStatsPage() {
-	const user = await currentDbUser();
-	const [mentor] = await db
-		.select()
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
+import { FilterBar, FilterPills } from "@/components/dashboard/filter-bar";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { StatCard } from "@/components/dashboard/stat-card";
+import { FadeIn } from "@/components/motion/fade-in";
+import { loadMentorStats } from "./_actions";
+import { StatsCharts } from "./_components/stats-charts";
+import { StatsRange } from "./_schema";
 
-	return (
-		<div className="min-h-screen bg-gray-50">
-			<MentorSubpageHeader active="stats" />
-			{!mentor ? (
-				<div className="p-8 max-w-3xl mx-auto">
-					<p className="text-sm text-gray-500">
-						No mentor profile linked to your account.
-					</p>
-				</div>
-			) : (
-				<StatsContent mentorId={mentor.id} />
-			)}
-		</div>
-	);
-}
+const RANGE_OPTIONS = [
+	{ value: "30d", label: "30 days" },
+	{ value: "90d", label: "90 days" },
+	{ value: "all", label: "All time" },
+];
 
-async function StatsContent({ mentorId }: { mentorId: string }) {
-	const [counts] = await db
-		.select({
-			total: sql<number>`count(*)::int`,
-			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
-			noShow: sql<number>`count(*) filter (where ${bookings.status} = 'no_show')::int`,
-			cancelled: sql<number>`count(*) filter (where ${bookings.status} = 'cancelled')::int`,
-		})
-		.from(bookings)
-		.where(eq(bookings.mentor_id, mentorId));
+export default async function MentorStatsPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ range?: string }>;
+}) {
+	const sp = await searchParams;
+	const range = StatsRange.catch("90d").parse(sp.range);
+	const result = await loadMentorStats(range);
 
-	const [rating] = await db
-		.select({
-			avg: sql<number>`coalesce(avg(${bookingFeedback.rating}), 0)::float`,
-		})
-		.from(bookingFeedback)
-		.innerJoin(bookings, eq(bookings.id, bookingFeedback.booking_id))
-		.where(and(eq(bookings.mentor_id, mentorId)));
-
-	return (
-		<div className="p-8 max-w-3xl mx-auto">
-			<header className="mb-8">
-				<h1 className="text-2xl font-semibold text-gray-900">Stats</h1>
-				<p className="text-sm text-gray-500 mt-1">
-					Your mentorship at a glance.
+	if (!result.ok) {
+		return (
+			<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+				<p className="text-sm text-muted-foreground">
+					No mentor profile linked to your account.
 				</p>
-			</header>
-
-			<div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-				<Stat label="Total bookings" value={counts.total} />
-				<Stat label="Completed" value={counts.completed} />
-				<Stat label="No-shows" value={counts.noShow} />
-				<Stat label="Cancelled" value={counts.cancelled} />
-				<Stat
-					label="Avg rating"
-					value={rating.avg ? rating.avg.toFixed(1) : "—"}
-				/>
 			</div>
-		</div>
-	);
-}
+		);
+	}
 
-function Stat({ label, value }: { label: string; value: number | string }) {
+	const { counts, avgRating, series } = result;
+
 	return (
-		<div className="rounded-lg border p-4 bg-white">
-			<p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
-			<p className="mt-1 text-2xl font-semibold text-gray-900">{value}</p>
+		<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+			<FadeIn>
+				<PageHeader title="Stats" subtitle="Your mentorship at a glance." />
+			</FadeIn>
+
+			<FadeIn delay={0.05}>
+				<FilterBar className="mb-6">
+					<FilterPills
+						label="Range"
+						paramKey="range"
+						options={RANGE_OPTIONS}
+						includeAll={false}
+						defaultValue="90d"
+					/>
+				</FilterBar>
+			</FadeIn>
+
+			<FadeIn delay={0.1}>
+				<div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+					<StatCard
+						icon={CalendarDays}
+						label="Total bookings"
+						value={counts.total}
+					/>
+					<StatCard
+						icon={CheckCircle2}
+						label="Completed"
+						value={counts.completed}
+					/>
+					<StatCard icon={UserX} label="No-shows" value={counts.noShow} />
+					<StatCard icon={XCircle} label="Cancelled" value={counts.cancelled} />
+					<StatCard
+						icon={Star}
+						label="Avg rating"
+						value={Math.round(avgRating * 10)}
+						formatValue={() => (avgRating ? avgRating.toFixed(1) : "—")}
+					/>
+				</div>
+			</FadeIn>
+
+			<FadeIn delay={0.15}>
+				<StatsCharts series={series} counts={counts} />
+			</FadeIn>
 		</div>
 	);
 }

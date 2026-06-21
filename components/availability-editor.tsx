@@ -1,18 +1,19 @@
 "use client";
 
+import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { Button } from "@/components/ui/button";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
-	SelectValue,
 } from "@/components/ui/select";
 import { saveAvailability } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
 import type { DayOfWeek } from "@/src/db/schema/tables";
-import { PlusIcon, XIcon } from "lucide-react";
-import { useTransition, useState } from "react";
+import { cn } from "@/utils/cn";
+import { CheckCircle2, Globe, PlusIcon, XIcon } from "lucide-react";
+import { useState, useTransition } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const DAYS_OF_WEEK: DayOfWeek[] = [
@@ -39,10 +40,17 @@ for (let h = 6; h < 24; h++) {
 	}
 }
 
+function timeLabel(value: string) {
+	return TIME_OPTIONS.find((t) => t.value === value)?.label ?? value;
+}
+
 export const TIMEZONES = [
 	// Africa (default region — listed first)
 	{ value: "Africa/Lagos", label: "West Africa Time — Lagos, Accra (WAT)" },
-	{ value: "Africa/Johannesburg", label: "Central/East Africa Time — Nairobi, Johannesburg" },
+	{
+		value: "Africa/Johannesburg",
+		label: "Central/East Africa Time — Nairobi, Johannesburg",
+	},
 	// US
 	{ value: "America/New_York", label: "Eastern Time (US & Canada)" },
 	{ value: "America/Chicago", label: "Central Time (US & Canada)" },
@@ -103,15 +111,22 @@ function validateSlots(slots: SlotRow[]): Map<string, string> {
 	for (const daySlots of byDay.values()) {
 		const sorted = [...daySlots].sort((a, b) =>
 			a.start_time.localeCompare(b.start_time),
-    );
+		);
 
-    for (let i = 1; i < sorted.length; i++) {
-      const current = sorted[i];
-      const previous = sorted[i - 1];
+		for (let i = 1; i < sorted.length; i++) {
+			const current = sorted[i];
+			const previous = sorted[i - 1];
 			if (current.start_time < previous.end_time) {
-				const fmt = (t: string) => TIME_OPTIONS.find((o) => o.value === t)?.label ?? t;
-				errors.set(current.tempId, `Overlaps with ${fmt(previous.start_time)} – ${fmt(previous.end_time)}`);
-				errors.set(previous.tempId, `Overlaps with ${fmt(current.start_time)} – ${fmt(current.end_time)}`);
+				const fmt = (t: string) =>
+					TIME_OPTIONS.find((o) => o.value === t)?.label ?? t;
+				errors.set(
+					current.tempId,
+					`Overlaps with ${fmt(previous.start_time)} – ${fmt(previous.end_time)}`,
+				);
+				errors.set(
+					previous.tempId,
+					`Overlaps with ${fmt(current.start_time)} – ${fmt(current.end_time)}`,
+				);
 			}
 		}
 	}
@@ -151,7 +166,11 @@ export function AvailabilityEditor({
 
 	function removeSlot(tempId: string) {
 		setSlots((prev) => prev.filter((s) => s.tempId !== tempId));
-		setSlotErrors((prev) => { const next = new Map(prev); next.delete(tempId); return next; });
+		setSlotErrors((prev) => {
+			const next = new Map(prev);
+			next.delete(tempId);
+			return next;
+		});
 	}
 
 	function updateSlot(
@@ -162,7 +181,11 @@ export function AvailabilityEditor({
 		setSlots((prev) =>
 			prev.map((s) => (s.tempId === tempId ? { ...s, [field]: value } : s)),
 		);
-		setSlotErrors((prev) => { const next = new Map(prev); next.delete(tempId); return next; });
+		setSlotErrors((prev) => {
+			const next = new Map(prev);
+			next.delete(tempId);
+			return next;
+		});
 	}
 
 	function handleSave() {
@@ -174,7 +197,7 @@ export function AvailabilityEditor({
 			setSlotErrors(validationErrors);
 			setError("Fix the highlighted slots before saving.");
 			return;
-    }
+		}
 
 		setSlotErrors(new Map());
 
@@ -188,134 +211,221 @@ export function AvailabilityEditor({
 		});
 	}
 
+	const totalSlots = slots.length;
+
 	return (
-		<div className="flex flex-col gap-5">
+		<div className="flex flex-col gap-6">
 			{/* Timezone */}
-			<div className="flex flex-col gap-1.5">
-				<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-					Timezone
-				</label>
-				<Select value={timezone} onValueChange={(v) => v && setTimezone(v)}>
-					<SelectTrigger className="h-9 text-sm w-full">
-						<span className="flex flex-1 text-left truncate">
-							{TIMEZONES.find((tz) => tz.value === timezone)?.label ?? timezone}
-						</span>
-					</SelectTrigger>
-					<SelectContent className="min-w-96">
-						{TIMEZONES.map((tz) => (
-							<SelectItem key={tz.value} value={tz.value} label={tz.label}>
-								{tz.label}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			</div>
+			<DataCard>
+				<DataCardSection className="space-y-2">
+					<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+						Timezone
+					</p>
+					<Select value={timezone} onValueChange={(v) => v && setTimezone(v)}>
+						<SelectTrigger className="h-10 w-full text-sm">
+							<span className="flex flex-1 items-center gap-2 truncate text-left">
+								<Globe className="size-4 shrink-0 text-muted-foreground" />
+								{TIMEZONES.find((tz) => tz.value === timezone)?.label ??
+									timezone}
+							</span>
+						</SelectTrigger>
+						<SelectContent className="min-w-96">
+							{TIMEZONES.map((tz) => (
+								<SelectItem key={tz.value} value={tz.value} label={tz.label}>
+									{tz.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<p className="text-xs text-muted-foreground">
+						All slots below are interpreted in this timezone.
+					</p>
+				</DataCardSection>
+			</DataCard>
 
 			{/* Day sections */}
 			<div className="flex flex-col gap-4">
 				{DAYS_OF_WEEK.map((day) => {
 					const daySlots = slots.filter((s) => s.day === day);
 					return (
-						<div key={day}>
-							<p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-								{day}
-							</p>
-							<div className="flex flex-col gap-2">
-								{daySlots.map((slot) => {
-									const slotError = slotErrors.get(slot.tempId);
-									return (
-										<div key={slot.tempId} className="flex flex-col gap-1">
-											<div className="flex items-center gap-2">
-												<Select
-													value={slot.start_time}
-													onValueChange={(v) => v && updateSlot(slot.tempId, "start_time", v)}
-												>
-													<SelectTrigger className={`h-8 text-sm flex-1 ${slotError ? "border-red-400" : ""}`}>
-														<span className="flex flex-1 text-left">
-															{TIME_OPTIONS.find((t) => t.value === slot.start_time)?.label ?? slot.start_time}
-														</span>
-													</SelectTrigger>
-													<SelectContent>
-														{TIME_OPTIONS.map((t) => (
-															<SelectItem key={t.value} value={t.value} label={t.label}>
-																{t.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
+						<DataCard key={day}>
+							<DataCardSection className="space-y-3">
+								<div className="flex items-center justify-between">
+									<p className="font-heading text-sm font-semibold text-foreground">
+										{day}
+									</p>
+									{daySlots.length === 0 ? (
+										<span className="text-xs text-muted-foreground">
+											Unavailable
+										</span>
+									) : (
+										<span className="text-xs text-muted-foreground">
+											{daySlots.length} slot{daySlots.length === 1 ? "" : "s"}
+										</span>
+									)}
+								</div>
 
-												<span className="text-gray-400 text-sm shrink-0">→</span>
-
-												<Select
-													value={slot.end_time}
-													onValueChange={(v) => v && updateSlot(slot.tempId, "end_time", v)}
+								<div className="flex flex-col gap-2">
+									{daySlots.map((slot) => {
+										const slotError = slotErrors.get(slot.tempId);
+										return (
+											<div key={slot.tempId} className="flex flex-col gap-1">
+												<div
+													className={cn(
+														"flex items-center gap-2 rounded-xl border border-border/60 bg-muted/40 p-2",
+														slotError &&
+															"border-destructive/50 bg-destructive/5",
+													)}
 												>
-													<SelectTrigger className={`h-8 text-sm flex-1 ${slotError ? "border-red-400" : ""}`}>
-														<span className="flex flex-1 text-left">
-															{TIME_OPTIONS.find((t) => t.value === slot.end_time)?.label ?? slot.end_time}
-														</span>
-													</SelectTrigger>
-													<SelectContent>
-														{TIME_OPTIONS.map((t) => (
-															<SelectItem key={t.value} value={t.value} label={t.label}>
-																{t.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
+													<Select
+														value={slot.start_time}
+														onValueChange={(v) =>
+															v && updateSlot(slot.tempId, "start_time", v)
+														}
+													>
+														<SelectTrigger className="h-9 flex-1 bg-white text-sm">
+															<span className="flex flex-1 text-left">
+																{timeLabel(slot.start_time)}
+															</span>
+														</SelectTrigger>
+														<SelectContent>
+															{TIME_OPTIONS.map((t) => (
+																<SelectItem
+																	key={t.value}
+																	value={t.value}
+																	label={t.label}
+																>
+																	{t.label}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</Select>
 
-												<button
-													type="button"
-													onClick={() => removeSlot(slot.tempId)}
-													className="text-gray-400 hover:text-red-400 transition-colors shrink-0"
-													aria-label="Remove slot"
-												>
-													<XIcon className="size-3.5" />
-												</button>
+													<span className="shrink-0 text-sm text-muted-foreground">
+														→
+													</span>
+
+													<Select
+														value={slot.end_time}
+														onValueChange={(v) =>
+															v && updateSlot(slot.tempId, "end_time", v)
+														}
+													>
+														<SelectTrigger className="h-9 flex-1 bg-white text-sm">
+															<span className="flex flex-1 text-left">
+																{timeLabel(slot.end_time)}
+															</span>
+														</SelectTrigger>
+														<SelectContent>
+															{TIME_OPTIONS.map((t) => (
+																<SelectItem
+																	key={t.value}
+																	value={t.value}
+																	label={t.label}
+																>
+																	{t.label}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</Select>
+
+													<button
+														type="button"
+														onClick={() => removeSlot(slot.tempId)}
+														className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+														aria-label="Remove slot"
+													>
+														<XIcon className="size-4" />
+													</button>
+												</div>
+												{slotError ? (
+													<p className="pl-1 text-xs text-destructive">
+														{slotError}
+													</p>
+												) : null}
 											</div>
-											{slotError && (
-												<p className="text-xs text-red-500 pl-0.5">{slotError}</p>
-											)}
-										</div>
-									);
-								})}
+										);
+									})}
 
-								<button
-									type="button"
-									onClick={() => addSlot(day)}
-									className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors w-fit"
-								>
-									<PlusIcon className="size-3" />
-									Add slot
-								</button>
-							</div>
-						</div>
+									<button
+										type="button"
+										onClick={() => addSlot(day)}
+										className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/80 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-primary-500 hover:text-primary-500"
+									>
+										<PlusIcon className="size-4" />
+										Add slot
+									</button>
+								</div>
+							</DataCardSection>
+						</DataCard>
 					);
 				})}
 			</div>
 
-			{error && (
-				<p className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-md px-3 py-2">
+			{/* Weekly preview */}
+			{totalSlots > 0 ? (
+				<DataCard>
+					<DataCardSection className="space-y-3">
+						<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+							Weekly preview
+						</p>
+						<div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+							{DAYS_OF_WEEK.map((day) => {
+								const daySlots = slots
+									.filter((s) => s.day === day)
+									.sort((a, b) => a.start_time.localeCompare(b.start_time));
+								return (
+									<div
+										key={day}
+										className="rounded-xl border border-border/60 bg-muted/30 p-3"
+									>
+										<p className="text-xs font-medium text-foreground">{day}</p>
+										{daySlots.length === 0 ? (
+											<p className="mt-1 text-xs text-muted-foreground">—</p>
+										) : (
+											<div className="mt-1.5 flex flex-wrap gap-1.5">
+												{daySlots.map((slot) => (
+													<span
+														key={slot.tempId}
+														className="inline-flex rounded-full bg-surface-pink px-2 py-0.5 text-xs font-medium text-primary-500"
+													>
+														{timeLabel(slot.start_time)} –{" "}
+														{timeLabel(slot.end_time)}
+													</span>
+												))}
+											</div>
+										)}
+									</div>
+								);
+							})}
+						</div>
+					</DataCardSection>
+				</DataCard>
+			) : null}
+
+			{error ? (
+				<p className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
 					{error}
 				</p>
-			)}
+			) : null}
 
-			{saved && (
-				<p className="text-xs text-green-600 bg-green-50 border border-green-100 rounded-md px-3 py-2">
-					Availability saved.
-				</p>
-			)}
-
-			<Button
-				type="button"
-				variant="solid"
-				size="sm"
-				onClick={handleSave}
-				disabled={isPending}
-				className="self-end"
-			>
-				{isPending ? "Saving…" : "Save availability"}
-			</Button>
+			<div className="flex items-center justify-end gap-3">
+				{saved ? (
+					<span className="inline-flex items-center gap-1.5 text-sm text-green-600">
+						<CheckCircle2 className="size-4" />
+						Availability saved
+					</span>
+				) : null}
+				<Button
+					type="button"
+					variant="solid"
+					size="sm"
+					onClick={handleSave}
+					disabled={isPending}
+				>
+					{isPending ? "Saving…" : "Save availability"}
+				</Button>
+			</div>
 		</div>
 	);
 }
