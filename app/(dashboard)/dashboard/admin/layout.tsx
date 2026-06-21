@@ -11,7 +11,9 @@ export default async function AdminLayout({
 	return (
 		<div className="min-h-screen bg-muted">
 			<AdminHeader />
-			{children}
+			{/* Shared container: every admin page + its loading skeleton sits at the
+			    same width and padding, so navigating between pages never shifts. */}
+			<div className="mx-auto w-full max-w-6xl p-6 sm:p-8">{children}</div>
 		</div>
 	);
 }

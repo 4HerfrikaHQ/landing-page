@@ -127,6 +127,7 @@
     "invalidEmail": "Veuillez entrer une adresse e-mail valide",
     "receiveUpdates": "Je souhaite recevoir des mises à jour et des conseils sur le mentorat de 4HerFrika.",
     "availableTimes": "Horaires disponibles :",
+    "timezoneNote": "Tous les horaires en {timezone}",
     "notMentioned": "Non mentionné",
     "mentorComingSoon": "Plus d'informations sur ce mentor seront bientôt disponibles.",
     "availableThisWeek": "Disponible cette semaine"

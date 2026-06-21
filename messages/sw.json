@@ -127,6 +127,7 @@
     "invalidEmail": "Tafadhali, weka anwani sahihi ya barua pepe",
     "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika.",
     "availableTimes": "Nyakati zinazopatikana:",
+    "timezoneNote": "Nyakati zote katika {timezone}",
     "notMentioned": "Haijatajwa",
     "mentorComingSoon": "Taarifa zaidi kuhusu mshauri huyu zitapatikana hivi karibuni.",
     "availableThisWeek": "Inapatikana wiki hii"

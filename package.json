@@ -15,6 +15,7 @@
     "db:studio": "drizzle-kit studio",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
+    "test": "bun test",
     "translate": "bun scripts/translate.ts"
   },
   "dependencies": {

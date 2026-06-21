@@ -1,25 +1,54 @@
+import { PageHeader } from "@/components/dashboard/page-header";
 import { currentDbUser } from "@/src/auth";
+import { MentorApplicationStatus } from "@/src/db/schema/tables/mentor-applications";
 import { unauthorized } from "next/navigation";
-import { listMentorApplications } from "./_actions";
+import { Suspense } from "react";
+import { getApplications } from "./_actions";
 import { ApplicationsTable } from "./_components/applications-table";
 
-export default async function ApplicationsPage() {
+const PAGE_SIZE = 20;
+
+export default async function ApplicationsPage({
+	searchParams,
+}: {
+	searchParams: Promise<{
+		status?: string;
+		q?: string;
+		sort?: string;
+		page?: string;
+	}>;
+}) {
 	const user = await currentDbUser();
 	if (user.role !== "super_admin") unauthorized();
 
-	const rows = await listMentorApplications();
+	const sp = await searchParams;
+	const status = MentorApplicationStatus.catch("pending").parse(sp.status);
+	const page = Math.max(1, Number(sp.page) || 1);
+
+	const { rows, total, pendingCount } = await getApplications({
+		status,
+		query: sp.q,
+		sort: sp.sort,
+		page,
+		pageSize: PAGE_SIZE,
+	});
 
 	return (
-		<div className="p-8 max-w-5xl mx-auto">
-			<header className="mb-8">
-				<h1 className="text-2xl font-semibold text-gray-900">
-					Mentor applications
-				</h1>
-				<p className="text-sm text-gray-500 mt-1">
-					Review and approve new mentor signups.
-				</p>
-			</header>
-			<ApplicationsTable rows={rows} />
+		<div>
+			<PageHeader
+				title="Mentor applications"
+				subtitle="Review and approve new mentor signups."
+			/>
+			<Suspense>
+				<ApplicationsTable
+					rows={rows}
+					status={status}
+					pendingCount={pendingCount}
+					page={page}
+					pageSize={PAGE_SIZE}
+					total={total}
+				/>
+			</Suspense>
 		</div>
 	);
 }

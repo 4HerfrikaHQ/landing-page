@@ -8,7 +8,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { approveMentorApplication, rejectMentorApplication } from "../_actions";
 
-export function RowActions({ applicationId }: { applicationId: string }) {
+export function RowActions({
+	applicationId,
+	onDone,
+}: {
+	applicationId: string;
+	/** Called after a successful approve/reject (e.g. to close a detail sheet). */
+	onDone?: () => void;
+}) {
 	const router = useRouter();
 	const [showReject, setShowReject] = useState(false);
 	const [reason, setReason] = useState("");
@@ -17,6 +24,7 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 		onSuccess: () => {
 			toast.success("Approved. Onboarding email sent.");
 			router.refresh();
+			onDone?.();
 		},
 		onError: ({ error }) => toast.error(error.serverError ?? "Failed"),
 	});
@@ -25,6 +33,7 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 			toast.success("Rejected.");
 			setShowReject(false);
 			router.refresh();
+			onDone?.();
 		},
 		onError: ({ error }) => toast.error(error.serverError ?? "Failed"),
 	});
@@ -38,10 +47,10 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 					onChange={(e) => setReason(e.target.value)}
 				/>
 				<div className="flex gap-2">
-          <Button
-            size="sm"
+					<Button
+						size="sm"
 						variant="outline"
-						className="border-red-300 text-red-700 hover:bg-red-50"
+						className="border-destructive/40 text-destructive hover:bg-destructive/5"
 						onClick={() =>
 							reject.execute({ applicationId, reason: reason || undefined })
 						}
@@ -49,12 +58,12 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 					>
 						Confirm reject
 					</Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setShowReject(false)}
-          >
-            Cancel
+					<Button
+						size="sm"
+						variant="ghost"
+						onClick={() => setShowReject(false)}
+					>
+						Cancel
 					</Button>
 				</div>
 			</div>
@@ -65,17 +74,13 @@ export function RowActions({ applicationId }: { applicationId: string }) {
 		<div className="flex gap-2">
 			<Button
 				onClick={() => approve.execute({ applicationId })}
-        disabled={approve.isPending}
-        size="sm"
+				disabled={approve.isPending}
+				size="sm"
 			>
 				{approve.isPending ? "Approving…" : "Approve"}
 			</Button>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={() => setShowReject(true)}
-      >
-        Reject
+			<Button size="sm" variant="outline" onClick={() => setShowReject(true)}>
+				Reject
 			</Button>
 		</div>
 	);

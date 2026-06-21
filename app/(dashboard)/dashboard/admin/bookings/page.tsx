@@ -1,98 +1,107 @@
+import { EmptyState } from "@/components/dashboard/empty-state";
+import { FilterBar } from "@/components/dashboard/filter-bar";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { StatusBadge } from "@/components/dashboard/status-badge";
 import { currentDbUser } from "@/src/auth";
-import { db } from "@/src/db";
-import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
-import { formatInTimeZone } from "date-fns-tz";
-import { desc, eq } from "drizzle-orm";
+import { CalendarDays } from "lucide-react";
 import { unauthorized } from "next/navigation";
+import { Suspense } from "react";
+import { getBookingsForAdmin, getMentorOptions } from "./_actions";
+import { BookingFilters } from "./_components/booking-filters";
+import { BookingRow } from "./_components/booking-row";
+import { Pagination } from "@/components/dashboard/pagination";
 
-export default async function AdminBookingsPage() {
+const PAGE_SIZE = 50;
+
+export default async function AdminBookingsPage({
+	searchParams,
+}: {
+	searchParams: Promise<{
+		status?: string;
+		mentor?: string;
+		from?: string;
+		to?: string;
+		q?: string;
+		page?: string;
+	}>;
+}) {
 	const user = await currentDbUser();
 	if (user.role !== "super_admin") unauthorized();
 
-	const rows = await db
-		.select({
-			id: bookings.id,
-			mentee_name: bookings.mentee_name,
-			mentee_email: bookings.mentee_email,
-			start_at: bookings.start_at,
-			status: bookings.status,
-			mentee_timezone: bookings.mentee_timezone,
-			mentor_name: mentors.name,
-			mentor_slug: mentors.slug,
-		})
-		.from(bookings)
-		.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
-		.orderBy(desc(bookings.start_at))
-		.limit(200);
+	const sp = await searchParams;
+	const page = Math.max(1, Number(sp.page) || 1);
+
+	const [{ rows, total }, mentorOptions] = await Promise.all([
+		getBookingsForAdmin({
+			status: sp.status,
+			mentorSlug: sp.mentor,
+			from: sp.from,
+			to: sp.to,
+			query: sp.q,
+			page,
+			pageSize: PAGE_SIZE,
+		}),
+		getMentorOptions(),
+	]);
+
+	const hasFilters = Boolean(
+		sp.status || sp.mentor || sp.from || sp.to || sp.q,
+	);
 
 	return (
-		<div className="p-8 max-w-6xl mx-auto">
-			<header className="mb-6">
-				<h1 className="text-2xl font-semibold text-gray-900">All bookings</h1>
-				<p className="text-sm text-gray-500 mt-1">
-					Most recent 200 bookings across all mentors.
-				</p>
-			</header>
+		<div>
+			<PageHeader
+				title="All bookings"
+				subtitle={`${total} booking${total === 1 ? "" : "s"} across all mentors`}
+			/>
 
-			<div className="rounded-lg border bg-white overflow-hidden">
+			<div className="mb-6">
+				<Suspense>
+					<FilterBar>
+						<BookingFilters mentors={mentorOptions} />
+					</FilterBar>
+				</Suspense>
+			</div>
+
+			<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
 				<table className="w-full text-sm">
-					<thead className="text-left text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+					<thead className="bg-muted text-left text-xs uppercase tracking-wide text-muted-foreground">
 						<tr>
-							<th className="px-4 py-2">When</th>
-							<th className="px-4 py-2">Mentor</th>
-							<th className="px-4 py-2">Mentee</th>
-							<th className="px-4 py-2">Status</th>
+							<th className="px-4 py-3 font-medium">When</th>
+							<th className="px-4 py-3 font-medium">Mentor</th>
+							<th className="px-4 py-3 font-medium">Mentee</th>
+							<th className="px-4 py-3 font-medium">Status</th>
 						</tr>
 					</thead>
 					<tbody>
 						{rows.map((r) => (
-							<tr key={r.id} className="border-t">
-								<td className="px-4 py-2 whitespace-nowrap">
-									{formatInTimeZone(
-										r.start_at,
-										r.mentee_timezone,
-										"MMM d, HH:mm",
-									)}
-								</td>
-								<td className="px-4 py-2">{r.mentor_name}</td>
-								<td className="px-4 py-2">
-									{r.mentee_name}{" "}
-									<span className="text-xs text-gray-500">
-										{r.mentee_email}
-									</span>
-								</td>
-								<td className="px-4 py-2">
-									<StatusBadge status={r.status} />
-								</td>
-							</tr>
+							<BookingRow key={r.id} booking={r} />
 						))}
-						{rows.length === 0 && (
-							<tr>
-								<td colSpan={4} className="px-4 py-6 text-center text-gray-500">
-									No bookings yet.
-								</td>
-							</tr>
-						)}
 					</tbody>
 				</table>
-			</div>
-		</div>
-	);
-}
 
-function StatusBadge({ status }: { status: string }) {
-	const styles: Record<string, string> = {
-		confirmed: "bg-blue-50 text-blue-700 border-blue-200",
-		completed: "bg-green-50 text-green-700 border-green-200",
-		cancelled: "bg-gray-100 text-gray-600 border-gray-200",
-		no_show: "bg-red-50 text-red-700 border-red-200",
-	};
-	return (
-		<span
-			className={`text-xs uppercase tracking-wide px-2 py-0.5 rounded border ${styles[status] ?? "bg-gray-100 text-gray-600 border-gray-200"}`}
-		>
-			{status}
-		</span>
+				{rows.length === 0 ? (
+					<div className="p-6">
+						<EmptyState
+							icon={CalendarDays}
+							title={
+								hasFilters
+									? "No bookings match these filters"
+									: "No bookings yet"
+							}
+							description={
+								hasFilters
+									? "Try clearing or adjusting the filters above."
+									: "Bookings will appear here as mentees book sessions."
+							}
+						/>
+					</div>
+				) : null}
+			</div>
+
+			<Suspense>
+				<Pagination page={page} pageSize={PAGE_SIZE} total={total} />
+			</Suspense>
+		</div>
 	);
 }

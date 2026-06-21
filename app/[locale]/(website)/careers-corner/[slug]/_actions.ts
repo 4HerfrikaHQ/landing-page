@@ -60,6 +60,21 @@ function googleCalendarId(): string {
 	return encodeURIComponent(id);
 }
 
+/** All Google Calendar/Meet env vars present (not validity — that surfaces at call time). */
+function googleMeetConfigured(): boolean {
+	return Boolean(
+		process.env.GOOGLE_CLIENT_ID &&
+			process.env.GOOGLE_CLIENT_SECRET &&
+			process.env.GOOGLE_OAUTH_REFRESH_TOKEN &&
+			process.env.GOOGLE_ORG_CALENDAR_ID,
+	);
+}
+
+// Used only outside production, when Google isn't configured (or its token is
+// dead) so the booking flow can be exercised end-to-end locally.
+const DEV_PLACEHOLDER_MEET_URL = "https://meet.google.com/dev-placeholder";
+const DEV_PLACEHOLDER_EVENT_ID = "local-dev-no-google-event";
+
 export async function createMeetEvent(params: {
 	summary: string;
 	description: string;
@@ -139,6 +154,12 @@ function siteUrl(): string {
 	return process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 }
 
+// Joining with the invited address skips Google's admit screen, so recommend it
+// (framed as the smooth path, not a limitation).
+function joinTip(email: string): string {
+	return `Tip: for the smoothest entry, join with this email (${email}).`;
+}
+
 type ConfirmationCommon = {
 	mentorName: string;
 	mentorEmail: string;
@@ -166,6 +187,7 @@ export async function sendBookingConfirmationMentee(
 Your ${p.sessionDurationMinutes}-minute call with ${p.mentorName} is confirmed for ${formatInTz(p.startAtUtc, p.menteeTimezone)}.
 
 Join here: ${p.meetUrl}
+${joinTip(p.menteeEmail)}
 
 Need to cancel or reschedule? ${p.manageUrl}
 
@@ -199,6 +221,7 @@ You have a new mentee booking.
 
 When: ${formatInTz(p.startAtUtc, p.mentorTimezone)}
 Meet: ${p.meetUrl}
+${joinTip(p.mentorEmail)}
 
 Mentee: ${p.menteeName} <${p.menteeEmail}>
 Purpose: ${p.purpose}
@@ -424,15 +447,40 @@ export const createBooking = actionClient
 			);
 		}
 
-		// Mint Google Meet event
-		const { eventId, meetUrl } = await createMeetEvent({
-			summary: `4HerFrika: ${parsedInput.mentee_name} ↔ ${mentor.name}`,
-			description: `Purpose: ${parsedInput.purpose}\n\nMentee: ${parsedInput.mentee_name} <${parsedInput.mentee_email}>`,
-			startAtUtc: startAt,
-			endAtUtc: endAt,
-			mentorEmail,
-			menteeEmail: parsedInput.mentee_email,
-		});
+		// Mint Google Meet event. In non-production, if Google isn't configured (or its
+		// token is dead) we fall back to a placeholder so the flow can be tested locally.
+		let eventId = DEV_PLACEHOLDER_EVENT_ID;
+		let meetUrl = DEV_PLACEHOLDER_MEET_URL;
+		let realMeetEvent = false;
+		if (googleMeetConfigured()) {
+			try {
+				const event = await createMeetEvent({
+					summary: `4HerFrika: ${parsedInput.mentee_name} ↔ ${mentor.name}`,
+					description: `Purpose: ${parsedInput.purpose}\n\nMentee: ${parsedInput.mentee_name} <${parsedInput.mentee_email}>`,
+					startAtUtc: startAt,
+					endAtUtc: endAt,
+					mentorEmail,
+					menteeEmail: parsedInput.mentee_email,
+				});
+				eventId = event.eventId;
+				meetUrl = event.meetUrl;
+				realMeetEvent = true;
+			} catch (err) {
+				if (process.env.NODE_ENV === "production") throw err;
+				console.warn(
+					"[booking] Google Meet creation failed — using local dev placeholder link.",
+					err,
+				);
+			}
+		} else if (process.env.NODE_ENV === "production") {
+			throw new ActionError(
+				"Booking is temporarily unavailable. Please try again later.",
+			);
+		} else {
+			console.warn(
+				"[booking] Google not configured — using local dev placeholder Meet link.",
+			);
+		}
 
 		// Insert booking inside a transaction. The Google Meet event already exists at
 		// this point — if the insert fails we compensate by deleting it so we don't
@@ -462,11 +510,14 @@ export const createBooking = actionClient
 				return row;
 			});
 		} catch (e) {
-			// Compensate: the Meet event was created before the insert. Roll it back
-			// so we don't leak an orphan calendar event the user can't see.
-			await deleteMeetEvent(eventId).catch((err) =>
-				console.error("[booking] failed to compensate Meet event", err),
-			);
+			// Compensate: a real Meet event was created before the insert. Roll it back
+			// so we don't leak an orphan calendar event the user can't see. (No-op for
+			// the local dev placeholder, which has no real calendar event.)
+			if (realMeetEvent) {
+				await deleteMeetEvent(eventId).catch((err) =>
+					console.error("[booking] failed to compensate Meet event", err),
+				);
+			}
 			throw e;
 		}
 

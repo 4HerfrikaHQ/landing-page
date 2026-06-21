@@ -19,6 +19,7 @@ type Mentor = {
 	linkedin_url: string | null;
 	active: boolean;
 	created_at: Date;
+	booking_count: number;
 };
 
 export function MentorTableRow({
@@ -41,26 +42,33 @@ export function MentorTableRow({
 						image={mentor.image}
 					/>
 				</TableCell>
-				<TableCell className="font-medium text-gray-900">
+				<TableCell className="font-medium text-foreground">
 					{mentor.name}
+					{mentor.nickname ? (
+						<span className="block text-xs font-normal text-muted-foreground">
+							“{mentor.nickname}”
+						</span>
+					) : null}
 				</TableCell>
-				<TableCell className="text-gray-600 capitalize">
+				<TableCell className="capitalize text-muted-foreground">
 					{mentor.position}
 				</TableCell>
-				<TableCell className="text-gray-600">{mentor.email}</TableCell>
-				<TableCell className="text-gray-400 text-sm">
+				<TableCell className="text-muted-foreground">{mentor.email}</TableCell>
+				<TableCell className="text-sm tabular-nums text-muted-foreground">
+					{Number(mentor.booking_count)}
+				</TableCell>
+				<TableCell className="text-sm text-muted-foreground">
 					{format(mentor.created_at, "MMM d, yyyy")}
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
-					{eligibleToFeature && (
-						<FeatureMentorButton
-							id={mentor.id}
-							isFeatured={currentFeaturedId === mentor.id}
-						/>
-					)}
+					<FeatureMentorButton
+						id={mentor.id}
+						isFeatured={currentFeaturedId === mentor.id}
+						eligible={eligibleToFeature}
+					/>
 				</TableCell>
 			</TableRow>
 
