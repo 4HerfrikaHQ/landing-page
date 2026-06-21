@@ -1,9 +1,9 @@
 "use server";
 
-import { createClient } from "@/src/auth";
-import { currentDbUser } from "@/src/auth";
+import { createAdminClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
+import { requireSuperAdmin } from "@/src/lib/safe-action";
 import { type SQL, and, asc, count, eq, ilike, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -54,10 +54,12 @@ export type AdminRow = Awaited<ReturnType<typeof getAdmins>>["rows"][number];
 export async function createAdmin(
 	formData: FormData,
 ): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
 	const name = formData.get("name") as string;
 	const email = formData.get("email") as string;
 
-	const supabase = await createClient();
+	const supabase = await createAdminClient();
 	const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
 		data: { name },
 	});
@@ -76,6 +78,8 @@ export async function updateAdmin(
 	id: string,
 	formData: FormData,
 ): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
 	const name = formData.get("name") as string;
 
 	await db.update(schema.users).set({ name }).where(eq(schema.users.id, id));
@@ -85,7 +89,7 @@ export async function updateAdmin(
 }
 
 export async function deleteAdmin(id: string): Promise<{ error?: string }> {
-	const currentUser = await currentDbUser();
+	const currentUser = await requireSuperAdmin();
 	if (currentUser.id === id) {
 		return { error: "You can't delete your own account." };
 	}
@@ -97,7 +101,7 @@ export async function deleteAdmin(id: string): Promise<{ error?: string }> {
 
 	if (!target) return { error: "Admin not found." };
 
-	const supabase = await createClient();
+	const supabase = await createAdminClient();
 	const { error } = await supabase.auth.admin.deleteUser(target.auth_user_id);
 	if (error) return { error: error.message };
 

@@ -26,6 +26,12 @@ function fmt(date: Date, tz: string): string {
 	return formatInTimeZone(date, tz, "EEEE, MMM d, yyyy 'at' HH:mm zzz");
 }
 
+// Joining with the invited address skips Google's admit screen — recommend it
+// as the smooth path (kept in sync with the confirmation emails' wording).
+function joinTip(email: string): string {
+	return `Tip: for the smoothest entry, join with this email (${email}).`;
+}
+
 function siteUrl(): string {
 	return process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 }
@@ -66,6 +72,7 @@ export async function GET(req: Request) {
 Quick reminder — your call with ${b.mentorName} is tomorrow at ${fmt(b.start_at, b.mentee_timezone)}.
 
 Join: ${b.meet_url}
+${joinTip(b.mentee_email)}
 Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 
 — 4HerFrika`,
@@ -198,6 +205,7 @@ async function sendMenteeReminder(resend: Resend, b: DueBooking) {
 		text: `Hi ${b.mentee_name},
 
 Your call starts at ${fmt(b.start_at, b.mentee_timezone)}. Join here: ${b.meet_url}
+${joinTip(b.mentee_email)}
 
 — 4HerFrika`,
 	});
@@ -212,6 +220,7 @@ async function sendMentorReminder(resend: Resend, b: DueBooking) {
 		text: `Hi ${b.mentorName},
 
 Your call with ${b.mentee_name} starts at ${fmt(b.start_at, b.mentorTimezone ?? b.mentee_timezone)}. Join here: ${b.meet_url}
+${joinTip(b.mentorEmail)}
 
 — 4HerFrika`,
 	});

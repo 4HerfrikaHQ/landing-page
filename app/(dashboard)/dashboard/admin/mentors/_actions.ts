@@ -1,7 +1,7 @@
 "use server";
 
 import { createHash } from "node:crypto";
-import { createClient } from "@/src/auth";
+import { createAdminClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import {
@@ -10,7 +10,11 @@ import {
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
-import { ActionError, adminAction } from "@/src/lib/safe-action";
+import {
+	ActionError,
+	adminAction,
+	requireSuperAdmin,
+} from "@/src/lib/safe-action";
 import {
 	type SQL,
 	and,
@@ -127,6 +131,8 @@ export type AdminMentorRow = Awaited<
 export async function createMentor(
 	formData: FormData,
 ): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
 	const name = formData.get("name") as string;
 	const email = formData.get("email") as string;
 	const position = (formData.get("position") as string) || "";
@@ -134,7 +140,7 @@ export async function createMentor(
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
 
-	const supabase = await createClient();
+	const supabase = await createAdminClient();
 	const { data, error } = await supabase.auth.admin.createUser({
 		email,
 		email_confirm: true,
@@ -186,6 +192,8 @@ export async function updateMentor(
 	id: string,
 	formData: FormData,
 ): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
 	const name = formData.get("name") as string;
 	const position = (formData.get("position") as string) || "";
 	const bio = (formData.get("bio") as string) || undefined;
@@ -205,6 +213,8 @@ export async function uploadMentorImage(
 	mentorId: string,
 	formData: FormData,
 ): Promise<{ url?: string; error?: string }> {
+	await requireSuperAdmin();
+
 	const result = await uploadMentorAvatar(mentorId, formData);
 	if (!result.error) revalidatePath("/dashboard/admin/mentors");
 	return result;
@@ -214,6 +224,8 @@ export async function toggleMentorActive(
 	id: string,
 	active: boolean,
 ): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
 	if (active) {
 		const mentor = await db.query.mentors.findFirst({
 			where: eq(schema.mentors.id, id),

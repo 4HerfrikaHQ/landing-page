@@ -1,7 +1,7 @@
 "use server";
 
 import { createHash } from "node:crypto";
-import { createClient } from "@/src/auth";
+import { createAdminClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { insertDefaultBookingSettings } from "@/src/db/actions/mentors";
 import {
@@ -77,7 +77,7 @@ async function resolveApplicantUser(params: { email: string; name: string }) {
 		.then((rows) => rows[0] ?? null);
 	if (existing) return existing.id;
 
-	const supabase = await createClient();
+	const supabase = await createAdminClient();
 	const { data, error } = await supabase.auth.admin.createUser({
 		email: params.email,
 		email_confirm: true,

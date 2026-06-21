@@ -37,4 +37,17 @@ export const mentorAction = actionClient.use(async ({ next }) => {
 	return next({ ctx: user });
 });
 
+/**
+ * Server-side super_admin guard for plain `"use server"` form actions (the ones
+ * that aren't wired through `adminAction`). Throws if the caller isn't a
+ * super_admin so privileged mutations can't be reached by a direct POST.
+ */
+export async function requireSuperAdmin() {
+	const user = await currentDbUser();
+	if (user.role !== "super_admin") {
+		throw new ActionError("Unauthorized");
+	}
+	return user;
+}
+
 export { ActionError };

@@ -154,6 +154,12 @@ function siteUrl(): string {
 	return process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 }
 
+// Joining with the invited address skips Google's admit screen, so recommend it
+// (framed as the smooth path, not a limitation).
+function joinTip(email: string): string {
+	return `Tip: for the smoothest entry, join with this email (${email}).`;
+}
+
 type ConfirmationCommon = {
 	mentorName: string;
 	mentorEmail: string;
@@ -181,6 +187,7 @@ export async function sendBookingConfirmationMentee(
 Your ${p.sessionDurationMinutes}-minute call with ${p.mentorName} is confirmed for ${formatInTz(p.startAtUtc, p.menteeTimezone)}.
 
 Join here: ${p.meetUrl}
+${joinTip(p.menteeEmail)}
 
 Need to cancel or reschedule? ${p.manageUrl}
 
@@ -214,6 +221,7 @@ You have a new mentee booking.
 
 When: ${formatInTz(p.startAtUtc, p.mentorTimezone)}
 Meet: ${p.meetUrl}
+${joinTip(p.mentorEmail)}
 
 Mentee: ${p.menteeName} <${p.menteeEmail}>
 Purpose: ${p.purpose}
