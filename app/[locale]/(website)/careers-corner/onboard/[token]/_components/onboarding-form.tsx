@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -57,19 +57,6 @@ export function OnboardingForm({
 		<form onSubmit={handleSubmitWithAction} className="space-y-5">
 			<input type="hidden" {...form.register("token")} />
 
-			<div className="space-y-1.5">
-				<Label>Bio</Label>
-				<Textarea rows={4} {...form.register("bio")} />
-				{errors.bio && (
-					<p className="text-sm text-red-500">{errors.bio.message}</p>
-				)}
-			</div>
-
-			<div className="space-y-1.5">
-				<Label>Nickname (optional)</Label>
-				<Input {...form.register("nickname")} />
-			</div>
-
 			<input type="hidden" {...form.register("image")} />
 			<div className="space-y-1.5">
 				<Label>Profile photo (optional)</Label>
@@ -81,8 +68,21 @@ export function OnboardingForm({
 					}
 				/>
 				{errors.image && (
-					<p className="text-sm text-red-500">{errors.image.message}</p>
+					<p className="text-sm text-destructive">{errors.image.message}</p>
 				)}
+			</div>
+
+			<div className="space-y-1.5">
+				<Label>Bio</Label>
+				<Textarea rows={4} {...form.register("bio")} />
+				{errors.bio && (
+					<p className="text-sm text-destructive">{errors.bio.message}</p>
+				)}
+			</div>
+
+			<div className="space-y-1.5">
+				<Label>Nickname (optional)</Label>
+				<Input {...form.register("nickname")} />
 			</div>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">

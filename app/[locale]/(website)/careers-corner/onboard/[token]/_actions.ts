@@ -42,7 +42,7 @@ export async function uploadOnboardingImage(
 		return {
 			error: `Invalid link: ${verified.ok ? "wrong_action" : verified.reason}`,
 		};
-  }
+	}
 
 	return uploadMentorAvatar(verified.bookingId, formData);
 }
