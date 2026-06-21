@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Button } from "@/components/ui/button";
 import { FadeIn, TextReveal } from "@/components/motion";
+import { Button } from "@/components/ui/button";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import type { Route } from "next";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import React from "react";
 import { GalleryGrid } from "../blog/_components/gallery-grid";
@@ -15,9 +15,10 @@ export const metadata: Metadata = {
 		"Explore 4Herfrika's impact-focused projects: StopTheViolence outreach, TechUp4Her bootcamps, campus chapters, and more — all designed to empower girls through education and technology.",
 };
 
-export default async function ProjectsPage({ params }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	setRequestLocale(locale as Locale);
+export default async function ProjectsPage({
+	params,
+}: { params: Promise<{ locale: string }> }) {
+	await setLocaleFromParams(params);
 	const t = await getTranslations("projects");
 	const tc = await getTranslations("common");
 
@@ -60,7 +61,11 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 						</div>
 
 						{/* Art */}
-						<FadeIn direction="right" delay={0.2} className="mt-10 lg:mt-0 lg:col-span-5">
+						<FadeIn
+							direction="right"
+							delay={0.2}
+							className="mt-10 lg:mt-0 lg:col-span-5"
+						>
 							<div className="p-2.5 rounded-[30px] bg-[linear-gradient(135deg,#ff3ea5_0%,#a855f7_100%)] [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)] shadow-[0_18px_40px_rgba(233,30,99,0.20)]">
 								<div className="relative aspect-4/5 rounded-[24px] overflow-hidden bg-accent [clip-path:polygon(18%_0,100%_0,100%_78%,85%_100%,0_100%,0_12%)]">
 									<Image

@@ -1,4 +1,4 @@
-import { generateOGImage, size, contentType } from "../../_lib/og";
+import { contentType, generateOGImage, size } from "../../_lib/og";
 import { FEATURED_POSTS, type PostSlug } from "../_schema";
 
 export { size, contentType };
@@ -15,8 +15,5 @@ export default async function Image({
 	const { slug } = await params;
 	const post = FEATURED_POSTS[slug as PostSlug];
 
-	return generateOGImage(
-		post?.title ?? "Blog Post",
-		post?.excerpt,
-	);
+	return generateOGImage(post?.title ?? "Blog Post", post?.excerpt);
 }

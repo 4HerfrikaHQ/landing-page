@@ -1,12 +1,10 @@
-import type { Metadata } from "next";
-import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion";
+import { Button } from "@/components/ui/button";
+import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { PrismicImage } from "@prismicio/react";
+import type { Metadata } from "next";
 import type { Route } from "next";
-import { hasLocale } from "next-intl";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 import AfricaLogo from "../africa-logo";
 import { getHomepage } from "./_actions";
 import { ExploreCommunity } from "./_components/explore-community";
@@ -19,10 +17,10 @@ export const metadata: Metadata = {
 		"4Herfrika empowers women across 25+ African university campuses with tech bootcamps, mentorship, and leadership programs. Join 3,000+ members building Africa's future.",
 };
 
-export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
-	const { locale } = await params;
-	if (!hasLocale(routing.locales, locale)) return null;
-	setRequestLocale(locale as Locale);
+export default async function HomePage({
+	params,
+}: { params: Promise<{ locale: string }> }) {
+	await setLocaleFromParams(params);
 	const t = await getTranslations("home");
 	const tc = await getTranslations("common");
 	const page = await getHomepage();
@@ -50,45 +48,45 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
 			<section className="px-4 sm:px-6 md:px-7 container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 sm:gap-8 w-full lg:pt-20 py-12 lg:pb-28">
 				<FadeIn direction="right">
-				<div>
-					<h3 className="text-foreground text-center lg:text-left text-3xl lg:text-4xl font-bold capitalize tracking-wide mb-3 sm:mb-4 lg:mb-6">
-						{t("becomeAmbassador")}{" "}
-					</h3>
-					<p className=" text-center lg:text-left text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6 lg:mb-9">
-						{ambassador_description}
-					</p>
-					<div className="lg:hidden relative w-full aspect-[1.16]">
+					<div>
+						<h3 className="text-foreground text-center lg:text-left text-3xl lg:text-4xl font-bold capitalize tracking-wide mb-3 sm:mb-4 lg:mb-6">
+							{t("becomeAmbassador")}{" "}
+						</h3>
+						<p className=" text-center lg:text-left text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6 lg:mb-9">
+							{ambassador_description}
+						</p>
+						<div className="lg:hidden relative w-full aspect-[1.16]">
+							<PrismicImage
+								field={ambassador_image}
+								className="object-cover rounded-xl w-full h-full"
+							/>
+						</div>
+						<div className="flex items-center gap-3 sm:gap-4 mt-8 lg:mt-0 lg:gap-6 flex-wrap justify-center lg:justify-start">
+							<Button
+								href={"/projects" as Route}
+								variant="outline"
+								className="px-8 py-3 md:py-4 text-base md:text-xl"
+							>
+								{tc("viewProjects")}
+							</Button>
+
+							<Button
+								className="px-8 py-3 md:py-4 text-base md:text-xl"
+								href={(ambassador_link.text || "/") as Route}
+								isExternal
+							>
+								{tc("joinUs")}
+							</Button>
+						</div>
+					</div>
+				</FadeIn>
+				<FadeIn direction="left">
+					<div className="hidden lg:block relative w-full aspect-[1.16]">
 						<PrismicImage
 							field={ambassador_image}
 							className="object-cover rounded-xl w-full h-full"
 						/>
 					</div>
-					<div className="flex items-center gap-3 sm:gap-4 mt-8 lg:mt-0 lg:gap-6 flex-wrap justify-center lg:justify-start">
-						<Button
-							href={"/projects" as Route}
-							variant="outline"
-							className="px-8 py-3 md:py-4 text-base md:text-xl"
-						>
-							{tc("viewProjects")}
-						</Button>
-
-						<Button
-							className="px-8 py-3 md:py-4 text-base md:text-xl"
-							href={(ambassador_link.text || "/") as Route}
-							isExternal
-						>
-							{tc("joinUs")}
-						</Button>
-					</div>
-				</div>
-				</FadeIn>
-				<FadeIn direction="left">
-				<div className="hidden lg:block relative w-full aspect-[1.16]">
-					<PrismicImage
-						field={ambassador_image}
-						className="object-cover rounded-xl w-full h-full"
-					/>
-				</div>
 				</FadeIn>
 			</section>
 			{/* Words of the street */}
@@ -98,15 +96,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 					<AfricaLogo className="hidden lg:block w-67.5 absolute left-4 bottom-0" />
 
 					<FadeIn>
-					<h1 className="text-center text-foreground text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
-						{t.rich("wordsOnStreet", {
-							pink: (chunks) => <span className="text-primary-500">{chunks}</span>,
-						})}
-					</h1>
+						<h1 className="text-center text-foreground text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
+							{t.rich("wordsOnStreet", {
+								pink: (chunks) => (
+									<span className="text-primary-500">{chunks}</span>
+								),
+							})}
+						</h1>
 
-					<p className="text-center text-foreground text-lg mb-8 lg:text-xl">
-						{t("wordsOnStreetSub")}
-					</p>
+						<p className="text-center text-foreground text-lg mb-8 lg:text-xl">
+							{t("wordsOnStreetSub")}
+						</p>
 					</FadeIn>
 
 					<div className="container mx-auto px-2">

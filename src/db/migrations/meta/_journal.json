@@ -36,6 +36,48 @@
       "when": 1775219929800,
       "tag": "0004_mentor_avatars_bucket",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1779027382985,
+      "tag": "0005_magenta_pixie",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781451005402,
+      "tag": "0006_spicy_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781451717337,
+      "tag": "0007_seed_featured_mentor_state",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1781461830840,
+      "tag": "0008_backfill_mentor_booking_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1781462630922,
+      "tag": "0009_odd_excalibur",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1781692695948,
+      "tag": "0010_ordinary_white_queen",
+      "breakpoints": true
     }
   ]
 }

@@ -1,19 +1,24 @@
-import type { Route } from "next";
-import Link from "next/link";
-import { Instagram, Linkedin, Twitter } from "lucide-react";
-import { getTranslations } from "next-intl/server";
-import Logo from "../4herfrika-logo";
-import { StaggerContainer, StaggerItem } from "@/components/motion";
 import { SubscribeForm } from "@/app/[locale]/(website)/_components/subscribe";
+import { StaggerContainer, StaggerItem } from "@/components/motion";
+import { Instagram, Linkedin, Twitter } from "lucide-react";
+import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
+import Link from "next/link";
+import Logo from "../4herfrika-logo";
 
 export const Footer = async () => {
 	const t = await getTranslations("footer");
 	return (
 		<footer className="bg-secondary-500">
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
-				<StaggerContainer className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5" staggerDelay={0.12}>
+				<StaggerContainer
+					className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5"
+					staggerDelay={0.12}
+				>
 					<StaggerItem className="text-center sm:text-left">
-						<p className="font-bold text-primary-500 text-xl">{t("quickLinks")}</p>
+						<p className="font-bold text-primary-500 text-xl">
+							{t("quickLinks")}
+						</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<Link
@@ -81,7 +86,9 @@ export const Footer = async () => {
 					</StaggerItem>
 
 					<StaggerItem className="text-center sm:text-left">
-						<p className="font-bold text-primary-500 text-xl">{t("contactUs")}</p>
+						<p className="font-bold text-primary-500 text-xl">
+							{t("contactUs")}
+						</p>
 						<ul className="mt-8 space-y-4 text-base">
 							<li>
 								<a
@@ -111,7 +118,7 @@ export const Footer = async () => {
 					</StaggerItem>
 
 					<StaggerItem className="text-center sm:text-left md:col-span-4 lg:col-span-2">
-						<SubscribeForm/>
+						<SubscribeForm />
 					</StaggerItem>
 				</StaggerContainer>
 
@@ -128,10 +135,14 @@ export const Footer = async () => {
 					</p>
 
 					<p className="text-sm text-white text-center">
-						&copy; {new Date().getFullYear()} 4HerFrika. {t("allRightsReserved")}
+						&copy; {new Date().getFullYear()} 4HerFrika.{" "}
+						{t("allRightsReserved")}
 					</p>
 
-					<StaggerContainer className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start" staggerDelay={0.08}>
+					<StaggerContainer
+						className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start"
+						staggerDelay={0.08}
+					>
 						<StaggerItem>
 							<a
 								href="https://www.linkedin.com/company/4herfrika"

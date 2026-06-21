@@ -304,6 +304,17 @@ interface BlogPostDocumentData {
   title: prismic.KeyTextField;
 
   /**
+   * description field in *Blog Post*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.description
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  description: prismic.KeyTextField;
+
+  /**
    * Author field in *Blog Post*
    *
    * - **Field Type**: Text
@@ -324,6 +335,18 @@ interface BlogPostDocumentData {
    * - **Documentation**: https://prismic.io/docs/fields/image
    */
   cover_image: prismic.ImageField<never>;
+
+  /**
+   * Was Submitted On Website field in *Blog Post*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: blog_post.submitted_story
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  submitted_story: prismic.BooleanField;
 
   /**
    * Slice Zone field in *Blog Post*

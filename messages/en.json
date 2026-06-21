@@ -116,7 +116,6 @@
     "details": "Details",
     "becomeMentor": "Wanna Become A Mentor?",
     "becomeMentorDescription": "Share your purpose for becoming a mentor and take the first step with us",
-    "availability": "Availability: Everyday, 11am - 7pm",
     "whyMentor": "Tell us why you want to become a mentor...",
     "occupation": "Occupation/Tech Stack",
     "contactField": "Contact",
@@ -128,8 +127,10 @@
     "invalidEmail": "Please, enter valid email address",
     "receiveUpdates": "I would like to receive updates and tips on mentoring from 4HerFrika.",
     "availableTimes": "Available times:",
+    "timezoneNote": "All times in {timezone}",
     "notMentioned": "Not Mentioned",
-    "mentorComingSoon": "More information about this mentor will be available soon."
+    "mentorComingSoon": "More information about this mentor will be available soon.",
+    "availableThisWeek": "Available this week"
   },
   "donate": {
     "title": "Support Our Mission",

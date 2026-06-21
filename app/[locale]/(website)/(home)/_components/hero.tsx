@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { FadeIn, ParallaxImage } from "@/components/motion";
+import { Button } from "@/components/ui/button";
 import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
 import { getTranslations } from "next-intl/server";
@@ -39,9 +39,7 @@ export const Hero = async ({
 						<p className="text-foreground text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
 							{t.rich("heroTitle", {
 								highlight: (chunks) => (
-									<span className="text-primary-500">
-										{chunks}
-									</span>
+									<span className="text-primary-500">{chunks}</span>
 								),
 							})}
 						</p>
@@ -76,7 +74,10 @@ export const Hero = async ({
 						</div>
 					</FadeIn>
 				</div>
-				<ParallaxImage speed={0.3} className="hidden lg:block shrink-0 relative aspect-square self-end w-full">
+				<ParallaxImage
+					speed={0.3}
+					className="hidden lg:block shrink-0 relative aspect-square self-end w-full"
+				>
 					<PrismicImage
 						field={heroImage}
 						className="aspect-[1.16] object-cover w-full"

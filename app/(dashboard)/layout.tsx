@@ -1,10 +1,14 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { currentUser } from "@/src/auth";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export default async function DashboardLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	return <TooltipProvider>{children}</TooltipProvider>;
+	return (
+		<NuqsAdapter>
+			<TooltipProvider>{children}</TooltipProvider>
+		</NuqsAdapter>
+	);
 }

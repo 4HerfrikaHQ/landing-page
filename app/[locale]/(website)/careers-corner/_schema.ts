@@ -300,45 +300,33 @@ export const COUNSELLING_MENTORS = [
 
 export type Mentor = (typeof COUNSELLING_MENTORS)[number];
 
-export const PROFILE_IMAGES = [
+export const HERO_SLOTS = [
 	{
-		src: "/assets/careers/Adesewa.png",
-		alt: "Adesewa",
 		size: "size-20",
 		position: "top-1/2 -translate-y-1/2 -right-24 md:-right-32",
 		duration: 4,
 	},
 	{
-		src: "/assets/careers/Dolapo.png",
-		alt: "Dolapo",
 		size: "size-16",
 		position: "-top-24 md:-top-32 right-4 md:right-20",
 		duration: 4.5,
 	},
 	{
-		src: "/assets/careers/Ruphina.png",
-		alt: "Ruphina",
 		size: "size-16",
 		position: "-top-24 md:-top-32 left-4 md:left-20",
 		duration: 5,
 	},
 	{
-		src: "/assets/careers/sharon.png",
-		alt: "Sharon",
 		size: "size-16",
 		position: "-top-4 -left-16 md:-left-24",
 		duration: 3.5,
 	},
 	{
-		src: "/assets/careers/sosanya.png",
-		alt: "Sosanya",
 		size: "size-12",
 		position: "-bottom-16 md:-bottom-20 -left-12 md:-left-20",
 		duration: 4.8,
 	},
 	{
-		src: "/assets/careers/Hassanat.png",
-		alt: "Hassanat",
 		size: "size-12",
 		position: "-bottom-16 md:-bottom-20 -right-12 md:-right-20",
 		duration: 3.8,

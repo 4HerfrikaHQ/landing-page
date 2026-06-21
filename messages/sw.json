@@ -116,7 +116,6 @@
     "details": "Maelezo",
     "becomeMentor": "Unataka kuwa mshauri?",
     "becomeMentorDescription": "Shiriki sababu yako ya kutaka kuwa mshauri na uchukue hatua ya kwanza pamoja nasi",
-    "availability": "Upatikanaji: Kila siku, 11am - 7pm",
     "whyMentor": "Tuambie kwa nini unataka kuwa mshauri...",
     "occupation": "Kazi/Stack ya teknolojia",
     "contactField": "Mawasiliano",
@@ -128,8 +127,10 @@
     "invalidEmail": "Tafadhali, weka anwani sahihi ya barua pepe",
     "receiveUpdates": "Ningependa kupokea masasisho na vidokezo kuhusu ushauri kutoka 4HerFrika.",
     "availableTimes": "Nyakati zinazopatikana:",
+    "timezoneNote": "Nyakati zote katika {timezone}",
     "notMentioned": "Haijatajwa",
-    "mentorComingSoon": "Taarifa zaidi kuhusu mshauri huyu zitapatikana hivi karibuni."
+    "mentorComingSoon": "Taarifa zaidi kuhusu mshauri huyu zitapatikana hivi karibuni.",
+    "availableThisWeek": "Inapatikana wiki hii"
   },
   "donate": {
     "title": "Unga mkono dhamira yetu",

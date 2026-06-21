@@ -3,6 +3,7 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { eq } from "drizzle-orm";
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { AuthError, User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
@@ -12,7 +13,7 @@ export async function createClient() {
 
 	return createServerClient(
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		process.env.SUPABASE_SERVICE_ROLE_KEY!,
+		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 		{
 			cookies: {
 				getAll: () => cookieStore.getAll(),
@@ -27,6 +28,19 @@ export async function createClient() {
 				},
 			},
 		},
+	);
+}
+
+/**
+ * Service-role client for privileged Supabase Admin API calls
+ * (`auth.admin.*` — create/invite/delete users). Bypasses RLS, so it must
+ * only ever run server-side. The cookie-bound `createClient()` above uses the
+ * anon key and CANNOT call the Admin API.
+ */
+export async function createAdminClient() {
+	return createSupabaseClient(
+		process.env.NEXT_PUBLIC_SUPABASE_URL!,
+		process.env.SUPABASE_SERVICE_ROLE_KEY!,
 	);
 }
 
@@ -67,8 +81,8 @@ export async function currentUser(): Promise<User> {
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	if (!user) unauthorized();
-	return user;
+	if (user) return user;
+	unauthorized();
 }
 
 /** Gets the public.users row that matches the Supabase auth user. */
