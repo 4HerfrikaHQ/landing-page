@@ -128,7 +128,8 @@
     "receiveUpdates": "Je souhaite recevoir des mises à jour et des conseils sur le mentorat de 4HerFrika.",
     "availableTimes": "Horaires disponibles :",
     "notMentioned": "Non mentionné",
-    "mentorComingSoon": "Plus d'informations sur ce mentor seront bientôt disponibles."
+    "mentorComingSoon": "Plus d'informations sur ce mentor seront bientôt disponibles.",
+    "availableThisWeek": "Disponible cette semaine"
   },
   "donate": {
     "title": "Soutenez notre mission",

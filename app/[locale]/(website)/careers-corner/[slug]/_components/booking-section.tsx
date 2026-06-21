@@ -27,6 +27,10 @@ export function BookingSection({
 			? Intl.DateTimeFormat().resolvedOptions().timeZone
 			: "UTC";
 
+	const whenLabel = selected
+		? formatInTimeZone(new Date(selected), tz, "EEEE, MMM d 'at' HH:mm zzz")
+		: undefined;
+
 	return (
 		<>
 			<SlotPicker
@@ -43,25 +47,18 @@ export function BookingSection({
 				onOpenChange={(o) => {
 					setOpen(o);
 					if (!o) setSelected(null);
-        }}
+				}}
 			>
-				<SheetContent className="overflow-y-auto sm:max-w-2xl!">
-					<SheetHeader>
+				<SheetContent className="flex flex-col overflow-y-auto px-4 sm:max-w-2xl! sm:px-6">
+					<SheetHeader className="px-0">
 						<SheetTitle>Book with {mentorName}</SheetTitle>
-						{selected && (
-							<p className="text-sm text-gray-500">
-								{formatInTimeZone(
-									new Date(selected),
-									tz,
-									"EEEE, MMM d 'at' HH:mm zzz",
-								)}
-							</p>
-						)}
 					</SheetHeader>
 					{selected && (
-						<div className="px-4 pb-8">
+						<div className="flex flex-1 flex-col">
 							<BookingForm
 								mentorSlug={mentorSlug}
+								mentorName={mentorName}
+								whenLabel={whenLabel}
 								startAtUtc={selected}
 								menteeTimezone={tz}
 								onSuccess={() => {
