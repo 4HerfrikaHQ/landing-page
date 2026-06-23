@@ -7,9 +7,9 @@ import Link from "next/link";
 import BankDetails from "./_components/bank-details";
 
 export const metadata: Metadata = {
-	title: "Donate — Fund Scholarships, Tech Training & Mentorship",
+	title: "Donate — Invest in Leadership Across Africa",
 	description:
-		"Your donation funds scholarships, digital skills bootcamps, and mentorship for women across Africa. Help us reach our goal of impacting 2 million women by 2030.",
+		"You're not supporting a program. You're supporting a movement. Help 4Herfrika raise the next generation of doctors, lawyers, engineers, entrepreneurs, and changemakers across Africa.",
 };
 
 export default async function DonationPage({

@@ -113,7 +113,7 @@ const CareersCorner = async ({
 					<h2 className="mb-3 text-center text-4xl font-semibold text-white">
 						{tCareers("bookCounseling")}
 					</h2>
-					<p className="mb-8 text-center text-white/70">
+					<p className="mb-8 text-center text-white max-w-[70vw] mx-auto">
 						{tCareers("counselingDescription")}
 					</p>
 					<div className="rounded-3xl bg-white/95 p-5 shadow-[0_10px_40px_rgba(0,0,0,0.12)] sm:p-8">
@@ -147,9 +147,9 @@ const CareersCorner = async ({
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-	title: "Career Corner — Free Mentorship & Career Guidance",
+	title: "Career Corner — Find the Mentor Who Gets Your Path",
 	description:
-		"Book a free 10-minute call with experienced mentors in tech and business. Get career guidance, ask questions, and take the next step in your professional journey.",
+		"Connect with mentors who've walked your road in medicine, engineering, law, agriculture, business, and beyond. Not generic advice — your mentor, your path, your community.",
 };
 
 export default CareersCorner;
