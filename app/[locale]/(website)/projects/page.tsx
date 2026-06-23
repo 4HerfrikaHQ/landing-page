@@ -92,9 +92,11 @@ export default async function ProjectsPage({
 						<h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
 							{t("intro")}
 						</h2>
-						<p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
-							{t("introFullDescription")}
-						</p>
+						<div className="mt-4 max-w-3xl mx-auto space-y-4 text-lg md:text-xl text-muted-foreground leading-relaxed">
+							{t("introFullDescription").split("\n").map((paragraph) => (
+								<p key={paragraph}>{paragraph}</p>
+							))}
+						</div>
 					</div>
 				</FadeIn>
 			</section>

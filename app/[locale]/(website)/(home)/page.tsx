@@ -12,9 +12,9 @@ import { Hero } from "./_components/hero";
 import { TestimonialCarousel } from "./_components/testimonial-carousel";
 
 export const metadata: Metadata = {
-	title: "Home — Raising World-Class Women in Tech & Business",
+	title: "Home — Your Northstar for Leadership Across Africa",
 	description:
-		"4Herfrika empowers women across 25+ African university campuses with tech bootcamps, mentorship, and leadership programs. Join 3,000+ members building Africa's future.",
+		"4Herfrika connects ambitious women across 25+ African university campuses with mentorship, networks, and resources to lead in technology, medicine, law, business, agriculture, and beyond. Join 3,000+ members.",
 };
 
 export default async function HomePage({
