@@ -2,12 +2,12 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get("x-prismic-secret");
-  if (authHeader !== process.env.PRISMIC_WEBHOOK_SECRET) {
+  const body = await request.json();
+  if (body.secret !== process.env.PRISMIC_WEBHOOK_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  revalidateTag("prismic", "max");
+  revalidateTag("prismic");
 
-	return NextResponse.json({ revalidated: true, now: Date.now() });
+  return NextResponse.json({ revalidated: true, now: Date.now() });
 }
