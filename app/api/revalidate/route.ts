@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  revalidateTag("prismic");
+  revalidateTag("prismic", "max");
 
   return NextResponse.json({ revalidated: true, now: Date.now() });
 }
