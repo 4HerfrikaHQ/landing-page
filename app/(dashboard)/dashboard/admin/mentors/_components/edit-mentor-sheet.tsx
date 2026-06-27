@@ -20,7 +20,7 @@ type Tab = "details" | "availability";
 type Mentor = {
 	id: string;
 	name: string;
-	position: string;
+	position: string | null;
 	bio: string | null;
 	nickname: string | null;
 	linkedin_url: string | null;
