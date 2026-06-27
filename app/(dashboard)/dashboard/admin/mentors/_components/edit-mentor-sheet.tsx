@@ -125,7 +125,7 @@ export function EditMentorSheet({
 							<Field
 								label="Position"
 								name="position"
-								defaultValue={mentor.position}
+								defaultValue={mentor.position ?? ""}
 							/>
 							<Field
 								label="Nickname"
