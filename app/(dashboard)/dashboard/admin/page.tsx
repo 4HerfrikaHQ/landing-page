@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
 			.select({
 				id: mentorApplications.id,
 				name: mentorApplications.name,
-				position: mentorApplications.position,
+				industry: mentorApplications.industry,
 				status: mentorApplications.status,
 				created_at: mentorApplications.created_at,
 			})
@@ -316,8 +316,8 @@ export default async function AdminDashboardPage() {
 												<p className="truncate text-sm font-medium text-foreground">
 													{a.name}
 												</p>
-												<p className="truncate text-xs text-muted-foreground">
-													{a.position}
+												<p className="truncate text-xs capitalize text-muted-foreground">
+													{a.industry ?? "—"}
 													{" · "}
 													{formatInTimeZone(a.created_at, "UTC", "MMM d, yyyy")}
 												</p>

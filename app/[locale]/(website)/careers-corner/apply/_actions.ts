@@ -60,14 +60,12 @@ export const submitMentorApplication = actionClient
 			.values({
 				name: parsedInput.name,
 				email: parsedInput.email,
-				phone: parsedInput.phone || null,
-				linkedin_url: parsedInput.linkedin_url || null,
-				country: parsedInput.country || null,
-				position: parsedInput.position,
-				bio: parsedInput.bio || null,
-				gender: parsedInput.gender ?? null,
-				expertise_areas: parsedInput.expertise_areas,
-				motivation: parsedInput.motivation,
+				phone: parsedInput.phone,
+				linkedin_url: parsedInput.linkedin_url,
+				country: parsedInput.country,
+				bio: parsedInput.bio,
+				industry: parsedInput.industry,
+				cv_path: parsedInput.cv_path,
 			})
 			.returning({ id: mentorApplications.id });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { StatusBadge } from "@/components/dashboard/status-badge";
+import { Button } from "@/components/ui/button";
 import {
 	Sheet,
 	SheetContent,
@@ -8,8 +9,10 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { format } from "date-fns";
-import type { ReactNode } from "react";
+import { FileDown } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import type { ApplicationRow } from "../_actions";
+import { getCvSignedUrl } from "../_actions";
 import { RowActions } from "./row-actions";
 
 export function ApplicationDetailSheet({
@@ -22,6 +25,18 @@ export function ApplicationDetailSheet({
 	onOpenChange: (open: boolean) => void;
 }) {
 	const a = application;
+	const [downloadingCv, setDownloadingCv] = useState(false);
+
+	async function handleCvDownload() {
+		if (!a.cv_path) return;
+		setDownloadingCv(true);
+		try {
+			const url = await getCvSignedUrl(a.cv_path);
+			if (url) window.open(url, "_blank");
+		} finally {
+			setDownloadingCv(false);
+		}
+	}
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -39,7 +54,6 @@ export function ApplicationDetailSheet({
 					</div>
 
 					<dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-						<Field label="Position">{a.position}</Field>
 						<Field label="Email">
 							<a
 								href={`mailto:${a.email}`}
@@ -50,9 +64,9 @@ export function ApplicationDetailSheet({
 						</Field>
 						{a.phone && <Field label="Phone / WhatsApp">{a.phone}</Field>}
 						{a.country && <Field label="Country">{a.country}</Field>}
-						{a.gender && (
-							<Field label="Gender">
-								<span className="capitalize">{a.gender.replace(/_/g, " ")}</span>
+						{a.industry && (
+							<Field label="Industry">
+								<span className="capitalize">{a.industry}</span>
 							</Field>
 						)}
 						{a.linkedin_url && (
@@ -67,35 +81,29 @@ export function ApplicationDetailSheet({
 								</a>
 							</Field>
 						)}
-						{a.expertise_areas && a.expertise_areas.length > 0 && (
-							<Field label="Expertise" full>
-								<div className="flex flex-wrap gap-1.5">
-									{a.expertise_areas.map((area) => (
-										<span
-											key={area}
-											className="rounded-full bg-surface-pink px-2.5 py-0.5 text-xs font-medium text-primary-500"
-										>
-											{area}
-										</span>
-									))}
-								</div>
+						{a.cv_path && (
+							<Field label="CV" full>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={handleCvDownload}
+									disabled={downloadingCv}
+									className="mt-1 gap-1.5"
+								>
+									<FileDown className="size-3.5" />
+									{downloadingCv ? "Getting link…" : "Download CV"}
+								</Button>
 							</Field>
 						)}
 					</dl>
 
 					{a.bio && (
-						<Section title="Bio">
+						<Section title="About">
 							<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/80">
 								{a.bio}
 							</p>
 						</Section>
 					)}
-
-					<Section title="Motivation">
-						<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/80">
-							{a.motivation}
-						</p>
-					</Section>
 
 					{a.status === "rejected" && a.reject_reason && (
 						<Section title="Reason for rejection">

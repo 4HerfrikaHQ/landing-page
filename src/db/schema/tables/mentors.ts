@@ -9,7 +9,7 @@ export const mentors = pgTable("mentors", {
 		.references(() => users.id, { onDelete: "cascade" }),
 	name: text("name").notNull(),
 	bio: text("bio"),
-	position: text("position").notNull(),
+	position: text("position"),
 	image: text("image"),
 	linkedin_url: text("linkedin_url"),
 	nickname: text("nickname"),

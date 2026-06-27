@@ -2,6 +2,7 @@
 
 import { createHash } from "node:crypto";
 import { createAdminClient } from "@/src/auth";
+import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { db } from "@/src/db";
 import { insertDefaultBookingSettings } from "@/src/db/actions/mentors";
 import {
@@ -194,7 +195,6 @@ export const approveMentorApplication = adminAction
 				.values({
 					user_id: applicantUserId,
 					name: app.name,
-					position: app.position,
 					bio: app.bio,
 					linkedin_url: app.linkedin_url,
 					slug,
@@ -264,3 +264,14 @@ export const rejectMentorApplication = adminAction
 		revalidatePath("/dashboard/admin/applications");
 		return { ok: true };
 	});
+
+export async function getCvSignedUrl(path: string): Promise<string | null> {
+	const admin = createSupabaseAdmin(
+		process.env.NEXT_PUBLIC_SUPABASE_URL!,
+		process.env.SUPABASE_SERVICE_ROLE_KEY!,
+	);
+	const { data } = await admin.storage
+		.from("mentor-cvs")
+		.createSignedUrl(path, 60);
+	return data?.signedUrl ?? null;
+}

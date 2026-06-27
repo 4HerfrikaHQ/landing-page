@@ -135,7 +135,7 @@ export function ApplicationsTable({
 									Email
 								</TableHead>
 								<TableHead className="font-medium text-muted-foreground">
-									Position
+									Industry
 								</TableHead>
 								<TableHead className="font-medium text-muted-foreground">
 									Submitted

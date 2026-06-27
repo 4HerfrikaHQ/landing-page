@@ -6,9 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
+import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2Icon } from "lucide-react";
+import {
+	CheckCircle2Icon,
+	FileIcon,
+	Loader2Icon,
+	UploadCloudIcon,
+	XIcon,
+} from "lucide-react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { uploadMentorCv } from "../apply/_upload-cv";
 import { submitMentorApplication } from "../apply/_actions";
 import { SubmitApplicationSchema } from "../apply/_schema";
 
@@ -24,23 +33,48 @@ export function BecomeAMentorForm() {
 					phone: "",
 					linkedin_url: "",
 					country: "",
-					position: "",
 					bio: "",
-					expertise_areas: [],
-					motivation: "",
+					industry: "",
+					cv_path: "",
 				},
 			},
 			actionProps: {
-				// No onSuccess needed: when the action succeeds we swap the form for the
-				// confirmation panel below (driven by `action.hasSucceeded`), so the form
-				// unmounts and there is nothing to reset.
 				onError: ({ error }) =>
 					toast.error(error.serverError ?? "Something went wrong. Try again."),
 			},
 		},
 	);
 
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [isUploading, setIsUploading] = useState(false);
+
 	const errors = form.formState.errors;
+	const isSubmitting = isUploading || action.isPending;
+
+	async function handleSubmit(e: React.FormEvent) {
+		e.preventDefault();
+
+		if (!selectedFile) {
+			form.setError("cv_path", { message: "Please upload your CV." });
+			// Still let handleSubmitWithAction run so other field errors surface too
+			await handleSubmitWithAction();
+			return;
+		}
+
+		setIsUploading(true);
+		const fd = new FormData();
+		fd.append("file", selectedFile);
+		const result = await uploadMentorCv(fd);
+		setIsUploading(false);
+
+		if (result.error) {
+			form.setError("cv_path", { message: result.error });
+			return;
+		}
+
+		form.setValue("cv_path", result.path!, { shouldValidate: false });
+		await handleSubmitWithAction();
+	}
 
 	if (action.hasSucceeded) {
 		return (
@@ -59,104 +93,141 @@ export function BecomeAMentorForm() {
 	}
 
 	return (
-		<form onSubmit={handleSubmitWithAction} className="space-y-10">
-			<Section
-				title="Contact"
-				description="So we know who you are and how to reach you."
-			>
-				<FormField label="Full name" error={errors.name?.message}>
-					<Input {...form.register("name")} />
-				</FormField>
+		<form onSubmit={handleSubmit} className="space-y-5">
+			<FormField label="Full name" error={errors.name?.message}>
+				<Input {...form.register("name")} />
+			</FormField>
 
-				<FormField label="Email" error={errors.email?.message}>
-					<Input type="email" {...form.register("email")} />
-				</FormField>
+			<FormField label="Email address" error={errors.email?.message}>
+				<Input type="email" {...form.register("email")} />
+			</FormField>
 
-				<FormField
-					label="Phone / WhatsApp"
-					hint="Optional"
-					helper="Only used if we need to follow up directly."
-				>
-					<Input {...form.register("phone")} />
-				</FormField>
+			<FormField label="Phone / WhatsApp" error={errors.phone?.message}>
+				<Input {...form.register("phone")} />
+			</FormField>
 
-				<FormField label="Country" hint="Optional">
-					<Input {...form.register("country")} />
-				</FormField>
-			</Section>
+			<FormField label="Country" error={errors.country?.message}>
+				<Input {...form.register("country")} />
+			</FormField>
 
-			<Section
-				title="About you"
-				description="A snapshot of your work so mentees know who they'll meet."
-			>
-				<FormField
-					label="Position / role"
-					error={errors.position?.message}
-					helper="Your current title and where you work."
-				>
-					<Input
-						placeholder="e.g. Senior PM at Stripe"
-						{...form.register("position")}
-					/>
-				</FormField>
+			<FormField label="LinkedIn Profile URL" error={errors.linkedin_url?.message}>
+				<Input type="url" {...form.register("linkedin_url")} />
+			</FormField>
 
-				<FormField label="LinkedIn URL" hint="Optional">
-					<Input type="url" {...form.register("linkedin_url")} />
-				</FormField>
+			<FormField label="About you" error={errors.bio?.message}>
+				<Textarea
+					rows={6}
+					className="min-h-[120px] resize-none"
+					placeholder="Tell us a bit about your background, what you do, and why you want to mentor young African women."
+					{...form.register("bio")}
+				/>
+			</FormField>
 
-				<FormField
-					label="Short bio"
-					hint="Optional"
-					helper="A few sentences on your background and what you love to talk about."
-				>
-					<Textarea rows={3} {...form.register("bio")} />
-				</FormField>
-			</Section>
+			<FormField label="Primary Industry" error={errors.industry?.message}>
+				<Input placeholder="e.g. Tech, Healthcare, Finance…" {...form.register("industry")} />
+			</FormField>
 
-			<Section
-				title="Motivation"
-				description="Help us understand why mentoring matters to you."
-			>
-				<FormField
-					label="Why do you want to mentor?"
-					error={errors.motivation?.message}
-					helper="Share what draws you to supporting young African women in tech and business."
-				>
-					<Textarea rows={5} {...form.register("motivation")} />
-				</FormField>
-			</Section>
+			<FormField label="CV" error={errors.cv_path?.message}>
+				<CvUpload
+					selectedFile={selectedFile}
+					onFileSelect={(file) => {
+						setSelectedFile(file);
+						if (file) form.clearErrors("cv_path");
+					}}
+					isUploading={isUploading}
+					error={errors.cv_path?.message}
+				/>
+			</FormField>
 
 			<Button
 				type="submit"
-				disabled={action.isPending}
+				disabled={isSubmitting}
 				className="w-full"
 				size="lg"
 			>
-				{action.isPending ? "Submitting…" : "Submit application"}
+				{isUploading
+					? "Uploading CV…"
+					: action.isPending
+						? "Submitting…"
+						: "Submit application"}
 			</Button>
 		</form>
 	);
 }
 
-function Section({
-	title,
-	description,
-	children,
+function CvUpload({
+	selectedFile,
+	onFileSelect,
+	isUploading,
+	error,
 }: {
-	title: string;
-	description: string;
-	children: React.ReactNode;
+	selectedFile: File | null;
+	onFileSelect: (file: File | null) => void;
+	isUploading: boolean;
+	error?: string;
 }) {
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const file = e.target.files?.[0] ?? null;
+		onFileSelect(file);
+	}
+
+	function handleRemove() {
+		onFileSelect(null);
+		if (inputRef.current) inputRef.current.value = "";
+	}
+
 	return (
-		<section className="space-y-5">
-			<div className="space-y-1">
-				<h2 className="font-heading text-base font-semibold text-foreground">
-					{title}
-				</h2>
-				<p className="text-sm text-muted-foreground">{description}</p>
-			</div>
-			<div className="space-y-5">{children}</div>
-		</section>
+		<div className="space-y-1.5">
+			<input
+				ref={inputRef}
+				type="file"
+				accept=".pdf,.doc,.docx"
+				className="sr-only"
+				onChange={handleFileChange}
+				disabled={isUploading}
+			/>
+
+			{selectedFile ? (
+				<div className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 px-4 py-3">
+					{isUploading ? (
+						<Loader2Icon className="size-4 shrink-0 animate-spin text-primary-500" />
+					) : (
+						<FileIcon className="size-4 shrink-0 text-muted-foreground" />
+					)}
+					<span className="min-w-0 flex-1 truncate text-sm text-foreground">
+						{selectedFile.name}
+					</span>
+					{!isUploading && (
+						<button
+							type="button"
+							onClick={handleRemove}
+							className="shrink-0 text-muted-foreground transition-colors hover:text-destructive"
+							aria-label="Remove file"
+						>
+							<XIcon className="size-4" />
+						</button>
+					)}
+				</div>
+			) : (
+				<button
+					type="button"
+					onClick={() => inputRef.current?.click()}
+					disabled={isUploading}
+					className={cn(
+						"flex w-full flex-col items-center gap-2 rounded-lg border border-dashed border-border px-6 py-8 text-center transition-colors hover:border-primary-500 hover:bg-surface-pink/30 disabled:pointer-events-none disabled:opacity-60",
+						error && "border-destructive",
+					)}
+				>
+					<UploadCloudIcon className="size-6 text-muted-foreground" />
+					<span className="text-sm font-medium text-foreground">Upload CV</span>
+					<span className="text-xs text-muted-foreground">
+						PDF, DOC, DOCX · max 10 MB
+					</span>
+				</button>
+			)}
+		</div>
 	);
 }
 

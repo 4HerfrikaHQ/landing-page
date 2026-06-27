@@ -24,7 +24,7 @@ export function ApplicationTableRow({
 					{application.email}
 				</TableCell>
 				<TableCell className="capitalize text-muted-foreground">
-					{application.position}
+					{application.industry ?? "—"}
 				</TableCell>
 				<TableCell className="whitespace-nowrap text-sm text-muted-foreground">
 					{format(application.created_at, "MMM d, yyyy")}
