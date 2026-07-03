@@ -20,6 +20,16 @@ export function ToggleActiveButton({
 	const [isPending, startTransition] = useTransition();
 
 	function handleChange(checked: boolean) {
+		// ponytail: native confirm on deactivate only; swap for AlertDialog if design pushes back
+		if (
+			!checked &&
+			!window.confirm(
+				"Deactivate this mentor? They'll be removed from the public site until reactivated.",
+			)
+		) {
+			return;
+		}
+
 		startTransition(async () => {
 			const { error } = await toggleMentorActive(id, checked);
 
