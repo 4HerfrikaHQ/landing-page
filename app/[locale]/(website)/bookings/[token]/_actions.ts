@@ -10,7 +10,7 @@ import {
 } from "@/src/lib/booking-mutations";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { loadRescheduleContext } from "./_helpers";
 import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
 
@@ -30,8 +30,9 @@ export async function loadBookingFromToken(token: string) {
 		.limit(1);
 	if (!booking) return { ok: false as const, reason: "not_found" };
 	const [mentor] = await db
-		.select()
+		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(eq(mentors.id, booking.mentor_id))
 		.limit(1);
 	return { ok: true as const, booking, mentor };
@@ -63,7 +64,7 @@ export const cancelBooking = actionClient
 
 		await cancelBookingCore({
 			booking,
-			mentorName: mentorRow.mentor.name,
+			mentorName: mentorRow.user?.name ?? "",
 			mentorSlug: mentorRow.mentor.slug,
 			mentorEmail: mentorRow.user?.email ?? undefined,
 			reason: parsedInput.reason,
@@ -80,7 +81,7 @@ export const rescheduleBooking = actionClient
 		await rescheduleBookingCore({
 			booking,
 			mentorId: mentor.id,
-			mentorName: mentor.name,
+			mentorName: mentorUser.name,
 			mentorSlug: mentor.slug,
 			mentorEmail: mentorUser.email!,
 			sessionDurationMinutes: settings.session_duration_minutes,

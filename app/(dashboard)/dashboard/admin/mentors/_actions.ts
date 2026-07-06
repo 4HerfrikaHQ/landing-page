@@ -54,7 +54,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 	if (query) {
 		conditions.push(
 			or(
-				ilike(schema.mentors.name, `%${query}%`),
+				ilike(schema.users.name, `%${query}%`),
 				ilike(schema.mentors.position, `%${query}%`),
 			),
 		);
@@ -89,13 +89,13 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			? desc(schema.mentors.created_at)
 			: sort === "bookings"
 				? desc(bookingCount)
-				: asc(schema.mentors.name);
+				: asc(schema.users.name);
 
 	const [rows, [{ total }]] = await Promise.all([
 		db
 			.select({
 				id: schema.mentors.id,
-				name: schema.mentors.name,
+				name: schema.users.name,
 				position: schema.mentors.position,
 				image: schema.mentors.image,
 				email: schema.users.email,
@@ -110,7 +110,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
 			.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
 			.where(where)
-			.groupBy(schema.mentors.id, schema.users.email)
+			.groupBy(schema.mentors.id, schema.users.id)
 			.orderBy(orderBy)
 			.limit(pageSize)
 			.offset((page - 1) * pageSize),
@@ -173,7 +173,6 @@ export async function createMentor(
 		.insert(schema.mentors)
 		.values({
 			user_id: dbUser.id,
-			name,
 			position,
 			bio,
 			nickname,
@@ -200,10 +199,22 @@ export async function updateMentor(
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
 
-	await db
-		.update(schema.mentors)
-		.set({ name, position, bio, nickname, linkedin_url })
-		.where(eq(schema.mentors.id, id));
+	// Name lives on the user row; the rest on the mentor row. One transaction
+	// so both land together.
+	await db.transaction(async (tx) => {
+		const [row] = await tx
+			.update(schema.mentors)
+			.set({ position, bio, nickname, linkedin_url })
+			.where(eq(schema.mentors.id, id))
+			.returning({ userId: schema.mentors.user_id });
+
+		if (row) {
+			await tx
+				.update(schema.users)
+				.set({ name })
+				.where(eq(schema.users.id, row.userId));
+		}
+	});
 
 	revalidatePath("/dashboard/admin/mentors");
 	return {};
@@ -236,10 +247,12 @@ export async function toggleMentorActive(
 			return { error: "Mentor not found" };
 		}
 
-		if (!mentor.name || !mentor.position || !mentor.bio) {
+		// name is guaranteed (users.name is NOT NULL); only mentor-owned fields
+		// can be missing.
+		if (!mentor.position || !mentor.bio) {
 			return {
 				error:
-					"Cannot activate mentor. Please ensure name, position, and bio are all set.",
+					"Cannot activate mentor. Please ensure position and bio are both set.",
 			};
 		}
 	}

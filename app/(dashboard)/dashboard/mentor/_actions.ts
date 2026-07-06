@@ -16,10 +16,12 @@ export async function getMentorProfile(): Promise<
 > {
 	const user = await currentDbUser();
 
-	return db.query.mentors.findFirst({
+	const mentor = await db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),
-		with: { availability: true },
+		with: { availability: true, user: { columns: { name: true } } },
 	});
+	if (!mentor) return undefined;
+	return { ...mentor, name: mentor.user.name };
 }
 
 export async function updateMyProfile(
@@ -28,16 +30,26 @@ export async function updateMyProfile(
 	const mentor = await getMentorProfile();
 	if (!mentor) return { error: "Mentor profile not found." };
 
-	await db
-		.update(schema.mentors)
-		.set({
-			name: formData.get("name") as string,
-			position: (formData.get("position") as string) || "",
-			bio: (formData.get("bio") as string) || undefined,
-			nickname: (formData.get("nickname") as string) || undefined,
-			linkedin_url: (formData.get("linkedin_url") as string) || undefined,
-		})
-		.where(eq(schema.mentors.id, mentor.id));
+	const name = formData.get("name") as string;
+
+	// Name lives on the user row; the rest on the mentor row. One transaction
+	// so both land together.
+	await db.transaction(async (tx) => {
+		await tx
+			.update(schema.mentors)
+			.set({
+				position: (formData.get("position") as string) || "",
+				bio: (formData.get("bio") as string) || undefined,
+				nickname: (formData.get("nickname") as string) || undefined,
+				linkedin_url: (formData.get("linkedin_url") as string) || undefined,
+			})
+			.where(eq(schema.mentors.id, mentor.id));
+
+		await tx
+			.update(schema.users)
+			.set({ name })
+			.where(eq(schema.users.id, mentor.user_id));
+	});
 
 	revalidatePath("/dashboard/mentor");
 	return {};

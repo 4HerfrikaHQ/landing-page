@@ -1,26 +1,43 @@
-import { pgTable, timestamp, uuid, text, boolean } from "drizzle-orm/pg-core";
+import {
+	boolean,
+	index,
+	pgTable,
+	text,
+	timestamp,
+	uuid,
+} from "drizzle-orm/pg-core";
+import type { DbAvailability } from "./availability";
 import { users } from "./users";
-import { DbAvailability } from "./availability";
 
-export const mentors = pgTable("mentors", {
-	id: uuid("id").primaryKey().defaultRandom(),
-	user_id: uuid("user_id")
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
-	name: text("name").notNull(),
-	bio: text("bio"),
-	position: text("position"),
-	image: text("image"),
-	linkedin_url: text("linkedin_url"),
-	nickname: text("nickname"),
-	slug: text("slug").notNull().unique(),
-	active: boolean("active").notNull().default(false),
-	created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+// A mentor's display name is the linked user's name (users.name) — not
+// duplicated here. Read it by joining users; write it to users only.
+export const mentors = pgTable(
+	"mentors",
+	{
+		id: uuid("id").primaryKey().defaultRandom(),
+		user_id: uuid("user_id")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		bio: text("bio"),
+		position: text("position"),
+		image: text("image"),
+		linkedin_url: text("linkedin_url"),
+		nickname: text("nickname"),
+		slug: text("slug").notNull().unique(),
+		active: boolean("active").notNull().default(false),
+		created_at: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(t) => [index("mentors_user_id_idx").on(t.user_id)],
+);
 
 export type DbMentor = typeof mentors.$inferSelect;
 export type DbMentorInsert = typeof mentors.$inferInsert;
 
+// Composite used across the app: a mentor row plus the joined display name and
+// availability. `name` comes from users.name (see getMentorProfile / getMentors).
 export type DbMentorWithAvailability = DbMentor & {
-  availability: DbAvailability[]
+	name: string;
+	availability: DbAvailability[];
 };

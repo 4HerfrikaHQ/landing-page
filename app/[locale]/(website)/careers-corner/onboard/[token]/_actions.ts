@@ -4,9 +4,10 @@ import { db } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
 import { availability } from "@/src/db/schema/tables/availability";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { CompleteOnboardingSchema } from "./_schema";
 
@@ -19,8 +20,9 @@ export async function loadMentorFromToken(token: string) {
 		};
 	}
 	const [mentor] = await db
-		.select()
+		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(eq(mentors.id, verified.bookingId))
 		.limit(1);
 	if (!mentor) return { ok: false as const, reason: "not_found" };

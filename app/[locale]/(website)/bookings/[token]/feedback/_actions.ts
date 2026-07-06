@@ -4,9 +4,10 @@ import { db } from "@/src/db";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { SubmitFeedbackSchema } from "./_schema";
 
 export async function loadFeedbackContext(token: string) {
@@ -33,8 +34,9 @@ export async function loadFeedbackContext(token: string) {
 	if (!booking) return { ok: false as const, reason: "not_found" };
 
 	const [mentor] = await db
-		.select()
+		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(eq(mentors.id, booking.mentor_id))
 		.limit(1);
 

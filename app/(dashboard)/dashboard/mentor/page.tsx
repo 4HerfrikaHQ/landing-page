@@ -17,15 +17,11 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { StaggerContainer } from "@/components/motion/stagger-container";
 import { StaggerItem } from "@/components/motion/stagger-item";
 import { Button } from "@/components/ui/button";
-import { currentDbUser } from "@/src/auth";
 
 import { getMentorOverview } from "./_actions";
 
 export default async function MentorDashboardPage() {
-	const [user, overview] = await Promise.all([
-		currentDbUser(),
-		getMentorOverview(),
-	]);
+	const overview = await getMentorOverview();
 
 	if (!overview) {
 		return (
@@ -37,7 +33,7 @@ export default async function MentorDashboardPage() {
 		);
 	}
 
-	const firstName = user.name.split(" ")[0];
+	const firstName = overview.mentor.name.split(" ")[0];
 
 	return (
 		<div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">

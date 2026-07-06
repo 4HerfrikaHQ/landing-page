@@ -10,7 +10,7 @@ import { signBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { and, eq, gte, lt, ne, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
@@ -240,8 +240,9 @@ ${intakeLines}
 
 export async function getMentorBySlug(slug: string) {
 	const [mentor] = await db
-		.select()
+		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
 		.limit(1);
 	return mentor ?? null;

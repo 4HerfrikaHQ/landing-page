@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { FadeIn } from "@/components/motion/fade-in";
 import { getMentorProfile } from "../_actions";
 import { ProfileForm } from "./_components/profile-form";
+import { PublicLinkCard } from "./_components/public-link-card";
 
 export default async function MentorProfilePage() {
 	const mentor = await getMentorProfile();
@@ -25,6 +26,13 @@ export default async function MentorProfilePage() {
 				/>
 			</FadeIn>
 			<FadeIn delay={0.05}>
+				<div className="mb-6">
+					<PublicLinkCard
+						url={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/careers-corner/${mentor.slug}`}
+					/>
+				</div>
+			</FadeIn>
+			<FadeIn delay={0.1}>
 				<ProfileForm mentor={mentor} />
 			</FadeIn>
 		</div>
