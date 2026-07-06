@@ -5,6 +5,7 @@ import { PrismicImage } from "@prismicio/react";
 import type { ImageField, KeyTextField } from "@prismicio/types";
 import type { Metadata } from "next";
 import type { Route } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import FrequentlyAskedQuestion from "../(home)/_components/faq-section";
@@ -55,11 +56,15 @@ const StatementSection = ({
 	</FadeIn>
 );
 
-export const metadata: Metadata = {
-	title: "About Us — Our Mission, Vision & Core Values",
-	description:
-		"4Herfrika trains, mentors, and empowers women to become transformative leaders across Africa. Our vision: impact 2 million women with tech and entrepreneurship by 2030.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.about" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function About({
 	params,

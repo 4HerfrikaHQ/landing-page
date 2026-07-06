@@ -4,6 +4,7 @@ import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { PrismicImage } from "@prismicio/react";
 import type { Metadata } from "next";
 import type { Route } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import AfricaLogo from "../africa-logo";
 import { getHomepage } from "./_actions";
@@ -11,11 +12,15 @@ import { ExploreCommunity } from "./_components/explore-community";
 import { Hero } from "./_components/hero";
 import { TestimonialCarousel } from "./_components/testimonial-carousel";
 
-export const metadata: Metadata = {
-	title: "Home — Your Northstar for Leadership Across Africa",
-	description:
-		"4Herfrika connects ambitious women across 25+ African university campuses with mentorship, networks, and resources to lead in technology, medicine, law, business, agriculture, and beyond. Join 3,000+ members.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.home" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function HomePage({
 	params,

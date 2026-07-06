@@ -12,15 +12,16 @@ import { BookingSection } from "./_components/booking-section";
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ slug: string }>;
+	params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
-	const { slug } = await params;
+	const { locale, slug } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.mentorProfile" });
 	const mentor = await getMentorBySlug(slug);
-	if (!mentor) return { title: "Mentor not found — 4HerFrika" };
+	if (!mentor) return { title: t("notFound") };
 	return {
-		title: `Book a call with ${mentor.name} — 4HerFrika`,
+		title: t("title", { name: mentor.name }),
 		description:
-			mentor.bio?.slice(0, 160) ?? `Book a 30-minute call with ${mentor.name}.`,
+			mentor.bio?.slice(0, 160) ?? t("description", { name: mentor.name }),
 	};
 }
 

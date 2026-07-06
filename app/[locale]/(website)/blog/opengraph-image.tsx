@@ -1,10 +1,15 @@
+import type { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { contentType, generateOGImage, size } from "../_lib/og";
 
 export { size, contentType };
 
-export default async function Image() {
-	return generateOGImage(
-		"The Pink Blog",
-		"Stories and experiences from women across Africa — finding purpose in the chaos called life.",
-	);
+export default async function Image({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}) {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.blog" });
+	return generateOGImage(t("ogTitle"), t("ogSubtitle"));
 }

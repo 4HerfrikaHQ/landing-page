@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import F4herfrikaLogo from "./4herfrika";
@@ -22,11 +23,15 @@ import right from "./right.jpg";
 import Squiggle from "./squiggle";
 import yearReport from "./year-report.jpg";
 
-export const metadata: Metadata = {
-	title: "Our Impact — 3,000+ Girls Mentored Across 25+ Campuses",
-	description:
-		"In year one, 4Herfrika mentored 3,000+ girls, reached 25+ campuses across 5 African countries, and graduated 1,000+ women from our Tech Academy. See our story in motion.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.impact" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function ReportPage({
 	params,

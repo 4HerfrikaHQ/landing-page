@@ -1,8 +1,8 @@
 import { FadeIn } from "@/components/motion";
 import { routing } from "@/i18n/routing";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
-import type { Locale } from "next-intl";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 // Prerender every locale we serve; a locale outside routing falls back to en.

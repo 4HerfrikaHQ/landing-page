@@ -4,16 +4,21 @@ import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import type { Route } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import React from "react";
 import { GalleryGrid } from "../blog/_components/gallery-grid";
 
-export const metadata: Metadata = {
-	title: "Projects — Grassroots Initiatives Uplifting Girls Across Africa",
-	description:
-		"Explore 4Herfrika's impact-focused projects: StopTheViolence outreach, TechUp4Her bootcamps, campus chapters, and more — all designed to empower girls through education and technology.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.projects" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function ProjectsPage({
 	params,
@@ -93,9 +98,11 @@ export default async function ProjectsPage({
 							{t("intro")}
 						</h2>
 						<div className="mt-4 max-w-3xl mx-auto space-y-4 text-lg md:text-xl text-muted-foreground leading-relaxed">
-							{t("introFullDescription").split("\n").map((paragraph) => (
-								<p key={paragraph}>{paragraph}</p>
-							))}
+							{t("introFullDescription")
+								.split("\n")
+								.map((paragraph) => (
+									<p key={paragraph}>{paragraph}</p>
+								))}
 						</div>
 					</div>
 				</FadeIn>
