@@ -14,6 +14,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 	);
 }
 
+// Token-gated private page — keep it out of search results.
+export const metadata = { robots: { index: false, follow: false } };
+
 export default async function FeedbackPage({
 	params,
 }: {

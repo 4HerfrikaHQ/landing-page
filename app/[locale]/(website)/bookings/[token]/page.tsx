@@ -10,6 +10,9 @@ import { getInitialWeekStart } from "../../careers-corner/[slug]/_actions";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";
 
+// Token-gated private page — keep it out of search results.
+export const metadata = { robots: { index: false, follow: false } };
+
 export default async function ManageBookingPage({
 	params,
 }: {
