@@ -10,6 +10,7 @@ import { schema } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, count, desc, eq, gte } from "drizzle-orm";
 import {
@@ -62,10 +63,11 @@ export default async function AdminDashboardPage() {
 				start_at: bookings.start_at,
 				status: bookings.status,
 				mentee_timezone: bookings.mentee_timezone,
-				mentor_name: mentors.name,
+				mentor_name: users.name,
 			})
 			.from(bookings)
 			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+			.innerJoin(users, eq(mentors.user_id, users.id))
 			.orderBy(desc(bookings.created_at))
 			.limit(6),
 		db
@@ -85,10 +87,11 @@ export default async function AdminDashboardPage() {
 				mentee_name: bookings.mentee_name,
 				start_at: bookings.start_at,
 				mentee_timezone: bookings.mentee_timezone,
-				mentor_name: mentors.name,
+				mentor_name: users.name,
 			})
 			.from(bookings)
 			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+			.innerJoin(users, eq(mentors.user_id, users.id))
 			.where(
 				and(eq(bookings.status, "no_show"), gte(bookings.start_at, since7d)),
 			)

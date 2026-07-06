@@ -1,9 +1,10 @@
 "use server";
 
-import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { db } from "@/src/db";
+import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { BookingStatus, bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
 import { adminAction } from "@/src/lib/safe-action";
 import {
 	type SQL,
@@ -81,11 +82,12 @@ export async function getBookingsForAdmin(filters: BookingFilters) {
 				status: bookings.status,
 				mentee_timezone: bookings.mentee_timezone,
 				meet_url: bookings.meet_url,
-				mentor_name: mentors.name,
+				mentor_name: users.name,
 				mentor_slug: mentors.slug,
 			})
 			.from(bookings)
 			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+			.innerJoin(users, eq(mentors.user_id, users.id))
 			.where(where)
 			.orderBy(desc(bookings.start_at))
 			.limit(pageSize)
@@ -106,9 +108,10 @@ export type AdminBookingRow = Awaited<
 
 export async function getMentorOptions() {
 	return db
-		.select({ id: mentors.id, name: mentors.name, slug: mentors.slug })
+		.select({ id: mentors.id, name: users.name, slug: mentors.slug })
 		.from(mentors)
-		.orderBy(asc(mentors.name));
+		.innerJoin(users, eq(mentors.user_id, users.id))
+		.orderBy(asc(users.name));
 }
 
 export type MentorOption = Awaited<ReturnType<typeof getMentorOptions>>[number];

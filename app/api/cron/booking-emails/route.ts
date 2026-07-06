@@ -110,10 +110,11 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 				id: bookings.id,
 				mentee_name: bookings.mentee_name,
 				mentee_email: bookings.mentee_email,
-				mentorName: mentors.name,
+				mentorName: users.name,
 			})
 			.from(bookings)
 			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+			.innerJoin(users, eq(mentors.user_id, users.id))
 			.where(
 				and(
 					eq(bookings.status, "confirmed"),
@@ -157,7 +158,7 @@ ${siteUrl()}/bookings/${token}/feedback
 			.select({
 				id: bookings.id,
 				mentee_name: bookings.mentee_name,
-				mentorName: mentors.name,
+				mentorName: users.name,
 				mentorEmail: users.email,
 			})
 			.from(bookings)
@@ -244,7 +245,7 @@ async function loadDueBookings(
 			start_at: bookings.start_at,
 			end_at: bookings.end_at,
 			meet_url: bookings.meet_url,
-			mentorName: mentors.name,
+			mentorName: users.name,
 			mentorEmail: users.email,
 			mentorTimezone: availability.timezone,
 		})

@@ -16,10 +16,12 @@ export async function getMentorProfile(): Promise<
 > {
 	const user = await currentDbUser();
 
-	return db.query.mentors.findFirst({
+	const mentor = await db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),
-		with: { availability: true },
+		with: { availability: true, user: { columns: { name: true } } },
 	});
+	if (!mentor) return undefined;
+	return { ...mentor, name: mentor.user.name };
 }
 
 export async function updateMyProfile(
@@ -30,13 +32,12 @@ export async function updateMyProfile(
 
 	const name = formData.get("name") as string;
 
-	// Keep users.name in sync with mentors.name so account-level views
-	// (admin, greeting) don't show a stale name after a profile edit.
+	// Name lives on the user row; the rest on the mentor row. One transaction
+	// so both land together.
 	await db.transaction(async (tx) => {
 		await tx
 			.update(schema.mentors)
 			.set({
-				name,
 				position: (formData.get("position") as string) || "",
 				bio: (formData.get("bio") as string) || undefined,
 				nickname: (formData.get("nickname") as string) || undefined,

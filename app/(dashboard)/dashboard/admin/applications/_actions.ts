@@ -2,7 +2,6 @@
 
 import { createHash } from "node:crypto";
 import { createAdminClient } from "@/src/auth";
-import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { db } from "@/src/db";
 import { insertDefaultBookingSettings } from "@/src/db/actions/mentors";
 import {
@@ -13,6 +12,7 @@ import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
+import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { type SQL, and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
@@ -194,7 +194,6 @@ export const approveMentorApplication = adminAction
 				.insert(mentors)
 				.values({
 					user_id: applicantUserId,
-					name: app.name,
 					bio: app.bio,
 					linkedin_url: app.linkedin_url,
 					slug,

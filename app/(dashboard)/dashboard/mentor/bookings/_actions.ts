@@ -1,8 +1,8 @@
 "use server";
 
 import { currentDbUser } from "@/src/auth";
-import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { db } from "@/src/db";
+import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import {
 	BookingStatus,
@@ -155,7 +155,7 @@ async function loadOwnBooking(bookingId: string) {
 		.select({
 			booking: bookings,
 			mentorId: mentors.id,
-			mentorName: mentors.name,
+			mentorName: users.name,
 			mentorSlug: mentors.slug,
 			mentorUserId: mentors.user_id,
 			mentorEmail: users.email,

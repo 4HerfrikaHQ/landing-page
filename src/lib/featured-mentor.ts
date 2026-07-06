@@ -3,7 +3,7 @@ import type {
 	DbFeaturedMentorState,
 	DbMentorWithAvailability,
 } from "@/src/db/schema/tables";
-import { eq, and } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const CYCLE_MS = 3 * 24 * 60 * 60 * 1000;
 export const SINGLETON_ID = "00000000-0000-0000-0000-000000000001";
@@ -27,9 +27,9 @@ function shuffle<T>(input: T[]): T[] {
 async function getEligibleMentors(): Promise<DbMentorWithAvailability[]> {
 	const all = await db.query.mentors.findMany({
 		where: eq(schema.mentors.active, true),
-		with: { availability: true },
+		with: { availability: true, user: { columns: { name: true } } },
 	});
-	return all.filter(isEligible);
+	return all.filter(isEligible).map((m) => ({ ...m, name: m.user.name }));
 }
 
 function findMentor(
@@ -60,9 +60,10 @@ export async function resolveFeaturedMentor(): Promise<DbMentorWithAvailability 
 				eq(schema.mentors.id, state.featured_mentor_id),
 				eq(schema.mentors.active, true),
 			),
-			with: { availability: true },
+			with: { availability: true, user: { columns: { name: true } } },
 		});
-		if (current && isEligible(current)) return current;
+		if (current && isEligible(current))
+			return { ...current, name: current.user.name };
 	}
 
 	return resolveLocked(now);
@@ -177,8 +178,7 @@ async function fallbackWithinWindow(
 	const featuredSet = new Set(
 		state.featured_this_cycle.filter((id) => poolIds.has(id)),
 	);
-	const replacement =
-		pool.find((m) => !featuredSet.has(m.id)) ?? pool[0];
+	const replacement = pool.find((m) => !featuredSet.has(m.id)) ?? pool[0];
 
 	await tx
 		.update(schema.featuredMentorState)
