@@ -28,16 +28,27 @@ export async function updateMyProfile(
 	const mentor = await getMentorProfile();
 	if (!mentor) return { error: "Mentor profile not found." };
 
-	await db
-		.update(schema.mentors)
-		.set({
-			name: formData.get("name") as string,
-			position: (formData.get("position") as string) || "",
-			bio: (formData.get("bio") as string) || undefined,
-			nickname: (formData.get("nickname") as string) || undefined,
-			linkedin_url: (formData.get("linkedin_url") as string) || undefined,
-		})
-		.where(eq(schema.mentors.id, mentor.id));
+	const name = formData.get("name") as string;
+
+	// Keep users.name in sync with mentors.name so account-level views
+	// (admin, greeting) don't show a stale name after a profile edit.
+	await db.transaction(async (tx) => {
+		await tx
+			.update(schema.mentors)
+			.set({
+				name,
+				position: (formData.get("position") as string) || "",
+				bio: (formData.get("bio") as string) || undefined,
+				nickname: (formData.get("nickname") as string) || undefined,
+				linkedin_url: (formData.get("linkedin_url") as string) || undefined,
+			})
+			.where(eq(schema.mentors.id, mentor.id));
+
+		await tx
+			.update(schema.users)
+			.set({ name })
+			.where(eq(schema.users.id, mentor.user_id));
+	});
 
 	revalidatePath("/dashboard/mentor");
 	return {};

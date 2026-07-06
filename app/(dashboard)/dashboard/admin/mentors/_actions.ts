@@ -200,10 +200,22 @@ export async function updateMentor(
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
 
-	await db
-		.update(schema.mentors)
-		.set({ name, position, bio, nickname, linkedin_url })
-		.where(eq(schema.mentors.id, id));
+	// Keep users.name in sync with mentors.name so account-level views
+	// don't show a stale name after an edit.
+	await db.transaction(async (tx) => {
+		const [row] = await tx
+			.update(schema.mentors)
+			.set({ name, position, bio, nickname, linkedin_url })
+			.where(eq(schema.mentors.id, id))
+			.returning({ userId: schema.mentors.user_id });
+
+		if (row) {
+			await tx
+				.update(schema.users)
+				.set({ name })
+				.where(eq(schema.users.id, row.userId));
+		}
+	});
 
 	revalidatePath("/dashboard/admin/mentors");
 	return {};
