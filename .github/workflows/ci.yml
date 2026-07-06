@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      # Real DB for the migrate step; placeholders so `next build` doesn't
+      # trip over required env vars. No secrets — nothing here talks to prod.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: ci-placeholder-service-role-key
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_GA_ID: G-CIPLACEHOLDER
+      BOOKING_TOKEN_SECRET: ci-placeholder-secret
+      CRON_SECRET: ci-placeholder-secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      # The migrations touch Supabase-managed schemas (an auth.users trigger in
+      # 0001, storage.buckets inserts in 0004/0012) that a vanilla Postgres
+      # doesn't have. Stub the minimal shape those migrations reference so the
+      # drizzle chain applies. psql ships on ubuntu-latest runners.
+      # Keep these columns in sync with whatever migrations actually reference —
+      # a migration touching a column not stubbed here will fail this step.
+      - name: Bootstrap Supabase schemas
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE SCHEMA IF NOT EXISTS auth;
+          CREATE TABLE IF NOT EXISTS auth.users (
+            id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+            email text,
+            raw_user_meta_data jsonb
+          );
+          CREATE SCHEMA IF NOT EXISTS storage;
+          CREATE TABLE IF NOT EXISTS storage.buckets (
+            id text PRIMARY KEY,
+            name text,
+            public boolean,
+            file_size_limit bigint,
+            allowed_mime_types text[]
+          );
+          SQL
+
+      # Applies every migration in order against a clean DB — fails the PR if a
+      # migration is broken, out of order, or invalid DDL, before it reaches the
+      # production deploy (vercel.ts runs db:migrate at prod build time).
+      - name: Run migrations
+        run: bun run db:migrate
+
+      # Build first: `next build` generates next-env.d.ts and .next/types
+      # (image-module and typed-route declarations) that the typecheck below
+      # depends on. Running tsc before this fails to resolve image imports.
+      - name: Build
+        run: bun run build
+
+      - name: Typecheck
+        # Explicit local binary so we use the pinned typescript (frozen install
+        # above), not whatever version bunx might otherwise resolve.
+        run: ./node_modules/.bin/tsc --noEmit
