@@ -22,8 +22,14 @@ function OnboardShell({ children }: { children: React.ReactNode }) {
 	);
 }
 
-// Token-gated private page — keep it out of search results.
-export const metadata = { robots: { index: false, follow: false } };
+// Token-gated private page — keep it out of search results, but still give it
+// a proper title/OG for the browser tab and link previews.
+export const metadata = {
+	title: "Mentor Onboarding",
+	description:
+		"Set up your availability and complete your 4Herfrika mentor onboarding.",
+	robots: { index: false, follow: false },
+};
 
 export default async function OnboardingPage({
 	params,

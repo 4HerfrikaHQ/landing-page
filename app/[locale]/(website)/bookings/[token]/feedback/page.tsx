@@ -14,8 +14,13 @@ function Shell({ children }: { children: React.ReactNode }) {
 	);
 }
 
-// Token-gated private page — keep it out of search results.
-export const metadata = { robots: { index: false, follow: false } };
+// Token-gated private page — keep it out of search results, but still give it
+// a proper title/OG for the browser tab and link previews.
+export const metadata = {
+	title: "Session Feedback",
+	description: "Share feedback on your 4Herfrika mentorship session.",
+	robots: { index: false, follow: false },
+};
 
 export default async function FeedbackPage({
 	params,
