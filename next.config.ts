@@ -7,8 +7,6 @@ const withMDX = createMDX();
 
 const nextConfig: NextConfig = {
 	typedRoutes: true,
-	// Let .mdx files be imported as components (content/terms/*.mdx)
-	pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 	productionBrowserSourceMaps: false,
 	experimental: {
 		authInterrupts: true,

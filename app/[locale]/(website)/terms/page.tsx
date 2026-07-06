@@ -14,13 +14,22 @@ const TITLES: Record<string, string> = {
 	sw: "Vigezo na Masharti — 4Herfrika",
 };
 
+const DESCRIPTIONS: Record<string, string> = {
+	en: "The rules for using the 4Herfrika website and mentorship platform.",
+	fr: "Les règles d'utilisation du site et de la plateforme de mentorat 4Herfrika.",
+	sw: "Kanuni za kutumia tovuti na jukwaa la ushauri la 4Herfrika.",
+};
+
 export async function generateMetadata({
 	params,
 }: {
 	params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
 	const { locale } = await params;
-	return { title: TITLES[locale] ?? TITLES.en };
+	return {
+		title: TITLES[locale] ?? TITLES.en,
+		description: DESCRIPTIONS[locale] ?? DESCRIPTIONS.en,
+	};
 }
 
 export default async function TermsPage({

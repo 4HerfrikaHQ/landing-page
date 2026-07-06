@@ -14,13 +14,22 @@ const TITLES: Record<string, string> = {
 	sw: "Sera ya Faragha — 4Herfrika",
 };
 
+const DESCRIPTIONS: Record<string, string> = {
+	en: "How we collect and protect your data on the 4Herfrika mentorship platform.",
+	fr: "Comment nous collectons et protégeons vos données.",
+	sw: "Jinsi tunavyokusanya na kulinda data yako.",
+};
+
 export async function generateMetadata({
 	params,
 }: {
 	params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
 	const { locale } = await params;
-	return { title: TITLES[locale] ?? TITLES.en };
+	return {
+		title: TITLES[locale] ?? TITLES.en,
+		description: DESCRIPTIONS[locale] ?? DESCRIPTIONS.en,
+	};
 }
 
 export default async function PrivacyPage({

@@ -11,7 +11,9 @@ const staticRoutes = [
 	"/donate",
 	"/faq",
 	"/impact",
+	"/privacy",
 	"/projects",
+	"/terms",
 ];
 
 const locales = ["en", "fr", "sw"];
