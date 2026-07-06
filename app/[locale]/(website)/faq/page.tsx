@@ -4,15 +4,20 @@ import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { Search } from "lucide-react";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { getFaqPage } from "./_actions";
 
-export const metadata: Metadata = {
-	title: "FAQ — Common Questions About 4Herfrika Programs",
-	description:
-		"Find answers about 4Herfrika's campus chapters, tech academies, mentorship programs, and how to get involved as a member, mentor, or ambassador.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.faq" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function FAQPage({
 	params,

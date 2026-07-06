@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getBlogPosts, getCategories } from "./_actions";
@@ -17,11 +19,15 @@ const circle = (size: "big" | "small", extra: string) => {
 	return `${base} ${variant} ${extra}`;
 };
 
-export const metadata: Metadata = {
-	title: "The Pink Blog — Stories of Women Leading Change in Africa",
-	description:
-		"Read inspiring stories, experiences, and insights from women across Africa navigating tech, business, and leadership. A safe space to find your mojo.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.blog" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function BlogPage({
 	params,
@@ -73,7 +79,13 @@ export default async function BlogPage({
 				</section>
 			)}
 
-			<Suspense><BlogSection posts={posts} categories={categories} featuredUid={featured?.uid} /></Suspense>
+			<Suspense>
+				<BlogSection
+					posts={posts}
+					categories={categories}
+					featuredUid={featured?.uid}
+				/>
+			</Suspense>
 
 			<section className="my-16 h-[420px] sm:h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
 				<div

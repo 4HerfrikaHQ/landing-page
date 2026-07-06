@@ -1,16 +1,21 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import BankDetails from "./_components/bank-details";
 
-export const metadata: Metadata = {
-	title: "Donate — Invest in Leadership Across Africa",
-	description:
-		"You're not supporting a program. You're supporting a movement. Help 4Herfrika raise the next generation of doctors, lawyers, engineers, entrepreneurs, and changemakers across Africa.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.donate" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function DonationPage({
 	params,

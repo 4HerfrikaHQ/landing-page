@@ -1,15 +1,19 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import FourHerfrikaLogo from "../../4herfrika-logo";
 import { BecomeAMentorForm } from "../_components/become-a-mentor-form";
 
-export const metadata: Metadata = {
-	title: "Become a mentor — 4HerFrika",
-	description:
-		"Share your time and experience with young African women in tech and business.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.mentorApply" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default async function ApplyPage({
 	params,

@@ -4,6 +4,7 @@ import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { resolveFeaturedMentor } from "@/src/lib/featured-mentor";
 import { UserRound } from "lucide-react";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { getHeroMentors, getMentors } from "./_actions";
@@ -146,10 +147,14 @@ const CareersCorner = async ({
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-	title: "Career Corner — Find the Mentor Who Gets Your Path",
-	description:
-		"Connect with mentors who've walked your road in medicine, engineering, law, agriculture, business, and beyond. Not generic advice — your mentor, your path, your community.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.careers" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default CareersCorner;

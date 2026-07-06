@@ -4,11 +4,27 @@ import { Button } from "@/components/ui/button";
 import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, LinkIcon, UserRound, Video } from "lucide-react";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { getInitialWeekStart } from "../../careers-corner/[slug]/_actions";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";
+
+// Token-gated private page — keep it out of search results, but still give it
+// a proper localized title/OG for the browser tab and link previews.
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}) {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.manageBooking" });
+	return {
+		title: t("title"),
+		description: t("description"),
+		robots: { index: false, follow: false },
+	};
+}
 
 export default async function ManageBookingPage({
 	params,

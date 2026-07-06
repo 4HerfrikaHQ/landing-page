@@ -9,6 +9,7 @@ import {
 	Twitter,
 } from "lucide-react";
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import ContactForm from "./_components/contact-form";
@@ -115,10 +116,14 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 	);
 };
 
-export const metadata: Metadata = {
-	title: "Contact Us — Get in Touch with 4Herfrika",
-	description:
-		"Have questions about our programs, partnerships, or campus chapters? Reach out to the 4Herfrika team — we'd love to hear from you.",
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.contact" });
+	return { title: t("title"), description: t("description") };
+}
 
 export default Contact;

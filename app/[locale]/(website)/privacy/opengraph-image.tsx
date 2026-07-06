@@ -10,6 +10,6 @@ export default async function Image({
 	params: Promise<{ locale: Locale }>;
 }) {
 	const { locale } = await params;
-	const t = await getTranslations({ locale, namespace: "seo.faq" });
-	return generateOGImage(t("ogTitle"), t("ogSubtitle"));
+	const t = await getTranslations({ locale, namespace: "seo.privacy" });
+	return generateOGImage(t("title"), t("description"));
 }
