@@ -1,13 +1,17 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+const withMDX = createMDX();
 
 const nextConfig: NextConfig = {
 	typedRoutes: true,
+	// Let .mdx files be imported as components (content/terms/*.mdx)
+	pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 	productionBrowserSourceMaps: false,
 	experimental: {
-    authInterrupts: true,
+		authInterrupts: true,
 		serverActions: {
 			bodySizeLimit: "4.25mb",
 		},
@@ -49,4 +53,4 @@ const nextConfig: NextConfig = {
 	},
 };
 
-export default withNextIntl(nextConfig);
+export default withNextIntl(withMDX(nextConfig));
