@@ -68,10 +68,13 @@ jobs:
       - name: Run migrations
         run: bun run db:migrate
 
+      # Build first: `next build` generates next-env.d.ts and .next/types
+      # (image-module and typed-route declarations) that the typecheck below
+      # depends on. Running tsc before this fails to resolve image imports.
+      - name: Build
+        run: bun run build
+
       - name: Typecheck
         # Explicit local binary so we use the pinned typescript (frozen install
         # above), not whatever version bunx might otherwise resolve.
         run: ./node_modules/.bin/tsc --noEmit
-
-      - name: Build
-        run: bun run build
