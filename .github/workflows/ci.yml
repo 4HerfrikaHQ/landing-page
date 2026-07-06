@@ -41,6 +41,8 @@ jobs:
       # 0001, storage.buckets inserts in 0004/0012) that a vanilla Postgres
       # doesn't have. Stub the minimal shape those migrations reference so the
       # drizzle chain applies. psql ships on ubuntu-latest runners.
+      # Keep these columns in sync with whatever migrations actually reference —
+      # a migration touching a column not stubbed here will fail this step.
       - name: Bootstrap Supabase schemas
         run: |
           psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
@@ -67,7 +69,9 @@ jobs:
         run: bun run db:migrate
 
       - name: Typecheck
-        run: bunx tsc --noEmit
+        # Explicit local binary so we use the pinned typescript (frozen install
+        # above), not whatever version bunx might otherwise resolve.
+        run: ./node_modules/.bin/tsc --noEmit
 
       - name: Build
         run: bun run build
