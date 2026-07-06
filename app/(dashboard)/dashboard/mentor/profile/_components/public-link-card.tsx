@@ -15,7 +15,6 @@ export function PublicLinkCard({ url }: { url: string }) {
 			await navigator.clipboard.writeText(url);
 			setCopied(true);
 			toast.success("Link copied");
-			// ponytail: plain timeout reset; no cleanup needed for a 2s label flip
 			setTimeout(() => setCopied(false), 2000);
 		} catch {
 			toast.error("Couldn't copy — copy it manually.");
