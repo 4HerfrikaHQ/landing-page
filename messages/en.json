@@ -202,5 +202,27 @@
     "couldntFind": "We couldn't find the page you were looking for, but don't worry!",
     "everyDetour": "Every detour is an opportunity to discover something new.",
     "takeMeHome": "Take me home"
+  },
+  "seo": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "How we collect and protect your data on the 4Herfrika mentorship platform."
+    },
+    "terms": {
+      "title": "Terms and Conditions",
+      "description": "The rules for using the 4Herfrika website and mentorship platform."
+    },
+    "manageBooking": {
+      "title": "Manage Your Booking",
+      "description": "View, reschedule, or cancel your 4Herfrika mentorship session."
+    },
+    "sessionFeedback": {
+      "title": "Session Feedback",
+      "description": "Share feedback on your 4Herfrika mentorship session."
+    },
+    "mentorOnboarding": {
+      "title": "Mentor Onboarding",
+      "description": "Set up your availability and complete your 4Herfrika mentor onboarding."
+    }
   }
 }

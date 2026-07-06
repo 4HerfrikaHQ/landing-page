@@ -1,10 +1,18 @@
+import type { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { contentType, generateOGImage, size } from "../../../_lib/og";
 
 export { size, contentType };
 
-export default async function Image() {
-	return generateOGImage(
-		"Mentor Onboarding",
-		"Set up your availability and complete your 4Herfrika mentor onboarding.",
-	);
+export default async function Image({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}) {
+	const { locale } = await params;
+	const t = await getTranslations({
+		locale,
+		namespace: "seo.mentorOnboarding",
+	});
+	return generateOGImage(t("title"), t("description"));
 }

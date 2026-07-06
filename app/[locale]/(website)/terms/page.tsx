@@ -1,41 +1,29 @@
 import { FadeIn } from "@/components/motion";
 import { routing } from "@/i18n/routing";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import type { Locale } from "next-intl";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 // Prerender every locale we serve; a locale outside routing falls back to en.
 export function generateStaticParams() {
 	return routing.locales.map((locale) => ({ locale }));
 }
 
-const TITLES: Record<string, string> = {
-	en: "Terms and Conditions — 4Herfrika",
-	fr: "Conditions générales — 4Herfrika",
-	sw: "Vigezo na Masharti — 4Herfrika",
-};
-
-const DESCRIPTIONS: Record<string, string> = {
-	en: "The rules for using the 4Herfrika website and mentorship platform.",
-	fr: "Les règles d'utilisation du site et de la plateforme de mentorat 4Herfrika.",
-	sw: "Kanuni za kutumia tovuti na jukwaa la ushauri la 4Herfrika.",
-};
-
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ locale: string }>;
+	params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
 	const { locale } = await params;
-	return {
-		title: TITLES[locale] ?? TITLES.en,
-		description: DESCRIPTIONS[locale] ?? DESCRIPTIONS.en,
-	};
+	const t = await getTranslations({ locale, namespace: "seo.terms" });
+	return { title: t("title"), description: t("description") };
 }
 
 export default async function TermsPage({
 	params,
 }: {
-	params: Promise<{ locale: string }>;
+	params: Promise<{ locale: Locale }>;
 }) {
 	await setLocaleFromParams(params);
 	const { locale } = await params;

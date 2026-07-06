@@ -202,5 +202,27 @@
     "techUp4HerStats": "200+ filles formées depuis le lancement.",
     "techUp4HerTitle": "TechUp4Her",
     "title": "Projets"
+  },
+  "seo": {
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "description": "Comment nous collectons et protégeons vos données sur la plateforme de mentorat 4Herfrika."
+    },
+    "terms": {
+      "title": "Conditions générales",
+      "description": "Les règles d'utilisation du site et de la plateforme de mentorat 4Herfrika."
+    },
+    "manageBooking": {
+      "title": "Gérer votre réservation",
+      "description": "Consultez, reprogrammez ou annulez votre session de mentorat 4Herfrika."
+    },
+    "sessionFeedback": {
+      "title": "Commentaires sur la session",
+      "description": "Partagez vos commentaires sur votre session de mentorat 4Herfrika."
+    },
+    "mentorOnboarding": {
+      "title": "Intégration des mentors",
+      "description": "Configurez vos disponibilités et finalisez votre intégration en tant que mentor 4Herfrika."
+    }
   }
 }

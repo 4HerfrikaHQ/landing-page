@@ -202,5 +202,27 @@
     "techUp4HerStats": "Wasichana 200+ wamepata mafunzo tangu ulipoanzishwa.",
     "techUp4HerTitle": "TechUp4Her",
     "title": "Miradi"
+  },
+  "seo": {
+    "privacy": {
+      "title": "Sera ya Faragha",
+      "description": "Jinsi tunavyokusanya na kulinda data yako kwenye jukwaa la ushauri la 4Herfrika."
+    },
+    "terms": {
+      "title": "Vigezo na Masharti",
+      "description": "Kanuni za kutumia tovuti na jukwaa la ushauri la 4Herfrika."
+    },
+    "manageBooking": {
+      "title": "Dhibiti Uhifadhi Wako",
+      "description": "Tazama, panga upya, au ghairi kipindi chako cha ushauri cha 4Herfrika."
+    },
+    "sessionFeedback": {
+      "title": "Maoni ya Kipindi",
+      "description": "Shiriki maoni kuhusu kipindi chako cha ushauri cha 4Herfrika."
+    },
+    "mentorOnboarding": {
+      "title": "Usajili wa Mshauri",
+      "description": "Weka upatikanaji wako na kamilisha usajili wako wa mshauri wa 4Herfrika."
+    }
   }
 }

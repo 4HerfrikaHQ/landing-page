@@ -2,7 +2,7 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, CheckCircle2, LinkIcon } from "lucide-react";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { loadFeedbackContext } from "./_actions";
 import { FeedbackForm } from "./_components/feedback-form";
 
@@ -15,12 +15,20 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 // Token-gated private page — keep it out of search results, but still give it
-// a proper title/OG for the browser tab and link previews.
-export const metadata = {
-	title: "Session Feedback",
-	description: "Share feedback on your 4Herfrika mentorship session.",
-	robots: { index: false, follow: false },
-};
+// a proper localized title/OG for the browser tab and link previews.
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}) {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.sessionFeedback" });
+	return {
+		title: t("title"),
+		description: t("description"),
+		robots: { index: false, follow: false },
+	};
+}
 
 export default async function FeedbackPage({
 	params,

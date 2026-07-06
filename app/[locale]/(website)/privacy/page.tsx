@@ -1,41 +1,29 @@
 import { FadeIn } from "@/components/motion";
 import { routing } from "@/i18n/routing";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import type { Locale } from "next-intl";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 // Prerender every locale we serve; a locale outside routing falls back to en.
 export function generateStaticParams() {
 	return routing.locales.map((locale) => ({ locale }));
 }
 
-const TITLES: Record<string, string> = {
-	en: "Privacy Policy — 4Herfrika",
-	fr: "Politique de confidentialité — 4Herfrika",
-	sw: "Sera ya Faragha — 4Herfrika",
-};
-
-const DESCRIPTIONS: Record<string, string> = {
-	en: "How we collect and protect your data on the 4Herfrika mentorship platform.",
-	fr: "Comment nous collectons et protégeons vos données.",
-	sw: "Jinsi tunavyokusanya na kulinda data yako.",
-};
-
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ locale: string }>;
+	params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
 	const { locale } = await params;
-	return {
-		title: TITLES[locale] ?? TITLES.en,
-		description: DESCRIPTIONS[locale] ?? DESCRIPTIONS.en,
-	};
+	const t = await getTranslations({ locale, namespace: "seo.privacy" });
+	return { title: t("title"), description: t("description") };
 }
 
 export default async function PrivacyPage({
 	params,
 }: {
-	params: Promise<{ locale: string }>;
+	params: Promise<{ locale: Locale }>;
 }) {
 	await setLocaleFromParams(params);
 	const { locale } = await params;
