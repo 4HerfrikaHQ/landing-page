@@ -23,7 +23,7 @@ export function AnimatedCounter({
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const shouldReduce = useReducedMotion();
-  const isInView = useInView(ref, { once: false, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   const motionValue = useMotionValue(0);
   const springValue = useSpring(motionValue, {
@@ -33,16 +33,12 @@ export function AnimatedCounter({
   const display = useTransform(springValue, (v) => Math.round(v));
 
   useEffect(() => {
-    if (isInView) {
-      if (shouldReduce) {
-        motionValue.set(target);
-      } else {
-        motionValue.set(0);
-        requestAnimationFrame(() => motionValue.set(target));
-      }
+    if (!isInView) return;
+    if (shouldReduce) {
+      motionValue.set(target);
     } else {
-      // Reset when out of view so it animates again on re-entry
       motionValue.set(0);
+      requestAnimationFrame(() => motionValue.set(target));
     }
   }, [isInView, motionValue, target, shouldReduce]);
 

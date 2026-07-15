@@ -21,7 +21,7 @@ export function TextReveal({ children, className, delay = 0 }: TextRevealProps) 
       className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, margin: "-50px" }}
+      viewport={{ once: true, margin: "-50px" }}
       variants={{
         visible: { transition: { staggerChildren: 0.06, delayChildren: delay } },
       }}
