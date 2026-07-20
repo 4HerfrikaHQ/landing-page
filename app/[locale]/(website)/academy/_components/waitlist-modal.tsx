@@ -24,6 +24,12 @@ import { toast } from "sonner";
 import { joinAcademyWaitlist } from "../_actions";
 import { AcademyWaitlistSchema } from "../_schema";
 
+const academyOptions = [
+	{ value: "tech", label: "techAcademy" },
+	{ value: "business", label: "businessAcademy" },
+	{ value: "climate", label: "climateAcademy" },
+] as const;
+
 export function WaitlistModal({
 	open,
 	onOpenChange,
@@ -109,9 +115,9 @@ export function WaitlistModal({
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								{["tech", "business", "climate"].map((value) => (
+								{academyOptions.map(({ value, label }) => (
 									<SelectItem key={value} value={value}>
-										{t(`${value}Academy`)}
+										{t(label)}
 									</SelectItem>
 								))}
 							</SelectContent>
