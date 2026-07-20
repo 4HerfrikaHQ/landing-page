@@ -1,1 +1,6 @@
-aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgeyBnZXRUcmFuc2xhdGlvbnMgfSBmcm9tICJuZXh0LWludGwvc2VydmVyIjsKaW1wb3J0IHsgQWNhZGVteVBhZ2UgfSBmcm9tICIuL19jb21wb25lbnRzL2FjYWRlbXktcGFnZSI7CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2VuZXJhdGVNZXRhZGF0YSgpOiBQcm9taXNlPE1ldGFkYXRhPiB7IGNvbnN0IHQgPSBhd2FpdCBnZXRUcmFuc2xhdGlvbnMoImFjYWRlbXkiKTsgcmV0dXJuIHsgdGl0bGU6IHQoIm1ldGFUaXRsZSIpLCBkZXNjcmlwdGlvbjogdCgibWV0YURlc2NyaXB0aW9uIikgfTsgfQpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQYWdlKCkgeyByZXR1cm4gPEFjYWRlbXlQYWdlIC8+OyB9Cg==
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { AcademyPage } from "./_components/academy-page";
+
+export async function generateMetadata(): Promise<Metadata> { const t = await getTranslations("academy"); return { title: t("metaTitle"), description: t("metaDescription") }; }
+export default function Page() { return <AcademyPage />; }
