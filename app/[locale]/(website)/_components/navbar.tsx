@@ -104,6 +104,8 @@ export const Navbar = async () => {
 							<Link
 								key={button.name}
 								href={button.href as Route}
+								target={button.isExternal ? "_blank" : "_self"}
+								rel={button.isExternal ? "noreferrer" : undefined}
 								className={`text-base font-medium py-2 px-6 rounded-full transition-colors ${
 									button.isPrimary
 										? "bg-primary-500 text-white hover:bg-primary-400"
