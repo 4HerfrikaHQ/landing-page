@@ -13,6 +13,7 @@ import { YearOneReport } from "./year-one-report";
 const NAV_LINK_KEYS: Record<string, string> = {
 	"About Us": "aboutUs",
 	Projects: "projects",
+	Academy: "academy",
 	"Career Corner": "careerCorner",
 	Blog: "blog",
 	"Contact Us": "contactUs",
