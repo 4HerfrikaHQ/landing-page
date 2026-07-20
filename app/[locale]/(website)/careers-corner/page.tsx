@@ -8,7 +8,6 @@ import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { getHeroMentors, getMentors } from "./_actions";
-import { BecomeAMentorForm } from "./_components/become-a-mentor-form";
 import { CareersHero } from "./_components/hero";
 import { MentorDirectory } from "./_components/mentor-directory";
 
@@ -128,17 +127,16 @@ const CareersCorner = async ({
 			</section>
 
 			<FadeIn>
-				<section
-					id="become-a-mentor"
-					className="container mx-auto max-w-3xl scroll-m-8 px-4 py-8 sm:px-6 md:py-12 lg:px-8 lg:py-16 xl:py-20"
-				>
-					<h2 className="mb-2 text-center text-4xl font-bold">
+				<section className="container mx-auto max-w-3xl px-4 py-8 text-center sm:px-6 md:py-12 lg:px-8 lg:py-16 xl:py-20">
+					<h2 className="mb-2 text-4xl font-bold">
 						{tCareers("becomeMentor")}
 					</h2>
-					<p className="mb-8 text-center text-muted-foreground">
+					<p className="mb-8 text-muted-foreground">
 						{tCareers("becomeMentorDescription")}
 					</p>
-					<BecomeAMentorForm />
+					<Button href="/careers-corner/apply" variant="solid" size="lg">
+						Apply to become a mentor
+					</Button>
 				</section>
 			</FadeIn>
 		</section>
