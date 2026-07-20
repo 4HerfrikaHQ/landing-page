@@ -1,1 +1,10 @@
-Q1JFQVRFIFRBQkxFICJhY2FkZW15X3dhaXRsaXN0X2VudHJpZXMiICgKCSJpZCIgdXVpZCBQUklNQVJZIEtFWSBERUZBVUxUIGdlbl9yYW5kb21fdXVpZCgpIE5PVCBOVUxMLAoJIm5hbWUiIHRleHQgTk9UIE5VTEwsCgkiZW1haWwiIHRleHQgTk9UIE5VTEwsCgkicGhvbmUiIHRleHQgTk9UIE5VTEwsCgkiYWNhZGVteSIgdGV4dCBOT1QgTlVMTCwKCSJsb2NhdGlvbiIgdGV4dCBOT1QgTlVMTCwKCSJjcmVhdGVkX2F0IiB0aW1lc3RhbXAgd2l0aCB0aW1lIHpvbmUgREVGQVVMVCBub3coKSBOT1QgTlVMTCwKCUNPTlNUUkFJTlQgImFjYWRlbXlfd2FpdGxpc3RfZW50cmllc19lbWFpbF9hY2FkZW15X3VuaXF1ZSIgVU5JUVVFKCJlbWFpbCIsICJhY2FkZW15IikKKTsK
+CREATE TABLE "academy_waitlist_entries" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL,
+	"phone" text NOT NULL,
+	"academy" text NOT NULL,
+	"location" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "academy_waitlist_entries_email_academy_unique" UNIQUE("email", "academy")
+);
