@@ -1,1 +1,9 @@
-aW1wb3J0IHsgeiB9IGZyb20gInpvZCI7CgpleHBvcnQgY29uc3QgQWNhZGVteVdhaXRsaXN0U2NoZW1hID0gei5vYmplY3QoewoJbmFtZTogei5zdHJpbmcoKS50cmltKCkubWluKDIpLm1heCgxMjApLAoJZW1haWw6IHouc3RyaW5nKCkudHJpbSgpLmVtYWlsKCksCglwaG9uZTogei5zdHJpbmcoKS50cmltKCkubWluKDUpLm1heCg0MCksCglhY2FkZW15OiB6LmVudW0oWyJ0ZWNoIiwgImJ1c2luZXNzIiwgImNsaW1hdGUiXSksCglsb2NhdGlvbjogei5zdHJpbmcoKS50cmltKCkubWluKDIpLm1heCgxMjApLAp9KTsK
+import { z } from "zod";
+
+export const AcademyWaitlistSchema = z.object({
+	name: z.string().trim().min(2).max(120),
+	email: z.string().trim().email(),
+	phone: z.string().trim().min(5).max(40),
+	academy: z.enum(["tech", "business", "climate"]),
+	location: z.string().trim().min(2).max(120),
+});
