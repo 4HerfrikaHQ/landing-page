@@ -1,1 +1,24 @@
-InVzZSBzZXJ2ZXIiOwoKaW1wb3J0IHsgZGIgfSBmcm9tICJAL3NyYy9kYiI7CmltcG9ydCB7IGFjYWRlbXlXYWl0bGlzdEVudHJpZXMgfSBmcm9tICJAL3NyYy9kYi9zY2hlbWEvdGFibGVzIjsKaW1wb3J0IHsgQWN0aW9uRXJyb3IsIGFjdGlvbkNsaWVudCB9IGZyb20gIkAvc3JjL2xpYi9zYWZlLWFjdGlvbiI7CmltcG9ydCB7IFJlc2VuZCB9IGZyb20gInJlc2VuZCI7CmltcG9ydCB7IEFjYWRlbXlXYWl0bGlzdFNjaGVtYSB9IGZyb20gIi4vX3NjaGVtYSI7Cgpjb25zdCBGUk9NID0gIjRoZXJmcmlrYSA8aGVsbG9ANGhlcmZyaWthLm9yZz4iOwpjb25zdCBhY2FkZW15TmFtZXMgPSB7IHRlY2g6ICJUZWNoIiwgYnVzaW5lc3M6ICJCdXNpbmVzcyIsIGNsaW1hdGU6ICJDbGltYXRlIiB9OwoKZXhwb3J0IGNvbnN0IGpvaW5BY2FkZW15V2FpdGxpc3QgPSBhY3Rpb25DbGllbnQKCS5zY2hlbWEoQWNhZGVteVdhaXRsaXN0U2NoZW1hKQoJLmFjdGlvbihhc3luYyAoeyBwYXJzZWRJbnB1dCB9KSA9PiB7CgkJY29uc3QgW2VudHJ5XSA9IGF3YWl0IGRiLmluc2VydChhY2FkZW15V2FpdGxpc3RFbnRyaWVzKS52YWx1ZXMocGFyc2VkSW5wdXQpLm9uQ29uZmxpY3REb05vdGhpbmcoKS5yZXR1cm5pbmcoeyBpZDogYWNhZGVteVdhaXRsaXN0RW50cmllcy5pZCB9KTsKCQlpZiAoIWVudHJ5KSB0aHJvdyBuZXcgQWN0aW9uRXJyb3IoIllvdeKAmXJlIGFscmVhZHkgb24gdGhpcyBhY2FkZW154oCZcyB3YWl0bGlzdC4iKTsKCQljb25zdCByZXNlbmQgPSBuZXcgUmVzZW5kKHByb2Nlc3MuZW52LlJFU0VORF9BUElfS0VZKTsKCQljb25zdCBzaXRlVXJsID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfU0lURV9VUkwgPz8gImh0dHBzOi8vNGhlcmZyaWthLm9yZyI7CgkJdHJ5IHsKCQkJYXdhaXQgcmVzZW5kLmVtYWlscy5zZW5kKHsgZnJvbTogRlJPTSwgdG86IHByb2Nlc3MuZW52LkFETUlOX0VNQUlMID8/ICJ0ZWFtQDRoZXJmcmlrYS5vcmciLCBzdWJqZWN0OiBgTmV3ICR7YWNhZGVteU5hbWVzW3BhcnNlZElucHV0LmFjYWRlbXldfSBBY2FkZW15IHdhaXRsaXN0IHNpZ251cGAsIHRleHQ6IGAke3BhcnNlZElucHV0Lm5hbWV9ICgke3BhcnNlZElucHV0LmVtYWlsfSkgam9pbmVkIHRoZSAke2FjYWRlbXlOYW1lc1twYXJzZWRJbnB1dC5hY2FkZW15XX0gQWNhZGVteSB3YWl0bGlzdC5cblxuVmlldyBlbnRyaWVzOiAke3NpdGVVcmx9L2Rhc2hib2FyZC9hZG1pbi9hY2FkZW15LXdhaXRsaXN0YCB9KTsKCQkJYXdhaXQgcmVzZW5kLmVtYWlscy5zZW5kKHsgZnJvbTogRlJPTSwgdG86IHBhcnNlZElucHV0LmVtYWlsLCBzdWJqZWN0OiAiWW914oCZcmUgb24gdGhlIDRIZXJmcmlrYSBBY2FkZW15IHdhaXRsaXN0IiwgdGV4dDogYEhpICR7cGFyc2VkSW5wdXQubmFtZX0sXG5cblRoYW5rcyBmb3Igam9pbmluZyB0aGUgJHthY2FkZW15TmFtZXNbcGFyc2VkSW5wdXQuYWNhZGVteV19IEFjYWRlbXkgd2FpdGxpc3QuIFdl4oCZbGwgbGV0IHlvdSBrbm93IHdoZW4gZW5yb2xsbWVudCBvcGVucy5cblxu4oCUIDRIZXJmcmlrYWAgfSk7CgkJfSBjYXRjaCAoZXJyb3IpIHsgY29uc29sZS5lcnJvcigiW2FjYWRlbXktd2FpdGxpc3RdIGVtYWlsIGZhaWxlZCIsIGVycm9yKTsgfQoJCXJldHVybiB7IGlkOiBlbnRyeS5pZCB9OwoJfSk7Cg==
+"use server";
+
+import { db } from "@/src/db";
+import { academyWaitlistEntries } from "@/src/db/schema/tables";
+import { ActionError, actionClient } from "@/src/lib/safe-action";
+import { Resend } from "resend";
+import { AcademyWaitlistSchema } from "./_schema";
+
+const FROM = "4herfrika <hello@4herfrika.org>";
+const academyNames = { tech: "Tech", business: "Business", climate: "Climate" };
+
+export const joinAcademyWaitlist = actionClient
+	.schema(AcademyWaitlistSchema)
+	.action(async ({ parsedInput }) => {
+		const [entry] = await db.insert(academyWaitlistEntries).values(parsedInput).onConflictDoNothing().returning({ id: academyWaitlistEntries.id });
+		if (!entry) throw new ActionError("You’re already on this academy’s waitlist.");
+		const resend = new Resend(process.env.RESEND_API_KEY);
+		const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
+		try {
+			await resend.emails.send({ from: FROM, to: process.env.ADMIN_EMAIL ?? "team@4herfrika.org", subject: `New ${academyNames[parsedInput.academy]} Academy waitlist signup`, text: `${parsedInput.name} (${parsedInput.email}) joined the ${academyNames[parsedInput.academy]} Academy waitlist.\n\nView entries: ${siteUrl}/dashboard/admin/academy-waitlist` });
+			await resend.emails.send({ from: FROM, to: parsedInput.email, subject: "You’re on the 4Herfrika Academy waitlist", text: `Hi ${parsedInput.name},\n\nThanks for joining the ${academyNames[parsedInput.academy]} Academy waitlist. We’ll let you know when enrollment opens.\n\n— 4Herfrika` });
+		} catch (error) { console.error("[academy-waitlist] email failed", error); }
+		return { id: entry.id };
+	});
