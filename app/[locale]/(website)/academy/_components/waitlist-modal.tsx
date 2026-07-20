@@ -1,10 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -13,9 +24,112 @@ import { toast } from "sonner";
 import { joinAcademyWaitlist } from "../_actions";
 import { AcademyWaitlistSchema } from "../_schema";
 
-export function WaitlistModal({ open, onOpenChange, academy }: { open: boolean; onOpenChange: (open: boolean) => void; academy?: "tech" | "business" | "climate" }) {
+export function WaitlistModal({
+	open,
+	onOpenChange,
+	academy,
+}: {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	academy?: "tech" | "business" | "climate";
+}) {
 	const t = useTranslations("academy");
-	const { form, handleSubmitWithAction, action } = useHookFormAction(joinAcademyWaitlist, zodResolver(AcademyWaitlistSchema), { formProps: { defaultValues: { name: "", email: "", phone: "", academy: academy ?? "tech", location: "" } }, actionProps: { onSuccess: () => { toast.success(t("success")); form.reset(); onOpenChange(false); }, onError: ({ error }) => toast.error(error.serverError ?? t("error")) } });
-	useEffect(() => { if (academy) form.setValue("academy", academy); }, [academy, form]);
-	return <Dialog open={open} onOpenChange={onOpenChange}><DialogContent className="max-h-[92vh] overflow-y-auto rounded-2xl p-6 sm:max-w-2xl sm:p-12"><DialogHeader><DialogTitle className="text-3xl font-bold sm:text-4xl">{t("modalTitle")}</DialogTitle><p className="pt-3 text-lg leading-7 text-muted-foreground">{t("modalDescription")}</p></DialogHeader><form onSubmit={handleSubmitWithAction} className="mt-5 space-y-5">{(["name", "email", "phone", "location"] as const).map((field) => <div key={field} className="space-y-2"><Label htmlFor={field}>{t(`${field}Label`)} <span className="text-destructive">*</span></Label><Input id={field} type={field === "email" ? "email" : "text"} placeholder={t(`${field}Placeholder`)} {...form.register(field)} className="h-12 rounded-xl" />{form.formState.errors[field] && <p className="text-sm text-destructive">{form.formState.errors[field]?.message}</p>}</div>)}<div className="space-y-2"><Label>{t("academyLabel")} <span className="text-destructive">*</span></Label><Select value={form.watch("academy")} onValueChange={(value) => form.setValue("academy", value as "tech" | "business" | "climate", { shouldValidate: true })}><SelectTrigger className="h-12 rounded-xl"><SelectValue /></SelectTrigger><SelectContent>{["tech", "business", "climate"].map((value) => <SelectItem key={value} value={value}>{t(`${value}Academy`)}</SelectItem>)}</SelectContent></Select></div><Button type="submit" size="lg" className="mt-2 h-15 w-full rounded-full text-lg" disabled={action.isPending}>{action.isPending ? t("submitting") : t("submit")}</Button><p className="text-center text-sm text-muted-foreground">{t("consent")}</p></form></DialogContent></Dialog>;
+	const { form, handleSubmitWithAction, action } = useHookFormAction(
+		joinAcademyWaitlist,
+		zodResolver(AcademyWaitlistSchema),
+		{
+			formProps: {
+				defaultValues: {
+					name: "",
+					email: "",
+					phone: "",
+					academy: academy ?? "tech",
+					location: "",
+				},
+			},
+			actionProps: {
+				onSuccess: () => {
+					toast.success(t("success"));
+					form.reset();
+					onOpenChange(false);
+				},
+				onError: ({ error }) => toast.error(error.serverError ?? t("error")),
+			},
+		},
+	);
+	useEffect(() => {
+		if (academy) form.setValue("academy", academy);
+	}, [academy, form]);
+	return (
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-2xl p-6 sm:max-w-2xl sm:p-12">
+				<DialogHeader>
+					<DialogTitle className="text-3xl font-bold sm:text-4xl">
+						{t("modalTitle")}
+					</DialogTitle>
+					<p className="pt-3 text-lg leading-7 text-muted-foreground">
+						{t("modalDescription")}
+					</p>
+				</DialogHeader>
+				<form onSubmit={handleSubmitWithAction} className="mt-5 space-y-5">
+					{(["name", "email", "phone", "location"] as const).map((field) => (
+						<div key={field} className="space-y-2">
+							<Label htmlFor={field}>
+								{t(`${field}Label`)} <span className="text-destructive">*</span>
+							</Label>
+							<Input
+								id={field}
+								type={field === "email" ? "email" : "text"}
+								placeholder={t(`${field}Placeholder`)}
+								{...form.register(field)}
+								className="h-12 rounded-xl"
+							/>
+							{form.formState.errors[field] && (
+								<p className="text-sm text-destructive">
+									{form.formState.errors[field]?.message}
+								</p>
+							)}
+						</div>
+					))}
+					<div className="space-y-2">
+						<Label>
+							{t("academyLabel")} <span className="text-destructive">*</span>
+						</Label>
+						<Select
+							value={form.watch("academy")}
+							onValueChange={(value) =>
+								form.setValue(
+									"academy",
+									value as "tech" | "business" | "climate",
+									{ shouldValidate: true },
+								)
+							}
+						>
+							<SelectTrigger className="h-12 rounded-xl">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								{["tech", "business", "climate"].map((value) => (
+									<SelectItem key={value} value={value}>
+										{t(`${value}Academy`)}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+					<Button
+						type="submit"
+						size="lg"
+						className="mt-2 h-15 w-full rounded-full text-lg"
+						disabled={action.isPending}
+					>
+						{action.isPending ? t("submitting") : t("submit")}
+					</Button>
+					<p className="text-center text-sm text-muted-foreground">
+						{t("consent")}
+					</p>
+				</form>
+			</DialogContent>
+		</Dialog>
+	);
 }
