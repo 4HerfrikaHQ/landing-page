@@ -19,7 +19,15 @@ export const joinAcademyWaitlist = actionClient
 			.returning({ id: academyWaitlistEntries.id });
 		if (!entry)
 			throw new ActionError("You’re already on this academy’s waitlist.");
-		const resend = new Resend(process.env.RESEND_API_KEY);
+		const resendApiKey = process.env.RESEND_API_KEY;
+		if (!resendApiKey) {
+			console.warn(
+				"[academy-waitlist] RESEND_API_KEY not configured, skipping emails",
+			);
+			return { id: entry.id };
+		}
+
+		const resend = new Resend(resendApiKey);
 		const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 		try {
 			await resend.emails.send({
