@@ -7,6 +7,7 @@ import type { Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import AfricaLogo from "../africa-logo";
+import { JOIN_US_URL } from "../navigation";
 import { getHomepage } from "./_actions";
 import { ExploreCommunity } from "./_components/explore-community";
 import { Hero } from "./_components/hero";
@@ -77,7 +78,7 @@ export default async function HomePage({
 
 							<Button
 								className="px-8 py-3 md:py-4 text-base md:text-xl"
-								href={(ambassador_link.text || "/") as Route}
+								href={(ambassador_link.text || JOIN_US_URL) as Route}
 								isExternal
 							>
 								{tc("joinUs")}
