@@ -1,12 +1,15 @@
 import { PageHeader } from "@/components/dashboard/page-header";
+import { Pagination } from "@/components/dashboard/pagination";
 import { currentDbUser } from "@/src/auth";
 import { db, schema } from "@/src/db";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { unauthorized } from "next/navigation";
 
+const PAGE_SIZE = 20;
+
 export default async function AcademyWaitlistPage({
 	searchParams,
-}: { searchParams: Promise<{ academy?: string; q?: string }> }) {
+}: { searchParams: Promise<{ academy?: string; q?: string; page?: string }> }) {
 	const user = await currentDbUser();
 	if (user.role !== "super_admin") unauthorized();
 	const sp = await searchParams;
@@ -14,6 +17,7 @@ export default async function AcademyWaitlistPage({
 		? sp.academy
 		: undefined;
 	const q = sp.q?.trim();
+	const page = Math.max(1, Number(sp.page) || 1);
 	const where = and(
 		academy
 			? eq(
@@ -29,12 +33,14 @@ export default async function AcademyWaitlistPage({
 				)
 			: undefined,
 	);
-	const [rows, counts] = await Promise.all([
+	const [rows, counts, totalRows] = await Promise.all([
 		db
 			.select()
 			.from(schema.academyWaitlistEntries)
 			.where(where)
-			.orderBy(desc(schema.academyWaitlistEntries.created_at)),
+			.orderBy(desc(schema.academyWaitlistEntries.created_at))
+			.limit(PAGE_SIZE)
+			.offset((page - 1) * PAGE_SIZE),
 		db
 			.select({
 				academy: schema.academyWaitlistEntries.academy,
@@ -42,7 +48,15 @@ export default async function AcademyWaitlistPage({
 			})
 			.from(schema.academyWaitlistEntries)
 			.groupBy(schema.academyWaitlistEntries.academy),
+		db
+			.select({ count: sql<number>`count(*)::int` })
+			.from(schema.academyWaitlistEntries)
+			.where(where),
 	]);
+	const total = totalRows[0]?.count ?? 0;
+	const dateFormatter = new Intl.DateTimeFormat("en-NG", {
+		dateStyle: "medium",
+	});
 	return (
 		<div>
 			<PageHeader
@@ -106,7 +120,7 @@ export default async function AcademyWaitlistPage({
 								<td className="px-5 py-4">{row.phone}</td>
 								<td className="px-5 py-4">{row.location}</td>
 								<td className="px-5 py-4 text-muted-foreground">
-									{row.created_at.toLocaleDateString()}
+									{dateFormatter.format(row.created_at)}
 								</td>
 							</tr>
 						))}
@@ -123,6 +137,7 @@ export default async function AcademyWaitlistPage({
 					</tbody>
 				</table>
 			</div>
+			<Pagination page={page} pageSize={PAGE_SIZE} total={total} />
 		</div>
 	);
 }
