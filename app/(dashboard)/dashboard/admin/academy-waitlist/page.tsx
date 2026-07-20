@@ -4,12 +4,125 @@ import { db, schema } from "@/src/db";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { unauthorized } from "next/navigation";
 
-export default async function AcademyWaitlistPage({ searchParams }: { searchParams: Promise<{ academy?: string; q?: string }> }) {
-	const user = await currentDbUser(); if (user.role !== "super_admin") unauthorized();
+export default async function AcademyWaitlistPage({
+	searchParams,
+}: { searchParams: Promise<{ academy?: string; q?: string }> }) {
+	const user = await currentDbUser();
+	if (user.role !== "super_admin") unauthorized();
 	const sp = await searchParams;
-	const academy = ["tech", "business", "climate"].includes(sp.academy ?? "") ? sp.academy : undefined;
+	const academy = ["tech", "business", "climate"].includes(sp.academy ?? "")
+		? sp.academy
+		: undefined;
 	const q = sp.q?.trim();
-	const where = and(academy ? eq(schema.academyWaitlistEntries.academy, academy as "tech" | "business" | "climate") : undefined, q ? or(ilike(schema.academyWaitlistEntries.name, `%${q}%`), ilike(schema.academyWaitlistEntries.email, `%${q}%`), ilike(schema.academyWaitlistEntries.location, `%${q}%`)) : undefined);
-	const [rows, counts] = await Promise.all([db.select().from(schema.academyWaitlistEntries).where(where).orderBy(desc(schema.academyWaitlistEntries.created_at)), db.select({ academy: schema.academyWaitlistEntries.academy, count: sql<number>`count(*)::int` }).from(schema.academyWaitlistEntries).groupBy(schema.academyWaitlistEntries.academy)]);
-	return <div><PageHeader title="Academy waitlist" subtitle="People interested in upcoming Academy programmes." /><div className="mb-6 grid gap-3 sm:grid-cols-3">{["tech", "business", "climate"].map((item) => <a key={item} href={`/dashboard/admin/academy-waitlist?academy=${item}`} className="rounded-2xl border bg-white p-4 capitalize no-underline"><p className="text-sm text-muted-foreground">{item} Academy</p><p className="mt-1 text-2xl font-bold">{counts.find((count) => count.academy === item)?.count ?? 0}</p></a>)}</div><form className="mb-5 flex flex-wrap gap-3"><input name="q" defaultValue={q} placeholder="Search name, email or location" className="h-10 min-w-64 rounded-lg border bg-white px-3 text-sm" /><select name="academy" defaultValue={academy} className="h-10 rounded-lg border bg-white px-3 text-sm"><option value="">All academies</option><option value="tech">Tech</option><option value="business">Business</option><option value="climate">Climate</option></select><button className="rounded-full bg-primary-500 px-5 text-sm font-medium text-white">Filter</button></form><div className="overflow-x-auto rounded-2xl border bg-white"><table className="w-full min-w-175 text-left text-sm"><thead className="border-b bg-muted/40 text-muted-foreground"><tr>{["Name", "Academy", "Email", "Phone", "Location", "Joined"].map((label) => <th key={label} className="px-5 py-3 font-medium">{label}</th>)}</tr></thead><tbody>{rows.map((row) => <tr key={row.id} className="border-b last:border-0"><td className="px-5 py-4 font-medium">{row.name}</td><td className="px-5 py-4 capitalize">{row.academy}</td><td className="px-5 py-4">{row.email}</td><td className="px-5 py-4">{row.phone}</td><td className="px-5 py-4">{row.location}</td><td className="px-5 py-4 text-muted-foreground">{row.created_at.toLocaleDateString()}</td></tr>)}{rows.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-muted-foreground">No waitlist entries yet.</td></tr>}</tbody></table></div></div>;
+	const where = and(
+		academy
+			? eq(
+					schema.academyWaitlistEntries.academy,
+					academy as "tech" | "business" | "climate",
+				)
+			: undefined,
+		q
+			? or(
+					ilike(schema.academyWaitlistEntries.name, `%${q}%`),
+					ilike(schema.academyWaitlistEntries.email, `%${q}%`),
+					ilike(schema.academyWaitlistEntries.location, `%${q}%`),
+				)
+			: undefined,
+	);
+	const [rows, counts] = await Promise.all([
+		db
+			.select()
+			.from(schema.academyWaitlistEntries)
+			.where(where)
+			.orderBy(desc(schema.academyWaitlistEntries.created_at)),
+		db
+			.select({
+				academy: schema.academyWaitlistEntries.academy,
+				count: sql<number>`count(*)::int`,
+			})
+			.from(schema.academyWaitlistEntries)
+			.groupBy(schema.academyWaitlistEntries.academy),
+	]);
+	return (
+		<div>
+			<PageHeader
+				title="Academy waitlist"
+				subtitle="People interested in upcoming Academy programmes."
+			/>
+			<div className="mb-6 grid gap-3 sm:grid-cols-3">
+				{["tech", "business", "climate"].map((item) => (
+					<a
+						key={item}
+						href={`/dashboard/admin/academy-waitlist?academy=${item}`}
+						className="rounded-2xl border bg-white p-4 capitalize no-underline"
+					>
+						<p className="text-sm text-muted-foreground">{item} Academy</p>
+						<p className="mt-1 text-2xl font-bold">
+							{counts.find((count) => count.academy === item)?.count ?? 0}
+						</p>
+					</a>
+				))}
+			</div>
+			<form className="mb-5 flex flex-wrap gap-3">
+				<input
+					name="q"
+					defaultValue={q}
+					placeholder="Search name, email or location"
+					className="h-10 min-w-64 rounded-lg border bg-white px-3 text-sm"
+				/>
+				<select
+					name="academy"
+					defaultValue={academy}
+					className="h-10 rounded-lg border bg-white px-3 text-sm"
+				>
+					<option value="">All academies</option>
+					<option value="tech">Tech</option>
+					<option value="business">Business</option>
+					<option value="climate">Climate</option>
+				</select>
+				<button className="rounded-full bg-primary-500 px-5 text-sm font-medium text-white">
+					Filter
+				</button>
+			</form>
+			<div className="overflow-x-auto rounded-2xl border bg-white">
+				<table className="w-full min-w-175 text-left text-sm">
+					<thead className="border-b bg-muted/40 text-muted-foreground">
+						<tr>
+							{["Name", "Academy", "Email", "Phone", "Location", "Joined"].map(
+								(label) => (
+									<th key={label} className="px-5 py-3 font-medium">
+										{label}
+									</th>
+								),
+							)}
+						</tr>
+					</thead>
+					<tbody>
+						{rows.map((row) => (
+							<tr key={row.id} className="border-b last:border-0">
+								<td className="px-5 py-4 font-medium">{row.name}</td>
+								<td className="px-5 py-4 capitalize">{row.academy}</td>
+								<td className="px-5 py-4">{row.email}</td>
+								<td className="px-5 py-4">{row.phone}</td>
+								<td className="px-5 py-4">{row.location}</td>
+								<td className="px-5 py-4 text-muted-foreground">
+									{row.created_at.toLocaleDateString()}
+								</td>
+							</tr>
+						))}
+						{rows.length === 0 && (
+							<tr>
+								<td
+									colSpan={6}
+									className="px-5 py-12 text-center text-muted-foreground"
+								>
+									No waitlist entries yet.
+								</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	);
 }
