@@ -13,9 +13,16 @@ export const academyWaitlistEntries = pgTable(
 		phone: text("phone").notNull(),
 		academy: text("academy").$type<Academy>().notNull(),
 		location: text("location").notNull(),
-		created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		created_at: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 	},
-	(table) => [unique("academy_waitlist_entries_email_academy_unique").on(table.email, table.academy)],
+	(table) => [
+		unique("academy_waitlist_entries_email_academy_unique").on(
+			table.email,
+			table.academy,
+		),
+	],
 );
 
 export type DbAcademyWaitlistEntry = typeof academyWaitlistEntries.$inferSelect;
