@@ -19,6 +19,24 @@ const paths = [
 	{ key: "climate", image: "/assets/about/Growth.png" },
 ] as const;
 
+const academyCopy = {
+	tech: { title: "techAcademy", description: "techDescription" },
+	business: { title: "businessAcademy", description: "businessDescription" },
+	climate: { title: "climateAcademy", description: "climateDescription" },
+} as const;
+
+const steps = [
+	{ key: "learn", title: "learnTitle", description: "learnDescription" },
+	{ key: "build", title: "buildTitle", description: "buildDescription" },
+	{ key: "lead", title: "leadTitle", description: "leadDescription" },
+] as const;
+
+const stats = [
+	{ value: "3000+", label: "girlsMentored", Icon: Users },
+	{ value: "25+", label: "campuses", Icon: CheckCircle2 },
+	{ value: "1000+", label: "graduates", Icon: CheckCircle2 },
+] as const;
+
 export function AcademyPage() {
 	const t = useTranslations("academy");
 	const [modalOpen, setModalOpen] = useState(false);
@@ -31,6 +49,7 @@ export function AcademyPage() {
 		setModalOpen(true);
 	};
 	const path = paths[active];
+	const pathCopy = academyCopy[path.key];
 	return (
 		<main>
 			<section className="relative isolate flex min-h-[700px] items-center justify-center overflow-hidden bg-slate-900 px-6 py-28 text-white sm:min-h-[780px]">
@@ -109,10 +128,10 @@ export function AcademyPage() {
 							>
 								<div>
 									<h3 className="text-2xl font-semibold">
-										{t(`${path.key}Academy`)}
+										{t(pathCopy.title)}
 									</h3>
 									<p className="mt-3 max-w-xl text-base leading-7 text-muted-foreground">
-										{t(`${path.key}Description`)}
+										{t(pathCopy.description)}
 									</p>
 								</div>
 								<span className="grid size-12 shrink-0 place-items-center rounded-full bg-primary-50 text-primary-500 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1">
@@ -134,19 +153,17 @@ export function AcademyPage() {
 						</h2>
 					</div>
 					<div className="mt-14 grid gap-7 md:grid-cols-3">
-						{["learn", "build", "lead"].map((item, i) => (
+						{steps.map((step, i) => (
 							<div
-								key={item}
+								key={step.key}
 								className="rounded-3xl border border-border/60 p-7"
 							>
 								<span className="grid size-11 place-items-center rounded-full bg-primary-50 font-bold text-primary-500">
 									0{i + 1}
 								</span>
-								<h3 className="mt-6 text-xl font-semibold">
-									{t(`${item}Title`)}
-								</h3>
+								<h3 className="mt-6 text-xl font-semibold">{t(step.title)}</h3>
 								<p className="mt-3 leading-7 text-muted-foreground">
-									{t(`${item}Description`)}
+									{t(step.description)}
 								</p>
 							</div>
 						))}
@@ -155,17 +172,12 @@ export function AcademyPage() {
 			</section>
 			<section className="bg-[#36398e] px-6 py-20 text-white">
 				<div className="mx-auto grid max-w-6xl gap-10 text-center sm:grid-cols-3">
-					{[
-						["3000+", "girlsMentored", Users],
-						["25+", "campuses", CheckCircle2],
-						["1000+", "graduates", CheckCircle2],
-					].map(([value, label, Icon]) => {
-						const I = Icon as typeof Users;
+					{stats.map(({ value, label, Icon }) => {
 						return (
-							<div key={String(label)}>
-								<I className="mx-auto size-7 text-primary-500" />
+							<div key={label}>
+								<Icon className="mx-auto size-7 text-primary-500" />
 								<p className="mt-3 text-5xl font-bold">{value}</p>
-								<p className="mt-2 text-white/80">{t(String(label))}</p>
+								<p className="mt-2 text-white/80">{t(label)}</p>
 							</div>
 						);
 					})}
