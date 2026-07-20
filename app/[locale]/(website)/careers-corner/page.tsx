@@ -135,7 +135,7 @@ const CareersCorner = async ({
 						{tCareers("becomeMentorDescription")}
 					</p>
 					<Button href="/careers-corner/apply" variant="solid" size="lg">
-						Apply to become a mentor
+						{tCareers("applyToBecomeMentor")}
 					</Button>
 				</section>
 			</FadeIn>
