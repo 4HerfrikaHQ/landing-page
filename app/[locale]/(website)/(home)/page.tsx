@@ -35,7 +35,6 @@ export default async function HomePage({
 		testimonials,
 		ambassador_description,
 		ambassador_image,
-		ambassador_link,
 		hero_image: heroImage,
 		members,
 		campuses,
@@ -78,7 +77,7 @@ export default async function HomePage({
 
 							<Button
 								className="px-8 py-3 md:py-4 text-base md:text-xl"
-								href={(ambassador_link.text || JOIN_US_URL) as Route}
+								href={JOIN_US_URL}
 								isExternal
 							>
 								{tc("joinUs")}
