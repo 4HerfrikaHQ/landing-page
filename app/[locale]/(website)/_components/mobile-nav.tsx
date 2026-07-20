@@ -124,6 +124,7 @@ export const MobileNav = () => {
 						<Button
 							key={button.name}
 							href={button.href as Route}
+							isExternal={button.isExternal}
 							variant={button.isPrimary ? "solid" : "outline"}
 							size="lg"
 							className="w-full justify-center"
