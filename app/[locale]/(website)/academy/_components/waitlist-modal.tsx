@@ -9,13 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -63,9 +56,11 @@ export function WaitlistModal({
 			},
 		},
 	);
+
 	useEffect(() => {
 		if (academy) form.setValue("academy", academy);
 	}, [academy, form]);
+
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-2xl p-6 sm:max-w-2xl sm:p-12">
@@ -77,6 +72,7 @@ export function WaitlistModal({
 						{t("modalDescription")}
 					</p>
 				</DialogHeader>
+
 				<form onSubmit={handleSubmitWithAction} className="mt-5 space-y-5">
 					{(["name", "email", "phone", "location"] as const).map((field) => (
 						<div key={field} className="space-y-2">
@@ -97,32 +93,24 @@ export function WaitlistModal({
 							)}
 						</div>
 					))}
+
 					<div className="space-y-2">
-						<Label>
+						<Label htmlFor="academy">
 							{t("academyLabel")} <span className="text-destructive">*</span>
 						</Label>
-						<Select
-							value={form.watch("academy")}
-							onValueChange={(value) =>
-								form.setValue(
-									"academy",
-									value as "tech" | "business" | "climate",
-									{ shouldValidate: true },
-								)
-							}
+						<select
+							id="academy"
+							{...form.register("academy")}
+							className="h-12 w-full rounded-xl border border-input bg-background px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 						>
-							<SelectTrigger className="h-12 rounded-xl">
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								{academyOptions.map(({ value, label }) => (
-									<SelectItem key={value} value={value}>
-										{t(label)}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+							{academyOptions.map(({ value, label }) => (
+								<option key={value} value={value}>
+									{t(label)}
+								</option>
+							))}
+						</select>
 					</div>
+
 					<Button
 						type="submit"
 						size="lg"
