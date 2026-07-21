@@ -1,0 +1,51 @@
+name: Migrate Dev database
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch whose Drizzle migrations should be applied to Dev
+        required: true
+        type: string
+      confirm:
+        description: Confirm that this applies migrations to the shared Dev database
+        required: true
+        type: choice
+        options:
+          - cancel
+          - migrate-dev
+
+concurrency:
+  group: dev-database-migrations
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: inputs.confirm == 'migrate-dev'
+    name: Migrate Dev from ${{ inputs.branch }}
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
+
+    steps:
+      - name: Check out selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Verify Dev database is configured
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::The development environment needs a DEV_DATABASE_URL secret."
+            exit 1
+          fi
+
+      - name: Apply Drizzle migrations to Dev
+        run: bun run db:migrate
