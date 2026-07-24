@@ -129,6 +129,26 @@ html {
 	scroll-behavior: smooth;
 }
 
+html:has(.academy-exact-page) {
+	scroll-behavior: auto;
+	scrollbar-width: none;
+}
+
+html:has(.academy-exact-page)::-webkit-scrollbar,
+body:has(.academy-exact-page) nextjs-portal {
+	display: none;
+}
+
+.font-playfair {
+	font-family: var(--font-playfair), Georgia, serif;
+}
+
+body:has(.academy-exact-page) [data-site-navbar],
+body:has(.academy-exact-page) [data-site-footer],
+body:has(.academy-exact-page) [data-site-scroll-progress] {
+	display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

@@ -1,202 +1,487 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
+	ArrowLeft,
 	ArrowRight,
-	CheckCircle2,
-	ChevronLeft,
-	ChevronRight,
-	Users,
+	Instagram,
+	Linkedin,
+	Twitter,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import type { Route } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { WaitlistModal } from "./waitlist-modal";
 
-const paths = [
-	{ key: "tech", image: "/assets/tech-divas.png" },
-	{ key: "business", image: "/assets/boss-divas.png" },
-	{ key: "climate", image: "/assets/about/Growth.png" },
+const academies = [
+	{
+		name: "Tech Academy",
+		description:
+			"Master product design, web development, product management, and more. Join 1000+ women already shaping Africa's tech future.",
+		image: "/assets/academy/tech-source.jpg",
+	},
+	{
+		name: "Business Academy",
+		description:
+			"Turn your ideas into sustainable ventures with practical business skills, mentorship, and a community built to help you grow.",
+		image: "/assets/academy/business-source.png",
+	},
+	{
+		name: "Climate Academy",
+		description:
+			"Shape Africa's environmental future. Build the skills to lead in green innovation, sustainability, and climate advocacy.",
+		image: "/assets/academy/climate-source.jpg",
+	},
 ] as const;
 
-const academyCopy = {
-	tech: { title: "techAcademy", description: "techDescription" },
-	business: { title: "businessAcademy", description: "businessDescription" },
-	climate: { title: "climateAcademy", description: "climateDescription" },
-} as const;
-
-const steps = [
-	{ key: "learn", title: "learnTitle", description: "learnDescription" },
-	{ key: "build", title: "buildTitle", description: "buildDescription" },
-	{ key: "lead", title: "leadTitle", description: "leadDescription" },
+const testimonials = [
+	{
+		quote:
+			"I came with no tech background. Now I'm a product designer at a global firm. This academy changed my entire career trajectory.",
+		name: "Adesola Adewale",
+		title: "Founder, ReadEvolve",
+		image: "/assets/academy/adesola_crop.png",
+	},
+	{
+		quote:
+			"I walked in with an idea. I walked out with a registered business, three clients, and the confidence to lead a team..",
+		name: "Adeleke Glory",
+		title: "Student, Lautech Campus",
+		image: "/assets/academy/glory_crop.png",
+	},
+	{
+		quote:
+			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
+		name: "Elizabeth Akinmolayan",
+		title: "Student, FUTA Campus",
+		image: "/assets/academy/elizabeth_crop.png",
+	},
+	{
+		quote:
+			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
+		name: "Olafisoye Theresa",
+		title: "Campus lead, 4Herfrika FUTA campus.",
+		image: "/assets/academy/theresa_crop.png",
+	},
 ] as const;
 
-const stats = [
-	{ value: "3000+", label: "girlsMentored", Icon: Users },
-	{ value: "25+", label: "campuses", Icon: CheckCircle2 },
-	{ value: "1000+", label: "graduates", Icon: CheckCircle2 },
+const navLinks = [
+	["About Us", "/about-us"],
+	["Projects", "/projects"],
+	["Academy", "/academy"],
+	["Career Corner", "/careers-corner"],
+	["Blog", "/blog"],
+	["Contact Us", "/contact-us"],
 ] as const;
+
+function AcademyNav() {
+	return (
+		<nav className="absolute left-1/2 top-6 z-20 hidden h-16 w-[calc(100%-206px)] max-w-[1258px] -translate-x-1/2 items-center rounded-full bg-white px-3 xl:flex">
+			<Link href={"/" as Route} className="shrink-0">
+				<Image
+					src="/assets/academy/academy-logo.png"
+					alt="4Herfrika"
+					width={127}
+					height={36}
+					className="h-9 w-[127px] object-contain"
+				/>
+			</Link>
+			<div className="ml-auto flex h-full items-center gap-5 whitespace-nowrap text-[17px] text-[#333] min-[1400px]:gap-[30px]">
+				{navLinks.map(([label, href]) => (
+					<Link
+						key={label}
+						href={href}
+						className={label === "Academy" ? "text-[#ec008c] underline" : ""}
+					>
+						{label}
+					</Link>
+				))}
+			</div>
+			<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-[104px]">
+				<Link
+					href="/donate"
+					className="rounded-full border border-[#ec008c] px-[30px] py-2.5 text-[#ec008c]"
+				>
+					Donate
+				</Link>
+				<Link
+					href="/contact-us"
+					className="rounded-full bg-[#ec008c] px-[30px] py-2.5 text-white"
+				>
+					Join Us
+				</Link>
+			</div>
+		</nav>
+	);
+}
 
 export function AcademyPage() {
-	const t = useTranslations("academy");
 	const [modalOpen, setModalOpen] = useState(false);
-	const [selectedAcademy, setSelectedAcademy] = useState<
-		"tech" | "business" | "climate"
-	>("tech");
-	const [active, setActive] = useState(0);
-	const open = (academy = paths[active].key) => {
-		setSelectedAcademy(academy);
-		setModalOpen(true);
-	};
-	const path = paths[active];
-	const pathCopy = academyCopy[path.key];
+	const [academyIndex, setAcademyIndex] = useState(0);
+
 	return (
-		<main>
-			<section className="relative isolate flex min-h-[700px] items-center justify-center overflow-hidden bg-slate-900 px-6 py-28 text-white sm:min-h-[780px]">
+		<main className="academy-exact-page overflow-hidden bg-white text-[#333]">
+			<section className="relative h-[845px] overflow-hidden text-white max-lg:h-[720px]">
 				<Image
-					src="/assets/home/hero.webp"
-					alt=""
+					src="/assets/academy/hero-source.jpg"
+					alt="Three women collaborating at 4Herfrika Academy"
 					fill
 					priority
-					className="-z-20 object-cover"
+					sizes="100vw"
+					className="object-cover"
 				/>
-				<div className="absolute inset-0 -z-10 bg-black/65" />
-				<div className="max-w-4xl text-center">
-					<h1 className="text-5xl font-medium tracking-tight sm:text-7xl">
-						{t("heroFirst")}
-						<br />
-						<em className="font-serif font-black text-primary-500">
-							{t("heroSecond")}
+				<div className="absolute inset-0 bg-black/60" />
+				<AcademyNav />
+
+				<div className="absolute left-1/2 top-[260px] z-10 w-[973px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:top-44">
+					<h1 className="text-[64px] font-medium leading-[1.265] tracking-[-1px] max-sm:text-5xl">
+						<span className="block">Trained. Built.</span>
+						<em className="block font-playfair font-black text-[#ec008c]">
+							Unstoppable
 						</em>
 					</h1>
-					<p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/90 sm:text-xl">
-						{t("heroDescription")}
+					<p className="mx-auto mt-4 max-w-[665px] text-xl leading-8 max-sm:text-base">
+						Our Academies combine practical skills, industry mentorship, and
+						real-world projects. No prior experience needed. Just readiness to
+						grow.
 					</p>
-					<div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
-						<Button size="lg" onClick={() => open()} className="gap-2">
-							{t("joinWaitlist")} <ArrowRight className="size-5" />
-						</Button>
-						<Button variant="outline-white" size="lg" href="/contact-us">
-							{t("contactUs")}
-						</Button>
+					<div className="mt-[34px] flex justify-center gap-4 max-sm:flex-col max-sm:items-center">
+						<button
+							type="button"
+							onClick={() => setModalOpen(true)}
+							className="flex h-[53px] items-center gap-2 rounded-full bg-[#e91e63] px-6 text-xl font-medium text-white transition hover:brightness-110"
+						>
+							Join the waitlist <ArrowRight className="size-5" />
+						</button>
+						<Link
+							href="/contact-us"
+							className="flex h-[53px] items-center rounded-full border border-[#ccc] px-6 text-xl font-medium text-[#ccc]"
+						>
+							Contact us
+						</Link>
 					</div>
 				</div>
 			</section>
-			<section className="bg-primary-50/30 px-6 py-20 sm:py-28">
-				<div className="mx-auto max-w-7xl">
-					<div className="grid items-start gap-12 lg:grid-cols-[.85fr_1.15fr]">
-						<div>
-							<h2 className="text-4xl font-bold leading-tight sm:text-5xl">
-								{t("pathsFirst")}
-								<br />
-								<em className="font-serif text-primary-500">
-									{t("pathsSecond")}
-								</em>
-							</h2>
-							<p className="mt-8 max-w-md text-lg leading-8 text-muted-foreground">
-								{t("pathsDescription")}
-							</p>
-							<div className="mt-10 flex gap-5">
-								<button
-									type="button"
-									aria-label={t("previous")}
-									onClick={() =>
-										setActive((active + paths.length - 1) % paths.length)
-									}
-									className="grid size-11 place-items-center rounded-xl border border-border bg-white"
-								>
-									<ChevronLeft />
-								</button>
-								<button
-									type="button"
-									aria-label={t("next")}
-									onClick={() => setActive((active + 1) % paths.length)}
-									className="grid size-11 place-items-center rounded-xl border border-primary-500 bg-primary-50 text-primary-500"
-								>
-									<ChevronRight />
-								</button>
-							</div>
-						</div>
-						<article className="overflow-hidden rounded-[2rem] bg-white p-5 shadow-xl sm:p-8">
-							<div className="relative aspect-[1.15] overflow-hidden rounded-[1.5rem]">
-								<Image src={path.image} alt="" fill className="object-cover" />
-							</div>
-							<button
-								type="button"
-								onClick={() => open(path.key)}
-								className="group mt-7 flex w-full items-start justify-between gap-5 text-left"
-							>
-								<div>
-									<h3 className="text-2xl font-semibold">
-										{t(pathCopy.title)}
-									</h3>
-									<p className="mt-3 max-w-xl text-base leading-7 text-muted-foreground">
-										{t(pathCopy.description)}
-									</p>
-								</div>
-								<span className="grid size-12 shrink-0 place-items-center rounded-full bg-primary-50 text-primary-500 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1">
-									<ArrowRight className="size-6" />
-								</span>
-							</button>
-						</article>
-					</div>
-				</div>
-			</section>
-			<section className="bg-white px-6 py-20 sm:py-28">
-				<div className="mx-auto max-w-6xl">
-					<div className="text-center">
-						<p className="text-sm font-semibold uppercase tracking-[.2em] text-primary-500">
-							{t("howItWorksEyebrow")}
-						</p>
-						<h2 className="mt-4 text-4xl font-bold sm:text-5xl">
-							{t("howItWorks")}
-						</h2>
-					</div>
-					<div className="mt-14 grid gap-7 md:grid-cols-3">
-						{steps.map((step, i) => (
-							<div
-								key={step.key}
-								className="rounded-3xl border border-border/60 p-7"
-							>
-								<span className="grid size-11 place-items-center rounded-full bg-primary-50 font-bold text-primary-500">
-									0{i + 1}
-								</span>
-								<h3 className="mt-6 text-xl font-semibold">{t(step.title)}</h3>
-								<p className="mt-3 leading-7 text-muted-foreground">
-									{t(step.description)}
+
+			<section className="relative h-[1305px] overflow-hidden bg-[rgba(236,0,140,0.02)] max-lg:h-auto max-lg:px-6 max-lg:py-20">
+				<div className="absolute left-1/2 top-[107px] flex h-[130px] w-[973px] -translate-x-1/2 items-center justify-center gap-11 max-lg:static max-lg:grid max-lg:h-auto max-lg:w-full max-lg:translate-x-0 max-lg:grid-cols-2 max-lg:gap-8">
+					{[
+						["3000+", "Girls Mentored"],
+						["25+", "Tech Academy Graduates"],
+						["3+", "Academies"],
+						["5+", "African Countries"],
+					].map(([value, label], index) => (
+						<div key={label} className="flex items-center gap-11">
+							<div className="min-w-[148px] text-center">
+								<p className="text-5xl font-semibold leading-[60px] text-white">
+									{value}
+								</p>
+								<p className="mt-2.5 text-[15px] font-medium text-[#333]">
+									{label}
 								</p>
 							</div>
-						))}
+							{index < 3 && (
+								<span className="h-[95px] w-px bg-[#ec008c] max-lg:hidden" />
+							)}
+						</div>
+					))}
+				</div>
+
+				<div className="absolute left-20 top-[351px] flex gap-[124px] max-lg:static max-lg:mt-20 max-lg:flex-col max-lg:gap-12">
+					<div className="flex h-[746px] w-[676px] shrink-0 flex-col justify-between max-lg:h-auto max-lg:w-full max-lg:gap-12">
+						<div>
+							<h2 className="text-5xl font-bold leading-[1] text-black">
+								Three paths.
+								<br />
+								<em className="font-playfair font-extrabold text-[#ec008c]">
+									One mission
+								</em>
+							</h2>
+							<p className="mt-9 w-[548px] max-w-full text-xl leading-8 text-[#4b4b4b]">
+								Whether you are a student or a woman ready to take up something
+								new, 4Herfrika Academy is the right place for you.
+							</p>
+						</div>
+						<div className="flex gap-6">
+							<button
+								type="button"
+								onClick={() =>
+									setAcademyIndex((index) => Math.max(0, index - 1))
+								}
+								disabled={academyIndex === 0}
+								aria-label="Previous academy"
+								className={`grid size-[37px] place-items-center rounded-xl border ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c]"}`}
+							>
+								<ArrowLeft className="size-5" />
+							</button>
+							<button
+								type="button"
+								onClick={() =>
+									setAcademyIndex((index) =>
+										Math.min(academies.length - 1, index + 1),
+									)
+								}
+								disabled={academyIndex === academies.length - 1}
+								aria-label="Next academy"
+								className={`grid size-[37px] place-items-center rounded-xl border ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c]"}`}
+							>
+								<ArrowRight className="size-5" />
+							</button>
+						</div>
+					</div>
+
+					<div className="min-w-0 w-[calc(100vw-880px)] overflow-hidden max-lg:w-full">
+						<div className="grid">
+							{academies.map((academy, index) => (
+								<article
+									key={academy.name}
+									aria-hidden={index !== academyIndex}
+									inert={index !== academyIndex}
+									className={`col-start-1 row-start-1 h-[860px] w-[669px] overflow-hidden rounded-[54px] bg-white p-[46px] shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none max-lg:h-auto max-lg:w-[calc(100vw-48px)] max-sm:rounded-3xl max-sm:p-6 ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+								>
+									<div className="relative h-[564px] overflow-hidden rounded-[54px] max-lg:aspect-[4/5] max-lg:h-auto max-lg:rounded-2xl">
+										<Image
+											src={academy.image}
+											alt={academy.name}
+											fill
+											sizes="669px"
+											className="object-cover"
+										/>
+										<span className="absolute bottom-9 right-9 grid size-12 place-items-center rounded-full border-2 border-white text-white">
+											<ArrowRight className="size-6 -rotate-45" />
+										</span>
+									</div>
+									<h3 className="mt-6 text-2xl font-semibold leading-[38px] text-black">
+										{academy.name}
+									</h3>
+									<p className="mt-1 text-xl leading-[25px] text-[#4b4b4b]">
+										{academy.description}
+									</p>
+								</article>
+							))}
+						</div>
 					</div>
 				</div>
 			</section>
-			<section className="bg-[#36398e] px-6 py-20 text-white">
-				<div className="mx-auto grid max-w-6xl gap-10 text-center sm:grid-cols-3">
-					{stats.map(({ value, label, Icon }) => {
-						return (
-							<div key={label}>
-								<Icon className="mx-auto size-7 text-primary-500" />
-								<p className="mt-3 text-5xl font-bold">{value}</p>
-								<p className="mt-2 text-white/80">{t(label)}</p>
-							</div>
-						);
-					})}
+
+			<section className="flex h-[737px] overflow-hidden rounded-t-[64px] bg-white text-white max-lg:h-auto max-lg:flex-col max-lg:rounded-t-[40px]">
+				<div className="relative h-full w-1/2 bg-[#03065c] max-lg:min-h-[520px] max-lg:w-full max-sm:min-h-[460px]">
+					<div className="absolute left-[82px] top-24 max-w-[491px] max-sm:left-8 max-sm:right-8">
+						<span className="inline-flex rounded-full bg-[#fff0f9] px-3 py-1.5 text-xs text-[#ec008c]">
+							Our Impact
+						</span>
+						<h2 className="mt-4 text-4xl font-bold leading-[45px] tracking-[-.9px]">
+							Equipping the next generation of{" "}
+							<em className="font-playfair font-extrabold">African women</em> in
+							tech, business, and climate.
+						</h2>
+					</div>
+					<button
+						type="button"
+						onClick={() => setModalOpen(true)}
+						className="absolute bottom-[101px] left-[72px] flex h-11 items-center gap-2 rounded-full border border-white px-6 font-medium max-sm:left-8"
+					>
+						Join the waitlist <ArrowRight className="size-[18px]" />
+					</button>
+				</div>
+				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-[719/737] max-lg:h-auto max-lg:w-full">
+					<Image
+						src="/assets/academy/impact-source.jpg"
+						alt="4Herfrika participant working on a laptop"
+						fill
+						sizes="(max-width: 1024px) 100vw, 50vw"
+						className="object-cover object-center"
+					/>
 				</div>
 			</section>
-			<section className="bg-primary-50 px-6 py-20 text-center">
-				<h2 className="text-4xl font-bold">{t("ctaTitle")}</h2>
-				<p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-					{t("ctaDescription")}
-				</p>
-				<Button size="lg" className="mt-8" onClick={() => open()}>
-					{t("joinWaitlist")}
-				</Button>
+
+			<section className="relative h-[812px] overflow-hidden bg-[#f5f5f5] max-lg:h-auto max-lg:px-6 max-lg:py-20">
+				<div className="absolute left-1/2 top-[75px] z-10 w-[880px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:static max-lg:mx-auto max-lg:translate-x-0">
+					<h2 className="text-[63px] font-semibold leading-[66px] max-sm:text-4xl max-sm:leading-tight">
+						<span className="text-[#ec008c]">Don’t</span> Take our{" "}
+						<span className="text-[#ec008c]">Words</span> for it!
+					</h2>
+					<p className="mt-6 text-xl font-medium leading-[27px]">
+						Take a look at what our learners say!
+					</p>
+				</div>
+
+				<Image
+					src="/assets/academy/decorative-logo.png"
+					alt=""
+					width={173}
+					height={251}
+					className="absolute -right-2 top-16 h-[251px] w-[173px] -rotate-[24deg] opacity-15"
+				/>
+				<Image
+					src="/assets/academy/decorative-logo.png"
+					alt=""
+					width={173}
+					height={251}
+					className="absolute -left-[106px] bottom-[-40px] h-[251px] w-[173px] -rotate-[40deg] opacity-15"
+				/>
+
+				<div className="absolute left-[78px] top-[234px] grid w-[1192px] grid-cols-2 gap-x-[52px] gap-y-14 max-lg:static max-lg:mt-14 max-lg:w-full max-lg:grid-cols-1">
+					{testimonials.map((testimonial) => (
+						<article
+							key={testimonial.name}
+							className="relative h-[209px] w-[570px] max-lg:w-full"
+						>
+							<div className="absolute left-[41px] top-0 flex h-[209px] w-[529px] flex-col rounded-2xl bg-[rgba(236,0,140,0.6)] py-[33px] pl-[57px] pr-[41px] text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] max-sm:left-6 max-sm:w-[calc(100%-24px)] max-sm:px-10">
+								<p className="text-lg font-medium leading-[23px]">
+									{testimonial.quote}
+								</p>
+								<div className="mt-auto flex items-end justify-between gap-4">
+									<div>
+										<h3 className="text-xl font-semibold leading-[25px]">
+											{testimonial.name}
+										</h3>
+										<p className="mt-2 text-sm leading-[18px]">
+											{testimonial.title}
+										</p>
+									</div>
+									<span
+										aria-label="5 out of 5 stars"
+										className="whitespace-nowrap text-base tracking-[4px]"
+									>
+										★★★★★
+									</span>
+								</div>
+							</div>
+							<Image
+								src={testimonial.image}
+								alt={testimonial.name}
+								width={82}
+								height={82}
+								className="absolute left-0 top-[66px] size-[82px] rounded-full object-cover"
+							/>
+						</article>
+					))}
+				</div>
 			</section>
+
+			<AcademyFooter />
 			<WaitlistModal
 				open={modalOpen}
 				onOpenChange={setModalOpen}
-				academy={selectedAcademy}
+				academy="tech"
 			/>
 		</main>
+	);
+}
+
+function AcademyFooter() {
+	return (
+		<footer className="relative h-[555px] bg-[#03065c] text-white max-lg:h-auto max-lg:px-6 max-lg:py-16">
+			<div className="absolute left-1/2 top-[94px] w-[1088px] -translate-x-1/2 max-lg:static max-lg:w-full max-lg:translate-x-0">
+				<div className="grid grid-cols-[166px_112px_176px_338px] justify-between gap-10 max-lg:grid-cols-2 max-sm:grid-cols-1">
+					<div>
+						<h2 className="text-[15px] font-bold">Quick Links</h2>
+						<ul className="mt-6 space-y-2.5 text-[15px] opacity-90">
+							<li>
+								<Link href="/projects">Projects</Link>
+							</li>
+							<li>
+								<Link href="/careers-corner">Become an Ambassador</Link>
+							</li>
+							<li>
+								<Link href="/careers-corner">Volunteer as a Mentor</Link>
+							</li>
+							<li>
+								<Link href="/donate">Donate</Link>
+							</li>
+							<li>
+								<Link href="/faq">FAQs</Link>
+							</li>
+						</ul>
+					</div>
+					<div>
+						<h2 className="text-[15px] font-bold">Legal</h2>
+						<ul className="mt-6 space-y-2.5 text-[15px] opacity-90">
+							<li>
+								<Link href="/terms">Terms</Link>
+							</li>
+							<li>
+								<Link href="/privacy">Privacy</Link>
+							</li>
+							<li>Cookies</li>
+						</ul>
+					</div>
+					<div>
+						<h2 className="text-[15px] font-bold">Contact Us</h2>
+						<ul className="mt-6 space-y-2.5 text-[15px]">
+							<li>
+								<a href="tel:+2349082009908">+234(0)9082009908</a>
+							</li>
+							<li>
+								<a href="mailto:4herfrika@gmail.com">4herfrika@gmail.com</a>
+							</li>
+							<li>
+								<Link href="/contact-us">Support</Link>
+							</li>
+						</ul>
+					</div>
+					<div className="rounded-[19px] bg-white/20 px-[42px] py-[30px]">
+						<h2 className="text-[15px] font-bold">Subscribe</h2>
+						<form className="mt-3 flex h-[47px] overflow-hidden rounded-md bg-white">
+							<input
+								type="email"
+								aria-label="Email address"
+								placeholder="Email address"
+								className="min-w-0 flex-1 px-4 text-sm text-[#ec008c] outline-none"
+							/>
+							<button
+								type="submit"
+								aria-label="Subscribe"
+								className="grid w-[50px] place-items-center bg-[rgba(236,0,140,0.6)]"
+							>
+								<ArrowRight className="size-4" />
+							</button>
+						</form>
+						<p className="mt-5 text-xs leading-5 opacity-80">
+							Subscribe to our newsletter for the latest updates and news
+						</p>
+					</div>
+				</div>
+				<div className="mt-[51px] h-px bg-white/10" />
+				<div className="mt-7 flex items-center justify-between max-sm:flex-col max-sm:gap-6">
+					<div className="rounded bg-white px-2 py-1">
+						<Image
+							src="/assets/academy/footer-logo.png"
+							alt="4Herfrika"
+							width={145}
+							height={41}
+							className="h-[41px] w-[145px] object-contain"
+						/>
+					</div>
+					<p className="text-[13px] font-medium">
+						© 2024 4HerFrika. All Rights Reserved
+					</p>
+					<div className="flex gap-4">
+						<a
+							href="https://www.linkedin.com/company/4herfrika"
+							aria-label="LinkedIn"
+							className="grid size-[35px] place-items-center rounded-full border border-white/10"
+						>
+							<Linkedin className="size-3" />
+						</a>
+						<a
+							href="https://www.instagram.com/4herfrika"
+							aria-label="Instagram"
+							className="grid size-[35px] place-items-center rounded-full border border-white/10"
+						>
+							<Instagram className="size-3" />
+						</a>
+						<a
+							href="https://x.com/4herfrika"
+							aria-label="X"
+							className="grid size-[35px] place-items-center rounded-full border border-white/10"
+						>
+							<Twitter className="size-3" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
 	);
 }
