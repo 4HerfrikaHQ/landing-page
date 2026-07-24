@@ -143,10 +143,24 @@ body:has(.academy-exact-page) nextjs-portal {
 	font-family: var(--font-playfair), Georgia, serif;
 }
 
-body:has(.academy-exact-page) [data-site-navbar],
 body:has(.academy-exact-page) [data-site-footer],
 body:has(.academy-exact-page) [data-site-scroll-progress] {
 	display: none;
+}
+
+/* The website chrome sits outside the Academy route tree. The page sets this
+   attribute while mounted: mobile keeps the shared navigation, desktop uses
+   the Academy-specific pill navigation. */
+body[data-academy-page] [data-site-footer],
+body[data-academy-page] [data-site-scroll-progress] {
+	display: none !important;
+}
+
+@media (min-width: 1280px) {
+	body:has(.academy-exact-page) [data-site-navbar],
+	body[data-academy-page] [data-site-navbar] {
+		display: none !important;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

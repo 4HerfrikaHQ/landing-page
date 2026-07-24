@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -10,7 +11,7 @@ import {
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WaitlistModal } from "./waitlist-modal";
 
 const academies = [
@@ -44,7 +45,7 @@ const testimonials = [
 	},
 	{
 		quote:
-			"I walked in with an idea. I walked out with a registered business, three clients, and the confidence to lead a team..",
+			"I walked in with an idea. I walked out with a registered business, three clients, and the confidence to lead a team.",
 		name: "Adeleke Glory",
 		title: "Student, Lautech Campus",
 		image: "/assets/academy/glory_crop.png",
@@ -60,7 +61,7 @@ const testimonials = [
 		quote:
 			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
 		name: "Olafisoye Theresa",
-		title: "Campus lead, 4Herfrika FUTA campus.",
+		title: "Campus lead, 4Herfrika FUTA campus",
 		image: "/assets/academy/theresa_crop.png",
 	},
 ] as const;
@@ -76,42 +77,44 @@ const navLinks = [
 
 function AcademyNav() {
 	return (
-		<nav className="absolute left-1/2 top-6 z-20 hidden h-16 w-[calc(100%-206px)] max-w-[1258px] -translate-x-1/2 items-center rounded-full bg-white px-3 xl:flex">
-			<Link href={"/" as Route} className="shrink-0">
-				<Image
-					src="/assets/academy/academy-logo.png"
-					alt="4Herfrika"
-					width={127}
-					height={36}
-					className="h-9 w-[127px] object-contain"
-				/>
-			</Link>
-			<div className="ml-auto flex h-full items-center gap-5 whitespace-nowrap text-[17px] text-[#333] min-[1400px]:gap-[30px]">
-				{navLinks.map(([label, href]) => (
+		<>
+			<nav className="fixed left-1/2 top-6 z-50 hidden h-16 w-[calc(100%-206px)] max-w-[1258px] -translate-x-1/2 items-center rounded-full bg-white px-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)] xl:flex">
+				<Link href={"/" as Route} className="shrink-0">
+					<Image
+						src="/assets/academy/academy-logo.png"
+						alt="4Herfrika"
+						width={127}
+						height={36}
+						className="h-9 w-[127px] object-contain"
+					/>
+				</Link>
+				<div className="ml-auto flex h-full items-center gap-5 whitespace-nowrap text-[17px] text-[#333] min-[1400px]:gap-[30px]">
+					{navLinks.map(([label, href]) => (
+						<Link
+							key={label}
+							href={href}
+							className={label === "Academy" ? "text-[#ec008c] underline" : ""}
+						>
+							{label}
+						</Link>
+					))}
+				</div>
+				<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-[104px]">
 					<Link
-						key={label}
-						href={href}
-						className={label === "Academy" ? "text-[#ec008c] underline" : ""}
+						href="/donate"
+						className="rounded-full border border-[#ec008c] px-[30px] py-2.5 text-[#ec008c]"
 					>
-						{label}
+						Donate
 					</Link>
-				))}
-			</div>
-			<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-[104px]">
-				<Link
-					href="/donate"
-					className="rounded-full border border-[#ec008c] px-[30px] py-2.5 text-[#ec008c]"
-				>
-					Donate
-				</Link>
-				<Link
-					href="/contact-us"
-					className="rounded-full bg-[#ec008c] px-[30px] py-2.5 text-white"
-				>
-					Join Us
-				</Link>
-			</div>
-		</nav>
+					<Link
+						href="/contact-us"
+						className="rounded-full bg-[#ec008c] px-[30px] py-2.5 text-white"
+					>
+						Join Us
+					</Link>
+				</div>
+			</nav>
+		</>
 	);
 }
 
@@ -119,8 +122,16 @@ export function AcademyPage() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [academyIndex, setAcademyIndex] = useState(0);
 
+	useEffect(() => {
+		document.body.dataset.academyPage = "true";
+
+		return () => {
+			delete document.body.dataset.academyPage;
+		};
+	}, []);
+
 	return (
-		<main className="academy-exact-page overflow-hidden bg-white text-[#333]">
+		<main className="academy-exact-page bg-white text-[#333]">
 			<section className="relative h-[845px] overflow-hidden text-white max-lg:h-[720px]">
 				<Image
 					src="/assets/academy/hero-source.jpg"
@@ -146,119 +157,127 @@ export function AcademyPage() {
 						grow.
 					</p>
 					<div className="mt-[34px] flex justify-center gap-4 max-sm:flex-col max-sm:items-center">
-						<button
+						<Button
 							type="button"
 							onClick={() => setModalOpen(true)}
-							className="flex h-[53px] items-center gap-2 rounded-full bg-[#e91e63] px-6 text-xl font-medium text-white transition hover:brightness-110"
+							size="lg"
+							className="h-[53px] gap-2 bg-[#e91e63] px-6 text-xl font-medium hover:bg-[#d91757]"
 						>
 							Join the waitlist <ArrowRight className="size-5" />
-						</button>
-						<Link
+						</Button>
+						<Button
 							href="/contact-us"
-							className="flex h-[53px] items-center rounded-full border border-[#ccc] px-6 text-xl font-medium text-[#ccc]"
+							variant="outline-white"
+							size="lg"
+							className="h-[53px] border-[#ccc] px-6 text-xl font-medium text-[#eee] hover:border-[#ec008c]"
 						>
 							Contact us
-						</Link>
+						</Button>
 					</div>
 				</div>
 			</section>
 
-			<section className="relative h-[1305px] overflow-hidden bg-[rgba(236,0,140,0.02)] max-lg:h-auto max-lg:px-6 max-lg:py-20">
-				<div className="absolute left-1/2 top-[107px] flex h-[130px] w-[973px] -translate-x-1/2 items-center justify-center gap-11 max-lg:static max-lg:grid max-lg:h-auto max-lg:w-full max-lg:translate-x-0 max-lg:grid-cols-2 max-lg:gap-8">
-					{[
-						["3000+", "Girls Mentored"],
-						["25+", "Tech Academy Graduates"],
-						["3+", "Academies"],
-						["5+", "African Countries"],
-					].map(([value, label], index) => (
-						<div key={label} className="flex items-center gap-11">
-							<div className="min-w-[148px] text-center">
-								<p className="text-5xl font-semibold leading-[60px] text-white">
-									{value}
-								</p>
-								<p className="mt-2.5 text-[15px] font-medium text-[#333]">
-									{label}
-								</p>
+			<section className="bg-[rgba(236,0,140,0.02)] px-6 py-20 lg:px-12 xl:px-12 xl:py-[107px] 2xl:px-20">
+				<div className="mx-auto max-w-[1280px]">
+					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+						{[
+							["3000+", "Girls Mentored"],
+							["25+", "Tech Academy Graduates"],
+							["3+", "Academies"],
+							["5+", "African Countries"],
+						].map(([value, label], index) => (
+							<div
+								key={label}
+								className="flex min-w-0 items-center justify-center gap-8 lg:gap-11"
+							>
+								<div className="min-w-0 text-center">
+									<p className="text-5xl font-semibold leading-[60px] text-[#03065c]">
+										{value}
+									</p>
+									<p className="mt-2.5 text-[15px] font-medium text-[#333]">
+										{label}
+									</p>
+								</div>
+								{index < 3 && (
+									<span className="hidden h-[95px] w-px shrink-0 bg-[#ec008c] lg:block" />
+								)}
 							</div>
-							{index < 3 && (
-								<span className="h-[95px] w-px bg-[#ec008c] max-lg:hidden" />
-							)}
-						</div>
-					))}
-				</div>
-
-				<div className="absolute left-20 top-[351px] flex gap-[124px] max-lg:static max-lg:mt-20 max-lg:flex-col max-lg:gap-12">
-					<div className="flex h-[746px] w-[676px] shrink-0 flex-col justify-between max-lg:h-auto max-lg:w-full max-lg:gap-12">
-						<div>
-							<h2 className="text-5xl font-bold leading-[1] text-black">
-								Three paths.
-								<br />
-								<em className="font-playfair font-extrabold text-[#ec008c]">
-									One mission
-								</em>
-							</h2>
-							<p className="mt-9 w-[548px] max-w-full text-xl leading-8 text-[#4b4b4b]">
-								Whether you are a student or a woman ready to take up something
-								new, 4Herfrika Academy is the right place for you.
-							</p>
-						</div>
-						<div className="flex gap-6">
-							<button
-								type="button"
-								onClick={() =>
-									setAcademyIndex((index) => Math.max(0, index - 1))
-								}
-								disabled={academyIndex === 0}
-								aria-label="Previous academy"
-								className={`grid size-[37px] place-items-center rounded-xl border ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c]"}`}
-							>
-								<ArrowLeft className="size-5" />
-							</button>
-							<button
-								type="button"
-								onClick={() =>
-									setAcademyIndex((index) =>
-										Math.min(academies.length - 1, index + 1),
-									)
-								}
-								disabled={academyIndex === academies.length - 1}
-								aria-label="Next academy"
-								className={`grid size-[37px] place-items-center rounded-xl border ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c]"}`}
-							>
-								<ArrowRight className="size-5" />
-							</button>
-						</div>
+						))}
 					</div>
 
-					<div className="min-w-0 w-[calc(100vw-880px)] overflow-hidden max-lg:w-full">
-						<div className="grid">
-							{academies.map((academy, index) => (
-								<article
-									key={academy.name}
-									aria-hidden={index !== academyIndex}
-									inert={index !== academyIndex}
-									className={`col-start-1 row-start-1 h-[860px] w-[669px] overflow-hidden rounded-[54px] bg-white p-[46px] shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none max-lg:h-auto max-lg:w-[calc(100vw-48px)] max-sm:rounded-3xl max-sm:p-6 ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+					<div className="mt-20 grid gap-12 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:items-end xl:gap-12 2xl:gap-20">
+						<div className="flex min-w-0 flex-col justify-between gap-12 xl:min-h-[746px]">
+							<div>
+								<h2 className="text-5xl font-bold leading-[1] text-black">
+									Three paths.
+									<br />
+									<em className="font-playfair font-extrabold text-[#ec008c]">
+										One mission
+									</em>
+								</h2>
+								<p className="mt-9 w-[548px] max-w-full text-xl leading-8 text-[#4b4b4b]">
+									Whether you are a student or a woman ready to take up
+									something new, 4Herfrika Academy is the right place for you.
+								</p>
+							</div>
+							<div className="flex gap-6">
+								<button
+									type="button"
+									onClick={() =>
+										setAcademyIndex((index) => Math.max(0, index - 1))
+									}
+									disabled={academyIndex === 0}
+									aria-label="Previous academy"
+									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
 								>
-									<div className="relative h-[564px] overflow-hidden rounded-[54px] max-lg:aspect-[4/5] max-lg:h-auto max-lg:rounded-2xl">
-										<Image
-											src={academy.image}
-											alt={academy.name}
-											fill
-											sizes="669px"
-											className="object-cover"
-										/>
-										<span className="absolute bottom-9 right-9 grid size-12 place-items-center rounded-full border-2 border-white text-white">
-											<ArrowRight className="size-6 -rotate-45" />
-										</span>
-									</div>
-									<h3 className="mt-6 text-2xl font-semibold leading-[38px] text-black">
-										{academy.name}
-									</h3>
-									<p className="mt-1 text-xl leading-[25px] text-[#4b4b4b]">
-										{academy.description}
-									</p>
-								</article>
-							))}
+									<ArrowLeft className="size-5" />
+								</button>
+								<button
+									type="button"
+									onClick={() =>
+										setAcademyIndex((index) =>
+											Math.min(academies.length - 1, index + 1),
+										)
+									}
+									disabled={academyIndex === academies.length - 1}
+									aria-label="Next academy"
+									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
+								>
+									<ArrowRight className="size-5" />
+								</button>
+							</div>
+						</div>
+
+						<div className="min-w-0">
+							<div className="grid">
+								{academies.map((academy, index) => (
+									<article
+										key={academy.name}
+										aria-hidden={index !== academyIndex}
+										inert={index !== academyIndex}
+										className={`col-start-1 row-start-1 mx-auto h-[860px] w-full max-w-[669px] overflow-hidden rounded-[54px] bg-white p-[46px] shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none xl:mx-0 max-lg:h-auto max-sm:rounded-3xl max-sm:p-6 ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+									>
+										<div className="relative h-[564px] overflow-hidden rounded-[54px] max-lg:aspect-[4/5] max-lg:h-auto max-lg:rounded-2xl">
+											<Image
+												src={academy.image}
+												alt={academy.name}
+												fill
+												sizes="669px"
+												className="object-cover"
+											/>
+											<span className="absolute bottom-9 right-9 grid size-12 place-items-center rounded-full border-2 border-white text-white">
+												<ArrowRight className="size-6 -rotate-45" />
+											</span>
+										</div>
+										<h3 className="mt-6 text-2xl font-semibold leading-[38px] text-black">
+											{academy.name}
+										</h3>
+										<p className="mt-1 text-xl leading-[25px] text-[#4b4b4b]">
+											{academy.description}
+										</p>
+									</article>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -276,13 +295,15 @@ export function AcademyPage() {
 							tech, business, and climate.
 						</h2>
 					</div>
-					<button
+					<Button
 						type="button"
 						onClick={() => setModalOpen(true)}
-						className="absolute bottom-[101px] left-[72px] flex h-11 items-center gap-2 rounded-full border border-white px-6 font-medium max-sm:left-8"
+						variant="outline-white"
+						size="sm"
+						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-sm:left-8"
 					>
 						Join the waitlist <ArrowRight className="size-[18px]" />
-					</button>
+					</Button>
 				</div>
 				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-[719/737] max-lg:h-auto max-lg:w-full">
 					<Image
@@ -295,68 +316,70 @@ export function AcademyPage() {
 				</div>
 			</section>
 
-			<section className="relative h-[812px] overflow-hidden bg-[#f5f5f5] max-lg:h-auto max-lg:px-6 max-lg:py-20">
-				<div className="absolute left-1/2 top-[75px] z-10 w-[880px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:static max-lg:mx-auto max-lg:translate-x-0">
-					<h2 className="text-[63px] font-semibold leading-[66px] max-sm:text-4xl max-sm:leading-tight">
-						<span className="text-[#ec008c]">Don’t</span> Take our{" "}
-						<span className="text-[#ec008c]">Words</span> for it!
-					</h2>
-					<p className="mt-6 text-xl font-medium leading-[27px]">
-						Take a look at what our learners say!
-					</p>
-				</div>
+			<section className="relative overflow-x-clip bg-[#f5f5f5] px-6 py-20 xl:px-12 xl:py-[75px] 2xl:px-20">
+				<div className="relative z-10 mx-auto max-w-[1280px]">
+					<div className="mx-auto max-w-[880px] text-center">
+						<h2 className="text-[63px] font-semibold leading-[66px] max-sm:text-4xl max-sm:leading-tight">
+							<span className="text-[#ec008c]">Don’t</span> Take our{" "}
+							<span className="text-[#ec008c]">Words</span> for it!
+						</h2>
+						<p className="mt-6 text-xl font-medium leading-[27px]">
+							Take a look at what our learners say!
+						</p>
+					</div>
 
-				<Image
-					src="/assets/academy/decorative-logo.png"
-					alt=""
-					width={173}
-					height={251}
-					className="absolute -right-2 top-16 h-[251px] w-[173px] -rotate-[24deg] opacity-15"
-				/>
-				<Image
-					src="/assets/academy/decorative-logo.png"
-					alt=""
-					width={173}
-					height={251}
-					className="absolute -left-[106px] bottom-[-40px] h-[251px] w-[173px] -rotate-[40deg] opacity-15"
-				/>
+					<Image
+						src="/assets/academy/decorative-logo.png"
+						alt=""
+						width={173}
+						height={251}
+						className="absolute -right-2 top-16 h-[251px] w-[173px] -rotate-[24deg] opacity-15"
+					/>
+					<Image
+						src="/assets/academy/decorative-logo.png"
+						alt=""
+						width={173}
+						height={251}
+						className="absolute -left-[106px] bottom-[-40px] h-[251px] w-[173px] -rotate-[40deg] opacity-15"
+					/>
 
-				<div className="absolute left-[78px] top-[234px] grid w-[1192px] grid-cols-2 gap-x-[52px] gap-y-14 max-lg:static max-lg:mt-14 max-lg:w-full max-lg:grid-cols-1">
-					{testimonials.map((testimonial) => (
-						<article
-							key={testimonial.name}
-							className="relative h-[209px] w-[570px] max-lg:w-full"
-						>
-							<div className="absolute left-[41px] top-0 flex h-[209px] w-[529px] flex-col rounded-2xl bg-[rgba(236,0,140,0.6)] py-[33px] pl-[57px] pr-[41px] text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] max-sm:left-6 max-sm:w-[calc(100%-24px)] max-sm:px-10">
-								<p className="text-lg font-medium leading-[23px]">
-									{testimonial.quote}
-								</p>
-								<div className="mt-auto flex items-end justify-between gap-4">
-									<div>
-										<h3 className="text-xl font-semibold leading-[25px]">
-											{testimonial.name}
-										</h3>
-										<p className="mt-2 text-sm leading-[18px]">
-											{testimonial.title}
-										</p>
+					<div className="mt-14 grid grid-cols-1 gap-x-[52px] gap-y-14 xl:grid-cols-2">
+						{testimonials.map((testimonial) => (
+							<article
+								key={testimonial.name}
+								className="relative min-w-0 pl-10 sm:pl-[41px]"
+							>
+								<div className="flex min-h-[209px] min-w-0 flex-col rounded-2xl bg-[#c62979] py-8 pl-16 pr-8 text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] sm:pl-[57px] sm:pr-[41px]">
+									<p className="text-base font-medium leading-6 sm:text-lg sm:leading-[23px]">
+										{testimonial.quote}
+									</p>
+									<div className="mt-6 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+										<div className="min-w-0">
+											<h3 className="text-xl font-semibold leading-[25px]">
+												{testimonial.name}
+											</h3>
+											<p className="mt-2 text-sm leading-[18px]">
+												{testimonial.title}
+											</p>
+										</div>
+										<span
+											aria-label="5 out of 5 stars"
+											className="whitespace-nowrap text-base tracking-[3px]"
+										>
+											★★★★★
+										</span>
 									</div>
-									<span
-										aria-label="5 out of 5 stars"
-										className="whitespace-nowrap text-base tracking-[4px]"
-									>
-										★★★★★
-									</span>
 								</div>
-							</div>
-							<Image
-								src={testimonial.image}
-								alt={testimonial.name}
-								width={82}
-								height={82}
-								className="absolute left-0 top-[66px] size-[82px] rounded-full object-cover"
-							/>
-						</article>
-					))}
+								<Image
+									src={testimonial.image}
+									alt={testimonial.name}
+									width={82}
+									height={82}
+									className="absolute left-0 top-1/2 size-[82px] -translate-y-1/2 rounded-full object-cover"
+								/>
+							</article>
+						))}
+					</div>
 				</div>
 			</section>
 
@@ -433,7 +456,7 @@ function AcademyFooter() {
 							<button
 								type="submit"
 								aria-label="Subscribe"
-								className="grid w-[50px] place-items-center bg-[rgba(236,0,140,0.6)]"
+								className="grid w-[50px] cursor-pointer place-items-center bg-[rgba(236,0,140,0.6)]"
 							>
 								<ArrowRight className="size-4" />
 							</button>
