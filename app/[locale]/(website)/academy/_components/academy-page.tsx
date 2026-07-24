@@ -284,8 +284,8 @@ export function AcademyPage() {
 			</section>
 
 			<section className="flex h-[737px] overflow-hidden rounded-t-[64px] bg-white text-white max-lg:h-auto max-lg:flex-col max-lg:rounded-t-[40px]">
-				<div className="relative h-full w-1/2 bg-[#03065c] max-lg:min-h-[520px] max-lg:w-full max-sm:min-h-[460px]">
-					<div className="absolute left-[82px] top-24 max-w-[491px] max-sm:left-8 max-sm:right-8">
+				<div className="relative h-full w-1/2 bg-[#03065c] max-lg:flex max-lg:h-auto max-lg:w-full max-lg:flex-col max-lg:gap-8 max-lg:px-8 max-lg:py-16 max-sm:px-6 max-sm:py-12">
+					<div className="absolute left-[82px] top-24 max-w-[491px] max-lg:static max-lg:max-w-none">
 						<span className="inline-flex rounded-full bg-[#fff0f9] px-3 py-1.5 text-xs text-[#ec008c]">
 							Our Impact
 						</span>
@@ -300,7 +300,7 @@ export function AcademyPage() {
 						onClick={() => setModalOpen(true)}
 						variant="outline-white"
 						size="sm"
-						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-sm:left-8"
+						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-lg:static max-lg:self-start"
 					>
 						Join the waitlist <ArrowRight className="size-[18px]" />
 					</Button>
