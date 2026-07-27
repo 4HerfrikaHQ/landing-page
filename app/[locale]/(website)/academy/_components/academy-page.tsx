@@ -66,6 +66,8 @@ const testimonials = [
 	},
 ] as const;
 
+const carouselInterval = 3_000;
+
 const navLinks = [
 	["About Us", "/about-us"],
 	["Projects", "/projects"],
@@ -121,6 +123,15 @@ function AcademyNav() {
 export function AcademyPage() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [academyIndex, setAcademyIndex] = useState(0);
+	const [carouselRevision, setCarouselRevision] = useState(0);
+
+	useEffect(() => {
+		const interval = window.setInterval(() => {
+			setAcademyIndex((index) => (index + 1) % academies.length);
+		}, carouselInterval);
+
+		return () => window.clearInterval(interval);
+	}, [carouselRevision]);
 
 	useEffect(() => {
 		document.body.dataset.academyPage = "true";
@@ -223,9 +234,10 @@ export function AcademyPage() {
 							<div className="flex gap-6">
 								<button
 									type="button"
-									onClick={() =>
-										setAcademyIndex((index) => Math.max(0, index - 1))
-									}
+									onClick={() => {
+										setAcademyIndex((index) => Math.max(0, index - 1));
+										setCarouselRevision((revision) => revision + 1);
+									}}
 									disabled={academyIndex === 0}
 									aria-label="Previous academy"
 									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
@@ -234,11 +246,12 @@ export function AcademyPage() {
 								</button>
 								<button
 									type="button"
-									onClick={() =>
+									onClick={() => {
 										setAcademyIndex((index) =>
 											Math.min(academies.length - 1, index + 1),
-										)
-									}
+										);
+										setCarouselRevision((revision) => revision + 1);
+									}}
 									disabled={academyIndex === academies.length - 1}
 									aria-label="Next academy"
 									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
