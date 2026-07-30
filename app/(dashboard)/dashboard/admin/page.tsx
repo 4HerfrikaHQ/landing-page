@@ -17,6 +17,7 @@ import {
 	AlertTriangle,
 	CalendarDays,
 	FileText,
+	GraduationCap,
 	Shield,
 	UserCheck,
 	Users,
@@ -41,6 +42,7 @@ export default async function AdminDashboardPage() {
 		[{ adminCount }],
 		[{ pendingApplications }],
 		[{ bookingCount }],
+		[{ academyWaitlistCount }],
 		recentBookings,
 		recentApplications,
 		recentNoShows,
@@ -56,6 +58,9 @@ export default async function AdminDashboardPage() {
 			.from(mentorApplications)
 			.where(eq(mentorApplications.status, "pending")),
 		db.select({ bookingCount: count() }).from(bookings),
+		db
+			.select({ academyWaitlistCount: count() })
+			.from(schema.academyWaitlistEntries),
 		db
 			.select({
 				id: bookings.id,
@@ -152,6 +157,12 @@ export default async function AdminDashboardPage() {
 					label="Admins"
 					value={adminCount}
 					href={"/dashboard/admin/admins" as Route}
+				/>
+				<StatCard
+					icon={GraduationCap}
+					label="Academy waitlist"
+					value={academyWaitlistCount}
+					href={"/dashboard/admin/academy-waitlist" as Route}
 				/>
 			</div>
 

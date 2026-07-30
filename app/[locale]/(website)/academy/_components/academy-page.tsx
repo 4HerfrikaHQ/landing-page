@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	type Review,
+	ReviewsSection,
+} from "@/components/reviews/reviews-section";
 import { Button } from "@/components/ui/button";
 import {
 	ArrowLeft,
@@ -16,18 +20,21 @@ import { WaitlistModal } from "./waitlist-modal";
 
 const academies = [
 	{
+		academy: "tech",
 		name: "Tech Academy",
 		description:
 			"Master product design, web development, product management, and more. Join 1000+ women already shaping Africa's tech future.",
 		image: "/assets/academy/tech-source.jpg",
 	},
 	{
+		academy: "business",
 		name: "Business Academy",
 		description:
 			"Turn your ideas into sustainable ventures with practical business skills, mentorship, and a community built to help you grow.",
 		image: "/assets/academy/business-source.png",
 	},
 	{
+		academy: "climate",
 		name: "Climate Academy",
 		description:
 			"Shape Africa's environmental future. Build the skills to lead in green innovation, sustainability, and climate advocacy.",
@@ -35,34 +42,46 @@ const academies = [
 	},
 ] as const;
 
-const testimonials = [
+type Academy = (typeof academies)[number]["academy"];
+
+const testimonials: readonly Review[] = [
 	{
+		id: "adesola-adewale",
 		quote:
 			"I came with no tech background. Now I'm a product designer at a global firm. This academy changed my entire career trajectory.",
 		name: "Adesola Adewale",
 		title: "Founder, ReadEvolve",
-		image: "/assets/academy/adesola_crop.png",
+		image: { src: "/assets/academy/adesola_crop.png", alt: "Adesola Adewale" },
 	},
 	{
+		id: "adeleke-glory",
 		quote:
 			"I walked in with an idea. I walked out with a registered business, three clients, and the confidence to lead a team.",
 		name: "Adeleke Glory",
 		title: "Student, Lautech Campus",
-		image: "/assets/academy/glory_crop.png",
+		image: { src: "/assets/academy/glory_crop.png", alt: "Adeleke Glory" },
 	},
 	{
+		id: "elizabeth-akinmolayan",
 		quote:
 			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
 		name: "Elizabeth Akinmolayan",
 		title: "Student, FUTA Campus",
-		image: "/assets/academy/elizabeth_crop.png",
+		image: {
+			src: "/assets/academy/elizabeth_crop.png",
+			alt: "Elizabeth Akinmolayan",
+		},
 	},
 	{
+		id: "olafisoye-theresa",
 		quote:
 			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
 		name: "Olafisoye Theresa",
 		title: "Campus lead, 4Herfrika FUTA campus",
-		image: "/assets/academy/theresa_crop.png",
+		image: {
+			src: "/assets/academy/theresa_crop.png",
+			alt: "Olafisoye Theresa",
+		},
 	},
 ] as const;
 
@@ -121,6 +140,12 @@ function AcademyNav() {
 export function AcademyPage() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [academyIndex, setAcademyIndex] = useState(0);
+	const [selectedAcademy, setSelectedAcademy] = useState<Academy>("tech");
+
+	const openWaitlist = (academy: Academy = "tech") => {
+		setSelectedAcademy(academy);
+		setModalOpen(true);
+	};
 
 	useEffect(() => {
 		document.body.dataset.academyPage = "true";
@@ -159,7 +184,7 @@ export function AcademyPage() {
 					<div className="mt-[34px] flex justify-center gap-4 max-sm:flex-col max-sm:items-center">
 						<Button
 							type="button"
-							onClick={() => setModalOpen(true)}
+							onClick={() => openWaitlist()}
 							size="lg"
 							className="h-[53px] gap-2 bg-[#e91e63] px-6 text-xl font-medium hover:bg-[#d91757]"
 						>
@@ -205,8 +230,8 @@ export function AcademyPage() {
 						))}
 					</div>
 
-					<div className="mt-20 grid gap-12 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:items-end xl:gap-12 2xl:gap-20">
-						<div className="flex min-w-0 flex-col justify-between gap-12 xl:min-h-[746px]">
+					<div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-end lg:gap-8 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20">
+						<div className="flex min-w-0 flex-col justify-between gap-12 lg:min-h-[478px] xl:min-h-[746px]">
 							<div>
 								<h2 className="text-5xl font-bold leading-[1] text-black">
 									Three paths.
@@ -255,24 +280,31 @@ export function AcademyPage() {
 										key={academy.name}
 										aria-hidden={index !== academyIndex}
 										inert={index !== academyIndex}
-										className={`col-start-1 row-start-1 mx-auto h-[860px] w-full max-w-[669px] overflow-hidden rounded-[54px] bg-white p-[46px] shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none xl:mx-0 max-lg:h-auto max-sm:rounded-3xl max-sm:p-6 ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+										className={`col-start-1 row-start-1 mx-auto h-auto w-full max-w-[520px] overflow-hidden rounded-3xl bg-white p-6 shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none sm:rounded-[36px] sm:p-8 lg:mx-0 xl:h-[860px] xl:max-w-[669px] xl:rounded-[54px] xl:p-[46px] ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
 									>
-										<div className="relative h-[564px] overflow-hidden rounded-[54px] max-lg:aspect-[4/5] max-lg:h-auto max-lg:rounded-2xl">
+										<div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:aspect-[16/10] sm:rounded-[28px] xl:h-[564px] xl:rounded-[54px]">
 											<Image
 												src={academy.image}
 												alt={academy.name}
 												fill
-												sizes="669px"
+												sizes="(max-width: 1279px) 520px, 669px"
 												className="object-cover"
 											/>
-											<span className="absolute bottom-9 right-9 grid size-12 place-items-center rounded-full border-2 border-white text-white">
-												<ArrowRight className="size-6 -rotate-45" />
-											</span>
+											<Button
+												type="button"
+												onClick={() => openWaitlist(academy.academy)}
+												variant="outline-white"
+												size="icon"
+												aria-label={`Join the ${academy.name} waitlist`}
+												className="absolute bottom-5 right-5 size-10 border-2 text-white sm:bottom-6 sm:right-6 sm:size-12 xl:bottom-9 xl:right-9"
+											>
+												<ArrowRight className="size-5 -rotate-45 sm:size-6" />
+											</Button>
 										</div>
-										<h3 className="mt-6 text-2xl font-semibold leading-[38px] text-black">
+										<h3 className="mt-5 text-xl font-semibold leading-8 text-black sm:text-2xl sm:leading-[38px] xl:mt-6">
 											{academy.name}
 										</h3>
-										<p className="mt-1 text-xl leading-[25px] text-[#4b4b4b]">
+										<p className="mt-1 text-base leading-6 text-[#4b4b4b] sm:text-lg sm:leading-[25px] xl:text-xl">
 											{academy.description}
 										</p>
 									</article>
@@ -297,7 +329,7 @@ export function AcademyPage() {
 					</div>
 					<Button
 						type="button"
-						onClick={() => setModalOpen(true)}
+						onClick={() => openWaitlist()}
 						variant="outline-white"
 						size="sm"
 						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-lg:static max-lg:self-start"
@@ -316,78 +348,40 @@ export function AcademyPage() {
 				</div>
 			</section>
 
-			<section className="relative overflow-x-clip bg-[#f5f5f5] px-6 py-20 xl:px-12 xl:py-[75px] 2xl:px-20">
-				<div className="relative z-10 mx-auto max-w-[1280px]">
-					<div className="mx-auto max-w-[880px] text-center">
-						<h2 className="text-[63px] font-semibold leading-[66px] max-sm:text-4xl max-sm:leading-tight">
-							<span className="text-[#ec008c]">Don’t</span> Take our{" "}
-							<span className="text-[#ec008c]">Words</span> for it!
-						</h2>
-						<p className="mt-6 text-xl font-medium leading-[27px]">
-							Take a look at what our learners say!
-						</p>
-					</div>
-
-					<Image
-						src="/assets/academy/decorative-logo.png"
-						alt=""
-						width={173}
-						height={251}
-						className="absolute -right-2 top-16 h-[251px] w-[173px] -rotate-[24deg] opacity-15"
-					/>
-					<Image
-						src="/assets/academy/decorative-logo.png"
-						alt=""
-						width={173}
-						height={251}
-						className="absolute -left-[106px] bottom-[-40px] h-[251px] w-[173px] -rotate-[40deg] opacity-15"
-					/>
-
-					<div className="mt-14 grid grid-cols-1 gap-x-[52px] gap-y-14 xl:grid-cols-2">
-						{testimonials.map((testimonial) => (
-							<article
-								key={testimonial.name}
-								className="relative min-w-0 pl-10 sm:pl-[41px]"
-							>
-								<div className="flex min-h-[209px] min-w-0 flex-col rounded-2xl bg-[#c62979] py-8 pl-16 pr-8 text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] sm:pl-[57px] sm:pr-[41px]">
-									<p className="text-base font-medium leading-6 sm:text-lg sm:leading-[23px]">
-										{testimonial.quote}
-									</p>
-									<div className="mt-6 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
-										<div className="min-w-0">
-											<h3 className="text-xl font-semibold leading-[25px]">
-												{testimonial.name}
-											</h3>
-											<p className="mt-2 text-sm leading-[18px]">
-												{testimonial.title}
-											</p>
-										</div>
-										<span
-											aria-label="5 out of 5 stars"
-											className="whitespace-nowrap text-base tracking-[3px]"
-										>
-											★★★★★
-										</span>
-									</div>
-								</div>
-								<Image
-									src={testimonial.image}
-									alt={testimonial.name}
-									width={82}
-									height={82}
-									className="absolute left-0 top-1/2 size-[82px] -translate-y-1/2 rounded-full object-cover"
-								/>
-							</article>
-						))}
-					</div>
-				</div>
-			</section>
+			<ReviewsSection
+				heading={
+					<>
+						<span className="text-[#ec008c]">Don’t</span> Take our{" "}
+						<span className="text-[#ec008c]">Words</span> for it!
+					</>
+				}
+				subheading="Take a look at what our learners say!"
+				reviews={testimonials}
+				decorations={
+					<>
+						<Image
+							src="/assets/academy/decorative-logo.png"
+							alt=""
+							width={173}
+							height={251}
+							className="pointer-events-none absolute -right-2 top-16 h-[251px] w-[173px] -rotate-[24deg] opacity-15"
+						/>
+						<Image
+							src="/assets/academy/decorative-logo.png"
+							alt=""
+							width={173}
+							height={251}
+							className="pointer-events-none absolute -left-[106px] bottom-[-40px] h-[251px] w-[173px] -rotate-[40deg] opacity-15"
+						/>
+					</>
+				}
+			/>
 
 			<AcademyFooter />
 			<WaitlistModal
 				open={modalOpen}
 				onOpenChange={setModalOpen}
-				academy="tech"
+				academy={selectedAcademy}
 			/>
 		</main>
 	);

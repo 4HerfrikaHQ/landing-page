@@ -58,8 +58,16 @@ export function WaitlistModal({
 	);
 
 	useEffect(() => {
-		if (academy) form.setValue("academy", academy);
-	}, [academy, form]);
+		if (!open) return;
+
+		form.reset({
+			name: "",
+			email: "",
+			phone: "",
+			academy: academy ?? "tech",
+			location: "",
+		});
+	}, [academy, form, open]);
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>

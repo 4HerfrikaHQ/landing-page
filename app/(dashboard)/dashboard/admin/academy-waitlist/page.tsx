@@ -1,30 +1,34 @@
 import { PageHeader } from "@/components/dashboard/page-header";
-import { Pagination } from "@/components/dashboard/pagination";
 import { currentDbUser } from "@/src/auth";
 import { db, schema } from "@/src/db";
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import type { Academy } from "@/src/db/schema/tables";
+import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { unauthorized } from "next/navigation";
+import { AcademyWaitlistTable } from "./_components/academy-waitlist-table";
 
 const PAGE_SIZE = 20;
 
 export default async function AcademyWaitlistPage({
 	searchParams,
-}: { searchParams: Promise<{ academy?: string; q?: string; page?: string }> }) {
+}: {
+	searchParams: Promise<{
+		academy?: string;
+		q?: string;
+		page?: string;
+		sort?: string;
+	}>;
+}) {
 	const user = await currentDbUser();
 	if (user.role !== "super_admin") unauthorized();
 	const sp = await searchParams;
 	const academy = ["tech", "business", "climate"].includes(sp.academy ?? "")
-		? sp.academy
+		? (sp.academy as Academy)
 		: undefined;
 	const q = sp.q?.trim();
 	const page = Math.max(1, Number(sp.page) || 1);
+	const sort = sp.sort === "oldest" ? "oldest" : "newest";
 	const where = and(
-		academy
-			? eq(
-					schema.academyWaitlistEntries.academy,
-					academy as "tech" | "business" | "climate",
-				)
-			: undefined,
+		academy ? eq(schema.academyWaitlistEntries.academy, academy) : undefined,
 		q
 			? or(
 					ilike(schema.academyWaitlistEntries.name, `%${q}%`),
@@ -38,7 +42,11 @@ export default async function AcademyWaitlistPage({
 			.select()
 			.from(schema.academyWaitlistEntries)
 			.where(where)
-			.orderBy(desc(schema.academyWaitlistEntries.created_at))
+			.orderBy(
+				sort === "oldest"
+					? asc(schema.academyWaitlistEntries.created_at)
+					: desc(schema.academyWaitlistEntries.created_at),
+			)
 			.limit(PAGE_SIZE)
 			.offset((page - 1) * PAGE_SIZE),
 		db
@@ -54,90 +62,22 @@ export default async function AcademyWaitlistPage({
 			.where(where),
 	]);
 	const total = totalRows[0]?.count ?? 0;
-	const dateFormatter = new Intl.DateTimeFormat("en-NG", {
-		dateStyle: "medium",
-	});
 	return (
 		<div>
 			<PageHeader
 				title="Academy waitlist"
 				subtitle="People interested in upcoming Academy programmes."
 			/>
-			<div className="mb-6 grid gap-3 sm:grid-cols-3">
-				{["tech", "business", "climate"].map((item) => (
-					<a
-						key={item}
-						href={`/dashboard/admin/academy-waitlist?academy=${item}`}
-						className="rounded-2xl border bg-white p-4 capitalize no-underline"
-					>
-						<p className="text-sm text-muted-foreground">{item} Academy</p>
-						<p className="mt-1 text-2xl font-bold">
-							{counts.find((count) => count.academy === item)?.count ?? 0}
-						</p>
-					</a>
-				))}
-			</div>
-			<form className="mb-5 flex flex-wrap gap-3">
-				<input
-					name="q"
-					defaultValue={q}
-					placeholder="Search name, email or location"
-					className="h-10 min-w-64 rounded-lg border bg-white px-3 text-sm"
-				/>
-				<select
-					name="academy"
-					defaultValue={academy}
-					className="h-10 rounded-lg border bg-white px-3 text-sm"
-				>
-					<option value="">All academies</option>
-					<option value="tech">Tech</option>
-					<option value="business">Business</option>
-					<option value="climate">Climate</option>
-				</select>
-				<button className="rounded-full bg-primary-500 px-5 text-sm font-medium text-white">
-					Filter
-				</button>
-			</form>
-			<div className="overflow-x-auto rounded-2xl border bg-white">
-				<table className="w-full min-w-175 text-left text-sm">
-					<thead className="border-b bg-muted/40 text-muted-foreground">
-						<tr>
-							{["Name", "Academy", "Email", "Phone", "Location", "Joined"].map(
-								(label) => (
-									<th key={label} className="px-5 py-3 font-medium">
-										{label}
-									</th>
-								),
-							)}
-						</tr>
-					</thead>
-					<tbody>
-						{rows.map((row) => (
-							<tr key={row.id} className="border-b last:border-0">
-								<td className="px-5 py-4 font-medium">{row.name}</td>
-								<td className="px-5 py-4 capitalize">{row.academy}</td>
-								<td className="px-5 py-4">{row.email}</td>
-								<td className="px-5 py-4">{row.phone}</td>
-								<td className="px-5 py-4">{row.location}</td>
-								<td className="px-5 py-4 text-muted-foreground">
-									{dateFormatter.format(row.created_at)}
-								</td>
-							</tr>
-						))}
-						{rows.length === 0 && (
-							<tr>
-								<td
-									colSpan={6}
-									className="px-5 py-12 text-center text-muted-foreground"
-								>
-									No waitlist entries yet.
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-			</div>
-			<Pagination page={page} pageSize={PAGE_SIZE} total={total} />
+			<AcademyWaitlistTable
+				rows={rows}
+				academy={academy}
+				counts={Object.fromEntries(
+					counts.map((entry) => [entry.academy, entry.count]),
+				)}
+				page={page}
+				pageSize={PAGE_SIZE}
+				total={total}
+			/>
 		</div>
 	);
 }

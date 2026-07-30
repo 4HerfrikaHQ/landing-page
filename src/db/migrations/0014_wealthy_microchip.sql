@@ -6,5 +6,5 @@ CREATE TABLE "academy_waitlist_entries" (
 	"academy" text NOT NULL,
 	"location" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "academy_waitlist_entries_email_academy_unique" UNIQUE("email", "academy")
+	CONSTRAINT "academy_waitlist_entries_email_academy_unique" UNIQUE("email","academy")
 );

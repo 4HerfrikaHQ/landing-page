@@ -62,7 +62,11 @@ export const MobileNav = () => {
 				<Menu className="h-6 w-6" />
 			</SheetTrigger>
 
-			<SheetContent side="right" className="px-6 py-6 overflow-y-auto">
+			<SheetContent
+				side="right"
+				className="z-80 overflow-y-auto px-6 py-6"
+				overlayClassName="z-70"
+			>
 				<div className="flex items-center justify-between">
 					<Link
 						href={"/" as Route}
