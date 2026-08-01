@@ -61,16 +61,21 @@ export function AcademyWaitlistTable({
 						paramKey="academy"
 						defaultValue=""
 						allLabel="All academies"
+						resetPageOnChange
 						options={optionsWithCounts}
 					/>
 				</div>
 				<FilterBar>
-					<SearchInput placeholder="Search name, email or location…" />
+					<SearchInput
+						placeholder="Search name, email or location…"
+						resetPageOnChange
+					/>
 					<FilterPills
 						label="Sort"
 						paramKey="sort"
 						defaultValue="newest"
 						includeAll={false}
+						resetPageOnChange
 						options={SORT_OPTIONS}
 					/>
 				</FilterBar>
