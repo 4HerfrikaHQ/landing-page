@@ -17,6 +17,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { LocaleSwitcher } from "../../_components/locale-switcher";
 import { SubscribeFormClient } from "../../_components/subscribe-client";
 import { WaitlistModal } from "./waitlist-modal";
 
@@ -125,6 +126,9 @@ function AcademyNav() {
 							{label}
 						</Link>
 					))}
+				</div>
+				<div className="ml-6">
+					<LocaleSwitcher />
 				</div>
 				<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-[104px]">
 					<Link
