@@ -83,7 +83,6 @@ export default async function BlogPage({
 				<BlogSection
 					posts={posts}
 					categories={categories}
-					featuredUid={featured?.uid}
 				/>
 			</Suspense>
 

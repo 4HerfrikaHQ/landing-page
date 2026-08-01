@@ -9,25 +9,22 @@ import { computeReadTime, formatPrismicDate } from "../_utils";
 type Props = {
   posts: Content.BlogPostDocument[];
   categories: Content.BlogCategoryDocument[];
-  featuredUid?: string;
 };
 
-export function BlogSection({ posts, categories, featuredUid }: Props) {
+export function BlogSection({ posts, categories }: Props) {
   const [activeCategory, setActiveCategory] = useQueryState("category", {
     defaultValue: "all",
   });
 
-  const gridPosts = featuredUid ? posts.filter((p) => p.uid !== featuredUid) : posts;
-
   const usedCategoryUids = new Set(
-    gridPosts.map((post) => (post.data.category as { uid?: string })?.uid).filter(Boolean)
+    posts.map((post) => (post.data.category as { uid?: string })?.uid).filter(Boolean)
   );
 
   const visibleCategories = categories.filter((cat) => usedCategoryUids.has(cat.uid));
 
   const filtered = activeCategory === "all"
-    ? gridPosts
-    : gridPosts.filter((post) => {
+    ? posts
+    : posts.filter((post) => {
       const cat = post.data.category as { uid?: string };
       return cat?.uid === activeCategory;
     });
