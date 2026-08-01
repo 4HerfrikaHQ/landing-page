@@ -20,6 +20,7 @@ import { NavbarLink } from "./navbar-link";
 const NAV_LINK_KEYS: Record<string, string> = {
 	"About Us": "aboutUs",
 	Projects: "projects",
+	Academy: "academy",
 	"Career Corner": "careerCorner",
 	Blog: "blog",
 	"Contact Us": "contactUs",
