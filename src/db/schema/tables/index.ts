@@ -47,3 +47,5 @@ export type {
 } from "./booking-feedback";
 
 export * from "./relations";
+export { academyWaitlistEntries, Academy } from "./academy-waitlist-entries";
+export type { DbAcademyWaitlistEntry } from "./academy-waitlist-entries";

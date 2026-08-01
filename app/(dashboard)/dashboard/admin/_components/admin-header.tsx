@@ -30,6 +30,7 @@ const SEGMENT_LABELS: Record<string, string> = {
 	mentors: "Mentors",
 	admins: "Admins",
 	applications: "Applications",
+	"academy-waitlist": "Academy waitlist",
 	bookings: "Bookings",
 };
 
@@ -55,6 +56,12 @@ const NAV_ITEMS: {
 		key: "applications",
 		label: "Applications",
 		href: "/dashboard/admin/applications" as Route,
+		icon: FileText,
+	},
+	{
+		key: "academy-waitlist",
+		label: "Academy waitlist",
+		href: "/dashboard/admin/academy-waitlist" as Route,
 		icon: FileText,
 	},
 	{

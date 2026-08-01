@@ -52,6 +52,8 @@ interface FilterPillsProps {
 	 * query reading this param refetches. Set true for purely client-side filtering.
 	 */
 	shallow?: boolean;
+	/** Clear the URL page when this filter changes. */
+	resetPageOnChange?: boolean;
 	className?: string;
 }
 
@@ -67,12 +69,17 @@ export function FilterPills({
 	includeAll = true,
 	allLabel = "All",
 	shallow = false,
+	resetPageOnChange = false,
 	className,
 }: FilterPillsProps) {
 	const [active, setActive] = useQueryState(paramKey, {
 		defaultValue,
 		shallow,
 	});
+	const [, setPage] = useQueryState(
+		"page",
+		parseAsString.withOptions({ shallow }),
+	);
 
 	const pills: FilterOption[] = includeAll
 		? [{ value: defaultValue, label: allLabel }, ...options]
@@ -97,7 +104,10 @@ export function FilterPills({
 				<button
 					key={opt.value}
 					type="button"
-					onClick={() => setActive(opt.value)}
+					onClick={() => {
+						void setActive(opt.value);
+						if (resetPageOnChange) void setPage(null);
+					}}
 					className={pillClass(opt.value)}
 				>
 					{opt.label}
@@ -128,6 +138,8 @@ interface SearchInputProps {
 	 * query reading this param refetches. Set true for purely client-side filtering.
 	 */
 	shallow?: boolean;
+	/** Clear the URL page when the search term changes. */
+	resetPageOnChange?: boolean;
 	className?: string;
 }
 
@@ -141,6 +153,7 @@ export function SearchInput({
 	placeholder = "Search…",
 	debounceMs = 300,
 	shallow = false,
+	resetPageOnChange = false,
 	className,
 }: SearchInputProps) {
 	const id = useId();
@@ -149,6 +162,10 @@ export function SearchInput({
 		parseAsString
 			.withDefault("")
 			.withOptions({ limitUrlUpdates: debounce(debounceMs), shallow }),
+	);
+	const [, setPage] = useQueryState(
+		"page",
+		parseAsString.withOptions({ shallow }),
 	);
 
 	return (
@@ -159,7 +176,10 @@ export function SearchInput({
 				type="search"
 				value={value}
 				placeholder={placeholder}
-				onChange={(e) => setValue(e.target.value || null)}
+				onChange={(e) => {
+					void setValue(e.target.value || null);
+					if (resetPageOnChange) void setPage(null);
+				}}
 				className="h-10 w-full rounded-full border border-[#E0E0E0] bg-white pl-9 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:border-primary-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
 			/>
 		</div>

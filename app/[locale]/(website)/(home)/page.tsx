@@ -1,6 +1,11 @@
 import { FadeIn } from "@/components/motion";
+import {
+	type Review,
+	ReviewsSection,
+} from "@/components/reviews/reviews-section";
 import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import { asImageSrc } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
 import type { Metadata } from "next";
 import type { Route } from "next";
@@ -11,7 +16,6 @@ import { JOIN_US_URL } from "../navigation";
 import { getHomepage } from "./_actions";
 import { ExploreCommunity } from "./_components/explore-community";
 import { Hero } from "./_components/hero";
-import { TestimonialCarousel } from "./_components/testimonial-carousel";
 
 export async function generateMetadata({
 	params,
@@ -40,6 +44,24 @@ export default async function HomePage({
 		campuses,
 		countries,
 	} = page.data;
+	const reviews: Review[] = testimonials.map((testimonial, index) => {
+		const imageSrc = asImageSrc(testimonial.profile_picture);
+		const name = testimonial.name || `Community member ${index + 1}`;
+
+		return {
+			id: `${name}-${index}`,
+			quote: testimonial.testimonial || "",
+			name,
+			title: testimonial.role_and_location,
+			rating: Number(testimonial.rating) || 5,
+			image: imageSrc
+				? {
+						src: imageSrc,
+						alt: testimonial.profile_picture.alt || name,
+					}
+				: null,
+		};
+	});
 
 	return (
 		<section className="bg-background">
@@ -95,29 +117,23 @@ export default async function HomePage({
 				</FadeIn>
 			</section>
 			{/* Words of the street */}
-			{testimonials.length > 0 && (
-				<section className="relative bg-muted px-4 py-12 lg:px-7 lg:pt-20 lg:pb-24 overflow-x-hidden">
-					<AfricaLogo className="w-24 absolute -right-12 top-24 lg:w-67.5 lg:-right-8 lg:top-8" />
-					<AfricaLogo className="hidden lg:block w-67.5 absolute left-4 bottom-0" />
-
-					<FadeIn>
-						<h1 className="text-center text-foreground text-3xl lg:text-4xl font-semibold mb-4 lg:mb-8">
-							{t.rich("wordsOnStreet", {
-								pink: (chunks) => (
-									<span className="text-primary-500">{chunks}</span>
-								),
-							})}
-						</h1>
-
-						<p className="text-center text-foreground text-lg mb-8 lg:text-xl">
-							{t("wordsOnStreetSub")}
-						</p>
-					</FadeIn>
-
-					<div className="container mx-auto px-2">
-						<TestimonialCarousel testimonials={testimonials} />
-					</div>
-				</section>
+			{reviews.length > 0 && (
+				<ReviewsSection
+					heading={t.rich("wordsOnStreet", {
+						pink: (chunks) => (
+							<span className="text-primary-500">{chunks}</span>
+						),
+					})}
+					subheading={t("wordsOnStreetSub")}
+					reviews={reviews}
+					layout="carousel"
+					decorations={
+						<>
+							<AfricaLogo className="pointer-events-none absolute -right-12 top-24 w-24 lg:-right-8 lg:top-8 lg:w-67.5" />
+							<AfricaLogo className="pointer-events-none absolute bottom-0 left-4 hidden w-67.5 lg:block" />
+						</>
+					}
+				/>
 			)}
 		</section>
 	);
