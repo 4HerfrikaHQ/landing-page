@@ -13,9 +13,11 @@ import {
 	Twitter,
 } from "lucide-react";
 import type { Route } from "next";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { SubscribeFormClient } from "../../_components/subscribe-client";
 import { WaitlistModal } from "./waitlist-modal";
 
 const academies = [
@@ -43,6 +45,12 @@ const academies = [
 ] as const;
 
 type Academy = (typeof academies)[number]["academy"];
+
+const academyTranslationKeys = {
+	tech: { name: "techAcademy", description: "techDescription" },
+	business: { name: "businessAcademy", description: "businessDescription" },
+	climate: { name: "climateAcademy", description: "climateDescription" },
+} as const;
 
 const testimonials: readonly Review[] = [
 	{
@@ -86,7 +94,7 @@ const testimonials: readonly Review[] = [
 ] as const;
 
 const navLinks = [
-	["About Us", "/about-us"],
+	["About Us", "/about"],
 	["Projects", "/projects"],
 	["Academy", "/academy"],
 	["Career Corner", "/careers-corner"],
@@ -138,6 +146,7 @@ function AcademyNav() {
 }
 
 export function AcademyPage() {
+	const t = useTranslations("academy");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [academyIndex, setAcademyIndex] = useState(0);
 	const [selectedAcademy, setSelectedAcademy] = useState<Academy>("tech");
@@ -171,15 +180,13 @@ export function AcademyPage() {
 
 				<div className="absolute left-1/2 top-[260px] z-10 w-[973px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:top-44">
 					<h1 className="text-[64px] font-medium leading-[1.265] tracking-[-1px] max-sm:text-5xl">
-						<span className="block">Trained. Built.</span>
+						<span className="block">{t("heroFirst")}</span>
 						<em className="block font-playfair font-black text-[#ec008c]">
-							Unstoppable
+							{t("heroSecond")}
 						</em>
 					</h1>
 					<p className="mx-auto mt-4 max-w-[665px] text-xl leading-8 max-sm:text-base">
-						Our Academies combine practical skills, industry mentorship, and
-						real-world projects. No prior experience needed. Just readiness to
-						grow.
+						{t("heroDescription")}
 					</p>
 					<div className="mt-[34px] flex justify-center gap-4 max-sm:flex-col max-sm:items-center">
 						<Button
@@ -188,7 +195,7 @@ export function AcademyPage() {
 							size="lg"
 							className="h-[53px] gap-2 bg-[#e91e63] px-6 text-xl font-medium hover:bg-[#d91757]"
 						>
-							Join the waitlist <ArrowRight className="size-5" />
+							{t("joinWaitlist")} <ArrowRight className="size-5" />
 						</Button>
 						<Button
 							href="/contact-us"
@@ -196,7 +203,7 @@ export function AcademyPage() {
 							size="lg"
 							className="h-[53px] border-[#ccc] px-6 text-xl font-medium text-[#eee] hover:border-[#ec008c]"
 						>
-							Contact us
+							{t("contactUs")}
 						</Button>
 					</div>
 				</div>
@@ -206,10 +213,10 @@ export function AcademyPage() {
 				<div className="mx-auto max-w-[1280px]">
 					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
 						{[
-							["3000+", "Girls Mentored"],
-							["25+", "Tech Academy Graduates"],
-							["3+", "Academies"],
-							["5+", "African Countries"],
+							["3000+", t("girlsMentored")],
+							["25+", t("graduates")],
+							["3+", t("academies")],
+							["5+", t("countries")],
 						].map(([value, label], index) => (
 							<div
 								key={label}
@@ -234,15 +241,14 @@ export function AcademyPage() {
 						<div className="flex min-w-0 flex-col justify-between gap-12 lg:min-h-[478px] xl:min-h-[746px]">
 							<div>
 								<h2 className="text-5xl font-bold leading-[1] text-black">
-									Three paths.
+									{t("pathsFirst")}
 									<br />
 									<em className="font-playfair font-extrabold text-[#ec008c]">
-										One mission
+										{t("pathsSecond")}
 									</em>
 								</h2>
 								<p className="mt-9 w-[548px] max-w-full text-xl leading-8 text-[#4b4b4b]">
-									Whether you are a student or a woman ready to take up
-									something new, 4Herfrika Academy is the right place for you.
+									{t("pathsDescription")}
 								</p>
 							</div>
 							<div className="flex gap-6">
@@ -252,7 +258,7 @@ export function AcademyPage() {
 										setAcademyIndex((index) => Math.max(0, index - 1))
 									}
 									disabled={academyIndex === 0}
-									aria-label="Previous academy"
+									aria-label={t("previous")}
 									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
 								>
 									<ArrowLeft className="size-5" />
@@ -265,7 +271,7 @@ export function AcademyPage() {
 										)
 									}
 									disabled={academyIndex === academies.length - 1}
-									aria-label="Next academy"
+									aria-label={t("next")}
 									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
 								>
 									<ArrowRight className="size-5" />
@@ -285,7 +291,7 @@ export function AcademyPage() {
 										<div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:aspect-[16/10] sm:rounded-[28px] xl:h-[564px] xl:rounded-[54px]">
 											<Image
 												src={academy.image}
-												alt={academy.name}
+												alt={t(academyTranslationKeys[academy.academy].name)}
 												fill
 												sizes="(max-width: 1279px) 520px, 669px"
 												className="object-cover"
@@ -295,17 +301,17 @@ export function AcademyPage() {
 												onClick={() => openWaitlist(academy.academy)}
 												variant="outline-white"
 												size="icon"
-												aria-label={`Join the ${academy.name} waitlist`}
+												aria-label={`${t("joinWaitlist")} — ${t(academyTranslationKeys[academy.academy].name)}`}
 												className="absolute bottom-5 right-5 size-10 border-2 text-white sm:bottom-6 sm:right-6 sm:size-12 xl:bottom-9 xl:right-9"
 											>
 												<ArrowRight className="size-5 -rotate-45 sm:size-6" />
 											</Button>
 										</div>
 										<h3 className="mt-5 text-xl font-semibold leading-8 text-black sm:text-2xl sm:leading-[38px] xl:mt-6">
-											{academy.name}
+											{t(academyTranslationKeys[academy.academy].name)}
 										</h3>
 										<p className="mt-1 text-base leading-6 text-[#4b4b4b] sm:text-lg sm:leading-[25px] xl:text-xl">
-											{academy.description}
+											{t(academyTranslationKeys[academy.academy].description)}
 										</p>
 									</article>
 								))}
@@ -334,7 +340,7 @@ export function AcademyPage() {
 						size="sm"
 						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-lg:static max-lg:self-start"
 					>
-						Join the waitlist <ArrowRight className="size-[18px]" />
+						{t("joinWaitlist")} <ArrowRight className="size-[18px]" />
 					</Button>
 				</div>
 				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-[719/737] max-lg:h-auto max-lg:w-full">
@@ -388,6 +394,8 @@ export function AcademyPage() {
 }
 
 function AcademyFooter() {
+	const t = useTranslations("footer");
+
 	return (
 		<footer className="relative h-[555px] bg-[#03065c] text-white max-lg:h-auto max-lg:px-6 max-lg:py-16">
 			<div className="absolute left-1/2 top-[94px] w-[1088px] -translate-x-1/2 max-lg:static max-lg:w-full max-lg:translate-x-0">
@@ -438,27 +446,11 @@ function AcademyFooter() {
 							</li>
 						</ul>
 					</div>
-					<div className="rounded-[19px] bg-white/20 px-[42px] py-[30px]">
-						<h2 className="text-[15px] font-bold">Subscribe</h2>
-						<form className="mt-3 flex h-[47px] overflow-hidden rounded-md bg-white">
-							<input
-								type="email"
-								aria-label="Email address"
-								placeholder="Email address"
-								className="min-w-0 flex-1 px-4 text-sm text-[#ec008c] outline-none"
-							/>
-							<button
-								type="submit"
-								aria-label="Subscribe"
-								className="grid w-[50px] cursor-pointer place-items-center bg-[rgba(236,0,140,0.6)]"
-							>
-								<ArrowRight className="size-4" />
-							</button>
-						</form>
-						<p className="mt-5 text-xs leading-5 opacity-80">
-							Subscribe to our newsletter for the latest updates and news
-						</p>
-					</div>
+					<SubscribeFormClient
+						label={t("subscribe")}
+						placeholder={t("emailPlaceholder")}
+						description={t("subscribeDescription")}
+					/>
 				</div>
 				<div className="mt-[51px] h-px bg-white/10" />
 				<div className="mt-7 flex items-center justify-between max-sm:flex-col max-sm:gap-6">
