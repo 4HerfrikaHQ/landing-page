@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { LocaleSwitcher } from "../../_components/locale-switcher";
 import { SubscribeFormClient } from "../../_components/subscribe-client";
+import { JOIN_US_URL } from "../../navigation";
 import { WaitlistModal } from "./waitlist-modal";
 
 const academies = [
@@ -137,12 +138,15 @@ function AcademyNav() {
 					>
 						Donate
 					</Link>
-					<Link
-						href="/contact-us"
-						className="rounded-full bg-[#ec008c] px-[30px] py-2.5 text-white"
+					<Button
+						href={JOIN_US_URL}
+						isExternal
+						variant="solid"
+						size="sm"
+						className="bg-[#ec008c] px-[30px] py-2.5 text-[19px] text-white"
 					>
 						Join Us
-					</Link>
+					</Button>
 				</div>
 			</nav>
 		</>
@@ -218,7 +222,7 @@ export function AcademyPage() {
 					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
 						{[
 							["3000+", t("girlsMentored")],
-							["25+", t("graduates")],
+							["1000+", t("graduates")],
 							["3+", t("academies")],
 							["5+", t("countries")],
 						].map(([value, label], index) => (
