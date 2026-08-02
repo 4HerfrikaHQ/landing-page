@@ -172,6 +172,16 @@ export function AcademyPage() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+		const timeout = window.setTimeout(() => {
+			setAcademyIndex((index) => (index + 1) % academies.length);
+		}, 3_000);
+
+		return () => window.clearTimeout(timeout);
+	}, [academyIndex]);
+
 	return (
 		<main className="academy-exact-page bg-white text-[#333]">
 			<section className="relative h-[845px] overflow-hidden text-white max-lg:h-[720px]">
