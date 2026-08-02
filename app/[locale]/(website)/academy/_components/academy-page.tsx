@@ -393,7 +393,7 @@ export function AcademyPage() {
 	}, [isAcademyControlsPaused, moveAcademy]);
 
 	return (
-		<main className="academy-exact-page bg-white text-[#333]">
+		<main className="academy-exact-page overflow-x-clip bg-white text-[#333]">
 			<section className="relative h-[845px] overflow-hidden text-white max-lg:h-[720px]">
 				<Image
 					src="/assets/academy/hero-source.jpg"
@@ -540,7 +540,7 @@ export function AcademyPage() {
 									scheduleAcademyLoop();
 								}}
 								aria-label="Academy paths"
-								className="-m-6 flex snap-x snap-mandatory scroll-px-6 gap-0 overflow-x-auto overscroll-x-contain py-6 xl:-my-6 xl:mx-0 xl:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+								className="-m-8 flex snap-x snap-mandatory scroll-px-8 gap-0 overflow-x-auto overscroll-x-contain px-2 py-8 xl:-my-8 xl:mx-0 xl:gap-8 xl:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 							>
 								{Array.from({ length: ACADEMY_COPY_COUNT }, (_, copy) =>
 									academies.map((academy, index) => (
@@ -548,7 +548,7 @@ export function AcademyPage() {
 											key={`${copy}-${academy.name}`}
 											aria-hidden={copy !== 1 || index !== academyIndex}
 											inert={copy !== 1 || index !== academyIndex}
-											className="mx-6 w-[calc(100%-3rem)] max-w-[450px] shrink-0 snap-start overflow-hidden rounded-2xl bg-white p-4 shadow-[0_12px_32px_rgba(0,0,0,0.10)] sm:rounded-3xl sm:p-6 xl:max-w-[570px] xl:rounded-[40px] xl:p-8"
+											className="mx-6 w-[calc(100%-3rem)] max-w-[450px] shrink-0 snap-start overflow-hidden rounded-2xl bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] sm:rounded-3xl sm:p-6 xl:max-w-[570px] xl:rounded-[40px] xl:p-8"
 										>
 											<div className="relative aspect-[3/2] overflow-hidden rounded-xl sm:rounded-2xl xl:rounded-[32px]">
 												<Image
