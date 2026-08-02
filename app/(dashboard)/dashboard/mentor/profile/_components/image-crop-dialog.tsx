@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/utils/cn";
 import { Check, ImageIcon, Loader2, Minus, Move, Plus } from "lucide-react";
-import Image from "next/image";
 import {
 	type PointerEvent as ReactPointerEvent,
 	useCallback,
@@ -213,7 +212,7 @@ export function ImageCropDialog({
 						<div
 							ref={frameRef}
 							className={cn(
-								"relative mx-auto w-full max-w-[360px] touch-none select-none overflow-hidden rounded-2xl bg-black shadow-2xl ring-1 ring-white/10",
+								"relative mx-auto aspect-[4/5] w-full max-w-[360px] touch-none select-none overflow-hidden rounded-2xl bg-black shadow-2xl ring-1 ring-white/10",
 								isSaving
 									? "cursor-wait"
 									: dragStart
@@ -349,13 +348,10 @@ function PreviewCard({
 		<div>
 			<div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-pink ring-1 ring-border/60">
 				{imageUrl ? (
-					<Image
+					<img
 						src={imageUrl}
 						alt=""
-						fill
-						sizes="180px"
-						className="max-w-none object-cover"
-						unoptimized
+						className="absolute max-w-none"
 						style={
 							imageSize.width && source.width
 								? {
