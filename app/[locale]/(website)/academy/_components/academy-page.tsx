@@ -465,8 +465,8 @@ export function AcademyPage() {
 						))}
 					</div>
 
-					<div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-start lg:gap-8 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20">
-						<div className="flex min-w-0 flex-col justify-between gap-12 lg:min-h-[478px] xl:min-h-[746px]">
+					<div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-stretch lg:gap-8 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20">
+						<div className="flex min-w-0 flex-col justify-between gap-12">
 							<div>
 								<h2 className="text-5xl font-bold leading-[1] text-black">
 									{t("pathsFirst")}
