@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prismic Content"
+  short_description: "Manage 4herfrika content through Prismic MCP"
+  default_prompt: "Use Prismic MCP to safely create or update 4herfrika content and media drafts."
