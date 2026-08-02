@@ -47,7 +47,7 @@ function calendarError(error: unknown): ActionError {
 	if (error instanceof OrgGoogleCalendarError) {
 		return new ActionError(
 			error.code === "connection_unavailable"
-				? "The 4Herfrika calendar is unavailable. Please try again later."
+				? "The 4HerFrika calendar is unavailable. Please try again later."
 				: "The calendar change could not be completed. Please contact support for manual resolution.",
 		);
 	}

@@ -26,7 +26,7 @@ This checklist validates mentor-owned Calendar events with dedicated test identi
 - [ ] Assert that the raw status loader contract is exactly `not_connected`, `connected`, `reauth_required`, `revoked`, or `disconnected`, plus safe identity/status metadata.
 - [ ] Separately assert the UI mapping: `connected` renders **Connected**; `reauth_required` and `revoked` render **Reauthorization required**; `not_connected` and `disconnected` render **Not connected**.
 - [ ] Assert that connect, reconnect, and disconnect actions are mentor-scoped and do not return tokens, authorization codes, raw Google responses, event descriptions, or Meet URLs.
-- [ ] Assert that an unavailable or `reauth_required` connection blocks slot discovery and booking creation; there is no central-organizer or placeholder fallback.
+- [ ] Assert that no mentor connection, an unavailable/`reauth_required` connection, a revoked/disconnected connection, an identity mismatch, and a failed token refresh route new slot discovery and booking creation through the configured 4HerFrika organizer; no placeholder is used in production.
 - [ ] Assert that Calendar inserts target the mentor's `primary` calendar, request a unique Meet conference, invite the mentee, and verify mentor organizer/creator identity.
 - [ ] Assert that `invalid_grant` becomes `reauth_required` and that retrying does not create a second event.
 - [ ] Assert that reschedule does not delete the existing Google event before the replacement is confirmed. If Google deletion fails, the booking is recoverable/manual-resolution state rather than falsely marked complete.
@@ -37,7 +37,7 @@ This checklist validates mentor-owned Calendar events with dedicated test identi
 ## Human/live verification — connect and ownership
 
 - [ ] Sign in to the mentor dashboard using the dedicated pilot mentor identity.
-- [ ] Open the mentor profile. Confirm the Calendar panel says **Not connected** and that booking availability is clearly described as unavailable until connection.
+- [ ] Open the mentor profile. Confirm the Calendar panel says **Not connected** and explains that Google Calendar is optional while unconnected bookings are hosted by 4HerFrika.
 - [ ] Select **Connect Google Calendar**. Complete Google's authorization as the pilot mentor, grant only the full reviewed scope set, and return to the dashboard.
 - [ ] Confirm the panel says **Connected**, shows only the safe Google email/display identity, displays **Connected on <timestamp>**, and shows the current health/status result (Connected or an explicit access-check warning). Treat **Connected on** as connection time, never as a last-successful-use timestamp. Confirm no token or authorization code appears in the browser address bar, UI, or logs.
 - [ ] Create one synthetic booking through the normal booking flow.
@@ -69,7 +69,7 @@ This checklist validates mentor-owned Calendar events with dedicated test identi
 
 - [ ] From the pilot mentor's Google account security settings, revoke the app's access. Do not copy the revocation response or any credentials.
 - [ ] Return to the mentor dashboard and reload the profile. Confirm the profile's bounded Calendar health check runs and shows **Reauthorization required** (the UI label mapped from the backend's `reauth_required` status) after Google reports the grant is no longer usable.
-- [ ] Attempt a synthetic slot discovery or booking. Confirm it fails closed with a clear reconnect instruction and does not use the shared 4Herfrika organizer.
+- [ ] Attempt a synthetic slot discovery or booking. Confirm it uses the shared 4HerFrika organizer, sends at most one reconnect notice to the mentor, and does not use the broken mentor grant.
 - [ ] Select **Reauthorize this account** and authorize the same pilot mentor identity again with forced consent. Confirm denial, wrong-account, expired-state, and insufficient-scope outcomes each return an actionable safe message without provider text, codes, tokens, or URLs.
 - [ ] Confirm the panel returns to **Connected**, the safe identity metadata is correct, and a new synthetic booking uses the mentor as organizer/creator.
 - [ ] If Google presents a different account during reconnect, cancel and confirm the app rejects the wrong-account link rather than silently replacing the mentor's connection.

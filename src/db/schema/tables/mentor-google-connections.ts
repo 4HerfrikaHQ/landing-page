@@ -79,6 +79,12 @@ export const mentorGoogleConnections = pgTable(
 		reauthorization_required_at: timestamp("reauthorization_required_at", {
 			withTimezone: true,
 		}),
+		reauthorization_notice_sent_at: timestamp(
+			"reauthorization_notice_sent_at",
+			{
+				withTimezone: true,
+			},
+		),
 		revoked_at: timestamp("revoked_at", { withTimezone: true }),
 		disconnected_at: timestamp("disconnected_at", { withTimezone: true }),
 		created_at: timestamp("created_at", { withTimezone: true })
