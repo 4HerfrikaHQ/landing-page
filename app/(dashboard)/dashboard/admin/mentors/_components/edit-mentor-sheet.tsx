@@ -12,10 +12,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { getAvailability } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
-import { DownloadIcon, Loader2Icon } from "lucide-react";
+import { DownloadIcon, ImagePlusIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState, useTransition } from "react";
-import { updateMentor } from "../_actions";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { ImageCropDialog } from "../../../mentor/profile/_components/image-crop-dialog";
+import { updateMentor, uploadMentorImage } from "../_actions";
 
 type Tab = "details" | "availability";
 
@@ -42,6 +44,11 @@ export function EditMentorSheet({
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 	const [isDownloading, setIsDownloading] = useState(false);
+	const [imagePreview, setImagePreview] = useState(mentor.image);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
+	const imageInputRef = useRef<HTMLInputElement>(null);
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
 	>(null);
@@ -52,6 +59,16 @@ export function EditMentorSheet({
 			getAvailability(mentor.id).then(setAvailabilitySlots);
 		}
 	}, [tab, mentor.id, availabilitySlots]);
+
+	useEffect(() => {
+		setImagePreview(mentor.image);
+	}, [mentor.image]);
+
+	useEffect(() => {
+		return () => {
+			if (cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropSource]);
 
 	const onOpenChange = (open: boolean) => {
 		if (open === false) {
@@ -76,11 +93,46 @@ export function EditMentorSheet({
 		});
 	}
 
+	function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		if (file.size > 4 * 1024 * 1024) {
+			toast.error("Image must be under 4MB.");
+			return;
+		}
+
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
+
+	async function handleCropSave(file: File) {
+		const formData = new FormData();
+		formData.append("file", file);
+
+		setIsUploading(true);
+		try {
+			const result = await uploadMentorImage(mentor.id, formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
+			}
+			if (result.url) setImagePreview(result.url);
+			setIsCropOpen(false);
+			setCropSource(null);
+			toast.success("Profile photo updated");
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsUploading(false);
+		}
+	}
+
 	async function handleImageDownload() {
-		if (!mentor.image) return;
+		if (!imagePreview) return;
 
 		const extension =
-			mentor.image
+			imagePreview
 				.split("?")[0]
 				.split(".")
 				.pop()
@@ -92,7 +144,7 @@ export function EditMentorSheet({
 
 		setIsDownloading(true);
 		try {
-			const response = await fetch(mentor.image);
+			const response = await fetch(imagePreview);
 			if (!response.ok) throw new Error("Image download failed");
 
 			const blob = await response.blob();
@@ -107,7 +159,7 @@ export function EditMentorSheet({
 		} catch {
 			// Keep a native fallback for environments that block cross-origin fetches.
 			const link = document.createElement("a");
-			link.href = mentor.image;
+			link.href = imagePreview;
 			link.download = filename;
 			link.target = "_blank";
 			link.rel = "noreferrer";
@@ -169,9 +221,9 @@ export function EditMentorSheet({
 								</span>
 								<div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
 									<div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
-										{mentor.image ? (
+										{imagePreview ? (
 											<Image
-												src={mentor.image}
+												src={imagePreview}
 												alt={mentor.name}
 												fill
 												className="object-cover object-top"
@@ -191,25 +243,53 @@ export function EditMentorSheet({
 									</div>
 									<div className="min-w-0">
 										<p className="truncate text-sm text-gray-700">
-											{mentor.image
+											{imagePreview
 												? "Current profile photo"
 												: "No profile photo uploaded"}
 										</p>
-										<Button
-											type="button"
-											variant="outline"
-											size="sm"
-											className="mt-2 gap-1.5"
-											onClick={handleImageDownload}
-											disabled={!mentor.image || isDownloading}
-										>
-											{isDownloading ? (
-												<Loader2Icon className="size-3.5 animate-spin" />
-											) : (
-												<DownloadIcon className="size-3.5" />
-											)}
-											{isDownloading ? "Downloading…" : "Download image"}
-										</Button>
+										<input
+											ref={imageInputRef}
+											type="file"
+											accept="image/jpeg,image/png,image/webp"
+											className="hidden"
+											onChange={handleImageChange}
+										/>
+										<div className="mt-2 flex flex-wrap gap-2">
+											<Button
+												type="button"
+												variant="outline"
+												size="sm"
+												className="gap-1.5"
+												onClick={() => imageInputRef.current?.click()}
+												disabled={isUploading}
+											>
+												{isUploading ? (
+													<Loader2Icon className="size-3.5 animate-spin" />
+												) : (
+													<ImagePlusIcon className="size-3.5" />
+												)}
+												{isUploading
+													? "Uploading…"
+													: imagePreview
+														? "Replace photo"
+														: "Upload photo"}
+											</Button>
+											<Button
+												type="button"
+												variant="ghost"
+												size="sm"
+												className="gap-1.5"
+												onClick={handleImageDownload}
+												disabled={!imagePreview || isDownloading || isUploading}
+											>
+												{isDownloading ? (
+													<Loader2Icon className="size-3.5 animate-spin" />
+												) : (
+													<DownloadIcon className="size-3.5" />
+												)}
+												{isDownloading ? "Downloading…" : "Download"}
+											</Button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -292,6 +372,16 @@ export function EditMentorSheet({
 					</div>
 				)}
 			</SheetContent>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) setCropSource(null);
+				}}
+				imageUrl={cropSource}
+				onSave={handleCropSave}
+				isSaving={isUploading}
+			/>
 		</Sheet>
 	);
 }

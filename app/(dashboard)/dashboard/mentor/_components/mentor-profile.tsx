@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { getMentorProfile, updateMyProfile, uploadMyImage } from "../_actions";
+import { ImageCropDialog } from "../profile/_components/image-crop-dialog";
 
 type Tab = "profile" | "availability";
 
@@ -30,10 +31,12 @@ export function MentorProfile({
 	});
 
 	const [preview, setPreview] = useState<string | null>(dbMentor.image);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 	const [isSigningOut, startSignOutTransition] = useTransition();
-	const [isUploading, startUploadTransition] = useTransition();
+	const [isUploading, setIsUploading] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// Sync controlled state when the server re-renders with fresh data after revalidatePath
@@ -46,6 +49,12 @@ export function MentorProfile({
 			linkedin_url: dbMentor.linkedin_url ?? "",
 		});
 	}, [dbMentor]);
+
+	useEffect(() => {
+		return () => {
+			if (cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropSource]);
 
 	const firstName = user.name.split(" ")[0];
 	const initials = fields.name
@@ -65,24 +74,30 @@ export function MentorProfile({
 			return;
 		}
 
-		setPreview(URL.createObjectURL(file));
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
+
+	async function handleCropSave(file: File) {
 		const formData = new FormData();
 		formData.append("file", file);
 
-		startUploadTransition(async () => {
-			try {
-				const result = await uploadMyImage(formData);
-				if (result.error) {
-					setPreview(dbMentor.image);
-					toast.error(`Upload failed: ${result.error}`);
-				} else if (result.url) {
-					setPreview(result.url);
-				}
-			} catch (err) {
-				setPreview(dbMentor.image);
-				toast.error(`Upload failed: ${String(err)}`);
+		setIsUploading(true);
+		try {
+			const result = await uploadMyImage(formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
 			}
-		});
+			if (result.url) setPreview(result.url);
+			setIsCropOpen(false);
+			setCropSource(null);
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsUploading(false);
+		}
 	}
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -280,6 +295,16 @@ export function MentorProfile({
 					/>
 				)}
 			</div>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) setCropSource(null);
+				}}
+				imageUrl={cropSource}
+				onSave={handleCropSave}
+				isSaving={isUploading}
+			/>
 		</div>
 	);
 }

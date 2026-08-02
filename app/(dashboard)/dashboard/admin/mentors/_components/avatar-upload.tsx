@@ -2,8 +2,9 @@
 
 import { CameraIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { ImageCropDialog } from "../../../mentor/profile/_components/image-crop-dialog";
 import { uploadMentorImage } from "../_actions";
 
 export function AvatarUpload({
@@ -16,13 +17,21 @@ export function AvatarUpload({
 	image: string | null;
 }) {
 	const [preview, setPreview] = useState<string | null>(image);
-	const [isPending, startTransition] = useTransition();
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
+	const [isPending, setIsPending] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	// Sync preview when the server re-renders with a new image URL
 	useEffect(() => {
 		setPreview(image);
 	}, [image]);
+
+	useEffect(() => {
+		return () => {
+			if (cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropSource]);
 
 	const initials = name
 		.split(" ")
@@ -40,26 +49,31 @@ export function AvatarUpload({
 			return;
 		}
 
-		setPreview(URL.createObjectURL(file));
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
 
+	async function handleCropSave(file: File) {
 		const formData = new FormData();
 		formData.append("file", file);
 
-		startTransition(async () => {
-			try {
-				const result = await uploadMentorImage(id, formData);
-				if (result.error) {
-					setPreview(image);
-					toast.error(`Upload failed: ${result.error}`);
-				} else if (result.url) {
-					setPreview(result.url);
-					toast.success("Successfully updated avatar");
-				}
-			} catch (err) {
-				setPreview(image);
-				toast.error(`Upload failed: ${String(err)}`);
+		setIsPending(true);
+		try {
+			const result = await uploadMentorImage(id, formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
 			}
-		});
+			if (result.url) setPreview(result.url);
+			setIsCropOpen(false);
+			setCropSource(null);
+			toast.success("Successfully updated avatar");
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsPending(false);
+		}
 	}
 
 	return (
@@ -100,6 +114,16 @@ export function AvatarUpload({
 				accept="image/jpeg,image/png,image/webp"
 				className="hidden"
 				onChange={handleChange}
+			/>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) setCropSource(null);
+				}}
+				imageUrl={cropSource}
+				onSave={handleCropSave}
+				isSaving={isPending}
 			/>
 		</>
 	);
