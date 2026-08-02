@@ -105,7 +105,10 @@ export async function rescheduleBookingCore(params: {
 				reminder_1h_sent_at: null,
 			})
 			.where(eq(bookings.id, booking.id));
-	} catch {
+	} catch (error) {
+		console.error("[booking-reschedule-db-update-failed]", {
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
 		throw new ActionError(
 			"The calendar changed, but the booking could not be saved. Please contact support for manual resolution.",
 		);
@@ -209,7 +212,10 @@ export async function cancelBookingCore(params: {
 				cancelled_at: new Date(),
 			})
 			.where(eq(bookings.id, booking.id));
-	} catch {
+	} catch (error) {
+		console.error("[booking-cancel-db-update-failed]", {
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
 		throw new ActionError(
 			"The calendar event was removed, but the booking could not be updated. Please contact support for manual resolution.",
 		);
