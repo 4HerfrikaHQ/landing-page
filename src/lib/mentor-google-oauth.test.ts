@@ -211,6 +211,31 @@ test("callback does not overwrite a connection for another Google subject", asyn
 	);
 });
 
+test("callback rejects a same-subject connection when the Google email changes", async () => {
+	const repository = new FakeRepository();
+	repository.connections.push({
+		mentorId: "mentor-a",
+		userId: "user-a",
+		googleSubject: "same-subject",
+		googleEmail: "old@example.test",
+		refreshTokenCiphertext: "old-ciphertext",
+		status: "connected",
+	});
+	const state = createOAuthState({});
+	repository.seedState(state.state, stateFor());
+
+	await expect(
+		complete(
+			repository,
+			state.state,
+			providerFor({ subject: "same-subject", email: "new@example.test" }),
+		),
+	).rejects.toMatchObject({ code: "google_account_conflict" });
+	expect(repository.connections[0]?.refreshTokenCiphertext).toBe(
+		"old-ciphertext",
+	);
+});
+
 test("callback cannot claim a subject already linked to another mentor", async () => {
 	const repository = new FakeRepository();
 	repository.connections.push({

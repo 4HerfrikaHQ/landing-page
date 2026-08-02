@@ -281,11 +281,14 @@ const repository: MentorGoogleOAuthRepository = {
 			const subjectChanged =
 				Boolean(existing.googleSubject && input.googleSubject) &&
 				existing.googleSubject !== input.googleSubject;
+			const emailChanged =
+				existing.googleEmail.trim().toLowerCase() !==
+				input.googleEmail.trim().toLowerCase();
 			const accountChangeAllowed =
 				input.allowAccountChange &&
 				(existing.status === "disconnected" || existing.status === "revoked") &&
 				existing.revocationState !== "pending";
-			if (subjectChanged && !accountChangeAllowed) {
+			if ((subjectChanged || emailChanged) && !accountChangeAllowed) {
 				throw new MentorGoogleOAuthError("google_account_conflict");
 			}
 			await db

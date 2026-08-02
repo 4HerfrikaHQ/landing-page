@@ -209,11 +209,7 @@ export function MentorCalendarConnection({
 									status?: string;
 								})
 							: null;
-					if (
-						resultRecord?.remoteRevocation === "failed" ||
-						resultRecord?.status === "pending" ||
-						resultRecord?.status === "error"
-					) {
+					if (resultRecord?.remoteRevocation === "failed") {
 						toast.error(
 							kind === "revocation_retry"
 								? "Google still has not confirmed access removal. Try again later or remove 4Herfrika from Google Account → Security → Third-party connections."
