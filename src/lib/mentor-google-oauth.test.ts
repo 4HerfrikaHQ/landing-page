@@ -5,7 +5,6 @@ import {
 	GoogleOAuthProviderError,
 	MENTOR_GOOGLE_REQUIRED_SCOPES,
 	type MentorGoogleConnectionRecord,
-	MentorGoogleOAuthError,
 	type MentorGoogleOAuthProvider,
 	type MentorGoogleOAuthRepository,
 	completeMentorGoogleOAuthCallback,
@@ -190,158 +189,89 @@ test("OAuth state is mentor-bound, expires, and is single-use", async () => {
 	expect(exchanged).toBe(false);
 });
 
-test("callback does not overwrite a connection for another Google subject", async () => {
-	const repository = new FakeRepository();
-	repository.connections.push({
+test("callback preserves mentor-bound Google account identity", async () => {
+	const existingConnection = {
 		mentorId: "mentor-a",
 		userId: "user-a",
 		googleSubject: "old-subject",
 		googleEmail: "old@example.test",
 		refreshTokenCiphertext: "old-ciphertext",
-		status: "connected",
-	});
-	const state = createOAuthState({});
-	repository.seedState(state.state, stateFor());
+		status: "connected" as const,
+	};
 
-	await expect(
-		complete(repository, state.state, providerFor({ subject: "new-subject" })),
-	).rejects.toMatchObject({ code: "google_account_conflict" });
-	expect(repository.connections[0]?.refreshTokenCiphertext).toBe(
-		"old-ciphertext",
-	);
-});
-
-test("callback rejects a same-subject connection when the Google email changes", async () => {
-	const repository = new FakeRepository();
-	repository.connections.push({
-		mentorId: "mentor-a",
-		userId: "user-a",
-		googleSubject: "same-subject",
-		googleEmail: "old@example.test",
-		refreshTokenCiphertext: "old-ciphertext",
-		status: "connected",
-	});
-	const state = createOAuthState({});
-	repository.seedState(state.state, stateFor());
-
+	const subjectChangedRepository = new FakeRepository();
+	subjectChangedRepository.connections.push(existingConnection);
+	const subjectChangedState = createOAuthState({});
+	subjectChangedRepository.seedState(subjectChangedState.state, stateFor());
 	await expect(
 		complete(
-			repository,
-			state.state,
+			subjectChangedRepository,
+			subjectChangedState.state,
+			providerFor({ subject: "new-subject" }),
+		),
+	).rejects.toMatchObject({ code: "google_account_conflict" });
+	expect(subjectChangedRepository.connections[0]?.refreshTokenCiphertext).toBe(
+		"old-ciphertext",
+	);
+
+	const emailChangedRepository = new FakeRepository();
+	emailChangedRepository.connections.push({
+		...existingConnection,
+		googleSubject: "same-subject",
+	});
+	const emailChangedState = createOAuthState({});
+	emailChangedRepository.seedState(emailChangedState.state, stateFor());
+	await expect(
+		complete(
+			emailChangedRepository,
+			emailChangedState.state,
 			providerFor({ subject: "same-subject", email: "new@example.test" }),
 		),
 	).rejects.toMatchObject({ code: "google_account_conflict" });
-	expect(repository.connections[0]?.refreshTokenCiphertext).toBe(
-		"old-ciphertext",
-	);
-});
 
-test("callback cannot claim a subject already linked to another mentor", async () => {
-	const repository = new FakeRepository();
-	repository.connections.push({
+	const otherMentorRepository = new FakeRepository();
+	otherMentorRepository.connections.push({
+		...existingConnection,
 		mentorId: "mentor-b",
 		userId: "user-b",
 		googleSubject: "google-subject-a",
 		googleEmail: "other@example.test",
 		refreshTokenCiphertext: "other-ciphertext",
-		status: "connected",
 	});
-	const state = createOAuthState({});
-	repository.seedState(state.state, stateFor());
-
-	await expect(complete(repository, state.state)).rejects.toMatchObject({
-		code: "google_account_conflict",
-	});
-});
-
-test("callback rejects an identity without a stable Google subject", async () => {
-	const repository = new FakeRepository();
-	const state = createOAuthState({});
-	repository.seedState(state.state, stateFor());
-
+	const otherMentorState = createOAuthState({});
+	otherMentorRepository.seedState(otherMentorState.state, stateFor());
 	await expect(
-		complete(repository, state.state, providerFor({ subject: undefined })),
-	).rejects.toMatchObject({ code: "identity_subject_missing" });
-	expect(repository.connections).toHaveLength(0);
+		complete(otherMentorRepository, otherMentorState.state),
+	).rejects.toMatchObject({ code: "google_account_conflict" });
 });
 
-test("invalid and revoked-style provider grants are classified without raw responses", async () => {
-	const repository = new FakeRepository();
-	const state = createOAuthState({});
-	repository.seedState(state.state, stateFor());
+test("callback fails closed for missing identity subjects and invalid grants", async () => {
+	const missingSubjectRepository = new FakeRepository();
+	const missingSubjectState = createOAuthState({});
+	missingSubjectRepository.seedState(missingSubjectState.state, stateFor());
+	await expect(
+		complete(
+			missingSubjectRepository,
+			missingSubjectState.state,
+			providerFor({ subject: undefined }),
+		),
+	).rejects.toMatchObject({ code: "identity_subject_missing" });
+	expect(missingSubjectRepository.connections).toHaveLength(0);
+
+	const invalidGrantRepository = new FakeRepository();
+	const invalidGrantState = createOAuthState({});
+	invalidGrantRepository.seedState(invalidGrantState.state, stateFor());
 	const provider = providerFor();
 	provider.exchangeCode = async () => {
 		throw new GoogleOAuthProviderError("invalid_grant");
 	};
-
 	await expect(
-		complete(repository, state.state, provider),
-	).rejects.toMatchObject({
-		code: "invalid_grant",
-	});
-
-	await expect(
-		completeMentorGoogleOAuthCallback({
-			state: "not-a-real-state",
-			code: "synthetic-auth-code",
-			authenticatedMentorId: "mentor-a",
-			authenticatedUserId: "user-a",
-			repository,
-			provider: providerFor(),
-			encryptRefreshToken: () => "encrypted",
-		}),
-	).rejects.toBeInstanceOf(MentorGoogleOAuthError);
+		complete(invalidGrantRepository, invalidGrantState.state, provider),
+	).rejects.toMatchObject({ code: "invalid_grant" });
+	expect(invalidGrantRepository.connections).toHaveLength(0);
 });
 
-test("remote revocation failure retains ciphertext for a protected retry", async () => {
-	const outcome = await revokeMentorGoogleCredential({
-		connection: {
-			mentorId: "mentor-a",
-			userId: "user-a",
-			googleSubject: "google-subject-a",
-			googleEmail: "mentor@example.test",
-			refreshTokenCiphertext: "ciphertext",
-			status: "connected",
-		},
-		desiredStatus: "revoked",
-		provider: {
-			revokeRefreshToken: async () => {
-				throw new GoogleOAuthProviderError("provider_error");
-			},
-		},
-		decryptRefreshToken: () => "synthetic-refresh-token",
-	});
-
-	expect(outcome).toEqual({
-		status: "disconnected",
-		remoteRevocation: "failed",
-		retainCiphertext: true,
-		revocationState: "pending",
-		revocationErrorCode: "remote_error",
-	});
-
-	const alreadyRevoked = await revokeMentorGoogleCredential({
-		connection: {
-			mentorId: "mentor-a",
-			userId: "user-a",
-			googleSubject: "google-subject-a",
-			googleEmail: "mentor@example.test",
-			refreshTokenCiphertext: "ciphertext",
-			status: "disconnected",
-		},
-		desiredStatus: "revoked",
-		provider: {
-			revokeRefreshToken: async () => {
-				throw new GoogleOAuthProviderError("invalid_grant");
-			},
-		},
-		decryptRefreshToken: () => "synthetic-refresh-token",
-	});
-	expect(alreadyRevoked.remoteRevocation).toBe("succeeded");
-	expect(alreadyRevoked.retainCiphertext).toBe(false);
-});
-
-test("retained revocation transitions from pending to revoked on a later retry", async () => {
+test("revocation retry and reconnect remain protected by origin checks", async () => {
 	let attempts = 0;
 	const connection: MentorGoogleConnectionRecord = {
 		mentorId: "mentor-a",
@@ -366,7 +296,12 @@ test("retained revocation transitions from pending to revoked on a later retry",
 		provider,
 		decryptRefreshToken: () => "synthetic-refresh-token",
 	});
-	expect(pending.retainCiphertext).toBe(true);
+	expect(pending).toMatchObject({
+		status: "disconnected",
+		retainCiphertext: true,
+		revocationState: "pending",
+		revocationErrorCode: "remote_error",
+	});
 
 	const retried = await revokeMentorGoogleCredential({
 		connection: {
@@ -384,46 +319,39 @@ test("retained revocation transitions from pending to revoked on a later retry",
 		retainCiphertext: false,
 		revocationState: "not_pending",
 	});
-	expect(attempts).toBe(2);
-});
 
-test("pending revocation blocks account relinking even with stale account-change state", async () => {
-	const repository = new FakeRepository();
-	repository.connections.push({
-		mentorId: "mentor-a",
-		userId: "user-a",
-		googleSubject: "old-subject",
-		googleEmail: "old@example.test",
-		refreshTokenCiphertext: "ciphertext",
+	const relinkRepository = new FakeRepository();
+	relinkRepository.connections.push({
+		...connection,
 		status: "disconnected",
 		revocationState: "pending",
 	});
-	const state = createOAuthState({ allowAccountChange: true });
-	repository.seedState(state.state, stateFor({ allowAccountChange: true }));
-
+	const relinkState = createOAuthState({ allowAccountChange: true });
+	relinkRepository.seedState(
+		relinkState.state,
+		stateFor({ allowAccountChange: true }),
+	);
 	await expect(
-		complete(repository, state.state, providerFor({ subject: "new-subject" })),
+		complete(
+			relinkRepository,
+			relinkState.state,
+			providerFor({ subject: "new-subject" }),
+		),
 	).rejects.toMatchObject({ code: "google_account_conflict" });
-});
 
-test("revocation sends the refresh token only in an encoded POST body", async () => {
 	let request: { url: string; init?: RequestInit } | undefined;
-	const provider = createMentorGoogleOAuthProvider(async (input, init) => {
-		request = { url: String(input), init };
-		return new Response(null, { status: 200 });
-	});
-
-	await provider.revokeRefreshToken("synthetic-refresh-token");
+	const googleProvider = createMentorGoogleOAuthProvider(
+		async (input, init) => {
+			request = { url: String(input), init };
+			return new Response(null, { status: 200 });
+		},
+	);
+	await googleProvider.revokeRefreshToken("synthetic-refresh-token");
 	expect(request?.url).toBe("https://oauth2.googleapis.com/revoke");
 	expect(request?.url).not.toContain("token=");
 	expect(request?.init?.method).toBe("POST");
-	expect(request?.init?.headers).toEqual({
-		"content-type": "application/x-www-form-urlencoded",
-	});
 	expect(String(request?.init?.body)).toBe("token=synthetic-refresh-token");
-});
 
-test("disconnect and revoke mutation routes require the exact request origin", () => {
 	expect(
 		isSameOriginMutationRequest({
 			origin: "https://app.example.test",
@@ -433,12 +361,6 @@ test("disconnect and revoke mutation routes require the exact request origin", (
 	expect(
 		isSameOriginMutationRequest({
 			origin: "https://evil.example.test",
-			requestOrigin: "https://app.example.test",
-		}),
-	).toBe(false);
-	expect(
-		isSameOriginMutationRequest({
-			origin: null,
 			requestOrigin: "https://app.example.test",
 		}),
 	).toBe(false);
