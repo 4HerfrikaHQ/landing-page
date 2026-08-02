@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { db } from "@/src/db";
 import { mentorGoogleConnections } from "@/src/db/schema/tables/mentor-google-connections";
 import { decryptMentorRefreshToken } from "@/src/lib/mentor-google-crypto";
+import { sendMentorGoogleReconnectNoticeOnce } from "@/src/lib/mentor-google-notifications";
 import {
 	GoogleOAuthProviderError,
 	type MentorGoogleOAuthProvider,
@@ -25,6 +26,7 @@ export type MentorCalendarConnection = {
 	identity: MentorCalendarIdentity;
 	getAccessToken: () => Promise<string>;
 	markReauthRequired: () => Promise<void>;
+	sendReauthorizationNotice?: () => Promise<void>;
 };
 
 export type MentorCalendarConnectionProvider = {
@@ -84,7 +86,20 @@ export type MentorCalendarEventParams = {
 	startAtUtc: Date;
 	endAtUtc: Date;
 	attemptKey: string;
+	connection?: MentorCalendarConnection;
+	accessToken?: string;
 };
+
+export type NewBookingCalendarHost =
+	| {
+			mode: "mentor_google";
+			connection: MentorCalendarConnection;
+			accessToken: string;
+	  }
+	| {
+			mode: "org_google";
+			reason: "no_connection" | "connection_unavailable";
+	  };
 
 export type MentorCalendarOperations = {
 	createMentorCalendarEvent: (
@@ -205,7 +220,7 @@ function googleProvider(
 }
 
 const databaseProvider: MentorCalendarConnectionProvider = {
-	async getMentorConnection({ mentorId }) {
+	async getMentorConnection({ mentorId, mentorEmail }) {
 		const row = await db.query.mentorGoogleConnections.findFirst({
 			where: eq(mentorGoogleConnections.mentor_id, mentorId),
 		});
@@ -255,6 +270,12 @@ const databaseProvider: MentorCalendarConnectionProvider = {
 				return token.accessToken;
 			},
 			markReauthRequired,
+			sendReauthorizationNotice: async () => {
+				await sendMentorGoogleReconnectNoticeOnce({
+					connectionId: row.id,
+					mentorEmail,
+				});
+			},
 		};
 	},
 };
@@ -291,34 +312,45 @@ async function getConnection(
 		mentorEmail: string;
 	},
 	provider?: MentorCalendarConnectionProvider,
+	connectionOverride?: MentorCalendarConnection,
 ) {
-	const connection = await (provider ?? connectionProvider).getMentorConnection(
-		input,
-	);
+	const connection =
+		connectionOverride ??
+		(await (provider ?? connectionProvider).getMentorConnection(input));
 	if (!connection || connection.mentorId !== input.mentorId)
 		throw new MentorCalendarError(
 			"connection_unavailable",
 			actionMessage(null),
 		);
-	if (connection.status === "reauth_required")
+	if (connection.status === "reauth_required") {
+		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
-	if (connection.status !== "connected")
+	}
+	if (connection.status !== "connected") {
+		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError(
 			"connection_unavailable",
 			actionMessage(null),
 		);
+	}
 	if (
 		normalizedEmail(connection.identity.email) !==
 		normalizedEmail(input.mentorEmail)
-	)
+	) {
+		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError(
 			"identity_mismatch",
 			"The connected Google Calendar identity does not match the mentor.",
 		);
+	}
 	return connection;
 }
 
-async function accessToken(connection: MentorCalendarConnection) {
+async function accessToken(
+	connection: MentorCalendarConnection,
+	knownAccessToken?: string,
+) {
+	if (knownAccessToken) return knownAccessToken;
 	try {
 		const token = await connection.getAccessToken();
 		if (!token) throw new Error("missing access token");
@@ -326,12 +358,53 @@ async function accessToken(connection: MentorCalendarConnection) {
 	} catch (error) {
 		if (isInvalidGrant(error)) {
 			await connection.markReauthRequired().catch(() => undefined);
+			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
 		}
+		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError(
 			"connection_unavailable",
 			actionMessage(null),
 		);
+	}
+}
+
+async function notifyBrokenConnection(connection: MentorCalendarConnection) {
+	await connection.sendReauthorizationNotice?.().catch(() => undefined);
+}
+
+export async function selectNewBookingCalendarHost(input: {
+	mentorId: string;
+	mentorEmail: string;
+	connectionProvider?: MentorCalendarConnectionProvider;
+}): Promise<NewBookingCalendarHost> {
+	const provider = input.connectionProvider ?? connectionProvider;
+	const connection = await provider.getMentorConnection(input);
+	if (!connection) {
+		return { mode: "org_google", reason: "no_connection" };
+	}
+	if (connection.mentorId !== input.mentorId) {
+		await notifyBrokenConnection(connection);
+		return { mode: "org_google", reason: "connection_unavailable" };
+	}
+	if (connection.status !== "connected") {
+		await notifyBrokenConnection(connection);
+		return { mode: "org_google", reason: "connection_unavailable" };
+	}
+	if (
+		normalizedEmail(connection.identity.email) !==
+		normalizedEmail(input.mentorEmail)
+	) {
+		await notifyBrokenConnection(connection);
+		return { mode: "org_google", reason: "connection_unavailable" };
+	}
+
+	try {
+		const token = await accessToken(connection);
+		return { mode: "mentor_google", connection, accessToken: token };
+	} catch {
+		await notifyBrokenConnection(connection);
+		return { mode: "org_google", reason: "connection_unavailable" };
 	}
 }
 
@@ -388,6 +461,7 @@ async function readEvent(
 	if (response.status === 404 || response.status === 410) return null;
 	if (response.status === 401) {
 		await connection.markReauthRequired().catch(() => undefined);
+		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
 	}
 	if (!response.ok)
@@ -414,8 +488,8 @@ export function createMentorCalendarClient(
 	}
 
 	async function createMentorCalendarEvent(params: MentorCalendarEventParams) {
-		const connection = await getConnection(params, provider);
-		const token = await accessToken(connection);
+		const connection = await getConnection(params, provider, params.connection);
+		const token = await accessToken(connection, params.accessToken);
 		const eventId = deterministicCalendarEventId(params.attemptKey);
 		const existing = await readEvent(connection, token, eventId, fetchImpl);
 		if (existing) {
@@ -479,6 +553,7 @@ export function createMentorCalendarClient(
 		}
 		if (response.status === 401) {
 			await connection.markReauthRequired().catch(() => undefined);
+			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
 		}
 		if (response.status === 409 || response.status === 412) {
@@ -532,6 +607,7 @@ export function createMentorCalendarClient(
 			return;
 		if (response.status === 401) {
 			await connection.markReauthRequired().catch(() => undefined);
+			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
 		}
 		throw new MentorCalendarError(

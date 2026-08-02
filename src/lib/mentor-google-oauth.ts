@@ -14,6 +14,7 @@ import {
 	encryptMentorGoogleSecret,
 	encryptMentorRefreshToken,
 } from "@/src/lib/mentor-google-crypto";
+import { sendMentorGoogleReconnectNoticeOnce } from "@/src/lib/mentor-google-notifications";
 import {
 	type ConsumedOAuthState,
 	type GoogleIdentity,
@@ -317,6 +318,7 @@ const repository: MentorGoogleOAuthRepository = {
 					connected_at: input.now,
 					last_token_refresh_at: null,
 					reauthorization_required_at: null,
+					reauthorization_notice_sent_at: null,
 					revoked_at: null,
 					disconnected_at: null,
 					updated_at: input.now,
@@ -357,6 +359,7 @@ const repository: MentorGoogleOAuthRepository = {
 async function currentMentorContext(): Promise<{
 	mentorId: string;
 	userId: string;
+	mentorEmail: string;
 }> {
 	const user = await currentDbUser();
 	if (user.role !== "mentor") throw new Error("Mentor authorization required");
@@ -366,7 +369,7 @@ async function currentMentorContext(): Promise<{
 		.where(eq(mentors.user_id, user.id))
 		.limit(1);
 	if (!mentor) throw new Error("Mentor profile not found");
-	return { mentorId: mentor.id, userId: user.id };
+	return { mentorId: mentor.id, userId: user.id, mentorEmail: user.email };
 }
 
 export type MentorGoogleConnectionStatusView = {
@@ -498,15 +501,31 @@ export async function getMentorGoogleCalendarContext(): Promise<{
 	accessToken: string;
 	scopes: string[];
 }> {
-	const { mentorId } = await currentMentorContext();
+	const { mentorId, mentorEmail } = await currentMentorContext();
 	const connection = await repository.getConnectionByMentor(mentorId);
-	const token = await getCoreMentorGoogleAccessToken({
-		connection,
-		provider: googleProvider,
-		decryptRefreshToken: decryptMentorRefreshToken,
-		markReauthorizationRequired: () =>
-			repository.markReauthorizationRequired(mentorId, new Date()),
-	});
+	let token: Awaited<ReturnType<typeof getCoreMentorGoogleAccessToken>>;
+	try {
+		token = await getCoreMentorGoogleAccessToken({
+			connection,
+			provider: googleProvider,
+			decryptRefreshToken: decryptMentorRefreshToken,
+			markReauthorizationRequired: () =>
+				repository.markReauthorizationRequired(mentorId, new Date()),
+		});
+	} catch (error) {
+		const [row] = await db
+			.select({ id: mentorGoogleConnections.id })
+			.from(mentorGoogleConnections)
+			.where(eq(mentorGoogleConnections.mentor_id, mentorId))
+			.limit(1);
+		if (row) {
+			await sendMentorGoogleReconnectNoticeOnce({
+				connectionId: row.id,
+				mentorEmail,
+			});
+		}
+		throw error;
+	}
 	const now = new Date();
 	await db
 		.update(mentorGoogleConnections)

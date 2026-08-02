@@ -1,12 +1,33 @@
-import { pgTable, uuid, text, timestamp, integer, index } from "drizzle-orm/pg-core";
+import {
+	index,
+	integer,
+	pgTable,
+	text,
+	timestamp,
+	uuid,
+} from "drizzle-orm/pg-core";
 import { z } from "zod";
+import type { Gender } from "./mentor-applications";
 import { mentors } from "./mentors";
-import { Gender } from "./mentor-applications";
 
-export const BookingStatus = z.enum(["confirmed", "cancelled", "completed", "no_show"]);
+export const BookingStatus = z.enum([
+	"confirmed",
+	"cancelled",
+	"completed",
+	"no_show",
+]);
 export type BookingStatus = z.infer<typeof BookingStatus>;
 
-export const CareerStage = z.enum(["student", "early_career", "mid_career", "founder", "other"]);
+export const BookingHostingMode = z.enum(["org_google", "mentor_google"]);
+export type BookingHostingMode = z.infer<typeof BookingHostingMode>;
+
+export const CareerStage = z.enum([
+	"student",
+	"early_career",
+	"mid_career",
+	"founder",
+	"other",
+]);
 export type CareerStage = z.infer<typeof CareerStage>;
 
 export const bookings = pgTable(
@@ -32,19 +53,40 @@ export const bookings = pgTable(
 
 		meet_url: text("meet_url").notNull(),
 		google_event_id: text("google_event_id").notNull(),
+		hosting_mode: text("hosting_mode")
+			.notNull()
+			.$type<BookingHostingMode>()
+			.default("org_google"),
 
-		status: text("status").notNull().$type<BookingStatus>().default("confirmed"),
+		status: text("status")
+			.notNull()
+			.$type<BookingStatus>()
+			.default("confirmed"),
 		cancel_reason: text("cancel_reason"),
 		reschedule_count: integer("reschedule_count").notNull().default(0),
 
-		confirmation_sent_at: timestamp("confirmation_sent_at", { withTimezone: true }),
-		reminder_24h_sent_at: timestamp("reminder_24h_sent_at", { withTimezone: true }),
-		reminder_1h_sent_at: timestamp("reminder_1h_sent_at", { withTimezone: true }),
-		feedback_email_sent_at: timestamp("feedback_email_sent_at", { withTimezone: true }),
-		mentor_followup_sent_at: timestamp("mentor_followup_sent_at", { withTimezone: true }),
+		confirmation_sent_at: timestamp("confirmation_sent_at", {
+			withTimezone: true,
+		}),
+		reminder_24h_sent_at: timestamp("reminder_24h_sent_at", {
+			withTimezone: true,
+		}),
+		reminder_1h_sent_at: timestamp("reminder_1h_sent_at", {
+			withTimezone: true,
+		}),
+		feedback_email_sent_at: timestamp("feedback_email_sent_at", {
+			withTimezone: true,
+		}),
+		mentor_followup_sent_at: timestamp("mentor_followup_sent_at", {
+			withTimezone: true,
+		}),
 
-		created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-		updated_at: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+		created_at: timestamp("created_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+		updated_at: timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow(),
 		cancelled_at: timestamp("cancelled_at", { withTimezone: true }),
 	},
 	(t) => [

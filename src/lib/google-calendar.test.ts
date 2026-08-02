@@ -5,6 +5,7 @@ import {
 	createMentorCalendarClient,
 	deterministicCalendarEventId,
 	replaceMentorCalendarEvent,
+	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
 } from "./google-calendar";
 
@@ -86,6 +87,57 @@ describe("mentor-scoped Google Calendar", () => {
 				),
 			}).ensureConnection({ mentorId, mentorEmail }),
 		).rejects.toMatchObject({ code: "identity_mismatch" });
+	});
+
+	test("selects the central host when no mentor connection exists", async () => {
+		const host = await selectNewBookingCalendarHost({
+			mentorId,
+			mentorEmail,
+			connectionProvider: provider(null),
+		});
+		expect(host).toEqual({ mode: "org_google", reason: "no_connection" });
+	});
+
+	test("selects a healthy mentor host with its validated access token", async () => {
+		const host = await selectNewBookingCalendarHost({
+			mentorId,
+			mentorEmail,
+			connectionProvider: provider(connection()),
+		});
+		expect(host).toMatchObject({
+			mode: "mentor_google",
+			accessToken: "fake-access-token",
+		});
+	});
+
+	test("selects the central host for a broken grant and notifies once per attempt", async () => {
+		let notices = 0;
+		let marked = 0;
+		let noticeSent = false;
+		const broken = connection({
+			getAccessToken: async () => {
+				throw { code: "invalid_grant" };
+			},
+			markReauthRequired: async () => {
+				marked += 1;
+			},
+			sendReauthorizationNotice: async () => {
+				if (noticeSent) return;
+				noticeSent = true;
+				notices += 1;
+			},
+		});
+		const host = await selectNewBookingCalendarHost({
+			mentorId,
+			mentorEmail,
+			connectionProvider: provider(broken),
+		});
+		expect(host).toEqual({
+			mode: "org_google",
+			reason: "connection_unavailable",
+		});
+		expect(marked).toBe(1);
+		expect(notices).toBe(1);
 	});
 
 	test("creates on primary with the mentee invited and a unique Meet", async () => {

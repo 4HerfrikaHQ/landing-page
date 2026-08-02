@@ -11,6 +11,7 @@ import {
 import { buildBookingIcs } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { type DbBooking, bookings } from "@/src/db/schema/tables/bookings";
+import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
 import { signBookingToken } from "@/src/lib/booking-tokens";
 import {
 	deleteMentorCalendarEvent,
@@ -18,6 +19,10 @@ import {
 	mentorCalendarActionMessage,
 	stableCalendarAttemptKey,
 } from "@/src/lib/google-calendar";
+import {
+	OrgGoogleCalendarError,
+	deleteOrgGoogleCalendarEvent,
+} from "@/src/lib/org-google-calendar";
 import { ActionError } from "@/src/lib/safe-action";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -39,6 +44,13 @@ function currentCalendarAttemptKey(booking: DbBooking, mentorId: string) {
 
 function calendarError(error: unknown): ActionError {
 	if (error instanceof ActionError) return error;
+	if (error instanceof OrgGoogleCalendarError) {
+		return new ActionError(
+			error.code === "connection_unavailable"
+				? "The 4HerFrika calendar is unavailable. Please try again later."
+				: "The calendar change could not be completed. Please contact support for manual resolution.",
+		);
+	}
 	return new ActionError(mentorCalendarActionMessage(error));
 }
 
@@ -80,6 +92,7 @@ export async function rescheduleBookingCore(params: {
 			endAtUtc: newEnd,
 			mentorEmail,
 			menteeEmail: booking.mentee_email,
+			hostingMode: booking.hosting_mode,
 			attemptKey: stableCalendarAttemptKey(
 				booking.id,
 				"reschedule",
@@ -188,7 +201,12 @@ export async function cancelBookingCore(params: {
 		);
 
 	try {
-		await deleteMentorCalendarEvent({
+		const deleteEvent = selectBookingCalendarProvider(booking.hosting_mode, {
+			mentor_google: deleteMentorCalendarEvent,
+			org_google: async ({ eventId }: { eventId: string }) =>
+				deleteOrgGoogleCalendarEvent({ eventId }),
+		});
+		await deleteEvent({
 			mentorId: booking.mentor_id,
 			mentorEmail,
 			eventId: booking.google_event_id,

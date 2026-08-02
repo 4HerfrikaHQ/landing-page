@@ -1,0 +1,2 @@
+ALTER TABLE "bookings" ADD COLUMN "hosting_mode" text DEFAULT 'org_google' NOT NULL;--> statement-breakpoint
+ALTER TABLE "mentor_google_connections" ADD COLUMN "reauthorization_notice_sent_at" timestamp with time zone;
