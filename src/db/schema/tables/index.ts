@@ -49,3 +49,20 @@ export type {
 export * from "./relations";
 export { academyWaitlistEntries, Academy } from "./academy-waitlist-entries";
 export type { DbAcademyWaitlistEntry } from "./academy-waitlist-entries";
+
+export {
+	mentorGoogleConnections,
+	mentorGoogleOAuthStates,
+	MentorGoogleConnectionStatus,
+	MentorGoogleReauthorizationState,
+	MentorGoogleRevocationState,
+} from "./mentor-google-connections";
+export type {
+	DbMentorGoogleConnection,
+	DbMentorGoogleConnectionInsert,
+	DbMentorGoogleOAuthState,
+	DbMentorGoogleOAuthStateInsert,
+	MentorGoogleConnectionStatus as MentorGoogleConnectionStatusType,
+	MentorGoogleReauthorizationState as MentorGoogleReauthorizationStateType,
+	MentorGoogleRevocationState as MentorGoogleRevocationStateType,
+} from "./mentor-google-connections";
