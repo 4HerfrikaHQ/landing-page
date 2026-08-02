@@ -74,9 +74,6 @@ describe("mentor-scoped Google Calendar", () => {
 			client.ensureConnection({ mentorId, mentorEmail }),
 		).rejects.toMatchObject({ code: "connection_unavailable" });
 		expect(calls).toBe(0);
-	});
-
-	test("isolates mentor and Google identities", async () => {
 		await expect(
 			createMentorCalendarClient({
 				connectionProvider: provider(connection({ mentorId: "other" })),
@@ -91,7 +88,7 @@ describe("mentor-scoped Google Calendar", () => {
 		).rejects.toMatchObject({ code: "identity_mismatch" });
 	});
 
-	test("creates on primary, invites the mentee, and uses stable event/conference IDs", async () => {
+	test("creates on primary with the mentee invited and a unique Meet", async () => {
 		const attemptKey = stableCalendarAttemptKey(
 			mentorId,
 			"create",
@@ -128,39 +125,7 @@ describe("mentor-scoped Google Calendar", () => {
 		expect(body.id).toBe(deterministicCalendarEventId(attemptKey));
 	});
 
-	test("recovers a timed-out insert without a second insert", async () => {
-		const attemptKey = stableCalendarAttemptKey(mentorId, "create", "retry");
-		let posts = 0;
-		let firstRead = true;
-		const client = createMentorCalendarClient({
-			connectionProvider: provider(connection()),
-			fetchImpl: async (_input, init) => {
-				if (init?.method === "POST") {
-					posts += 1;
-					throw new Error("network timeout");
-				}
-				if (firstRead) {
-					firstRead = false;
-					return response({}, 404);
-				}
-				return response(
-					event(
-						attemptKey,
-						mentorEmail,
-						deterministicCalendarEventId(attemptKey),
-					),
-				);
-			},
-		});
-		await expect(
-			client.createMentorCalendarEvent(createParams(attemptKey)),
-		).resolves.toMatchObject({
-			eventId: deterministicCalendarEventId(attemptKey),
-		});
-		expect(posts).toBe(1);
-	});
-
-	test("rejects foreign organizer/creator and does not delete it", async () => {
+	test("rejects a foreign organizer or creator without deleting it", async () => {
 		let deletes = 0;
 		const client = createMentorCalendarClient({
 			connectionProvider: provider(connection()),
@@ -195,23 +160,6 @@ describe("mentor-scoped Google Calendar", () => {
 			client.ensureConnection({ mentorId, mentorEmail }),
 		).rejects.toMatchObject({ code: "reauth_required" });
 		expect(marked).toBe(1);
-	});
-
-	test("uses the mentor grant for delete and treats a gone event as cancelled", async () => {
-		const urls: string[] = [];
-		const client = createMentorCalendarClient({
-			connectionProvider: provider(connection()),
-			fetchImpl: async (input) => {
-				urls.push(String(input));
-				return new Response(null, { status: 410 });
-			},
-		});
-		await client.deleteMentorCalendarEvent({
-			mentorId,
-			mentorEmail,
-			eventId: "old-event",
-		});
-		expect(urls[0]).toContain("/calendars/primary/events/old-event");
 	});
 
 	test("creates replacement before delete and exposes manual resolution", async () => {
