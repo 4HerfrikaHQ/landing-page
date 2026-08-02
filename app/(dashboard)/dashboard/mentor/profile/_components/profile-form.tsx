@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 
 import { updateMyProfile, uploadMyImage } from "../../_actions";
+import { ImageCropDialog } from "./image-crop-dialog";
 
 export function ProfileForm({
 	mentor: dbMentor,
@@ -25,10 +26,12 @@ export function ProfileForm({
 	});
 
 	const [preview, setPreview] = useState<string | null>(dbMentor.image);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [saved, setSaved] = useState(false);
 	const [isPending, startTransition] = useTransition();
-	const [isUploading, startUploadTransition] = useTransition();
+	const [isUploading, setIsUploading] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// Sync controlled state when the server re-renders with fresh data after revalidatePath
@@ -41,6 +44,12 @@ export function ProfileForm({
 			linkedin_url: dbMentor.linkedin_url ?? "",
 		});
 	}, [dbMentor]);
+
+	useEffect(() => {
+		return () => {
+			if (cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropSource]);
 
 	const initials = fields.name
 		.split(" ")
@@ -58,24 +67,31 @@ export function ProfileForm({
 			return;
 		}
 
-		setPreview(URL.createObjectURL(file));
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		// Allow choosing the same file again after cancelling.
+		e.currentTarget.value = "";
+	}
+
+	async function handleCropSave(file: File) {
 		const formData = new FormData();
 		formData.append("file", file);
 
-		startUploadTransition(async () => {
-			try {
-				const result = await uploadMyImage(formData);
-				if (result.error) {
-					setPreview(dbMentor.image);
-					toast.error(`Upload failed: ${result.error}`);
-				} else if (result.url) {
-					setPreview(result.url);
-				}
-			} catch (err) {
-				setPreview(dbMentor.image);
-				toast.error(`Upload failed: ${String(err)}`);
+		setIsUploading(true);
+		try {
+			const result = await uploadMyImage(formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
 			}
-		});
+			if (result.url) setPreview(result.url);
+			setIsCropOpen(false);
+			setCropSource(null);
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsUploading(false);
+		}
 	}
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -130,7 +146,7 @@ export function ProfileForm({
 								{fields.name}
 							</p>
 							<p className="text-sm text-muted-foreground">
-								Click the photo to upload a new one (under 4MB).
+								Click to upload and frame a new photo (under 4MB).
 							</p>
 						</div>
 					</div>
@@ -228,6 +244,16 @@ export function ProfileForm({
 					</div>
 				</DataCardSection>
 			</DataCard>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) setCropSource(null);
+				}}
+				imageUrl={cropSource}
+				onSave={handleCropSave}
+				isSaving={isUploading}
+			/>
 		</form>
 	);
 }

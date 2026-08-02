@@ -23,14 +23,27 @@ export async function uploadMentorAvatar(
 	try {
 		const file = formData.get("file") as File;
 		if (!file?.name) return { error: "No file received." };
+		if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+			return { error: "Please upload a JPEG, PNG, or WebP image." };
+		}
+		if (file.size > 4 * 1024 * 1024) {
+			return { error: "Image must be under 4MB." };
+		}
 
-		const ext = file.name.split(".").pop();
+		const ext =
+			file.type === "image/webp"
+				? "webp"
+				: file.type === "image/png"
+					? "png"
+					: "jpg";
 		const path = `${mentorId}.${ext}`;
+		const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+		const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+		if (!supabaseUrl || !serviceRoleKey) {
+			return { error: "Image uploads are not configured." };
+		}
 
-		const adminClient = createAdminClient(
-			process.env.NEXT_PUBLIC_SUPABASE_URL!,
-			process.env.SUPABASE_SERVICE_ROLE_KEY!,
-		);
+		const adminClient = createAdminClient(supabaseUrl, serviceRoleKey);
 
 		const { error: uploadError } = await adminClient.storage
 			.from("mentor-avatars")
@@ -38,7 +51,9 @@ export async function uploadMentorAvatar(
 
 		if (uploadError) return { error: uploadError.message };
 
-		const { data } = adminClient.storage.from("mentor-avatars").getPublicUrl(path);
+		const { data } = adminClient.storage
+			.from("mentor-avatars")
+			.getPublicUrl(path);
 		const url = `${data.publicUrl}?t=${Date.now()}`;
 
 		await db

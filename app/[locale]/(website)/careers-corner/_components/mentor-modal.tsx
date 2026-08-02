@@ -52,7 +52,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	return (
 		<Dialog>
 			<div className="group flex h-full w-full flex-col rounded-2xl border border-border/60 bg-white p-3 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.10)]">
-				<div className="relative h-64 w-full overflow-hidden rounded-[14px]">
+				<div className="relative aspect-[4/5] w-full overflow-hidden rounded-[14px]">
 					{mentor.image ? (
 						<Image
 							src={mentor.image}
