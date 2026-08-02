@@ -1,6 +1,6 @@
 # Sera ya Faragha
 
-_Imesasishwa mwisho: 6 Julai 2026_
+_Imesasishwa mwisho: 2 Agosti 2026_
 
 Sera hii inaeleza tunachokusanya, kwa nini, na tunashiriki na nani. Kwa kifupi:
 tunakusanya tu kile ambacho jukwaa la ushauri linahitaji ili lifanye kazi.
@@ -51,6 +51,37 @@ kila mmoja anahitaji:
   (hakuna data binafsi).
 
 Hatuuzi data yako wala hatuishiriki na watangazaji.
+
+## Mshauri anapounganisha Google Calendar
+
+Washauri wanaweza kuchagua kuunganisha Google Calendar yao wenyewe ili kikao
+kilichowekwa kiweze kuundwa kwenye kalenda yao kuu, pamoja na kiungo cha Google
+Meet. Muunganisho huu hutumia idhini ya OAuth ya Google. Ombi la idhini hutumia
+seti hii iliyokaguliwa ya ruhusa:
+
+- `https://www.googleapis.com/auth/calendar.events.owned` — kuunda na kusimamia
+  matukio ya vikao yanayomilikiwa na programu kwenye kalenda ya mshauri;
+- `openid` na `email` — kuthibitisha akaunti ya Google iliyochaguliwa na kupokea
+  metadata ya msingi ya utambulisho wa Google, ikiwemo kitambulisho thabiti cha
+  Google na anwani ya barua pepe, ili muunganisho uhusishwe na mshauri sahihi.
+
+Tunatunza anwani ya barua pepe ya Google, kitambulisho thabiti, seti ya ruhusa
+zilizotolewa, pamoja na hali na mihuri ya muda ya muunganisho. Hatuhifadhi kwa
+muda mrefu tokeni za ufikiaji au misimbo ya idhini. Tokeni ya kuhuisha
+(refresh token) huhifadhiwa kwenye seva yetu pekee ikiwa imesimbwa kwa njia fiche,
+na haiwekwi kwenye hifadhi ya kivinjari, URL, au kumbukumbu za mfumo. Hutumiwa
+kupata tokeni za ufikiaji za muda mfupi wakati muunganisho wa Calendar wa
+mshauri unahitajika.
+
+Mshauri anaweza kuunganisha tena ikiwa idhini imekwisha muda au imeondolewa.
+Kukata muunganisho husitisha matumizi ya Calendar hapa na kuanzisha kubatilisha
+ufikiaji wa Google. Ubatilishaji unapothibitishwa (pamoja na Google kuripoti
+kwamba idhini tayari si halali), tunafuta maandishi yaliyosimbwa ya tokeni ya
+kuhuisha na kubakiza metadata salama ya hali pekee. Ubatilishaji wa
+mbali ukishindikana, matumizi ya ndani husitishwa na maandishi yaliyosimbwa
+hubakizwa kwa muda kwa jaribio lililolindwa pekee; hufutwa baada ya jaribio hilo
+kufaulu. Maombi ya kufuta akaunti na data hushughulikiwa kupitia utaratibu wetu
+wa kawaida wa usaidizi.
 
 ## Kwa nini tunaitumia
 
