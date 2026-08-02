@@ -47,6 +47,10 @@ export function ImageCropDialog({
 	const [frameSize, setFrameSize] = useState({ width: 320, height: 400 });
 	const [zoom, setZoom] = useState(1);
 	const [pan, setPan] = useState<Point>({ x: 0, y: 0 });
+	const [croppedPreviewUrl, setCroppedPreviewUrl] = useState<string | null>(
+		null,
+	);
+	const croppedPreviewUrlRef = useRef<string | null>(null);
 	const [dragStart, setDragStart] = useState<{
 		pointer: Point;
 		pan: Point;
@@ -103,14 +107,29 @@ export function ImageCropDialog({
 	);
 
 	useEffect(() => {
-		if (!open || !frameRef.current) return;
-		const frame = frameRef.current;
-		const resizeObserver = new ResizeObserver(() => {
-			const width = frame.clientWidth;
-			setFrameSize({ width, height: width / MENTOR_IMAGE_ASPECT_RATIO });
+		if (!open) return;
+
+		let resizeObserver: ResizeObserver | null = null;
+		const frameRequest = requestAnimationFrame(() => {
+			const frame = frameRef.current;
+			if (!frame) return;
+
+			const updateFrameSize = () => {
+				const width = frame.clientWidth;
+				if (width) {
+					setFrameSize({ width, height: width / MENTOR_IMAGE_ASPECT_RATIO });
+				}
+			};
+
+			resizeObserver = new ResizeObserver(updateFrameSize);
+			updateFrameSize();
+			resizeObserver.observe(frame);
 		});
-		resizeObserver.observe(frame);
-		return () => resizeObserver.disconnect();
+
+		return () => {
+			cancelAnimationFrame(frameRequest);
+			resizeObserver?.disconnect();
+		};
 	}, [open]);
 
 	useEffect(() => {
@@ -132,6 +151,58 @@ export function ImageCropDialog({
 			});
 		}
 	}, [open, imageUrl]);
+
+	useEffect(() => {
+		if (
+			!imageUrl ||
+			!imageSize.width ||
+			!imageSize.height ||
+			!sourceWidth ||
+			!sourceHeight
+		) {
+			setCroppedPreviewUrl(null);
+			return;
+		}
+
+		const image = imageRef.current;
+		if (!image) return;
+
+		let cancelled = false;
+		createCroppedBlob(image, {
+			x: sourceX,
+			y: sourceY,
+			width: sourceWidth,
+			height: sourceHeight,
+		}).then((blob) => {
+			if (cancelled || !blob) return;
+			const nextUrl = URL.createObjectURL(blob);
+			if (croppedPreviewUrlRef.current) {
+				URL.revokeObjectURL(croppedPreviewUrlRef.current);
+			}
+			croppedPreviewUrlRef.current = nextUrl;
+			setCroppedPreviewUrl(nextUrl);
+		});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [
+		imageUrl,
+		imageSize.height,
+		imageSize.width,
+		sourceHeight,
+		sourceWidth,
+		sourceX,
+		sourceY,
+	]);
+
+	useEffect(() => {
+		return () => {
+			if (croppedPreviewUrlRef.current) {
+				URL.revokeObjectURL(croppedPreviewUrlRef.current);
+			}
+		};
+	}, []);
 
 	useEffect(() => {
 		setPan((current) => clampPan(current));
@@ -169,28 +240,12 @@ export function ImageCropDialog({
 		const image = imageRef.current;
 		if (!image) return;
 
-		const canvas = document.createElement("canvas");
-		canvas.width = OUTPUT_WIDTH;
-		canvas.height = OUTPUT_HEIGHT;
-		const context = canvas.getContext("2d");
-		if (!context) return;
-		context.imageSmoothingEnabled = true;
-		context.imageSmoothingQuality = "high";
-		context.drawImage(
-			image,
-			sourceX,
-			sourceY,
-			sourceWidth,
-			sourceHeight,
-			0,
-			0,
-			OUTPUT_WIDTH,
-			OUTPUT_HEIGHT,
-		);
-
-		const blob = await new Promise<Blob | null>((resolve) =>
-			canvas.toBlob(resolve, "image/webp", 0.9),
-		);
+		const blob = await createCroppedBlob(image, {
+			x: sourceX,
+			y: sourceY,
+			width: sourceWidth,
+			height: sourceHeight,
+		});
 		if (!blob) return;
 		await onSave(new File([blob], "mentor-photo.webp", { type: "image/webp" }));
 	}
@@ -267,8 +322,7 @@ export function ImageCropDialog({
 							<Plus className="size-4 shrink-0 text-white/55" />
 						</div>
 						<p className="mx-auto mt-3 max-w-[360px] text-center text-xs text-white/45">
-							Your crop is saved as a portrait that works across your mentor
-							cards.
+							Your crop is saved as a 4:5 portrait for your mentor profile.
 						</p>
 					</div>
 
@@ -278,33 +332,25 @@ export function ImageCropDialog({
 								Live preview
 							</p>
 							<p className="mt-1 text-sm text-foreground">
-								This is how your photo will appear.
+								Your saved crop will be used across your mentor profile.
 							</p>
 						</div>
-						<div className="grid grid-cols-2 gap-3 md:grid-cols-1">
-							<PreviewCard
-								imageUrl={imageUrl}
-								label="Mentor card"
-								imageSize={imageSize}
-								source={{
-									x: sourceX,
-									y: sourceY,
-									width: sourceWidth,
-									height: sourceHeight,
-								}}
-							/>
-							<PreviewCard
-								imageUrl={imageUrl}
-								label="Featured"
-								imageSize={imageSize}
-								source={{
-									x: sourceX,
-									y: sourceY,
-									width: sourceWidth,
-									height: sourceHeight,
-								}}
-							/>
+						<div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-pink ring-1 ring-border/60">
+							{croppedPreviewUrl ? (
+								<img
+									src={croppedPreviewUrl}
+									alt=""
+									className="size-full object-cover"
+								/>
+							) : (
+								<div className="flex h-full items-center justify-center">
+									<ImageIcon className="size-6 text-primary-500/60" />
+								</div>
+							)}
 						</div>
+						<p className="text-center text-xs font-medium text-muted-foreground">
+							Mentor profile preview
+						</p>
 					</aside>
 				</div>
 
@@ -333,45 +379,28 @@ export function ImageCropDialog({
 	);
 }
 
-function PreviewCard({
-	imageUrl,
-	label,
-	imageSize,
-	source,
-}: {
-	imageUrl: string | null;
-	label: string;
-	imageSize: { width: number; height: number };
-	source: { x: number; y: number; width: number; height: number };
-}) {
-	return (
-		<div>
-			<div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-pink ring-1 ring-border/60">
-				{imageUrl ? (
-					<img
-						src={imageUrl}
-						alt=""
-						className="absolute max-w-none"
-						style={
-							imageSize.width && source.width
-								? {
-										width: `${(imageSize.width / source.width) * 100}%`,
-										height: `${(imageSize.height / source.height) * 100}%`,
-										left: `${-(source.x / source.width) * 100}%`,
-										top: `${-(source.y / source.height) * 100}%`,
-									}
-								: undefined
-						}
-					/>
-				) : (
-					<div className="flex h-full items-center justify-center">
-						<ImageIcon className="size-6 text-primary-500/60" />
-					</div>
-				)}
-			</div>
-			<p className="mt-2 text-center text-xs font-medium text-muted-foreground">
-				{label}
-			</p>
-		</div>
+function createCroppedBlob(
+	image: HTMLImageElement,
+	source: { x: number; y: number; width: number; height: number },
+): Promise<Blob | null> {
+	const canvas = document.createElement("canvas");
+	canvas.width = OUTPUT_WIDTH;
+	canvas.height = OUTPUT_HEIGHT;
+	const context = canvas.getContext("2d");
+	if (!context) return Promise.resolve(null);
+	context.imageSmoothingEnabled = true;
+	context.imageSmoothingQuality = "high";
+	context.drawImage(
+		image,
+		source.x,
+		source.y,
+		source.width,
+		source.height,
+		0,
+		0,
+		OUTPUT_WIDTH,
+		OUTPUT_HEIGHT,
 	);
+
+	return new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.9));
 }
