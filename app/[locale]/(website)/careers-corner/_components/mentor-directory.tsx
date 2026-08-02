@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { cn } from "@/utils/cn";
 import { SearchX } from "lucide-react";
-import { useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useMemo } from "react";
+import { filterMentors } from "../_utils/mentor-directory-filters";
 import { MentorCard } from "./mentor-modal";
 
 export function MentorDirectory({
@@ -20,22 +21,19 @@ export function MentorDirectory({
 	searchPlaceholder: string;
 	availableLabel: string;
 }) {
-	const [q, setQ] = useQueryState("q", { defaultValue: "" });
+	const [q, setQ] = useQueryState(
+		"q",
+		parseAsString.withDefault("").withOptions({ shallow: true }),
+	);
 	const [available, setAvailable] = useQueryState("available", {
 		defaultValue: "",
 	});
 	const onlyAvailable = available === "1";
 
-	const filtered = useMemo(() => {
-		const term = q.trim().toLowerCase();
-		return mentors.filter((m) => {
-			if (onlyAvailable && (m.availability?.length ?? 0) === 0) return false;
-			if (!term) return true;
-			const haystack =
-				`${m.nickname ?? ""} ${m.name} ${m.position}`.toLowerCase();
-			return haystack.includes(term);
-		});
-	}, [mentors, q, onlyAvailable]);
+	const filtered = useMemo(
+		() => filterMentors(mentors, q, onlyAvailable),
+		[mentors, q, onlyAvailable],
+	);
 
 	function clearFilters() {
 		setQ(null);
@@ -45,7 +43,12 @@ export function MentorDirectory({
 	return (
 		<>
 			<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-				<SearchInput placeholder={searchPlaceholder} shallow />
+				<SearchInput
+					placeholder={searchPlaceholder}
+					value={q}
+					onValueChange={(value) => void setQ(value || null)}
+					shallow
+				/>
 				<button
 					type="button"
 					onClick={() => setAvailable(onlyAvailable ? null : "1")}
