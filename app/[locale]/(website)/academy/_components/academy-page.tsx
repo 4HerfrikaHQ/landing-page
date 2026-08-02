@@ -434,7 +434,7 @@ export function AcademyPage() {
 									scheduleAcademyLoop();
 								}}
 								aria-label="Academy paths"
-								className="-m-6 flex snap-x snap-mandatory scroll-px-6 gap-0 overflow-x-auto overscroll-x-contain py-6 xl:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+								className="-m-6 flex snap-x snap-mandatory scroll-px-6 gap-0 overflow-x-auto overscroll-x-contain py-6 xl:-my-6 xl:mx-0 xl:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 							>
 								{Array.from({ length: ACADEMY_COPY_COUNT }, (_, copy) =>
 									academies.map((academy, index) => (
