@@ -399,7 +399,10 @@ export const createBooking = actionClient
 					.returning();
 				return row;
 			});
-		} catch {
+		} catch (error) {
+			console.error("[booking-insert-failed]", {
+				errorType: error instanceof Error ? error.name : typeof error,
+			});
 			await deleteMentorCalendarEvent({
 				mentorId: mentor.id,
 				mentorEmail,
