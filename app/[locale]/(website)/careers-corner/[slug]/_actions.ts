@@ -7,6 +7,13 @@ import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-set
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
+import {
+	createMentorCalendarEvent,
+	deleteMentorCalendarEvent,
+	ensureMentorCalendarConnection,
+	mentorCalendarActionMessage,
+	stableCalendarAttemptKey,
+} from "@/src/lib/google-calendar";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
@@ -15,134 +22,6 @@ import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
 import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
-
-// ---------- Google Meet via Calendar REST API ----------
-//
-// We hit Google's Calendar API directly with fetch instead of the heavy `googleapis` pkg.
-// We exchange the long-lived refresh token for a short-lived access token, cached in
-// module scope so concurrent bookings reuse it.
-
-let cachedAccessToken: { token: string; expiresAt: number } | null = null;
-
-async function getGoogleAccessToken(): Promise<string> {
-	if (cachedAccessToken && cachedAccessToken.expiresAt > Date.now() + 60_000) {
-		return cachedAccessToken.token;
-	}
-	const res = await fetch("https://oauth2.googleapis.com/token", {
-		method: "POST",
-		headers: { "Content-Type": "application/x-www-form-urlencoded" },
-		body: new URLSearchParams({
-			client_id: process.env.GOOGLE_CLIENT_ID ?? "",
-			client_secret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-			refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN ?? "",
-			grant_type: "refresh_token",
-		}),
-	});
-	if (!res.ok) {
-		throw new Error(
-			`Google token exchange failed: ${res.status} ${await res.text()}`,
-		);
-	}
-	const json = (await res.json()) as {
-		access_token: string;
-		expires_in: number;
-	};
-	cachedAccessToken = {
-		token: json.access_token,
-		expiresAt: Date.now() + json.expires_in * 1000,
-	};
-	return json.access_token;
-}
-
-function googleCalendarId(): string {
-	const id = process.env.GOOGLE_ORG_CALENDAR_ID;
-	if (!id) throw new Error("GOOGLE_ORG_CALENDAR_ID not set");
-	return encodeURIComponent(id);
-}
-
-/** All Google Calendar/Meet env vars present (not validity — that surfaces at call time). */
-function googleMeetConfigured(): boolean {
-	return Boolean(
-		process.env.GOOGLE_CLIENT_ID &&
-			process.env.GOOGLE_CLIENT_SECRET &&
-			process.env.GOOGLE_OAUTH_REFRESH_TOKEN &&
-			process.env.GOOGLE_ORG_CALENDAR_ID,
-	);
-}
-
-// Used only outside production, when Google isn't configured (or its token is
-// dead) so the booking flow can be exercised end-to-end locally.
-const DEV_PLACEHOLDER_MEET_URL = "https://meet.google.com/dev-placeholder";
-const DEV_PLACEHOLDER_EVENT_ID = "local-dev-no-google-event";
-
-export async function createMeetEvent(params: {
-	summary: string;
-	description: string;
-	startAtUtc: Date;
-	endAtUtc: Date;
-	mentorEmail: string;
-	menteeEmail: string;
-}): Promise<{ eventId: string; meetUrl: string }> {
-	const token = await getGoogleAccessToken();
-	const url = `https://www.googleapis.com/calendar/v3/calendars/${googleCalendarId()}/events?conferenceDataVersion=1&sendUpdates=all`;
-
-	const body = {
-		summary: params.summary,
-		description: params.description,
-		start: { dateTime: params.startAtUtc.toISOString() },
-		end: { dateTime: params.endAtUtc.toISOString() },
-		attendees: [{ email: params.mentorEmail }, { email: params.menteeEmail }],
-		conferenceData: {
-			createRequest: {
-				requestId: `4hf-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-				conferenceSolutionKey: { type: "hangoutsMeet" },
-			},
-		},
-	};
-
-	const res = await fetch(url, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(body),
-	});
-	if (!res.ok) {
-		throw new Error(
-			`Google Calendar events.insert failed: ${res.status} ${await res.text()}`,
-		);
-	}
-	const data = (await res.json()) as {
-		id?: string;
-		hangoutLink?: string;
-		conferenceData?: {
-			entryPoints?: { entryPointType?: string; uri?: string }[];
-		};
-	};
-	const eventId = data.id;
-	const meetUrl =
-		data.hangoutLink ??
-		data.conferenceData?.entryPoints?.find((e) => e.entryPointType === "video")
-			?.uri;
-	if (!eventId || !meetUrl) throw new Error("Failed to create Meet event");
-	return { eventId, meetUrl };
-}
-
-export async function deleteMeetEvent(eventId: string): Promise<void> {
-	const token = await getGoogleAccessToken();
-	const url = `https://www.googleapis.com/calendar/v3/calendars/${googleCalendarId()}/events/${encodeURIComponent(eventId)}?sendUpdates=all`;
-	const res = await fetch(url, {
-		method: "DELETE",
-		headers: { Authorization: `Bearer ${token}` },
-	});
-	if (!res.ok && res.status !== 410) {
-		// 410 Gone is fine — event already deleted
-		throw new Error(
-			`Google Calendar events.delete failed: ${res.status} ${await res.text()}`,
-		);
-	}
-}
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
@@ -240,7 +119,11 @@ ${intakeLines}
 
 export async function getMentorBySlug(slug: string) {
 	const [mentor] = await db
-		.select({ ...getTableColumns(mentors), name: users.name })
+		.select({
+			...getTableColumns(mentors),
+			name: users.name,
+			email: users.email,
+		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
@@ -253,6 +136,14 @@ export const listMentorSlots = actionClient
 	.action(async ({ parsedInput }) => {
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
+		try {
+			await ensureMentorCalendarConnection({
+				mentorId: mentor.id,
+				mentorEmail: mentor.email,
+			});
+		} catch (error) {
+			throw new ActionError(mentorCalendarActionMessage(error));
+		}
 
 		const [settingsRow] = await db
 			.select()
@@ -312,6 +203,14 @@ export async function getFirstAvailableSlotUtc(
 ): Promise<string | null> {
 	const mentor = await getMentorBySlug(mentorSlug);
 	if (!mentor) return null;
+	try {
+		await ensureMentorCalendarConnection({
+			mentorId: mentor.id,
+			mentorEmail: mentor.email,
+		});
+	} catch {
+		return null;
+	}
 
 	const [settingsRow] = await db
 		.select()
@@ -375,14 +274,16 @@ export const createBooking = actionClient
 	.action(async ({ parsedInput }) => {
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
+		const mentorEmail = mentor.email;
 
-		const [mentorUser] = await db
-			.select()
-			.from(users)
-			.where(eq(users.id, mentor.user_id))
-			.limit(1);
-		const mentorEmail = mentorUser?.email;
-		if (!mentorEmail) throw new ActionError("Mentor email missing");
+		try {
+			await ensureMentorCalendarConnection({
+				mentorId: mentor.id,
+				mentorEmail,
+			});
+		} catch (error) {
+			throw new ActionError(mentorCalendarActionMessage(error));
+		}
 
 		const [settingsRow] = await db
 			.select()
@@ -447,41 +348,29 @@ export const createBooking = actionClient
 				"That slot is no longer available. Please pick another time.",
 			);
 		}
-
-		// Mint Google Meet event. In non-production, if Google isn't configured (or its
-		// token is dead) we fall back to a placeholder so the flow can be tested locally.
-		let eventId = DEV_PLACEHOLDER_EVENT_ID;
-		let meetUrl = DEV_PLACEHOLDER_MEET_URL;
-		let realMeetEvent = false;
-		if (googleMeetConfigured()) {
-			try {
-				const event = await createMeetEvent({
-					summary: `4HerFrika: ${parsedInput.mentee_name} ↔ ${mentor.name}`,
-					description: `Purpose: ${parsedInput.purpose}\n\nMentee: ${parsedInput.mentee_name} <${parsedInput.mentee_email}>`,
-					startAtUtc: startAt,
-					endAtUtc: endAt,
-					mentorEmail,
-					menteeEmail: parsedInput.mentee_email,
-				});
-				eventId = event.eventId;
-				meetUrl = event.meetUrl;
-				realMeetEvent = true;
-			} catch (err) {
-				if (process.env.NODE_ENV === "production") throw err;
-				console.warn(
-					"[booking] Google Meet creation failed — using local dev placeholder link.",
-					err,
-				);
-			}
-		} else if (process.env.NODE_ENV === "production") {
-			throw new ActionError(
-				"Booking is temporarily unavailable. Please try again later.",
-			);
-		} else {
-			console.warn(
-				"[booking] Google not configured — using local dev placeholder Meet link.",
-			);
+		const attemptKey = stableCalendarAttemptKey(
+			mentor.id,
+			"create",
+			startAt.toISOString(),
+			parsedInput.mentee_email.toLowerCase(),
+		);
+		let event: { eventId: string; meetUrl: string };
+		try {
+			event = await createMentorCalendarEvent({
+				mentorId: mentor.id,
+				mentorEmail,
+				menteeEmail: parsedInput.mentee_email,
+				summary: `4HerFrika: ${parsedInput.mentee_name} ↔ ${mentor.name}`,
+				description: `Purpose: ${parsedInput.purpose}\n\nMentee: ${parsedInput.mentee_name} <${parsedInput.mentee_email}>`,
+				startAtUtc: startAt,
+				endAtUtc: endAt,
+				attemptKey,
+			});
+		} catch (error) {
+			throw new ActionError(mentorCalendarActionMessage(error));
 		}
+		const eventId = event.eventId;
+		const meetUrl = event.meetUrl;
 
 		// Insert booking inside a transaction. The Google Meet event already exists at
 		// this point — if the insert fails we compensate by deleting it so we don't
@@ -510,16 +399,16 @@ export const createBooking = actionClient
 					.returning();
 				return row;
 			});
-		} catch (e) {
-			// Compensate: a real Meet event was created before the insert. Roll it back
-			// so we don't leak an orphan calendar event the user can't see. (No-op for
-			// the local dev placeholder, which has no real calendar event.)
-			if (realMeetEvent) {
-				await deleteMeetEvent(eventId).catch((err) =>
-					console.error("[booking] failed to compensate Meet event", err),
-				);
-			}
-			throw e;
+		} catch {
+			await deleteMentorCalendarEvent({
+				mentorId: mentor.id,
+				mentorEmail,
+				eventId,
+				expectedAttemptKey: attemptKey,
+			}).catch(() => undefined);
+			throw new ActionError(
+				"Booking could not be saved. Please retry or contact support for calendar resolution.",
+			);
 		}
 
 		// Side effects — best-effort emails
@@ -588,8 +477,8 @@ export const createBooking = actionClient
 					.set({ confirmation_sent_at: new Date() })
 					.where(eq(bookings.id, booking.id));
 			});
-		} catch (e) {
-			console.error("[booking] confirmation email failed", e);
+		} catch {
+			console.error("[booking] confirmation_email_failed");
 		}
 
 		revalidatePath(`/careers-corner/${mentor.slug}`);
