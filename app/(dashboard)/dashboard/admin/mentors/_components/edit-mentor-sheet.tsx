@@ -12,6 +12,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { getAvailability } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
+import { DownloadIcon, Loader2Icon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
 import { updateMentor } from "../_actions";
 
@@ -20,6 +22,7 @@ type Tab = "details" | "availability";
 type Mentor = {
 	id: string;
 	name: string;
+	image: string | null;
 	position: string | null;
 	bio: string | null;
 	nickname: string | null;
@@ -38,6 +41,7 @@ export function EditMentorSheet({
 	const [tab, setTab] = useState<Tab>("details");
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
+	const [isDownloading, setIsDownloading] = useState(false);
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
 	>(null);
@@ -70,6 +74,49 @@ export function EditMentorSheet({
 				onOpenChange(false);
 			}
 		});
+	}
+
+	async function handleImageDownload() {
+		if (!mentor.image) return;
+
+		const extension =
+			mentor.image
+				.split("?")[0]
+				.split(".")
+				.pop()
+				?.match(/^[a-z0-9]+$/i)?.[0] ?? "jpg";
+		const filename = `${mentor.name
+			.trim()
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, "-")}-profile.${extension}`;
+
+		setIsDownloading(true);
+		try {
+			const response = await fetch(mentor.image);
+			if (!response.ok) throw new Error("Image download failed");
+
+			const blob = await response.blob();
+			const downloadUrl = URL.createObjectURL(blob);
+			const link = document.createElement("a");
+			link.href = downloadUrl;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+			URL.revokeObjectURL(downloadUrl);
+		} catch {
+			// Keep a native fallback for environments that block cross-origin fetches.
+			const link = document.createElement("a");
+			link.href = mentor.image;
+			link.download = filename;
+			link.target = "_blank";
+			link.rel = "noreferrer";
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+		} finally {
+			setIsDownloading(false);
+		}
 	}
 
 	return (
@@ -116,6 +163,57 @@ export function EditMentorSheet({
 								defaultValue={mentor.name}
 							/>
 
+							<div className="flex flex-col gap-1.5">
+								<span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+									Profile photo
+								</span>
+								<div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
+									<div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+										{mentor.image ? (
+											<Image
+												src={mentor.image}
+												alt={mentor.name}
+												fill
+												className="object-cover object-top"
+												sizes="64px"
+												unoptimized
+											/>
+										) : (
+											<span className="flex size-full items-center justify-center text-sm font-medium text-gray-500">
+												{mentor.name
+													.split(" ")
+													.map((word) => word[0])
+													.slice(0, 2)
+													.join("")
+													.toUpperCase()}
+											</span>
+										)}
+									</div>
+									<div className="min-w-0">
+										<p className="truncate text-sm text-gray-700">
+											{mentor.image
+												? "Current profile photo"
+												: "No profile photo uploaded"}
+										</p>
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											className="mt-2 gap-1.5"
+											onClick={handleImageDownload}
+											disabled={!mentor.image || isDownloading}
+										>
+											{isDownloading ? (
+												<Loader2Icon className="size-3.5 animate-spin" />
+											) : (
+												<DownloadIcon className="size-3.5" />
+											)}
+											{isDownloading ? "Downloading…" : "Download image"}
+										</Button>
+									</div>
+								</div>
+							</div>
+
 							<div className="flex items-center gap-3 py-1">
 								<div className="h-px flex-1 bg-gray-100" />
 								<span className="text-xs text-gray-400">Optional details</span>
@@ -134,10 +232,14 @@ export function EditMentorSheet({
 							/>
 
 							<div className="flex flex-col gap-1.5">
-								<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+								<label
+									htmlFor="bio"
+									className="text-xs font-medium text-gray-500 uppercase tracking-wide"
+								>
 									Bio
 								</label>
 								<Textarea
+									id="bio"
 									name="bio"
 									rows={3}
 									className="text-sm resize-none"
