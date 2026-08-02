@@ -80,7 +80,6 @@ export function FilterPills({
 		"page",
 		parseAsString.withOptions({ shallow }),
 	);
-
 	const pills: FilterOption[] = includeAll
 		? [{ value: defaultValue, label: allLabel }, ...options]
 		: options;
@@ -174,6 +173,14 @@ export function SearchInput({
 		"page",
 		parseAsString.withOptions({ shallow }),
 	);
+	const handleValueChange = (nextValue: string) => {
+		if (onValueChange) {
+			onValueChange(nextValue);
+		} else {
+			void setQueryValue(nextValue || null);
+		}
+		if (resetPageOnChange) void setPage(null);
+	};
 
 	return (
 		<div className={cn("relative w-full sm:w-64", className)}>
@@ -183,15 +190,7 @@ export function SearchInput({
 				type="search"
 				value={value}
 				placeholder={placeholder}
-				onChange={(e) => {
-					const nextValue = e.target.value;
-					if (onValueChange) {
-						onValueChange(nextValue);
-					} else {
-						void setQueryValue(nextValue || null);
-					}
-					if (resetPageOnChange) void setPage(null);
-				}}
+				onInput={(e) => handleValueChange(e.currentTarget.value)}
 				className="h-10 w-full rounded-full border border-[#E0E0E0] bg-white pl-9 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:border-primary-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
 			/>
 		</div>

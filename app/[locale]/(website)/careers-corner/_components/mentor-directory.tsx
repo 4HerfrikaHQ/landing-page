@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { cn } from "@/utils/cn";
 import { SearchX } from "lucide-react";
-import { useMemo, useState } from "react";
+import { parseAsString, useQueryState } from "nuqs";
+import { useMemo } from "react";
 import { filterMentors } from "../_utils/mentor-directory-filters";
 import { MentorCard } from "./mentor-modal";
 
@@ -20,8 +21,14 @@ export function MentorDirectory({
 	searchPlaceholder: string;
 	availableLabel: string;
 }) {
-	const [q, setQ] = useState("");
-	const [onlyAvailable, setOnlyAvailable] = useState(false);
+	const [q, setQ] = useQueryState(
+		"q",
+		parseAsString.withDefault("").withOptions({ shallow: true }),
+	);
+	const [available, setAvailable] = useQueryState("available", {
+		defaultValue: "",
+	});
+	const onlyAvailable = available === "1";
 
 	const filtered = useMemo(
 		() => filterMentors(mentors, q, onlyAvailable),
@@ -29,8 +36,8 @@ export function MentorDirectory({
 	);
 
 	function clearFilters() {
-		setQ("");
-		setOnlyAvailable(false);
+		void setQ(null);
+		void setAvailable(null);
 	}
 
 	return (
@@ -39,11 +46,12 @@ export function MentorDirectory({
 				<SearchInput
 					placeholder={searchPlaceholder}
 					value={q}
-					onValueChange={setQ}
+					onValueChange={(value) => void setQ(value || null)}
+					shallow
 				/>
 				<button
 					type="button"
-					onClick={() => setOnlyAvailable((current) => !current)}
+					onClick={() => void setAvailable(onlyAvailable ? null : "1")}
 					className={cn(
 						"inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
 						onlyAvailable
