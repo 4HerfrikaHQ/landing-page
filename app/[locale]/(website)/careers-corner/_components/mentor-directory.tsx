@@ -8,7 +8,7 @@ import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { cn } from "@/utils/cn";
 import { SearchX } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { filterMentors } from "../_utils/mentor-directory-filters";
 import { MentorCard } from "./mentor-modal";
 
@@ -28,6 +28,7 @@ export function MentorDirectory({
 	const [available, setAvailable] = useQueryState("available", {
 		defaultValue: "",
 	});
+	const [hasInteracted, setHasInteracted] = useState(false);
 	const onlyAvailable = available === "1";
 
 	const filtered = useMemo(
@@ -36,6 +37,7 @@ export function MentorDirectory({
 	);
 
 	function clearFilters() {
+		setHasInteracted(true);
 		void setQ(null);
 		void setAvailable(null);
 	}
@@ -46,12 +48,18 @@ export function MentorDirectory({
 				<SearchInput
 					placeholder={searchPlaceholder}
 					value={q}
-					onValueChange={(value) => void setQ(value || null)}
+					onValueChange={(value) => {
+						setHasInteracted(true);
+						void setQ(value || null);
+					}}
 					shallow
 				/>
 				<button
 					type="button"
-					onClick={() => void setAvailable(onlyAvailable ? null : "1")}
+					onClick={() => {
+						setHasInteracted(true);
+						void setAvailable(onlyAvailable ? null : "1");
+					}}
 					className={cn(
 						"inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
 						onlyAvailable
@@ -66,7 +74,10 @@ export function MentorDirectory({
 			{filtered.length > 0 ? (
 				<StaggerContainer className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 					{filtered.map((mentor) => (
-						<StaggerItem key={mentor.id}>
+						<StaggerItem
+							key={mentor.id}
+							initial={hasInteracted ? false : undefined}
+						>
 							<HoverCard>
 								<MentorCard mentor={mentor} />
 							</HoverCard>
