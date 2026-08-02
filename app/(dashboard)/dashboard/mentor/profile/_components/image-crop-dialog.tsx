@@ -122,6 +122,19 @@ export function ImageCropDialog({
 	}, [open]);
 
 	useEffect(() => {
+		if (!open || !imageUrl) return;
+		// A blob URL can finish loading before the dialog's first paint. In that
+		// case onLoad has already fired, so read the dimensions here as well.
+		const image = imageRef.current;
+		if (image?.complete && image.naturalWidth > 0) {
+			setImageSize({
+				width: image.naturalWidth,
+				height: image.naturalHeight,
+			});
+		}
+	}, [open, imageUrl]);
+
+	useEffect(() => {
 		setPan((current) => clampPan(current));
 	}, [clampPan]);
 
