@@ -48,11 +48,10 @@ const academies = [
 
 type Academy = (typeof academies)[number]["academy"];
 
-const ACADEMY_CARD_GAP = 32;
 const ACADEMY_CARD_BLEED = 24;
 const ACADEMY_COPY_COUNT = 3;
 
-function getAcademyStep(carousel: HTMLDivElement) {
+function measureAcademyStep(carousel: HTMLDivElement) {
 	const cards = carousel.querySelectorAll<HTMLElement>("article");
 	const firstCard = cards[0];
 	const secondCard = cards[1];
@@ -64,7 +63,15 @@ function getAcademyStep(carousel: HTMLDivElement) {
 		);
 	}
 
-	return (firstCard?.getBoundingClientRect().width ?? 0) + ACADEMY_CARD_GAP;
+	if (!firstCard) return 0;
+
+	const cardWidth = firstCard.getBoundingClientRect().width;
+	const cardMargins =
+		Number.parseFloat(getComputedStyle(firstCard).marginLeft) +
+		Number.parseFloat(getComputedStyle(firstCard).marginRight);
+	const trackGap = Number.parseFloat(getComputedStyle(carousel).columnGap) || 0;
+
+	return cardWidth + cardMargins + trackGap;
 }
 
 function getAcademyScrollPosition(position: number, step: number) {
@@ -183,7 +190,11 @@ export function AcademyPage() {
 	const [selectedAcademy, setSelectedAcademy] = useState<Academy>("tech");
 	const [isAcademyControlsPaused, setIsAcademyControlsPaused] = useState(false);
 	const academyCarouselRef = useRef<HTMLDivElement>(null);
+	const academyStepRef = useRef(0);
 	const academyScrollEndTimer = useRef<number | null>(null);
+	const academyScrollSettleFrame = useRef<number | null>(null);
+	const academyScrollAnimatingRef = useRef(false);
+	const academyTrackInteractingRef = useRef(false);
 
 	const openWaitlist = (academy: Academy = "tech") => {
 		setSelectedAcademy(academy);
@@ -200,10 +211,15 @@ export function AcademyPage() {
 
 	const moveAcademy = useCallback((direction: -1 | 1) => {
 		const carousel = academyCarouselRef.current;
-		if (!carousel) return;
-
-		const step = getAcademyStep(carousel);
-		if (!step) return;
+		const step = academyStepRef.current;
+		if (
+			!carousel ||
+			!step ||
+			academyScrollAnimatingRef.current ||
+			academyTrackInteractingRef.current
+		) {
+			return;
+		}
 
 		let currentPosition = Math.round(
 			(carousel.scrollLeft + ACADEMY_CARD_BLEED) / step,
@@ -219,18 +235,21 @@ export function AcademyPage() {
 			carousel.scrollLeft = getAcademyScrollPosition(currentPosition, step);
 		}
 
+		const behavior = window.matchMedia("(prefers-reduced-motion: reduce)")
+			.matches
+			? "auto"
+			: "smooth";
+		academyScrollAnimatingRef.current = behavior === "smooth";
 		carousel.scrollTo({
 			left: getAcademyScrollPosition(currentPosition + direction, step),
-			behavior: "smooth",
+			behavior,
 		});
 	}, []);
 
 	const normalizeAcademyPosition = useCallback(() => {
 		const carousel = academyCarouselRef.current;
-		if (!carousel) return;
-
-		const step = getAcademyStep(carousel);
-		if (!step) return;
+		const step = academyStepRef.current;
+		if (!carousel || !step) return;
 
 		const position = Math.round(
 			(carousel.scrollLeft + ACADEMY_CARD_BLEED) / step,
@@ -247,32 +266,80 @@ export function AcademyPage() {
 				? position + academies.length
 				: position - academies.length;
 		carousel.scrollLeft = getAcademyScrollPosition(wrappedPosition, step);
+		academyScrollAnimatingRef.current = false;
 	}, []);
+
+	const settleAcademyScroll = useCallback(() => {
+		const carousel = academyCarouselRef.current;
+		if (!carousel) return;
+
+		let previousScrollLeft = carousel.scrollLeft;
+		let stableFrames = 0;
+
+		const checkForSettledScroll = () => {
+			const currentScrollLeft = carousel.scrollLeft;
+			if (Math.abs(currentScrollLeft - previousScrollLeft) < 0.5) {
+				stableFrames += 1;
+			} else {
+				stableFrames = 0;
+			}
+			previousScrollLeft = currentScrollLeft;
+
+			if (stableFrames >= 3) {
+				academyScrollSettleFrame.current = null;
+				academyScrollAnimatingRef.current = false;
+				normalizeAcademyPosition();
+				return;
+			}
+
+			academyScrollSettleFrame.current = window.requestAnimationFrame(
+				checkForSettledScroll,
+			);
+		};
+
+		if (academyScrollSettleFrame.current !== null) {
+			window.cancelAnimationFrame(academyScrollSettleFrame.current);
+		}
+		academyScrollSettleFrame.current = window.requestAnimationFrame(
+			checkForSettledScroll,
+		);
+	}, [normalizeAcademyPosition]);
 
 	const scheduleAcademyLoop = useCallback(() => {
 		if (academyScrollEndTimer.current !== null) {
 			window.clearTimeout(academyScrollEndTimer.current);
 		}
 
-		academyScrollEndTimer.current = window.setTimeout(
-			normalizeAcademyPosition,
-			160,
-		);
-	}, [normalizeAcademyPosition]);
+		academyScrollEndTimer.current = window.setTimeout(settleAcademyScroll, 160);
+	}, [settleAcademyScroll]);
 
 	useEffect(() => {
 		const carousel = academyCarouselRef.current;
 		if (!carousel) return;
 
+		const updateAcademyStep = () => {
+			academyStepRef.current = measureAcademyStep(carousel);
+		};
+		updateAcademyStep();
+		const observer = new ResizeObserver(updateAcademyStep);
+		observer.observe(carousel);
+		const firstCard = carousel.querySelector<HTMLElement>("article");
+		if (firstCard) observer.observe(firstCard);
+
 		const frame = window.requestAnimationFrame(() => {
-			const step = getAcademyStep(carousel);
+			updateAcademyStep();
+			const step = academyStepRef.current;
 			carousel.scrollLeft = getAcademyScrollPosition(academies.length, step);
 		});
 
 		return () => {
+			observer.disconnect();
 			window.cancelAnimationFrame(frame);
 			if (academyScrollEndTimer.current !== null) {
 				window.clearTimeout(academyScrollEndTimer.current);
+			}
+			if (academyScrollSettleFrame.current !== null) {
+				window.cancelAnimationFrame(academyScrollSettleFrame.current);
 			}
 		};
 	}, []);
@@ -281,9 +348,29 @@ export function AcademyPage() {
 		const carousel = academyCarouselRef.current;
 		if (!carousel) return;
 
-		carousel.addEventListener("scrollend", normalizeAcademyPosition);
-		return () =>
-			carousel.removeEventListener("scrollend", normalizeAcademyPosition);
+		const supportsScrollEnd = "onscrollend" in carousel;
+		const handleScrollEnd = () => {
+			academyScrollAnimatingRef.current = false;
+			if (academyScrollEndTimer.current !== null) {
+				window.clearTimeout(academyScrollEndTimer.current);
+				academyScrollEndTimer.current = null;
+			}
+			if (academyScrollSettleFrame.current !== null) {
+				window.cancelAnimationFrame(academyScrollSettleFrame.current);
+				academyScrollSettleFrame.current = null;
+			}
+			normalizeAcademyPosition();
+		};
+
+		if (supportsScrollEnd) {
+			carousel.addEventListener("scrollend", handleScrollEnd);
+		}
+
+		return () => {
+			if (supportsScrollEnd) {
+				carousel.removeEventListener("scrollend", handleScrollEnd);
+			}
+		};
 	}, [normalizeAcademyPosition]);
 
 	useEffect(() => {
@@ -294,7 +381,14 @@ export function AcademyPage() {
 			return;
 		}
 
-		const interval = window.setInterval(() => moveAcademy(1), 3_000);
+		const interval = window.setInterval(() => {
+			if (
+				!academyScrollAnimatingRef.current &&
+				!academyTrackInteractingRef.current
+			) {
+				moveAcademy(1);
+			}
+		}, 3_000);
 		return () => window.clearInterval(interval);
 	}, [isAcademyControlsPaused, moveAcademy]);
 
@@ -422,9 +516,21 @@ export function AcademyPage() {
 						<div className="min-w-0">
 							<div
 								ref={academyCarouselRef}
+								onPointerDown={() => {
+									academyTrackInteractingRef.current = true;
+									setIsAcademyControlsPaused(true);
+								}}
+								onPointerUp={() => {
+									academyTrackInteractingRef.current = false;
+									setIsAcademyControlsPaused(false);
+								}}
+								onPointerCancel={() => {
+									academyTrackInteractingRef.current = false;
+									setIsAcademyControlsPaused(false);
+								}}
 								onScroll={(event) => {
 									const carousel = event.currentTarget;
-									const step = getAcademyStep(carousel);
+									const step = academyStepRef.current;
 									if (!step) return;
 
 									const position = Math.round(
