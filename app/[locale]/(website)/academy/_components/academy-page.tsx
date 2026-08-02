@@ -16,7 +16,7 @@ import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LocaleSwitcher } from "../../_components/locale-switcher";
 import { SubscribeFormClient } from "../../_components/subscribe-client";
 import { JOIN_US_URL } from "../../navigation";
@@ -47,6 +47,29 @@ const academies = [
 ] as const;
 
 type Academy = (typeof academies)[number]["academy"];
+
+const ACADEMY_CARD_GAP = 32;
+const ACADEMY_CARD_BLEED = 24;
+const ACADEMY_COPY_COUNT = 3;
+
+function getAcademyStep(carousel: HTMLDivElement) {
+	const cards = carousel.querySelectorAll<HTMLElement>("article");
+	const firstCard = cards[0];
+	const secondCard = cards[1];
+
+	if (firstCard && secondCard) {
+		return (
+			secondCard.getBoundingClientRect().left -
+			firstCard.getBoundingClientRect().left
+		);
+	}
+
+	return (firstCard?.getBoundingClientRect().width ?? 0) + ACADEMY_CARD_GAP;
+}
+
+function getAcademyScrollPosition(position: number, step: number) {
+	return Math.max(0, position * step - ACADEMY_CARD_BLEED);
+}
 
 const academyTranslationKeys = {
 	tech: { name: "techAcademy", description: "techDescription" },
@@ -158,6 +181,9 @@ export function AcademyPage() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [academyIndex, setAcademyIndex] = useState(0);
 	const [selectedAcademy, setSelectedAcademy] = useState<Academy>("tech");
+	const [isAcademyControlsPaused, setIsAcademyControlsPaused] = useState(false);
+	const academyCarouselRef = useRef<HTMLDivElement>(null);
+	const academyScrollEndTimer = useRef<number | null>(null);
 
 	const openWaitlist = (academy: Academy = "tech") => {
 		setSelectedAcademy(academy);
@@ -172,15 +198,105 @@ export function AcademyPage() {
 		};
 	}, []);
 
+	const moveAcademy = useCallback((direction: -1 | 1) => {
+		const carousel = academyCarouselRef.current;
+		if (!carousel) return;
+
+		const step = getAcademyStep(carousel);
+		if (!step) return;
+
+		let currentPosition = Math.round(
+			(carousel.scrollLeft + ACADEMY_CARD_BLEED) / step,
+		);
+		if (direction === -1 && currentPosition < academies.length) {
+			currentPosition += academies.length;
+			carousel.scrollLeft = getAcademyScrollPosition(currentPosition, step);
+		} else if (
+			direction === 1 &&
+			currentPosition >= academies.length * (ACADEMY_COPY_COUNT - 1)
+		) {
+			currentPosition -= academies.length;
+			carousel.scrollLeft = getAcademyScrollPosition(currentPosition, step);
+		}
+
+		carousel.scrollTo({
+			left: getAcademyScrollPosition(currentPosition + direction, step),
+			behavior: "smooth",
+		});
+	}, []);
+
+	const normalizeAcademyPosition = useCallback(() => {
+		const carousel = academyCarouselRef.current;
+		if (!carousel) return;
+
+		const step = getAcademyStep(carousel);
+		if (!step) return;
+
+		const position = Math.round(
+			(carousel.scrollLeft + ACADEMY_CARD_BLEED) / step,
+		);
+		if (
+			position >= academies.length &&
+			position < academies.length * (ACADEMY_COPY_COUNT - 1)
+		) {
+			return;
+		}
+
+		const wrappedPosition =
+			position < academies.length
+				? position + academies.length
+				: position - academies.length;
+		carousel.scrollLeft = getAcademyScrollPosition(wrappedPosition, step);
+	}, []);
+
+	const scheduleAcademyLoop = useCallback(() => {
+		if (academyScrollEndTimer.current !== null) {
+			window.clearTimeout(academyScrollEndTimer.current);
+		}
+
+		academyScrollEndTimer.current = window.setTimeout(
+			normalizeAcademyPosition,
+			160,
+		);
+	}, [normalizeAcademyPosition]);
+
 	useEffect(() => {
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		const carousel = academyCarouselRef.current;
+		if (!carousel) return;
 
-		const timeout = window.setTimeout(() => {
-			setAcademyIndex((index) => (index + 1) % academies.length);
-		}, 3_000);
+		const frame = window.requestAnimationFrame(() => {
+			const step = getAcademyStep(carousel);
+			carousel.scrollLeft = getAcademyScrollPosition(academies.length, step);
+		});
 
-		return () => window.clearTimeout(timeout);
-	}, [academyIndex]);
+		return () => {
+			window.cancelAnimationFrame(frame);
+			if (academyScrollEndTimer.current !== null) {
+				window.clearTimeout(academyScrollEndTimer.current);
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		const carousel = academyCarouselRef.current;
+		if (!carousel) return;
+
+		carousel.addEventListener("scrollend", normalizeAcademyPosition);
+		return () =>
+			carousel.removeEventListener("scrollend", normalizeAcademyPosition);
+	}, [normalizeAcademyPosition]);
+
+	useEffect(() => {
+		if (
+			isAcademyControlsPaused ||
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches
+		) {
+			return;
+		}
+
+		const interval = window.setInterval(() => moveAcademy(1), 3_000);
+		return () => window.clearInterval(interval);
+	}, [isAcademyControlsPaused, moveAcademy]);
 
 	return (
 		<main className="academy-exact-page bg-white text-[#333]">
@@ -255,7 +371,7 @@ export function AcademyPage() {
 						))}
 					</div>
 
-					<div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-end lg:gap-8 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20">
+					<div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-start lg:gap-8 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20">
 						<div className="flex min-w-0 flex-col justify-between gap-12 lg:min-h-[478px] xl:min-h-[746px]">
 							<div>
 								<h2 className="text-5xl font-bold leading-[1] text-black">
@@ -269,28 +385,34 @@ export function AcademyPage() {
 									{t("pathsDescription")}
 								</p>
 							</div>
-							<div className="flex gap-6">
+							<div
+								className="flex gap-6"
+								onPointerEnter={() => setIsAcademyControlsPaused(true)}
+								onPointerLeave={() => setIsAcademyControlsPaused(false)}
+								onFocusCapture={() => setIsAcademyControlsPaused(true)}
+								onBlurCapture={(event) => {
+									if (
+										!event.currentTarget.contains(
+											event.relatedTarget as Node | null,
+										)
+									) {
+										setIsAcademyControlsPaused(false);
+									}
+								}}
+							>
 								<button
 									type="button"
-									onClick={() =>
-										setAcademyIndex((index) => Math.max(0, index - 1))
-									}
-									disabled={academyIndex === 0}
+									onClick={() => moveAcademy(-1)}
 									aria-label={t("previous")}
-									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
+									className="grid size-[37px] cursor-pointer place-items-center rounded-xl border border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] transition-colors hover:bg-[#ec008c]/20"
 								>
 									<ArrowLeft className="size-5" />
 								</button>
 								<button
 									type="button"
-									onClick={() =>
-										setAcademyIndex((index) =>
-											Math.min(academies.length - 1, index + 1),
-										)
-									}
-									disabled={academyIndex === academies.length - 1}
+									onClick={() => moveAcademy(1)}
 									aria-label={t("next")}
-									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
+									className="grid size-[37px] cursor-pointer place-items-center rounded-xl border border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] transition-colors hover:bg-[#ec008c]/20"
 								>
 									<ArrowRight className="size-5" />
 								</button>
@@ -298,41 +420,58 @@ export function AcademyPage() {
 						</div>
 
 						<div className="min-w-0">
-							<div className="grid">
-								{academies.map((academy, index) => (
-									<article
-										key={academy.name}
-										aria-hidden={index !== academyIndex}
-										inert={index !== academyIndex}
-										className={`col-start-1 row-start-1 mx-auto h-auto w-full max-w-[520px] overflow-hidden rounded-3xl bg-white p-6 shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none sm:rounded-[36px] sm:p-8 lg:mx-0 xl:h-[860px] xl:max-w-[669px] xl:rounded-[54px] xl:p-[46px] ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
-									>
-										<div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:aspect-[16/10] sm:rounded-[28px] xl:h-[564px] xl:rounded-[54px]">
-											<Image
-												src={academy.image}
-												alt={t(academyTranslationKeys[academy.academy].name)}
-												fill
-												sizes="(max-width: 1279px) 520px, 669px"
-												className="object-cover"
-											/>
-											<Button
-												type="button"
-												onClick={() => openWaitlist(academy.academy)}
-												variant="outline-white"
-												size="icon"
-												aria-label={`${t("joinWaitlist")} — ${t(academyTranslationKeys[academy.academy].name)}`}
-												className="absolute bottom-5 right-5 size-10 border-2 text-white sm:bottom-6 sm:right-6 sm:size-12 xl:bottom-9 xl:right-9"
-											>
-												<ArrowRight className="size-5 -rotate-45 sm:size-6" />
-											</Button>
-										</div>
-										<h3 className="mt-5 text-xl font-semibold leading-8 text-black sm:text-2xl sm:leading-[38px] xl:mt-6">
-											{t(academyTranslationKeys[academy.academy].name)}
-										</h3>
-										<p className="mt-1 text-base leading-6 text-[#4b4b4b] sm:text-lg sm:leading-[25px] xl:text-xl">
-											{t(academyTranslationKeys[academy.academy].description)}
-										</p>
-									</article>
-								))}
+							<div
+								ref={academyCarouselRef}
+								onScroll={(event) => {
+									const carousel = event.currentTarget;
+									const step = getAcademyStep(carousel);
+									if (!step) return;
+
+									const position = Math.round(
+										(carousel.scrollLeft + ACADEMY_CARD_BLEED) / step,
+									);
+									setAcademyIndex(position % academies.length);
+									scheduleAcademyLoop();
+								}}
+								aria-label="Academy paths"
+								className="-m-6 flex snap-x snap-mandatory scroll-px-6 gap-0 overflow-x-auto overscroll-x-contain py-6 xl:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+							>
+								{Array.from({ length: ACADEMY_COPY_COUNT }, (_, copy) =>
+									academies.map((academy, index) => (
+										<article
+											key={`${copy}-${academy.name}`}
+											aria-hidden={copy !== 1 || index !== academyIndex}
+											inert={copy !== 1 || index !== academyIndex}
+											className="mx-6 w-[calc(100%-3rem)] max-w-[450px] shrink-0 snap-start overflow-hidden rounded-2xl bg-white p-4 shadow-[0_12px_32px_rgba(0,0,0,0.10)] sm:rounded-3xl sm:p-6 xl:max-w-[570px] xl:rounded-[40px] xl:p-8"
+										>
+											<div className="relative aspect-[3/2] overflow-hidden rounded-xl sm:rounded-2xl xl:rounded-[32px]">
+												<Image
+													src={academy.image}
+													alt={t(academyTranslationKeys[academy.academy].name)}
+													fill
+													sizes="(max-width: 1279px) 520px, 669px"
+													className="object-cover"
+												/>
+												<Button
+													type="button"
+													onClick={() => openWaitlist(academy.academy)}
+													variant="outline-white"
+													size="icon"
+													aria-label={`${t("joinWaitlist")} — ${t(academyTranslationKeys[academy.academy].name)}`}
+													className="absolute bottom-5 right-5 size-10 border-2 text-white sm:bottom-6 sm:right-6 sm:size-12 xl:bottom-9 xl:right-9"
+												>
+													<ArrowRight className="size-5 -rotate-45 sm:size-6" />
+												</Button>
+											</div>
+											<h3 className="mt-4 text-lg font-semibold leading-7 text-black sm:text-xl sm:leading-8 xl:mt-5">
+												{t(academyTranslationKeys[academy.academy].name)}
+											</h3>
+											<p className="mt-1 text-sm leading-5 text-[#4b4b4b] sm:text-base sm:leading-6">
+												{t(academyTranslationKeys[academy.academy].description)}
+											</p>
+										</article>
+									)),
+								)}
 							</div>
 						</div>
 					</div>
