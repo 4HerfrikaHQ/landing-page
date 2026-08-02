@@ -5,13 +5,19 @@ import { Resend } from "resend";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
+type ReconnectNoticeSendResult = {
+	data?: { id?: string } | null;
+	error?: unknown | null;
+};
+
 export async function sendReconnectNoticeOnce(params: {
 	sentAt: Date | null | undefined;
-	send: () => Promise<void>;
+	send: () => Promise<ReconnectNoticeSendResult>;
 	markSent: () => Promise<void>;
 }): Promise<boolean> {
 	if (params.sentAt) return false;
-	await params.send();
+	const result = await params.send();
+	if (result.error || !result.data?.id) return false;
 	await params.markSent();
 	return true;
 }
@@ -35,7 +41,7 @@ export async function sendMentorGoogleReconnectNoticeOnce(params: {
 			send: async () => {
 				try {
 					const resend = new Resend(process.env.RESEND_API_KEY);
-					await resend.emails.send({
+					return await resend.emails.send({
 						from: FROM,
 						to: params.mentorEmail,
 						subject: "Reconnect Google Calendar to keep accepting bookings",

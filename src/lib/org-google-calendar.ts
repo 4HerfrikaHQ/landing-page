@@ -14,9 +14,6 @@ type CalendarFetch = typeof fetch;
 
 let cachedAccessToken: { token: string; expiresAt: number } | null = null;
 
-const DEV_PLACEHOLDER_MEET_URL = "https://meet.google.com/dev-placeholder";
-const DEV_PLACEHOLDER_EVENT_ID = "local-dev-no-google-event";
-
 function configured(): boolean {
 	return Boolean(
 		process.env.GOOGLE_CLIENT_ID &&
@@ -37,14 +34,14 @@ function calendarUrl(eventId?: string): string {
 }
 
 async function getAccessToken(fetchImpl: CalendarFetch): Promise<string> {
-	if (cachedAccessToken && cachedAccessToken.expiresAt > Date.now() + 60_000) {
-		return cachedAccessToken.token;
-	}
 	if (!configured()) {
 		throw new OrgGoogleCalendarError(
 			"connection_unavailable",
 			"The 4HerFrika calendar is unavailable.",
 		);
+	}
+	if (cachedAccessToken && cachedAccessToken.expiresAt > Date.now() + 60_000) {
+		return cachedAccessToken.token;
 	}
 
 	let response: Response;
@@ -120,7 +117,6 @@ function eventDetails(event: Record<string, unknown>) {
 export async function ensureOrgGoogleCalendarConnection(
 	fetchImpl: CalendarFetch = fetch,
 ): Promise<void> {
-	if (!configured() && process.env.NODE_ENV !== "production") return;
 	await getAccessToken(fetchImpl);
 }
 
@@ -128,19 +124,6 @@ export async function createOrgGoogleCalendarEvent(
 	params: MentorCalendarEventParams,
 	fetchImpl: CalendarFetch = fetch,
 ): Promise<{ eventId: string; meetUrl: string }> {
-	if (!configured()) {
-		if (process.env.NODE_ENV === "production") {
-			throw new OrgGoogleCalendarError(
-				"connection_unavailable",
-				"The 4HerFrika calendar is unavailable.",
-			);
-		}
-		return {
-			eventId: DEV_PLACEHOLDER_EVENT_ID,
-			meetUrl: DEV_PLACEHOLDER_MEET_URL,
-		};
-	}
-
 	const token = await getAccessToken(fetchImpl);
 	let response: Response;
 	try {
@@ -198,7 +181,6 @@ export async function deleteOrgGoogleCalendarEvent(params: {
 	eventId: string;
 	fetchImpl?: CalendarFetch;
 }): Promise<void> {
-	if (params.eventId === DEV_PLACEHOLDER_EVENT_ID) return;
 	const fetchImpl = params.fetchImpl ?? fetch;
 	const token = await getAccessToken(fetchImpl);
 	let response: Response;
