@@ -32,13 +32,17 @@ export async function updateMyProfile(
 
 	const name = formData.get("name") as string;
 
+	// Position gates mentor activation on the admin dashboard, so it can't be blank.
+	const position = ((formData.get("position") as string) || "").trim();
+	if (!position) return { error: "Position is required." };
+
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
 	await db.transaction(async (tx) => {
 		await tx
 			.update(schema.mentors)
 			.set({
-				position: (formData.get("position") as string) || "",
+				position,
 				bio: (formData.get("bio") as string) || undefined,
 				nickname: (formData.get("nickname") as string) || undefined,
 				linkedin_url: (formData.get("linkedin_url") as string) || undefined,

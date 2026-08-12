@@ -211,7 +211,7 @@ export function AcademyPage() {
 							type="button"
 							onClick={() => openWaitlist()}
 							size="lg"
-							className="h-[53px] gap-2 bg-[#e91e63] px-6 text-xl font-medium hover:bg-[#d91757]"
+							className="h-[53px] gap-2 bg-[#ec008c] px-6 text-xl font-medium hover:bg-[#d1007c]"
 						>
 							{t("joinWaitlist")} <ArrowRight className="size-5" />
 						</Button>
