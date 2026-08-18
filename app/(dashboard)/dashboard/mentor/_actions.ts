@@ -30,7 +30,8 @@ export async function updateMyProfile(
 	const mentor = await getMentorProfile();
 	if (!mentor) return { error: "Mentor profile not found." };
 
-	const name = formData.get("name") as string;
+	const name = ((formData.get("name") as string) || "").trim();
+	if (!name) return { error: "Name is required." };
 
 	// Position gates mentor activation on the admin dashboard, so it can't be blank.
 	const position = ((formData.get("position") as string) || "").trim();
