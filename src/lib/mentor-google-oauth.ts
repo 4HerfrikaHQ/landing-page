@@ -25,7 +25,6 @@ import {
 	completeMentorGoogleOAuthCallback,
 	createOAuthState,
 	getMentorGoogleAccessToken as getCoreMentorGoogleAccessToken,
-	hashOAuthState,
 	revokeMentorGoogleCredential,
 } from "@/src/lib/mentor-google-oauth-core";
 import {
@@ -439,5 +438,3 @@ export async function retryMentorGoogleRevocation(): Promise<{
 	}
 	return disconnectMentorGoogleConnection({ status: "revoked" });
 }
-
-export { MENTOR_GOOGLE_CALENDAR_ID, hashOAuthState };
