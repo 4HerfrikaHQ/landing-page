@@ -1,12 +1,10 @@
 // Server-only mentor OAuth callback route. Google must be configured with this exact path.
-import {
-	finishMentorGoogleOAuth,
-	mentorGoogleOAuthErrorReason,
-} from "@/src/lib/mentor-google-oauth";
+import { finishMentorGoogleOAuth } from "@/src/lib/mentor-google-oauth";
 import {
 	MentorGoogleOAuthError,
 	safeMentorReturnPath,
 } from "@/src/lib/mentor-google-oauth-core";
+import { mentorGoogleOAuthErrorReason } from "@/src/lib/mentor-google-oauth-provider";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

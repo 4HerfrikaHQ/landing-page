@@ -17,15 +17,10 @@ import {
 import { sendMentorGoogleReconnectNoticeOnce } from "@/src/lib/mentor-google-notifications";
 import {
 	type ConsumedOAuthState,
-	type GoogleIdentity,
-	GoogleOAuthProviderError,
-	type GoogleOAuthTokenResponse,
 	MENTOR_GOOGLE_CALENDAR_ID,
-	MENTOR_GOOGLE_CALENDAR_SCOPE,
 	MENTOR_GOOGLE_REQUIRED_SCOPES,
 	type MentorGoogleConnectionRecord,
 	MentorGoogleOAuthError,
-	type MentorGoogleOAuthProvider,
 	type MentorGoogleOAuthRepository,
 	completeMentorGoogleOAuthCallback,
 	createOAuthState,
@@ -33,183 +28,17 @@ import {
 	hashOAuthState,
 	revokeMentorGoogleCredential,
 } from "@/src/lib/mentor-google-oauth-core";
+import {
+	createMentorGoogleOAuthProvider,
+	requireMentorGoogleOAuthConfig,
+} from "@/src/lib/mentor-google-oauth-provider";
 import { and, eq, isNull, lt } from "drizzle-orm";
 
 const GOOGLE_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-const GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
-const GOOGLE_REVOCATION_URL = "https://oauth2.googleapis.com/revoke";
-
-type MentorOAuthConfig = {
-	clientId: string;
-	clientSecret: string;
-	redirectUri: string;
-};
 
 function normalizedEmail(email: string): string {
 	return email.trim().toLowerCase();
 }
-
-function requireConfig(): MentorOAuthConfig {
-	const clientId = process.env.MENTOR_GOOGLE_OAUTH_CLIENT_ID;
-	const clientSecret = process.env.MENTOR_GOOGLE_OAUTH_CLIENT_SECRET;
-	const redirectUri = process.env.MENTOR_GOOGLE_OAUTH_REDIRECT_URI;
-	if (!clientId || !clientSecret || !redirectUri) {
-		throw new Error("Mentor Google OAuth is not configured");
-	}
-
-	let parsedRedirect: URL;
-	try {
-		parsedRedirect = new URL(redirectUri);
-	} catch {
-		throw new Error("MENTOR_GOOGLE_OAUTH_REDIRECT_URI is invalid");
-	}
-	const localDevelopment =
-		process.env.NODE_ENV !== "production" &&
-		(parsedRedirect.hostname === "localhost" ||
-			parsedRedirect.hostname === "127.0.0.1");
-	if (parsedRedirect.protocol !== "https:" && !localDevelopment) {
-		throw new Error("MENTOR_GOOGLE_OAUTH_REDIRECT_URI must use HTTPS");
-	}
-	if (
-		parsedRedirect.search ||
-		parsedRedirect.hash ||
-		parsedRedirect.pathname !== "/api/mentor/google-calendar/callback"
-	) {
-		throw new Error(
-			"MENTOR_GOOGLE_OAUTH_REDIRECT_URI must be the exact callback URL",
-		);
-	}
-
-	return { clientId, clientSecret, redirectUri };
-}
-
-function jsonString(value: unknown, key: string): string | undefined {
-	if (!value || typeof value !== "object") return undefined;
-	const candidate = (value as Record<string, unknown>)[key];
-	return typeof candidate === "string" ? candidate : undefined;
-}
-
-async function responseJson(response: Response): Promise<unknown> {
-	try {
-		return await response.json();
-	} catch {
-		return undefined;
-	}
-}
-
-function providerError(responseBody: unknown): GoogleOAuthProviderError {
-	return new GoogleOAuthProviderError(
-		jsonString(responseBody, "error") === "invalid_grant"
-			? "invalid_grant"
-			: "provider_error",
-	);
-}
-
-async function postTokenRequest(
-	body: URLSearchParams,
-	fallbackScopes?: string[],
-	fetchImpl: typeof fetch = fetch,
-): Promise<GoogleOAuthTokenResponse> {
-	let response: Response;
-	try {
-		response = await fetchImpl(GOOGLE_TOKEN_URL, {
-			method: "POST",
-			headers: { "content-type": "application/x-www-form-urlencoded" },
-			body,
-			cache: "no-store",
-		});
-	} catch {
-		throw new GoogleOAuthProviderError("provider_error");
-	}
-	const payload = await responseJson(response);
-	if (!response.ok) throw providerError(payload);
-
-	const accessToken = jsonString(payload, "access_token");
-	const scope = jsonString(payload, "scope") ?? fallbackScopes?.join(" ");
-	const refreshToken = jsonString(payload, "refresh_token");
-	if (!accessToken || !scope) {
-		throw new GoogleOAuthProviderError("provider_error");
-	}
-
-	return {
-		accessToken,
-		refreshToken,
-		scopes: scope.split(/\s+/).filter(Boolean),
-	};
-}
-
-export function createMentorGoogleOAuthProvider(
-	fetchImpl: typeof fetch = fetch,
-): MentorGoogleOAuthProvider {
-	return {
-		async exchangeCode({ code, codeVerifier }) {
-			const config = requireConfig();
-			return postTokenRequest(
-				new URLSearchParams({
-					code,
-					client_id: config.clientId,
-					client_secret: config.clientSecret,
-					redirect_uri: config.redirectUri,
-					grant_type: "authorization_code",
-					code_verifier: codeVerifier,
-				}),
-				undefined,
-				fetchImpl,
-			);
-		},
-
-		async refreshAccessToken(refreshToken) {
-			const config = requireConfig();
-			return postTokenRequest(
-				new URLSearchParams({
-					client_id: config.clientId,
-					client_secret: config.clientSecret,
-					refresh_token: refreshToken,
-					grant_type: "refresh_token",
-				}),
-				[MENTOR_GOOGLE_CALENDAR_SCOPE],
-				fetchImpl,
-			);
-		},
-
-		async getIdentity(accessToken): Promise<GoogleIdentity> {
-			let response: Response;
-			try {
-				response = await fetchImpl(GOOGLE_USERINFO_URL, {
-					headers: { authorization: `Bearer ${accessToken}` },
-					cache: "no-store",
-				});
-			} catch {
-				throw new GoogleOAuthProviderError("provider_error");
-			}
-			const payload = await responseJson(response);
-			if (!response.ok) throw providerError(payload);
-			const email = jsonString(payload, "email");
-			const subject = jsonString(payload, "sub");
-			if (!email || !subject) {
-				throw new GoogleOAuthProviderError("provider_error");
-			}
-			return { email, subject };
-		},
-
-		async revokeRefreshToken(refreshToken) {
-			let response: Response;
-			try {
-				response = await fetchImpl(GOOGLE_REVOCATION_URL, {
-					method: "POST",
-					headers: { "content-type": "application/x-www-form-urlencoded" },
-					body: new URLSearchParams({ token: refreshToken }),
-					cache: "no-store",
-				});
-			} catch {
-				throw new GoogleOAuthProviderError("provider_error");
-			}
-			if (!response.ok) throw providerError(await responseJson(response));
-		},
-	};
-}
-
 const googleProvider = createMentorGoogleOAuthProvider();
 
 function asConnectionRecord(
@@ -432,7 +261,7 @@ export async function startMentorGoogleOAuth(input?: {
 	returnPath?: string;
 	forceConsent?: boolean;
 }): Promise<string> {
-	const config = requireConfig();
+	const config = requireMentorGoogleOAuthConfig();
 	const { mentorId, userId } = await currentMentorContext();
 	const existing = await repository.getConnectionByMentor(mentorId);
 	if (existing?.revocationState === "pending") {
@@ -609,11 +438,6 @@ export async function retryMentorGoogleRevocation(): Promise<{
 		};
 	}
 	return disconnectMentorGoogleConnection({ status: "revoked" });
-}
-
-export function mentorGoogleOAuthErrorReason(error: unknown): string {
-	if (error instanceof MentorGoogleOAuthError) return error.code;
-	return "oauth_failed";
 }
 
 export { MENTOR_GOOGLE_CALENDAR_ID, hashOAuthState };
