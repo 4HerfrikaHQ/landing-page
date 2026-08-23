@@ -39,6 +39,8 @@ function currentCalendarAttemptKey(booking: DbBooking, mentorId: string) {
 				booking.id,
 				"reschedule",
 				String(booking.reschedule_count),
+				booking.start_at.toISOString(),
+				booking.end_at.toISOString(),
 			);
 }
 
@@ -97,6 +99,8 @@ export async function rescheduleBookingCore(params: {
 				booking.id,
 				"reschedule",
 				String(booking.reschedule_count + 1),
+				newStartUtc.toISOString(),
+				newEnd.toISOString(),
 			),
 			expectedOldAttemptKey: currentCalendarAttemptKey(booking, mentorId),
 		});

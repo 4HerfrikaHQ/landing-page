@@ -44,6 +44,8 @@ export class MentorCalendarError extends Error {
 		| "reauth_required"
 		| "remote_error"
 		| "identity_mismatch"
+		| "attempt_key_conflict"
+		| "attempt_key_required"
 		| "manual_resolution_required";
 	readonly eventId?: string;
 
@@ -105,13 +107,16 @@ export type MentorCalendarOperations = {
 	createMentorCalendarEvent: (
 		params: MentorCalendarEventParams,
 	) => Promise<{ eventId: string; meetUrl: string }>;
-	deleteMentorCalendarEvent: (params: {
-		mentorId: string;
-		mentorEmail: string;
-		eventId: string;
-		attemptKey?: string;
-		expectedAttemptKey?: string;
-	}) => Promise<void>;
+	deleteMentorCalendarEvent: (
+		params: {
+			mentorId: string;
+			mentorEmail: string;
+			eventId: string;
+		} & (
+			| { attemptKey: string; expectedAttemptKey?: string }
+			| { attemptKey?: string; expectedAttemptKey: string }
+		),
+	) => Promise<void>;
 };
 
 const ATTEMPT_PROPERTY = "4herfrikaBookingAttempt";
@@ -498,8 +503,8 @@ export function createMentorCalendarClient(
 				params.attemptKey
 			)
 				throw new MentorCalendarError(
-					"identity_mismatch",
-					"Google Calendar returned an event owned by a different booking.",
+					"attempt_key_conflict",
+					"Google Calendar returned an event for a different booking attempt.",
 				);
 			return usableEvent(existing, connection);
 		}
@@ -541,8 +546,8 @@ export function createMentorCalendarClient(
 					params.attemptKey
 				)
 					throw new MentorCalendarError(
-						"identity_mismatch",
-						"Google Calendar returned an event owned by a different booking.",
+						"attempt_key_conflict",
+						"Google Calendar returned an event for a different booking attempt.",
 					);
 				return usableEvent(recovered, connection);
 			}
@@ -558,7 +563,17 @@ export function createMentorCalendarClient(
 		}
 		if (response.status === 409 || response.status === 412) {
 			const duplicate = await readEvent(connection, token, eventId, fetchImpl);
-			if (duplicate) return usableEvent(duplicate, connection);
+			if (duplicate) {
+				if (
+					duplicate.extendedProperties?.private?.[ATTEMPT_PROPERTY] !==
+					params.attemptKey
+				)
+					throw new MentorCalendarError(
+						"attempt_key_conflict",
+						"Google Calendar returned an event for a different booking attempt.",
+					);
+				return usableEvent(duplicate, connection);
+			}
 		}
 		if (!response.ok)
 			throw new MentorCalendarError(
@@ -577,24 +592,33 @@ export function createMentorCalendarClient(
 		return usableEvent(event, connection);
 	}
 
-	async function deleteMentorCalendarEvent(params: {
-		mentorId: string;
-		mentorEmail: string;
-		eventId: string;
-		attemptKey?: string;
-		expectedAttemptKey?: string;
-	}) {
+	async function deleteMentorCalendarEvent(
+		params: {
+			mentorId: string;
+			mentorEmail: string;
+			eventId: string;
+		} & (
+			| { attemptKey: string; expectedAttemptKey?: string }
+			| { attemptKey?: string; expectedAttemptKey: string }
+		),
+	) {
 		const connection = await getConnection(params, provider);
 		const token = await accessToken(connection);
 		const event = await readEvent(connection, token, params.eventId, fetchImpl);
 		if (!event) return;
 		eventOwnerMatches(event, connection);
 		const expectedAttempt = params.expectedAttemptKey ?? params.attemptKey;
-		const actualAttempt = event.extendedProperties?.private?.[ATTEMPT_PROPERTY];
-		if (expectedAttempt && actualAttempt && expectedAttempt !== actualAttempt)
+		if (!expectedAttempt) {
 			throw new MentorCalendarError(
-				"identity_mismatch",
-				"Google Calendar returned an event owned by a different booking.",
+				"attempt_key_required",
+				"A booking attempt key is required before deleting a calendar event.",
+			);
+		}
+		const actualAttempt = event.extendedProperties?.private?.[ATTEMPT_PROPERTY];
+		if (!actualAttempt || expectedAttempt !== actualAttempt)
+			throw new MentorCalendarError(
+				"attempt_key_conflict",
+				"Google Calendar returned an event for a different booking attempt.",
 			);
 		const response = await fetchImpl(
 			`${calendarUrl(params.eventId)}?sendUpdates=all`,
@@ -627,7 +651,7 @@ const defaultClient = createMentorCalendarClient();
 export async function replaceMentorCalendarEvent(
 	params: MentorCalendarEventParams & {
 		oldEventId: string;
-		expectedOldAttemptKey?: string;
+		expectedOldAttemptKey: string;
 	},
 	operations: MentorCalendarOperations = defaultClient,
 ) {
