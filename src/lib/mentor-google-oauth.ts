@@ -8,6 +8,7 @@ import {
 	mentorGoogleOAuthStates,
 } from "@/src/db/schema/tables/mentor-google-connections";
 import { mentors } from "@/src/db/schema/tables/mentors";
+import { users } from "@/src/db/schema/tables/users";
 import {
 	decryptMentorGoogleSecret,
 	decryptMentorRefreshToken,
@@ -44,6 +45,10 @@ type MentorOAuthConfig = {
 	clientSecret: string;
 	redirectUri: string;
 };
+
+function normalizedEmail(email: string): string {
+	return email.trim().toLowerCase();
+}
 
 function requireConfig(): MentorOAuthConfig {
 	const clientId = process.env.MENTOR_GOOGLE_OAUTH_CLIENT_ID;
@@ -269,12 +274,18 @@ const repository: MentorGoogleOAuthRepository = {
 
 	async linkConnection(input) {
 		const [mentor] = await db
-			.select({ userId: mentors.user_id })
+			.select({ userId: mentors.user_id, userEmail: users.email })
 			.from(mentors)
+			.innerJoin(users, eq(users.id, mentors.user_id))
 			.where(eq(mentors.id, input.mentorId))
 			.limit(1);
 		if (!mentor || mentor.userId !== input.userId) {
 			throw new MentorGoogleOAuthError("state_mentor_mismatch");
+		}
+		if (
+			normalizedEmail(mentor.userEmail) !== normalizedEmail(input.googleEmail)
+		) {
+			throw new MentorGoogleOAuthError("google_account_conflict");
 		}
 		const existing = await this.getConnectionByMentor(input.mentorId);
 		if (existing) {
@@ -282,8 +293,8 @@ const repository: MentorGoogleOAuthRepository = {
 				Boolean(existing.googleSubject && input.googleSubject) &&
 				existing.googleSubject !== input.googleSubject;
 			const emailChanged =
-				existing.googleEmail.trim().toLowerCase() !==
-				input.googleEmail.trim().toLowerCase();
+				normalizedEmail(existing.googleEmail) !==
+				normalizedEmail(input.googleEmail);
 			const accountChangeAllowed =
 				input.allowAccountChange &&
 				(existing.status === "disconnected" || existing.status === "revoked") &&
