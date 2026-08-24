@@ -1,6 +1,7 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { Button } from "@/components/ui/button";
+import { isLocalImageUrl } from "@/src/lib/image-url";
 import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, LinkIcon, UserRound, Video } from "lucide-react";
 import type { Locale } from "next-intl";
@@ -108,7 +109,7 @@ export default async function ManageBookingPage({
 										alt={mentor.name}
 										fill
 										sizes="48px"
-										unoptimized={mentor.image.includes("localhost")}
+										unoptimized={isLocalImageUrl(mentor.image)}
 										className="object-cover object-top"
 									/>
 								) : (

@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/motion";
+import { isLocalImageUrl } from "@/src/lib/image-url";
 import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
@@ -69,7 +70,7 @@ export default async function MentorDetailPage({
 												alt={mentor.name}
 												fill
 												sizes="128px"
-												unoptimized={mentor.image.includes("localhost")}
+												unoptimized={isLocalImageUrl(mentor.image)}
 												className="object-cover object-top"
 											/>
 										) : (
