@@ -10,6 +10,7 @@ import { signBookingToken } from "@/src/lib/booking-tokens";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
+	isMentorCalendarError,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
@@ -106,12 +107,6 @@ ${joinTip(p.menteeEmail)}
 Need to cancel or reschedule? ${p.manageUrl}
 
 — 4HerFrika`,
-		attachments: [
-			{
-				filename: "invite.ics",
-				content: Buffer.from(p.icsAttachment).toString("base64"),
-			},
-		],
 	});
 }
 
@@ -143,12 +138,6 @@ Purpose: ${p.purpose}
 ${intakeLines}
 
 — 4HerFrika`,
-		attachments: [
-			{
-				filename: "invite.ics",
-				content: Buffer.from(p.icsAttachment).toString("base64"),
-			},
-		],
 	});
 }
 
@@ -171,7 +160,20 @@ export const listMentorSlots = actionClient
 	.action(async ({ parsedInput }) => {
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
-		await selectBookingCalendarHost(mentor);
+		try {
+			await selectBookingCalendarHost(mentor);
+		} catch (error) {
+			console.error("[booking-calendar] availability_check_failed", {
+				mentorId: mentor.id,
+				code:
+					isMentorCalendarError(error) ||
+					error instanceof OrgGoogleCalendarError
+						? error.code
+						: "unknown",
+				errorType: error instanceof Error ? error.name : typeof error,
+			});
+			throw error;
+		}
 
 		const [settingsRow] = await db
 			.select()
