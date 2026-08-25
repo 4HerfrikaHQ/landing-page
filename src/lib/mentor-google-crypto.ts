@@ -18,7 +18,7 @@ function decodeKey(value: EncryptionKey): Buffer {
 	}
 
 	const encoded = value.trim();
-	if (!encoded || encoded !== value) {
+	if (!encoded) {
 		throw new Error("MENTOR_GOOGLE_TOKEN_ENCRYPTION_KEY is not valid base64");
 	}
 
