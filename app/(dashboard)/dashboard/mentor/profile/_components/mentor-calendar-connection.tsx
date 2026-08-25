@@ -184,7 +184,7 @@ export function MentorCalendarConnection({
 	useEffect(() => {
 		if (!callbackOutcome) return;
 		void clearCallbackQuery({ googleCalendar: null, reason: null });
-	}, [callbackOutcome]);
+	}, [callbackOutcome, clearCallbackQuery]);
 
 	function runAction(
 		action: (() => Promise<unknown>) | undefined,
