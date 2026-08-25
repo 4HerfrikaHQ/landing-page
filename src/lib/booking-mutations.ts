@@ -234,15 +234,23 @@ export async function cancelBookingCore(params: {
 		menteeName: booking.mentee_name,
 		menteeEmail: booking.mentee_email,
 	});
-	await sendCancellationEmails({
-		mentorName,
-		mentorEmail,
-		menteeName: booking.mentee_name,
-		menteeEmail: booking.mentee_email,
-		startAtUtc: booking.start_at,
-		menteeTimezone: booking.mentee_timezone,
-		reason,
-		icsAttachment: ics,
-	});
+	try {
+		await sendCancellationEmails({
+			mentorName,
+			mentorEmail,
+			menteeName: booking.mentee_name,
+			menteeEmail: booking.mentee_email,
+			startAtUtc: booking.start_at,
+			menteeTimezone: booking.mentee_timezone,
+			reason,
+			icsAttachment: ics,
+		});
+	} catch (error) {
+		console.error("[booking] cancellation email delivery failed", {
+			bookingId: booking.id,
+			mentorId: booking.mentor_id,
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
+	}
 	revalidatePath(`/careers-corner/${mentorSlug}`);
 }
