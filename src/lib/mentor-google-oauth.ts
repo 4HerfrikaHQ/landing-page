@@ -1,5 +1,4 @@
 // Server-only: OAuth credentials, database access, and Google token exchange live here.
-"use server";
 
 import { currentDbUser } from "@/src/auth";
 import { db } from "@/src/db";

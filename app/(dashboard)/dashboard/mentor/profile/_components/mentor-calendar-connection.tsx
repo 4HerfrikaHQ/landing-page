@@ -9,6 +9,7 @@ import {
 	Unplug,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { parseAsString, useQueryStates } from "nuqs";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
@@ -171,6 +172,10 @@ export function MentorCalendarConnection({
 	const [isPending, startTransition] = useTransition();
 	const [confirmDisconnect, setConfirmDisconnect] = useState(false);
 	const router = useRouter();
+	const [, clearCallbackQuery] = useQueryStates({
+		googleCalendar: parseAsString,
+		reason: parseAsString,
+	});
 	const status = STATUS_COPY[connection.status];
 	const StatusIcon = status.icon;
 	const isConnected = connection.status === "connected";
@@ -178,10 +183,7 @@ export function MentorCalendarConnection({
 
 	useEffect(() => {
 		if (!callbackOutcome) return;
-		const url = new URL(window.location.href);
-		url.searchParams.delete("googleCalendar");
-		url.searchParams.delete("reason");
-		window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+		void clearCallbackQuery({ googleCalendar: null, reason: null });
 	}, [callbackOutcome]);
 
 	function runAction(
