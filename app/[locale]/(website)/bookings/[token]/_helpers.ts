@@ -2,11 +2,9 @@ import { computeSlots } from "@/app/[locale]/(website)/careers-corner/[slug]/_he
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
-import type { BookingHostingMode } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
 import {
 	createMentorCalendarEvent,
@@ -14,10 +12,6 @@ import {
 	replaceMentorCalendarEvent,
 	stableCalendarAttemptKey,
 } from "@/src/lib/google-calendar";
-import {
-	createOrgGoogleCalendarEvent,
-	deleteOrgGoogleCalendarEvent,
-} from "@/src/lib/org-google-calendar";
 import { ActionError } from "@/src/lib/safe-action";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne } from "drizzle-orm";
@@ -141,7 +135,6 @@ export async function swapMeetEvent(params: {
 	menteeEmail: string;
 	attemptKey: string;
 	expectedOldAttemptKey: string;
-	hostingMode: BookingHostingMode;
 }) {
 	const calendarParams = {
 		oldEventId: params.oldEventId,
@@ -155,18 +148,7 @@ export async function swapMeetEvent(params: {
 		attemptKey: params.attemptKey,
 		expectedOldAttemptKey: params.expectedOldAttemptKey,
 	};
-	const provider = selectBookingCalendarProvider(params.hostingMode, {
-		mentor_google: {
-			createMentorCalendarEvent,
-			deleteMentorCalendarEvent,
-		},
-		org_google: {
-			createMentorCalendarEvent: createOrgGoogleCalendarEvent,
-			deleteMentorCalendarEvent: async ({ eventId }) =>
-				deleteOrgGoogleCalendarEvent({ eventId }),
-		},
-	});
-	return replaceMentorCalendarEvent(calendarParams, provider);
+	return replaceMentorCalendarEvent(calendarParams);
 }
 
 export { stableCalendarAttemptKey };
