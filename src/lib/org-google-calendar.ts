@@ -154,13 +154,11 @@ function assertExpectedEvent(event: OrgCalendarEvent, attemptKey: string) {
 
 	const expectedEmail = process.env.GOOGLE_ORG_CALENDAR_ID?.toLowerCase();
 	if (!expectedEmail?.includes("@")) return;
-	for (const owner of [event.organizer, event.creator]) {
-		if (owner?.email?.toLowerCase() !== expectedEmail)
-			throw new OrgGoogleCalendarError(
-				"identity_mismatch",
-				"The 4Herfrika calendar returned an event owned by a different identity.",
-			);
-	}
+	if (event.organizer?.email?.toLowerCase() !== expectedEmail)
+		throw new OrgGoogleCalendarError(
+			"identity_mismatch",
+			"The 4Herfrika calendar returned an event owned by a different identity.",
+		);
 }
 
 function eventDetails(event: OrgCalendarEvent, attemptKey: string) {
