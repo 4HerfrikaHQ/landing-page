@@ -55,6 +55,17 @@ function associatedData(mentorId: string, purpose: string): Buffer {
 	return Buffer.from(`4herfrika:${purpose}:${mentorId}`, "utf8");
 }
 
+function decodeBase64Url(value: string): Buffer {
+	if (!value || !/^[A-Za-z0-9_-]+$/.test(value)) {
+		throw new Error("Invalid encrypted mentor Google secret");
+	}
+	const decoded = Buffer.from(value, "base64url");
+	if (decoded.toString("base64url") !== value) {
+		throw new Error("Invalid encrypted mentor Google secret");
+	}
+	return decoded;
+}
+
 export function encryptMentorGoogleSecret(
 	plaintext: string,
 	mentorId: string,
@@ -91,9 +102,9 @@ export function decryptMentorGoogleSecret(
 		throw new Error("Invalid encrypted mentor Google secret");
 	}
 
-	const nonce = Buffer.from(parts[1], "base64url");
-	const tag = Buffer.from(parts[2], "base64url");
-	const ciphertext = Buffer.from(parts[3], "base64url");
+	const nonce = decodeBase64Url(parts[1]);
+	const tag = decodeBase64Url(parts[2]);
+	const ciphertext = decodeBase64Url(parts[3]);
 	if (
 		nonce.length !== NONCE_BYTES ||
 		tag.length !== AUTH_TAG_BYTES ||
