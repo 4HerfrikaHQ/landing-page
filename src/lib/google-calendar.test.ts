@@ -5,6 +5,7 @@ import {
 	createMentorCalendarClient,
 	deterministicCalendarEventId,
 	replaceMentorCalendarEvent,
+	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
 } from "./google-calendar";
 
@@ -88,6 +89,57 @@ describe("mentor-scoped Google Calendar", () => {
 		).rejects.toMatchObject({ code: "identity_mismatch" });
 	});
 
+	test("selects the central host when no mentor connection exists", async () => {
+		const host = await selectNewBookingCalendarHost({
+			mentorId,
+			mentorEmail,
+			connectionProvider: provider(null),
+		});
+		expect(host).toEqual({ mode: "org_google", reason: "no_connection" });
+	});
+
+	test("selects a healthy mentor host with its validated access token", async () => {
+		const host = await selectNewBookingCalendarHost({
+			mentorId,
+			mentorEmail,
+			connectionProvider: provider(connection()),
+		});
+		expect(host).toMatchObject({
+			mode: "mentor_google",
+			accessToken: "fake-access-token",
+		});
+	});
+
+	test("selects the central host for a broken grant and notifies once per attempt", async () => {
+		let notices = 0;
+		let marked = 0;
+		let noticeSent = false;
+		const broken = connection({
+			getAccessToken: async () => {
+				throw { code: "invalid_grant" };
+			},
+			markReauthRequired: async () => {
+				marked += 1;
+			},
+			sendReauthorizationNotice: async () => {
+				if (noticeSent) return;
+				noticeSent = true;
+				notices += 1;
+			},
+		});
+		const host = await selectNewBookingCalendarHost({
+			mentorId,
+			mentorEmail,
+			connectionProvider: provider(broken),
+		});
+		expect(host).toEqual({
+			mode: "org_google",
+			reason: "connection_unavailable",
+		});
+		expect(marked).toBe(1);
+		expect(notices).toBe(1);
+	});
+
 	test("creates on primary with the mentee invited and a unique Meet", async () => {
 		const attemptKey = stableCalendarAttemptKey(
 			mentorId,
@@ -139,6 +191,53 @@ describe("mentor-scoped Google Calendar", () => {
 		await expect(
 			client.createMentorCalendarEvent(createParams("attempt")),
 		).rejects.toMatchObject({ code: "identity_mismatch" });
+		expect(deletes).toBe(0);
+	});
+
+	test("rejects duplicate recovery when the attempt marker does not match", async () => {
+		let reads = 0;
+		const attemptKey = "expected-attempt";
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (_input, init) => {
+				if (init?.method === "POST") return response({}, 409);
+				reads += 1;
+				return reads === 1
+					? response({}, 404)
+					: response(event("different-attempt"));
+			},
+		});
+
+		await expect(
+			client.createMentorCalendarEvent(createParams(attemptKey)),
+		).rejects.toMatchObject({ code: "attempt_key_conflict" });
+	});
+
+	test("refuses to delete an event without its attempt marker", async () => {
+		let deletes = 0;
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (_input, init) => {
+				if (init?.method === "DELETE") {
+					deletes += 1;
+					return response({});
+				}
+				return response({
+					id: "event-without-marker",
+					organizer: { email: mentorEmail, id: "google-subject-1" },
+					creator: { email: mentorEmail, id: "google-subject-1" },
+				});
+			},
+		});
+
+		await expect(
+			client.deleteMentorCalendarEvent({
+				mentorId,
+				mentorEmail,
+				eventId: "event-without-marker",
+				attemptKey: "expected-attempt",
+			}),
+		).rejects.toMatchObject({ code: "attempt_key_conflict" });
 		expect(deletes).toBe(0);
 	});
 

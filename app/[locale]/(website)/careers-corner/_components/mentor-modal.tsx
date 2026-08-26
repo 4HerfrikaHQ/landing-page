@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import type { DayOfWeek } from "@/src/db/schema/tables/availability";
+import { isLocalImageUrl } from "@/src/lib/image-url";
 import { format, parse } from "date-fns";
 import { CalendarClock, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -59,7 +60,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 							alt={mentor.name}
 							fill
 							sizes="(max-width: 768px) 50vw, 25vw"
-							unoptimized={mentor.image.includes("localhost")}
+							unoptimized={isLocalImageUrl(mentor.image)}
 							className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
 						/>
 					) : (
@@ -106,7 +107,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 										fill
 										sizes="(max-width: 768px) 100vw, 400px"
 										className="object-cover object-top"
-										unoptimized={mentor.image.includes("localhost")}
+										unoptimized={isLocalImageUrl(mentor.image)}
 									/>
 								) : (
 									<div className="flex h-full w-full items-center justify-center bg-surface-pink">

@@ -1,5 +1,6 @@
 "use client";
 
+import { isLocalImageUrl } from "@/src/lib/image-url";
 // import { Search } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -59,7 +60,7 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 								alt={mentor.name}
 								width={700}
 								height={1000}
-								unoptimized={mentor.image.includes("localhost")}
+								unoptimized={isLocalImageUrl(mentor.image)}
 								className={`${slot.size} object-cover object-top aspect-square rounded-full shadow-lg shadow-primary-300/50`}
 								style={{
 									filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",

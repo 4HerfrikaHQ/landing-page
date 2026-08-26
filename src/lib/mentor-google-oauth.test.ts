@@ -1,5 +1,4 @@
 import { expect, test } from "bun:test";
-import { createMentorGoogleOAuthProvider } from "./mentor-google-oauth";
 import {
 	type ConsumedOAuthState,
 	GoogleOAuthProviderError,
@@ -13,6 +12,7 @@ import {
 	isSameOriginMutationRequest,
 	revokeMentorGoogleCredential,
 } from "./mentor-google-oauth-core";
+import { createMentorGoogleOAuthProvider } from "./mentor-google-oauth-provider";
 
 class FakeRepository implements MentorGoogleOAuthRepository {
 	states = new Map<string, ConsumedOAuthState & { used: boolean }>();

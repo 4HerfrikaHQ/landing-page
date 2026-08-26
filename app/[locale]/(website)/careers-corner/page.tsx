@@ -2,6 +2,7 @@ import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { resolveFeaturedMentor } from "@/src/lib/featured-mentor";
+import { isLocalImageUrl } from "@/src/lib/image-url";
 import { UserRound } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
@@ -43,7 +44,7 @@ const CareersCorner = async ({
 										alt={featured.name}
 										fill
 										sizes="(max-width: 768px) 100vw, 50vw"
-										unoptimized={featured.image.includes("localhost")}
+										unoptimized={isLocalImageUrl(featured.image)}
 										className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
 									/>
 								) : (

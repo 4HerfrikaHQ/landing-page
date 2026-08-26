@@ -3,7 +3,8 @@ import { createHash, randomBytes } from "node:crypto";
 export const MENTOR_GOOGLE_CALENDAR_SCOPE =
 	"https://www.googleapis.com/auth/calendar.events.owned" as const;
 export const MENTOR_GOOGLE_OPENID_SCOPE = "openid" as const;
-export const MENTOR_GOOGLE_EMAIL_SCOPE = "email" as const;
+export const MENTOR_GOOGLE_EMAIL_SCOPE =
+	"https://www.googleapis.com/auth/userinfo.email" as const;
 export const MENTOR_GOOGLE_REQUIRED_SCOPES = [
 	MENTOR_GOOGLE_CALENDAR_SCOPE,
 	MENTOR_GOOGLE_OPENID_SCOPE,
@@ -60,12 +61,22 @@ export function normalizeGoogleScopes(scopeValue: string | string[]): string[] {
 		? scopeValue
 		: scopeValue.split(/\s+/);
 	return [
-		...new Set(values.map((scope) => scope.trim()).filter(Boolean)),
+		...new Set(
+			values
+				.map((scope) => scope.trim())
+				.filter(Boolean)
+				.map((scope) =>
+					scope === "email" ? MENTOR_GOOGLE_EMAIL_SCOPE : scope,
+				),
+		),
 	].sort();
 }
 
 export function hasRequiredMentorGoogleScopes(scopes: string[]): boolean {
-	return MENTOR_GOOGLE_REQUIRED_SCOPES.every((scope) => scopes.includes(scope));
+	const normalizedScopes = normalizeGoogleScopes(scopes);
+	return MENTOR_GOOGLE_REQUIRED_SCOPES.every((scope) =>
+		normalizedScopes.includes(scope),
+	);
 }
 
 export function hasMentorGoogleCalendarScope(scopes: string[]): boolean {

@@ -77,7 +77,8 @@ const STATUS_COPY: Record<
 > = {
 	not_connected: {
 		label: "Not connected",
-		description: "Connect a Google account before accepting a booking.",
+		description:
+			"Google Calendar is optional. Unconnected calls are hosted by 4HerFrika.",
 		className: "border-amber-200 bg-amber-50 text-amber-800",
 		icon: AlertCircle,
 	},
@@ -90,7 +91,7 @@ const STATUS_COPY: Record<
 	reauth_required: {
 		label: "Reauthorization required",
 		description:
-			"Google needs you to reconnect before a booking can be created.",
+			"Reconnect to organize new calls from your Google Calendar. 4HerFrika can host bookings while you reconnect.",
 		className: "border-rose-200 bg-rose-50 text-rose-800",
 		icon: AlertCircle,
 	},
@@ -121,17 +122,17 @@ const CALLBACK_COPY: Record<
 	insufficient_scope: {
 		title: "Calendar permission is missing",
 		description:
-			"Reconnect and approve the requested Calendar permission so bookings can be created.",
+			"Reconnect and approve the requested Calendar permission to restore mentor-owned events. New bookings can use 4HerFrika meanwhile.",
 	},
 	invalid_grant: {
 		title: "Google needs you to reconnect",
 		description:
-			"Use Reauthorize this account to restore booking availability.",
+			"Use Reauthorize this account to restore mentor-owned events. New bookings can use 4HerFrika meanwhile.",
 	},
 	oauth_exchange_failed: {
 		title: "Google could not finish the connection",
 		description:
-			"Try connecting again. Booking stays unavailable until it succeeds.",
+			"Try connecting again to restore mentor-owned events. New bookings can use 4HerFrika in the meantime.",
 	},
 	identity_lookup_failed: {
 		title: "Google account details could not be confirmed",
@@ -140,12 +141,12 @@ const CALLBACK_COPY: Record<
 	refresh_token_missing: {
 		title: "Google needs you to reconnect",
 		description:
-			"Use Reauthorize this account to restore booking availability.",
+			"Use Reauthorize this account to restore mentor-owned events. New bookings can use 4HerFrika meanwhile.",
 	},
 	connection_unavailable: {
 		title: "Google Calendar is unavailable",
 		description:
-			"Try again shortly. Booking stays unavailable until it succeeds.",
+			"Try again shortly to restore mentor-owned events. New bookings can use 4HerFrika in the meantime.",
 	},
 };
 
@@ -286,7 +287,8 @@ export function MentorCalendarConnection({
 				{healthCheckUnavailable ? (
 					<div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950">
 						Google access could not be confirmed just now. Reauthorize this
-						account before accepting a new booking.
+						account to restore mentor-owned events. New bookings can continue
+						through 4HerFrika.
 					</div>
 				) : null}
 				{revocationPending ? (
@@ -295,8 +297,8 @@ export function MentorCalendarConnection({
 							Google access removal is still pending.
 						</p>
 						<p className="mt-1 leading-5">
-							Bookings remain unavailable until Google confirms revocation. You
-							can try the protected retry now, or remove 4Herfrika from Google
+							New bookings use 4HerFrika until Google confirms revocation. You
+							can try the protected retry now, or remove 4HerFrika from Google
 							Account → Security → Third-party connections.
 						</p>
 						{canRetryRevocation && actions?.retryRevocation ? (
@@ -363,17 +365,16 @@ export function MentorCalendarConnection({
 					</div>
 				) : (
 					<div className="border-l-2 border-primary-500 pl-4 text-sm leading-6 text-muted-foreground">
-						Bookings are unavailable until Google Calendar is connected. Once
-						connected, a fresh Calendar event and unique Meet will be created on
-						your account for each booking.
+						Google Calendar is optional. Until you connect it, 4HerFrika hosts
+						new bookings. Once connected, fresh Calendar events and unique Meets
+						will be created on your account for new bookings.
 					</div>
 				)}
 
 				{isReconnect ? (
 					<div className="rounded-xl border border-rose-200 bg-rose-50/70 p-4 text-sm leading-6 text-rose-900">
-						Reconnect to restore booking availability. The existing connection
-						is not used as a fallback, and new calls stay blocked until Google
-						confirms your account again.
+						Reconnect to restore mentor-owned Calendar events. New bookings can
+						continue through 4HerFrika while this connection is unavailable.
 					</div>
 				) : null}
 
