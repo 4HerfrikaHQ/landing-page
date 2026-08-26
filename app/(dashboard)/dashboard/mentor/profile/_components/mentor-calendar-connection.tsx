@@ -4,17 +4,22 @@ import {
 	AlertCircle,
 	CalendarDays,
 	CheckCircle2,
+	Info,
 	RefreshCw,
-	ShieldCheck,
 	Unplug,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { parseAsString, useQueryStates } from "nuqs";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { Button } from "@/components/ui/button";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/utils/cn";
 
 export type MentorCalendarConnectionStatus =
@@ -70,32 +75,33 @@ const STATUS_COPY: Record<
 	MentorCalendarConnectionStatus,
 	{
 		label: string;
-		description: string;
 		className: string;
 		icon: typeof CheckCircle2;
 	}
 > = {
 	not_connected: {
 		label: "Not connected",
-		description:
-			"Google Calendar is optional. Unconnected calls are hosted by 4HerFrika.",
 		className: "border-amber-200 bg-amber-50 text-amber-800",
 		icon: AlertCircle,
 	},
 	connected: {
 		label: "Connected",
-		description: "New calls will be organized from your Google Calendar.",
 		className: "border-emerald-200 bg-emerald-50 text-emerald-800",
 		icon: CheckCircle2,
 	},
 	reauth_required: {
 		label: "Reauthorization required",
-		description:
-			"Reconnect to organize new calls from your Google Calendar. 4HerFrika can host bookings while you reconnect.",
 		className: "border-rose-200 bg-rose-50 text-rose-800",
 		icon: AlertCircle,
 	},
 };
+
+const ACTION_FOCUS_CLASS_NAME =
+	"focus-visible:ring-3 focus-visible:ring-ring/50";
+const CONNECTED_ACTION_CLASS_NAME = cn(
+	"box-border h-9 gap-2 py-0",
+	ACTION_FOCUS_CLASS_NAME,
+);
 
 const CALLBACK_COPY: Record<
 	MentorCalendarCallbackReason,
@@ -172,6 +178,9 @@ export function MentorCalendarConnection({
 }: MentorCalendarConnectionProps) {
 	const [isPending, startTransition] = useTransition();
 	const [confirmDisconnect, setConfirmDisconnect] = useState(false);
+	const disconnectButtonRef = useRef<HTMLButtonElement>(null);
+	const keepItButtonRef = useRef<HTMLButtonElement>(null);
+	const restoreDisconnectFocusRef = useRef(false);
 	const router = useRouter();
 	const [, clearCallbackQuery] = useQueryStates({
 		googleCalendar: parseAsString,
@@ -181,11 +190,33 @@ export function MentorCalendarConnection({
 	const StatusIcon = status.icon;
 	const isConnected = connection.status === "connected";
 	const isReconnect = connection.status === "reauth_required";
+	const description = isConnected
+		? "Your Google account organizes new calls."
+		: isReconnect
+			? "Reconnect your Google Calendar to organize new calls; 4Herfrika hosts them until you do."
+			: "Connect Google Calendar to let your Google account organize new calls. Without it, 4Herfrika hosts them.";
+
+	useEffect(() => {
+		if (confirmDisconnect) {
+			keepItButtonRef.current?.focus();
+			return;
+		}
+
+		if (restoreDisconnectFocusRef.current) {
+			disconnectButtonRef.current?.focus();
+			restoreDisconnectFocusRef.current = false;
+		}
+	}, [confirmDisconnect]);
 
 	useEffect(() => {
 		if (!callbackOutcome) return;
 		void clearCallbackQuery({ googleCalendar: null, reason: null });
 	}, [callbackOutcome, clearCallbackQuery]);
+
+	function cancelDisconnect() {
+		restoreDisconnectFocusRef.current = true;
+		setConfirmDisconnect(false);
+	}
 
 	function runAction(
 		action: (() => Promise<unknown>) | undefined,
@@ -256,27 +287,21 @@ export function MentorCalendarConnection({
 						</p>
 					</div>
 				) : null}
-				<div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-					<div className="flex gap-4">
-						<div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-surface-indigo text-secondary-500">
-							<CalendarDays className="size-5" aria-hidden="true" />
-						</div>
-						<div>
-							<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-								Your calls
-							</p>
-							<h2 className="mt-1 font-heading text-xl font-semibold text-foreground">
-								Google Calendar &amp; Meet
-							</h2>
-							<p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-								Your own Google account organizes each call, sends the invite,
-								and owns the meeting. 4Herfrika does not join the call.
-							</p>
-						</div>
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+					<div className="min-w-0">
+						<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+							Your calls
+						</p>
+						<h2 className="mt-1 font-heading text-xl font-semibold text-foreground">
+							Google Calendar &amp; Meet
+						</h2>
+						<p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
+							{description}
+						</p>
 					</div>
 					<div
 						className={cn(
-							"inline-flex w-fit items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium",
+							"inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium",
 							status.className,
 						)}
 					>
@@ -287,8 +312,7 @@ export function MentorCalendarConnection({
 				{healthCheckUnavailable ? (
 					<div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950">
 						Google access could not be confirmed just now. Reauthorize this
-						account to restore mentor-owned events. New bookings can continue
-						through 4HerFrika.
+						account to restore your Google Calendar connection.
 					</div>
 				) : null}
 				{revocationPending ? (
@@ -297,8 +321,7 @@ export function MentorCalendarConnection({
 							Google access removal is still pending.
 						</p>
 						<p className="mt-1 leading-5">
-							New bookings use 4HerFrika until Google confirms revocation. You
-							can try the protected retry now, or remove 4HerFrika from Google
+							Try the protected retry now, or remove 4HerFrika from Google
 							Account → Security → Third-party connections.
 						</p>
 						{canRetryRevocation && actions?.retryRevocation ? (
@@ -317,25 +340,6 @@ export function MentorCalendarConnection({
 						) : null}
 					</div>
 				) : null}
-
-				<div className="rounded-xl border border-border/60 bg-muted/40 p-4">
-					<div className="flex items-start gap-3">
-						<ShieldCheck
-							className="mt-0.5 size-4 shrink-0 text-secondary-500"
-							aria-hidden="true"
-						/>
-						<div className="space-y-1">
-							<p className="text-sm font-medium text-foreground">
-								{status.description}
-							</p>
-							<p className="text-sm leading-5 text-muted-foreground">
-								We only show your connected account and connection health here.
-								We never display access codes, tokens, or meeting links in this
-								panel.
-							</p>
-						</div>
-					</div>
-				</div>
 
 				{isConnected ? (
 					<div className="grid gap-4 border-y border-border/60 py-4 sm:grid-cols-2">
@@ -363,99 +367,134 @@ export function MentorCalendarConnection({
 							</p>
 						</div>
 					</div>
-				) : (
-					<div className="border-l-2 border-primary-500 pl-4 text-sm leading-6 text-muted-foreground">
-						Google Calendar is optional. Until you connect it, 4HerFrika hosts
-						new bookings. Once connected, fresh Calendar events and unique Meets
-						will be created on your account for new bookings.
-					</div>
-				)}
-
-				{isReconnect ? (
-					<div className="rounded-xl border border-rose-200 bg-rose-50/70 p-4 text-sm leading-6 text-rose-900">
-						Reconnect to restore mentor-owned Calendar events. New bookings can
-						continue through 4HerFrika while this connection is unavailable.
-					</div>
 				) : null}
 
-				<div className="flex flex-col gap-3 border-t border-border/60 pt-5 sm:flex-row sm:items-center sm:justify-between">
-					<div className="flex flex-wrap gap-2">
-						{isConnected ? (
-							<div className="flex flex-wrap items-center gap-2">
+				<div className="flex flex-col gap-3 border-t border-border/60 pt-5">
+					{confirmDisconnect && isConnected ? (
+						<div
+							className="flex w-full flex-col gap-3 rounded-xl border border-rose-200 bg-rose-50/70 p-4 sm:flex-row sm:items-center sm:justify-between"
+							role="alertdialog"
+							aria-labelledby="disconnect-google-calendar-title"
+							aria-describedby="disconnect-google-calendar-description"
+						>
+							<div>
+								<p
+									id="disconnect-google-calendar-title"
+									className="text-sm font-medium text-rose-950"
+								>
+									Disconnect Google Calendar?
+								</p>
+								<p
+									id="disconnect-google-calendar-description"
+									className="mt-1 text-sm leading-5 text-rose-900/80"
+								>
+									New calls will be hosted by 4Herfrika.
+								</p>
+							</div>
+							<div className="grid grid-cols-2 gap-2 sm:flex">
 								<Button
 									type="button"
 									variant="outline"
 									size="sm"
-									disabled={isPending || !actions?.reconnect}
-									aria-disabled={!actions?.reconnect}
-									onClick={() => runAction(actions?.reconnect, "oauth")}
+									className={cn(
+										"gap-2 border-rose-300 px-3.5 text-rose-700 hover:border-primary-500 hover:text-white",
+										ACTION_FOCUS_CLASS_NAME,
+									)}
+									disabled={isPending || !actions?.disconnect}
+									onClick={() => runAction(actions?.disconnect, "disconnect")}
 								>
-									<RefreshCw className="size-4" aria-hidden="true" />
-									Reauthorize this account
+									Yes, disconnect
 								</Button>
-								<p className="basis-full text-xs text-muted-foreground">
-									Refreshes consent for this linked Google account; it cannot
-									switch accounts.
-								</p>
-							</div>
-						) : (
-							<Button
-								type="button"
-								variant="solid"
-								size="sm"
-								disabled={
-									isPending ||
-									!(isReconnect ? actions?.reconnect : actions?.connect)
-								}
-								onClick={() =>
-									runAction(
-										isReconnect ? actions?.reconnect : actions?.connect,
-										"oauth",
-									)
-								}
-							>
-								<CalendarDays className="size-4" aria-hidden="true" />
-								{isReconnect
-									? "Reauthorize this account"
-									: "Connect Google Calendar"}
-							</Button>
-						)}
-						{isConnected ? (
-							confirmDisconnect ? (
-								<div className="flex items-center gap-2 text-sm text-muted-foreground">
-									<span>Disconnect Google Calendar?</span>
-									<Button
-										type="button"
-										variant="outline"
-										size="sm"
-										disabled={isPending || !actions?.disconnect}
-										onClick={() => runAction(actions?.disconnect, "disconnect")}
-									>
-										Yes, disconnect
-									</Button>
-									<Button
-										type="button"
-										variant="ghost"
-										size="sm"
-										onClick={() => setConfirmDisconnect(false)}
-									>
-										Keep it
-									</Button>
-								</div>
-							) : (
 								<Button
 									type="button"
 									variant="ghost"
 									size="sm"
+									className={cn(
+										"px-3.5 text-rose-900 hover:bg-white/70",
+										ACTION_FOCUS_CLASS_NAME,
+									)}
+									ref={keepItButtonRef}
+									onClick={cancelDisconnect}
+								>
+									Keep it
+								</Button>
+							</div>
+						</div>
+					) : (
+						<div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+							{isConnected ? (
+								<>
+									<Button
+										type="button"
+										variant="outline"
+										size="sm"
+										className={CONNECTED_ACTION_CLASS_NAME}
+										disabled={isPending || !actions?.reconnect}
+										aria-disabled={!actions?.reconnect}
+										onClick={() => runAction(actions?.reconnect, "oauth")}
+									>
+										<RefreshCw className="size-4" aria-hidden="true" />
+										Reauthorize this account
+									</Button>
+									<Tooltip>
+										<TooltipTrigger
+											render={
+												<Button
+													type="button"
+													variant="ghost"
+													size="icon-sm"
+													aria-label="About reauthorization"
+													className="text-muted-foreground"
+												/>
+											}
+										>
+											<Info className="size-4" aria-hidden="true" />
+										</TooltipTrigger>
+										<TooltipContent>
+											Refreshes consent for this linked Google account; it
+											cannot switch accounts.
+										</TooltipContent>
+									</Tooltip>
+								</>
+							) : (
+								<Button
+									type="button"
+									variant="solid"
+									size="sm"
+									className="gap-2"
+									disabled={
+										isPending ||
+										!(isReconnect ? actions?.reconnect : actions?.connect)
+									}
+									onClick={() =>
+										runAction(
+											isReconnect ? actions?.reconnect : actions?.connect,
+											"oauth",
+										)
+									}
+								>
+									<CalendarDays className="size-4" aria-hidden="true" />
+									{isReconnect
+										? "Reauthorize this account"
+										: "Connect Google Calendar"}
+								</Button>
+							)}
+							{isConnected ? (
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className={CONNECTED_ACTION_CLASS_NAME}
 									disabled={isPending}
+									ref={disconnectButtonRef}
 									onClick={() => setConfirmDisconnect(true)}
 								>
 									<Unplug className="size-4" aria-hidden="true" />
 									Disconnect
 								</Button>
-							)
-						) : null}
-					</div>
+							) : null}
+						</div>
+					)}
 					{isPending ? (
 						<output className="text-sm text-muted-foreground">
 							Updating connection…

@@ -23,7 +23,7 @@ export function PublicLinkCard({ url }: { url: string }) {
 
 	return (
 		<DataCard>
-			<DataCardSection className="space-y-3 p-6 sm:p-8">
+			<DataCardSection className="space-y-4 p-6 sm:p-8">
 				<div>
 					<h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
 						Your public link
@@ -32,12 +32,18 @@ export function PublicLinkCard({ url }: { url: string }) {
 						Share this exact link — it's how mentees find and book you.
 					</p>
 				</div>
-				<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-					<code className="min-w-0 flex-1 truncate rounded-md border border-border/60 bg-muted px-3 py-2 text-sm text-foreground">
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+					<code className="min-w-0 flex-1 truncate rounded-md border border-border/60 bg-muted px-3.5 py-2.5 text-sm text-foreground">
 						{url}
 					</code>
-					<div className="flex gap-2">
-						<Button type="button" variant="outline" size="sm" onClick={copy}>
+					<div className="grid grid-cols-2 gap-2 sm:flex">
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							className="w-full gap-2 px-3.5 sm:min-w-20 sm:w-auto"
+							onClick={copy}
+						>
 							{copied ? (
 								<Check className="size-4" />
 							) : (
@@ -45,7 +51,13 @@ export function PublicLinkCard({ url }: { url: string }) {
 							)}
 							{copied ? "Copied" : "Copy"}
 						</Button>
-						<Button href={url} isExternal variant="outline" size="sm">
+						<Button
+							href={url}
+							isExternal
+							variant="outline"
+							size="sm"
+							className="w-full gap-2 px-3.5 sm:min-w-20 sm:w-auto"
+						>
 							<ExternalLink className="size-4" />
 							Open
 						</Button>
