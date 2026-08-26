@@ -1,15 +1,25 @@
-import {
-	createMeetEvent,
-	deleteMeetEvent,
-} from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
 import { computeSlots } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
-import { bookings } from "@/src/db/schema/tables/bookings";
+import {
+	type BookingHostingMode,
+	bookings,
+} from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
+import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
+import {
+	createMentorCalendarEvent,
+	deleteMentorCalendarEvent,
+	replaceMentorCalendarEvent,
+	stableCalendarAttemptKey,
+} from "@/src/lib/google-calendar";
+import {
+	createOrgGoogleCalendarEvent,
+	deleteOrgGoogleCalendarEvent,
+} from "@/src/lib/org-google-calendar";
 import { ActionError } from "@/src/lib/safe-action";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne } from "drizzle-orm";
@@ -117,8 +127,13 @@ export async function validateNewSlot(params: {
 	return { mentorTimezone: templates[0]?.timezone ?? "UTC" };
 }
 
-/** Deletes the old google meet event and creates a new one for the rescheduled time. */
+/**
+ * Creates the replacement first, then removes the old event. The stable
+ * attempt key makes a retry reconcile to the same replacement instead of
+ * inserting another Calendar event.
+ */
 export async function swapMeetEvent(params: {
+	mentorId: string;
 	oldEventId: string;
 	summary: string;
 	description: string;
@@ -126,22 +141,37 @@ export async function swapMeetEvent(params: {
 	endAtUtc: Date;
 	mentorEmail: string;
 	menteeEmail: string;
+	attemptKey: string;
+	expectedOldAttemptKey: string;
+	hostingMode: BookingHostingMode;
 }) {
-	try {
-		await deleteMeetEvent(params.oldEventId);
-	} catch (e) {
-		console.warn("[reschedule] google delete failed", e);
-	}
-
-	return createMeetEvent({
+	const calendarParams = {
+		oldEventId: params.oldEventId,
+		mentorId: params.mentorId,
 		summary: params.summary,
 		description: params.description,
 		startAtUtc: params.startAtUtc,
 		endAtUtc: params.endAtUtc,
 		mentorEmail: params.mentorEmail,
 		menteeEmail: params.menteeEmail,
+		attemptKey: params.attemptKey,
+		expectedOldAttemptKey: params.expectedOldAttemptKey,
+	};
+	const provider = selectBookingCalendarProvider(params.hostingMode, {
+		mentor_google: {
+			createMentorCalendarEvent,
+			deleteMentorCalendarEvent,
+		},
+		org_google: {
+			createMentorCalendarEvent: createOrgGoogleCalendarEvent,
+			deleteMentorCalendarEvent: async ({ eventId }: { eventId: string }) =>
+				deleteOrgGoogleCalendarEvent({ eventId }),
+		},
 	});
+	return replaceMentorCalendarEvent(calendarParams, provider);
 }
+
+export { stableCalendarAttemptKey };
 
 /** Cancellation email fan-out (mentee + mentor). */
 export async function sendCancellationEmails(params: {
