@@ -35,7 +35,7 @@ const academies = [
 		name: "Business Academy",
 		description:
 			"Turn your ideas into sustainable ventures with practical business skills, mentorship, and a community built to help you grow.",
-		image: "/assets/academy/business-source.png",
+		image: "/assets/academy/business-source.jpg",
 	},
 	{
 		academy: "climate",
