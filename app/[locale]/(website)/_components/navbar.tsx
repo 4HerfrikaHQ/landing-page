@@ -68,7 +68,7 @@ export const Navbar = async () => {
 								>
 									<button
 										type="button"
-										className="flex h-full items-center gap-1 text-sm leading-6 text-foreground hover:text-primary-500 lg:text-base"
+										className="flex h-full cursor-pointer items-center gap-1 text-sm leading-6 text-foreground hover:text-primary-500 lg:text-base"
 										aria-haspopup="true"
 									>
 										{getNavName(link.name)}
