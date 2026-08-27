@@ -30,7 +30,12 @@ export async function updateMyProfile(
 	const mentor = await getMentorProfile();
 	if (!mentor) return { error: "Mentor profile not found." };
 
-	const name = formData.get("name") as string;
+	const name = ((formData.get("name") as string) || "").trim();
+	if (!name) return { error: "Name is required." };
+
+	// Position gates mentor activation on the admin dashboard, so it can't be blank.
+	const position = ((formData.get("position") as string) || "").trim();
+	if (!position) return { error: "Position is required." };
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
@@ -38,7 +43,7 @@ export async function updateMyProfile(
 		await tx
 			.update(schema.mentors)
 			.set({
-				position: (formData.get("position") as string) || "",
+				position,
 				bio: (formData.get("bio") as string) || undefined,
 				nickname: (formData.get("nickname") as string) || undefined,
 				linkedin_url: (formData.get("linkedin_url") as string) || undefined,

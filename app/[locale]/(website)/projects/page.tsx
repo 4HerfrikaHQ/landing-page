@@ -49,14 +49,14 @@ export default async function ProjectsPage({
 
 							<div className="mt-10 flex flex-col sm:flex-row gap-4">
 								<Button
-									href={"/about" as Route}
+									href={"/academy" as Route}
 									variant="solid"
 									className="px-8 py-3 md:py-4 text-base md:text-xl"
 								>
 									{tc("startAChapter")}
 								</Button>
 								<Button
-									href={"/about" as Route}
+									href={"/academy" as Route}
 									variant="outline"
 									className="px-8 py-3 md:py-4 text-base md:text-xl"
 								>

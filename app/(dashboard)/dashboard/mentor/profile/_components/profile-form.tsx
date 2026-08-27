@@ -160,6 +160,7 @@ export function ProfileForm({
 							<Field
 								label="Position"
 								name="position"
+								required
 								value={fields.position}
 								onChange={(e) =>
 									setFields((f) => ({ ...f, position: e.target.value }))
