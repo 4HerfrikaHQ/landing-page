@@ -54,7 +54,7 @@ const Community = ({
 	<div className="rounded-3xl w-full">
 		<Image
 			src={image}
-			alt="person"
+			alt=""
 			width={64}
 			height={64}
 			className="w-16 object-cover aspect-square rounded-full"

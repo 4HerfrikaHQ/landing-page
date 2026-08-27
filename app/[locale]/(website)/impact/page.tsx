@@ -44,7 +44,7 @@ export default async function ReportPage({
 		<div className="w-screen overflow-hidden">
 			<Image
 				src={yearReport}
-				alt="Yearly report"
+				alt={t("altYearReport")}
 				className="mx-auto max-w-full"
 			/>
 			<h1 className="text-3xl md:text-5xl font-bold text-foreground mx-auto my-16 md:my-28 text-center">
@@ -61,7 +61,7 @@ export default async function ReportPage({
 				>
 					<Image
 						src={earth}
-						alt="Earth Icon"
+						alt={t("altEarth")}
 						className="mx-auto max-w-xl relative w-[43vw]"
 					/>
 				</FadeIn>
@@ -94,17 +94,17 @@ export default async function ReportPage({
 				<div className="grid grid-cols-2 gap-4 px-6 mt-12 md:mt-0">
 					<Image
 						src={milestone1}
-						alt="milestone"
+						alt={t("altMilestone1")}
 						className="relative md:absolute h-40 left-0 md:top-1/2 md:-translate-y-1/2 md:size-[16vw] object-cover md:rounded-full"
 					/>
 					<Image
 						src={milestone2}
-						alt="milestone"
+						alt={t("altMilestone2")}
 						className="relative md:absolute h-40 md:right-60 md:bottom-48 md:size-[14vw] object-cover md:rounded-full"
 					/>
 					<Image
 						src={milestone3}
-						alt="milestone"
+						alt={t("altMilestone3")}
 						className="relative col-span-2 h-80 md:absolute md:right-20 md:top-20 md:size-[10vw] object-cover md:rounded-full"
 					/>
 				</div>
@@ -117,17 +117,17 @@ export default async function ReportPage({
 				<div className="relative mb-8 md:mb-40 grid grid-cols-2 md:flex gap-4 px-6">
 					<Image
 						src={middle}
-						alt="Girls"
+						alt={t("altMiddle")}
 						className="w-full h-full md:w-[30vw] md:h-141.25 object-cover mx-auto relative"
 					/>
 					<Image
 						src={right}
-						alt="Girls"
+						alt={t("altRight")}
 						className="w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-25 right-0 md:top-32"
 					/>
 					<Image
 						src={left}
-						alt="Girls"
+						alt={t("altLeft")}
 						className="col-span-2 w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-[-25deg] left-0 md:top-32"
 					/>
 				</div>
@@ -155,7 +155,7 @@ export default async function ReportPage({
 					</div>
 					<Image
 						src={beginning}
-						alt="Just the beginning"
+						alt={t("altBeginning")}
 						className="w-full h-135 object-cover"
 					/>
 				</div>

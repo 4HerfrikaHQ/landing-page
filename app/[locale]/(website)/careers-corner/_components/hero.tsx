@@ -21,7 +21,7 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 		<section className="overflow-hidden grid place-content-center relative min-h-[60vh] w-full pt-28 pb-16">
 			<Image
 				src="/assets/careers/Mask.png"
-				alt=" "
+				alt=""
 				width={700}
 				height={1000}
 				className="absolute top-0 -left-28 h-full"
@@ -29,7 +29,7 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 			/>
 			<Image
 				src="/assets/careers/Mask2.png"
-				alt=" "
+				alt=""
 				width={700}
 				height={1000}
 				className="absolute bottom-0 -right-10"
