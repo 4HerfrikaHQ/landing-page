@@ -22,7 +22,7 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 		<section className="h-screen grid py-10 relative">
 			<Image
 				src="/assets/contact/background.png"
-				alt="hero"
+				alt=""
 				className="object-cover absolute top-0 w-full"
 				fill
 				sizes="100vw"
@@ -101,7 +101,7 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								<div className="relative w-full min-h-48 mt-7">
 									<Image
 										src="/assets/contact/map.jpg"
-										alt="map"
+										alt="Map showing 4Herfrika's office location"
 										fill
 										sizes="(max-width: 768px) 100vw, 50vw"
 										className="object-cover rounded-md"
