@@ -131,13 +131,15 @@ export default async function ReportPage({
 						className="col-span-2 w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-[-25deg] left-0 md:top-32"
 					/>
 				</div>
-				<Button
-					href="/reports/4herfrika-Annual-report.pdf"
-					isExternal
-					className="mx-auto w-fit"
-				>
-					{tc("downloadReport")}
-				</Button>
+				<div className="flex justify-center">
+					<Button
+						href="/reports/4herfrika-Annual-report.pdf"
+						isExternal
+						className="w-fit"
+					>
+						{tc("downloadReport")}
+					</Button>
+				</div>
 				<span className="h-12 md:h-36 block" />
 			</div>
 			<FadeIn>
