@@ -306,7 +306,7 @@ export function AcademyPage() {
 										inert={index !== academyIndex}
 										className={`col-start-1 row-start-1 mx-auto h-auto w-full max-w-[520px] overflow-hidden rounded-3xl bg-white p-6 shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none sm:rounded-[36px] sm:p-8 lg:mx-0 xl:h-[860px] xl:max-w-[669px] xl:rounded-[54px] xl:p-[46px] ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
 									>
-										<div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:aspect-[16/10] sm:rounded-[28px] xl:h-[564px] xl:rounded-[54px]">
+										<div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-[16/10] sm:rounded-[28px] xl:h-[564px] xl:rounded-[54px]">
 											<Image
 												src={academy.image}
 												alt={t(academyTranslationKeys[academy.academy].name)}
