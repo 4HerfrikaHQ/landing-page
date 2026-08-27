@@ -447,7 +447,6 @@ function AcademyFooter() {
 							<li>
 								<Link href="/privacy">Privacy</Link>
 							</li>
-							<li>Cookies</li>
 						</ul>
 					</div>
 					<div>
