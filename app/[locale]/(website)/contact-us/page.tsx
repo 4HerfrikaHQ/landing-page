@@ -101,7 +101,7 @@ const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
 								<div className="relative w-full min-h-48 mt-7">
 									<Image
 										src="/assets/contact/map.jpg"
-										alt="Map showing 4Herfrika's office location"
+										alt={t("altMap")}
 										fill
 										sizes="(max-width: 768px) 100vw, 50vw"
 										className="object-cover rounded-md"

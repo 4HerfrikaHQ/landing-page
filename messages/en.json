@@ -155,6 +155,7 @@
 		"bankTransferNote": "Use the account details below to make your transfer"
 	},
 	"contact": {
+		"altMap": "Map showing 4Herfrika's office location",
 		"title": "Contact Us",
 		"name": "Name",
 		"email": "Email Address",
@@ -171,6 +172,15 @@
 		"errorMessage": "Failed to send message. Please check your inputs and try again."
 	},
 	"impact": {
+		"altYearReport": "Cover of 4Herfrika's Year-One Landscape Report, ‘From One to Many’",
+		"altEarth": "Illustration of planet Earth",
+		"altMilestone1": "Two young women coding on laptops together at a 4Herfrika workshop",
+		"altMilestone2": "Young women holding their certificates at a 4Herfrika bootcamp graduation",
+		"altMilestone3": "Participants seated in a lecture hall during a 4Herfrika campus session",
+		"altMiddle": "A facilitator teaching at the LAUTECH campus bootcamp computer lab",
+		"altRight": "A young woman in a hijab working at a computer during the LAUTECH campus bootcamp",
+		"altLeft": "Three young women smiling and taking a selfie together at a 4Herfrika event",
+		"altBeginning": "4Herfrika participants in branded pink shirts standing together outdoors on campus",
 		"storyInMotion": "Our Story in Motion",
 		"milestones": "Milestones of Year One",
 		"girlsMentored": "3,000+ girls mentored",
