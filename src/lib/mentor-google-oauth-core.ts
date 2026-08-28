@@ -12,6 +12,7 @@ export const MENTOR_GOOGLE_REQUIRED_SCOPES = [
 ] as const;
 export const MENTOR_GOOGLE_CALENDAR_ID = "primary" as const;
 export const MENTOR_GOOGLE_DEFAULT_STATE_TTL_SECONDS = 600;
+export const MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX = "onboarding_" as const;
 
 export type MentorGoogleOAuthErrorCode =
 	| "invalid_state"
@@ -92,7 +93,13 @@ export function isSameOriginMutationRequest(input: {
 
 export function safeMentorReturnPath(value: string | null | undefined): string {
 	const path = value?.trim() || "/dashboard/mentor";
-	if (!path.startsWith("/dashboard/mentor") || path.startsWith("//")) {
+	const isOnboardingPath =
+		path.startsWith("/careers-corner/onboard/") ||
+		/^\/(?:en|fr|sw)\/careers-corner\/onboard\//.test(path);
+	if (
+		(!path.startsWith("/dashboard/mentor") && !isOnboardingPath) ||
+		path.startsWith("//")
+	) {
 		return "/dashboard/mentor";
 	}
 	return path;
@@ -117,6 +124,7 @@ export function createOAuthState(input: {
 	ttlSeconds?: number;
 	returnPath?: string;
 	allowAccountChange?: boolean;
+	purpose?: "dashboard" | "onboarding";
 }): CreatedOAuthState {
 	const ttlSeconds =
 		input.ttlSeconds ?? MENTOR_GOOGLE_DEFAULT_STATE_TTL_SECONDS;
@@ -124,7 +132,7 @@ export function createOAuthState(input: {
 		throw new Error("OAuth state TTL must be between 1 and 900 seconds");
 	}
 
-	const state = randomBytes(32).toString("base64url");
+	const state = `${input.purpose === "onboarding" ? MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX : ""}${randomBytes(32).toString("base64url")}`;
 	const codeVerifier = randomBytes(32).toString("base64url");
 	const codeChallenge = createHash("sha256")
 		.update(codeVerifier, "ascii")
@@ -213,8 +221,8 @@ function normalizedEmail(email: string): string {
 export async function completeMentorGoogleOAuthCallback(input: {
 	state: string;
 	code: string | null;
-	authenticatedMentorId: string;
-	authenticatedUserId: string;
+	authenticatedMentorId?: string;
+	authenticatedUserId?: string;
 	now?: Date;
 	repository: MentorGoogleOAuthRepository;
 	provider: MentorGoogleOAuthProvider;
@@ -230,14 +238,19 @@ export async function completeMentorGoogleOAuthCallback(input: {
 		throw new MentorGoogleOAuthError("expired_state", consumed.returnPath);
 	}
 	if (
-		consumed.mentorId !== input.authenticatedMentorId ||
-		consumed.userId !== input.authenticatedUserId
+		Boolean(input.authenticatedMentorId) !==
+			Boolean(input.authenticatedUserId) ||
+		(input.authenticatedMentorId &&
+			input.authenticatedMentorId !== consumed.mentorId) ||
+		(input.authenticatedUserId && input.authenticatedUserId !== consumed.userId)
 	) {
 		throw new MentorGoogleOAuthError(
 			"state_mentor_mismatch",
 			consumed.returnPath,
 		);
 	}
+	const mentorId = input.authenticatedMentorId ?? consumed.mentorId;
+	const userId = input.authenticatedUserId ?? consumed.userId;
 	if (!input.code) {
 		throw new MentorGoogleOAuthError("oauth_denied", consumed.returnPath);
 	}
@@ -279,10 +292,8 @@ export async function completeMentorGoogleOAuthCallback(input: {
 			consumed.returnPath,
 		);
 
-	const existing = await input.repository.getConnectionByMentor(
-		input.authenticatedMentorId,
-	);
-	if (existing && existing.userId !== input.authenticatedUserId) {
+	const existing = await input.repository.getConnectionByMentor(mentorId);
+	if (existing && existing.userId !== userId) {
 		throw new MentorGoogleOAuthError(
 			"state_mentor_mismatch",
 			consumed.returnPath,
@@ -297,7 +308,7 @@ export async function completeMentorGoogleOAuthCallback(input: {
 	}
 	const subjectOwner =
 		await input.repository.getConnectionByGoogleSubject(subject);
-	if (subjectOwner && subjectOwner.mentorId !== input.authenticatedMentorId) {
+	if (subjectOwner && subjectOwner.mentorId !== mentorId) {
 		throw new MentorGoogleOAuthError(
 			"google_account_conflict",
 			consumed.returnPath,
@@ -322,10 +333,7 @@ export async function completeMentorGoogleOAuthCallback(input: {
 	}
 
 	const encryptedRefreshToken = tokenResponse.refreshToken
-		? input.encryptRefreshToken(
-				tokenResponse.refreshToken,
-				input.authenticatedMentorId,
-			)
+		? input.encryptRefreshToken(tokenResponse.refreshToken, mentorId)
 		: existing?.refreshTokenCiphertext;
 	if (!encryptedRefreshToken) {
 		throw new MentorGoogleOAuthError(
@@ -335,8 +343,8 @@ export async function completeMentorGoogleOAuthCallback(input: {
 	}
 
 	await input.repository.linkConnection({
-		mentorId: input.authenticatedMentorId,
-		userId: input.authenticatedUserId,
+		mentorId,
+		userId,
 		googleSubject: subject,
 		googleEmail: email,
 		refreshTokenCiphertext: encryptedRefreshToken,

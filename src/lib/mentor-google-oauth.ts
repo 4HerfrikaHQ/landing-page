@@ -18,6 +18,7 @@ import { sendMentorGoogleReconnectNoticeOnce } from "@/src/lib/mentor-google-not
 import {
 	type ConsumedOAuthState,
 	MENTOR_GOOGLE_CALENDAR_ID,
+	MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX,
 	MENTOR_GOOGLE_REQUIRED_SCOPES,
 	type MentorGoogleConnectionRecord,
 	MentorGoogleOAuthError,
@@ -260,14 +261,54 @@ export async function startMentorGoogleOAuth(input?: {
 	returnPath?: string;
 	forceConsent?: boolean;
 }): Promise<string> {
-	const config = requireMentorGoogleOAuthConfig();
 	const { mentorId, userId } = await currentMentorContext();
+	return createMentorGoogleOAuthUrl({
+		mentorId,
+		userId,
+		returnPath: input?.returnPath,
+		forceConsent: input?.forceConsent,
+	});
+}
+
+export async function startMentorGoogleOAuthForOnboarding(input: {
+	mentorId: string;
+	userId: string;
+	returnPath: string;
+	forceConsent?: boolean;
+}): Promise<string> {
+	const [mentor] = await db
+		.select({ userId: mentors.user_id })
+		.from(mentors)
+		.where(eq(mentors.id, input.mentorId))
+		.limit(1);
+	if (!mentor || mentor.userId !== input.userId) {
+		throw new MentorGoogleOAuthError("state_mentor_mismatch");
+	}
+	return createMentorGoogleOAuthUrl({
+		mentorId: input.mentorId,
+		userId: input.userId,
+		returnPath: input.returnPath,
+		purpose: "onboarding",
+		forceConsent: input.forceConsent,
+	});
+}
+
+async function createMentorGoogleOAuthUrl(input: {
+	mentorId: string;
+	userId: string;
+	returnPath?: string;
+	forceConsent?: boolean;
+	purpose?: "dashboard" | "onboarding";
+}): Promise<string> {
+	const config = requireMentorGoogleOAuthConfig();
+	const { mentorId, userId } = input;
 	const existing = await repository.getConnectionByMentor(mentorId);
 	if (existing?.revocationState === "pending") {
 		throw new MentorGoogleOAuthError("revocation_pending");
 	}
 	const state = createOAuthState({
-		returnPath: input?.returnPath,
+		returnPath: input.returnPath,
+		purpose: input.purpose,
 		allowAccountChange:
 			existing?.status === "disconnected" || existing?.status === "revoked",
 	});
@@ -318,6 +359,21 @@ export async function finishMentorGoogleOAuth(input: {
 		...input,
 		authenticatedMentorId: mentorId,
 		authenticatedUserId: userId,
+		repository,
+		provider: googleProvider,
+		encryptRefreshToken: encryptMentorRefreshToken,
+	});
+}
+
+export async function finishMentorGoogleOAuthFromOnboarding(input: {
+	state: string;
+	code: string | null;
+}): Promise<{ returnPath: string }> {
+	if (!input.state.startsWith(MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX)) {
+		throw new MentorGoogleOAuthError("invalid_state");
+	}
+	return completeMentorGoogleOAuthCallback({
+		...input,
 		repository,
 		provider: googleProvider,
 		encryptRefreshToken: encryptMentorRefreshToken,

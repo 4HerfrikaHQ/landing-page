@@ -1,5 +1,9 @@
 // Server-only mentor OAuth callback route. Google must be configured with this exact path.
-import { finishMentorGoogleOAuth } from "@/src/lib/mentor-google-oauth";
+import {
+	finishMentorGoogleOAuth,
+	finishMentorGoogleOAuthFromOnboarding,
+} from "@/src/lib/mentor-google-oauth";
+import { MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX } from "@/src/lib/mentor-google-oauth-core";
 import {
 	MentorGoogleOAuthError,
 	safeMentorReturnPath,
@@ -17,7 +21,10 @@ export async function GET(request: NextRequest) {
 	}
 
 	try {
-		const result = await finishMentorGoogleOAuth({
+		const finish = state.startsWith(MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX)
+			? finishMentorGoogleOAuthFromOnboarding
+			: finishMentorGoogleOAuth;
+		const result = await finish({
 			state,
 			code: request.nextUrl.searchParams.get("code"),
 		});

@@ -87,6 +87,12 @@ type SlotRow = {
 	end_time: string;
 };
 
+type AvailabilitySaveSlot = Omit<SlotRow, "tempId">;
+type AvailabilitySaveAction = (
+	slots: AvailabilitySaveSlot[],
+	timezone: string,
+) => Promise<{ error?: string }>;
+
 // Returns a map of tempId → error message for any invalid slots.
 // "HH:MM:SS" strings are zero-padded so lexicographic comparison is correct.
 function validateSlots(slots: SlotRow[]): Map<string, string> {
@@ -137,9 +143,11 @@ function validateSlots(slots: SlotRow[]): Map<string, string> {
 export function AvailabilityEditor({
 	mentorId,
 	initialSlots,
+	saveAvailabilityAction,
 }: {
-	mentorId: string;
+	mentorId?: string;
 	initialSlots: DbAvailability[];
+	saveAvailabilityAction?: AvailabilitySaveAction;
 }) {
 	const [timezone, setTimezone] = useState(
 		initialSlots[0]?.timezone ?? "Africa/Lagos",
@@ -200,9 +208,22 @@ export function AvailabilityEditor({
 		}
 
 		setSlotErrors(new Map());
+		const persistAvailability =
+			saveAvailabilityAction ??
+			(mentorId
+				? (nextSlots: AvailabilitySaveSlot[], nextTimezone: string) =>
+						saveAvailability(mentorId, nextSlots, nextTimezone)
+				: null);
+		if (!persistAvailability) {
+			setError("Availability saving is not available.");
+			return;
+		}
 
 		startTransition(async () => {
-			const result = await saveAvailability(mentorId, slots, timezone);
+			const result = await persistAvailability(
+				slots.map(({ tempId: _tempId, ...slot }) => slot),
+				timezone,
+			);
 			if (result.error) {
 				setError(result.error);
 			} else {
