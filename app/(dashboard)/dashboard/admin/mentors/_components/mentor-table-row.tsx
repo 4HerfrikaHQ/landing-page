@@ -8,7 +8,12 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/utils/cn";
 import { format } from "date-fns";
-import { CalendarCheck2, CalendarOff, CalendarSync } from "lucide-react";
+import {
+	CalendarCheck2,
+	CalendarOff,
+	CalendarSync,
+	CalendarX2,
+} from "lucide-react";
 import { useState } from "react";
 import { AvatarUpload } from "./avatar-upload";
 import { EditMentorSheet } from "./edit-mentor-sheet";
@@ -44,6 +49,14 @@ function calendarStatus(mentor: Mentor) {
 			label: "Connected",
 			icon: CalendarCheck2,
 			className: "text-emerald-600",
+		};
+	}
+
+	if (mentor.google_connection_status === "revoked") {
+		return {
+			label: "Disconnected",
+			icon: CalendarX2,
+			className: "text-slate-500",
 		};
 	}
 
