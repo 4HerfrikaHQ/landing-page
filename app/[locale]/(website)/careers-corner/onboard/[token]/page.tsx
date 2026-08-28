@@ -123,6 +123,7 @@ export default async function OnboardingPage({
 							<AvailabilityEditor
 								mentorId={mentor.id}
 								initialSlots={availability}
+								onboardingToken={token}
 							/>
 						}
 						profileSlot={

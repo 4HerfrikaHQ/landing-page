@@ -8,8 +8,9 @@ import {
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
+import { resolveActionLink } from "@/src/lib/action-links";
 import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
-import { verifyBookingToken } from "@/src/lib/booking-tokens";
+import { sendEmail } from "@/src/lib/email";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
@@ -23,7 +24,6 @@ import {
 import { ActionError } from "@/src/lib/safe-action";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne } from "drizzle-orm";
-import { Resend } from "resend";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
@@ -37,15 +37,15 @@ export function siteUrl(): string {
 
 /** Verifies the manage token and loads booking + mentor (+mentor user) for a reschedule flow. */
 export async function loadRescheduleContext(token: string) {
-	const verified = verifyBookingToken(token);
-	if (!verified.ok || verified.action !== "manage") {
+	const verified = await resolveActionLink(token, "manage");
+	if (!verified.ok) {
 		throw new ActionError("Invalid link");
 	}
 
 	const [booking] = await db
 		.select()
 		.from(bookings)
-		.where(eq(bookings.id, verified.bookingId))
+		.where(eq(bookings.id, verified.resourceId))
 		.limit(1);
 	if (!booking || booking.status === "cancelled") {
 		throw new ActionError("Booking not active");
@@ -184,7 +184,6 @@ export async function sendCancellationEmails(params: {
 	reason?: string;
 	icsAttachment: string;
 }) {
-	const resend = new Resend(process.env.RESEND_API_KEY);
 	const recipients = [
 		{
 			email: params.menteeEmail,
@@ -199,7 +198,7 @@ export async function sendCancellationEmails(params: {
 	];
 	await Promise.all(
 		recipients.map((r) =>
-			resend.emails.send({
+			sendEmail({
 				from: FROM,
 				to: r.email,
 				subject: `Cancelled: call on ${fmt(params.startAtUtc, r.tz)}`,

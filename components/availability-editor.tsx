@@ -137,9 +137,11 @@ function validateSlots(slots: SlotRow[]): Map<string, string> {
 export function AvailabilityEditor({
 	mentorId,
 	initialSlots,
+	onboardingToken,
 }: {
 	mentorId: string;
 	initialSlots: DbAvailability[];
+	onboardingToken?: string;
 }) {
 	const [timezone, setTimezone] = useState(
 		initialSlots[0]?.timezone ?? "Africa/Lagos",
@@ -202,7 +204,12 @@ export function AvailabilityEditor({
 		setSlotErrors(new Map());
 
 		startTransition(async () => {
-			const result = await saveAvailability(mentorId, slots, timezone);
+			const result = await saveAvailability(
+				mentorId,
+				slots,
+				timezone,
+				onboardingToken,
+			);
 			if (result.error) {
 				setError(result.error);
 			} else {

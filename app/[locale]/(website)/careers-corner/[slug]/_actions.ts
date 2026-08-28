@@ -6,7 +6,8 @@ import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { signBookingToken } from "@/src/lib/booking-tokens";
+import { createActionLink } from "@/src/lib/action-links";
+import { sendEmail } from "@/src/lib/email";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
@@ -26,7 +27,6 @@ import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, getTableColumns, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
 import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
@@ -92,8 +92,7 @@ type ConfirmationCommon = {
 export async function sendBookingConfirmationMentee(
 	p: ConfirmationCommon & { manageUrl: string; sessionDurationMinutes: number },
 ) {
-	const resend = new Resend(process.env.RESEND_API_KEY);
-	await resend.emails.send({
+	await sendEmail({
 		from: FROM,
 		to: p.menteeEmail,
 		subject: `Confirmed: your call with ${p.mentorName}`,
@@ -119,8 +118,7 @@ export async function sendBookingConfirmationMentor(
 		.filter(([, v]) => v)
 		.map(([k, v]) => `- ${k}: ${v}`)
 		.join("\n");
-	const resend = new Resend(process.env.RESEND_API_KEY);
-	await resend.emails.send({
+	await sendEmail({
 		from: FROM,
 		to: p.mentorEmail,
 		subject: `New booking: ${p.menteeName} on ${formatInTz(p.startAtUtc, p.mentorTimezone)}`,
@@ -449,10 +447,10 @@ export const createBooking = actionClient
 		}
 
 		// Side effects — best-effort emails
-		const manageToken = signBookingToken({
-			bookingId: booking.id,
+		const manageToken = await createActionLink({
+			resourceId: booking.id,
 			action: "manage",
-			expiresAt: startAt.getTime(),
+			expiresAt: startAt,
 		});
 		const manageUrl = `${siteUrl()}/bookings/${manageToken}`;
 		const mentorTz = availabilityWindows[0]?.timezone ?? "UTC";
