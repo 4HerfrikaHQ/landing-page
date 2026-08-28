@@ -14,7 +14,7 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getFeaturedMentorId, getMentorsForAdmin } from "./_actions";
+import { getMentorsForAdmin } from "./_actions";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
@@ -46,17 +46,14 @@ export default async function MentorsPage({
 	const featured = MentorFeaturedFilter.safeParse(sp.featured);
 	const page = Math.max(1, Number(sp.page) || 1);
 
-	const [{ rows: mentors, total }, currentFeaturedId] = await Promise.all([
-		getMentorsForAdmin({
-			query: sp.q,
-			status: status.success ? status.data : undefined,
-			sort: sort.success ? sort.data : undefined,
-			featured: featured.success ? featured.data : undefined,
-			page,
-			pageSize: PAGE_SIZE,
-		}),
-		getFeaturedMentorId(),
-	]);
+	const { rows: mentors, total } = await getMentorsForAdmin({
+		query: sp.q,
+		status: status.success ? status.data : undefined,
+		sort: sort.success ? sort.data : undefined,
+		featured: featured.success ? featured.data : undefined,
+		page,
+		pageSize: PAGE_SIZE,
+	});
 
 	return (
 		<div>
@@ -97,8 +94,8 @@ export default async function MentorsPage({
 							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Featured
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Google Cal
 							</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -116,11 +113,7 @@ export default async function MentorsPage({
 							</TableRow>
 						) : (
 							mentors.map((mentor) => (
-								<MentorTableRow
-									key={mentor.id}
-									mentor={mentor}
-									currentFeaturedId={currentFeaturedId}
-								/>
+								<MentorTableRow key={mentor.id} mentor={mentor} />
 							))
 						)}
 					</TableBody>
