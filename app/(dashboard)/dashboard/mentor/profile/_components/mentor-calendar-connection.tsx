@@ -128,17 +128,16 @@ const CALLBACK_COPY: Record<
 	insufficient_scope: {
 		title: "Calendar permission is missing",
 		description:
-			"Reconnect and approve the requested Calendar permission to restore mentor-owned events. New bookings can use 4HerFrika meanwhile.",
+			"Reconnect and approve the requested Calendar permission before you can host new meetings.",
 	},
 	invalid_grant: {
 		title: "Google needs you to reconnect",
-		description:
-			"Use Reauthorize this account to restore mentor-owned events. New bookings can use 4HerFrika meanwhile.",
+		description: "Use Reauthorize this account before you can host new meetings.",
 	},
 	oauth_exchange_failed: {
 		title: "Google could not finish the connection",
 		description:
-			"Try connecting again to restore mentor-owned events. New bookings can use 4HerFrika in the meantime.",
+			"Try connecting again. You cannot host new meetings until Google Calendar is connected.",
 	},
 	identity_lookup_failed: {
 		title: "Google account details could not be confirmed",
@@ -146,13 +145,12 @@ const CALLBACK_COPY: Record<
 	},
 	refresh_token_missing: {
 		title: "Google needs you to reconnect",
-		description:
-			"Use Reauthorize this account to restore mentor-owned events. New bookings can use 4HerFrika meanwhile.",
+		description: "Use Reauthorize this account before you can host new meetings.",
 	},
 	connection_unavailable: {
 		title: "Google Calendar is unavailable",
 		description:
-			"Try again shortly to restore mentor-owned events. New bookings can use 4HerFrika in the meantime.",
+			"Try again shortly. You cannot host new meetings until Google Calendar is connected.",
 	},
 };
 
@@ -193,8 +191,8 @@ export function MentorCalendarConnection({
 	const description = isConnected
 		? "Your Google account organizes new calls."
 		: isReconnect
-			? "Reconnect your Google Calendar to organize new calls; 4Herfrika hosts them until you do."
-			: "Connect Google Calendar to let your Google account organize new calls. Without it, 4Herfrika hosts them.";
+			? "Reconnect Google Calendar before you can host new meetings."
+			: "Connect Google Calendar before you can host meetings.";
 
 	useEffect(() => {
 		if (confirmDisconnect) {
@@ -312,7 +310,7 @@ export function MentorCalendarConnection({
 				{healthCheckUnavailable ? (
 					<div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950">
 						Google access could not be confirmed just now. Reauthorize this
-						account to restore your Google Calendar connection.
+						account before you can host new meetings.
 					</div>
 				) : null}
 				{revocationPending ? (
@@ -321,8 +319,9 @@ export function MentorCalendarConnection({
 							Google access removal is still pending.
 						</p>
 						<p className="mt-1 leading-5">
-							Try the protected retry now, or remove 4HerFrika from Google
-							Account → Security → Third-party connections.
+							You cannot host new meetings until Google confirms revocation and
+							you reconnect. Try the protected retry now, or remove 4HerFrika
+							from Google Account → Security → Third-party connections.
 						</p>
 						{canRetryRevocation && actions?.retryRevocation ? (
 							<Button
@@ -388,7 +387,8 @@ export function MentorCalendarConnection({
 									id="disconnect-google-calendar-description"
 									className="mt-1 text-sm leading-5 text-rose-900/80"
 								>
-									New calls will be hosted by 4Herfrika.
+									You will not be able to host new meetings until you connect
+									Google Calendar again.
 								</p>
 							</div>
 							<div className="grid grid-cols-2 gap-2 sm:flex">
