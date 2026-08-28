@@ -94,8 +94,8 @@ export default async function MentorsPage({
 							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Google Calendar
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Google Cal
 							</TableHead>
 						</TableRow>
 					</TableHeader>

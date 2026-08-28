@@ -1,8 +1,14 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/utils/cn";
 import { format } from "date-fns";
+import { CalendarCheck2, CalendarOff, CalendarSync } from "lucide-react";
 import { useState } from "react";
 import { AvatarUpload } from "./avatar-upload";
 import { EditMentorSheet } from "./edit-mentor-sheet";
@@ -36,7 +42,8 @@ function calendarStatus(mentor: Mentor) {
 	) {
 		return {
 			label: "Connected",
-			className: "border-emerald-200 bg-emerald-50 text-emerald-800",
+			icon: CalendarCheck2,
+			className: "text-emerald-600",
 		};
 	}
 
@@ -46,19 +53,22 @@ function calendarStatus(mentor: Mentor) {
 	) {
 		return {
 			label: "Reconnect needed",
-			className: "border-rose-200 bg-rose-50 text-rose-800",
+			icon: CalendarSync,
+			className: "text-rose-600",
 		};
 	}
 
 	return {
 		label: "Not connected",
-		className: "border-amber-200 bg-amber-50 text-amber-800",
+		icon: CalendarOff,
+		className: "text-amber-600",
 	};
 }
 
 export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 	const [editIsOpen, setEditIsOpen] = useState(false);
 	const googleCalendar = calendarStatus(mentor);
+	const CalendarIcon = googleCalendar.icon;
 
 	return (
 		<>
@@ -91,15 +101,25 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
 				</TableCell>
-				<TableCell>
-					<span
-						className={cn(
-							"inline-flex whitespace-nowrap rounded border px-2 py-0.5 text-xs font-medium",
-							googleCalendar.className,
-						)}
-					>
-						{googleCalendar.label}
-					</span>
+				<TableCell className="w-16 text-center">
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<span
+									aria-label={`Google Calendar: ${googleCalendar.label}`}
+									className={cn(
+										"inline-flex size-8 items-center justify-center rounded-full bg-muted/70",
+										googleCalendar.className,
+									)}
+								/>
+							}
+						>
+							<CalendarIcon className="size-4" aria-hidden />
+						</TooltipTrigger>
+						<TooltipContent>
+							Google Calendar: {googleCalendar.label}
+						</TooltipContent>
+					</Tooltip>
 				</TableCell>
 			</TableRow>
 
