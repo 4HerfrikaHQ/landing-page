@@ -14,7 +14,7 @@ import {
 } from "@/src/lib/google-calendar";
 import { startMentorGoogleOAuthForOnboarding } from "@/src/lib/mentor-google-oauth";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { and, eq, getTableColumns } from "drizzle-orm";
+import { and, eq, exists, getTableColumns, isNotNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import {
 	ActivateOnboardingSchema,
@@ -53,6 +53,10 @@ export async function loadMentorFromToken(token: string) {
 		.select({
 			status: mentorGoogleConnections.status,
 			reauthorizationState: mentorGoogleConnections.reauthorization_state,
+			revocationState: mentorGoogleConnections.revocation_state,
+			hasRefreshToken: isNotNull(
+				mentorGoogleConnections.refresh_token_ciphertext,
+			),
 			googleEmail: mentorGoogleConnections.google_email,
 			connectedAt: mentorGoogleConnections.connected_at,
 		})
@@ -70,12 +74,15 @@ export async function loadMentorFromToken(token: string) {
 						connection.status === "revoked"
 							? ("revoked" as const)
 							: connection.status === "connected" &&
-									connection.reauthorizationState === "not_required"
+									connection.hasRefreshToken &&
+									connection.reauthorizationState === "not_required" &&
+									connection.revocationState === "not_pending"
 								? ("connected" as const)
 								: connection.status === "reauth_required" ||
 										connection.reauthorizationState === "required"
 									? ("reauth_required" as const)
-									: connection.status === "disconnected"
+									: connection.status === "connected" ||
+											connection.status === "disconnected"
 										? ("disconnected" as const)
 										: ("not_connected" as const),
 					googleEmail: connection.googleEmail,
@@ -241,10 +248,48 @@ export const completeMentorOnboarding = actionClient
 			);
 		}
 
-		await db
-			.update(mentors)
-			.set({ active: true })
-			.where(and(eq(mentors.id, mentorId), eq(mentors.active, false)));
+		const activated = await db.transaction(async (tx) => {
+			await tx
+				.select({ id: mentorGoogleConnections.id })
+				.from(mentorGoogleConnections)
+				.where(eq(mentorGoogleConnections.mentor_id, mentorId))
+				.for("update")
+				.limit(1);
+
+			return tx
+				.update(mentors)
+				.set({ active: true })
+				.where(
+					and(
+						eq(mentors.id, mentorId),
+						eq(mentors.active, false),
+						exists(
+							tx
+								.select({ id: mentorGoogleConnections.id })
+								.from(mentorGoogleConnections)
+								.where(
+									and(
+										eq(mentorGoogleConnections.mentor_id, mentors.id),
+										eq(mentorGoogleConnections.status, "connected"),
+										isNotNull(mentorGoogleConnections.refresh_token_ciphertext),
+										eq(mentorGoogleConnections.revocation_state, "not_pending"),
+										eq(
+											mentorGoogleConnections.reauthorization_state,
+											"not_required",
+										),
+									),
+								)
+								.limit(1),
+						),
+					),
+				)
+				.returning({ id: mentors.id });
+		});
+		if (activated.length === 0) {
+			throw new ActionError(
+				"Google Calendar is no longer connected. Reconnect before going live.",
+			);
+		}
 
 		revalidatePath("/careers-corner");
 		revalidatePath(`/careers-corner/${mentor.slug}`);

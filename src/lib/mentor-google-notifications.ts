@@ -47,7 +47,7 @@ export async function sendMentorGoogleReconnectNoticeOnce(params: {
 						subject: "Reconnect Google Calendar to keep accepting bookings",
 						text: `Hi,
 
-Your Google Calendar connection needs to be reconnected. New mentee bookings can still be hosted by 4HerFrika while you reconnect.
+Your Google Calendar connection needs to be reconnected. New mentee bookings are paused until you reconnect Google Calendar.
 
 Open your mentor profile to reconnect Google Calendar:
 ${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/dashboard/mentor/profile

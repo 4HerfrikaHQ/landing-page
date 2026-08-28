@@ -244,7 +244,10 @@ export async function getMentorGoogleConnectionStatus(): Promise<MentorGoogleCon
 		revocationPending: connection.revocationState === "pending",
 		canRetryRevocation: connection.revocationState === "pending",
 		connectedAt: row?.connectedAt?.toISOString() ?? null,
-		canUseForBookings: connection.status === "connected",
+		canUseForBookings:
+			connection.status === "connected" &&
+			connection.revocationState === "not_pending" &&
+			Boolean(connection.refreshTokenCiphertext),
 	};
 }
 
@@ -433,6 +436,21 @@ export async function disconnectMentorGoogleConnection(input: {
 			remoteRevocation: "not_attempted",
 			retryPending: false,
 		};
+
+	const pendingAt = new Date();
+	await db
+		.update(mentorGoogleConnections)
+		.set({
+			status: "disconnected",
+			reauthorization_state: "not_required",
+			revocation_state: "pending",
+			revocation_error_code: null,
+			last_error_code: null,
+			disconnected_at: pendingAt,
+			revoked_at: null,
+			updated_at: pendingAt,
+		})
+		.where(eq(mentorGoogleConnections.mentor_id, mentorId));
 
 	const revocation = await revokeMentorGoogleCredential({
 		connection,

@@ -28,6 +28,7 @@ import {
 	eq,
 	exists,
 	ilike,
+	isNotNull,
 	ne,
 	or,
 	sql,
@@ -111,6 +112,11 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				google_connection_status: schema.mentorGoogleConnections.status,
 				google_reauthorization_state:
 					schema.mentorGoogleConnections.reauthorization_state,
+				google_revocation_state:
+					schema.mentorGoogleConnections.revocation_state,
+				google_has_refresh_token: sql<boolean>`
+					${schema.mentorGoogleConnections.refresh_token_ciphertext} is not null
+				`,
 				created_at: schema.mentors.created_at,
 				booking_count: bookingCount,
 			})
@@ -127,6 +133,8 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				schema.users.id,
 				schema.mentorGoogleConnections.status,
 				schema.mentorGoogleConnections.reauthorization_state,
+				schema.mentorGoogleConnections.revocation_state,
+				schema.mentorGoogleConnections.refresh_token_ciphertext,
 			)
 			.orderBy(orderBy)
 			.limit(pageSize)
@@ -310,6 +318,13 @@ export async function toggleMentorActive(
 											schema.mentors.id,
 										),
 										eq(schema.mentorGoogleConnections.status, "connected"),
+										isNotNull(
+											schema.mentorGoogleConnections.refresh_token_ciphertext,
+										),
+										eq(
+											schema.mentorGoogleConnections.revocation_state,
+											"not_pending",
+										),
 										eq(
 											schema.mentorGoogleConnections.reauthorization_state,
 											"not_required",

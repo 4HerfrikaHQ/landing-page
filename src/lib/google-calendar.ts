@@ -107,6 +107,8 @@ export type MentorCalendarOperations = {
 			mentorId: string;
 			mentorEmail: string;
 			eventId: string;
+			connection?: MentorCalendarConnection;
+			accessToken?: string;
 		} & (
 			| { attemptKey: string; expectedAttemptKey?: string }
 			| { attemptKey?: string; expectedAttemptKey: string }
@@ -242,7 +244,8 @@ const databaseProvider: MentorCalendarConnectionProvider = {
 			mentorId: row.mentor_id,
 			status:
 				row.status === "connected" &&
-				row.reauthorization_state === "not_required"
+				row.reauthorization_state === "not_required" &&
+				row.revocation_state === "not_pending"
 					? "connected"
 					: row.status === "reauth_required"
 						? "reauth_required"
@@ -568,13 +571,15 @@ export function createMentorCalendarClient(
 			mentorId: string;
 			mentorEmail: string;
 			eventId: string;
+			connection?: MentorCalendarConnection;
+			accessToken?: string;
 		} & (
 			| { attemptKey: string; expectedAttemptKey?: string }
 			| { attemptKey?: string; expectedAttemptKey: string }
 		),
 	) {
-		const connection = await getConnection(params, provider);
-		const token = await accessToken(connection);
+		const connection = await getConnection(params, provider, params.connection);
+		const token = await accessToken(connection, params.accessToken);
 		const event = await readEvent(connection, token, params.eventId, fetchImpl);
 		if (!event) return;
 		eventOwnerMatches(event, connection);
