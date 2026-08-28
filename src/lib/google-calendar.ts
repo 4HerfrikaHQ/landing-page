@@ -92,16 +92,11 @@ export type MentorCalendarEventParams = {
 	accessToken?: string;
 };
 
-export type NewBookingCalendarHost =
-	| {
-			mode: "mentor_google";
-			connection: MentorCalendarConnection;
-			accessToken: string;
-	  }
-	| {
-			mode: "org_google";
-			reason: "no_connection" | "connection_unavailable";
-	  };
+export type NewBookingCalendarHost = {
+	mode: "mentor_google";
+	connection: MentorCalendarConnection;
+	accessToken: string;
+};
 
 export type MentorCalendarOperations = {
 	createMentorCalendarEvent: (
@@ -384,33 +379,9 @@ export async function selectNewBookingCalendarHost(input: {
 	connectionProvider?: MentorCalendarConnectionProvider;
 }): Promise<NewBookingCalendarHost> {
 	const provider = input.connectionProvider ?? connectionProvider;
-	const connection = await provider.getMentorConnection(input);
-	if (!connection) {
-		return { mode: "org_google", reason: "no_connection" };
-	}
-	if (connection.mentorId !== input.mentorId) {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
-	if (connection.status !== "connected") {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
-	if (
-		normalizedEmail(connection.identity.email) !==
-		normalizedEmail(input.mentorEmail)
-	) {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
-
-	try {
-		const token = await accessToken(connection);
-		return { mode: "mentor_google", connection, accessToken: token };
-	} catch {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
+	const connection = await getConnection(input, provider);
+	const token = await accessToken(connection);
+	return { mode: "mentor_google", connection, accessToken: token };
 }
 
 function eventOwnerMatches(
