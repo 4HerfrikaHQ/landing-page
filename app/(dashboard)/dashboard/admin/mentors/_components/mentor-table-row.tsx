@@ -1,11 +1,11 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import { cn } from "@/utils/cn";
 import { format } from "date-fns";
 import { useState } from "react";
 import { AvatarUpload } from "./avatar-upload";
 import { EditMentorSheet } from "./edit-mentor-sheet";
-import { FeatureMentorButton } from "./feature-mentor-button";
 import { ToggleActiveButton } from "./toggle-active-button";
 
 type Mentor = {
@@ -18,19 +18,47 @@ type Mentor = {
 	nickname: string | null;
 	linkedin_url: string | null;
 	active: boolean;
+	google_connection_status:
+		| "connected"
+		| "reauth_required"
+		| "revoked"
+		| "disconnected"
+		| null;
+	google_reauthorization_state: "not_required" | "required" | null;
 	created_at: Date;
 	booking_count: number;
 };
 
-export function MentorTableRow({
-	mentor,
-	currentFeaturedId,
-}: {
-	mentor: Mentor;
-	currentFeaturedId: string | null;
-}) {
+function calendarStatus(mentor: Mentor) {
+	if (
+		mentor.google_connection_status === "connected" &&
+		mentor.google_reauthorization_state === "not_required"
+	) {
+		return {
+			label: "Connected",
+			className: "border-emerald-200 bg-emerald-50 text-emerald-800",
+		};
+	}
+
+	if (
+		mentor.google_connection_status === "reauth_required" ||
+		mentor.google_reauthorization_state === "required"
+	) {
+		return {
+			label: "Reconnect needed",
+			className: "border-rose-200 bg-rose-50 text-rose-800",
+		};
+	}
+
+	return {
+		label: "Not connected",
+		className: "border-amber-200 bg-amber-50 text-amber-800",
+	};
+}
+
+export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 	const [editIsOpen, setEditIsOpen] = useState(false);
-	const eligibleToFeature = mentor.active && !!mentor.image;
+	const googleCalendar = calendarStatus(mentor);
 
 	return (
 		<>
@@ -63,12 +91,15 @@ export function MentorTableRow({
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
 				</TableCell>
-				<TableCell onClick={(e) => e.stopPropagation()}>
-					<FeatureMentorButton
-						id={mentor.id}
-						isFeatured={currentFeaturedId === mentor.id}
-						eligible={eligibleToFeature}
-					/>
+				<TableCell>
+					<span
+						className={cn(
+							"inline-flex whitespace-nowrap rounded border px-2 py-0.5 text-xs font-medium",
+							googleCalendar.className,
+						)}
+					>
+						{googleCalendar.label}
+					</span>
 				</TableCell>
 			</TableRow>
 

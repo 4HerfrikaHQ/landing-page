@@ -103,14 +103,29 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				nickname: schema.mentors.nickname,
 				linkedin_url: schema.mentors.linkedin_url,
 				active: schema.mentors.active,
+				google_connection_status: schema.mentorGoogleConnections.status,
+				google_reauthorization_state:
+					schema.mentorGoogleConnections.reauthorization_state,
 				created_at: schema.mentors.created_at,
 				booking_count: bookingCount,
 			})
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.leftJoin(
+				schema.mentorGoogleConnections,
+				eq(
+					schema.mentorGoogleConnections.mentor_id,
+					schema.mentors.id,
+				),
+			)
 			.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
 			.where(where)
-			.groupBy(schema.mentors.id, schema.users.id)
+			.groupBy(
+				schema.mentors.id,
+				schema.users.id,
+				schema.mentorGoogleConnections.status,
+				schema.mentorGoogleConnections.reauthorization_state,
+			)
 			.orderBy(orderBy)
 			.limit(pageSize)
 			.offset((page - 1) * pageSize),
