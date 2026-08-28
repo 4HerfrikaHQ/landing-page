@@ -11,6 +11,10 @@ import {
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
 import {
+	ensureMentorCalendarConnection,
+	isMentorCalendarError,
+} from "@/src/lib/google-calendar";
+import {
 	ActionError,
 	adminAction,
 	requireSuperAdmin,
@@ -22,6 +26,7 @@ import {
 	count,
 	desc,
 	eq,
+	exists,
 	ilike,
 	ne,
 	or,
@@ -113,10 +118,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
 			.leftJoin(
 				schema.mentorGoogleConnections,
-				eq(
-					schema.mentorGoogleConnections.mentor_id,
-					schema.mentors.id,
-				),
+				eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
 			)
 			.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
 			.where(where)
@@ -255,7 +257,10 @@ export async function toggleMentorActive(
 	if (active) {
 		const mentor = await db.query.mentors.findFirst({
 			where: eq(schema.mentors.id, id),
-			with: { availability: true },
+			with: {
+				availability: true,
+				user: { columns: { email: true } },
+			},
 		});
 
 		if (!mentor) {
@@ -270,12 +275,60 @@ export async function toggleMentorActive(
 					"Cannot activate mentor. Please ensure position and bio are both set.",
 			};
 		}
+
+		try {
+			await ensureMentorCalendarConnection({
+				mentorId: mentor.id,
+				mentorEmail: mentor.user.email,
+			});
+		} catch (error) {
+			return {
+				error:
+					isMentorCalendarError(error) && error.code === "reauth_required"
+						? "Cannot activate mentor. Reconnect Google Calendar before activating this mentor."
+						: "Cannot activate mentor. Connect Google Calendar before activating this mentor.",
+			};
+		}
 	}
 
-	await db
+	const updated = await db
 		.update(schema.mentors)
 		.set({ active })
-		.where(eq(schema.mentors.id, id));
+		.where(
+			active
+				? and(
+						eq(schema.mentors.id, id),
+						eq(schema.mentors.active, false),
+						exists(
+							db
+								.select({ id: schema.mentorGoogleConnections.id })
+								.from(schema.mentorGoogleConnections)
+								.where(
+									and(
+										eq(
+											schema.mentorGoogleConnections.mentor_id,
+											schema.mentors.id,
+										),
+										eq(schema.mentorGoogleConnections.status, "connected"),
+										eq(
+											schema.mentorGoogleConnections.reauthorization_state,
+											"not_required",
+										),
+									),
+								)
+								.limit(1),
+						),
+					)
+				: eq(schema.mentors.id, id),
+		)
+		.returning({ id: schema.mentors.id });
+
+	if (active && updated.length === 0) {
+		return {
+			error:
+				"Cannot activate mentor. Google Calendar must remain connected to activate this mentor.",
+		};
+	}
 
 	revalidatePath("/dashboard/admin/mentors");
 	return {};
