@@ -52,7 +52,7 @@ export const OurCore = async () => {
 
 					<FadeIn
 						className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto"
-						initial={{ opacity: 0, scale: 0.9 }}
+						direction="scale"
 					>
 						<Image
 							src={Forherfirka.src}

@@ -1,45 +1,45 @@
 "use client";
 
-import { type HTMLMotionProps, motion, useReducedMotion } from "motion/react";
-import { DURATION, EASE_OUT, TRAVEL, VIEWPORT } from "./tokens";
+import { cn } from "@/utils/cn";
+import type { HTMLAttributes } from "react";
+import { useReveal } from "./use-reveal";
 
-type Direction = "up" | "down" | "left" | "right";
+export type RevealDirection = "up" | "down" | "left" | "right" | "scale";
 
-interface FadeInProps extends HTMLMotionProps<"div"> {
-	direction?: Direction;
+interface FadeInProps extends HTMLAttributes<HTMLDivElement> {
+	direction?: RevealDirection;
+	/** Seconds to hold before this element starts. */
 	delay?: number;
-	duration?: number;
 	children: React.ReactNode;
 }
 
-const offsets: Record<Direction, { x: number; y: number }> = {
-	up: { x: 0, y: TRAVEL },
-	down: { x: 0, y: -TRAVEL },
-	left: { x: TRAVEL, y: 0 },
-	right: { x: -TRAVEL, y: 0 },
-};
-
+/**
+ * Entrance reveal.
+ *
+ * The animation is CSS keyframes (see `globals.css`); the only thing JS does
+ * is flip `data-revealed` when the element reaches the viewport. That keeps
+ * the per-frame work on the compositor instead of in React, and drops the
+ * `motion` runtime from every page that only ever used it to fade things in.
+ */
 export function FadeIn({
 	direction = "up",
 	delay = 0,
-	duration = DURATION.enter,
+	className,
 	children,
 	...props
 }: FadeInProps) {
-	const shouldReduce = useReducedMotion();
-	const offset = offsets[direction];
+	const { ref, revealed } = useReveal<HTMLDivElement>();
 
 	return (
-		<motion.div
-			initial={
-				shouldReduce ? { opacity: 0 } : { opacity: 0, x: offset.x, y: offset.y }
-			}
-			whileInView={{ opacity: 1, x: 0, y: 0 }}
-			viewport={VIEWPORT}
-			transition={{ duration, delay, ease: EASE_OUT }}
+		<div
+			ref={ref}
+			data-reveal={direction}
+			data-revealed={revealed || undefined}
+			style={delay ? { animationDelay: `${delay}s` } : undefined}
+			className={cn(className)}
 			{...props}
 		>
 			{children}
-		</motion.div>
+		</div>
 	);
 }

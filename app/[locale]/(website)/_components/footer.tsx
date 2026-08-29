@@ -136,10 +136,7 @@ export const Footer = async () => {
 						{t("allRightsReserved")}
 					</p>
 
-					<StaggerContainer
-						className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start"
-						staggerDelay={0.08}
-					>
+					<StaggerContainer className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
 						<StaggerItem>
 							<a
 								href="https://www.linkedin.com/company/4herfrika"

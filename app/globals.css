@@ -125,18 +125,20 @@ a:hover {
 		linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 }
 
-/* Above-the-fold entrance.
+/* ── Entrances ──────────────────────────────────────────────────────────
  *
- * The JS motion primitives render their hidden state into the SSR'd HTML
- * (`opacity: 0`) and only reveal it once the bundle has hydrated and an
- * IntersectionObserver has fired. For content below the fold that is
- * invisible anyway. For the hero it means the largest text on the page is
- * blank until JS arrives — on a slow phone, seconds of empty screen.
+ * All entrance animation on the site is CSS keyframes. JS's only job is to
+ * flip `data-revealed` when an element reaches the viewport (see
+ * components/motion/use-reveal.ts); the browser runs the animation itself,
+ * off the main thread, instead of React setting styles frame by frame.
  *
- * This keyframe runs off the first paint in every browser, with no JS at all,
- * so the hero animates on time regardless of how the bundle is doing. The
- * `prefers-reduced-motion` block below collapses the duration, which lands the
- * element on its `to` state immediately. */
+ * `.animate-enter` is the time-based variant, for content that is on screen at
+ * load. It runs off the first paint with no JS involved at all, which is what
+ * keeps the hero from sitting blank while the bundle downloads.
+ *
+ * The `prefers-reduced-motion` block further down collapses every duration
+ * here, which lands each element on its final state immediately. */
+
 @keyframes enter-up {
 	from {
 		opacity: 0;
@@ -148,8 +150,167 @@ a:hover {
 	}
 }
 
+@keyframes enter-down {
+	from {
+		opacity: 0;
+		transform: translateY(-16px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes enter-left {
+	from {
+		opacity: 0;
+		transform: translateX(16px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes enter-right {
+	from {
+		opacity: 0;
+		transform: translateX(-16px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes enter-scale {
+	from {
+		opacity: 0;
+		transform: scale(0.92);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
 .animate-enter {
 	animation: enter-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Scroll parallax. Offsets come from the component as custom properties so
+ * the travel distance stays a prop rather than a magic number in here. */
+@keyframes parallax-drift {
+	from {
+		transform: translateY(var(--parallax-from, -30px));
+	}
+	to {
+		transform: translateY(var(--parallax-to, 30px));
+	}
+}
+
+@supports (animation-timeline: view()) {
+	@media (prefers-reduced-motion: no-preference) {
+		.animate-parallax {
+			animation: parallax-drift linear both;
+			animation-timeline: view();
+		}
+	}
+}
+
+/* Reading-progress bar, driven by the document scroller rather than a JS
+ * scroll handler. Unsupported browsers keep the element's base `scale-x-0`,
+ * so the bar is simply absent rather than broken. */
+@keyframes scroll-progress {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
+}
+
+@supports (animation-timeline: scroll()) {
+	@media (prefers-reduced-motion: no-preference) {
+		.animate-scroll-progress {
+			animation: scroll-progress linear both;
+			animation-timeline: scroll(root block);
+		}
+	}
+}
+
+/* Idle float for the careers-corner hero avatars. Was an infinite
+ * `repeat: Infinity` motion animation on six elements, i.e. JS touching the
+ * DOM every frame for as long as the page is open. A CSS keyframe loop is the
+ * thing browsers already do for free, on the compositor. Duration and delay
+ * come from each slot as custom properties. */
+@keyframes hero-float {
+	0% {
+		transform: translateY(0) rotate(0deg);
+	}
+	33% {
+		transform: translateY(-10px) rotate(3deg);
+	}
+	66% {
+		transform: translateY(5px) rotate(-3deg);
+	}
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.animate-hero-float {
+		animation: hero-float var(--float-duration, 6s) ease-in-out
+			var(--float-delay, 0s) infinite;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	[data-reveal] {
+		opacity: 0;
+	}
+
+	[data-reveal][data-revealed] {
+		animation: enter-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+
+	[data-reveal="down"][data-revealed] {
+		animation-name: enter-down;
+	}
+	[data-reveal="left"][data-revealed] {
+		animation-name: enter-left;
+	}
+	[data-reveal="right"][data-revealed] {
+		animation-name: enter-right;
+	}
+	[data-reveal="scale"][data-revealed] {
+		animation-name: enter-scale;
+	}
+
+	/* Cascade for grouped items. Siblings usually cross the viewport edge
+	 * together, so without this a grid lands as one slab. Explicit delays
+	 * rather than a JS orchestrator: the container needs no runtime at all. */
+	[data-stagger] > *:nth-child(2) {
+		animation-delay: 60ms;
+	}
+	[data-stagger] > *:nth-child(3) {
+		animation-delay: 120ms;
+	}
+	[data-stagger] > *:nth-child(4) {
+		animation-delay: 180ms;
+	}
+	[data-stagger] > *:nth-child(5) {
+		animation-delay: 240ms;
+	}
+	[data-stagger] > *:nth-child(6) {
+		animation-delay: 300ms;
+	}
+	/* Past six the cascade stops growing — a long list should not make the
+	 * last item wait a second and a half. */
+	[data-stagger] > *:nth-child(n + 7) {
+		animation-delay: 360ms;
+	}
 }
 
 html {

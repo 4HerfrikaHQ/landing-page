@@ -10,6 +10,9 @@
  * the first third of the animation, so the element reads as "already arriving"
  * rather than drifting into place. Long travel over a long duration is what
  * makes an entrance feel floaty, so both are deliberately small.
+ *
+ * The values themselves live in globals.css, since the entrances are CSS
+ * keyframes now. These are the JS-side mirrors of the ones JS still needs.
  */
 
 /** Entrance easing. Fast out of the gate, long soft settle. */
@@ -27,17 +30,10 @@ export const DURATION = {
 	interaction: 0.2,
 } as const;
 
-/** Entrance travel in px. Small on purpose — see the note above. */
-export const TRAVEL = 16;
-
-/** Gap between staggered children. */
-export const STAGGER = 0.06;
-
 /**
- * Viewport config for scroll-triggered entrances. A negative bottom margin
- * only delays the trigger until the element is already well inside the
- * viewport, which is what makes reveals feel like they are lagging behind the
- * scroll; firing slightly *before* the element is fully on screen is what
- * reads as responsive.
+ * Reveal trigger margin. A negative *bottom* margin only delays the trigger
+ * until the element is already well inside the viewport, which is what makes
+ * reveals feel like they are lagging behind the scroll; firing slightly before
+ * the element is fully on screen is what reads as responsive.
  */
-export const VIEWPORT = { once: true, margin: "0px 0px -8% 0px" } as const;
+export const VIEWPORT_ROOT_MARGIN = "0px 0px -8% 0px";

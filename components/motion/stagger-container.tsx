@@ -1,35 +1,23 @@
-"use client";
+import { cn } from "@/utils/cn";
+import type { HTMLAttributes } from "react";
 
-import { type HTMLMotionProps, motion, useReducedMotion } from "motion/react";
-import { STAGGER, VIEWPORT } from "./tokens";
-
-interface StaggerContainerProps extends HTMLMotionProps<"div"> {
-	staggerDelay?: number;
+interface StaggerContainerProps extends HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
 }
 
+/**
+ * Marks a group whose `StaggerItem` children should cascade rather than land
+ * together. The cascade is `:nth-child` animation delays in `globals.css`, so
+ * this component ships no JS at all — it is a plain server component.
+ */
 export function StaggerContainer({
-	staggerDelay = STAGGER,
+	className,
 	children,
 	...props
 }: StaggerContainerProps) {
-	const shouldReduce = useReducedMotion();
-
 	return (
-		<motion.div
-			initial="hidden"
-			whileInView="visible"
-			viewport={VIEWPORT}
-			variants={{
-				visible: {
-					transition: {
-						staggerChildren: shouldReduce ? 0 : staggerDelay,
-					},
-				},
-			}}
-			{...props}
-		>
+		<div data-stagger className={cn(className)} {...props}>
 			{children}
-		</motion.div>
+		</div>
 	);
 }

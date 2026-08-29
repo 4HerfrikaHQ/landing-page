@@ -74,10 +74,7 @@ export function MentorDirectory({
 			{filtered.length > 0 ? (
 				<StaggerContainer className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 					{filtered.map((mentor) => (
-						<StaggerItem
-							key={mentor.id}
-							initial={hasInteracted ? false : undefined}
-						>
+						<StaggerItem key={mentor.id} immediate={hasInteracted}>
 							<HoverCard>
 								<MentorCard mentor={mentor} />
 							</HoverCard>

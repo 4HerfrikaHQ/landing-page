@@ -1,54 +1,58 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useReveal } from "./use-reveal";
 
 interface AnimatedCounterProps {
-  target: number;
-  duration?: number;
-  className?: string;
+	target: number;
+	/** Seconds to count from 0 to `target`. */
+	duration?: number;
+	className?: string;
 }
 
+/**
+ * Counts up to `target` once it scrolls into view.
+ *
+ * The one animation on the site that genuinely cannot be CSS: the thing being
+ * animated is text content, not a style. It is a bare rAF loop rather than a
+ * spring from `motion` — counting to a number does not need a physics engine,
+ * and this was the last thing keeping the library in the bundle.
+ */
 export function AnimatedCounter({
-  target,
-  duration = 1.5,
-  className,
+	target,
+	duration = 1.5,
+	className,
 }: AnimatedCounterProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const shouldReduce = useReducedMotion();
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+	const { ref, revealed } = useReveal<HTMLSpanElement>();
+	const [value, setValue] = useState(0);
+	const frame = useRef<number>(undefined);
 
-  const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, {
-    duration: duration * 1000,
-    bounce: 0,
-  });
-  const display = useTransform(springValue, (v) => Math.round(v));
+	useEffect(() => {
+		if (!revealed) return;
 
-  useEffect(() => {
-    if (!isInView) return;
-    if (shouldReduce) {
-      motionValue.set(target);
-    } else {
-      motionValue.set(0);
-      requestAnimationFrame(() => motionValue.set(target));
-    }
-  }, [isInView, motionValue, target, shouldReduce]);
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			setValue(target);
+			return;
+		}
 
-  if (shouldReduce) {
-    return (
-      <span ref={ref} className={className}>
-        {target}
-      </span>
-    );
-  }
+		const start = performance.now();
+		const tick = (now: number) => {
+			const progress = Math.min((now - start) / (duration * 1000), 1);
+			// Same ease-out as the CSS entrances, so the count settles the way
+			// everything else on the page does.
+			setValue(Math.round(target * (1 - (1 - progress) ** 3)));
+			if (progress < 1) frame.current = requestAnimationFrame(tick);
+		};
+		frame.current = requestAnimationFrame(tick);
 
-  return <motion.span ref={ref} className={className}>{display}</motion.span>;
+		return () => {
+			if (frame.current !== undefined) cancelAnimationFrame(frame.current);
+		};
+	}, [revealed, target, duration]);
+
+	return (
+		<span ref={ref} className={className}>
+			{value}
+		</span>
+	);
 }

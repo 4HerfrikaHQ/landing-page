@@ -25,7 +25,7 @@ export const Hero = async ({
 	const tc = await getTranslations("common");
 
 	return (
-		<section className="px-4 sm:px-6 md:px-7 relative overflow-x-hidden">
+		<section className="px-4 sm:px-6 md:px-7 relative overflow-x-clip">
 			<div className="w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 left-0 bg-primary-500/20 absolute blur-[374px]" />
 			<div className="w-80 h-60 sm:h-72 md:h-80 rounded-full top-0 right-0 bg-primary-500/20 absolute blur-[374px]" />
 			<HeroCurveIcon
