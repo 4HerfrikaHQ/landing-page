@@ -36,7 +36,7 @@ export const Hero = async ({
 			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
 				<div className="w-full">
 					<FadeIn>
-						<p className="text-foreground text-center lg:text-left text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize">
+						<p className="text-foreground text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize text-balance">
 							{t.rich("heroTitle", {
 								highlight: (chunks) => (
 									<span className="text-primary-500">{chunks}</span>
@@ -50,7 +50,7 @@ export const Hero = async ({
 						width={278}
 					/>
 					<FadeIn delay={0.3}>
-						<p className="text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-muted-foreground mb-6 lg:mb-14 tracking-wider xl:max-w-182.5 text-center lg:text-left">
+						<p className="text-base sm:text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-muted-foreground mb-6 lg:mb-14 tracking-wider xl:max-w-182.5 text-center lg:text-left">
 							{t("heroDescription")}
 						</p>
 					</FadeIn>
@@ -59,7 +59,7 @@ export const Hero = async ({
 							<Button
 								href="/about"
 								variant="outline"
-								className="w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
+								className="w-36 sm:w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
 							>
 								{tc("learnMore")}
 							</Button>
@@ -67,7 +67,7 @@ export const Hero = async ({
 								href={JOIN_FORM_LINK}
 								isExternal
 								variant="solid"
-								className="w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
+								className="w-36 sm:w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
 							>
 								{tc("joinCommunity")}
 							</Button>
