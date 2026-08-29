@@ -3,6 +3,7 @@
 import {
 	AlertCircle,
 	CalendarDays,
+	CalendarX2,
 	CheckCircle2,
 	Info,
 	RefreshCw,
@@ -25,6 +26,8 @@ import { cn } from "@/utils/cn";
 export type MentorCalendarConnectionStatus =
 	| "not_connected"
 	| "connected"
+	| "disconnected"
+	| "revoked"
 	| "reauth_required";
 
 /** Safe, non-secret metadata from the server-side connection loader. */
@@ -84,6 +87,16 @@ const STATUS_COPY: Record<
 		className: "border-amber-200 bg-amber-50 text-amber-800",
 		icon: AlertCircle,
 	},
+	disconnected: {
+		label: "Disconnected",
+		className: "border-slate-200 bg-slate-50 text-slate-700",
+		icon: Unplug,
+	},
+	revoked: {
+		label: "Access revoked",
+		className: "border-rose-200 bg-rose-50 text-rose-800",
+		icon: CalendarX2,
+	},
 	connected: {
 		label: "Connected",
 		className: "border-emerald-200 bg-emerald-50 text-emerald-800",
@@ -132,7 +145,8 @@ const CALLBACK_COPY: Record<
 	},
 	invalid_grant: {
 		title: "Google needs you to reconnect",
-		description: "Use Reauthorize this account before you can host new meetings.",
+		description:
+			"Use Reauthorize this account before you can host new meetings.",
 	},
 	oauth_exchange_failed: {
 		title: "Google could not finish the connection",
@@ -145,7 +159,8 @@ const CALLBACK_COPY: Record<
 	},
 	refresh_token_missing: {
 		title: "Google needs you to reconnect",
-		description: "Use Reauthorize this account before you can host new meetings.",
+		description:
+			"Use Reauthorize this account before you can host new meetings.",
 	},
 	connection_unavailable: {
 		title: "Google Calendar is unavailable",
@@ -187,12 +202,21 @@ export function MentorCalendarConnection({
 	const status = STATUS_COPY[connection.status];
 	const StatusIcon = status.icon;
 	const isConnected = connection.status === "connected";
-	const isReconnect = connection.status === "reauth_required";
+	const isReconnect =
+		connection.status === "reauth_required" || connection.status === "revoked";
 	const description = isConnected
 		? "Your Google account organizes new calls."
-		: isReconnect
-			? "Reconnect Google Calendar before you can host new meetings."
-			: "Connect Google Calendar before you can host meetings.";
+		: connection.status === "reauth_required"
+			? "Reauthorize Google Calendar before you can host new meetings."
+			: connection.status === "revoked"
+				? "Google access was revoked. Reconnect before you can host new meetings."
+				: connection.status === "disconnected"
+					? "Reconnect Google Calendar before you can host new meetings."
+					: "Connect Google Calendar before you can host meetings.";
+	const reconnectLabel =
+		connection.status === "revoked"
+			? "Reconnect Google Calendar"
+			: "Reauthorize this account";
 
 	useEffect(() => {
 		if (confirmDisconnect) {
@@ -473,13 +497,15 @@ export function MentorCalendarConnection({
 										)
 									}
 								>
-									<CalendarDays className="size-4" aria-hidden="true" />
-									{isReconnect
-										? "Reauthorize this account"
-										: "Connect Google Calendar"}
+									{isReconnect ? (
+										<RefreshCw className="size-4" aria-hidden="true" />
+									) : (
+										<CalendarDays className="size-4" aria-hidden="true" />
+									)}
+									{isReconnect ? reconnectLabel : "Connect Google Calendar"}
 								</Button>
 							)}
-							{isConnected ? (
+							{isConnected && actions?.disconnect ? (
 								<Button
 									type="button"
 									variant="ghost"

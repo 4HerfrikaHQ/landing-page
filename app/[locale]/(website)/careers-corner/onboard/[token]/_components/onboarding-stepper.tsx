@@ -2,52 +2,92 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
-import { CalendarClockIcon, CheckIcon, UserRoundIcon } from "lucide-react";
+import {
+	CalendarClockIcon,
+	CalendarDaysIcon,
+	CheckIcon,
+	UserRoundIcon,
+} from "lucide-react";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 
-type StepId = "availability" | "profile";
+type StepId = "availability" | "profile" | "calendar";
 
 const steps: { id: StepId; label: string; icon: typeof CalendarClockIcon }[] = [
 	{ id: "availability", label: "Availability", icon: CalendarClockIcon },
 	{ id: "profile", label: "Profile", icon: UserRoundIcon },
+	{ id: "calendar", label: "Google Calendar", icon: CalendarDaysIcon },
 ];
 
 export function OnboardingStepper({
 	availabilitySlot,
 	profileSlot,
+	calendarSlot,
+	calendarConnected,
+	availabilityComplete,
+	profileComplete,
 }: {
 	availabilitySlot: ReactNode;
-	profileSlot: ReactNode;
+	profileSlot: (onSaved: () => void) => ReactNode;
+	calendarSlot: ReactNode;
+	calendarConnected: boolean;
+	availabilityComplete: boolean;
+	profileComplete: boolean;
 }) {
 	// Step state lives in the URL so it survives refresh and is shareable.
 	const [active, setActive] = useQueryState(
 		"step",
-		parseAsStringLiteral(["availability", "profile"] as const).withDefault(
+		parseAsStringLiteral([
 			"availability",
-		),
+			"profile",
+			"calendar",
+		] as const).withDefault("availability"),
 	);
 	// "availability" is marked done once the mentor advances past it.
 	const [availabilityDone, setAvailabilityDone] = useQueryState(
 		"ready",
 		parseAsBoolean.withDefault(false),
 	);
+	const [profileDone, setProfileDone] = useQueryState(
+		"profile",
+		parseAsBoolean.withDefault(false),
+	);
+	const availabilityReady = availabilityComplete || availabilityDone;
+	const profileReady = profileComplete || profileDone;
+	const visibleActive =
+		active === "profile" && !availabilityReady
+			? "availability"
+			: active === "calendar" && (!availabilityReady || !profileReady)
+				? availabilityReady
+					? "profile"
+					: "availability"
+				: active;
 
 	return (
 		<div>
 			<nav aria-label="Onboarding steps" className="mb-8">
 				<ol className="flex items-center gap-3">
 					{steps.map((step, index) => {
-						const isActive = active === step.id;
+						const isActive = visibleActive === step.id;
 						const isDone =
-							step.id === "availability" && availabilityDone && !isActive;
+							(step.id === "availability" && availabilityReady) ||
+							(step.id === "profile" && profileReady) ||
+							(step.id === "calendar" && calendarConnected);
+						const canVisit =
+							step.id === "availability" ||
+							(step.id === "profile" && availabilityReady) ||
+							(step.id === "calendar" && availabilityReady && profileReady);
 						const Icon = isDone ? CheckIcon : step.icon;
 						return (
 							<li key={step.id} className="flex flex-1 items-center gap-3">
 								<button
 									type="button"
-									onClick={() => setActive(step.id)}
-									className="flex flex-1 items-center gap-3 text-left"
+									disabled={!canVisit}
+									onClick={() => canVisit && setActive(step.id)}
+									className={cn(
+										"flex flex-1 items-center gap-3 text-left",
+										!canVisit && "cursor-not-allowed opacity-60",
+									)}
 								>
 									<span
 										className={cn(
@@ -80,7 +120,15 @@ export function OnboardingStepper({
 										aria-hidden
 										className={cn(
 											"hidden h-px flex-1 sm:block",
-											availabilityDone ? "bg-primary-500/40" : "bg-border",
+											(
+												step.id === "availability"
+													? availabilityReady
+													: step.id === "profile"
+														? profileReady
+														: calendarConnected
+											)
+												? "bg-primary-500/40"
+												: "bg-border",
 										)}
 									/>
 								) : null}
@@ -90,7 +138,7 @@ export function OnboardingStepper({
 				</ol>
 			</nav>
 
-			{active === "availability" ? (
+			{visibleActive === "availability" ? (
 				<div className="space-y-6">
 					<StepHeader
 						title="Set your weekly availability"
@@ -109,13 +157,24 @@ export function OnboardingStepper({
 						</Button>
 					</div>
 				</div>
-			) : (
+			) : visibleActive === "profile" ? (
 				<div className="space-y-6">
 					<StepHeader
 						title="Complete your profile"
 						description="This is what mentees see on your booking page. A friendly photo and a short bio go a long way."
 					/>
-					{profileSlot}
+					{profileSlot(() => {
+						setProfileDone(true);
+						setActive("calendar");
+					})}
+				</div>
+			) : (
+				<div className="space-y-6">
+					<StepHeader
+						title="Connect Google Calendar"
+						description="Link the Google Calendar you use for mentoring. New calls will be scheduled on this calendar."
+					/>
+					{calendarSlot}
 				</div>
 			)}
 		</div>

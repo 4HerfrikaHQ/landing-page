@@ -4,6 +4,7 @@ import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
+import { mentorGoogleConnections } from "@/src/db/schema/tables/mentor-google-connections";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { signBookingToken } from "@/src/lib/booking-tokens";
@@ -15,16 +16,20 @@ import {
 	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
 } from "@/src/lib/google-calendar";
-import {
-	OrgGoogleCalendarError,
-	createOrgGoogleCalendarEvent,
-	deleteOrgGoogleCalendarEvent,
-	ensureOrgGoogleCalendarConnection,
-} from "@/src/lib/org-google-calendar";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { and, eq, getTableColumns, gte, lt, ne, sql } from "drizzle-orm";
+import {
+	and,
+	eq,
+	exists,
+	getTableColumns,
+	gte,
+	isNotNull,
+	lt,
+	ne,
+	sql,
+} from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
@@ -32,33 +37,32 @@ import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
-function calendarActionError(error: unknown): ActionError {
-	if (error instanceof OrgGoogleCalendarError) {
-		return new ActionError(
-			error.code === "connection_unavailable"
-				? "Booking is temporarily unavailable. Please try again later."
-				: "The calendar could not complete the requested operation.",
-		);
+class CalendarActionError extends ActionError {
+	readonly code: string;
+
+	constructor(error: unknown) {
+		super(mentorCalendarActionMessage(error));
+		this.name = "CalendarActionError";
+		this.code = isMentorCalendarError(error) ? error.code : "unknown";
 	}
-	return new ActionError(mentorCalendarActionMessage(error));
+}
+
+function calendarActionError(error: unknown): CalendarActionError {
+	return new CalendarActionError(error);
 }
 
 async function selectBookingCalendarHost(mentor: {
 	id: string;
 	email: string;
 }) {
-	const host = await selectNewBookingCalendarHost({
-		mentorId: mentor.id,
-		mentorEmail: mentor.email,
-	});
-	if (host.mode === "org_google") {
-		try {
-			await ensureOrgGoogleCalendarConnection();
-		} catch (error) {
-			throw calendarActionError(error);
-		}
+	try {
+		return await selectNewBookingCalendarHost({
+			mentorId: mentor.id,
+			mentorEmail: mentor.email,
+		});
+	} catch (error) {
+		throw calendarActionError(error);
 	}
-	return host;
 }
 
 function formatInTz(date: Date, tz: string): string {
@@ -150,7 +154,30 @@ export async function getMentorBySlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
+		.where(
+			and(
+				eq(mentors.slug, slug),
+				eq(mentors.active, true),
+				exists(
+					db
+						.select({ id: mentorGoogleConnections.id })
+						.from(mentorGoogleConnections)
+						.where(
+							and(
+								eq(mentorGoogleConnections.mentor_id, mentors.id),
+								eq(mentorGoogleConnections.status, "connected"),
+								isNotNull(mentorGoogleConnections.refresh_token_ciphertext),
+								eq(mentorGoogleConnections.revocation_state, "not_pending"),
+								eq(
+									mentorGoogleConnections.reauthorization_state,
+									"not_required",
+								),
+							),
+						)
+						.limit(1),
+				),
+			),
+		)
 		.limit(1);
 	return mentor ?? null;
 }
@@ -165,11 +192,7 @@ export const listMentorSlots = actionClient
 		} catch (error) {
 			console.error("[booking-calendar] availability_check_failed", {
 				mentorId: mentor.id,
-				code:
-					isMentorCalendarError(error) ||
-					error instanceof OrgGoogleCalendarError
-						? error.code
-						: "unknown",
+				code: error instanceof CalendarActionError ? error.code : "unknown",
 				errorType: error instanceof Error ? error.name : typeof error,
 			});
 			throw error;
@@ -302,7 +325,6 @@ export const createBooking = actionClient
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 		const mentorEmail = mentor.email;
-		const hosting = await selectBookingCalendarHost(mentor);
 
 		const [settingsRow] = await db
 			.select()
@@ -367,6 +389,7 @@ export const createBooking = actionClient
 				"That slot is no longer available. Please pick another time.",
 			);
 		}
+		const latestHosting = await selectBookingCalendarHost(mentor);
 		const attemptKey = stableCalendarAttemptKey(
 			mentor.id,
 			"create",
@@ -384,17 +407,10 @@ export const createBooking = actionClient
 				startAtUtc: startAt,
 				endAtUtc: endAt,
 				attemptKey,
-				...(hosting.mode === "mentor_google"
-					? {
-							connection: hosting.connection,
-							accessToken: hosting.accessToken,
-						}
-					: {}),
+				connection: latestHosting.connection,
+				accessToken: latestHosting.accessToken,
 			};
-			event =
-				hosting.mode === "mentor_google"
-					? await createMentorCalendarEvent(calendarParams)
-					: await createOrgGoogleCalendarEvent(calendarParams);
+			event = await createMentorCalendarEvent(calendarParams);
 		} catch (error) {
 			throw calendarActionError(error);
 		}
@@ -407,6 +423,31 @@ export const createBooking = actionClient
 		let booking: typeof bookings.$inferSelect;
 		try {
 			booking = await db.transaction(async (tx) => {
+				const [connection] = await tx
+					.select({
+						id: mentorGoogleConnections.id,
+						status: mentorGoogleConnections.status,
+						reauthorizationState: mentorGoogleConnections.reauthorization_state,
+						revocationState: mentorGoogleConnections.revocation_state,
+						refreshTokenCiphertext:
+							mentorGoogleConnections.refresh_token_ciphertext,
+					})
+					.from(mentorGoogleConnections)
+					.where(eq(mentorGoogleConnections.mentor_id, mentor.id))
+					.for("update")
+					.limit(1);
+				if (
+					!connection ||
+					connection.id !== latestHosting.connection.connectionId ||
+					connection.status !== "connected" ||
+					connection.reauthorizationState !== "not_required" ||
+					connection.revocationState !== "not_pending" ||
+					!connection.refreshTokenCiphertext
+				) {
+					throw new ActionError(
+						"The mentor's Google Calendar is no longer available. Please choose another time.",
+					);
+				}
 				const [row] = await tx
 					.insert(bookings)
 					.values({
@@ -424,7 +465,7 @@ export const createBooking = actionClient
 						mentee_timezone: parsedInput.menteeTimezone,
 						meet_url: meetUrl,
 						google_event_id: eventId,
-						hosting_mode: hosting.mode,
+						hosting_mode: latestHosting.mode,
 					})
 					.returning();
 				return row;
@@ -433,16 +474,15 @@ export const createBooking = actionClient
 			console.error("[booking-insert-failed]", {
 				errorType: error instanceof Error ? error.name : typeof error,
 			});
-			if (hosting.mode === "mentor_google") {
-				await deleteMentorCalendarEvent({
-					mentorId: mentor.id,
-					mentorEmail,
-					eventId,
-					expectedAttemptKey: attemptKey,
-				}).catch(() => undefined);
-			} else {
-				await deleteOrgGoogleCalendarEvent({ eventId }).catch(() => undefined);
-			}
+			await deleteMentorCalendarEvent({
+				mentorId: mentor.id,
+				mentorEmail,
+				eventId,
+				connection: latestHosting.connection,
+				accessToken: latestHosting.accessToken,
+				expectedAttemptKey: attemptKey,
+			}).catch(() => undefined);
+			if (error instanceof ActionError) throw error;
 			throw new ActionError(
 				"Booking could not be saved. Please retry or contact support for calendar resolution.",
 			);

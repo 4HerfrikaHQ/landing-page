@@ -36,6 +36,8 @@ type Mentor = {
 		| "disconnected"
 		| null;
 	google_reauthorization_state: "not_required" | "required" | null;
+	google_revocation_state: "not_pending" | "pending" | null;
+	google_has_refresh_token: boolean;
 	created_at: Date;
 	booking_count: number;
 };
@@ -43,7 +45,9 @@ type Mentor = {
 function calendarStatus(mentor: Mentor) {
 	if (
 		mentor.google_connection_status === "connected" &&
-		mentor.google_reauthorization_state === "not_required"
+		mentor.google_reauthorization_state === "not_required" &&
+		mentor.google_revocation_state === "not_pending" &&
+		mentor.google_has_refresh_token
 	) {
 		return {
 			label: "Connected",
@@ -55,6 +59,14 @@ function calendarStatus(mentor: Mentor) {
 	if (mentor.google_connection_status === "revoked") {
 		return {
 			label: "Disconnected",
+			icon: CalendarX2,
+			className: "text-slate-500",
+		};
+	}
+
+	if (mentor.google_revocation_state === "pending") {
+		return {
+			label: "Disconnecting",
 			icon: CalendarX2,
 			className: "text-slate-500",
 		};

@@ -6,10 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { completeMentorOnboarding } from "../_actions";
+import { saveMentorOnboardingProfile } from "../_actions";
 import { CompleteOnboardingSchema } from "../_schema";
 import { OnboardingAvatarUpload } from "./onboarding-avatar-upload";
 
@@ -18,16 +16,16 @@ export function OnboardingForm({
 	defaultBio,
 	defaultNickname,
 	defaultImage,
+	onSaved,
 }: {
 	token: string;
 	defaultBio: string;
 	defaultNickname: string;
 	defaultImage: string;
+	onSaved: () => void;
 }) {
-	const router = useRouter();
-
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
-		completeMentorOnboarding,
+		saveMentorOnboardingProfile,
 		zodResolver(CompleteOnboardingSchema),
 		{
 			formProps: {
@@ -39,11 +37,9 @@ export function OnboardingForm({
 				},
 			},
 			actionProps: {
-				onSuccess: ({ data }) => {
-					toast.success("All set! Your profile is live.");
-					if (data?.slug) {
-						router.push(`/careers-corner/${data.slug}` as Route);
-					}
+				onSuccess: () => {
+					toast.success("Profile saved. Connect Google Calendar to continue.");
+					onSaved();
 				},
 				onError: ({ error }) =>
 					toast.error(error.serverError ?? "Failed to save."),
@@ -86,7 +82,7 @@ export function OnboardingForm({
 			</div>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">
-				{action.isPending ? "Saving…" : "Save profile & go live"}
+				{action.isPending ? "Saving…" : "Save profile & continue"}
 			</Button>
 		</form>
 	);
