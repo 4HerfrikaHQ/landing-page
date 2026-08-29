@@ -1,4 +1,4 @@
-import { FadeIn, ParallaxImage } from "@/components/motion";
+import { ParallaxImage } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { Content } from "@prismicio/client";
 import { PrismicImage } from "@prismicio/react";
@@ -35,7 +35,7 @@ export const Hero = async ({
 
 			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
 				<div className="w-full">
-					<FadeIn>
+					<div className="animate-enter">
 						<p className="text-foreground text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize text-balance">
 							{t.rich("heroTitle", {
 								highlight: (chunks) => (
@@ -43,18 +43,18 @@ export const Hero = async ({
 								),
 							})}
 						</p>
-					</FadeIn>
+					</div>
 					<PrismicImage
 						field={heroImage}
 						className="aspect-[1.16] mx-auto object-cover lg:hidden mb-4 w-full max-w-md"
 						width={278}
 					/>
-					<FadeIn delay={0.3}>
+					<div className="animate-enter" style={{ animationDelay: "80ms" }}>
 						<p className="text-base sm:text-lg lg:text-2xl mx-auto max-w-2xl py-4 lg:py-0 text-muted-foreground mb-6 lg:mb-14 tracking-wider xl:max-w-182.5 text-center lg:text-left">
 							{t("heroDescription")}
 						</p>
-					</FadeIn>
-					<FadeIn delay={0.6}>
+					</div>
+					<div className="animate-enter" style={{ animationDelay: "160ms" }}>
 						<div className="flex items-center gap-3 sm:gap-4 lg:gap-5 justify-center lg:justify-start flex-wrap">
 							<Button
 								href="/about"
@@ -72,7 +72,7 @@ export const Hero = async ({
 								{tc("joinCommunity")}
 							</Button>
 						</div>
-					</FadeIn>
+					</div>
 				</div>
 				<ParallaxImage
 					speed={0.3}

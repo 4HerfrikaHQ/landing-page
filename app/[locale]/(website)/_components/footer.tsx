@@ -11,10 +11,7 @@ export const Footer = async () => {
 	return (
 		<footer className="bg-secondary-500" data-site-footer>
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
-				<StaggerContainer
-					className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5"
-					staggerDelay={0.12}
-				>
+				<StaggerContainer className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 					<StaggerItem className="text-center sm:text-left">
 						<p className="font-bold text-primary-500 text-xl">
 							{t("quickLinks")}

@@ -101,7 +101,19 @@ export const MobileNav = () => {
 										<ChevronDown className="h-4 w-4 transition-transform duration-300" />
 									</label>
 
-									<div className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-40">
+									{/* Sized from the item count rather than a fixed cap: a row is
+									    py-3 + text-base = 3rem, and 4.5rem each leaves room for a
+									    label that wraps to two lines. A hard max-h-40 clipped the
+									    fourth item, and an over-generous one makes the open/close
+									    transition cover mostly empty space, which reads as a snap. */}
+									<div
+										className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-(--dropdown-max-h)"
+										style={
+											{
+												"--dropdown-max-h": `${link.dropdownItems.length * 4.5}rem`,
+											} as React.CSSProperties
+										}
+									>
 										{link.dropdownItems.map((dropdownItem) => (
 											<NavbarLink
 												key={dropdownItem.name}

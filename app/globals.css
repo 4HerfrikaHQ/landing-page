@@ -125,6 +125,33 @@ a:hover {
 		linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 }
 
+/* Above-the-fold entrance.
+ *
+ * The JS motion primitives render their hidden state into the SSR'd HTML
+ * (`opacity: 0`) and only reveal it once the bundle has hydrated and an
+ * IntersectionObserver has fired. For content below the fold that is
+ * invisible anyway. For the hero it means the largest text on the page is
+ * blank until JS arrives — on a slow phone, seconds of empty screen.
+ *
+ * This keyframe runs off the first paint in every browser, with no JS at all,
+ * so the hero animates on time regardless of how the bundle is doing. The
+ * `prefers-reduced-motion` block below collapses the duration, which lands the
+ * element on its `to` state immediately. */
+@keyframes enter-up {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.animate-enter {
+	animation: enter-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 html {
 	scroll-behavior: smooth;
 }
