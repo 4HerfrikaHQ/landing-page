@@ -16,7 +16,8 @@ export async function loadFeedbackContext(token: string) {
 	if (!verified.ok) {
 		return {
 			ok: false as const,
-			reason: verified.reason,
+			reason:
+				verified.reason === "used" ? "already_submitted" : verified.reason,
 		};
 	}
 

@@ -4,7 +4,12 @@ import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { consumeActionLinks, resolveActionLink } from "@/src/lib/action-links";
+import {
+	claimActionLink,
+	consumeActionLinks,
+	releaseActionLinkClaim,
+	resolveActionLink,
+} from "@/src/lib/action-links";
 import {
 	cancelBookingCore,
 	rescheduleBookingCore,
@@ -41,68 +46,88 @@ export async function loadBookingFromToken(token: string) {
 export const cancelBooking = actionClient
 	.schema(CancelBookingSchema)
 	.action(async ({ parsedInput }) => {
-		const verified = await resolveActionLink(parsedInput.token, "manage");
-		if (!verified.ok) {
+		const claimed = await claimActionLink(parsedInput.token, "manage");
+		if (!claimed.ok) {
 			throw new ActionError("Invalid link");
 		}
+		let mutationCompleted = false;
 
-		const [booking] = await db
-			.select()
-			.from(bookings)
-			.where(eq(bookings.id, verified.resourceId))
-			.limit(1);
-		if (!booking) throw new ActionError("Booking not found");
-		if (booking.status === "cancelled") {
+		try {
+			const [booking] = await db
+				.select()
+				.from(bookings)
+				.where(eq(bookings.id, claimed.resourceId))
+				.limit(1);
+			if (!booking) throw new ActionError("Booking not found");
+			if (booking.status === "cancelled") {
+				mutationCompleted = true;
+				await consumeActionLinks({
+					action: "manage",
+					resourceId: booking.id,
+				});
+				return { ok: true };
+			}
+
+			const [mentorRow] = await db
+				.select({ mentor: mentors, user: users })
+				.from(mentors)
+				.leftJoin(users, eq(users.id, mentors.user_id))
+				.where(eq(mentors.id, booking.mentor_id))
+				.limit(1);
+			if (!mentorRow?.mentor) throw new ActionError("Mentor not found");
+
+			await cancelBookingCore({
+				booking,
+				mentorName: mentorRow.user?.name ?? "",
+				mentorSlug: mentorRow.mentor.slug,
+				mentorEmail: mentorRow.user?.email ?? undefined,
+				reason: parsedInput.reason,
+			});
+			mutationCompleted = true;
 			await consumeActionLinks({
 				action: "manage",
 				resourceId: booking.id,
 			});
 			return { ok: true };
+		} catch (error) {
+			if (!mutationCompleted) {
+				await releaseActionLinkClaim(claimed.claim);
+			}
+			throw error;
 		}
-
-		const [mentorRow] = await db
-			.select({ mentor: mentors, user: users })
-			.from(mentors)
-			.leftJoin(users, eq(users.id, mentors.user_id))
-			.where(eq(mentors.id, booking.mentor_id))
-			.limit(1);
-		if (!mentorRow?.mentor) throw new ActionError("Mentor not found");
-
-		await cancelBookingCore({
-			booking,
-			mentorName: mentorRow.user?.name ?? "",
-			mentorSlug: mentorRow.mentor.slug,
-			mentorEmail: mentorRow.user?.email ?? undefined,
-			reason: parsedInput.reason,
-		});
-		await consumeActionLinks({
-			action: "manage",
-			resourceId: booking.id,
-		});
-		return { ok: true };
 	});
 
 export const rescheduleBooking = actionClient
 	.schema(RescheduleBookingSchema)
 	.action(async ({ parsedInput }) => {
-		const verified = await resolveActionLink(parsedInput.token, "manage");
-		if (!verified.ok) throw new ActionError("Invalid link");
-		const { booking, mentor, mentorUser, settings } =
-			await loadRescheduleContext(parsedInput.token);
+		const claimed = await claimActionLink(parsedInput.token, "manage");
+		if (!claimed.ok) throw new ActionError("Invalid link");
+		let mutationCompleted = false;
 
-		const result = await rescheduleBookingCore({
-			booking,
-			mentorId: mentor.id,
-			mentorName: mentorUser.name,
-			mentorSlug: mentor.slug,
-			mentorEmail: mentorUser.email!,
-			sessionDurationMinutes: settings.session_duration_minutes,
-			newStartUtc: new Date(parsedInput.newStartAtUtc),
-		});
-		await consumeActionLinks({
-			action: "manage",
-			resourceId: booking.id,
-			excludeToken: result.manageToken,
-		});
-		return { ok: true };
+		try {
+			const { booking, mentor, mentorUser, mentorEmail, settings } =
+				await loadRescheduleContext(claimed.resourceId);
+
+			const result = await rescheduleBookingCore({
+				booking,
+				mentorId: mentor.id,
+				mentorName: mentorUser.name,
+				mentorSlug: mentor.slug,
+				mentorEmail,
+				sessionDurationMinutes: settings.session_duration_minutes,
+				newStartUtc: new Date(parsedInput.newStartAtUtc),
+			});
+			mutationCompleted = true;
+			await consumeActionLinks({
+				action: "manage",
+				resourceId: booking.id,
+				excludeToken: result.manageToken,
+			});
+			return { ok: true };
+		} catch (error) {
+			if (!mutationCompleted) {
+				await releaseActionLinkClaim(claimed.claim);
+			}
+			throw error;
+		}
 	});

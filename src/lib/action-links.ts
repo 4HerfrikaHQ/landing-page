@@ -6,7 +6,7 @@ import {
 	actionLinks,
 } from "@/src/db/schema/tables";
 import { verifyBookingToken } from "@/src/lib/booking-tokens";
-import { and, eq, isNull, ne } from "drizzle-orm";
+import { and, eq, gt, isNull, ne } from "drizzle-orm";
 
 const TOKEN_BYTES = 16;
 
@@ -27,6 +27,15 @@ export type ResolveActionLinkResult =
 				| "used"
 				| "wrong_action";
 	  };
+
+export type ActionLinkClaim = {
+	tokenHash: string;
+	claimedAt: Date;
+};
+
+export type ClaimActionLinkResult =
+	| ({ ok: true; claim: ActionLinkClaim } & ResolvedActionLink)
+	| Exclude<ResolveActionLinkResult, { ok: true }>;
 
 export function generateActionLinkToken(): string {
 	return randomBytes(TOKEN_BYTES).toString("base64url");
@@ -111,6 +120,110 @@ export async function resolveActionLink(
 		resourceId: legacy.bookingId,
 		source: "legacy_jwt",
 	};
+}
+
+/**
+ * Atomically reserves a link before a mutation starts. Callers should release
+ * the claim if the mutation fails before it completes; successful claims stay
+ * consumed.
+ */
+export async function claimActionLink(
+	token: string,
+	expectedAction: ActionLinkActionType,
+): Promise<ClaimActionLinkResult> {
+	const tokenHash = hashActionLinkToken(token);
+	const claimedAt = new Date();
+	const [claimed] = await db
+		.update(actionLinks)
+		.set({ used_at: claimedAt })
+		.where(
+			and(
+				eq(actionLinks.token_hash, tokenHash),
+				eq(actionLinks.action, expectedAction),
+				isNull(actionLinks.used_at),
+				gt(actionLinks.expires_at, claimedAt),
+			),
+		)
+		.returning({
+			action: actionLinks.action,
+			resourceId: actionLinks.resource_id,
+			claimedAt: actionLinks.used_at,
+		});
+
+	if (claimed?.claimedAt) {
+		return {
+			ok: true,
+			action: claimed.action,
+			resourceId: claimed.resourceId,
+			source: "database",
+			claim: { tokenHash, claimedAt: claimed.claimedAt },
+		};
+	}
+
+	const [existing] = await db
+		.select()
+		.from(actionLinks)
+		.where(eq(actionLinks.token_hash, tokenHash))
+		.limit(1);
+	if (existing) {
+		const validation = validateActionLinkRecord(
+			{
+				action: existing.action,
+				resourceId: existing.resource_id,
+				expiresAt: existing.expires_at,
+				usedAt: existing.used_at,
+			},
+			expectedAction,
+			claimedAt,
+		);
+		// A valid row can only miss the conditional update if another request
+		// changed it concurrently. Treat that lost claim as consumed.
+		return validation.ok ? { ok: false, reason: "used" } : validation;
+	}
+
+	if (token.split(".").length !== 3) {
+		return { ok: false, reason: "malformed" };
+	}
+	const legacy = verifyBookingToken(token);
+	if (!legacy.ok) return legacy;
+	if (legacy.action !== expectedAction) {
+		return { ok: false, reason: "wrong_action" };
+	}
+
+	const [inserted] = await db
+		.insert(actionLinks)
+		.values({
+			token_hash: tokenHash,
+			action: legacy.action,
+			resource_id: legacy.bookingId,
+			expires_at: new Date(legacy.expiresAt),
+			used_at: claimedAt,
+		})
+		.onConflictDoNothing({ target: actionLinks.token_hash })
+		.returning({ claimedAt: actionLinks.used_at });
+	if (!inserted?.claimedAt) return { ok: false, reason: "used" };
+
+	return {
+		ok: true,
+		action: legacy.action,
+		resourceId: legacy.bookingId,
+		source: "legacy_jwt",
+		claim: { tokenHash, claimedAt: inserted.claimedAt },
+	};
+}
+
+export async function releaseActionLinkClaim(
+	claim: ActionLinkClaim,
+): Promise<void> {
+	await db
+		.update(actionLinks)
+		.set({ used_at: null })
+		.where(
+			and(
+				eq(actionLinks.token_hash, claim.tokenHash),
+				eq(actionLinks.used_at, claim.claimedAt),
+			),
+		);
 }
 
 export async function consumeActionLinks(input: {

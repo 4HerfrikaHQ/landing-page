@@ -8,7 +8,6 @@ import {
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { resolveActionLink } from "@/src/lib/action-links";
 import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
 import { sendEmail } from "@/src/lib/email";
 import {
@@ -35,17 +34,12 @@ export function siteUrl(): string {
 	return process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 }
 
-/** Verifies the manage token and loads booking + mentor (+mentor user) for a reschedule flow. */
-export async function loadRescheduleContext(token: string) {
-	const verified = await resolveActionLink(token, "manage");
-	if (!verified.ok) {
-		throw new ActionError("Invalid link");
-	}
-
+/** Loads booking + mentor (+mentor user) after the action token is verified. */
+export async function loadRescheduleContext(bookingId: string) {
 	const [booking] = await db
 		.select()
 		.from(bookings)
-		.where(eq(bookings.id, verified.resourceId))
+		.where(eq(bookings.id, bookingId))
 		.limit(1);
 	if (!booking || booking.status === "cancelled") {
 		throw new ActionError("Booking not active");
@@ -61,6 +55,7 @@ export async function loadRescheduleContext(token: string) {
 	const mentorUser = mentorRow?.user;
 	if (!mentor) throw new ActionError("Mentor missing");
 	if (!mentorUser?.email) throw new ActionError("Mentor email missing");
+	const mentorEmail = mentorUser.email;
 
 	const [settingsRow] = await db
 		.select()
@@ -70,7 +65,7 @@ export async function loadRescheduleContext(token: string) {
 	if (!settingsRow) throw new ActionError("Mentor booking settings missing");
 	const settings = settingsRow;
 
-	return { booking, mentor, mentorUser, settings };
+	return { booking, mentor, mentorUser, mentorEmail, settings };
 }
 
 /** Throws if the requested new slot isn't a valid available slot for the mentor. */
