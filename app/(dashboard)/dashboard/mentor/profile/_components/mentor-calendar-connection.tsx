@@ -505,7 +505,7 @@ export function MentorCalendarConnection({
 									{isReconnect ? reconnectLabel : "Connect Google Calendar"}
 								</Button>
 							)}
-							{isConnected ? (
+							{isConnected && actions?.disconnect ? (
 								<Button
 									type="button"
 									variant="ghost"

@@ -37,8 +37,18 @@ import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
-function calendarActionError(error: unknown): ActionError {
-	return new ActionError(mentorCalendarActionMessage(error));
+class CalendarActionError extends ActionError {
+	readonly code: string;
+
+	constructor(error: unknown) {
+		super(mentorCalendarActionMessage(error));
+		this.name = "CalendarActionError";
+		this.code = isMentorCalendarError(error) ? error.code : "unknown";
+	}
+}
+
+function calendarActionError(error: unknown): CalendarActionError {
+	return new CalendarActionError(error);
 }
 
 async function selectBookingCalendarHost(mentor: {
@@ -182,7 +192,7 @@ export const listMentorSlots = actionClient
 		} catch (error) {
 			console.error("[booking-calendar] availability_check_failed", {
 				mentorId: mentor.id,
-				code: isMentorCalendarError(error) ? error.code : "unknown",
+				code: error instanceof CalendarActionError ? error.code : "unknown",
 				errorType: error instanceof Error ? error.name : typeof error,
 			});
 			throw error;
@@ -315,7 +325,6 @@ export const createBooking = actionClient
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 		const mentorEmail = mentor.email;
-		await selectBookingCalendarHost(mentor);
 
 		const [settingsRow] = await db
 			.select()
