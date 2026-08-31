@@ -43,7 +43,6 @@
     "ical-generator": "^10.2.0",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.577.0",
-    "motion": "^12.23.3",
     "next": "^16",
     "next-intl": "^4.8.3",
     "next-safe-action": "^8.5.2",

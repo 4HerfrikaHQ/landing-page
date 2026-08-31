@@ -1,6 +1,7 @@
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import { resolveFeaturedMentor } from "@/src/lib/featured-mentor";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { UserRound } from "lucide-react";
@@ -97,7 +98,7 @@ const CareersCorner = async ({
 									<Button
 										variant="solid"
 										size="lg"
-										href={`/careers-corner/${featured.slug}`}
+										href={`/careercorner/${featured.slug}`}
 										className="w-full md:w-1/2"
 									>
 										{tCommon("bookACall")}
@@ -135,7 +136,7 @@ const CareersCorner = async ({
 					<p className="mb-8 text-muted-foreground">
 						{tCareers("becomeMentorDescription")}
 					</p>
-					<Button href="/careers-corner/apply" variant="solid" size="lg">
+					<Button href="/careercorner/apply" variant="solid" size="lg">
 						{tCareers("applyToBecomeMentor")}
 					</Button>
 				</section>
@@ -153,7 +154,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { locale } = await params;
 	const t = await getTranslations({ locale, namespace: "seo.careers" });
-	return { title: t("title"), description: t("description") };
+	return careerCornerMetadata(locale, t("title"), t("description"));
 }
 
 export default CareersCorner;

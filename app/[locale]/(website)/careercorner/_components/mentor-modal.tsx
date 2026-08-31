@@ -190,7 +190,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 								<Button
 									variant="solid"
 									size="lg"
-									href={`/careers-corner/${mentor.slug}`}
+									href={`/careercorner/${mentor.slug}`}
 									className="w-full sm:w-auto"
 								>
 									{tc("bookACall")}

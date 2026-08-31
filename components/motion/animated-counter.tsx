@@ -1,54 +1,47 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useReveal } from "./use-reveal";
 
 interface AnimatedCounterProps {
-  target: number;
-  duration?: number;
-  className?: string;
+	target: number;
+	duration?: number;
+	className?: string;
 }
 
 export function AnimatedCounter({
-  target,
-  duration = 1.5,
-  className,
+	target,
+	duration = 1.5,
+	className,
 }: AnimatedCounterProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const shouldReduce = useReducedMotion();
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+	const { ref, revealed } = useReveal<HTMLSpanElement>();
+	const [value, setValue] = useState(0);
+	const frame = useRef<number>(undefined);
 
-  const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, {
-    duration: duration * 1000,
-    bounce: 0,
-  });
-  const display = useTransform(springValue, (v) => Math.round(v));
+	useEffect(() => {
+		if (!revealed) return;
 
-  useEffect(() => {
-    if (!isInView) return;
-    if (shouldReduce) {
-      motionValue.set(target);
-    } else {
-      motionValue.set(0);
-      requestAnimationFrame(() => motionValue.set(target));
-    }
-  }, [isInView, motionValue, target, shouldReduce]);
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			setValue(target);
+			return;
+		}
 
-  if (shouldReduce) {
-    return (
-      <span ref={ref} className={className}>
-        {target}
-      </span>
-    );
-  }
+		const start = performance.now();
+		const tick = (now: number) => {
+			const progress = Math.min((now - start) / (duration * 1000), 1);
+			setValue(Math.round(target * (1 - (1 - progress) ** 3)));
+			if (progress < 1) frame.current = requestAnimationFrame(tick);
+		};
+		frame.current = requestAnimationFrame(tick);
 
-  return <motion.span ref={ref} className={className}>{display}</motion.span>;
+		return () => {
+			if (frame.current !== undefined) cancelAnimationFrame(frame.current);
+		};
+	}, [revealed, target, duration]);
+
+	return (
+		<span ref={ref} className={className}>
+			{value}
+		</span>
+	);
 }

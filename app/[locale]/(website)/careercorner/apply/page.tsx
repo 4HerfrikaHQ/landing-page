@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/motion/fade-in";
+import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -12,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { locale } = await params;
 	const t = await getTranslations({ locale, namespace: "seo.mentorApply" });
-	return { title: t("title"), description: t("description") };
+	return careerCornerMetadata(locale, t("title"), t("description"), "/apply");
 }
 
 export default async function ApplyPage({

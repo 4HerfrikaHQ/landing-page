@@ -41,9 +41,12 @@ export const Navbar = async () => {
 	};
 
 	return (
-		<div className="relative" data-site-navbar>
+		<>
 			<YearOneReport />
-			<header className="sticky inset-x-0 top-0 z-50 bg-transparent h-16 lg:h-22.5">
+			<header
+				data-site-navbar
+				className="sticky inset-x-0 top-0 z-50 h-16 bg-background/85 backdrop-blur-sm lg:h-22.5"
+			>
 				<nav
 					className="flex items-center justify-between h-full px-6 lg:px-8"
 					aria-label="Global"
@@ -118,6 +121,6 @@ export const Navbar = async () => {
 					</div>
 				</nav>
 			</header>
-		</div>
+		</>
 	);
 };

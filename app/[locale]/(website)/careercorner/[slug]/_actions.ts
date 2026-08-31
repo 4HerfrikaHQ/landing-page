@@ -10,7 +10,6 @@ import { signBookingToken } from "@/src/lib/booking-tokens";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
-	isMentorCalendarError,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
@@ -158,20 +157,6 @@ export const listMentorSlots = actionClient
 	.action(async ({ parsedInput }) => {
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
-		try {
-			await selectBookingCalendarHost(mentor);
-		} catch (error) {
-			console.error("[booking-calendar] availability_check_failed", {
-				mentorId: mentor.id,
-				code:
-					isMentorCalendarError(error) ||
-					error instanceof OrgGoogleCalendarError
-						? error.code
-						: "unknown",
-				errorType: error instanceof Error ? error.name : typeof error,
-			});
-			throw error;
-		}
 
 		const [settingsRow] = await db
 			.select()
@@ -231,11 +216,6 @@ export async function getFirstAvailableSlotUtc(
 ): Promise<string | null> {
 	const mentor = await getMentorBySlug(mentorSlug);
 	if (!mentor) return null;
-	try {
-		await selectBookingCalendarHost(mentor);
-	} catch {
-		return null;
-	}
 
 	const [settingsRow] = await db
 		.select()
@@ -516,6 +496,6 @@ export const createBooking = actionClient
 			console.error("[booking] confirmation_email_failed");
 		}
 
-		revalidatePath(`/careers-corner/${mentor.slug}`);
+		revalidatePath(`/careercorner/${mentor.slug}`);
 		return { bookingId: booking.id, manageUrl };
 	});

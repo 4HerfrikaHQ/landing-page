@@ -66,6 +66,7 @@ interface MentorCalendarConnectionProps {
 	connection: MentorCalendarConnection;
 	actions?: MentorCalendarConnectionActions;
 	callbackOutcome?: MentorCalendarCallbackOutcome | null;
+	configurationMissing?: boolean;
 	healthCheckUnavailable?: boolean;
 	revocationPending?: boolean;
 	canRetryRevocation?: boolean;
@@ -132,7 +133,8 @@ const CALLBACK_COPY: Record<
 	},
 	invalid_grant: {
 		title: "Google needs you to reconnect",
-		description: "Use Reauthorize this account before you can host new meetings.",
+		description:
+			"Use Reauthorize this account before you can host new meetings.",
 	},
 	oauth_exchange_failed: {
 		title: "Google could not finish the connection",
@@ -145,7 +147,8 @@ const CALLBACK_COPY: Record<
 	},
 	refresh_token_missing: {
 		title: "Google needs you to reconnect",
-		description: "Use Reauthorize this account before you can host new meetings.",
+		description:
+			"Use Reauthorize this account before you can host new meetings.",
 	},
 	connection_unavailable: {
 		title: "Google Calendar is unavailable",
@@ -170,6 +173,7 @@ export function MentorCalendarConnection({
 	connection,
 	actions,
 	callbackOutcome,
+	configurationMissing,
 	healthCheckUnavailable,
 	revocationPending,
 	canRetryRevocation,
@@ -307,6 +311,22 @@ export function MentorCalendarConnection({
 						{status.label}
 					</div>
 				</div>
+				{configurationMissing ? (
+					<div
+						className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950"
+						role="alert"
+					>
+						<p className="font-medium">
+							Google Calendar sign-in isn&apos;t set up on this site yet
+						</p>
+						<p className="mt-1">
+							Nothing is wrong with your account — the site is missing its
+							Google credentials, so there is no point retrying. An admin needs
+							to add them. Your calls are hosted on the 4HerFrika calendar until
+							then.
+						</p>
+					</div>
+				) : null}
 				{healthCheckUnavailable ? (
 					<div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950">
 						Google access could not be confirmed just now. Reauthorize this

@@ -4,6 +4,10 @@ export const SetFeaturedMentorSchema = z.object({
 	mentorId: z.string().uuid(),
 });
 
+export const RequestMentorCalendarConnectionSchema = z.object({
+	mentorId: z.string().uuid(),
+});
+
 export const MentorSortValue = z.enum(["name", "joined", "bookings"]);
 export type MentorSortValue = z.infer<typeof MentorSortValue>;
 

@@ -7,8 +7,8 @@ import {
 import {
 	sendBookingConfirmationMentee,
 	sendBookingConfirmationMentor,
-} from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
-import { buildBookingIcs } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
+} from "@/app/[locale]/(website)/careercorner/[slug]/_actions";
+import { buildBookingIcs } from "@/app/[locale]/(website)/careercorner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { type DbBooking, bookings } from "@/src/db/schema/tables/bookings";
 import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
@@ -186,7 +186,7 @@ export async function rescheduleBookingCore(params: {
 			},
 		}),
 	]);
-	revalidatePath(`/careers-corner/${mentorSlug}`);
+	revalidatePath(`/careercorner/${mentorSlug}`);
 	return { startAt: newStartUtc, endAt: newEnd };
 }
 
@@ -274,5 +274,5 @@ export async function cancelBookingCore(params: {
 			errorType: error instanceof Error ? error.name : typeof error,
 		});
 	}
-	revalidatePath(`/careers-corner/${mentorSlug}`);
+	revalidatePath(`/careercorner/${mentorSlug}`);
 }
