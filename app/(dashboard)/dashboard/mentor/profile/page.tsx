@@ -4,6 +4,7 @@ import {
 	disconnectMentorGoogleConnection,
 	getMentorGoogleCalendarContext,
 	getMentorGoogleConnectionStatus,
+	mentorGoogleOAuthConfigured,
 	retryMentorGoogleRevocation,
 	startMentorGoogleOAuth,
 } from "@/src/lib/mentor-google-oauth";
@@ -102,6 +103,7 @@ export default async function MentorProfilePage({
 	const callbackOutcome = searchParams
 		? getCallbackOutcome(await searchParams)
 		: null;
+	const oauthConfigured = mentorGoogleOAuthConfigured();
 	const connectionStatus =
 		currentConnection.status === "connected"
 			? "connected"
@@ -134,12 +136,19 @@ export default async function MentorProfilePage({
 							connectedAt: currentConnection.connectedAt,
 						}}
 						actions={{
-							connect: connectMentorGoogleCalendar,
-							reconnect: reconnectMentorGoogleCalendar,
+							// Withheld when unconfigured: the component disables the button
+							// rather than offering an action that always fails.
+							connect: oauthConfigured
+								? connectMentorGoogleCalendar
+								: undefined,
+							reconnect: oauthConfigured
+								? reconnectMentorGoogleCalendar
+								: undefined,
 							disconnect: disconnectMentorGoogleCalendar,
 							retryRevocation: retryMentorGoogleAccessRemoval,
 						}}
 						callbackOutcome={callbackOutcome}
+						configurationMissing={!oauthConfigured}
 						healthCheckUnavailable={healthCheckUnavailable}
 						revocationPending={currentConnection.revocationPending}
 						canRetryRevocation={currentConnection.canRetryRevocation}
