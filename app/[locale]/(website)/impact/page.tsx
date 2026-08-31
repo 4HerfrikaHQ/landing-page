@@ -41,7 +41,7 @@ export default async function ReportPage({
 	const tc = await getTranslations("common");
 
 	return (
-		<div className="w-screen overflow-hidden">
+		<div className="w-full overflow-x-clip">
 			<Image
 				src={yearReport}
 				alt={t("altYearReport")}
@@ -55,10 +55,7 @@ export default async function ReportPage({
 					<F4herfrikaLogo className="w-[96vw]" />
 				</div>
 				<Squiggle className="absolute left-0 top-1/2 -translate-y-1/2 w-screen" />
-				<FadeIn
-					initial={{ opacity: 0, scale: 0.8 }}
-					whileInView={{ opacity: 1, scale: 1 }}
-				>
+				<FadeIn direction="scale">
 					<Image
 						src={earth}
 						alt={t("altEarth")}

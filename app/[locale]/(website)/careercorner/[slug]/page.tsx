@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/motion";
+import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
 import type { Metadata } from "next";
@@ -19,11 +20,12 @@ export async function generateMetadata({
 	const t = await getTranslations({ locale, namespace: "seo.mentorProfile" });
 	const mentor = await getMentorBySlug(slug);
 	if (!mentor) return { title: t("notFound") };
-	return {
-		title: t("title", { name: mentor.name }),
-		description:
-			mentor.bio?.slice(0, 160) ?? t("description", { name: mentor.name }),
-	};
+	return careerCornerMetadata(
+		locale,
+		t("title", { name: mentor.name }),
+		mentor.bio?.slice(0, 160) ?? t("description", { name: mentor.name }),
+		`/${slug}`,
+	);
 }
 
 export default async function MentorDetailPage({
@@ -48,7 +50,7 @@ export default async function MentorDetailPage({
 			<div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
 				<FadeIn>
 					<Link
-						href="/careers-corner"
+						href="/careercorner"
 						className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary-500 hover:no-underline!"
 					>
 						<ChevronLeft className="size-4" />

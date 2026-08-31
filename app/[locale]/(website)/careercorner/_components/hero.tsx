@@ -2,7 +2,6 @@
 
 import { isLocalImageUrl } from "@/src/lib/image-url";
 // import { Search } from "lucide-react";
-import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { HeroMentor } from "../_actions";
@@ -41,19 +40,15 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 					const slot = HERO_SLOTS[index];
 
 					return (
-						<motion.div
+						<div
 							key={mentor.slug}
-							className={`absolute ${slot.position}`}
-							animate={{
-								y: [0, -10, 5, 0],
-								rotate: [0, 3, -3, 0],
-							}}
-							transition={{
-								duration: slot.duration,
-								repeat: Number.POSITIVE_INFINITY,
-								ease: "easeInOut",
-								delay: index * 0.3,
-							}}
+							className={`animate-hero-float absolute ${slot.position}`}
+							style={
+								{
+									"--float-duration": `${slot.duration}s`,
+									"--float-delay": `${index * 0.3}s`,
+								} as React.CSSProperties
+							}
 						>
 							<Image
 								src={mentor.image}
@@ -66,7 +61,7 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 									filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",
 								}}
 							/>
-						</motion.div>
+						</div>
 					);
 				})}
 

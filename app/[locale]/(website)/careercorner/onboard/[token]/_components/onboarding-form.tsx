@@ -42,7 +42,7 @@ export function OnboardingForm({
 				onSuccess: ({ data }) => {
 					toast.success("All set! Your profile is live.");
 					if (data?.slug) {
-						router.push(`/careers-corner/${data.slug}` as Route);
+						router.push(`/careercorner/${data.slug}` as Route);
 					}
 				},
 				onError: ({ error }) =>

@@ -4,6 +4,7 @@ import {
 	disconnectMentorGoogleConnection,
 	getMentorGoogleCalendarContext,
 	getMentorGoogleConnectionStatus,
+	mentorGoogleOAuthConfigured,
 	retryMentorGoogleRevocation,
 	startMentorGoogleOAuth,
 } from "@/src/lib/mentor-google-oauth";
@@ -102,6 +103,7 @@ export default async function MentorProfilePage({
 	const callbackOutcome = searchParams
 		? getCallbackOutcome(await searchParams)
 		: null;
+	const oauthConfigured = mentorGoogleOAuthConfigured();
 	const connectionStatus =
 		currentConnection.status === "connected"
 			? "connected"
@@ -121,7 +123,7 @@ export default async function MentorProfilePage({
 			<FadeIn delay={0.05}>
 				<div className="mb-6">
 					<PublicLinkCard
-						url={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/careers-corner/${mentor.slug}`}
+						url={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/careercorner/${mentor.slug}`}
 					/>
 				</div>
 			</FadeIn>
@@ -134,12 +136,17 @@ export default async function MentorProfilePage({
 							connectedAt: currentConnection.connectedAt,
 						}}
 						actions={{
-							connect: connectMentorGoogleCalendar,
-							reconnect: reconnectMentorGoogleCalendar,
+							connect: oauthConfigured
+								? connectMentorGoogleCalendar
+								: undefined,
+							reconnect: oauthConfigured
+								? reconnectMentorGoogleCalendar
+								: undefined,
 							disconnect: disconnectMentorGoogleCalendar,
 							retryRevocation: retryMentorGoogleAccessRemoval,
 						}}
 						callbackOutcome={callbackOutcome}
+						configurationMissing={!oauthConfigured}
 						healthCheckUnavailable={healthCheckUnavailable}
 						revocationPending={currentConnection.revocationPending}
 						canRetryRevocation={currentConnection.canRetryRevocation}

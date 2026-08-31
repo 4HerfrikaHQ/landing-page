@@ -29,6 +29,7 @@ import {
 } from "@/src/lib/mentor-google-oauth-core";
 import {
 	createMentorGoogleOAuthProvider,
+	mentorGoogleOAuthConfigured,
 	requireMentorGoogleOAuthConfig,
 } from "@/src/lib/mentor-google-oauth-provider";
 import { and, eq, isNull, lt } from "drizzle-orm";
@@ -438,3 +439,5 @@ export async function retryMentorGoogleRevocation(): Promise<{
 	}
 	return disconnectMentorGoogleConnection({ status: "revoked" });
 }
+
+export { mentorGoogleOAuthConfigured };

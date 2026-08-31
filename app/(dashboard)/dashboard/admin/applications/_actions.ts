@@ -34,7 +34,7 @@ async function sendApprovalEmail(params: {
 	onboardToken: string;
 }) {
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
-	const url = `${siteUrl}/careers-corner/onboard/${params.onboardToken}`;
+	const url = `${siteUrl}/careercorner/onboard/${params.onboardToken}`;
 	const resend = new Resend(process.env.RESEND_API_KEY);
 	await resend.emails.send({
 		from: FROM,

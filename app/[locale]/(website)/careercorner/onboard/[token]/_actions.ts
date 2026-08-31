@@ -101,7 +101,7 @@ export const completeMentorOnboarding = actionClient
 				);
 		});
 
-		revalidatePath("/careers-corner");
-		revalidatePath(`/careers-corner/${mentor.slug}`);
+		revalidatePath("/careercorner");
+		revalidatePath(`/careercorner/${mentor.slug}`);
 		return { slug: mentor.slug };
 	});
