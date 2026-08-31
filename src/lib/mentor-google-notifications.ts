@@ -10,15 +10,37 @@ type ReconnectNoticeSendResult = {
 	error?: unknown | null;
 };
 
-export async function sendReconnectNoticeOnce(params: {
-	sentAt: Date | null | undefined;
+/**
+ * Send something at most once, without holding a database transaction open
+ * across the send.
+ *
+ * `claim` must be atomic and return false if someone else already claimed it —
+ * a single conditional UPDATE does that on its own, no explicit transaction
+ * needed. If the send then fails, `release` gives the claim back so a later
+ * attempt can retry, which is the compensating action that replaces "roll the
+ * transaction back".
+ */
+export async function sendClaimedNoticeOnce(params: {
+	claim: () => Promise<boolean>;
 	send: () => Promise<ReconnectNoticeSendResult>;
-	markSent: () => Promise<void>;
+	release: () => Promise<void>;
 }): Promise<boolean> {
-	if (params.sentAt) return false;
-	const result = await params.send();
-	if (result.error || !result.data?.id) return false;
-	await params.markSent();
+	if (!(await params.claim())) return false;
+
+	let result: ReconnectNoticeSendResult;
+	try {
+		result = await params.send();
+	} catch {
+		await params.release();
+		return false;
+	}
+
+	// Resend reports delivery problems in the response body, not by throwing.
+	if (result.error || !result.data?.id) {
+		await params.release();
+		return false;
+	}
+
 	return true;
 }
 
@@ -26,26 +48,35 @@ export async function sendMentorGoogleReconnectNoticeOnce(params: {
 	connectionId: string;
 	mentorEmail: string;
 }): Promise<boolean> {
-	return db.transaction(async (tx) => {
-		const [connection] = await tx
-			.select({
-				noticeSentAt: mentorGoogleConnections.reauthorization_notice_sent_at,
-			})
-			.from(mentorGoogleConnections)
-			.where(eq(mentorGoogleConnections.id, params.connectionId))
-			.for("update");
-		if (!connection || connection.noticeSentAt) return false;
+	// Stamped up front so the release below can prove it is clearing its own
+	// claim rather than one a concurrent caller made after this send failed.
+	const claimedAt = new Date();
 
-		return sendReconnectNoticeOnce({
-			sentAt: connection.noticeSentAt,
-			send: async () => {
-				try {
-					const resend = new Resend(process.env.RESEND_API_KEY);
-					return await resend.emails.send({
-						from: FROM,
-						to: params.mentorEmail,
-						subject: "Reconnect Google Calendar to keep accepting bookings",
-						text: `Hi,
+	return sendClaimedNoticeOnce({
+		claim: async () => {
+			const claimed = await db
+				.update(mentorGoogleConnections)
+				.set({
+					reauthorization_notice_sent_at: claimedAt,
+					updated_at: claimedAt,
+				})
+				.where(
+					and(
+						eq(mentorGoogleConnections.id, params.connectionId),
+						isNull(mentorGoogleConnections.reauthorization_notice_sent_at),
+					),
+				)
+				.returning({ id: mentorGoogleConnections.id });
+			return claimed.length > 0;
+		},
+
+		send: async () => {
+			const resend = new Resend(process.env.RESEND_API_KEY);
+			return resend.emails.send({
+				from: FROM,
+				to: params.mentorEmail,
+				subject: "Reconnect Google Calendar to keep accepting bookings",
+				text: `Hi,
 
 Your Google Calendar connection needs to be reconnected. New mentee bookings can still be hosted by 4HerFrika while you reconnect.
 
@@ -53,28 +84,30 @@ Open your mentor profile to reconnect Google Calendar:
 ${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/dashboard/mentor/profile
 
 — 4HerFrika`,
-					});
-				} catch (error) {
-					console.error("[mentor-google-reconnect-notice-failed]", {
-						errorType: error instanceof Error ? error.name : typeof error,
-					});
-					throw error;
-				}
-			},
-			markSent: async () => {
-				await tx
+			});
+		},
+
+		release: async () => {
+			try {
+				await db
 					.update(mentorGoogleConnections)
-					.set({
-						reauthorization_notice_sent_at: new Date(),
-						updated_at: new Date(),
-					})
+					.set({ reauthorization_notice_sent_at: null, updated_at: new Date() })
 					.where(
 						and(
 							eq(mentorGoogleConnections.id, params.connectionId),
-							isNull(mentorGoogleConnections.reauthorization_notice_sent_at),
+							eq(
+								mentorGoogleConnections.reauthorization_notice_sent_at,
+								claimedAt,
+							),
 						),
 					);
-			},
-		}).catch(() => false);
+			} catch (error) {
+				// Losing the release only means the notice won't be retried; it must
+				// never mask the send failure from the caller.
+				console.error("[mentor-google-reconnect-notice-release-failed]", {
+					errorType: error instanceof Error ? error.name : typeof error,
+				});
+			}
+		},
 	});
 }
