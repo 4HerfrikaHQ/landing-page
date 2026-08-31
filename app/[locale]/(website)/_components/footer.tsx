@@ -27,7 +27,7 @@ export const Footer = async () => {
 							</li>
 							<li>
 								<Link
-									href={"/careers-corner" as Route}
+									href={"/careercorner" as Route}
 									className="text-white transition hover:text-white/75"
 								>
 									Become an Ambassador
@@ -35,7 +35,7 @@ export const Footer = async () => {
 							</li>
 							<li>
 								<Link
-									href={"/careers-corner" as Route}
+									href={"/careercorner" as Route}
 									className="text-white transition hover:text-white/75"
 								>
 									Volunteer as a Mentor

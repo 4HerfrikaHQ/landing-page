@@ -87,7 +87,7 @@ export const completeMentorOnboarding = actionClient
 			})
 			.where(eq(mentors.id, mentorId));
 
-		revalidatePath("/careers-corner");
-		revalidatePath(`/careers-corner/${mentor.slug}`);
+		revalidatePath("/careercorner");
+		revalidatePath(`/careercorner/${mentor.slug}`);
 		return { slug: mentor.slug };
 	});

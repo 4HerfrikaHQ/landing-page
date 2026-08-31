@@ -498,6 +498,6 @@ export const createBooking = actionClient
 			console.error("[booking] confirmation_email_failed");
 		}
 
-		revalidatePath(`/careers-corner/${mentor.slug}`);
+		revalidatePath(`/careercorner/${mentor.slug}`);
 		return { bookingId: booking.id, manageUrl };
 	});

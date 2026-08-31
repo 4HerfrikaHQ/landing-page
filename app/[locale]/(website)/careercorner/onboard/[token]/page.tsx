@@ -62,7 +62,7 @@ export default async function OnboardingPage({
 						title="This link can't be used"
 						description={`We couldn't open your onboarding (${result.reason}). Reach out to the 4HerFrika team and we'll send you a fresh link.`}
 						action={
-							<Button href="/careers-corner" variant="outline" size="sm">
+							<Button href="/careercorner" variant="outline" size="sm">
 								Back to mentors
 							</Button>
 						}
@@ -86,7 +86,7 @@ export default async function OnboardingPage({
 						description="You're all set. Mentees can find you in the directory and book a call. You can update your bio, photo, and availability anytime from your dashboard."
 						action={
 							<div className="flex flex-wrap items-center justify-center gap-3">
-								<Button href={`/careers-corner/${mentor.slug}`} size="sm">
+								<Button href={`/careercorner/${mentor.slug}`} size="sm">
 									View public profile
 								</Button>
 								<Button href="/dashboard/mentor" variant="outline" size="sm">

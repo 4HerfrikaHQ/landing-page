@@ -29,7 +29,7 @@ export async function saveAvailability(
 	}
 
 	revalidatePath("/dashboard/admin/mentors");
-	revalidatePath("/en/careers-corner");
-	revalidatePath("/fr/careers-corner");
+	revalidatePath("/en/careercorner");
+	revalidatePath("/fr/careercorner");
 	return {};
 }

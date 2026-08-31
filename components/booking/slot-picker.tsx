@@ -1,6 +1,6 @@
 "use client";
 
-import { listMentorSlots } from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
+import { listMentorSlots } from "@/app/[locale]/(website)/careercorner/[slug]/_actions";
 import { Button } from "@/components/ui/button";
 import {
 	Select,

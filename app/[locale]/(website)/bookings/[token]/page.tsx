@@ -7,7 +7,7 @@ import { CalendarClock, LinkIcon, UserRound, Video } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
-import { getInitialWeekStart } from "../../careers-corner/[slug]/_actions";
+import { getInitialWeekStart } from "../../careercorner/[slug]/_actions";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";
 
@@ -44,7 +44,7 @@ export default async function ManageBookingPage({
 					title="This booking link isn't valid"
 					description="The link may have expired or already been used. Head back to find your mentor and book again."
 					action={
-						<Button variant="outline" size="sm" href="/careers-corner">
+						<Button variant="outline" size="sm" href="/careercorner">
 							Browse mentors
 						</Button>
 					}
@@ -75,7 +75,7 @@ export default async function ManageBookingPage({
 							variant="outline"
 							size="sm"
 							href={
-								mentor ? `/careers-corner/${mentor.slug}` : "/careers-corner"
+								mentor ? `/careercorner/${mentor.slug}` : "/careercorner"
 							}
 						>
 							Book again
