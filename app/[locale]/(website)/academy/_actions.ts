@@ -2,8 +2,8 @@
 
 import { db } from "@/src/db";
 import { academyWaitlistEntries } from "@/src/db/schema/tables";
-import { sendEmail } from "@/src/lib/email";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
+import { Resend } from "resend";
 import { AcademyWaitlistSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
@@ -19,25 +19,24 @@ export const joinAcademyWaitlist = actionClient
 			.returning({ id: academyWaitlistEntries.id });
 		if (!entry)
 			throw new ActionError("You’re already on this academy’s waitlist.");
-		if (
-			!process.env.RESEND_API_KEY &&
-			process.env.EMAIL_TRANSPORT !== "mailpit"
-		) {
+		const resendApiKey = process.env.RESEND_API_KEY;
+		if (!resendApiKey) {
 			console.warn(
 				"[academy-waitlist] RESEND_API_KEY not configured, skipping emails",
 			);
 			return { id: entry.id };
 		}
 
+		const resend = new Resend(resendApiKey);
 		const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 		try {
-			await sendEmail({
+			await resend.emails.send({
 				from: FROM,
 				to: process.env.ADMIN_EMAIL ?? "team@4herfrika.org",
 				subject: `New ${academyNames[parsedInput.academy]} Academy waitlist signup`,
 				text: `${parsedInput.name} (${parsedInput.email}) joined the ${academyNames[parsedInput.academy]} Academy waitlist.\n\nView entries: ${siteUrl}/dashboard/admin/academy-waitlist`,
 			});
-			await sendEmail({
+			await resend.emails.send({
 				from: FROM,
 				to: parsedInput.email,
 				subject: "You’re on the 4Herfrika Academy waitlist",

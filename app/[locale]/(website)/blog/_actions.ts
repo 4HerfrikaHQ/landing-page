@@ -1,8 +1,8 @@
 "use server";
 
-import { createClient, repositoryName } from "@/prismicio";
-import { sendEmail } from "@/src/lib/email";
 import * as prismic from "@prismicio/client";
+import { Resend } from "resend";
+import { createClient, repositoryName } from "@/prismicio";
 import type { Content } from "@prismicio/client";
 
 export async function getBlogPosts() {
@@ -135,7 +135,9 @@ export async function submitStory(
 			return { error: "Failed to create your story draft. Please try again." };
 		}
 
-		await sendEmail({
+		const resend = new Resend(process.env.RESEND_API_KEY);
+
+		await resend.emails.send({
 			from: "4HerFrika <noreply@4herfrika.org>",
 			to: "4herfrika@gmail.com",
 			subject: `New Story Submission: ${title}`,

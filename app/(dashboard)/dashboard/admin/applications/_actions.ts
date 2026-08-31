@@ -11,11 +11,11 @@ import {
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
-import { sendEmail } from "@/src/lib/email";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { type SQL, and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
 import { ApproveApplicationSchema, RejectApplicationSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
@@ -35,7 +35,8 @@ async function sendApprovalEmail(params: {
 }) {
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 	const url = `${siteUrl}/careers-corner/onboard/${params.onboardToken}`;
-	await sendEmail({
+	const resend = new Resend(process.env.RESEND_API_KEY);
+	await resend.emails.send({
 		from: FROM,
 		to: params.to,
 		subject: "Welcome to 4HerFrika — finish setting up your mentor profile",
@@ -55,7 +56,8 @@ async function sendRejectionEmail(params: {
 	name: string;
 	reason?: string;
 }) {
-	await sendEmail({
+	const resend = new Resend(process.env.RESEND_API_KEY);
+	await resend.emails.send({
 		from: FROM,
 		to: params.to,
 		subject: "Update on your 4HerFrika mentor application",

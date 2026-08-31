@@ -2,9 +2,9 @@
 
 import { db } from "@/src/db";
 import { mentorApplications } from "@/src/db/schema/tables/mentor-applications";
-import { sendEmail } from "@/src/lib/email";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { eq } from "drizzle-orm";
+import { Resend } from "resend";
 import { SubmitApplicationSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
@@ -14,8 +14,9 @@ async function notifyAdminOfApplication(params: {
 	name: string;
 	email: string;
 }) {
+	const resend = new Resend(process.env.RESEND_API_KEY);
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
-	await sendEmail({
+	await resend.emails.send({
 		from: FROM,
 		to: process.env.ADMIN_EMAIL ?? "team@4herfrika.org",
 		subject: `New mentor application: ${params.name}`,
@@ -26,7 +27,8 @@ Review: ${siteUrl}/dashboard/admin/applications`,
 }
 
 async function sendApplicantConfirmation(params: { to: string; name: string }) {
-	await sendEmail({
+	const resend = new Resend(process.env.RESEND_API_KEY);
+	await resend.emails.send({
 		from: FROM,
 		to: params.to,
 		subject: "We received your 4HerFrika mentor application",

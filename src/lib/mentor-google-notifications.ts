@@ -1,7 +1,7 @@
 import { db } from "@/src/db";
 import { mentorGoogleConnections } from "@/src/db/schema/tables/mentor-google-connections";
-import { sendEmail } from "@/src/lib/email";
 import { and, eq, isNull } from "drizzle-orm";
+import { Resend } from "resend";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
@@ -40,7 +40,8 @@ export async function sendMentorGoogleReconnectNoticeOnce(params: {
 			sentAt: connection.noticeSentAt,
 			send: async () => {
 				try {
-					return await sendEmail({
+					const resend = new Resend(process.env.RESEND_API_KEY);
+					return await resend.emails.send({
 						from: FROM,
 						to: params.mentorEmail,
 						subject: "Reconnect Google Calendar to keep accepting bookings",

@@ -9,7 +9,6 @@ import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-set
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
-import { sendEmail } from "@/src/lib/email";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
@@ -23,6 +22,7 @@ import {
 import { ActionError } from "@/src/lib/safe-action";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne } from "drizzle-orm";
+import { Resend } from "resend";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
@@ -179,6 +179,7 @@ export async function sendCancellationEmails(params: {
 	reason?: string;
 	icsAttachment: string;
 }) {
+	const resend = new Resend(process.env.RESEND_API_KEY);
 	const recipients = [
 		{
 			email: params.menteeEmail,
@@ -193,7 +194,7 @@ export async function sendCancellationEmails(params: {
 	];
 	await Promise.all(
 		recipients.map((r) =>
-			sendEmail({
+			resend.emails.send({
 				from: FROM,
 				to: r.email,
 				subject: `Cancelled: call on ${fmt(params.startAtUtc, r.tz)}`,

@@ -1,6 +1,6 @@
 "use server";
 
-import { sendEmail } from "@/src/lib/email";
+import { Resend } from "resend";
 import { z } from "zod";
 
 const schema = z.object({ email: z.string().email() });
@@ -41,7 +41,9 @@ export async function subscribeAction(formData: FormData) {
 		console.log(`[subscribe] email saved to sheet: ${email}`);
 	}
 
-	await sendEmail({
+	// Send welcome email via Resend
+	const resend = new Resend(process.env.RESEND_API_KEY);
+	await resend.emails.send({
 		from: "4herfrika <hello@4herfrika.org>",
 		to: email,
 		subject: "Welcome to 4herfrika Newsletter",
