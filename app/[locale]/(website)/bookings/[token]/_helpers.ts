@@ -1,4 +1,4 @@
-import { computeSlots } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
+import { computeSlots } from "@/app/[locale]/(website)/careercorner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import {

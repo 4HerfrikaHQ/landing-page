@@ -84,7 +84,7 @@ export function BecomeAMentorForm() {
 				title="Application received — here's what happens next"
 				description="Our team reviews each application personally and gets back to you within a few days. If it's a match, we'll send you a link to set up your mentor profile and availability."
 				action={
-					<Button href="/careers-corner" variant="outline" size="sm">
+					<Button href="/careercorner" variant="outline" size="sm">
 						Back to mentors
 					</Button>
 				}

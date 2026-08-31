@@ -339,7 +339,7 @@ export const setFeaturedMentor = adminAction
 				.where(eq(schema.featuredMentorState.id, SINGLETON_ID));
 		});
 
-		revalidatePath("/careers-corner");
+		revalidatePath("/careercorner");
 		revalidatePath("/dashboard/admin/mentors");
 		return { ok: true };
 	});

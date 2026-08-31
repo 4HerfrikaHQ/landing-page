@@ -99,7 +99,7 @@ const navLinks = [
 	["About Us", "/about"],
 	["Projects", "/projects"],
 	["Academy", "/academy"],
-	["Career Corner", "/careers-corner"],
+	["Career Corner", "/careercorner"],
 	["Blog", "/blog"],
 	["Contact Us", "/contact-us"],
 ] as const;
@@ -425,10 +425,10 @@ function AcademyFooter() {
 								<Link href="/projects">Projects</Link>
 							</li>
 							<li>
-								<Link href="/careers-corner">Become an Ambassador</Link>
+								<Link href="/careercorner">Become an Ambassador</Link>
 							</li>
 							<li>
-								<Link href="/careers-corner">Volunteer as a Mentor</Link>
+								<Link href="/careercorner">Volunteer as a Mentor</Link>
 							</li>
 							<li>
 								<Link href="/donate">Donate</Link>
