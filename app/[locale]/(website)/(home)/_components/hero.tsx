@@ -59,7 +59,7 @@ export const Hero = async ({
 							<Button
 								href="/about"
 								variant="outline"
-								className="w-36 sm:w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
+								className="px-6 py-3 md:px-8 md:py-4 text-base md:text-xl"
 							>
 								{tc("learnMore")}
 							</Button>
@@ -67,7 +67,7 @@ export const Hero = async ({
 								href={JOIN_FORM_LINK}
 								isExternal
 								variant="solid"
-								className="w-36 sm:w-40 md:w-auto px-8 py-3 md:py-4 text-base md:text-xl"
+								className="px-6 py-3 md:px-8 md:py-4 text-base md:text-xl"
 							>
 								{tc("joinCommunity")}
 							</Button>
