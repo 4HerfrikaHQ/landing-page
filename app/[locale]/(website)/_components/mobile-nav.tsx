@@ -32,6 +32,9 @@ const ACTION_BUTTON_KEYS: Record<string, string> = {
 	"Join Us": "joinUs",
 };
 
+/** `id` must not contain whitespace, and nav names like "Impact Hub" do. */
+const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
 export const MobileNav = () => {
 	const [open, setOpen] = useState(false);
 	const tn = useTranslations("nav");
@@ -88,13 +91,13 @@ export const MobileNav = () => {
 								<div className="space-y-1">
 									<input
 										type="checkbox"
-										id={`mobile-dropdown-${link.name}`}
+										id={`mobile-dropdown-${slug(link.name)}`}
 										className="peer hidden"
 									/>
 									{/* The chevron is a descendant of the label, not a sibling of the
 									    peer input, so the rotate has to be applied from the label. */}
 									<label
-										htmlFor={`mobile-dropdown-${link.name}`}
+										htmlFor={`mobile-dropdown-${slug(link.name)}`}
 										className="flex cursor-pointer items-center justify-between -mx-3 px-3 py-3 text-base text-foreground peer-checked:[&>svg]:rotate-180"
 									>
 										<span>{getNavName(link.name)}</span>

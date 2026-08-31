@@ -41,7 +41,7 @@ export default async function ReportPage({
 	const tc = await getTranslations("common");
 
 	return (
-		<div className="w-screen overflow-hidden">
+		<div className="w-full overflow-x-clip">
 			<Image
 				src={yearReport}
 				alt={t("altYearReport")}
