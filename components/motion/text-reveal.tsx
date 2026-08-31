@@ -1,48 +1,35 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
+import { cn } from "@/utils/cn";
 
 interface TextRevealProps {
-  children: string;
-  className?: string;
-  delay?: number;
+	children: string;
+	className?: string;
+	delay?: number;
 }
 
-export function TextReveal({ children, className, delay = 0 }: TextRevealProps) {
-  const shouldReduce = useReducedMotion();
-  const words = children.split(" ");
+const STAGGER_MS = 60;
 
-  if (shouldReduce) {
-    return <span className={className}>{children}</span>;
-  }
+export function TextReveal({
+	children,
+	className,
+	delay = 0,
+}: TextRevealProps) {
+	const words = children.split(" ");
 
-  return (
-    <motion.span
-      className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      variants={{
-        visible: { transition: { staggerChildren: 0.06, delayChildren: delay } },
-      }}
-      aria-label={children}
-    >
-      {words.map((word, i) => (
-        <motion.span
-          key={`${word}-${i}`}
-          className="inline-block mr-[0.25em]"
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.4, ease: "easeOut" },
-            },
-          }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
+	return (
+		<span className={className}>
+			<span className="sr-only">{children}</span>
+			<span aria-hidden="true">
+				{words.map((word, i) => (
+					<span
+						// biome-ignore lint/suspicious/noArrayIndexKey: the word list is derived from a static string and never reorders; the index is also the stagger position
+						key={`${word}-${i}`}
+						className={cn("animate-enter inline-block", "mr-[0.25em]")}
+						style={{ animationDelay: `${delay * 1000 + i * STAGGER_MS}ms` }}
+					>
+						{word}
+					</span>
+				))}
+			</span>
+		</span>
+	);
 }

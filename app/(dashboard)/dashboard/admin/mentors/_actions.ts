@@ -28,7 +28,12 @@ import {
 	sql,
 } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { type MentorSortValue, SetFeaturedMentorSchema } from "./_schema";
+import { Resend } from "resend";
+import {
+	type MentorSortValue,
+	RequestMentorCalendarConnectionSchema,
+	SetFeaturedMentorSchema,
+} from "./_schema";
 
 interface MentorAdminFilters {
 	query?: string;
@@ -113,10 +118,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
 			.leftJoin(
 				schema.mentorGoogleConnections,
-				eq(
-					schema.mentorGoogleConnections.mentor_id,
-					schema.mentors.id,
-				),
+				eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
 			)
 			.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
 			.where(where)
@@ -340,4 +342,50 @@ export const setFeaturedMentor = adminAction
 		revalidatePath("/careers-corner");
 		revalidatePath("/dashboard/admin/mentors");
 		return { ok: true };
+	});
+
+export const requestMentorCalendarConnection = adminAction
+	.schema(RequestMentorCalendarConnectionSchema)
+	.action(async ({ parsedInput }) => {
+		const [mentor] = await db
+			.select({ email: schema.users.email, name: schema.users.name })
+			.from(schema.mentors)
+			.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
+			.where(eq(schema.mentors.id, parsedInput.mentorId))
+			.limit(1);
+
+		if (!mentor?.email) {
+			throw new ActionError("That mentor has no email on file.");
+		}
+
+		const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
+		const firstName = mentor.name?.split(" ")[0] ?? "there";
+
+		const resend = new Resend(process.env.RESEND_API_KEY);
+		const { error } = await resend.emails.send({
+			from: "4herfrika <hello@4herfrika.org>",
+			to: mentor.email,
+			subject: "Connect your Google Calendar to host mentee calls",
+			text: `Hi ${firstName},
+
+To host mentee calls on your own Google Calendar and Meet, connect your Google
+account from your mentor profile:
+
+${siteUrl}/dashboard/mentor/profile
+
+Sign in with the Google account you want your calls organised from, and approve
+the Calendar permission.
+
+— 4HerFrika`,
+		});
+
+		if (error) {
+			console.error("[mentor-calendar-connect-request-failed]", {
+				mentorId: parsedInput.mentorId,
+				errorType: error.name,
+			});
+			throw new ActionError("The email could not be sent. Try again.");
+		}
+
+		return { sentTo: mentor.email };
 	});

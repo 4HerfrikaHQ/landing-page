@@ -11,7 +11,7 @@ export const ExploreCommunity = async () => {
 	const t = await getTranslations("home");
 
 	return (
-		<StaggerContainer className="px-4 sm:px-6 md:px-7 container mx-auto my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center lg:py-6">
+		<StaggerContainer className="relative px-4 sm:px-6 md:px-7 container mx-auto my-6 lg:my-8 gap-5 flex flex-col lg:flex-row lg:gap-x-11 items-start lg:items-center lg:py-6">
 			<StaggerItem>
 				<Community
 					image={campus.src}

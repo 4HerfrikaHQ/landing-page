@@ -17,6 +17,15 @@ type MentorOAuthConfig = {
 	redirectUri: string;
 };
 
+export function mentorGoogleOAuthConfigured(): boolean {
+	try {
+		requireMentorGoogleOAuthConfig();
+	} catch {
+		return false;
+	}
+	return Boolean(process.env.MENTOR_GOOGLE_TOKEN_ENCRYPTION_KEY);
+}
+
 export function requireMentorGoogleOAuthConfig(): MentorOAuthConfig {
 	const clientId = process.env.MENTOR_GOOGLE_OAUTH_CLIENT_ID;
 	const clientSecret = process.env.MENTOR_GOOGLE_OAUTH_CLIENT_SECRET;
