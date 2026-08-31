@@ -125,20 +125,6 @@ a:hover {
 		linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 }
 
-/* ── Entrances ──────────────────────────────────────────────────────────
- *
- * All entrance animation on the site is CSS keyframes. JS's only job is to
- * flip `data-revealed` when an element reaches the viewport (see
- * components/motion/use-reveal.ts); the browser runs the animation itself,
- * off the main thread, instead of React setting styles frame by frame.
- *
- * `.animate-enter` is the time-based variant, for content that is on screen at
- * load. It runs off the first paint with no JS involved at all, which is what
- * keeps the hero from sitting blank while the bundle downloads.
- *
- * The `prefers-reduced-motion` block further down collapses every duration
- * here, which lands each element on its final state immediately. */
-
 @keyframes enter-up {
 	from {
 		opacity: 0;
@@ -198,8 +184,6 @@ a:hover {
 	animation: enter-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Scroll parallax. Offsets come from the component as custom properties so
- * the travel distance stays a prop rather than a magic number in here. */
 @keyframes parallax-drift {
 	from {
 		transform: translateY(var(--parallax-from, -30px));
@@ -218,9 +202,6 @@ a:hover {
 	}
 }
 
-/* Reading-progress bar, driven by the document scroller rather than a JS
- * scroll handler. Unsupported browsers keep the element's base `scale-x-0`,
- * so the bar is simply absent rather than broken. */
 @keyframes scroll-progress {
 	from {
 		transform: scaleX(0);
@@ -239,11 +220,6 @@ a:hover {
 	}
 }
 
-/* Idle float for the careers-corner hero avatars. Was an infinite
- * `repeat: Infinity` motion animation on six elements, i.e. JS touching the
- * DOM every frame for as long as the page is open. A CSS keyframe loop is the
- * thing browsers already do for free, on the compositor. Duration and delay
- * come from each slot as custom properties. */
 @keyframes hero-float {
 	0% {
 		transform: translateY(0) rotate(0deg);
@@ -288,9 +264,6 @@ a:hover {
 		animation-name: enter-scale;
 	}
 
-	/* Cascade for grouped items. Siblings usually cross the viewport edge
-	 * together, so without this a grid lands as one slab. Explicit delays
-	 * rather than a JS orchestrator: the container needs no runtime at all. */
 	[data-stagger] > *:nth-child(2) {
 		animation-delay: 60ms;
 	}
@@ -306,8 +279,6 @@ a:hover {
 	[data-stagger] > *:nth-child(6) {
 		animation-delay: 300ms;
 	}
-	/* Past six the cascade stops growing — a long list should not make the
-	 * last item wait a second and a half. */
 	[data-stagger] > *:nth-child(n + 7) {
 		animation-delay: 360ms;
 	}

@@ -136,8 +136,6 @@ export default async function MentorProfilePage({
 							connectedAt: currentConnection.connectedAt,
 						}}
 						actions={{
-							// Withheld when unconfigured: the component disables the button
-							// rather than offering an action that always fails.
 							connect: oauthConfigured
 								? connectMentorGoogleCalendar
 								: undefined,

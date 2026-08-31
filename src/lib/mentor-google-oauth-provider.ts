@@ -17,22 +17,12 @@ type MentorOAuthConfig = {
 	redirectUri: string;
 };
 
-/**
- * Whether mentor Google OAuth can run at all.
- *
- * `requireMentorGoogleOAuthConfig` throws on missing env, which a server action
- * surfaces to the client as a generic failure — indistinguishable from a
- * network blip, so a mentor retries a button that can never work. This lets the
- * UI say the actual reason instead.
- */
 export function mentorGoogleOAuthConfigured(): boolean {
 	try {
 		requireMentorGoogleOAuthConfig();
 	} catch {
 		return false;
 	}
-	// Tokens are encrypted at rest with this key; without it a connection can be
-	// authorised and then fail to persist.
 	return Boolean(process.env.MENTOR_GOOGLE_TOKEN_ENCRYPTION_KEY);
 }
 

@@ -8,19 +8,10 @@ export type RevealDirection = "up" | "down" | "left" | "right" | "scale";
 
 interface FadeInProps extends HTMLAttributes<HTMLDivElement> {
 	direction?: RevealDirection;
-	/** Seconds to hold before this element starts. */
 	delay?: number;
 	children: React.ReactNode;
 }
 
-/**
- * Entrance reveal.
- *
- * The animation is CSS keyframes (see `globals.css`); the only thing JS does
- * is flip `data-revealed` when the element reaches the viewport. That keeps
- * the per-frame work on the compositor instead of in React, and drops the
- * `motion` runtime from every page that only ever used it to fade things in.
- */
 export function FadeIn({
 	direction = "up",
 	delay = 0,

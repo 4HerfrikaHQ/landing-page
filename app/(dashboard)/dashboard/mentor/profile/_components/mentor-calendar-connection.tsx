@@ -66,7 +66,6 @@ interface MentorCalendarConnectionProps {
 	connection: MentorCalendarConnection;
 	actions?: MentorCalendarConnectionActions;
 	callbackOutcome?: MentorCalendarCallbackOutcome | null;
-	/** Server-side env for mentor Google OAuth is missing; connecting cannot work. */
 	configurationMissing?: boolean;
 	healthCheckUnavailable?: boolean;
 	revocationPending?: boolean;

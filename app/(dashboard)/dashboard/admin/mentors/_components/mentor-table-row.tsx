@@ -14,7 +14,8 @@ import {
 	CalendarSync,
 	CalendarX2,
 } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import { toast } from "sonner";
 import { requestMentorCalendarConnection } from "../_actions";
 import { AvatarUpload } from "./avatar-upload";
@@ -82,21 +83,17 @@ function calendarStatus(mentor: Mentor) {
 
 export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 	const [editIsOpen, setEditIsOpen] = useState(false);
-	const [isSending, startSending] = useTransition();
 	const googleCalendar = calendarStatus(mentor);
 	const CalendarIcon = googleCalendar.icon;
 	const isConnected = googleCalendar.label === "Connected";
 	const firstName = mentor.name.split(" ")[0];
 
-	// An admin can't complete the OAuth on a mentor's behalf — Google's consent
-	// screen needs the mentor's own account — so the action here is a nudge.
-	function sendConnectRequest() {
-		startSending(async () => {
-			const result = await requestMentorCalendarConnection(mentor.id);
-			if (result.error) toast.error(result.error);
-			else toast.success(`Connection link sent to ${result.sentTo}`);
-		});
-	}
+	const requestConnection = useAction(requestMentorCalendarConnection, {
+		onSuccess: ({ data }) =>
+			toast.success(`Connection link sent to ${data?.sentTo}`),
+		onError: ({ error }) =>
+			toast.error(error.serverError ?? "Failed to send the connection link"),
+	});
 
 	return (
 		<>
@@ -147,8 +144,10 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 								) : (
 									<button
 										type="button"
-										disabled={isSending}
-										onClick={sendConnectRequest}
+										disabled={requestConnection.isPending}
+										onClick={() =>
+											requestConnection.execute({ mentorId: mentor.id })
+										}
 										aria-label={`Google Calendar: ${googleCalendar.label}. Email ${firstName} a connection link.`}
 										className={cn(
 											"inline-flex size-8 cursor-pointer items-center justify-center rounded-full bg-muted/70 transition-colors hover:bg-muted disabled:opacity-50",

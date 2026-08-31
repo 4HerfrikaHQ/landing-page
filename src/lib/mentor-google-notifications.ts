@@ -10,16 +10,6 @@ type ReconnectNoticeSendResult = {
 	error?: unknown | null;
 };
 
-/**
- * Send something at most once, without holding a database transaction open
- * across the send.
- *
- * `claim` must be atomic and return false if someone else already claimed it —
- * a single conditional UPDATE does that on its own, no explicit transaction
- * needed. If the send then fails, `release` gives the claim back so a later
- * attempt can retry, which is the compensating action that replaces "roll the
- * transaction back".
- */
 export async function sendClaimedNoticeOnce(params: {
 	claim: () => Promise<boolean>;
 	send: () => Promise<ReconnectNoticeSendResult>;
@@ -35,7 +25,6 @@ export async function sendClaimedNoticeOnce(params: {
 		return false;
 	}
 
-	// Resend reports delivery problems in the response body, not by throwing.
 	if (result.error || !result.data?.id) {
 		await params.release();
 		return false;
@@ -48,8 +37,6 @@ export async function sendMentorGoogleReconnectNoticeOnce(params: {
 	connectionId: string;
 	mentorEmail: string;
 }): Promise<boolean> {
-	// Stamped up front so the release below can prove it is clearing its own
-	// claim rather than one a concurrent caller made after this send failed.
 	const claimedAt = new Date();
 
 	return sendClaimedNoticeOnce({
@@ -102,8 +89,6 @@ ${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/dashboard/mentor/
 						),
 					);
 			} catch (error) {
-				// Losing the release only means the notice won't be retried; it must
-				// never mask the send failure from the caller.
 				console.error("[mentor-google-reconnect-notice-release-failed]", {
 					errorType: error instanceof Error ? error.name : typeof error,
 				});

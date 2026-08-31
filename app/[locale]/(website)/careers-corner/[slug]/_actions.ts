@@ -160,13 +160,6 @@ export const listMentorSlots = actionClient
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 
-		// Deliberately does NOT check the calendar host. Listing slots is a read
-		// of the mentor's availability; it does not touch Google. Gating it on a
-		// working calendar connection meant one expired org refresh token turned
-		// every mentor's page into "Booking is temporarily unavailable", even
-		// with availability saved and visible elsewhere on the same page.
-		// `createBooking` still checks, so a broken calendar fails at the point
-		// it actually matters, with a message about that specific booking.
 		const [settingsRow] = await db
 			.select()
 			.from(mentorBookingSettings)

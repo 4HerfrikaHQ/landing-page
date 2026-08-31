@@ -32,7 +32,6 @@ const ACTION_BUTTON_KEYS: Record<string, string> = {
 	"Join Us": "joinUs",
 };
 
-/** `id` must not contain whitespace, and nav names like "Impact Hub" do. */
 const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 export const MobileNav = () => {
@@ -94,8 +93,6 @@ export const MobileNav = () => {
 										id={`mobile-dropdown-${slug(link.name)}`}
 										className="peer hidden"
 									/>
-									{/* The chevron is a descendant of the label, not a sibling of the
-									    peer input, so the rotate has to be applied from the label. */}
 									<label
 										htmlFor={`mobile-dropdown-${slug(link.name)}`}
 										className="flex cursor-pointer items-center justify-between -mx-3 px-3 py-3 text-base text-foreground peer-checked:[&>svg]:rotate-180"
@@ -104,11 +101,6 @@ export const MobileNav = () => {
 										<ChevronDown className="h-4 w-4 transition-transform duration-300" />
 									</label>
 
-									{/* Sized from the item count rather than a fixed cap: a row is
-									    py-3 + text-base = 3rem, and 4.5rem each leaves room for a
-									    label that wraps to two lines. A hard max-h-40 clipped the
-									    fourth item, and an over-generous one makes the open/close
-									    transition cover mostly empty space, which reads as a snap. */}
 									<div
 										className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-(--dropdown-max-h)"
 										style={

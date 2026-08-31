@@ -41,9 +41,6 @@ export const Navbar = async () => {
 	};
 
 	return (
-		// `position: sticky` is clipped by the nearest block-container ancestor, so
-		// the header must be a direct child of the page flow — a wrapper <div> here
-		// would pin it to the wrapper's own height (i.e. not stick at all).
 		<>
 			<YearOneReport />
 			<header
