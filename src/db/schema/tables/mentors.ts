@@ -1,5 +1,7 @@
+import { sql } from "drizzle-orm";
 import {
 	boolean,
+	check,
 	index,
 	pgTable,
 	text,
@@ -29,7 +31,13 @@ export const mentors = pgTable(
 			.notNull()
 			.defaultNow(),
 	},
-	(t) => [index("mentors_user_id_idx").on(t.user_id)],
+	(t) => [
+		index("mentors_user_id_idx").on(t.user_id),
+		check(
+			"mentors_slug_format_check",
+			sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.slug} <> 'apply'`,
+		),
+	],
 );
 
 export type DbMentor = typeof mentors.$inferSelect;

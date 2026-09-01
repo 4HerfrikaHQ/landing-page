@@ -20,6 +20,7 @@ export function ProfileForm({
 		name: dbMentor.name,
 		position: dbMentor.position ?? "",
 		nickname: dbMentor.nickname ?? "",
+		slug: dbMentor.slug,
 		bio: dbMentor.bio ?? "",
 		linkedin_url: dbMentor.linkedin_url ?? "",
 	});
@@ -37,6 +38,7 @@ export function ProfileForm({
 			name: dbMentor.name,
 			position: dbMentor.position ?? "",
 			nickname: dbMentor.nickname ?? "",
+			slug: dbMentor.slug,
 			bio: dbMentor.bio ?? "",
 			linkedin_url: dbMentor.linkedin_url ?? "",
 		});
@@ -174,6 +176,21 @@ export function ProfileForm({
 									setFields((f) => ({ ...f, nickname: e.target.value }))
 								}
 							/>
+							<div className="sm:col-span-2">
+								<Field
+									label="Profile link"
+									name="slug"
+									required
+									value={fields.slug}
+									onChange={(e) =>
+										setFields((f) => ({ ...f, slug: e.target.value }))
+									}
+								/>
+								<p className="mt-1.5 text-xs text-amber-700">
+									Changing this immediately breaks any profile links you have
+									previously shared. Use only letters, numbers, and hyphens.
+								</p>
+							</div>
 							<Field
 								label="LinkedIn URL"
 								name="linkedin_url"

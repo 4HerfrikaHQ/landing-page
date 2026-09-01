@@ -8,6 +8,7 @@ import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { MinLeadHoursSchema } from "@/src/lib/booking-rules";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import { and, countDistinct, eq, gte, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -37,26 +38,39 @@ export async function updateMyProfile(
 	const position = ((formData.get("position") as string) || "").trim();
 	if (!position) return { error: "Position is required." };
 
+	const parsedSlug = parseMentorSlug(formData.get("slug"));
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
-	await db.transaction(async (tx) => {
-		await tx
-			.update(schema.mentors)
-			.set({
-				position,
-				bio: (formData.get("bio") as string) || undefined,
-				nickname: (formData.get("nickname") as string) || undefined,
-				linkedin_url: (formData.get("linkedin_url") as string) || undefined,
-			})
-			.where(eq(schema.mentors.id, mentor.id));
+	try {
+		await db.transaction(async (tx) => {
+			await tx
+				.update(schema.mentors)
+				.set({
+					position,
+					bio: (formData.get("bio") as string) || undefined,
+					nickname: (formData.get("nickname") as string) || undefined,
+					slug: parsedSlug.slug,
+					linkedin_url: (formData.get("linkedin_url") as string) || undefined,
+				})
+				.where(eq(schema.mentors.id, mentor.id));
 
-		await tx
-			.update(schema.users)
-			.set({ name })
-			.where(eq(schema.users.id, mentor.user_id));
-	});
+			await tx
+				.update(schema.users)
+				.set({ name })
+				.where(eq(schema.users.id, mentor.user_id));
+		});
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
+		}
+		throw error;
+	}
 
 	revalidatePath("/dashboard/mentor");
+	revalidatePath(`/careercorner/${mentor.slug}`);
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
 	return {};
 }
 

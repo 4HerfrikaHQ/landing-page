@@ -10,6 +10,7 @@ import {
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
+import { parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
 	ActionError,
 	adminAction,
@@ -297,6 +298,13 @@ export async function toggleMentorActive(
 
 		if (!mentor) {
 			return { error: "Mentor not found" };
+		}
+
+		const parsedSlug = parseMentorSlug(mentor.slug);
+		if (!parsedSlug.success) {
+			return {
+				error: `Cannot activate mentor. ${parsedSlug.error}`,
+			};
 		}
 
 		// name is guaranteed (users.name is NOT NULL); only mentor-owned fields
