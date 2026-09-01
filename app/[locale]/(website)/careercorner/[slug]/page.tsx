@@ -1,14 +1,22 @@
 import { FadeIn } from "@/components/motion";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
+import {
+	absoluteSiteUrl,
+	localizedCareerCornerPath,
+} from "@/src/lib/careercorner-seo";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getInitialWeekStart, getMentorBySlug } from "./_actions";
+import { notFound, permanentRedirect } from "next/navigation";
+import {
+	getInitialWeekStart,
+	getMentorByPreviousSlug,
+	getMentorBySlug,
+} from "./_actions";
 import { BookingSection } from "./_components/booking-section";
 
 export async function generateMetadata({
@@ -20,10 +28,11 @@ export async function generateMetadata({
 	const t = await getTranslations({ locale, namespace: "seo.mentorProfile" });
 	const mentor = await getMentorBySlug(slug);
 	if (!mentor) return { title: t("notFound") };
+	const displayName = mentor.nickname || mentor.name;
 	return careerCornerMetadata(
 		locale,
-		t("title", { name: mentor.name }),
-		mentor.bio?.slice(0, 160) ?? t("description", { name: mentor.name }),
+		t("title", { name: displayName }),
+		mentor.bio?.slice(0, 160) ?? t("description", { name: displayName }),
 		`/${slug}`,
 	);
 }
@@ -36,17 +45,69 @@ export default async function MentorDetailPage({
 	const { locale, slug } = await params;
 	setRequestLocale(locale as Locale);
 
-	const [mentor, tc] = await Promise.all([
-		getMentorBySlug(slug),
-		getTranslations("common"),
-	]);
-	if (!mentor) notFound();
+	const mentor = await getMentorBySlug(slug);
+	if (!mentor) {
+		const movedMentor = await getMentorByPreviousSlug(slug);
+		if (!movedMentor) notFound();
+		const localePrefix = locale === "en" ? "" : `/${locale}`;
+		permanentRedirect(
+			`${localePrefix}/careercorner/${movedMentor.slug}` as Route,
+		);
+	}
+	const tc = await getTranslations("common");
 
 	const initialWeekStart = await getInitialWeekStart(mentor.slug);
 	const displayName = mentor.nickname || mentor.name;
+	const pageUrl = absoluteSiteUrl(
+		localizedCareerCornerPath(locale, `/${mentor.slug}`),
+	);
+	const structuredData = {
+		"@context": "https://schema.org",
+		"@type": "ProfilePage",
+		"@id": `${pageUrl}#profile`,
+		url: pageUrl,
+		name: `Book a call with ${displayName} — 4Herfrika`,
+		isPartOf: {
+			"@type": "WebSite",
+			name: "4Herfrika",
+			url: absoluteSiteUrl("/"),
+		},
+		mainEntity: {
+			"@type": "Person",
+			name: displayName,
+			jobTitle: mentor.position || undefined,
+			description: mentor.bio || undefined,
+			image: mentor.image ? absoluteSiteUrl(mentor.image) : undefined,
+			url: pageUrl,
+			sameAs: mentor.linkedin_url ? [mentor.linkedin_url] : undefined,
+		},
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Career Corner",
+					item: absoluteSiteUrl(localizedCareerCornerPath(locale)),
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: displayName,
+					item: pageUrl,
+				},
+			],
+		},
+	};
 
 	return (
 		<main className="bg-muted">
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+				}}
+			/>
 			<div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
 				<FadeIn>
 					<Link

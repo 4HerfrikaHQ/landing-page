@@ -16,12 +16,12 @@ import { OnboardingAvatarUpload } from "./onboarding-avatar-upload";
 export function OnboardingForm({
 	token,
 	defaultBio,
-	defaultNickname,
+	defaultDisplayName,
 	defaultImage,
 }: {
 	token: string;
 	defaultBio: string;
-	defaultNickname: string;
+	defaultDisplayName: string;
 	defaultImage: string;
 }) {
 	const router = useRouter();
@@ -34,7 +34,7 @@ export function OnboardingForm({
 				defaultValues: {
 					token,
 					bio: defaultBio,
-					nickname: defaultNickname,
+					nickname: defaultDisplayName,
 					image: defaultImage,
 				},
 			},
@@ -81,7 +81,7 @@ export function OnboardingForm({
 			</div>
 
 			<div className="space-y-1.5">
-				<Label>Nickname (optional)</Label>
+				<Label>Display Name (optional)</Label>
 				<Input {...form.register("nickname")} />
 			</div>
 

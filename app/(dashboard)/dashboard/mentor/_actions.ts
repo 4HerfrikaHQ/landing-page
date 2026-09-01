@@ -8,6 +8,7 @@ import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { MinLeadHoursSchema } from "@/src/lib/booking-rules";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import { and, countDistinct, eq, gte, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -58,6 +59,43 @@ export async function updateMyProfile(
 
 	revalidatePath("/dashboard/mentor");
 	return {};
+}
+
+export async function updateMySlug(slug: string): Promise<{
+	slug?: string;
+	error?: string;
+}> {
+	const mentor = await getMentorProfile();
+	if (!mentor) return { error: "Mentor profile not found." };
+
+	const parsedSlug = parseMentorSlug(slug);
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+	if (parsedSlug.slug === mentor.slug) return { slug: mentor.slug };
+	const recentlyUsed = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.previous_slug, parsedSlug.slug),
+			ne(schema.mentors.id, mentor.id),
+		),
+		columns: { id: true },
+	});
+	if (recentlyUsed) return { error: "This profile link is already taken." };
+
+	try {
+		await db
+			.update(schema.mentors)
+			.set({ slug: parsedSlug.slug, previous_slug: mentor.slug })
+			.where(eq(schema.mentors.id, mentor.id));
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
+		}
+		throw error;
+	}
+
+	revalidatePath("/dashboard/mentor/profile");
+	revalidatePath(`/careercorner/${mentor.slug}`);
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
+	return { slug: parsedSlug.slug };
 }
 
 export async function getMyBookingNotice(): Promise<{ minLeadHours: number }> {

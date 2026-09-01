@@ -1,8 +1,15 @@
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { contentType, generateOGImage, size } from "../_lib/og";
+import { getHeroMentors } from "./_actions";
+import {
+	contentType,
+	generateCareerCornerOGImage,
+	size,
+} from "../_lib/og";
 
 export { size, contentType };
+
+export const dynamic = "force-dynamic";
 
 export default async function Image({
 	params,
@@ -11,5 +18,10 @@ export default async function Image({
 }) {
 	const { locale } = await params;
 	const t = await getTranslations({ locale, namespace: "seo.careers" });
-	return generateOGImage(t("ogTitle"), t("ogSubtitle"));
+	const mentors = await getHeroMentors();
+	return generateCareerCornerOGImage({
+		title: t("ogTitle"),
+		subtitle: t("ogSubtitle"),
+		mentors,
+	});
 }

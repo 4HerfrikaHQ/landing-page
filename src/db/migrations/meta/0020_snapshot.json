@@ -1,6 +1,6 @@
 {
-  "id": "82bba4e6-9a15-4f19-bfae-513b9537bda1",
-  "prevId": "6b724eab-5b95-4d60-9c5d-f84cacf07b1a",
+  "id": "2b2109ba-03aa-4a92-8f8e-df92251defad",
+  "prevId": "82bba4e6-9a15-4f19-bfae-513b9537bda1",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1283,6 +1283,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "previous_slug": {
+          "name": "previous_slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "active": {
           "name": "active",
           "type": "boolean",
@@ -1338,10 +1344,26 @@
           "columns": [
             "slug"
           ]
+        },
+        "mentors_previous_slug_unique": {
+          "name": "mentors_previous_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "previous_slug"
+          ]
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "mentors_slug_format_check": {
+          "name": "mentors_slug_format_check",
+          "value": "\"mentors\".\"slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and \"mentors\".\"slug\" not in ('apply', 'onboard')"
+        },
+        "mentors_previous_slug_format_check": {
+          "name": "mentors_previous_slug_format_check",
+          "value": "\"mentors\".\"previous_slug\" is null or (\"mentors\".\"previous_slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and \"mentors\".\"previous_slug\" not in ('apply', 'onboard'))"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.users": {
