@@ -213,6 +213,71 @@ describe("mentor-scoped Google Calendar", () => {
 		).rejects.toMatchObject({ code: "attempt_key_conflict" });
 	});
 
+	test("replaces an owned orphaned event without notifying attendees", async () => {
+		const attemptKey = "replacement-attempt";
+		const calls: { url: string; method?: string }[] = [];
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (input, init) => {
+				calls.push({ url: String(input), method: init?.method });
+				if (init?.method === "DELETE") return new Response(null, { status: 204 });
+				if (init?.method === "POST")
+					return response(
+						event(
+							attemptKey,
+							mentorEmail,
+							deterministicCalendarEventId(attemptKey),
+						),
+					);
+				return response(event("4hf-stale-attempt"));
+			},
+		});
+
+		await expect(
+			client.createMentorCalendarEvent({
+				...createParams(attemptKey),
+				allowOrphanedEventOverride: true,
+			}),
+		).resolves.toMatchObject({
+			eventId: deterministicCalendarEventId(attemptKey),
+		});
+		expect(calls).toEqual([
+			{
+				url: expect.stringContaining(
+					`/calendars/primary/events/${deterministicCalendarEventId(attemptKey)}`,
+				),
+				method: undefined,
+			},
+			{
+				url: expect.stringContaining("sendUpdates=none"),
+				method: "DELETE",
+			},
+			{
+				url: expect.stringContaining("conferenceDataVersion=1"),
+				method: "POST",
+			},
+		]);
+	});
+
+	test("does not replace an orphaned event owned by another Google account", async () => {
+		let deletes = 0;
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (_input, init) => {
+				if (init?.method === "DELETE") deletes += 1;
+				return response(event("4hf-stale-attempt", "wrong@example.com"));
+			},
+		});
+
+		await expect(
+			client.createMentorCalendarEvent({
+				...createParams("replacement-attempt"),
+				allowOrphanedEventOverride: true,
+			}),
+		).rejects.toMatchObject({ code: "identity_mismatch" });
+		expect(deletes).toBe(0);
+	});
+
 	test("refuses to delete an event without its attempt marker", async () => {
 		let deletes = 0;
 		const client = createMentorCalendarClient({

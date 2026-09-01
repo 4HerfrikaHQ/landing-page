@@ -10,7 +10,6 @@ import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
-	isMentorCalendarError,
 	deleteMentorCalendarEvent,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
@@ -39,13 +38,6 @@ function calendarActionError(error: unknown): ActionError {
 			error.code === "connection_unavailable"
 				? "Booking is temporarily unavailable. Please try again later."
 				: "The calendar could not complete the requested operation.",
-		);
-	}
-	if (isMentorCalendarError(error)) {
-		const details =
-			error.cause && typeof error.cause === "object" ? error.cause : undefined;
-		return new ActionError(
-			`${mentorCalendarActionMessage(error)} [debug: ${JSON.stringify({ name: error.name, code: error.code, message: error.message, details })}]`,
 		);
 	}
 	return new ActionError(mentorCalendarActionMessage(error));
@@ -477,6 +469,7 @@ export const createBooking = actionClient
 				startAtUtc: startAt,
 				endAtUtc: endAt,
 				attemptKey,
+				allowOrphanedEventOverride: hosting.mode === "mentor_google",
 				...(hosting.mode === "mentor_google"
 					? {
 							connection: hosting.connection,

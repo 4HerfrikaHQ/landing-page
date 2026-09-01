@@ -88,6 +88,8 @@ export type MentorCalendarEventParams = {
 	startAtUtc: Date;
 	endAtUtc: Date;
 	attemptKey: string;
+	/** Set only after the booking action confirms the slot has no active DB booking. */
+	allowOrphanedEventOverride?: boolean;
 	connection?: MentorCalendarConnection;
 	accessToken?: string;
 };
@@ -161,7 +163,7 @@ async function json(response: Response): Promise<Record<string, unknown>> {
 }
 
 async function logCalendarApiFailure(input: {
-	operation: "read_event" | "create_event";
+	operation: "read_event" | "create_event" | "delete_orphaned_event";
 	mentorId: string;
 	connectionId: string;
 	attemptKey?: string;
@@ -559,15 +561,54 @@ export function createMentorCalendarClient(
 		const eventId = deterministicCalendarEventId(params.attemptKey);
 		const existing = await readEvent(connection, token, eventId, fetchImpl);
 		if (existing) {
-			if (
-				existing.extendedProperties?.private?.[ATTEMPT_PROPERTY] !==
-				params.attemptKey
-			)
-				throw new MentorCalendarError(
-					"attempt_key_conflict",
-					"Google Calendar returned an event for a different booking attempt.",
+			const existingAttempt =
+				existing.extendedProperties?.private?.[ATTEMPT_PROPERTY];
+			if (existingAttempt !== params.attemptKey) {
+				if (
+					!params.allowOrphanedEventOverride ||
+					!existingAttempt?.startsWith("4hf-")
+				)
+					throw new MentorCalendarError(
+						"attempt_key_conflict",
+						"Google Calendar returned an event for a different booking attempt.",
+					);
+				eventOwnerMatches(existing, connection);
+				const deleteResponse = await fetchImpl(
+					`${calendarUrl(eventId)}?sendUpdates=none`,
+					{
+						method: "DELETE",
+						headers: { authorization: `Bearer ${token}` },
+					},
 				);
-			return usableEvent(existing, connection);
+				if (deleteResponse.status === 401) {
+					await connection.markReauthRequired().catch(() => undefined);
+					await notifyBrokenConnection(connection);
+					throw new MentorCalendarError("reauth_required", actionMessage(null));
+				}
+				if (!deleteResponse.ok && deleteResponse.status !== 404) {
+					const details = await logCalendarApiFailure({
+						operation: "delete_orphaned_event",
+						mentorId: connection.mentorId,
+						connectionId: connection.connectionId,
+						attemptKey: params.attemptKey,
+						response: deleteResponse,
+					});
+					throw new MentorCalendarError(
+						"remote_error",
+						"Google Calendar could not complete the requested operation.",
+						{ cause: details },
+					);
+				}
+				console.warn("[mentor-google-calendar-orphaned-event-replaced]", {
+					mentorId: connection.mentorId,
+					connectionId: connection.connectionId,
+					eventId,
+					previousAttemptKey: existingAttempt,
+					attemptKey: params.attemptKey,
+				});
+			} else {
+				return usableEvent(existing, connection);
+			}
 		}
 
 		let response: Response;
