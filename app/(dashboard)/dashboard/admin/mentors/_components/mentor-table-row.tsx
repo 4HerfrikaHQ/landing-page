@@ -24,6 +24,7 @@ import { ToggleActiveButton } from "./toggle-active-button";
 
 type Mentor = {
 	id: string;
+	slug: string;
 	name: string;
 	position: string | null;
 	image: string | null;

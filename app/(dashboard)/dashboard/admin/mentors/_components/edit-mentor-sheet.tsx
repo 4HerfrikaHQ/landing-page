@@ -12,15 +12,22 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { getAvailability } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
-import { DownloadIcon, Loader2Icon } from "lucide-react";
+import {
+	CheckIcon,
+	CopyIcon,
+	DownloadIcon,
+	Loader2Icon,
+} from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 import { updateMentor } from "../_actions";
 
 type Tab = "details" | "availability";
 
 type Mentor = {
 	id: string;
+	slug: string;
 	name: string;
 	image: string | null;
 	position: string | null;
@@ -42,6 +49,7 @@ export function EditMentorSheet({
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 	const [isDownloading, setIsDownloading] = useState(false);
+	const [linkCopied, setLinkCopied] = useState(false);
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
 	>(null);
@@ -58,11 +66,25 @@ export function EditMentorSheet({
 			// Reset state
 			setTab("details");
 			setError(null);
+			setLinkCopied(false);
 			setAvailabilitySlots(null);
 		}
 
 		return _onOpenChange(open);
 	};
+
+	async function handleCopyMentorLink() {
+		const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/careercorner/${mentor.slug}`;
+
+		try {
+			await navigator.clipboard.writeText(url);
+			setLinkCopied(true);
+			toast.success("Link copied");
+			setTimeout(() => setLinkCopied(false), 2000);
+		} catch {
+			toast.error("Couldn't copy — copy it manually.");
+		}
+	}
 
 	function handleSubmit(formData: FormData) {
 		setError(null);
@@ -126,9 +148,25 @@ export function EditMentorSheet({
 				showCloseButton={false}
 			>
 				<SheetHeader className="px-6 pt-6 pb-4 border-b">
-					<SheetTitle className="text-base font-semibold text-gray-900">
-						Edit mentor
-					</SheetTitle>
+					<div className="flex items-center justify-between gap-4">
+						<SheetTitle className="text-base font-semibold text-gray-900">
+							Edit mentor
+						</SheetTitle>
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							className="gap-1.5"
+							onClick={handleCopyMentorLink}
+						>
+							{linkCopied ? (
+								<CheckIcon className="size-3.5" />
+							) : (
+								<CopyIcon className="size-3.5" />
+							)}
+							{linkCopied ? "Copied" : "Copy mentor link"}
+						</Button>
+					</div>
 
 					{/* Tab toggle */}
 					<div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1 mt-2 w-fit">
