@@ -139,7 +139,7 @@ export async function getMentorOverview() {
 	const weekAhead = new Date(now);
 	weekAhead.setDate(weekAhead.getDate() + 7);
 
-	const [countRows, menteeRows, recent] = await Promise.all([
+	const loadOverviewCounts = () =>
 		db
 			.select({
 				upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now.toISOString()}::timestamptz and ${bookings.start_at} < ${weekAhead.toISOString()}::timestamptz and ${bookings.status} = 'confirmed')::int`,
@@ -147,11 +147,13 @@ export async function getMentorOverview() {
 				total: sql<number>`count(*)::int`,
 			})
 			.from(bookings)
-			.where(eq(bookings.mentor_id, mentor.id)),
+			.where(eq(bookings.mentor_id, mentor.id));
+	const loadOverviewMenteeCount = () =>
 		db
 			.select({ mentees: countDistinct(bookings.mentee_email) })
 			.from(bookings)
-			.where(eq(bookings.mentor_id, mentor.id)),
+			.where(eq(bookings.mentor_id, mentor.id));
+	const loadRecentBookings = () =>
 		db
 			.select({
 				id: bookings.id,
@@ -170,7 +172,12 @@ export async function getMentorOverview() {
 				),
 			)
 			.orderBy(bookings.start_at)
-			.limit(5),
+			.limit(5);
+
+	const [countRows, menteeRows, recent] = await Promise.all([
+		loadOverviewCounts(),
+		loadOverviewMenteeCount(),
+		loadRecentBookings(),
 	]);
 
 	const counts = countRows[0];

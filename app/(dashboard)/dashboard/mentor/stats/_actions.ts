@@ -24,7 +24,7 @@ export async function loadMentorStats(range: StatsRange) {
 		? and(eq(bookings.mentor_id, mentor.id), gte(bookings.created_at, since))
 		: eq(bookings.mentor_id, mentor.id);
 
-	const [countRows, ratingRows, series] = await Promise.all([
+	const loadBookingCounts = () =>
 		db
 			.select({
 				total: sql<number>`count(*)::int`,
@@ -34,7 +34,8 @@ export async function loadMentorStats(range: StatsRange) {
 				cancelled: sql<number>`count(*) filter (where ${bookings.status} = 'cancelled')::int`,
 			})
 			.from(bookings)
-			.where(rangeFilter),
+			.where(rangeFilter);
+	const loadBookingRating = () =>
 		db
 			.select({
 				avg: sql<number>`coalesce(avg(${bookingFeedback.rating}), 0)::float`,
@@ -48,8 +49,8 @@ export async function loadMentorStats(range: StatsRange) {
 							gte(bookings.created_at, since),
 						)
 					: eq(bookings.mentor_id, mentor.id),
-			),
-		// Bookings over time, bucketed by week, within the selected range.
+			);
+	const loadBookingSeries = () =>
 		db
 			.select({
 				bucket: sql<string>`to_char(date_trunc('week', ${bookings.created_at}), 'YYYY-MM-DD')`,
@@ -58,7 +59,12 @@ export async function loadMentorStats(range: StatsRange) {
 			.from(bookings)
 			.where(rangeFilter)
 			.groupBy(sql`date_trunc('week', ${bookings.created_at})`)
-			.orderBy(sql`date_trunc('week', ${bookings.created_at})`),
+			.orderBy(sql`date_trunc('week', ${bookings.created_at})`);
+
+	const [countRows, ratingRows, series] = await Promise.all([
+		loadBookingCounts(),
+		loadBookingRating(),
+		loadBookingSeries(),
 	]);
 
 	const counts = countRows[0];
