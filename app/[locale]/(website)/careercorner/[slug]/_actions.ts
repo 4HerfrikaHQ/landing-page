@@ -174,25 +174,22 @@ export async function getInactiveMentorBySlug(slug: string) {
 	return canPreview ? mentor : null;
 }
 
-/** Active mentors are bookable publicly; inactive mentors are bookable to admins only. */
-async function getMentorForBookingBySlug(slug: string) {
+/** Active availability is public; inactive availability is visible to its owner and admins. */
+async function getMentorForAvailabilityBySlug(slug: string) {
 	const activeMentor = await getMentorBySlug(slug);
 	if (activeMentor) return activeMentor;
+	return getInactiveMentorBySlug(slug);
+}
+
+/** Active mentors are bookable publicly; inactive mentors are bookable to admins only. */
+async function getMentorForBookingBySlug(slug: string) {
+	const mentor = await getMentorForAvailabilityBySlug(slug);
+	if (!mentor) return null;
+	if (mentor.active) return mentor;
 
 	const viewer = await optionalUserCapabilities();
 	if (!viewer?.isAdmin) return null;
-
-	const [mentor] = await db
-		.select({
-			...getTableColumns(mentors),
-			name: users.name,
-			email: users.email,
-		})
-		.from(mentors)
-		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.slug, slug), eq(mentors.active, false)))
-		.limit(1);
-	return mentor ?? null;
+	return mentor;
 }
 
 export async function getMentorByPreviousSlug(slug: string) {
@@ -212,7 +209,7 @@ export async function getMentorByPreviousSlug(slug: string) {
 export const listMentorSlots = actionClient
 	.schema(ListSlotsSchema)
 	.action(async ({ parsedInput }) => {
-		const mentor = await getMentorForBookingBySlug(parsedInput.mentorSlug);
+		const mentor = await getMentorForAvailabilityBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 
 		const [settingsRow] = await db
@@ -271,7 +268,7 @@ export const listMentorSlots = actionClient
 export async function getFirstAvailableSlotUtc(
 	mentorSlug: string,
 ): Promise<string | null> {
-	const mentor = await getMentorForBookingBySlug(mentorSlug);
+	const mentor = await getMentorForAvailabilityBySlug(mentorSlug);
 	if (!mentor) return null;
 
 	const [settingsRow] = await db

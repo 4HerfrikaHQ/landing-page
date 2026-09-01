@@ -71,10 +71,8 @@ export default async function MentorDetailPage({
 	}
 	const tc = await getTranslations("common");
 
-	const canBook = !isInactivePreview || isAdminPreview;
-	const initialWeekStart = canBook
-		? await getInitialWeekStart(mentor.slug)
-		: null;
+	const canCreateBooking = !isInactivePreview || isAdminPreview;
+	const initialWeekStart = await getInitialWeekStart(mentor.slug);
 	const displayName = mentor.nickname || mentor.name;
 	const pageUrl = absoluteSiteUrl(
 		localizedCareerCornerPath(locale, `/${mentor.slug}`),
@@ -218,12 +216,12 @@ export default async function MentorDetailPage({
 										<Clock className="size-5" />
 									</span>
 									<h2 className="text-lg font-semibold text-foreground">
-										{isInactivePreview
-											? "Booking availability"
-											: "Book a 30-min call"}
+										{canCreateBooking
+											? "Book a 30-min call"
+											: "Booking availability"}
 									</h2>
 								</div>
-								{canBook ? (
+								{canCreateBooking ? (
 									<>
 										<p className="mt-2 text-sm text-muted-foreground">
 											Pick a time that works for you. Times are shown in your local
@@ -234,13 +232,17 @@ export default async function MentorDetailPage({
 												mentorSlug={mentor.slug}
 												mentorName={mentor.name}
 												initialWeekStart={initialWeekStart}
+												readOnly={isInactivePreview && !isAdminPreview}
 											/>
 										</div>
 									</>
 								) : (
-									<p className="mt-2 text-sm leading-6 text-muted-foreground">
-										Bookings are unavailable while this profile is inactive.
-									</p>
+									<BookingSection
+										mentorSlug={mentor.slug}
+										mentorName={mentor.name}
+										initialWeekStart={initialWeekStart}
+										readOnly
+									/>
 								)}
 							</div>
 						</div>
