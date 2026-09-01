@@ -22,7 +22,7 @@ import {
 import { ActionError } from "@/src/lib/safe-action";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, lt, ne } from "drizzle-orm";
-import { Resend } from "resend";
+import { sendEmail } from "@/src/lib/email";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
@@ -179,7 +179,6 @@ export async function sendCancellationEmails(params: {
 	reason?: string;
 	icsAttachment: string;
 }) {
-	const resend = new Resend(process.env.RESEND_API_KEY);
 	const recipients = [
 		{
 			email: params.menteeEmail,
@@ -194,7 +193,7 @@ export async function sendCancellationEmails(params: {
 	];
 	await Promise.all(
 		recipients.map((r) =>
-			resend.emails.send({
+			sendEmail({
 				from: FROM,
 				to: r.email,
 				subject: `Cancelled: call on ${fmt(params.startAtUtc, r.tz)}`,

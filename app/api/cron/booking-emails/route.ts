@@ -15,7 +15,7 @@ import { createActionLink } from "@/src/lib/action-links";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, isNull, lt, lte, ne } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendEmail } from "@/src/lib/email";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -44,7 +44,6 @@ export async function GET(req: Request) {
 	}
 
 	const now = Date.now();
-	const resend = new Resend(process.env.RESEND_API_KEY);
 	const counts = {
 		reminder24h: 0,
 		reminder1h: 0,
@@ -63,7 +62,7 @@ export async function GET(req: Request) {
 				action: "manage",
 				expiresAt: b.start_at,
 			});
-			await resend.emails.send({
+			await sendEmail({
 				from: FROM,
 				to: b.mentee_email,
 				subject: `Tomorrow: your call with ${b.mentorName}`,
@@ -92,8 +91,8 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 		const rows = await loadDueBookings("reminder_1h_sent_at", lower, upper);
 		for (const b of rows) {
 			await Promise.all([
-				sendMenteeReminder(resend, b),
-				sendMentorReminder(resend, b),
+				sendMenteeReminder(b),
+				sendMentorReminder(b),
 			]);
 			await db
 				.update(bookings)
@@ -129,7 +128,7 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 				action: "feedback",
 				expiresAt: new Date(now + 14 * 24 * 3600_000),
 			});
-			await resend.emails.send({
+			await sendEmail({
 				from: FROM,
 				to: b.mentee_email,
 				subject: `How was your call with ${b.mentorName}?`,
@@ -174,7 +173,7 @@ ${siteUrl()}/bookings/${token}/feedback
 			.limit(100);
 		for (const b of rows) {
 			if (!b.mentorEmail) continue;
-			await resend.emails.send({
+			await sendEmail({
 				from: FROM,
 				to: b.mentorEmail,
 				subject: `Follow-up: your call with ${b.mentee_name}`,
@@ -197,9 +196,9 @@ Thanks again for showing up. If there's anything you wanted to follow up with ${
 
 type DueBooking = Awaited<ReturnType<typeof loadDueBookings>>[number];
 
-async function sendMenteeReminder(resend: Resend, b: DueBooking) {
+async function sendMenteeReminder(b: DueBooking) {
 	if (!b.mentee_email) return;
-	await resend.emails.send({
+	await sendEmail({
 		from: FROM,
 		to: b.mentee_email,
 		subject: `Starting soon: your call with ${b.mentorName}`,
@@ -212,9 +211,9 @@ ${joinTip(b.mentee_email)}
 	});
 }
 
-async function sendMentorReminder(resend: Resend, b: DueBooking) {
+async function sendMentorReminder(b: DueBooking) {
 	if (!b.mentorEmail) return;
-	await resend.emails.send({
+	await sendEmail({
 		from: FROM,
 		to: b.mentorEmail,
 		subject: `In ~1 hour: call with ${b.mentee_name}`,

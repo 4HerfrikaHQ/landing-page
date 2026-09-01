@@ -25,7 +25,7 @@ import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, getTableColumns, gt, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { Resend } from "resend";
+import { sendEmail } from "@/src/lib/email";
 import { buildBookingIcs, computeSlots } from "./_helpers";
 import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
@@ -91,8 +91,7 @@ type ConfirmationCommon = {
 export async function sendBookingConfirmationMentee(
 	p: ConfirmationCommon & { manageUrl: string; sessionDurationMinutes: number },
 ) {
-	const resend = new Resend(process.env.RESEND_API_KEY);
-	await resend.emails.send({
+	await sendEmail({
 		from: FROM,
 		to: p.menteeEmail,
 		subject: `Confirmed: your call with ${p.mentorName}`,
@@ -118,8 +117,7 @@ export async function sendBookingConfirmationMentor(
 		.filter(([, v]) => v)
 		.map(([k, v]) => `- ${k}: ${v}`)
 		.join("\n");
-	const resend = new Resend(process.env.RESEND_API_KEY);
-	await resend.emails.send({
+	await sendEmail({
 		from: FROM,
 		to: p.mentorEmail,
 		subject: `New booking: ${p.menteeName} on ${formatInTz(p.startAtUtc, p.mentorTimezone)}`,
