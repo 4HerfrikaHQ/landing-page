@@ -118,6 +118,36 @@ export const currentUserCapabilities = cache(async () => {
 	};
 });
 
+/**
+ * Resolves capabilities for pages that are public by default. Unlike
+ * `currentUserCapabilities`, an anonymous visitor simply receives `null`.
+ */
+export const optionalUserCapabilities = cache(async () => {
+	const supabase = await createClient();
+	const {
+		data: { user: authUser },
+	} = await supabase.auth.getUser();
+	if (!authUser) return null;
+
+	const user = await db
+		.select()
+		.from(schema.users)
+		.where(eq(schema.users.auth_user_id, authUser.id))
+		.limit(1)
+		.then((rows) => rows[0] ?? null);
+	if (!user) return null;
+
+	const mentor = await db.query.mentors.findFirst({
+		where: eq(schema.mentors.user_id, user.id),
+	});
+
+	return {
+		user,
+		mentor,
+		isAdmin: user.role === "super_admin",
+	};
+});
+
 /** Gets the owned mentor record for the signed-in user, or rejects the request. */
 export const currentDbMentor = cache(async () => {
 	const { user, mentor } = await currentUserCapabilities();

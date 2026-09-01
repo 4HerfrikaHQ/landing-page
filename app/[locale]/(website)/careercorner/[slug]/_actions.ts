@@ -1,5 +1,6 @@
 "use server";
 
+import { optionalUserCapabilities } from "@/src/auth";
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
@@ -152,6 +153,25 @@ export async function getMentorBySlug(slug: string) {
 		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
 		.limit(1);
 	return mentor ?? null;
+}
+
+/** Fetches an inactive profile only for a super admin or its owning mentor. */
+export async function getInactiveMentorBySlug(slug: string) {
+	const [mentor] = await db
+		.select({
+			...getTableColumns(mentors),
+			name: users.name,
+			email: users.email,
+		})
+		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
+		.where(and(eq(mentors.slug, slug), eq(mentors.active, false)))
+		.limit(1);
+	if (!mentor) return null;
+
+	const viewer = await optionalUserCapabilities();
+	const canPreview = viewer?.isAdmin || viewer?.mentor?.id === mentor.id;
+	return canPreview ? mentor : null;
 }
 
 export async function getMentorByPreviousSlug(slug: string) {

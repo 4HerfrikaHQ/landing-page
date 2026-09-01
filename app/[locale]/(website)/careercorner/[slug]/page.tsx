@@ -1,11 +1,12 @@
 import { FadeIn } from "@/components/motion";
+import { optionalUserCapabilities } from "@/src/auth";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import {
 	absoluteSiteUrl,
 	localizedCareerCornerPath,
 } from "@/src/lib/careercorner-seo";
 import { isLocalImageUrl } from "@/src/lib/image-url";
-import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
+import { ChevronLeft, Clock, Eye, Linkedin, UserRound } from "lucide-react";
 import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -14,6 +15,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import {
 	getInitialWeekStart,
+	getInactiveMentorBySlug,
 	getMentorByPreviousSlug,
 	getMentorBySlug,
 } from "./_actions";
@@ -45,7 +47,20 @@ export default async function MentorDetailPage({
 	const { locale, slug } = await params;
 	setRequestLocale(locale as Locale);
 
-	const mentor = await getMentorBySlug(slug);
+	let mentor = await getMentorBySlug(slug);
+	let isInactivePreview = false;
+	let isAdminPreview = false;
+
+	if (!mentor) {
+		const inactiveMentor = await getInactiveMentorBySlug(slug);
+		if (inactiveMentor) {
+			const viewer = await optionalUserCapabilities();
+			mentor = inactiveMentor;
+			isInactivePreview = true;
+			isAdminPreview = viewer?.isAdmin === true;
+		}
+	}
+
 	if (!mentor) {
 		const movedMentor = await getMentorByPreviousSlug(slug);
 		if (!movedMentor) notFound();
@@ -56,7 +71,9 @@ export default async function MentorDetailPage({
 	}
 	const tc = await getTranslations("common");
 
-	const initialWeekStart = await getInitialWeekStart(mentor.slug);
+	const initialWeekStart = isInactivePreview
+		? null
+		: await getInitialWeekStart(mentor.slug);
 	const displayName = mentor.nickname || mentor.name;
 	const pageUrl = absoluteSiteUrl(
 		localizedCareerCornerPath(locale, `/${mentor.slug}`),
@@ -102,6 +119,22 @@ export default async function MentorDetailPage({
 
 	return (
 		<main className="bg-muted">
+			{isInactivePreview && (
+				<div className="border-b border-amber-500/20 bg-amber-50 text-amber-950">
+					<div className="container mx-auto flex max-w-6xl items-start gap-3 px-4 py-3 sm:px-6 lg:px-8">
+						<Eye className="mt-0.5 size-5 shrink-0 text-amber-700" />
+						<p className="text-sm leading-6">
+							<span className="font-semibold">Inactive profile preview.</span>{" "}
+							This mentor is not currently visible to the public. You can
+							see this page because you are {" "}
+							{isAdminPreview
+								? "a super admin"
+								: "the mentor who owns this profile"}
+							.
+						</p>
+					</div>
+				</div>
+			)}
 			<script
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{
@@ -184,20 +217,30 @@ export default async function MentorDetailPage({
 										<Clock className="size-5" />
 									</span>
 									<h2 className="text-lg font-semibold text-foreground">
-										Book a 30-min call
+										{isInactivePreview
+											? "Booking availability"
+											: "Book a 30-min call"}
 									</h2>
 								</div>
-								<p className="mt-2 text-sm text-muted-foreground">
-									Pick a time that works for you. Times are shown in your local
-									timezone.
-								</p>
-								<div className="mt-6">
-									<BookingSection
-										mentorSlug={mentor.slug}
-										mentorName={mentor.name}
-										initialWeekStart={initialWeekStart}
-									/>
-								</div>
+								{isInactivePreview ? (
+									<p className="mt-2 text-sm leading-6 text-muted-foreground">
+										Bookings are unavailable while this profile is inactive.
+									</p>
+								) : (
+									<>
+										<p className="mt-2 text-sm text-muted-foreground">
+											Pick a time that works for you. Times are shown in your local
+											timezone.
+										</p>
+										<div className="mt-6">
+											<BookingSection
+												mentorSlug={mentor.slug}
+												mentorName={mentor.name}
+												initialWeekStart={initialWeekStart}
+											/>
+										</div>
+									</>
+								)}
 							</div>
 						</div>
 					</FadeIn>
