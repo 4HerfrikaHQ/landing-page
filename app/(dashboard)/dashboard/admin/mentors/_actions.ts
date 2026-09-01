@@ -45,6 +45,12 @@ interface MentorAdminFilters {
 	pageSize?: number;
 }
 
+// Not exported: "use server" modules may only export async functions.
+function mentorPublicUrl(slug: string) {
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
+	return `${siteUrl}/careercorner/${slug}`;
+}
+
 /** Sentinel for "these filters can't match any mentor". */
 const NO_MATCH = Symbol("no-match");
 
@@ -153,12 +159,24 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.where(where),
 	]);
 
-	return { rows, total };
+	// URL built server-side so it reads NEXT_PUBLIC_SITE_URL at runtime, like
+	// every other public link in the app (a client-side read inlines it at build).
+	return {
+		rows: rows.map((row) => ({
+			...row,
+			public_url: mentorPublicUrl(row.slug),
+		})),
+		total,
+	};
 }
 
 /**
- * Every mentor matching the current filters, unpaginated — marketing copies the
- * whole set of public links at once instead of page by page.
+ * Public links for every mentor matching the current filters, unpaginated —
+ * marketing copies the whole set at once instead of page by page.
+ *
+ * Active-only: the public page (getMentorBySlug) filters on active, so an
+ * inactive mentor's URL 404s and would be a dead link in a campaign.
+ * URLs are built here so client and server agree on the runtime site URL.
  */
 export async function getMentorLinksForAdmin(
 	filters: Pick<MentorAdminFilters, "query" | "status" | "featured"> = {},
@@ -168,12 +186,17 @@ export async function getMentorLinksForAdmin(
 	const where = await mentorFilterWhere(filters);
 	if (where === NO_MATCH) return [];
 
-	return db
+	const rows = await db
 		.select({ name: schema.users.name, slug: schema.mentors.slug })
 		.from(schema.mentors)
 		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
-		.where(where)
+		.where(and(where, eq(schema.mentors.active, true)))
 		.orderBy(asc(schema.users.name));
+
+	return rows.map(({ name, slug }) => ({
+		name,
+		url: mentorPublicUrl(slug),
+	}));
 }
 
 export type AdminMentorRow = Awaited<

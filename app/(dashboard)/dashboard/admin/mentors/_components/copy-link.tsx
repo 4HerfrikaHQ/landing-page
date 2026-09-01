@@ -10,13 +10,10 @@ import { Check, Copy, Link2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// ponytail: same inline env read as every other public-URL site in the app.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
-
-export function mentorPublicUrl(slug: string) {
-	return `${SITE_URL}/careercorner/${slug}`;
-}
-
+// The site URL is resolved on the server and passed in: reading
+// NEXT_PUBLIC_SITE_URL here would inline it at build time, which can disagree
+// with the runtime value every server-side link (booking emails, onboarding)
+// uses.
 async function writeClipboard(text: string, message: string) {
 	try {
 		await navigator.clipboard.writeText(text);
@@ -29,11 +26,13 @@ async function writeClipboard(text: string, message: string) {
 }
 
 export function CopyMentorLinkButton({
-	slug,
+	url,
 	name,
+	active,
 }: {
-	slug: string;
+	url: string;
 	name: string;
+	active: boolean;
 }) {
 	const [copied, setCopied] = useState(false);
 
@@ -43,11 +42,10 @@ export function CopyMentorLinkButton({
 				render={
 					<button
 						type="button"
-						aria-label={`Copy ${name}'s public booking link`}
+						aria-label={`Copy ${name}'s public booking link${active ? "" : " (page is offline while they're inactive)"}`}
 						className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full bg-muted/70 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
 						onClick={async () => {
-							if (!(await writeClipboard(mentorPublicUrl(slug), "Link copied")))
-								return;
+							if (!(await writeClipboard(url, "Link copied"))) return;
 							setCopied(true);
 							setTimeout(() => setCopied(false), 2000);
 						}}
@@ -61,8 +59,12 @@ export function CopyMentorLinkButton({
 				)}
 			</TooltipTrigger>
 			<TooltipContent>
-				{mentorPublicUrl(slug)}
-				<span className="mt-1 block text-xs opacity-80">Click to copy</span>
+				{url}
+				<span className="mt-1 block text-xs opacity-80">
+					{active
+						? "Click to copy"
+						: "Click to copy — but this page 404s until the mentor is active."}
+				</span>
 			</TooltipContent>
 		</Tooltip>
 	);
@@ -71,27 +73,38 @@ export function CopyMentorLinkButton({
 export function CopyAllMentorLinksButton({
 	mentors,
 }: {
-	mentors: { name: string; slug: string }[];
+	mentors: { name: string; url: string }[];
 }) {
 	if (mentors.length === 0) return null;
 
 	return (
-		<Button
-			type="button"
-			variant="outline"
-			size="sm"
-			className="gap-2"
-			onClick={() =>
-				writeClipboard(
-					mentors
-						.map((m) => `${m.name}\t${mentorPublicUrl(m.slug)}`)
-						.join("\n"),
-					`${mentors.length} link${mentors.length === 1 ? "" : "s"} copied`,
-				)
-			}
-		>
-			<Copy className="size-4" />
-			Copy {mentors.length} link{mentors.length === 1 ? "" : "s"}
-		</Button>
+		<Tooltip>
+			<TooltipTrigger
+				render={
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						className="gap-2"
+						onClick={() =>
+							writeClipboard(
+								mentors.map((m) => `${m.name}\t${m.url}`).join("\n"),
+								`${mentors.length} link${mentors.length === 1 ? "" : "s"} copied`,
+							)
+						}
+					>
+						<Copy className="size-4" />
+						Copy {mentors.length} link{mentors.length === 1 ? "" : "s"}
+					</Button>
+				}
+			/>
+			<TooltipContent>
+				Active mentors matching your filters — one “Name → URL” per line,
+				tab-separated.
+				<span className="mt-1 block text-xs opacity-80">
+					Inactive mentors are left out; their public pages 404.
+				</span>
+			</TooltipContent>
+		</Tooltip>
 	);
 }
