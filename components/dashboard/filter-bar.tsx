@@ -5,6 +5,13 @@ import { debounce, parseAsString, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { useId } from "react";
 
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/utils/cn";
 
 /**
@@ -34,6 +41,47 @@ export interface FilterOption {
 	value: string;
 	label: string;
 	count?: number;
+}
+
+export function FilterSelect({
+	label,
+	value,
+	options,
+	onValueChange,
+	className,
+}: {
+	label: string;
+	value: string;
+	options: FilterOption[];
+	onValueChange: (value: string | null) => void;
+	className?: string;
+}) {
+	return (
+		<Select value={value} onValueChange={onValueChange}>
+			<SelectTrigger
+				aria-label={label}
+				className={cn(
+					"h-10 w-full rounded-full border-[#E0E0E0] bg-white px-4 sm:w-auto sm:min-w-40",
+					className,
+				)}
+			>
+				<span className="text-muted-foreground">{label}:</span>
+				<SelectValue>
+					{(selectedValue) =>
+						options.find((option) => option.value === selectedValue)?.label ??
+						options[0].label
+					}
+				</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				{options.map((option) => (
+					<SelectItem key={option.value} value={option.value}>
+						{option.label}
+					</SelectItem>
+				))}
+			</SelectContent>
+		</Select>
+	);
 }
 
 interface FilterPillsProps {

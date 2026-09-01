@@ -1,13 +1,6 @@
 "use client";
 
-import { SearchInput } from "@/components/dashboard/filter-bar";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { FilterSelect, SearchInput } from "@/components/dashboard/filter-bar";
 import { parseAsString, useQueryStates } from "nuqs";
 
 const STATUS_OPTIONS = [
@@ -57,41 +50,5 @@ export function MentorFilters() {
 				onValueChange={(value) => updateFilter("calendar", value)}
 			/>
 		</>
-	);
-}
-
-function FilterSelect({
-	label,
-	value,
-	options,
-	onValueChange,
-}: {
-	label: string;
-	value: string;
-	options: { value: string; label: string }[];
-	onValueChange: (value: string | null) => void;
-}) {
-	return (
-		<Select value={value} onValueChange={onValueChange}>
-			<SelectTrigger
-				aria-label={label}
-				className="h-10 w-full rounded-full border-[#E0E0E0] bg-white px-4 sm:w-auto sm:min-w-40"
-			>
-				<span className="text-muted-foreground">{label}:</span>
-				<SelectValue>
-					{(selectedValue) =>
-						options.find((option) => option.value === selectedValue)?.label ??
-						options[0].label
-					}
-				</SelectValue>
-			</SelectTrigger>
-			<SelectContent>
-				{options.map((option) => (
-					<SelectItem key={option.value} value={option.value}>
-						{option.label}
-					</SelectItem>
-				))}
-			</SelectContent>
-		</Select>
 	);
 }
