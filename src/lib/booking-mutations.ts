@@ -11,7 +11,7 @@ import {
 import { buildBookingIcs } from "@/app/[locale]/(website)/careercorner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { type DbBooking, bookings } from "@/src/db/schema/tables/bookings";
-import { createActionLink } from "@/src/lib/action-links";
+import { replaceActionLink } from "@/src/lib/action-links";
 import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
 import {
 	deleteMentorCalendarEvent,
@@ -64,7 +64,7 @@ export async function rescheduleBookingCore(params: {
 	mentorEmail: string;
 	sessionDurationMinutes: number;
 	newStartUtc: Date;
-}): Promise<{ startAt: Date; endAt: Date; manageToken: string }> {
+}): Promise<void> {
 	const {
 		booking,
 		mentorId,
@@ -131,7 +131,7 @@ export async function rescheduleBookingCore(params: {
 		);
 	}
 
-	const manageToken = await createActionLink({
+	const manageToken = await replaceActionLink({
 		resourceId: booking.id,
 		action: "manage",
 		expiresAt: newStartUtc,
@@ -187,7 +187,6 @@ export async function rescheduleBookingCore(params: {
 		}),
 	]);
 	revalidatePath(`/careercorner/${mentorSlug}`);
-	return { startAt: newStartUtc, endAt: newEnd, manageToken };
 }
 
 export async function cancelBookingCore(params: {

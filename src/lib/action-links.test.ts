@@ -5,8 +5,7 @@ import {
 	validateActionLinkRecord,
 } from "./action-links";
 
-const NOW = new Date("2026-08-28T12:00:00.000Z");
-const FUTURE = new Date("2026-08-29T12:00:00.000Z");
+const FUTURE = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
 describe("action-link tokens", () => {
 	test("generates compact 128-bit base64url tokens", () => {
@@ -35,31 +34,28 @@ describe("action-link validation", () => {
 	};
 
 	test("accepts a matching unused link before expiry", () => {
-		expect(validateActionLinkRecord(valid, "mentor_onboard", NOW)).toEqual({
+		expect(validateActionLinkRecord(valid, "mentor_onboard")).toEqual({
 			ok: true,
 			action: "mentor_onboard",
 			resourceId: valid.resourceId,
-			source: "database",
 		});
 	});
 
 	test("rejects wrong-action, used, and expired links", () => {
-		expect(validateActionLinkRecord(valid, "feedback", NOW)).toEqual({
+		expect(validateActionLinkRecord(valid, "feedback")).toEqual({
 			ok: false,
 			reason: "wrong_action",
 		});
 		expect(
 			validateActionLinkRecord(
-				{ ...valid, usedAt: new Date("2026-08-28T11:00:00.000Z") },
+				{ ...valid, usedAt: new Date(Date.now() - 60 * 1000) },
 				"mentor_onboard",
-				NOW,
 			),
 		).toEqual({ ok: false, reason: "used" });
 		expect(
 			validateActionLinkRecord(
-				{ ...valid, expiresAt: NOW },
+				{ ...valid, expiresAt: new Date(Date.now() - 60 * 1000) },
 				"mentor_onboard",
-				NOW,
 			),
 		).toEqual({ ok: false, reason: "expired" });
 	});
