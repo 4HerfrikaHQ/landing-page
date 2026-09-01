@@ -40,7 +40,7 @@ export function ApplicationDetailSheet({
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="flex flex-col overflow-y-auto px-4 sm:w-[64rem] sm:max-w-[calc(100vw-2rem)] sm:px-6">
+			<SheetContent className="data-[side=right]:w-full! data-[side=right]:sm:max-w-none! flex flex-col overflow-y-auto px-4 sm:px-6">
 				<SheetHeader className="px-0">
 					<SheetTitle>{a.name}</SheetTitle>
 				</SheetHeader>
