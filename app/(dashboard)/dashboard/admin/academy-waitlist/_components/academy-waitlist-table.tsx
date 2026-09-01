@@ -2,11 +2,12 @@
 
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
-	FilterBar,
 	DashboardFilter,
+	FilterBar,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
 	Table,
 	TableBody,
@@ -23,11 +24,6 @@ const ACADEMY_OPTIONS = [
 	{ value: "tech", label: "Tech" },
 	{ value: "business", label: "Business" },
 	{ value: "climate", label: "Climate" },
-];
-
-const SORT_OPTIONS = [
-	{ value: "newest", label: "Newest" },
-	{ value: "oldest", label: "Oldest" },
 ];
 
 type Academy = "tech" | "business" | "climate";
@@ -70,14 +66,6 @@ export function AcademyWaitlistTable({
 						placeholder="Search name, email or location…"
 						resetPageOnChange
 					/>
-					<DashboardFilter
-						label="Sort"
-						paramKey="sort"
-						defaultValue="newest"
-						includeAll={false}
-						resetPageOnChange
-						options={SORT_OPTIONS}
-					/>
 				</FilterBar>
 			</div>
 
@@ -109,9 +97,14 @@ export function AcademyWaitlistTable({
 								<TableHead className="font-medium text-muted-foreground">
 									Location
 								</TableHead>
-								<TableHead className="whitespace-nowrap font-medium text-muted-foreground">
+								<SortableTableHead
+									value="joined"
+									defaultSortValue="joined"
+									defaultDirection="desc"
+									className="whitespace-nowrap"
+								>
 									Joined
-								</TableHead>
+								</SortableTableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>

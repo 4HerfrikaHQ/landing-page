@@ -5,36 +5,35 @@ import { cn } from "@/utils/cn";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
-import type { MentorSortValue } from "../_schema";
 
-const DEFAULT_DIRECTION: Record<MentorSortValue, "asc" | "desc"> = {
-	name: "asc",
-	bookings: "desc",
-	joined: "desc",
-};
+type SortDirection = "asc" | "desc";
 
 export function SortableTableHead({
 	value,
+	defaultSortValue,
+	defaultDirection = "asc",
 	children,
 	className,
 }: {
-	value: MentorSortValue;
+	value: string;
+	defaultSortValue: string;
+	defaultDirection?: SortDirection;
 	children: ReactNode;
 	className?: string;
 }) {
 	const [query, setQuery] = useQueryStates(
 		{
-			sort: parseAsString.withDefault("name"),
+			sort: parseAsString.withDefault(defaultSortValue),
 			order: parseAsString,
 			page: parseAsString.withDefault(""),
 		},
 		{ shallow: false },
 	);
 	const active = query.sort === value;
-	const direction =
+	const direction: SortDirection =
 		active && (query.order === "asc" || query.order === "desc")
 			? query.order
-			: DEFAULT_DIRECTION[value];
+			: defaultDirection;
 	const Icon = !active
 		? ArrowUpDown
 		: direction === "asc"
@@ -46,7 +45,7 @@ export function SortableTableHead({
 			? direction === "asc"
 				? "desc"
 				: "asc"
-			: DEFAULT_DIRECTION[value];
+			: defaultDirection;
 		void setQuery({ sort: value, order: nextDirection, page: null });
 	}
 

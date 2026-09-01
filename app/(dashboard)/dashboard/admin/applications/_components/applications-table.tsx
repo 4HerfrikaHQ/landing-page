@@ -2,11 +2,12 @@
 
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
-	FilterBar,
 	DashboardFilter,
+	FilterBar,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
 	Table,
 	TableBody,
@@ -20,11 +21,6 @@ import type { ApplicationRow } from "../_actions";
 import { ApplicationTableRow } from "./application-table-row";
 
 type Status = MentorApplicationStatus;
-
-const SORT_OPTIONS = [
-	{ value: "newest", label: "Newest" },
-	{ value: "oldest", label: "Oldest" },
-];
 
 const TABS: { value: Status; label: string }[] = [
 	{ value: "pending", label: "Pending" },
@@ -80,13 +76,6 @@ export function ApplicationsTable({
 						includeAll={false}
 						resetPageOnChange
 					/>
-					<DashboardFilter
-						label="Sort"
-						paramKey="sort"
-						options={SORT_OPTIONS}
-						defaultValue="newest"
-						includeAll={false}
-					/>
 				</FilterBar>
 			</div>
 
@@ -110,9 +99,13 @@ export function ApplicationsTable({
 								<TableHead className="font-medium text-muted-foreground">
 									Industry
 								</TableHead>
-								<TableHead className="font-medium text-muted-foreground">
+								<SortableTableHead
+									value="submitted"
+									defaultSortValue="submitted"
+									defaultDirection="desc"
+								>
 									Submitted
-								</TableHead>
+								</SortableTableHead>
 								<TableHead className="font-medium text-muted-foreground">
 									Status
 								</TableHead>

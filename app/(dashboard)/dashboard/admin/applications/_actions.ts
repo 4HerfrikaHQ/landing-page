@@ -115,6 +115,7 @@ interface ApplicationFilters {
 	status?: string;
 	query?: string;
 	sort?: string;
+	order?: string;
 	page?: number;
 	pageSize?: number;
 }
@@ -139,7 +140,7 @@ export async function getApplications(filters: ApplicationFilters) {
 
 	const where = and(...conditions);
 	const orderBy =
-		filters.sort === "oldest"
+		filters.order === "asc" || filters.sort === "oldest"
 			? asc(mentorApplications.created_at)
 			: desc(mentorApplications.created_at);
 
