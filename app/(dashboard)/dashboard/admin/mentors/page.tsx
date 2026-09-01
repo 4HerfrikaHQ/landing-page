@@ -14,7 +14,7 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getMentorLinksForAdmin, getMentorsForAdmin } from "./_actions";
+import { getMentorsForAdmin } from "./_actions";
 import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
@@ -57,18 +57,13 @@ export default async function MentorsPage({
 		calendar: calendar.success ? calendar.data : undefined,
 	};
 
-	// Links cover every mentor matching the filters, not just this page — there
-	// are more mentors than fit on one page.
-	const [{ rows: mentors, total }, links] = await Promise.all([
-		getMentorsForAdmin({
-			...activeFilters,
-			sort: sort.success ? sort.data : undefined,
-			order: order.success ? order.data : undefined,
-			page,
-			pageSize: PAGE_SIZE,
-		}),
-		getMentorLinksForAdmin(activeFilters),
-	]);
+	const { rows: mentors, total } = await getMentorsForAdmin({
+		...activeFilters,
+		sort: sort.success ? sort.data : undefined,
+		order: order.success ? order.data : undefined,
+		page,
+		pageSize: PAGE_SIZE,
+	});
 
 	return (
 		<div>
@@ -77,7 +72,7 @@ export default async function MentorsPage({
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
 				action={
 					<div className="flex items-center gap-2">
-						<CopyAllMentorLinksButton mentors={links} />
+						<CopyAllMentorLinksButton count={total} filters={activeFilters} />
 						<CreateMentorSheet />
 					</div>
 				}

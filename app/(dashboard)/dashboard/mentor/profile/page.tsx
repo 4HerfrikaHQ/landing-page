@@ -2,18 +2,20 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { FadeIn } from "@/components/motion/fade-in";
 import {
 	disconnectMentorGoogleConnection,
-	getMentorGoogleCalendarContext,
-	getMentorGoogleConnectionStatus,
 	mentorGoogleOAuthConfigured,
 	retryMentorGoogleRevocation,
 	startMentorGoogleOAuth,
 } from "@/src/lib/mentor-google-oauth";
+import { Suspense } from "react";
 import { getMentorProfile } from "../_actions";
-import {
-	type MentorCalendarCallbackOutcome,
-	type MentorCalendarCallbackReason,
-	MentorCalendarConnection,
+import type {
+	MentorCalendarCallbackOutcome,
+	MentorCalendarCallbackReason,
 } from "./_components/mentor-calendar-connection";
+import {
+	MentorCalendarCheckingState,
+	MentorCalendarHealth,
+} from "./_components/mentor-calendar-health";
 import { ProfileForm } from "./_components/profile-form";
 import { PublicLinkCard } from "./_components/public-link-card";
 
@@ -89,28 +91,10 @@ export default async function MentorProfilePage({
 		);
 	}
 
-	const googleConnection = await getMentorGoogleConnectionStatus();
-	let currentConnection = googleConnection;
-	let healthCheckUnavailable = false;
-	if (googleConnection.status === "connected") {
-		try {
-			await getMentorGoogleCalendarContext();
-		} catch {
-			healthCheckUnavailable = true;
-			currentConnection = await getMentorGoogleConnectionStatus();
-		}
-	}
 	const callbackOutcome = searchParams
 		? getCallbackOutcome(await searchParams)
 		: null;
 	const oauthConfigured = mentorGoogleOAuthConfigured();
-	const connectionStatus =
-		currentConnection.status === "connected"
-			? "connected"
-			: currentConnection.status === "reauth_required" ||
-					currentConnection.status === "revoked"
-				? "reauth_required"
-				: "not_connected";
 
 	return (
 		<div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
@@ -132,28 +116,22 @@ export default async function MentorProfilePage({
 			</FadeIn>
 			<FadeIn delay={0.075}>
 				<div className="mb-6">
-					<MentorCalendarConnection
-						connection={{
-							status: connectionStatus,
-							googleEmail: currentConnection.googleEmail,
-							connectedAt: currentConnection.connectedAt,
-						}}
-						actions={{
-							connect: oauthConfigured
-								? connectMentorGoogleCalendar
-								: undefined,
-							reconnect: oauthConfigured
-								? reconnectMentorGoogleCalendar
-								: undefined,
-							disconnect: disconnectMentorGoogleCalendar,
-							retryRevocation: retryMentorGoogleAccessRemoval,
-						}}
-						callbackOutcome={callbackOutcome}
-						configurationMissing={!oauthConfigured}
-						healthCheckUnavailable={healthCheckUnavailable}
-						revocationPending={currentConnection.revocationPending}
-						canRetryRevocation={currentConnection.canRetryRevocation}
-					/>
+					<Suspense fallback={<MentorCalendarCheckingState />}>
+						<MentorCalendarHealth
+							actions={{
+								connect: oauthConfigured
+									? connectMentorGoogleCalendar
+									: undefined,
+								reconnect: oauthConfigured
+									? reconnectMentorGoogleCalendar
+									: undefined,
+								disconnect: disconnectMentorGoogleCalendar,
+								retryRevocation: retryMentorGoogleAccessRemoval,
+							}}
+							callbackOutcome={callbackOutcome}
+							configurationMissing={!oauthConfigured}
+						/>
+					</Suspense>
 				</div>
 			</FadeIn>
 			<FadeIn delay={0.1}>

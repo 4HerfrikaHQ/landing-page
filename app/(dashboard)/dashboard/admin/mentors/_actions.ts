@@ -37,7 +37,7 @@ import {
 	SetFeaturedMentorSchema,
 } from "./_schema";
 
-interface MentorAdminFilters {
+export interface MentorAdminFilters {
 	query?: string;
 	status?: "active" | "inactive";
 	sort?: MentorSortValue;
