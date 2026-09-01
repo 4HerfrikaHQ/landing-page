@@ -2,7 +2,7 @@ import { FadeIn } from "@/components/motion";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
@@ -45,7 +45,9 @@ export default async function MentorDetailPage({
 		const movedMentor = await getMentorByPreviousSlug(slug);
 		if (!movedMentor) notFound();
 		const localePrefix = locale === "en" ? "" : `/${locale}`;
-		permanentRedirect(`${localePrefix}/careercorner/${movedMentor.slug}`);
+		permanentRedirect(
+			`${localePrefix}/careercorner/${movedMentor.slug}` as Route,
+		);
 	}
 	const tc = await getTranslations("common");
 
