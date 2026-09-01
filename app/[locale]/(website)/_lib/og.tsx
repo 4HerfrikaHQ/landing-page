@@ -134,7 +134,7 @@ export async function generateCareerCornerOGImage(options: {
 				display: "flex",
 				position: "relative",
 				overflow: "hidden",
-				backgroundColor: "#03065c",
+				backgroundColor: "#ffffff",
 				fontFamily: "sans-serif",
 			}}
 		>
@@ -187,7 +187,7 @@ export async function generateCareerCornerOGImage(options: {
 							fontSize: options.title.length > 52 ? "39px" : "46px",
 							fontWeight: 700,
 							lineHeight: 1.08,
-							color: "#ffffff",
+							color: "#03065c",
 							maxWidth: "640px",
 						}}
 					>
@@ -198,7 +198,7 @@ export async function generateCareerCornerOGImage(options: {
 							style={{
 								fontSize: "22px",
 								lineHeight: 1.35,
-								color: "#d9daf3",
+								color: "#4a4b66",
 								maxWidth: "590px",
 							}}
 						>
