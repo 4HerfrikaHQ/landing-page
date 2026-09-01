@@ -293,6 +293,41 @@ describe("mentor-scoped Google Calendar", () => {
 		});
 	});
 
+	test("removes a cancelled foreign event before creating the replacement", async () => {
+		const attemptKey = "replacement-attempt";
+		const calls: { url: string; method?: string }[] = [];
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (input, init) => {
+				calls.push({ url: String(input), method: init?.method });
+				if (init?.method === "DELETE")
+					return new Response(null, { status: 204 });
+				if (init?.method === "POST")
+					return response(
+						event(
+							attemptKey,
+							mentorEmail,
+							deterministicCalendarEventId(attemptKey),
+						),
+					);
+				return response({
+					...event("old-attempt", "4herfrika@gmail.com"),
+					status: "cancelled",
+				});
+			},
+		});
+
+		await expect(
+			client.createMentorCalendarEvent(createParams(attemptKey)),
+		).resolves.toMatchObject({
+			eventId: deterministicCalendarEventId(attemptKey),
+		});
+		expect(calls[1]).toEqual({
+			url: expect.stringContaining("sendUpdates=none"),
+			method: "DELETE",
+		});
+	});
+
 	test("does not replace an orphaned event owned by another Google account", async () => {
 		let deletes = 0;
 		const client = createMentorCalendarClient({

@@ -65,6 +65,7 @@ export class MentorCalendarError extends Error {
 type GoogleEventIdentity = { email?: string; id?: string };
 type CalendarEvent = {
 	id?: string;
+	status?: string;
 	hangoutLink?: string;
 	organizer?: GoogleEventIdentity;
 	creator?: GoogleEventIdentity;
@@ -163,7 +164,11 @@ async function json(response: Response): Promise<Record<string, unknown>> {
 }
 
 async function logCalendarApiFailure(input: {
-	operation: "read_event" | "create_event" | "delete_orphaned_event";
+	operation:
+		| "read_event"
+		| "create_event"
+		| "delete_orphaned_event"
+		| "delete_cancelled_event";
 	mentorId: string;
 	connectionId: string;
 	attemptKey?: string;
@@ -560,7 +565,41 @@ export function createMentorCalendarClient(
 		const token = await accessToken(connection, params.accessToken);
 		const eventId = deterministicCalendarEventId(params.attemptKey);
 		const existing = await readEvent(connection, token, eventId, fetchImpl);
-		if (existing) {
+		if (existing?.status === "cancelled") {
+			const deleteResponse = await fetchImpl(
+				`${calendarUrl(eventId)}?sendUpdates=none`,
+				{
+					method: "DELETE",
+					headers: { authorization: `Bearer ${token}` },
+				},
+			);
+			if (deleteResponse.status === 401) {
+				await connection.markReauthRequired().catch(() => undefined);
+				await notifyBrokenConnection(connection);
+				throw new MentorCalendarError("reauth_required", actionMessage(null));
+			}
+			if (!deleteResponse.ok && deleteResponse.status !== 404) {
+				const details = await logCalendarApiFailure({
+					operation: "delete_cancelled_event",
+					mentorId: connection.mentorId,
+					connectionId: connection.connectionId,
+					attemptKey: params.attemptKey,
+					response: deleteResponse,
+				});
+				throw new MentorCalendarError(
+					"remote_error",
+					"Google Calendar could not complete the requested operation.",
+					{ cause: details },
+				);
+			}
+			console.warn("[mentor-google-calendar-cancelled-event-removed]", {
+				mentorId: connection.mentorId,
+				connectionId: connection.connectionId,
+				eventId,
+				attemptKey: params.attemptKey,
+			});
+		}
+		if (existing && existing.status !== "cancelled") {
 			const existingAttempt =
 				existing.extendedProperties?.private?.[ATTEMPT_PROPERTY];
 			if (existingAttempt !== params.attemptKey) {
