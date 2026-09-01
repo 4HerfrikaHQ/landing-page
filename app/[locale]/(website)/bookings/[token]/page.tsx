@@ -64,11 +64,11 @@ export default async function ManageBookingPage({
 			<Shell>
 				<EmptyState
 					icon={CalendarClock}
-					title="This booking is cancelled"
+					title="Your booking has been cancelled"
 					description={
 						mentor
-							? `If you'd like to meet again, book a new time with ${mentor.name}.`
-							: "If you'd like to meet again, book a new time."
+							? `Your mentor has been notified. If you'd like to meet again, book a new time with ${mentor.name}.`
+							: "Your mentor has been notified. If you'd like to meet again, book a new time."
 					}
 					action={
 						<Button
