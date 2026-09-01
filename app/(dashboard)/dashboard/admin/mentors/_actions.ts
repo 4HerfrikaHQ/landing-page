@@ -253,11 +253,29 @@ export async function updateMentor(
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
 	const parsedSlug = parseMentorSlug(formData.get("slug"));
 	if (!parsedSlug.success) return { error: parsedSlug.error };
+	const currentMentor = await db.query.mentors.findFirst({
+		where: eq(schema.mentors.id, id),
+		columns: { slug: true },
+	});
+	if (!currentMentor) return { error: "Mentor not found." };
+	const slugChanged = parsedSlug.slug !== currentMentor.slug;
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
 	try {
 		await db.transaction(async (tx) => {
+			if (slugChanged) {
+				await tx
+					.update(schema.mentors)
+					.set({ previous_slug: null })
+					.where(
+						and(
+							eq(schema.mentors.previous_slug, currentMentor.slug),
+							ne(schema.mentors.id, id),
+						),
+					);
+			}
+
 			const [row] = await tx
 				.update(schema.mentors)
 				.set({
@@ -266,6 +284,7 @@ export async function updateMentor(
 					nickname,
 					linkedin_url,
 					slug: parsedSlug.slug,
+					previous_slug: slugChanged ? currentMentor.slug : undefined,
 				})
 				.where(eq(schema.mentors.id, id))
 				.returning({ userId: schema.mentors.user_id });

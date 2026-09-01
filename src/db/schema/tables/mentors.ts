@@ -26,6 +26,7 @@ export const mentors = pgTable(
 		linkedin_url: text("linkedin_url"),
 		nickname: text("nickname"),
 		slug: text("slug").notNull().unique(),
+		previous_slug: text("previous_slug").unique(),
 		active: boolean("active").notNull().default(false),
 		created_at: timestamp("created_at", { withTimezone: true })
 			.notNull()
@@ -36,6 +37,10 @@ export const mentors = pgTable(
 		check(
 			"mentors_slug_format_check",
 			sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.slug} <> 'apply'`,
+		),
+		check(
+			"mentors_previous_slug_format_check",
+			sql`${t.previous_slug} is null or (${t.previous_slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.previous_slug} <> 'apply')`,
 		),
 	],
 );

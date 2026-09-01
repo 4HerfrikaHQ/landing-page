@@ -7,8 +7,12 @@ import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getInitialWeekStart, getMentorBySlug } from "./_actions";
+import { notFound, permanentRedirect } from "next/navigation";
+import {
+	getInitialWeekStart,
+	getMentorByPreviousSlug,
+	getMentorBySlug,
+} from "./_actions";
 import { BookingSection } from "./_components/booking-section";
 
 export async function generateMetadata({
@@ -36,11 +40,14 @@ export default async function MentorDetailPage({
 	const { locale, slug } = await params;
 	setRequestLocale(locale as Locale);
 
-	const [mentor, tc] = await Promise.all([
-		getMentorBySlug(slug),
-		getTranslations("common"),
-	]);
-	if (!mentor) notFound();
+	const mentor = await getMentorBySlug(slug);
+	if (!mentor) {
+		const movedMentor = await getMentorByPreviousSlug(slug);
+		if (!movedMentor) notFound();
+		const localePrefix = locale === "en" ? "" : `/${locale}`;
+		permanentRedirect(`${localePrefix}/careercorner/${movedMentor.slug}`);
+	}
+	const tc = await getTranslations("common");
 
 	const initialWeekStart = await getInitialWeekStart(mentor.slug);
 	const displayName = mentor.nickname || mentor.name;
