@@ -11,6 +11,7 @@ import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
+	deterministicCalendarEventId,
 	isMentorCalendarError,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
@@ -19,6 +20,7 @@ import {
 import {
 	OrgGoogleCalendarError,
 	createOrgGoogleCalendarEvent,
+	deleteFallbackOrphanedCalendarEvent,
 	deleteOrgGoogleCalendarEvent,
 	ensureOrgGoogleCalendarConnection,
 } from "@/src/lib/org-google-calendar";
@@ -485,10 +487,24 @@ export const createBooking = actionClient
 						}
 					: {}),
 			};
-			event =
-				hosting.mode === "mentor_google"
-					? await createMentorCalendarEvent(calendarParams)
-					: await createOrgGoogleCalendarEvent(calendarParams);
+			if (hosting.mode === "org_google") {
+				event = await createOrgGoogleCalendarEvent(calendarParams);
+			} else {
+				try {
+					event = await createMentorCalendarEvent(calendarParams);
+				} catch (error) {
+					if (
+						!isMentorCalendarError(error) ||
+						error.code !== "identity_mismatch"
+					)
+						throw error;
+					await deleteFallbackOrphanedCalendarEvent({
+						eventId: deterministicCalendarEventId(attemptKey),
+						mentorEmail,
+					});
+					event = await createMentorCalendarEvent(calendarParams);
+				}
+			}
 		} catch (error) {
 			throw calendarActionError(error);
 		}

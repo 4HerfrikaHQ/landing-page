@@ -28,6 +28,7 @@ type OrgCalendarEvent = {
 	hangoutLink?: string;
 	organizer?: OrgEventIdentity;
 	creator?: OrgEventIdentity;
+	attendees?: OrgEventIdentity[];
 	conferenceData?: {
 		entryPoints?: { entryPointType?: string; uri?: string }[];
 	};
@@ -267,6 +268,61 @@ export async function deleteOrgGoogleCalendarEvent(params: {
 	try {
 		response = await fetchImpl(
 			`${calendarUrl(params.eventId)}?sendUpdates=all`,
+			{
+				method: "DELETE",
+				headers: { Authorization: `Bearer ${token}` },
+			},
+		);
+	} catch {
+		throw new OrgGoogleCalendarError(
+			"remote_error",
+			"The 4Herfrika calendar could not complete the requested operation.",
+		);
+	}
+	if (!response.ok && response.status !== 404 && response.status !== 410)
+		throw new OrgGoogleCalendarError(
+			"remote_error",
+			"The 4Herfrika calendar could not complete the requested operation.",
+		);
+}
+
+/**
+ * Removes a fallback event that was left behind after the mentor connected
+ * their own Calendar. It is deliberately stricter than normal cancellation:
+ * the event must still be owned by the fallback calendar and include the mentor.
+ */
+export async function deleteFallbackOrphanedCalendarEvent(params: {
+	eventId: string;
+	mentorEmail: string;
+	fetchImpl?: CalendarFetch;
+}): Promise<void> {
+	const fetchImpl = params.fetchImpl ?? fetch;
+	const token = await getAccessToken(fetchImpl);
+	const event = await readEvent(token, params.eventId, fetchImpl);
+	if (!event)
+		throw new OrgGoogleCalendarError(
+			"attempt_key_conflict",
+			"The fallback calendar event could not be found.",
+		);
+
+	const fallbackEmail = process.env.GOOGLE_ORG_CALENDAR_ID?.toLowerCase();
+	const ownsEvent = [event.organizer, event.creator].some(
+		(identity) => identity?.email?.toLowerCase() === fallbackEmail,
+	);
+	const includesMentor = event.attendees?.some(
+		(attendee) =>
+			attendee.email?.toLowerCase() === params.mentorEmail.toLowerCase(),
+	);
+	if (!fallbackEmail?.includes("@") || !ownsEvent || !includesMentor)
+		throw new OrgGoogleCalendarError(
+			"identity_mismatch",
+			"The fallback calendar returned an event owned by a different identity.",
+		);
+
+	let response: Response;
+	try {
+		response = await fetchImpl(
+			`${calendarUrl(params.eventId)}?sendUpdates=none`,
 			{
 				method: "DELETE",
 				headers: { Authorization: `Bearer ${token}` },
