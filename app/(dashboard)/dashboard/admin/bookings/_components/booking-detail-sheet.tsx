@@ -131,14 +131,21 @@ export function BookingDetailSheet({
 					) : null}
 				</div>
 
-				<div className="sticky bottom-0 -mx-4 flex flex-wrap gap-3 border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
+				<div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
+					{canMarkNoShow ? (
+						<NoShowButton
+							bookingId={booking.id}
+							menteeName={booking.mentee_name}
+						/>
+					) : (
+						<span />
+					)}
 					{booking.status !== "cancelled" ? (
 						<Button href={booking.meet_url} isExternal size="sm">
 							<ExternalLink className="size-4" />
 							Open meeting
 						</Button>
 					) : null}
-					{canMarkNoShow ? <NoShowButton bookingId={booking.id} /> : null}
 				</div>
 			</SheetContent>
 		</Sheet>
