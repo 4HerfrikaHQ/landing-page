@@ -94,6 +94,8 @@ async function mentorFilterWhere({
 }
 
 export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
+	await requireSuperAdmin();
+
 	const { sort = "name", page = 1, pageSize = 20 } = filters;
 
 	const where = await mentorFilterWhere(filters);
@@ -161,6 +163,8 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 export async function getMentorLinksForAdmin(
 	filters: Pick<MentorAdminFilters, "query" | "status" | "featured"> = {},
 ) {
+	await requireSuperAdmin();
+
 	const where = await mentorFilterWhere(filters);
 	if (where === NO_MATCH) return [];
 

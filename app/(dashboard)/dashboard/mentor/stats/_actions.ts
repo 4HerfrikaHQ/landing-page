@@ -1,25 +1,15 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
 import { and, eq, gte, sql } from "drizzle-orm";
 
 import { RANGE_DAYS, type StatsRange } from "./_schema";
 
 export async function loadMentorStats(range: StatsRange) {
-	const user = await currentDbUser();
-	const [mentor] = await db
-		.select()
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
-
-	if (!mentor) {
-		return { ok: false as const, reason: "no_mentor_profile" as const };
-	}
+	const { mentor } = await currentDbMentor();
 
 	const since =
 		range === "all"

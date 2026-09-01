@@ -10,7 +10,10 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { getAvailability } from "@/src/db/actions/availability";
+import {
+	getAvailabilityForAdmin,
+	saveAvailabilityForAdmin,
+} from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
 import { DownloadIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
@@ -45,11 +48,20 @@ export function EditMentorSheet({
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
 	>(null);
+	const [availabilityError, setAvailabilityError] = useState<string | null>(
+		null,
+	);
 
 	// Load availability lazily on first switch to that tab
 	useEffect(() => {
 		if (tab === "availability" && availabilitySlots === null) {
-			getAvailability(mentor.id).then(setAvailabilitySlots);
+			getAvailabilityForAdmin(mentor.id)
+				.then(setAvailabilitySlots)
+				.catch(() => {
+					setAvailabilityError(
+						"Availability could not be loaded. Please close this panel and try again.",
+					);
+				});
 		}
 	}, [tab, mentor.id, availabilitySlots]);
 
@@ -59,6 +71,7 @@ export function EditMentorSheet({
 			setTab("details");
 			setError(null);
 			setAvailabilitySlots(null);
+			setAvailabilityError(null);
 		}
 
 		return _onOpenChange(open);
@@ -279,7 +292,11 @@ export function EditMentorSheet({
 					</>
 				) : (
 					<div className="flex-1 overflow-y-auto px-6 py-5">
-						{availabilitySlots === null ? (
+						{availabilityError ? (
+							<p className="rounded-md border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-600">
+								{availabilityError}
+							</p>
+						) : availabilitySlots === null ? (
 							<div className="flex items-center justify-center py-12">
 								<div className="size-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
 							</div>
@@ -287,6 +304,7 @@ export function EditMentorSheet({
 							<AvailabilityEditor
 								mentorId={mentor.id}
 								initialSlots={availabilitySlots}
+								onSave={saveAvailabilityForAdmin}
 							/>
 						)}
 					</div>

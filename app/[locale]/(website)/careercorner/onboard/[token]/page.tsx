@@ -1,4 +1,5 @@
 import { AvailabilityEditor } from "@/components/availability-editor";
+import { saveOnboardingAvailability } from "@/src/db/actions/availability";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
@@ -73,6 +74,7 @@ export default async function OnboardingPage({
 	}
 
 	const { mentor, availability } = result;
+	const saveAvailability = saveOnboardingAvailability.bind(null, token);
 
 	if (mentor.active) {
 		return (
@@ -123,6 +125,7 @@ export default async function OnboardingPage({
 							<AvailabilityEditor
 								mentorId={mentor.id}
 								initialSlots={availability}
+								onSave={saveAvailability}
 							/>
 						}
 						profileSlot={
