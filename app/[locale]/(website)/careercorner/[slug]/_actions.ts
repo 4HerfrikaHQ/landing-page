@@ -154,6 +154,20 @@ export async function getMentorBySlug(slug: string) {
 	return mentor ?? null;
 }
 
+export async function getMentorByPreviousSlug(slug: string) {
+	const [mentor] = await db
+		.select({
+			...getTableColumns(mentors),
+			name: users.name,
+			email: users.email,
+		})
+		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
+		.where(and(eq(mentors.previous_slug, slug), eq(mentors.active, true)))
+		.limit(1);
+	return mentor ?? null;
+}
+
 export const listMentorSlots = actionClient
 	.schema(ListSlotsSchema)
 	.action(async ({ parsedInput }) => {

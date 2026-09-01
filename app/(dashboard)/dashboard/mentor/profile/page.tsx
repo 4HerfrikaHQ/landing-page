@@ -123,7 +123,10 @@ export default async function MentorProfilePage({
 			<FadeIn delay={0.05}>
 				<div className="mb-6">
 					<PublicLinkCard
-						url={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"}/careercorner/${mentor.slug}`}
+						siteUrl={
+							process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org"
+						}
+						slug={mentor.slug}
 					/>
 				</div>
 			</FadeIn>

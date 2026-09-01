@@ -1,5 +1,7 @@
+import { sql } from "drizzle-orm";
 import {
 	boolean,
+	check,
 	index,
 	pgTable,
 	text,
@@ -24,12 +26,23 @@ export const mentors = pgTable(
 		linkedin_url: text("linkedin_url"),
 		nickname: text("nickname"),
 		slug: text("slug").notNull().unique(),
+		previous_slug: text("previous_slug").unique(),
 		active: boolean("active").notNull().default(false),
 		created_at: timestamp("created_at", { withTimezone: true })
 			.notNull()
 			.defaultNow(),
 	},
-	(t) => [index("mentors_user_id_idx").on(t.user_id)],
+	(t) => [
+		index("mentors_user_id_idx").on(t.user_id),
+		check(
+			"mentors_slug_format_check",
+			sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.slug} not in ('apply', 'onboard')`,
+		),
+		check(
+			"mentors_previous_slug_format_check",
+			sql`${t.previous_slug} is null or (${t.previous_slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.previous_slug} not in ('apply', 'onboard'))`,
+		),
+	],
 );
 
 export type DbMentor = typeof mentors.$inferSelect;

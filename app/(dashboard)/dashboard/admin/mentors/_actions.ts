@@ -10,6 +10,7 @@ import {
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
 	ActionError,
 	adminAction,
@@ -250,25 +251,58 @@ export async function updateMentor(
 	const bio = (formData.get("bio") as string) || undefined;
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
+	const parsedSlug = parseMentorSlug(formData.get("slug"));
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+	const currentMentor = await db.query.mentors.findFirst({
+		where: eq(schema.mentors.id, id),
+		columns: { slug: true },
+	});
+	if (!currentMentor) return { error: "Mentor not found." };
+	const slugChanged = parsedSlug.slug !== currentMentor.slug;
+	if (slugChanged) {
+		const recentlyUsed = await db.query.mentors.findFirst({
+			where: and(
+				eq(schema.mentors.previous_slug, parsedSlug.slug),
+				ne(schema.mentors.id, id),
+			),
+			columns: { id: true },
+		});
+		if (recentlyUsed) return { error: "This profile link is already taken." };
+	}
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
-	await db.transaction(async (tx) => {
-		const [row] = await tx
-			.update(schema.mentors)
-			.set({ position, bio, nickname, linkedin_url })
-			.where(eq(schema.mentors.id, id))
-			.returning({ userId: schema.mentors.user_id });
+	try {
+		await db.transaction(async (tx) => {
+			const [row] = await tx
+				.update(schema.mentors)
+				.set({
+					position,
+					bio,
+					nickname,
+					linkedin_url,
+					slug: parsedSlug.slug,
+					previous_slug: slugChanged ? currentMentor.slug : undefined,
+				})
+				.where(eq(schema.mentors.id, id))
+				.returning({ userId: schema.mentors.user_id });
 
-		if (row) {
-			await tx
-				.update(schema.users)
-				.set({ name })
-				.where(eq(schema.users.id, row.userId));
+			if (row) {
+				await tx
+					.update(schema.users)
+					.set({ name })
+					.where(eq(schema.users.id, row.userId));
+			}
+		});
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
 		}
-	});
+		throw error;
+	}
 
 	revalidatePath("/dashboard/admin/mentors");
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
 	return {};
 }
 
@@ -297,6 +331,13 @@ export async function toggleMentorActive(
 
 		if (!mentor) {
 			return { error: "Mentor not found" };
+		}
+
+		const parsedSlug = parseMentorSlug(mentor.slug);
+		if (!parsedSlug.success) {
+			return {
+				error: `Cannot activate mentor. ${parsedSlug.error}`,
+			};
 		}
 
 		// name is guaranteed (users.name is NOT NULL); only mentor-owned fields
