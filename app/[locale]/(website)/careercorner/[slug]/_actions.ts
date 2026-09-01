@@ -23,7 +23,7 @@ import {
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { and, eq, getTableColumns, gte, lt, ne, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, gt, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
@@ -297,7 +297,7 @@ export const createBooking = actionClient
 			startAt.getTime() + settings.session_duration_minutes * 60_000,
 		);
 
-		// Per-mentee active cap (across all mentors — prevents one person hoarding bookings)
+		// Per-mentee future-booking cap (across all mentors — prevents one person hoarding slots)
 		const [{ activeCount }] = await db
 			.select({ activeCount: sql<number>`count(*)::int` })
 			.from(bookings)
@@ -305,6 +305,7 @@ export const createBooking = actionClient
 				and(
 					eq(bookings.mentee_email, parsedInput.mentee_email),
 					eq(bookings.status, "confirmed"),
+					gt(bookings.start_at, new Date()),
 				),
 			);
 		if (activeCount >= settings.max_active_bookings_per_mentee) {
