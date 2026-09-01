@@ -13,15 +13,17 @@ export default function AdminBookingsLoading() {
 			{/* Header */}
 			<SkeletonPageHeader />
 
-			<div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+			<div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
 				{STATS.map((stat) => (
 					<div
 						key={stat}
-						className="rounded-2xl border border-border/60 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+						className="flex items-center gap-3 rounded-xl border border-border/60 bg-white p-3 shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
 					>
-						<SkeletonBlock className="size-10 rounded-xl" />
-						<SkeletonBlock className="mt-4 h-8 w-16" />
-						<SkeletonBlock className="mt-2 h-4 w-24" />
+						<SkeletonBlock className="size-8 shrink-0 rounded-lg" />
+						<div className="space-y-1">
+							<SkeletonBlock className="h-5 w-10" />
+							<SkeletonBlock className="h-3 w-20" />
+						</div>
 					</div>
 				))}
 			</div>

@@ -84,24 +84,37 @@ export default async function AdminBookingsPage({
 				}
 			/>
 
-			<div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+			<div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
 				<StatCard
+					compact
 					icon={CalendarDays}
 					label="Total bookings"
 					value={summary.total}
 				/>
-				<StatCard icon={Clock3} label="Upcoming" value={summary.upcoming} />
 				<StatCard
+					compact
+					icon={Clock3}
+					label="Upcoming"
+					value={summary.upcoming}
+				/>
+				<StatCard
+					compact
 					icon={CheckCircle2}
 					label="Completed"
 					value={summary.completed}
 				/>
 				<StatCard
+					compact
 					icon={XCircle}
 					label={`Cancelled · ${summary.cancellationRate}%`}
 					value={summary.cancelled}
 				/>
-				<StatCard icon={UserX} label="No shows" value={summary.noShow} />
+				<StatCard
+					compact
+					icon={UserX}
+					label="No shows"
+					value={summary.noShow}
+				/>
 			</div>
 
 			<div className="mb-6">

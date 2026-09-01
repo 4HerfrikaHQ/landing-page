@@ -20,6 +20,8 @@ interface StatCardProps {
 		/** Label after the delta, e.g. "vs last month". */
 		label?: string;
 	};
+	/** A shorter, horizontal treatment for dense summary rows. */
+	compact?: boolean;
 	className?: string;
 }
 
@@ -30,6 +32,7 @@ export function StatCard({
 	formatValue,
 	href,
 	delta,
+	compact = false,
 	className,
 }: StatCardProps) {
 	const isPositive = delta ? delta.value >= 0 : false;
@@ -38,12 +41,18 @@ export function StatCard({
 		<div
 			className={cn(
 				"flex flex-col gap-4 rounded-2xl border border-border/60 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
+				compact && "flex-row items-center gap-3 rounded-xl p-3",
 				className,
 			)}
 		>
 			<div className="flex items-start justify-between">
-				<span className="flex size-10 items-center justify-center rounded-xl bg-surface-pink text-primary-500">
-					<Icon className="size-5" strokeWidth={2} />
+				<span
+					className={cn(
+						"flex size-10 items-center justify-center rounded-xl bg-surface-pink text-primary-500",
+						compact && "size-8 rounded-lg",
+					)}
+				>
+					<Icon className={cn("size-5", compact && "size-4")} strokeWidth={2} />
 				</span>
 				{href ? (
 					<Link
@@ -56,15 +65,27 @@ export function StatCard({
 				) : null}
 			</div>
 
-			<div className="space-y-1">
-				<p className="text-3xl font-semibold tabular-nums text-foreground">
+			<div className={cn("space-y-1", compact && "min-w-0 space-y-0")}>
+				<p
+					className={cn(
+						"text-3xl font-semibold tabular-nums text-foreground",
+						compact && "text-xl leading-tight",
+					)}
+				>
 					{formatValue ? (
 						<FormattedCounter value={value} format={formatValue} />
 					) : (
 						<AnimatedCounter target={value} />
 					)}
 				</p>
-				<p className="text-sm text-muted-foreground">{label}</p>
+				<p
+					className={cn(
+						"text-sm text-muted-foreground",
+						compact && "truncate text-xs",
+					)}
+				>
+					{label}
+				</p>
 			</div>
 
 			{delta ? (
