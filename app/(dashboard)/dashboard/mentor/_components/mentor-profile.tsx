@@ -223,7 +223,7 @@ export function MentorProfile({
 								}
 							/>
 							<Field
-								label="Nickname"
+								label="Display Name"
 								name="nickname"
 								value={fields.nickname}
 								onChange={(e) =>

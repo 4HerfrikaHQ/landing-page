@@ -296,7 +296,7 @@ export function EditMentorSheet({
 								defaultValue={mentor.position ?? ""}
 							/>
 							<Field
-								label="Nickname"
+								label="Display Name"
 								name="nickname"
 								defaultValue={mentor.nickname ?? ""}
 							/>
