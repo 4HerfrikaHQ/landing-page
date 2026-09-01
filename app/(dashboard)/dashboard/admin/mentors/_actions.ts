@@ -259,23 +259,21 @@ export async function updateMentor(
 	});
 	if (!currentMentor) return { error: "Mentor not found." };
 	const slugChanged = parsedSlug.slug !== currentMentor.slug;
+	if (slugChanged) {
+		const recentlyUsed = await db.query.mentors.findFirst({
+			where: and(
+				eq(schema.mentors.previous_slug, parsedSlug.slug),
+				ne(schema.mentors.id, id),
+			),
+			columns: { id: true },
+		});
+		if (recentlyUsed) return { error: "This profile link is already taken." };
+	}
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
 	try {
 		await db.transaction(async (tx) => {
-			if (slugChanged) {
-				await tx
-					.update(schema.mentors)
-					.set({ previous_slug: null })
-					.where(
-						and(
-							eq(schema.mentors.previous_slug, currentMentor.slug),
-							ne(schema.mentors.id, id),
-						),
-					);
-			}
-
 			const [row] = await tx
 				.update(schema.mentors)
 				.set({

@@ -71,24 +71,20 @@ export async function updateMySlug(slug: string): Promise<{
 	const parsedSlug = parseMentorSlug(slug);
 	if (!parsedSlug.success) return { error: parsedSlug.error };
 	if (parsedSlug.slug === mentor.slug) return { slug: mentor.slug };
+	const recentlyUsed = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.previous_slug, parsedSlug.slug),
+			ne(schema.mentors.id, mentor.id),
+		),
+		columns: { id: true },
+	});
+	if (recentlyUsed) return { error: "This profile link is already taken." };
 
 	try {
-		await db.transaction(async (tx) => {
-			await tx
-				.update(schema.mentors)
-				.set({ previous_slug: null })
-				.where(
-					and(
-						eq(schema.mentors.previous_slug, mentor.slug),
-						ne(schema.mentors.id, mentor.id),
-					),
-				);
-
-			await tx
-				.update(schema.mentors)
-				.set({ slug: parsedSlug.slug, previous_slug: mentor.slug })
-				.where(eq(schema.mentors.id, mentor.id));
-		});
+		await db
+			.update(schema.mentors)
+			.set({ slug: parsedSlug.slug, previous_slug: mentor.slug })
+			.where(eq(schema.mentors.id, mentor.id));
 	} catch (error) {
 		if (isUniqueViolation(error)) {
 			return { error: "This profile link is already taken." };
