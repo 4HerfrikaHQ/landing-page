@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import type { DayOfWeek } from "@/src/db/schema/tables/availability";
+import { trackEvent } from "@/src/lib/analytics";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { format, parse } from "date-fns";
 import { CalendarClock, UserRound } from "lucide-react";
@@ -42,13 +43,20 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	const tc = useTranslations("common");
 	const displayName = mentor.nickname || mentor.name;
 	const availability = mentor.availability ?? [];
-	const timezones = Array.from(new Set(availability.map((slot) => slot.timezone)));
+	const timezones = Array.from(
+		new Set(availability.map((slot) => slot.timezone)),
+	);
 	const slotsByDay = DAY_ORDER.map((day) => ({
 		day,
 		slots: availability
 			.filter((slot) => slot.day === day)
 			.sort((a, b) => a.start_time.localeCompare(b.start_time)),
 	})).filter((group) => group.slots.length > 0);
+	const analyticsMentor = {
+		mentor_id: mentor.id,
+		mentor_slug: mentor.slug,
+		mentor_name: displayName,
+	};
 
 	return (
 		<Dialog>
@@ -75,6 +83,13 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 						{mentor.position}
 					</p>
 					<DialogTrigger
+						onClick={() =>
+							trackEvent("mentor_details_viewed", {
+								...analyticsMentor,
+								mentor_role: mentor.position ?? "",
+								has_availability: availability.length > 0,
+							})
+						}
 						render={
 							<Button
 								variant="outline"
@@ -145,8 +160,11 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 																key={slot.start_time}
 																className="tabular-nums"
 															>
-																{formatTime(slot.start_time)} – {formatTime(slot.end_time)}
-																{timezones.length > 1 ? ` ${slot.timezone}` : ""}
+																{formatTime(slot.start_time)} –{" "}
+																{formatTime(slot.end_time)}
+																{timezones.length > 1
+																	? ` ${slot.timezone}`
+																	: ""}
 															</span>
 														))}
 													</span>
@@ -191,6 +209,12 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 									variant="solid"
 									size="lg"
 									href={`/careercorner/${mentor.slug}`}
+									onClick={() =>
+										trackEvent("mentor_booking_clicked", {
+											...analyticsMentor,
+											source: "mentor_details",
+										})
+									}
 									className="w-full sm:w-auto"
 								>
 									{tc("bookACall")}

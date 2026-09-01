@@ -7,8 +7,10 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
+import { trackEvent } from "@/src/lib/analytics";
 import { formatInTimeZone } from "date-fns-tz";
 import { useQueryState } from "nuqs";
+import { useEffect, useRef } from "react";
 import { BookingForm } from "./booking-form";
 
 export function BookingSection({
@@ -22,6 +24,16 @@ export function BookingSection({
 }) {
 	const [selected, setSelected] = useQueryState("slot");
 	const [tzParam] = useQueryState("tz");
+	const viewedRef = useRef(false);
+
+	useEffect(() => {
+		if (viewedRef.current) return;
+		viewedRef.current = true;
+		trackEvent("mentor_booking_page_viewed", {
+			mentor_slug: mentorSlug,
+			mentor_name: mentorName,
+		});
+	}, [mentorName, mentorSlug]);
 
 	const localTz =
 		typeof Intl !== "undefined"
@@ -40,7 +52,10 @@ export function BookingSection({
 				mentorSlug={mentorSlug}
 				initialWeekStart={initialWeekStart}
 				selectedStartUtc={selected}
-				onSelect={(s) => setSelected(s)}
+				onSelect={(s) => {
+					trackEvent("booking_slot_selected", { mentor_slug: mentorSlug });
+					void setSelected(s);
+				}}
 			/>
 			<Sheet
 				open={open}
