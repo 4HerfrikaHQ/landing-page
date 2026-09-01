@@ -60,6 +60,7 @@ export function BookingRow({ booking }: { booking: AdminBookingRow }) {
 					<Button
 						variant="ghost"
 						size="sm"
+						className="gap-1.5"
 						onClick={(event) => {
 							event.stopPropagation();
 							setOpen(true);
