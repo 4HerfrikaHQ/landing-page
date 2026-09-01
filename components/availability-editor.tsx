@@ -208,11 +208,15 @@ export function AvailabilityEditor({
 		setSlotErrors(new Map());
 
 		startTransition(async () => {
-			const result = await onSave(mentorId, slots, timezone);
-			if (result.error) {
-				setError(result.error);
-			} else {
-				setSaved(true);
+			try {
+				const result = await onSave(mentorId, slots, timezone);
+				if (result.error) {
+					setError(result.error);
+				} else {
+					setSaved(true);
+				}
+			} catch {
+				setError("Your availability could not be saved. Please try again.");
 			}
 		});
 	}

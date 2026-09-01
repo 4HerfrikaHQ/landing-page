@@ -31,7 +31,7 @@ export const mentorAction = actionClient.use(async ({ next }) => {
 	} catch {
 		throw new ActionError("Unauthorized");
 	}
-	return next({ ctx: mentorContext });
+	return next({ ctx: mentorContext.user });
 });
 
 /**
