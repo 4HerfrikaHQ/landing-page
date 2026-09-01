@@ -24,42 +24,45 @@ export async function loadMentorStats(range: StatsRange) {
 		? and(eq(bookings.mentor_id, mentor.id), gte(bookings.created_at, since))
 		: eq(bookings.mentor_id, mentor.id);
 
-	const [counts] = await db
-		.select({
-			total: sql<number>`count(*)::int`,
-			confirmed: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed')::int`,
-			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
-			noShow: sql<number>`count(*) filter (where ${bookings.status} = 'no_show')::int`,
-			cancelled: sql<number>`count(*) filter (where ${bookings.status} = 'cancelled')::int`,
-		})
-		.from(bookings)
-		.where(rangeFilter);
+	const [countRows, ratingRows, series] = await Promise.all([
+		db
+			.select({
+				total: sql<number>`count(*)::int`,
+				confirmed: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed')::int`,
+				completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
+				noShow: sql<number>`count(*) filter (where ${bookings.status} = 'no_show')::int`,
+				cancelled: sql<number>`count(*) filter (where ${bookings.status} = 'cancelled')::int`,
+			})
+			.from(bookings)
+			.where(rangeFilter),
+		db
+			.select({
+				avg: sql<number>`coalesce(avg(${bookingFeedback.rating}), 0)::float`,
+			})
+			.from(bookingFeedback)
+			.innerJoin(bookings, eq(bookings.id, bookingFeedback.booking_id))
+			.where(
+				since
+					? and(
+							eq(bookings.mentor_id, mentor.id),
+							gte(bookings.created_at, since),
+						)
+					: eq(bookings.mentor_id, mentor.id),
+			),
+		// Bookings over time, bucketed by week, within the selected range.
+		db
+			.select({
+				bucket: sql<string>`to_char(date_trunc('week', ${bookings.created_at}), 'YYYY-MM-DD')`,
+				count: sql<number>`count(*)::int`,
+			})
+			.from(bookings)
+			.where(rangeFilter)
+			.groupBy(sql`date_trunc('week', ${bookings.created_at})`)
+			.orderBy(sql`date_trunc('week', ${bookings.created_at})`),
+	]);
 
-	const [rating] = await db
-		.select({
-			avg: sql<number>`coalesce(avg(${bookingFeedback.rating}), 0)::float`,
-		})
-		.from(bookingFeedback)
-		.innerJoin(bookings, eq(bookings.id, bookingFeedback.booking_id))
-		.where(
-			since
-				? and(
-						eq(bookings.mentor_id, mentor.id),
-						gte(bookings.created_at, since),
-					)
-				: eq(bookings.mentor_id, mentor.id),
-		);
-
-	// Bookings over time, bucketed by week, within the selected range.
-	const series = await db
-		.select({
-			bucket: sql<string>`to_char(date_trunc('week', ${bookings.created_at}), 'YYYY-MM-DD')`,
-			count: sql<number>`count(*)::int`,
-		})
-		.from(bookings)
-		.where(rangeFilter)
-		.groupBy(sql`date_trunc('week', ${bookings.created_at})`)
-		.orderBy(sql`date_trunc('week', ${bookings.created_at})`);
+	const counts = countRows[0];
+	const rating = ratingRows[0];
 
 	return {
 		ok: true as const,

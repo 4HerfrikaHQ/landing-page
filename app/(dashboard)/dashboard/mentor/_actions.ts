@@ -139,39 +139,42 @@ export async function getMentorOverview() {
 	const weekAhead = new Date(now);
 	weekAhead.setDate(weekAhead.getDate() + 7);
 
-	const [counts] = await db
-		.select({
-			upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now.toISOString()}::timestamptz and ${bookings.start_at} < ${weekAhead.toISOString()}::timestamptz and ${bookings.status} = 'confirmed')::int`,
-			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
-			total: sql<number>`count(*)::int`,
-		})
-		.from(bookings)
-		.where(eq(bookings.mentor_id, mentor.id));
+	const [countRows, menteeRows, recent] = await Promise.all([
+		db
+			.select({
+				upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now.toISOString()}::timestamptz and ${bookings.start_at} < ${weekAhead.toISOString()}::timestamptz and ${bookings.status} = 'confirmed')::int`,
+				completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
+				total: sql<number>`count(*)::int`,
+			})
+			.from(bookings)
+			.where(eq(bookings.mentor_id, mentor.id)),
+		db
+			.select({ mentees: countDistinct(bookings.mentee_email) })
+			.from(bookings)
+			.where(eq(bookings.mentor_id, mentor.id)),
+		db
+			.select({
+				id: bookings.id,
+				menteeName: bookings.mentee_name,
+				menteeEmail: bookings.mentee_email,
+				startAt: bookings.start_at,
+				status: bookings.status,
+				meetUrl: bookings.meet_url,
+			})
+			.from(bookings)
+			.where(
+				and(
+					eq(bookings.mentor_id, mentor.id),
+					gte(bookings.start_at, now),
+					ne(bookings.status, "cancelled"),
+				),
+			)
+			.orderBy(bookings.start_at)
+			.limit(5),
+	]);
 
-	const [{ mentees } = { mentees: 0 }] = await db
-		.select({ mentees: countDistinct(bookings.mentee_email) })
-		.from(bookings)
-		.where(eq(bookings.mentor_id, mentor.id));
-
-	const recent = await db
-		.select({
-			id: bookings.id,
-			menteeName: bookings.mentee_name,
-			menteeEmail: bookings.mentee_email,
-			startAt: bookings.start_at,
-			status: bookings.status,
-			meetUrl: bookings.meet_url,
-		})
-		.from(bookings)
-		.where(
-			and(
-				eq(bookings.mentor_id, mentor.id),
-				gte(bookings.start_at, now),
-				ne(bookings.status, "cancelled"),
-			),
-		)
-		.orderBy(bookings.start_at)
-		.limit(5);
+	const counts = countRows[0];
+	const mentees = menteeRows[0]?.mentees ?? 0;
 
 	return {
 		mentor,
