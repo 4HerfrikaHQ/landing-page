@@ -10,7 +10,7 @@ import {
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
-import { parseMentorSlug } from "@/src/lib/mentor-slug";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
 	ActionError,
 	adminAction,
@@ -251,25 +251,41 @@ export async function updateMentor(
 	const bio = (formData.get("bio") as string) || undefined;
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
+	const parsedSlug = parseMentorSlug(formData.get("slug"));
+	if (!parsedSlug.success) return { error: parsedSlug.error };
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
-	await db.transaction(async (tx) => {
-		const [row] = await tx
-			.update(schema.mentors)
-			.set({ position, bio, nickname, linkedin_url })
-			.where(eq(schema.mentors.id, id))
-			.returning({ userId: schema.mentors.user_id });
+	try {
+		await db.transaction(async (tx) => {
+			const [row] = await tx
+				.update(schema.mentors)
+				.set({
+					position,
+					bio,
+					nickname,
+					linkedin_url,
+					slug: parsedSlug.slug,
+				})
+				.where(eq(schema.mentors.id, id))
+				.returning({ userId: schema.mentors.user_id });
 
-		if (row) {
-			await tx
-				.update(schema.users)
-				.set({ name })
-				.where(eq(schema.users.id, row.userId));
+			if (row) {
+				await tx
+					.update(schema.users)
+					.set({ name })
+					.where(eq(schema.users.id, row.userId));
+			}
+		});
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
 		}
-	});
+		throw error;
+	}
 
 	revalidatePath("/dashboard/admin/mentors");
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
 	return {};
 }
 
