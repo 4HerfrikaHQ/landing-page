@@ -31,7 +31,7 @@ describe("parseMentorSlug", () => {
 	});
 
 	test("rejects blank, malformed, and reserved slugs", () => {
-		for (const value of ["", "emoji-✨", "two--hyphens", "apply"]) {
+		for (const value of ["", "emoji-✨", "two--hyphens", "apply", "onboard"]) {
 			expect(parseMentorSlug(value).success).toBe(false);
 		}
 	});

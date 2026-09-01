@@ -36,11 +36,11 @@ export const mentors = pgTable(
 		index("mentors_user_id_idx").on(t.user_id),
 		check(
 			"mentors_slug_format_check",
-			sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.slug} <> 'apply'`,
+			sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.slug} not in ('apply', 'onboard')`,
 		),
 		check(
 			"mentors_previous_slug_format_check",
-			sql`${t.previous_slug} is null or (${t.previous_slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.previous_slug} <> 'apply')`,
+			sql`${t.previous_slug} is null or (${t.previous_slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and ${t.previous_slug} not in ('apply', 'onboard'))`,
 		),
 	],
 );

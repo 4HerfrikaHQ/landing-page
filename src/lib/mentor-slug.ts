@@ -1,7 +1,7 @@
 export const MENTOR_SLUG_MAX_LENGTH = 64;
 export const MENTOR_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-const RESERVED_MENTOR_SLUGS = new Set(["apply"]);
+const RESERVED_MENTOR_SLUGS = new Set(["apply", "onboard"]);
 
 export type MentorSlugResult =
 	| { success: true; slug: string }

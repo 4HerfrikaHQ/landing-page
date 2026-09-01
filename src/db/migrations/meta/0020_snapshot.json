@@ -1,5 +1,5 @@
 {
-  "id": "77ec50b6-83dd-4c7f-a402-d3ed36aaaeb5",
+  "id": "2b2109ba-03aa-4a92-8f8e-df92251defad",
   "prevId": "82bba4e6-9a15-4f19-bfae-513b9537bda1",
   "version": "7",
   "dialect": "postgresql",
@@ -1357,11 +1357,11 @@
       "checkConstraints": {
         "mentors_slug_format_check": {
           "name": "mentors_slug_format_check",
-          "value": "\"mentors\".\"slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and \"mentors\".\"slug\" <> 'apply'"
+          "value": "\"mentors\".\"slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and \"mentors\".\"slug\" not in ('apply', 'onboard')"
         },
         "mentors_previous_slug_format_check": {
           "name": "mentors_previous_slug_format_check",
-          "value": "\"mentors\".\"previous_slug\" is null or (\"mentors\".\"previous_slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and \"mentors\".\"previous_slug\" <> 'apply')"
+          "value": "\"mentors\".\"previous_slug\" is null or (\"mentors\".\"previous_slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and \"mentors\".\"previous_slug\" not in ('apply', 'onboard'))"
         }
       },
       "isRLSEnabled": false
