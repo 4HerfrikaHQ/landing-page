@@ -10,6 +10,7 @@ import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
+	isMentorCalendarError,
 	deleteMentorCalendarEvent,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
@@ -38,6 +39,11 @@ function calendarActionError(error: unknown): ActionError {
 			error.code === "connection_unavailable"
 				? "Booking is temporarily unavailable. Please try again later."
 				: "The calendar could not complete the requested operation.",
+		);
+	}
+	if (isMentorCalendarError(error)) {
+		return new ActionError(
+			`${mentorCalendarActionMessage(error)} [debug: ${error.code}]`,
 		);
 	}
 	return new ActionError(mentorCalendarActionMessage(error));
