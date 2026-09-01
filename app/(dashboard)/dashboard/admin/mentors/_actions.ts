@@ -46,7 +46,6 @@ interface MentorAdminFilters {
 	pageSize?: number;
 }
 
-// Not exported: "use server" modules may only export async functions.
 function mentorPublicUrl(slug: string) {
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 	return `${siteUrl}/careercorner/${slug}`;
@@ -160,8 +159,6 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.where(where),
 	]);
 
-	// URL built server-side so it reads NEXT_PUBLIC_SITE_URL at runtime, like
-	// every other public link in the app (a client-side read inlines it at build).
 	return {
 		rows: rows.map((row) => ({
 			...row,
@@ -172,12 +169,8 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 }
 
 /**
- * Public links for every mentor matching the current filters, unpaginated —
- * marketing copies the whole set at once instead of page by page.
- *
- * Active-only: the public page (getMentorBySlug) filters on active, so an
- * inactive mentor's URL 404s and would be a dead link in a campaign.
- * URLs are built here so client and server agree on the runtime site URL.
+ * Every mentor matching the current filters, unpaginated — marketing copies the
+ * whole set of public links at once instead of page by page.
  */
 export async function getMentorLinksForAdmin(
 	filters: Pick<MentorAdminFilters, "query" | "status" | "featured"> = {},

@@ -10,10 +10,6 @@ import { Check, Copy, Link2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// The site URL is resolved on the server and passed in: reading
-// NEXT_PUBLIC_SITE_URL here would inline it at build time, which can disagree
-// with the runtime value every server-side link (booking emails, onboarding)
-// uses.
 async function writeClipboard(text: string, message: string) {
 	try {
 		await navigator.clipboard.writeText(text);
