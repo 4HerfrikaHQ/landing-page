@@ -27,6 +27,7 @@ type Mentor = {
 	id: string;
 	name: string;
 	slug: string;
+	public_url: string;
 	position: string | null;
 	image: string | null;
 	email: string;
@@ -129,7 +130,11 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 					className="w-16 text-center"
 					onClick={(e) => e.stopPropagation()}
 				>
-					<CopyMentorLinkButton slug={mentor.slug} name={mentor.name} />
+					<CopyMentorLinkButton
+						url={mentor.public_url}
+						name={mentor.name}
+						active={mentor.active}
+					/>
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
