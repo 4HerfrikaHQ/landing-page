@@ -24,6 +24,7 @@ import {
 	desc,
 	eq,
 	ilike,
+	ne,
 	or,
 	sql,
 } from "drizzle-orm";
