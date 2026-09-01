@@ -38,29 +38,44 @@ export async function updateMyProfile(
 	const position = ((formData.get("position") as string) || "").trim();
 	if (!position) return { error: "Position is required." };
 
-	const parsedSlug = parseMentorSlug(formData.get("slug"));
-	if (!parsedSlug.success) return { error: parsedSlug.error };
-
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
-	try {
-		await db.transaction(async (tx) => {
-			await tx
-				.update(schema.mentors)
-				.set({
-					position,
-					bio: (formData.get("bio") as string) || undefined,
-					nickname: (formData.get("nickname") as string) || undefined,
-					slug: parsedSlug.slug,
-					linkedin_url: (formData.get("linkedin_url") as string) || undefined,
-				})
-				.where(eq(schema.mentors.id, mentor.id));
+	await db.transaction(async (tx) => {
+		await tx
+			.update(schema.mentors)
+			.set({
+				position,
+				bio: (formData.get("bio") as string) || undefined,
+				nickname: (formData.get("nickname") as string) || undefined,
+				linkedin_url: (formData.get("linkedin_url") as string) || undefined,
+			})
+			.where(eq(schema.mentors.id, mentor.id));
 
-			await tx
-				.update(schema.users)
-				.set({ name })
-				.where(eq(schema.users.id, mentor.user_id));
-		});
+		await tx
+			.update(schema.users)
+			.set({ name })
+			.where(eq(schema.users.id, mentor.user_id));
+	});
+
+	revalidatePath("/dashboard/mentor");
+	return {};
+}
+
+export async function updateMySlug(slug: string): Promise<{
+	slug?: string;
+	error?: string;
+}> {
+	const mentor = await getMentorProfile();
+	if (!mentor) return { error: "Mentor profile not found." };
+
+	const parsedSlug = parseMentorSlug(slug);
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+
+	try {
+		await db
+			.update(schema.mentors)
+			.set({ slug: parsedSlug.slug })
+			.where(eq(schema.mentors.id, mentor.id));
 	} catch (error) {
 		if (isUniqueViolation(error)) {
 			return { error: "This profile link is already taken." };
@@ -68,10 +83,10 @@ export async function updateMyProfile(
 		throw error;
 	}
 
-	revalidatePath("/dashboard/mentor");
+	revalidatePath("/dashboard/mentor/profile");
 	revalidatePath(`/careercorner/${mentor.slug}`);
 	revalidatePath(`/careercorner/${parsedSlug.slug}`);
-	return {};
+	return { slug: parsedSlug.slug };
 }
 
 export async function getMyBookingNotice(): Promise<{ minLeadHours: number }> {
