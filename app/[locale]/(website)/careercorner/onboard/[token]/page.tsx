@@ -132,7 +132,7 @@ export default async function OnboardingPage({
 							<OnboardingForm
 								token={token}
 								defaultBio={mentor.bio ?? ""}
-								defaultNickname={mentor.nickname ?? ""}
+								defaultDisplayName={mentor.nickname ?? ""}
 								defaultImage={mentor.image ?? ""}
 							/>
 						}

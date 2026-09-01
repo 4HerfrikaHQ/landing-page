@@ -76,7 +76,7 @@ export function CreateMentorSheet() {
 					</div>
 
 					<Field label="Position" name="position" />
-					<Field label="Nickname" name="nickname" />
+					<Field label="Display Name" name="nickname" />
 
 					<div className="flex flex-col gap-1.5">
 						<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
