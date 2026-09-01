@@ -8,6 +8,15 @@ const withMDX = createMDX();
 const nextConfig: NextConfig = {
 	typedRoutes: true,
 	productionBrowserSourceMaps: false,
+	async redirects() {
+		// Keep old bookmarks, mentor links, and onboarding invitations working.
+		// Explicit English URLs go straight to the unprefixed canonical URL.
+		return ["", "/en", "/fr", "/sw"].map((prefix) => ({
+			source: `${prefix}/careers-corner/:path*`,
+			destination: `${prefix === "/en" ? "" : prefix}/careercorner/:path*`,
+			permanent: true,
+		}));
+	},
 	experimental: {
 		authInterrupts: true,
 		serverActions: {
@@ -44,6 +53,12 @@ const nextConfig: NextConfig = {
 			{
 				protocol: "http",
 				hostname: "localhost",
+				port: "54321",
+				pathname: "/storage/v1/object/public/**",
+			},
+			{
+				protocol: "http",
+				hostname: "127.0.0.1",
 				port: "54321",
 				pathname: "/storage/v1/object/public/**",
 			},

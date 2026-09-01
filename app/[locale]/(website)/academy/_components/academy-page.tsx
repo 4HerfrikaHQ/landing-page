@@ -35,7 +35,7 @@ const academies = [
 		name: "Business Academy",
 		description:
 			"Turn your ideas into sustainable ventures with practical business skills, mentorship, and a community built to help you grow.",
-		image: "/assets/academy/business-source.png",
+		image: "/assets/academy/business-source.jpg",
 	},
 	{
 		academy: "climate",
@@ -129,7 +129,7 @@ const navLinks = [
 	["About Us", "/about"],
 	["Projects", "/projects"],
 	["Academy", "/academy"],
-	["Career Corner", "/careers-corner"],
+	["Career Corner", "/careercorner"],
 	["Blog", "/blog"],
 	["Contact Us", "/contact-us"],
 ] as const;
@@ -421,7 +421,7 @@ export function AcademyPage() {
 							type="button"
 							onClick={() => openWaitlist()}
 							size="lg"
-							className="h-[53px] gap-2 bg-[#e91e63] px-6 text-xl font-medium hover:bg-[#d91757]"
+							className="h-[53px] gap-2 bg-[#ec008c] px-6 text-xl font-medium hover:bg-[#d1007c]"
 						>
 							{t("joinWaitlist")} <ArrowRight className="size-5" />
 						</Button>
@@ -670,10 +670,10 @@ function AcademyFooter() {
 								<Link href="/projects">Projects</Link>
 							</li>
 							<li>
-								<Link href="/careers-corner">Become an Ambassador</Link>
+								<Link href="/careercorner">Become an Ambassador</Link>
 							</li>
 							<li>
-								<Link href="/careers-corner">Volunteer as a Mentor</Link>
+								<Link href="/careercorner">Volunteer as a Mentor</Link>
 							</li>
 							<li>
 								<Link href="/donate">Donate</Link>
@@ -692,7 +692,6 @@ function AcademyFooter() {
 							<li>
 								<Link href="/privacy">Privacy</Link>
 							</li>
-							<li>Cookies</li>
 						</ul>
 					</div>
 					<div>

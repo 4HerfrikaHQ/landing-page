@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" ADD COLUMN "hosting_mode" text DEFAULT 'org_google' NOT NULL;

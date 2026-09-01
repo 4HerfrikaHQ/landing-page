@@ -10,6 +10,7 @@ import {
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
 	ActionError,
 	adminAction,
@@ -28,27 +29,33 @@ import {
 	sql,
 } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { type MentorSortValue, SetFeaturedMentorSchema } from "./_schema";
+import { Resend } from "resend";
+import {
+	type MentorSortDirection,
+	type MentorSortValue,
+	RequestMentorCalendarConnectionSchema,
+	SetFeaturedMentorSchema,
+} from "./_schema";
 
 interface MentorAdminFilters {
 	query?: string;
 	status?: "active" | "inactive";
 	sort?: MentorSortValue;
-	/** When "featured"/"not_featured", filter against the singleton state. */
-	featured?: "featured" | "not_featured";
+	order?: MentorSortDirection;
+	calendar?: "connected" | "not_connected";
 	page?: number;
 	pageSize?: number;
 }
 
-export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
-	const {
-		query,
-		status,
-		sort = "name",
-		featured,
-		page = 1,
-		pageSize = 20,
-	} = filters;
+/**
+ * Shared filter translation so the paginated table and the "copy every link"
+ * action always agree on which mentors match.
+ */
+function mentorFilterWhere({
+	query,
+	status,
+	calendar,
+}: Pick<MentorAdminFilters, "query" | "status" | "calendar">) {
 	const conditions: (SQL<unknown> | undefined)[] = [];
 
 	if (query) {
@@ -69,33 +76,50 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			break;
 	}
 
-	// Resolve the featured filter into a SQL condition so pagination stays correct
-	// (the singleton featured mentor can't be filtered in-memory after limit/offset).
-	if (featured) {
-		const featuredId = await getFeaturedMentorId();
-		if (featured === "featured") {
-			if (!featuredId) return { rows: [], total: 0 };
-			conditions.push(eq(schema.mentors.id, featuredId));
-		} else if (featuredId) {
-			conditions.push(ne(schema.mentors.id, featuredId));
-		}
+	if (calendar === "connected") {
+		conditions.push(
+			and(
+				eq(schema.mentorGoogleConnections.status, "connected"),
+				eq(
+					schema.mentorGoogleConnections.reauthorization_state,
+					"not_required",
+				),
+			),
+		);
+	} else if (calendar === "not_connected") {
+		conditions.push(sql`not (
+			coalesce(${schema.mentorGoogleConnections.status} = 'connected', false)
+			and coalesce(${schema.mentorGoogleConnections.reauthorization_state} = 'not_required', false)
+		)`);
 	}
 
-	const where = conditions.length ? and(...conditions) : undefined;
+	return conditions.length ? and(...conditions) : undefined;
+}
+
+export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
+	await requireSuperAdmin();
+
+	const { sort = "name", order, page = 1, pageSize = 20 } = filters;
+
+	const where = mentorFilterWhere(filters);
+
 	const bookingCount = sql<number>`count(${bookings.id})`.as("booking_count");
 
-	const orderBy =
+	const sortDirection = order ?? (sort === "name" ? "asc" : "desc");
+	const sortColumn =
 		sort === "joined"
-			? desc(schema.mentors.created_at)
+			? schema.mentors.created_at
 			: sort === "bookings"
-				? desc(bookingCount)
-				: asc(schema.users.name);
+				? bookingCount
+				: schema.users.name;
+	const orderBy = sortDirection === "asc" ? asc(sortColumn) : desc(sortColumn);
 
 	const [rows, [{ total }]] = await Promise.all([
 		db
 			.select({
 				id: schema.mentors.id,
 				name: schema.users.name,
+				slug: schema.mentors.slug,
 				position: schema.mentors.position,
 				image: schema.mentors.image,
 				email: schema.users.email,
@@ -103,14 +127,26 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				nickname: schema.mentors.nickname,
 				linkedin_url: schema.mentors.linkedin_url,
 				active: schema.mentors.active,
+				google_connection_status: schema.mentorGoogleConnections.status,
+				google_reauthorization_state:
+					schema.mentorGoogleConnections.reauthorization_state,
 				created_at: schema.mentors.created_at,
 				booking_count: bookingCount,
 			})
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.leftJoin(
+				schema.mentorGoogleConnections,
+				eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+			)
 			.leftJoin(bookings, eq(bookings.mentor_id, schema.mentors.id))
 			.where(where)
-			.groupBy(schema.mentors.id, schema.users.id)
+			.groupBy(
+				schema.mentors.id,
+				schema.users.id,
+				schema.mentorGoogleConnections.status,
+				schema.mentorGoogleConnections.reauthorization_state,
+			)
 			.orderBy(orderBy)
 			.limit(pageSize)
 			.offset((page - 1) * pageSize),
@@ -118,10 +154,37 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.select({ total: count() })
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.leftJoin(
+				schema.mentorGoogleConnections,
+				eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+			)
 			.where(where),
 	]);
 
 	return { rows, total };
+}
+
+/**
+ * Every mentor matching the current filters, unpaginated — marketing copies the
+ * whole set of public links at once instead of page by page.
+ */
+export async function getMentorLinksForAdmin(
+	filters: Pick<MentorAdminFilters, "query" | "status" | "calendar"> = {},
+) {
+	await requireSuperAdmin();
+
+	const where = mentorFilterWhere(filters);
+
+	return db
+		.select({ name: schema.users.name, slug: schema.mentors.slug })
+		.from(schema.mentors)
+		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+		.leftJoin(
+			schema.mentorGoogleConnections,
+			eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+		)
+		.where(where)
+		.orderBy(asc(schema.users.name));
 }
 
 export type AdminMentorRow = Awaited<
@@ -198,25 +261,58 @@ export async function updateMentor(
 	const bio = (formData.get("bio") as string) || undefined;
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
+	const parsedSlug = parseMentorSlug(formData.get("slug"));
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+	const currentMentor = await db.query.mentors.findFirst({
+		where: eq(schema.mentors.id, id),
+		columns: { slug: true },
+	});
+	if (!currentMentor) return { error: "Mentor not found." };
+	const slugChanged = parsedSlug.slug !== currentMentor.slug;
+	if (slugChanged) {
+		const recentlyUsed = await db.query.mentors.findFirst({
+			where: and(
+				eq(schema.mentors.previous_slug, parsedSlug.slug),
+				ne(schema.mentors.id, id),
+			),
+			columns: { id: true },
+		});
+		if (recentlyUsed) return { error: "This profile link is already taken." };
+	}
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
-	await db.transaction(async (tx) => {
-		const [row] = await tx
-			.update(schema.mentors)
-			.set({ position, bio, nickname, linkedin_url })
-			.where(eq(schema.mentors.id, id))
-			.returning({ userId: schema.mentors.user_id });
+	try {
+		await db.transaction(async (tx) => {
+			const [row] = await tx
+				.update(schema.mentors)
+				.set({
+					position,
+					bio,
+					nickname,
+					linkedin_url,
+					slug: parsedSlug.slug,
+					previous_slug: slugChanged ? currentMentor.slug : undefined,
+				})
+				.where(eq(schema.mentors.id, id))
+				.returning({ userId: schema.mentors.user_id });
 
-		if (row) {
-			await tx
-				.update(schema.users)
-				.set({ name })
-				.where(eq(schema.users.id, row.userId));
+			if (row) {
+				await tx
+					.update(schema.users)
+					.set({ name })
+					.where(eq(schema.users.id, row.userId));
+			}
+		});
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
 		}
-	});
+		throw error;
+	}
 
 	revalidatePath("/dashboard/admin/mentors");
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
 	return {};
 }
 
@@ -245,6 +341,13 @@ export async function toggleMentorActive(
 
 		if (!mentor) {
 			return { error: "Mentor not found" };
+		}
+
+		const parsedSlug = parseMentorSlug(mentor.slug);
+		if (!parsedSlug.success) {
+			return {
+				error: `Cannot activate mentor. ${parsedSlug.error}`,
+			};
 		}
 
 		// name is guaranteed (users.name is NOT NULL); only mentor-owned fields
@@ -322,7 +425,53 @@ export const setFeaturedMentor = adminAction
 				.where(eq(schema.featuredMentorState.id, SINGLETON_ID));
 		});
 
-		revalidatePath("/careers-corner");
+		revalidatePath("/careercorner");
 		revalidatePath("/dashboard/admin/mentors");
 		return { ok: true };
+	});
+
+export const requestMentorCalendarConnection = adminAction
+	.schema(RequestMentorCalendarConnectionSchema)
+	.action(async ({ parsedInput }) => {
+		const [mentor] = await db
+			.select({ email: schema.users.email, name: schema.users.name })
+			.from(schema.mentors)
+			.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
+			.where(eq(schema.mentors.id, parsedInput.mentorId))
+			.limit(1);
+
+		if (!mentor?.email) {
+			throw new ActionError("That mentor has no email on file.");
+		}
+
+		const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
+		const firstName = mentor.name?.split(" ")[0] ?? "there";
+
+		const resend = new Resend(process.env.RESEND_API_KEY);
+		const { error } = await resend.emails.send({
+			from: "4herfrika <hello@4herfrika.org>",
+			to: mentor.email,
+			subject: "Connect your Google Calendar to host mentee calls",
+			text: `Hi ${firstName},
+
+To host mentee calls on your own Google Calendar and Meet, connect your Google
+account from your mentor profile:
+
+${siteUrl}/dashboard/mentor/profile
+
+Sign in with the Google account you want your calls organised from, and approve
+the Calendar permission.
+
+— 4HerFrika`,
+		});
+
+		if (error) {
+			console.error("[mentor-calendar-connect-request-failed]", {
+				mentorId: parsedInput.mentorId,
+				errorType: error.name,
+			});
+			throw new ActionError("The email could not be sent. Try again.");
+		}
+
+		return { sentTo: mentor.email };
 	});

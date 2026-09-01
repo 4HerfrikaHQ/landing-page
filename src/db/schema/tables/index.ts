@@ -1,6 +1,13 @@
 export { users } from "./users";
 export type { DbUser, DbUserInsert, UserRole } from "./users";
 
+export { actionLinks, ActionLinkAction } from "./action-links";
+export type {
+	ActionLinkAction as ActionLinkActionType,
+	DbActionLink,
+	DbActionLinkInsert,
+} from "./action-links";
+
 export { mentors } from "./mentors";
 export type {
 	DbMentor,
@@ -49,3 +56,20 @@ export type {
 export * from "./relations";
 export { academyWaitlistEntries, Academy } from "./academy-waitlist-entries";
 export type { DbAcademyWaitlistEntry } from "./academy-waitlist-entries";
+
+export {
+	mentorGoogleConnections,
+	mentorGoogleOAuthStates,
+	MentorGoogleConnectionStatus,
+	MentorGoogleReauthorizationState,
+	MentorGoogleRevocationState,
+} from "./mentor-google-connections";
+export type {
+	DbMentorGoogleConnection,
+	DbMentorGoogleConnectionInsert,
+	DbMentorGoogleOAuthState,
+	DbMentorGoogleOAuthStateInsert,
+	MentorGoogleConnectionStatus as MentorGoogleConnectionStatusType,
+	MentorGoogleReauthorizationState as MentorGoogleReauthorizationStateType,
+	MentorGoogleRevocationState as MentorGoogleRevocationStateType,
+} from "./mentor-google-connections";

@@ -1,26 +1,23 @@
-"use client";
+import { cn } from "@/utils/cn";
+import type { HTMLAttributes } from "react";
 
-import { type HTMLMotionProps, motion, useReducedMotion } from "motion/react";
+type HoverCardProps = HTMLAttributes<HTMLDivElement> & {
+	children: React.ReactNode;
+};
 
-interface HoverCardProps extends HTMLMotionProps<"div"> {
-  children: React.ReactNode;
-}
-
-export function HoverCard({ children, ...props }: HoverCardProps) {
-  const shouldReduce = useReducedMotion();
-
-  if (shouldReduce) {
-    return <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>;
-  }
-
-  return (
-    <motion.div
-      whileHover={{ y: -6, boxShadow: "0 10px 40px rgba(0,0,0,0.1)" }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      {...props}
-    >
-      {children}
-    </motion.div>
-  );
+export function HoverCard({ children, className, ...props }: HoverCardProps) {
+	return (
+		<div
+			className={cn(
+				"transition duration-200 ease-out",
+				"hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)]",
+				"active:scale-[0.98]",
+				"motion-reduce:transition-none",
+				className,
+			)}
+			{...props}
+		>
+			{children}
+		</div>
+	);
 }

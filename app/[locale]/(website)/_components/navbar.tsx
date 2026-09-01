@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
@@ -12,6 +11,7 @@ import { YearOneReport } from "./year-one-report";
 
 const NAV_LINK_KEYS: Record<string, string> = {
 	"About Us": "aboutUs",
+	"Impact Hub": "impactHub",
 	Projects: "projects",
 	Academy: "academy",
 	"Career Corner": "careerCorner",
@@ -41,9 +41,12 @@ export const Navbar = async () => {
 	};
 
 	return (
-		<div className="relative" data-site-navbar>
+		<>
 			<YearOneReport />
-			<header className="sticky inset-x-0 top-0 z-50 bg-transparent h-16 lg:h-22.5">
+			<header
+				data-site-navbar
+				className="sticky inset-x-0 top-0 z-50 h-16 bg-background/85 backdrop-blur-sm lg:h-22.5"
+			>
 				<nav
 					className="flex items-center justify-between h-full px-6 lg:px-8"
 					aria-label="Global"
@@ -66,15 +69,14 @@ export const Navbar = async () => {
 									key={link.name}
 									className="relative group h-full flex items-center"
 								>
-									<Button
-										variant="ghost"
+									<button
 										type="button"
-										className="flex items-center gap-1 text-foreground hover:text-primary-500"
+										className="flex h-full items-center gap-1 text-sm leading-6 text-foreground hover:text-primary-500 lg:text-base"
 										aria-haspopup="true"
 									>
 										{getNavName(link.name)}
 										<ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
-									</Button>
+									</button>
 
 									<div className="absolute top-[75%] left-1/2 -translate-x-1/2 mt-2 w-48 bg-background shadow-lg z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform group-hover:translate-y-2 rounded-md">
 										{link.dropdownItems.map((dropdownItem) => (
@@ -119,6 +121,6 @@ export const Navbar = async () => {
 					</div>
 				</nav>
 			</header>
-		</div>
+		</>
 	);
 };

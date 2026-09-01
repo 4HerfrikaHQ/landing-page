@@ -14,12 +14,15 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getFeaturedMentorId, getMentorsForAdmin } from "./_actions";
+import { getMentorLinksForAdmin, getMentorsForAdmin } from "./_actions";
+import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
+import { SortableTableHead } from "./_components/sortable-table-head";
 import {
-	MentorFeaturedFilter,
+	MentorCalendarFilter,
+	MentorSortDirection,
 	MentorSortValue,
 	MentorStatusFilter,
 } from "./_schema";
@@ -33,7 +36,8 @@ export default async function MentorsPage({
 		q?: string;
 		status?: string;
 		sort?: string;
-		featured?: string;
+		order?: string;
+		calendar?: string;
 		page?: string;
 	}>;
 }) {
@@ -43,19 +47,27 @@ export default async function MentorsPage({
 	const sp = await searchParams;
 	const status = MentorStatusFilter.safeParse(sp.status);
 	const sort = MentorSortValue.safeParse(sp.sort);
-	const featured = MentorFeaturedFilter.safeParse(sp.featured);
+	const order = MentorSortDirection.safeParse(sp.order);
+	const calendar = MentorCalendarFilter.safeParse(sp.calendar);
 	const page = Math.max(1, Number(sp.page) || 1);
 
-	const [{ rows: mentors, total }, currentFeaturedId] = await Promise.all([
+	const activeFilters = {
+		query: sp.q,
+		status: status.success ? status.data : undefined,
+		calendar: calendar.success ? calendar.data : undefined,
+	};
+
+	// Links cover every mentor matching the filters, not just this page — there
+	// are more mentors than fit on one page.
+	const [{ rows: mentors, total }, links] = await Promise.all([
 		getMentorsForAdmin({
-			query: sp.q,
-			status: status.success ? status.data : undefined,
+			...activeFilters,
 			sort: sort.success ? sort.data : undefined,
-			featured: featured.success ? featured.data : undefined,
+			order: order.success ? order.data : undefined,
 			page,
 			pageSize: PAGE_SIZE,
 		}),
-		getFeaturedMentorId(),
+		getMentorLinksForAdmin(activeFilters),
 	]);
 
 	return (
@@ -63,7 +75,12 @@ export default async function MentorsPage({
 			<PageHeader
 				title="Mentors"
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
-				action={<CreateMentorSheet />}
+				action={
+					<div className="flex items-center gap-2">
+						<CopyAllMentorLinksButton mentors={links} />
+						<CreateMentorSheet />
+					</div>
+				}
 			/>
 
 			<div className="mb-6">
@@ -79,33 +96,30 @@ export default async function MentorsPage({
 					<TableHeader>
 						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<TableHead className="font-medium text-muted-foreground">
-								Name
-							</TableHead>
+							<SortableTableHead value="name">Name</SortableTableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Email
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Bookings
-							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Joined
+							<SortableTableHead value="bookings">Bookings</SortableTableHead>
+							<SortableTableHead value="joined">Joined</SortableTableHead>
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Link
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Featured
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Google Cal
 							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} className="p-0">
+								<TableCell colSpan={9} className="p-0">
 									<EmptyState
 										icon={Users}
 										title="No mentors match these filters"
@@ -116,11 +130,7 @@ export default async function MentorsPage({
 							</TableRow>
 						) : (
 							mentors.map((mentor) => (
-								<MentorTableRow
-									key={mentor.id}
-									mentor={mentor}
-									currentFeaturedId={currentFeaturedId}
-								/>
+								<MentorTableRow key={mentor.id} mentor={mentor} />
 							))
 						)}
 					</TableBody>

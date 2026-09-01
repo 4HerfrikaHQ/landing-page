@@ -1,16 +1,32 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/utils/cn";
 import { format } from "date-fns";
+import {
+	CalendarCheck2,
+	CalendarOff,
+	CalendarSync,
+	CalendarX2,
+} from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
+import { toast } from "sonner";
+import { requestMentorCalendarConnection } from "../_actions";
 import { AvatarUpload } from "./avatar-upload";
+import { CopyMentorLinkButton } from "./copy-link";
 import { EditMentorSheet } from "./edit-mentor-sheet";
-import { FeatureMentorButton } from "./feature-mentor-button";
 import { ToggleActiveButton } from "./toggle-active-button";
 
 type Mentor = {
 	id: string;
 	name: string;
+	slug: string;
 	position: string | null;
 	image: string | null;
 	email: string;
@@ -18,19 +34,68 @@ type Mentor = {
 	nickname: string | null;
 	linkedin_url: string | null;
 	active: boolean;
+	google_connection_status:
+		| "connected"
+		| "reauth_required"
+		| "revoked"
+		| "disconnected"
+		| null;
+	google_reauthorization_state: "not_required" | "required" | null;
 	created_at: Date;
 	booking_count: number;
 };
 
-export function MentorTableRow({
-	mentor,
-	currentFeaturedId,
-}: {
-	mentor: Mentor;
-	currentFeaturedId: string | null;
-}) {
+function calendarStatus(mentor: Mentor) {
+	if (
+		mentor.google_connection_status === "connected" &&
+		mentor.google_reauthorization_state === "not_required"
+	) {
+		return {
+			label: "Connected",
+			icon: CalendarCheck2,
+			className: "text-emerald-600",
+		};
+	}
+
+	if (mentor.google_connection_status === "revoked") {
+		return {
+			label: "Disconnected",
+			icon: CalendarX2,
+			className: "text-slate-500",
+		};
+	}
+
+	if (
+		mentor.google_connection_status === "reauth_required" ||
+		mentor.google_reauthorization_state === "required"
+	) {
+		return {
+			label: "Reconnect needed",
+			icon: CalendarSync,
+			className: "text-rose-600",
+		};
+	}
+
+	return {
+		label: "Not connected",
+		icon: CalendarOff,
+		className: "text-amber-600",
+	};
+}
+
+export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 	const [editIsOpen, setEditIsOpen] = useState(false);
-	const eligibleToFeature = mentor.active && !!mentor.image;
+	const googleCalendar = calendarStatus(mentor);
+	const CalendarIcon = googleCalendar.icon;
+	const isConnected = googleCalendar.label === "Connected";
+	const firstName = mentor.name.split(" ")[0];
+
+	const requestConnection = useAction(requestMentorCalendarConnection, {
+		onSuccess: ({ data }) =>
+			toast.success(`Connection link sent to ${data?.sentTo}`),
+		onError: ({ error }) =>
+			toast.error(error.serverError ?? "Failed to send the connection link"),
+	});
 
 	return (
 		<>
@@ -60,15 +125,58 @@ export function MentorTableRow({
 				<TableCell className="text-sm text-muted-foreground">
 					{format(mentor.created_at, "MMM d, yyyy")}
 				</TableCell>
+				<TableCell
+					className="w-16 text-center"
+					onClick={(e) => e.stopPropagation()}
+				>
+					<CopyMentorLinkButton slug={mentor.slug} name={mentor.name} />
+				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />
 				</TableCell>
-				<TableCell onClick={(e) => e.stopPropagation()}>
-					<FeatureMentorButton
-						id={mentor.id}
-						isFeatured={currentFeaturedId === mentor.id}
-						eligible={eligibleToFeature}
-					/>
+				<TableCell
+					className="w-16 text-center"
+					onClick={(e) => e.stopPropagation()}
+				>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								isConnected ? (
+									<span
+										aria-label={`Google Calendar: ${googleCalendar.label}`}
+										className={cn(
+											"inline-flex size-8 items-center justify-center rounded-full bg-muted/70",
+											googleCalendar.className,
+										)}
+									/>
+								) : (
+									<button
+										type="button"
+										disabled={requestConnection.isPending}
+										onClick={() =>
+											requestConnection.execute({ mentorId: mentor.id })
+										}
+										aria-label={`Google Calendar: ${googleCalendar.label}. Email ${firstName} a connection link.`}
+										className={cn(
+											"inline-flex size-8 cursor-pointer items-center justify-center rounded-full bg-muted/70 transition-colors hover:bg-muted disabled:opacity-50",
+											googleCalendar.className,
+										)}
+									/>
+								)
+							}
+						>
+							<CalendarIcon className="size-4" aria-hidden />
+						</TooltipTrigger>
+						<TooltipContent>
+							Google Calendar: {googleCalendar.label}
+							{isConnected ? null : (
+								<span className="mt-1 block text-xs opacity-80">
+									Only {firstName} can connect it — Google needs their own
+									account. Click to email them the link.
+								</span>
+							)}
+						</TooltipContent>
+					</Tooltip>
 				</TableCell>
 			</TableRow>
 

@@ -1,6 +1,6 @@
 # Politique de confidentialité
 
-_Dernière mise à jour : 6 juillet 2026_
+_Dernière mise à jour : 2 août 2026_
 
 Cette politique explique ce que nous collectons, pourquoi, et avec qui nous le
 partageons. En résumé : nous ne collectons que ce dont la plateforme de mentorat
@@ -57,6 +57,39 @@ Nous ne partageons que ce dont chacun a besoin :
   personnelle).
 
 Nous ne vendons pas vos données et ne les partageons pas avec des annonceurs.
+
+## Lorsqu'un mentor connecte Google Calendar
+
+Les mentors peuvent choisir de connecter leur propre Google Calendar afin qu'une
+session réservée soit créée dans leur calendrier principal, avec un lien Google
+Meet. Cette connexion utilise l'autorisation OAuth de Google. La demande de
+consentement utilise l'ensemble de portées examiné suivant :
+
+- `https://www.googleapis.com/auth/calendar.events.owned` — créer et gérer les
+  événements de session appartenant à l'application dans le calendrier du
+  mentor ;
+- `openid` et `email` — authentifier le compte Google sélectionné et recevoir
+  ses métadonnées d'identité de base, notamment son identifiant Google stable et
+  son adresse e-mail, afin d'associer la connexion au bon mentor.
+
+Nous conservons l'adresse e-mail Google, l'identifiant stable, l'ensemble des
+portées accordées, ainsi que le statut et les dates de la connexion. Nous ne
+conservons pas durablement les jetons d'accès ni les codes d'autorisation. Le
+jeton de rafraîchissement est conservé uniquement sur notre serveur, sous forme
+chiffrée, et n'est jamais placé dans le stockage du navigateur, les URL ou les
+logs. Il sert à obtenir des jetons d'accès de courte durée lorsque la connexion
+Calendar du mentor est nécessaire.
+
+Un mentor peut se reconnecter si l'autorisation expire ou est retirée. La
+déconnexion arrête l'utilisation locale de Calendar et lance la révocation de
+l'accès Google. Lorsque la révocation est confirmée (y compris lorsque Google
+indique que l'autorisation est déjà invalide), nous supprimons le texte chiffré
+du jeton de rafraîchissement et conservons uniquement des métadonnées de statut
+non sensibles. Si la révocation distante échoue, l'utilisation locale
+est désactivée et le texte chiffré est conservé temporairement uniquement pour
+une nouvelle tentative protégée ; il est supprimé après sa réussite. Les demandes
+de suppression du compte et des données sont traitées par notre procédure
+habituelle d'assistance.
 
 ## Pourquoi nous les utilisons
 

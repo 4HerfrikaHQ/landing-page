@@ -10,7 +10,7 @@ import {
 } from "@/src/db/schema/tables/mentor-applications";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { signBookingToken } from "@/src/lib/booking-tokens";
+import { createActionLink } from "@/src/lib/action-links";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { type SQL, and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
@@ -34,7 +34,7 @@ async function sendApprovalEmail(params: {
 	onboardToken: string;
 }) {
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
-	const url = `${siteUrl}/careers-corner/onboard/${params.onboardToken}`;
+	const url = `${siteUrl}/careercorner/onboard/${params.onboardToken}`;
 	const resend = new Resend(process.env.RESEND_API_KEY);
 	await resend.emails.send({
 		from: FROM,
@@ -216,9 +216,9 @@ export const approveMentorApplication = adminAction
 			return { mentorId: mentor.id };
 		});
 
-		const expiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000;
-		const token = signBookingToken({
-			bookingId: result.mentorId,
+		const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+		const token = await createActionLink({
+			resourceId: result.mentorId,
 			action: "mentor_onboard",
 			expiresAt,
 		});

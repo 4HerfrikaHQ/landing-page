@@ -1,12 +1,13 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { Button } from "@/components/ui/button";
+import { isLocalImageUrl } from "@/src/lib/image-url";
 import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, LinkIcon, UserRound, Video } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
-import { getInitialWeekStart } from "../../careers-corner/[slug]/_actions";
+import { getInitialWeekStart } from "../../careercorner/[slug]/_actions";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";
 
@@ -43,7 +44,7 @@ export default async function ManageBookingPage({
 					title="This booking link isn't valid"
 					description="The link may have expired or already been used. Head back to find your mentor and book again."
 					action={
-						<Button variant="outline" size="sm" href="/careers-corner">
+						<Button variant="outline" size="sm" href="/careercorner">
 							Browse mentors
 						</Button>
 					}
@@ -74,7 +75,7 @@ export default async function ManageBookingPage({
 							variant="outline"
 							size="sm"
 							href={
-								mentor ? `/careers-corner/${mentor.slug}` : "/careers-corner"
+								mentor ? `/careercorner/${mentor.slug}` : "/careercorner"
 							}
 						>
 							Book again
@@ -108,7 +109,7 @@ export default async function ManageBookingPage({
 										alt={mentor.name}
 										fill
 										sizes="48px"
-										unoptimized={mentor.image.includes("localhost")}
+										unoptimized={isLocalImageUrl(mentor.image)}
 										className="object-cover object-top"
 									/>
 								) : (

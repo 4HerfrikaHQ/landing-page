@@ -1,35 +1,61 @@
 import {
-	deleteMeetEvent,
-	sendBookingConfirmationMentee,
-	sendBookingConfirmationMentor,
-} from "@/app/[locale]/(website)/careers-corner/[slug]/_actions";
-import { buildBookingIcs } from "@/app/[locale]/(website)/careers-corner/[slug]/_helpers";
-import {
 	sendCancellationEmails,
 	siteUrl,
 	swapMeetEvent,
 	validateNewSlot,
 } from "@/app/[locale]/(website)/bookings/[token]/_helpers";
+import {
+	sendBookingConfirmationMentee,
+	sendBookingConfirmationMentor,
+} from "@/app/[locale]/(website)/careercorner/[slug]/_actions";
+import { buildBookingIcs } from "@/app/[locale]/(website)/careercorner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { type DbBooking, bookings } from "@/src/db/schema/tables/bookings";
-import { signBookingToken } from "@/src/lib/booking-tokens";
+import { replaceActionLink } from "@/src/lib/action-links";
+import { selectBookingCalendarProvider } from "@/src/lib/booking-calendar-host";
+import {
+	deleteMentorCalendarEvent,
+	isMentorCalendarError,
+	mentorCalendarActionMessage,
+	stableCalendarAttemptKey,
+} from "@/src/lib/google-calendar";
+import {
+	OrgGoogleCalendarError,
+	deleteOrgGoogleCalendarEvent,
+} from "@/src/lib/org-google-calendar";
+import { ActionError } from "@/src/lib/safe-action";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-/**
- * Shared reschedule/cancel cores, decoupled from how the booking was loaded
- * (mentee manage-token flow OR mentor dashboard). Callers authorize + load the
- * booking and mentor, then call these. Per the project rule, Google Calendar and
- * Resend I/O happen OUTSIDE the DB transaction, with the Meet event moved/deleted
- * before the row update so a failed update can be compensated by the caller's
- * surrounding error handling (the original token flow's behavior, preserved).
- */
+function currentCalendarAttemptKey(booking: DbBooking, mentorId: string) {
+	return booking.reschedule_count === 0
+		? stableCalendarAttemptKey(
+				mentorId,
+				"create",
+				booking.start_at.toISOString(),
+				booking.mentee_email.toLowerCase(),
+			)
+		: stableCalendarAttemptKey(
+				booking.id,
+				"reschedule",
+				String(booking.reschedule_count),
+				booking.start_at.toISOString(),
+				booking.end_at.toISOString(),
+			);
+}
 
-/**
- * Move a booking to a new time: re-validate the slot, swap the Google Meet event,
- * update the row (start/end, bump reschedule_count, reset reminders), and email
- * both parties. Returns the new start/end.
- */
+function calendarError(error: unknown): ActionError {
+	if (error instanceof ActionError) return error;
+	if (error instanceof OrgGoogleCalendarError) {
+		return new ActionError(
+			error.code === "connection_unavailable"
+				? "The 4HerFrika calendar is unavailable. Please try again later."
+				: "The calendar change could not be completed. Please contact support for manual resolution.",
+		);
+	}
+	return new ActionError(mentorCalendarActionMessage(error));
+}
+
 export async function rescheduleBookingCore(params: {
 	booking: DbBooking;
 	mentorId: string;
@@ -38,7 +64,7 @@ export async function rescheduleBookingCore(params: {
 	mentorEmail: string;
 	sessionDurationMinutes: number;
 	newStartUtc: Date;
-}): Promise<{ startAt: Date; endAt: Date }> {
+}): Promise<void> {
 	const {
 		booking,
 		mentorId,
@@ -48,70 +74,90 @@ export async function rescheduleBookingCore(params: {
 		sessionDurationMinutes,
 		newStartUtc,
 	} = params;
-
-	const newStart = newStartUtc;
-	const newEnd = new Date(newStart.getTime() + sessionDurationMinutes * 60_000);
-
+	const newEnd = new Date(
+		newStartUtc.getTime() + sessionDurationMinutes * 60_000,
+	);
 	const { mentorTimezone } = await validateNewSlot({
 		mentorId,
 		bookingId: booking.id,
-		newStartUtc: newStart,
+		newStartUtc,
 	});
 
-	const { eventId, meetUrl } = await swapMeetEvent({
-		oldEventId: booking.google_event_id,
-		summary: `4HerFrika: ${booking.mentee_name} ↔ ${mentorName}`,
-		description: `Purpose: ${booking.purpose}`,
-		startAtUtc: newStart,
-		endAtUtc: newEnd,
-		mentorEmail,
-		menteeEmail: booking.mentee_email,
-	});
+	let event: { eventId: string; meetUrl: string };
+	try {
+		event = await swapMeetEvent({
+			mentorId,
+			oldEventId: booking.google_event_id,
+			summary: `4HerFrika: ${booking.mentee_name} ↔ ${mentorName}`,
+			description: `Purpose: ${booking.purpose}`,
+			startAtUtc: newStartUtc,
+			endAtUtc: newEnd,
+			mentorEmail,
+			menteeEmail: booking.mentee_email,
+			hostingMode: booking.hosting_mode,
+			attemptKey: stableCalendarAttemptKey(
+				booking.id,
+				"reschedule",
+				String(booking.reschedule_count + 1),
+				newStartUtc.toISOString(),
+				newEnd.toISOString(),
+			),
+			expectedOldAttemptKey: currentCalendarAttemptKey(booking, mentorId),
+		});
+	} catch (error) {
+		throw calendarError(error);
+	}
 
-	await db.transaction(async (tx) => {
-		await tx
+	try {
+		await db
 			.update(bookings)
 			.set({
-				start_at: newStart,
+				start_at: newStartUtc,
 				end_at: newEnd,
-				meet_url: meetUrl,
-				google_event_id: eventId,
+				meet_url: event.meetUrl,
+				google_event_id: event.eventId,
 				reschedule_count: booking.reschedule_count + 1,
 				updated_at: new Date(),
 				reminder_24h_sent_at: null,
 				reminder_1h_sent_at: null,
 			})
 			.where(eq(bookings.id, booking.id));
-	});
+	} catch (error) {
+		console.error("[booking-reschedule-db-update-failed]", {
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
+		throw new ActionError(
+			"The calendar changed, but the booking could not be saved. Please contact support for manual resolution.",
+		);
+	}
 
-	const manageToken = signBookingToken({
-		bookingId: booking.id,
+	const manageToken = await replaceActionLink({
+		resourceId: booking.id,
 		action: "manage",
-		expiresAt: newStart.getTime(),
+		expiresAt: newStartUtc,
 	});
 	const ics = buildBookingIcs({
 		uid: booking.id,
 		method: "REQUEST",
 		summary: `4HerFrika mentorship with ${mentorName}`,
 		description: booking.purpose,
-		startAtUtc: newStart,
+		startAtUtc: newStartUtc,
 		endAtUtc: newEnd,
-		meetUrl,
+		meetUrl: event.meetUrl,
 		mentorName,
 		mentorEmail,
 		menteeName: booking.mentee_name,
 		menteeEmail: booking.mentee_email,
 	});
-
 	await Promise.all([
 		sendBookingConfirmationMentee({
 			mentorName,
 			mentorEmail,
 			menteeName: booking.mentee_name,
 			menteeEmail: booking.mentee_email,
-			startAtUtc: newStart,
+			startAtUtc: newStartUtc,
 			endAtUtc: newEnd,
-			meetUrl,
+			meetUrl: event.meetUrl,
 			menteeTimezone: booking.mentee_timezone,
 			mentorTimezone,
 			purpose: booking.purpose,
@@ -124,9 +170,9 @@ export async function rescheduleBookingCore(params: {
 			mentorEmail,
 			menteeName: booking.mentee_name,
 			menteeEmail: booking.mentee_email,
-			startAtUtc: newStart,
+			startAtUtc: newStartUtc,
 			endAtUtc: newEnd,
-			meetUrl,
+			meetUrl: event.meetUrl,
 			menteeTimezone: booking.mentee_timezone,
 			mentorTimezone,
 			purpose: booking.purpose,
@@ -140,15 +186,9 @@ export async function rescheduleBookingCore(params: {
 			},
 		}),
 	]);
-
-	revalidatePath(`/careers-corner/${mentorSlug}`);
-	return { startAt: newStart, endAt: newEnd };
+	revalidatePath(`/careercorner/${mentorSlug}`);
 }
 
-/**
- * Cancel a booking: delete the Google Meet event, mark the row cancelled, and
- * email both parties a CANCEL `.ics`. No-op if already cancelled.
- */
 export async function cancelBookingCore(params: {
 	booking: DbBooking;
 	mentorName: string;
@@ -158,15 +198,34 @@ export async function cancelBookingCore(params: {
 }): Promise<void> {
 	const { booking, mentorName, mentorSlug, mentorEmail, reason } = params;
 	if (booking.status === "cancelled") return;
+	if (!mentorEmail)
+		throw new ActionError(
+			"Cancellation is unavailable until the mentor calendar is connected.",
+		);
 
 	try {
-		await deleteMeetEvent(booking.google_event_id);
-	} catch (e) {
-		console.warn("[cancel] google delete failed", e);
+		const deleteEvent = selectBookingCalendarProvider(booking.hosting_mode, {
+			mentor_google: deleteMentorCalendarEvent,
+			org_google: async ({ eventId }: { eventId: string }) =>
+				deleteOrgGoogleCalendarEvent({ eventId }),
+		});
+		await deleteEvent({
+			mentorId: booking.mentor_id,
+			mentorEmail,
+			eventId: booking.google_event_id,
+			expectedAttemptKey: currentCalendarAttemptKey(booking, booking.mentor_id),
+		});
+	} catch (error) {
+		if (isMentorCalendarError(error) && error.code === "remote_error") {
+			throw new ActionError(
+				"The calendar event could not be removed. Please reconnect the mentor calendar or contact support.",
+			);
+		}
+		throw calendarError(error);
 	}
 
-	await db.transaction(async (tx) => {
-		await tx
+	try {
+		await db
 			.update(bookings)
 			.set({
 				status: "cancelled",
@@ -174,22 +233,29 @@ export async function cancelBookingCore(params: {
 				cancelled_at: new Date(),
 			})
 			.where(eq(bookings.id, booking.id));
-	});
-
-	if (mentorEmail) {
-		const ics = buildBookingIcs({
-			uid: booking.id,
-			method: "CANCEL",
-			summary: `4HerFrika mentorship with ${mentorName}`,
-			description: booking.purpose,
-			startAtUtc: booking.start_at,
-			endAtUtc: booking.end_at,
-			meetUrl: booking.meet_url,
-			mentorName,
-			mentorEmail,
-			menteeName: booking.mentee_name,
-			menteeEmail: booking.mentee_email,
+	} catch (error) {
+		console.error("[booking-cancel-db-update-failed]", {
+			errorType: error instanceof Error ? error.name : typeof error,
 		});
+		throw new ActionError(
+			"The calendar event was removed, but the booking could not be updated. Please contact support for manual resolution.",
+		);
+	}
+
+	const ics = buildBookingIcs({
+		uid: booking.id,
+		method: "CANCEL",
+		summary: `4HerFrika mentorship with ${mentorName}`,
+		description: booking.purpose,
+		startAtUtc: booking.start_at,
+		endAtUtc: booking.end_at,
+		meetUrl: booking.meet_url,
+		mentorName,
+		mentorEmail,
+		menteeName: booking.mentee_name,
+		menteeEmail: booking.mentee_email,
+	});
+	try {
 		await sendCancellationEmails({
 			mentorName,
 			mentorEmail,
@@ -200,7 +266,12 @@ export async function cancelBookingCore(params: {
 			reason,
 			icsAttachment: ics,
 		});
+	} catch (error) {
+		console.error("[booking] cancellation email delivery failed", {
+			bookingId: booking.id,
+			mentorId: booking.mentor_id,
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
 	}
-
-	revalidatePath(`/careers-corner/${mentorSlug}`);
+	revalidatePath(`/careercorner/${mentorSlug}`);
 }

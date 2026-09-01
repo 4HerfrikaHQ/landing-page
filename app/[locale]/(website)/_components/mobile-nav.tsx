@@ -19,6 +19,7 @@ import { NavbarLink } from "./navbar-link";
 
 const NAV_LINK_KEYS: Record<string, string> = {
 	"About Us": "aboutUs",
+	"Impact Hub": "impactHub",
 	Projects: "projects",
 	Academy: "academy",
 	"Career Corner": "careerCorner",
@@ -30,6 +31,8 @@ const ACTION_BUTTON_KEYS: Record<string, string> = {
 	Donate: "donate",
 	"Join Us": "joinUs",
 };
+
+const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 export const MobileNav = () => {
 	const [open, setOpen] = useState(false);
@@ -87,23 +90,30 @@ export const MobileNav = () => {
 								<div className="space-y-1">
 									<input
 										type="checkbox"
-										id={`mobile-dropdown-${link.name}`}
+										id={`mobile-dropdown-${slug(link.name)}`}
 										className="peer hidden"
 									/>
 									<label
-										htmlFor={`mobile-dropdown-${link.name}`}
-										className="flex cursor-pointer items-center justify-between -mx-3 px-3 py-2 text-base text-foreground"
+										htmlFor={`mobile-dropdown-${slug(link.name)}`}
+										className="flex cursor-pointer items-center justify-between -mx-3 px-3 py-3 text-base text-foreground peer-checked:[&>svg]:rotate-180"
 									>
 										<span>{getNavName(link.name)}</span>
-										<ChevronDown className="h-4 w-4 transition-transform duration-300 peer-checked:rotate-180" />
+										<ChevronDown className="h-4 w-4 transition-transform duration-300" />
 									</label>
 
-									<div className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-40">
+									<div
+										className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-(--dropdown-max-h)"
+										style={
+											{
+												"--dropdown-max-h": `${link.dropdownItems.length * 4.5}rem`,
+											} as React.CSSProperties
+										}
+									>
 										{link.dropdownItems.map((dropdownItem) => (
 											<NavbarLink
 												key={dropdownItem.name}
 												href={dropdownItem.href as Route}
-												className="-mx-3 block px-3 py-2 text-base text-foreground"
+												className="-mx-3 block px-3 py-3 text-base text-foreground"
 												onClick={() => setOpen(false)}
 											>
 												{getNavName(dropdownItem.name)}
@@ -114,7 +124,7 @@ export const MobileNav = () => {
 							) : (
 								<NavbarLink
 									href={link.href as Route}
-									className="-mx-3 block px-3 py-2 text-base"
+									className="-mx-3 block px-3 py-3 text-base"
 									onClick={() => setOpen(false)}
 								>
 									{getNavName(link.name)}

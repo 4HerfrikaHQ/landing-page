@@ -1,9 +1,8 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
 import { type SQL, and, count, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 interface LoadMenteesParams {
@@ -16,16 +15,7 @@ interface LoadMenteesParams {
 export async function loadMentees(params: LoadMenteesParams = {}) {
 	const { query, sort, page = 1, pageSize = 20 } = params;
 
-	const user = await currentDbUser();
-	const [mentor] = await db
-		.select()
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
-
-	if (!mentor) {
-		return { ok: false as const, reason: "no_mentor_profile" as const };
-	}
+	const { mentor } = await currentDbMentor();
 
 	const conditions: (SQL<unknown> | undefined)[] = [
 		eq(bookings.mentor_id, mentor.id),
