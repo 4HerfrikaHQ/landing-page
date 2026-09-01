@@ -1,11 +1,11 @@
 import { readFile } from "node:fs/promises";
-import { extname } from "node:path";
 import { join } from "node:path";
 import {
 	isTrustedLocalMentorImagePath,
 	isTrustedMentorAvatarUrl,
 } from "@/src/lib/mentor-image-url";
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -21,6 +21,31 @@ type CareerCornerMentor = {
 	image: string;
 	name: string;
 };
+
+async function normalizedImageDataUri(
+	image: Buffer,
+): Promise<string | undefined> {
+	try {
+		const normalized = await sharp(image, {
+			failOn: "error",
+			limitInputPixels: 40_000_000,
+		})
+			.rotate()
+			.resize({
+				width: 1600,
+				height: 1600,
+				fit: "inside",
+				withoutEnlargement: true,
+			})
+			.png({ compressionLevel: 7 })
+			.toBuffer();
+
+		if (normalized.byteLength > MAX_SOCIAL_IMAGE_BYTES) return undefined;
+		return `data:image/png;base64,${normalized.toString("base64")}`;
+	} catch {
+		return undefined;
+	}
+}
 
 async function readBoundedImageResponse(
 	response: Response,
@@ -63,14 +88,7 @@ async function imageDataUri(imageUrl?: string): Promise<string | undefined> {
 			if (!isTrustedLocalMentorImagePath(imageUrl)) return undefined;
 			const image = await readFile(join(process.cwd(), "public", imageUrl));
 			if (image.byteLength > MAX_SOCIAL_IMAGE_BYTES) return undefined;
-			const extension = extname(imageUrl).toLowerCase();
-			const mimeType =
-				extension === ".jpg" || extension === ".jpeg"
-					? "image/jpeg"
-					: extension === ".webp"
-						? "image/webp"
-						: "image/png";
-			return `data:${mimeType};base64,${image.toString("base64")}`;
+			return normalizedImageDataUri(image);
 		}
 		if (!isTrustedMentorAvatarUrl(imageUrl)) return undefined;
 
@@ -88,7 +106,7 @@ async function imageDataUri(imageUrl?: string): Promise<string | undefined> {
 		}
 		const image = await readBoundedImageResponse(response);
 		if (!image) return undefined;
-		return `data:${contentType};base64,${image.toString("base64")}`;
+		return normalizedImageDataUri(image);
 	} catch {
 		return undefined;
 	}
