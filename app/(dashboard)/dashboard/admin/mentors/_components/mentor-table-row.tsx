@@ -19,12 +19,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { requestMentorCalendarConnection } from "../_actions";
 import { AvatarUpload } from "./avatar-upload";
+import { CopyMentorLinkButton } from "./copy-link";
 import { EditMentorSheet } from "./edit-mentor-sheet";
 import { ToggleActiveButton } from "./toggle-active-button";
 
 type Mentor = {
 	id: string;
 	name: string;
+	slug: string;
 	position: string | null;
 	image: string | null;
 	email: string;
@@ -122,6 +124,12 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 				</TableCell>
 				<TableCell className="text-sm text-muted-foreground">
 					{format(mentor.created_at, "MMM d, yyyy")}
+				</TableCell>
+				<TableCell
+					className="w-16 text-center"
+					onClick={(e) => e.stopPropagation()}
+				>
+					<CopyMentorLinkButton slug={mentor.slug} name={mentor.name} />
 				</TableCell>
 				<TableCell onClick={(e) => e.stopPropagation()}>
 					<ToggleActiveButton id={mentor.id} active={mentor.active} />

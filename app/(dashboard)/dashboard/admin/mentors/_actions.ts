@@ -45,15 +45,19 @@ interface MentorAdminFilters {
 	pageSize?: number;
 }
 
-export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
-	const {
-		query,
-		status,
-		sort = "name",
-		featured,
-		page = 1,
-		pageSize = 20,
-	} = filters;
+/** Sentinel for "these filters can't match any mentor". */
+const NO_MATCH = Symbol("no-match");
+
+/**
+ * Shared filter translation so the paginated table and the "copy every link"
+ * action always agree on which mentors match. Returns NO_MATCH when the filters
+ * can't match anything (featured filter with no featured mentor set).
+ */
+async function mentorFilterWhere({
+	query,
+	status,
+	featured,
+}: Pick<MentorAdminFilters, "query" | "status" | "featured">) {
 	const conditions: (SQL<unknown> | undefined)[] = [];
 
 	if (query) {
@@ -79,14 +83,24 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 	if (featured) {
 		const featuredId = await getFeaturedMentorId();
 		if (featured === "featured") {
-			if (!featuredId) return { rows: [], total: 0 };
+			if (!featuredId) return NO_MATCH;
 			conditions.push(eq(schema.mentors.id, featuredId));
 		} else if (featuredId) {
 			conditions.push(ne(schema.mentors.id, featuredId));
 		}
 	}
 
-	const where = conditions.length ? and(...conditions) : undefined;
+	return conditions.length ? and(...conditions) : undefined;
+}
+
+export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
+	await requireSuperAdmin();
+
+	const { sort = "name", page = 1, pageSize = 20 } = filters;
+
+	const where = await mentorFilterWhere(filters);
+	if (where === NO_MATCH) return { rows: [], total: 0 };
+
 	const bookingCount = sql<number>`count(${bookings.id})`.as("booking_count");
 
 	const orderBy =
@@ -101,6 +115,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.select({
 				id: schema.mentors.id,
 				name: schema.users.name,
+				slug: schema.mentors.slug,
 				position: schema.mentors.position,
 				image: schema.mentors.image,
 				email: schema.users.email,
@@ -139,6 +154,26 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 	]);
 
 	return { rows, total };
+}
+
+/**
+ * Every mentor matching the current filters, unpaginated — marketing copies the
+ * whole set of public links at once instead of page by page.
+ */
+export async function getMentorLinksForAdmin(
+	filters: Pick<MentorAdminFilters, "query" | "status" | "featured"> = {},
+) {
+	await requireSuperAdmin();
+
+	const where = await mentorFilterWhere(filters);
+	if (where === NO_MATCH) return [];
+
+	return db
+		.select({ name: schema.users.name, slug: schema.mentors.slug })
+		.from(schema.mentors)
+		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+		.where(where)
+		.orderBy(asc(schema.users.name));
 }
 
 export type AdminMentorRow = Awaited<

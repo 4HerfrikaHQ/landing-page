@@ -14,7 +14,8 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getMentorsForAdmin } from "./_actions";
+import { getMentorLinksForAdmin, getMentorsForAdmin } from "./_actions";
+import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
@@ -46,21 +47,35 @@ export default async function MentorsPage({
 	const featured = MentorFeaturedFilter.safeParse(sp.featured);
 	const page = Math.max(1, Number(sp.page) || 1);
 
-	const { rows: mentors, total } = await getMentorsForAdmin({
+	const activeFilters = {
 		query: sp.q,
 		status: status.success ? status.data : undefined,
-		sort: sort.success ? sort.data : undefined,
 		featured: featured.success ? featured.data : undefined,
-		page,
-		pageSize: PAGE_SIZE,
-	});
+	};
+
+	// Links cover every mentor matching the filters, not just this page — there
+	// are more mentors than fit on one page.
+	const [{ rows: mentors, total }, links] = await Promise.all([
+		getMentorsForAdmin({
+			...activeFilters,
+			sort: sort.success ? sort.data : undefined,
+			page,
+			pageSize: PAGE_SIZE,
+		}),
+		getMentorLinksForAdmin(activeFilters),
+	]);
 
 	return (
 		<div>
 			<PageHeader
 				title="Mentors"
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
-				action={<CreateMentorSheet />}
+				action={
+					<div className="flex items-center gap-2">
+						<CopyAllMentorLinksButton mentors={links} />
+						<CreateMentorSheet />
+					</div>
+				}
 			/>
 
 			<div className="mb-6">
@@ -91,6 +106,9 @@ export default async function MentorsPage({
 							<TableHead className="font-medium text-muted-foreground">
 								Joined
 							</TableHead>
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Link
+							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
@@ -102,7 +120,7 @@ export default async function MentorsPage({
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} className="p-0">
+								<TableCell colSpan={9} className="p-0">
 									<EmptyState
 										icon={Users}
 										title="No mentors match these filters"
