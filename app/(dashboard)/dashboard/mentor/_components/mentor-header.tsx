@@ -24,6 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";
+import { PortalSwitcher } from "../../_components/portal-switcher";
 
 const NAV_ITEMS: {
 	key: string;
@@ -97,7 +98,7 @@ export function MentorHeader({
 		<header className="sticky top-0 z-30 border-b border-border/60 bg-white/90 backdrop-blur-sm">
 			<div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 				{/* Left: brand + nav */}
-				<div className="flex items-center gap-6">
+				<div className="flex items-center gap-4">
 					<Link href={"/" as Route} className="shrink-0 no-underline">
 						<Image
 							src="/assets/icons/4herfrika-logo.svg"
@@ -107,6 +108,10 @@ export function MentorHeader({
 							className="h-8 w-auto"
 						/>
 					</Link>
+					<span className="hidden h-6 w-px bg-border sm:block" />
+					<div className="hidden shrink-0 sm:block">
+						<PortalSwitcher portal="mentor" canSwitch={showAdminPortal} />
+					</div>
 
 					<nav className="hidden items-center gap-1 lg:flex">
 						{NAV_ITEMS.map((item) => {
@@ -134,14 +139,6 @@ export function MentorHeader({
 
 				{/* Right: sign out + mobile trigger */}
 				<div className="flex items-center gap-2">
-					{showAdminPortal ? (
-						<Link
-							href={"/dashboard/admin" as Route}
-							className="hidden rounded-full border border-border/60 px-3 py-1.5 text-sm font-medium text-muted-foreground no-underline transition-colors hover:border-primary-500 hover:text-primary-500 sm:inline-flex"
-						>
-							Admin portal
-						</Link>
-					) : null}
 					<button
 						type="button"
 						onClick={handleLogout}
@@ -165,20 +162,10 @@ export function MentorHeader({
 							<Menu className="size-5" />
 						</SheetTrigger>
 						<SheetContent side="right" className="w-72">
-							<SheetTitle className="px-4 pt-4">Mentor portal</SheetTitle>
+							<SheetTitle className="px-4 pt-4">
+								<PortalSwitcher portal="mentor" canSwitch={showAdminPortal} />
+							</SheetTitle>
 							<nav className="flex flex-col gap-1 px-2 py-2">
-								{showAdminPortal ? (
-									<SheetClose
-										render={
-											<Link
-												href={"/dashboard/admin" as Route}
-												className="mb-2 inline-flex items-center gap-3 rounded-xl border border-border/60 px-3 py-2.5 text-sm font-medium text-foreground no-underline transition-colors hover:border-primary-500 hover:text-primary-500"
-											/>
-										}
-									>
-										Admin portal
-									</SheetClose>
-								) : null}
 								{NAV_ITEMS.map((item) => {
 									const isActive = item.key === active;
 									const Icon = item.icon;
