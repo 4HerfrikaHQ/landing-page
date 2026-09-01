@@ -98,13 +98,23 @@ export function ImageCropDialog({
 				),
 			)
 		: 0;
+	const normalizedWidth = imageSize.width ? sourceWidth / imageSize.width : 0;
+	const normalizedHeight = imageSize.height
+		? sourceHeight / imageSize.height
+		: 0;
 	const currentCrop: MentorImageCrop | null =
 		imageSize.width && imageSize.height && sourceWidth && sourceHeight
 			? {
-					x: sourceX / imageSize.width,
-					y: sourceY / imageSize.height,
-					width: sourceWidth / imageSize.width,
-					height: sourceHeight / imageSize.height,
+					x: Math.max(
+						0,
+						Math.min(1 - normalizedWidth, sourceX / imageSize.width),
+					),
+					y: Math.max(
+						0,
+						Math.min(1 - normalizedHeight, sourceY / imageSize.height),
+					),
+					width: normalizedWidth,
+					height: normalizedHeight,
 				}
 			: null;
 
@@ -334,20 +344,30 @@ export function ImageCropDialog({
 							</p>
 						</div>
 						{imageUrl && currentCrop ? (
-							<MentorImage
-								src={imageUrl}
-								alt=""
-								crop={currentCrop}
-								className="aspect-[4/5] rounded-xl bg-surface-pink ring-1 ring-border/60"
-								sizes="180px"
-							/>
+							<div className="grid grid-cols-[1fr_88px] items-end gap-3">
+								<MentorImage
+									src={imageUrl}
+									alt=""
+									crop={currentCrop}
+									className="aspect-[4/5] rounded-xl bg-surface-pink ring-1 ring-border/60"
+									sizes="140px"
+								/>
+								<MentorImage
+									src={imageUrl}
+									alt=""
+									crop={currentCrop}
+									aspectRatio={1}
+									className="aspect-square rounded-full bg-surface-pink ring-4 ring-primary-500/15"
+									sizes="88px"
+								/>
+							</div>
 						) : (
 							<div className="flex aspect-[4/5] items-center justify-center rounded-xl bg-surface-pink ring-1 ring-border/60">
 								<ImageIcon className="size-6 text-primary-500/60" />
 							</div>
 						)}
 						<p className="text-center text-xs font-medium text-muted-foreground">
-							Mentor profile preview
+							Card and profile previews
 						</p>
 					</aside>
 				</div>

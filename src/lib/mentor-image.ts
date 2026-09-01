@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const MENTOR_IMAGE_ASPECT_RATIO = 4 / 5;
+export const MENTOR_IMAGE_CROP_EPSILON = 0.000001;
 
 export type MentorImageCrop = {
 	x: number;
@@ -17,22 +18,16 @@ export const MentorImageCropSchema = z
 		height: z.number().finite().gt(0).max(1),
 	})
 	.superRefine((crop, context) => {
-		if (crop.x + crop.width > 1) {
+		if (crop.x + crop.width > 1 + MENTOR_IMAGE_CROP_EPSILON) {
 			context.addIssue({
 				code: "custom",
 				message: "Crop exceeds image width.",
 			});
 		}
-		if (crop.y + crop.height > 1) {
+		if (crop.y + crop.height > 1 + MENTOR_IMAGE_CROP_EPSILON) {
 			context.addIssue({
 				code: "custom",
 				message: "Crop exceeds image height.",
-			});
-		}
-		if (Math.abs(crop.width / crop.height - MENTOR_IMAGE_ASPECT_RATIO) > 0.01) {
-			context.addIssue({
-				code: "custom",
-				message: "Crop must use a 4:5 aspect ratio.",
 			});
 		}
 	});
@@ -40,4 +35,18 @@ export const MentorImageCropSchema = z
 export function parseMentorImageCrop(value: unknown): MentorImageCrop | null {
 	const parsed = MentorImageCropSchema.safeParse(value);
 	return parsed.success ? parsed.data : null;
+}
+
+export function cropMentorImageToAspectRatio(
+	crop: MentorImageCrop,
+	targetAspectRatio: number,
+): MentorImageCrop {
+	if (targetAspectRatio >= MENTOR_IMAGE_ASPECT_RATIO) {
+		const height =
+			crop.height * (MENTOR_IMAGE_ASPECT_RATIO / targetAspectRatio);
+		return { ...crop, y: crop.y + (crop.height - height) / 2, height };
+	}
+
+	const width = crop.width * (targetAspectRatio / MENTOR_IMAGE_ASPECT_RATIO);
+	return { ...crop, x: crop.x + (crop.width - width) / 2, width };
 }

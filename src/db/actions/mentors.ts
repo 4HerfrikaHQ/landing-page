@@ -27,11 +27,32 @@ export async function uploadMentorAvatar(
 		const cropValue = formData.get("crop");
 		let crop = null;
 		if (cropValue) {
-			try {
-				crop = MentorImageCropSchema.parse(JSON.parse(String(cropValue)));
-			} catch {
-				return { error: "The image framing is invalid." };
+			if (typeof cropValue !== "string") {
+				return {
+					error: "The image framing is invalid: expected text data.",
+				};
 			}
+
+			let decodedCrop: unknown;
+			try {
+				decodedCrop = JSON.parse(cropValue);
+			} catch {
+				return {
+					error:
+						"The image framing is invalid: framing data could not be read.",
+				};
+			}
+
+			const parsedCrop = MentorImageCropSchema.safeParse(decodedCrop);
+			if (!parsedCrop.success) {
+				const reason = parsedCrop.error.issues[0]?.message;
+				return {
+					error: reason
+						? `The image framing is invalid: ${reason}`
+						: "The image framing is invalid.",
+				};
+			}
+			crop = parsedCrop.data;
 		}
 
 		if (!file) {
