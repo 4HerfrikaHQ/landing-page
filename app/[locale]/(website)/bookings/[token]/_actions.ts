@@ -4,7 +4,7 @@ import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { consumeActionLinks, resolveActionLink } from "@/src/lib/action-links";
+import { resolveActionLink } from "@/src/lib/action-links";
 import {
 	cancelBookingCore,
 	rescheduleBookingCore,
@@ -52,7 +52,6 @@ export const cancelBooking = actionClient
 			.limit(1);
 		if (!booking) throw new ActionError("Booking not found");
 		if (booking.status === "cancelled") {
-			await consumeActionLinks({ action: "manage", resourceId: booking.id });
 			return { ok: true };
 		}
 
@@ -71,7 +70,6 @@ export const cancelBooking = actionClient
 			mentorEmail: mentorRow.user?.email ?? undefined,
 			reason: parsedInput.reason,
 		});
-		await consumeActionLinks({ action: "manage", resourceId: booking.id });
 		return { ok: true };
 	});
 
