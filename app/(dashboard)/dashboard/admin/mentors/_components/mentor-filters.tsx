@@ -1,34 +1,18 @@
 "use client";
 
-import { FilterSelect, SearchInput } from "@/components/dashboard/filter-bar";
-import { parseAsString, useQueryStates } from "nuqs";
+import { DashboardFilter, SearchInput } from "@/components/dashboard/filter-bar";
 
 const STATUS_OPTIONS = [
-	{ value: "all", label: "All" },
 	{ value: "active", label: "Active" },
 	{ value: "inactive", label: "Inactive" },
 ];
 
 const CALENDAR_OPTIONS = [
-	{ value: "all", label: "All" },
 	{ value: "connected", label: "Connected" },
 	{ value: "not_connected", label: "Not connected" },
 ];
 
 export function MentorFilters() {
-	const [filters, setFilters] = useQueryStates(
-		{
-			status: parseAsString.withDefault("all"),
-			calendar: parseAsString.withDefault("all"),
-			page: parseAsString.withDefault(""),
-		},
-		{ shallow: false },
-	);
-
-	function updateFilter(key: "status" | "calendar", value: string | null) {
-		void setFilters({ [key]: value === "all" ? null : value, page: null });
-	}
-
 	return (
 		<>
 			<SearchInput
@@ -37,17 +21,17 @@ export function MentorFilters() {
 				resetPageOnChange
 				className="sm:w-80"
 			/>
-			<FilterSelect
+			<DashboardFilter
 				label="Status"
-				value={filters.status}
 				options={STATUS_OPTIONS}
-				onValueChange={(value) => updateFilter("status", value)}
+				paramKey="status"
+				resetPageOnChange
 			/>
-			<FilterSelect
+			<DashboardFilter
 				label="Google Calendar"
-				value={filters.calendar}
 				options={CALENDAR_OPTIONS}
-				onValueChange={(value) => updateFilter("calendar", value)}
+				paramKey="calendar"
+				resetPageOnChange
 			/>
 		</>
 	);

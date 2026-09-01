@@ -7,7 +7,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Check, Copy, Link2, Loader2 } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { type MentorAdminFilters, getMentorLinksForAdmin } from "../_actions";
 
@@ -76,45 +76,26 @@ export function CopyAllMentorLinksButton({
 	count: number;
 	filters: Pick<MentorAdminFilters, "query" | "status" | "calendar">;
 }) {
-	const [isPending, startTransition] = useTransition();
-	const [loaded, setLoaded] = useState<{
-		key: string;
-		mentors: Awaited<ReturnType<typeof getMentorLinksForAdmin>>;
-	} | null>(null);
-	const filtersKey = `${filters.query ?? ""}\u0000${filters.status ?? ""}\u0000${filters.calendar ?? ""}`;
-	const cachedMentors = loaded?.key === filtersKey ? loaded.mentors : null;
+	const [isCopying, setIsCopying] = useState(false);
 
 	if (count === 0) return null;
 
 	function copyAll() {
-		if (isPending) return;
-
-		// Clipboard writes must start in this click handler. If the filtered set
-		// has not been loaded yet, make this gesture load it and ask for one
-		// explicit follow-up click rather than losing Safari/Firefox activation.
-		if (!cachedMentors) {
-			startTransition(async () => {
-				try {
-					const mentors = await getMentorLinksForAdmin(filters);
-					setLoaded({ key: filtersKey, mentors });
-					toast.success(
-						`${mentors.length} link${mentors.length === 1 ? "" : "s"} ready — click Copy again to copy`,
-					);
-				} catch {
-					toast.error("Couldn't load mentor links. Try again.");
-				}
-			});
-			return;
-		}
-
-		// Do not await a server action or wrap this call in a transition: the
-		// second user gesture is what authorizes clipboard access in strict browsers.
-		void writeClipboard(
-			cachedMentors
+		if (isCopying) return;
+		setIsCopying(true);
+		try {
+			const mentors = await getMentorLinksForAdmin(filters);
+			await writeClipboard(
+				mentors
 				.map((m) => `${m.name}\t${mentorPublicUrl(m.slug)}`)
 				.join("\n"),
-			`${cachedMentors.length} link${cachedMentors.length === 1 ? "" : "s"} copied`,
-		);
+				`${mentors.length} link${mentors.length === 1 ? "" : "s"} copied`,
+			);
+		} catch {
+			toast.error("Couldn't load mentor links. Try again.");
+		} finally {
+			setIsCopying(false);
+		}
 	}
 
 	return (
@@ -123,15 +104,15 @@ export function CopyAllMentorLinksButton({
 			variant="outline"
 			size="sm"
 			className="gap-2"
-			disabled={isPending}
+			disabled={isCopying}
 			onClick={copyAll}
 		>
-			{isPending ? (
+			{isCopying ? (
 				<Loader2 className="size-4 animate-spin" />
 			) : (
 				<Copy className="size-4" />
 			)}
-			{isPending
+			{isCopying
 				? "Loading links…"
 				: `Copy ${count} link${count === 1 ? "" : "s"}`}
 		</Button>

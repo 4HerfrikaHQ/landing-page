@@ -1,6 +1,6 @@
 "use client";
 
-import { FilterSelect, SearchInput } from "@/components/dashboard/filter-bar";
+import { DashboardFilter, SearchInput } from "@/components/dashboard/filter-bar";
 import { BookingStatus } from "@/src/db/schema/tables/bookings";
 import { cn } from "@/utils/cn";
 import { X } from "lucide-react";
@@ -15,7 +15,6 @@ const STATUS_LABELS: Record<BookingStatus, string> = {
 };
 
 const STATUS_OPTIONS = [
-	{ value: "all", label: "All" },
 	...BookingStatus.options.map((value) => ({
 		value,
 		label: STATUS_LABELS[value],
@@ -23,7 +22,6 @@ const STATUS_OPTIONS = [
 ];
 
 const DATE_OPTIONS = [
-	{ value: "all", label: "All time" },
 	{ value: "upcoming", label: "Upcoming" },
 	{ value: "past", label: "Past" },
 	{ value: "30d", label: "Last 30 days" },
@@ -44,17 +42,6 @@ export function BookingFilters({ mentors }: { mentors: MentorOption[] }) {
 		{ shallow: false },
 	);
 
-	function updateFilter(
-		key: "status" | "mentor" | "date",
-		value: string | null,
-	) {
-		void setFilters({
-			[key]: value === "all" ? null : value,
-			page: null,
-			...(key === "date" && value !== "custom" ? { from: null, to: null } : {}),
-		});
-	}
-
 	const hasFilters =
 		Boolean(filters.q) ||
 		filters.status !== "all" ||
@@ -70,30 +57,33 @@ export function BookingFilters({ mentors }: { mentors: MentorOption[] }) {
 				resetPageOnChange
 				className="sm:w-80"
 			/>
-			<FilterSelect
+			<DashboardFilter
 				label="Status"
-				value={filters.status}
 				options={STATUS_OPTIONS}
-				onValueChange={(value) => updateFilter("status", value)}
+				paramKey="status"
+				resetPageOnChange
 			/>
-			<FilterSelect
+			<DashboardFilter
 				label="Mentor"
-				value={filters.mentor}
-				options={[
-					{ value: "all", label: "All" },
-					...mentors.map((mentor) => ({
-						value: mentor.slug,
-						label: mentor.name,
-					})),
-				]}
-				onValueChange={(value) => updateFilter("mentor", value)}
+				options={mentors.map((mentor) => ({
+					value: mentor.slug,
+					label: mentor.name,
+				}))}
+				paramKey="mentor"
+				resetPageOnChange
 				className="sm:max-w-56"
 			/>
-			<FilterSelect
+			<DashboardFilter
 				label="Date"
-				value={filters.date}
 				options={DATE_OPTIONS}
-				onValueChange={(value) => updateFilter("date", value)}
+				paramKey="date"
+				allLabel="All time"
+				resetPageOnChange
+				onValueChange={(value) => {
+					if (value !== "custom") {
+						void setFilters({ from: null, to: null });
+					}
+				}}
 			/>
 
 			{filters.date === "custom" ? (

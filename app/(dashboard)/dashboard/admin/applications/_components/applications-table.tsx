@@ -3,7 +3,7 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
 	FilterBar,
-	FilterPills,
+	DashboardFilter,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
@@ -15,9 +15,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { MentorApplicationStatus } from "@/src/db/schema/tables/mentor-applications";
-import { cn } from "@/utils/cn";
 import { Inbox } from "lucide-react";
-import { parseAsString, useQueryStates } from "nuqs";
 import type { ApplicationRow } from "../_actions";
 import { ApplicationTableRow } from "./application-table-row";
 
@@ -64,50 +62,25 @@ export function ApplicationsTable({
 	pageSize: number;
 	total: number;
 }) {
-	const [, setQuery] = useQueryStates(
-		{
-			status: parseAsString,
-			page: parseAsString,
-		},
-		{ shallow: false },
-	);
-
-	const tabClass = (value: Status) =>
-		cn(
-			"inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
-			status === value
-				? "bg-primary-500 text-white"
-				: "bg-white border border-[#E0E0E0] text-[#636363] hover:border-primary-500 hover:text-primary-500",
-		);
+	const statusOptions = TABS.map((tab) => ({
+		...tab,
+		count: tab.value === "pending" ? pendingCount : undefined,
+	}));
 
 	return (
 		<div>
 			<div className="mb-6 space-y-4">
-				<div className="flex flex-wrap items-center gap-2">
-					{TABS.map((t) => (
-						<button
-							key={t.value}
-							type="button"
-							onClick={() => setQuery({ status: t.value, page: null })}
-							className={tabClass(t.value)}
-						>
-							{t.label}
-							{t.value === "pending" ? (
-								<span
-									className={cn(
-										"tabular-nums text-xs",
-										status === "pending" ? "text-white/80" : "text-[#9a9a9a]",
-									)}
-								>
-									{pendingCount}
-								</span>
-							) : null}
-						</button>
-					))}
-				</div>
 				<FilterBar>
 					<SearchInput paramKey="q" placeholder="Search by name or email…" />
-					<FilterPills
+					<DashboardFilter
+						label="Status"
+						paramKey="status"
+						options={statusOptions}
+						defaultValue="pending"
+						includeAll={false}
+						resetPageOnChange
+					/>
+					<DashboardFilter
 						label="Sort"
 						paramKey="sort"
 						options={SORT_OPTIONS}

@@ -13,7 +13,7 @@ import {
 	RESCHEDULE_MIN_NOTICE_HOURS,
 	canReschedule,
 } from "@/src/lib/booking-rules";
-import { CalendarClock, UserX, X } from "lucide-react";
+import { CalendarClock, ExternalLink, UserX, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -29,12 +29,14 @@ export function BookingActions({
 	startAtUtc,
 	status,
 	isUpcoming,
+	meetUrl,
 }: {
 	bookingId: string;
 	mentorSlug: string;
 	startAtUtc: string;
 	status: string;
 	isUpcoming: boolean;
+	meetUrl?: string;
 }) {
 	const [rescheduleOpen, setRescheduleOpen] = useState(false);
 	const [cancelOpen, setCancelOpen] = useState(false);
@@ -73,43 +75,61 @@ export function BookingActions({
 	if (!isUpcoming) {
 		if (status === "no_show" || status === "cancelled") return null;
 		return (
-			<Button
-				variant="outline"
-				size="sm"
-				disabled={noShow.isPending}
-				onClick={() => noShow.execute({ bookingId })}
-			>
-				<UserX className="size-4" />
-				Mark no-show
-			</Button>
+			<div className="flex items-center">
+				<Button
+					variant="outline"
+					size="sm"
+					className="h-8 rounded-full px-3 text-xs"
+					disabled={noShow.isPending}
+					onClick={() => noShow.execute({ bookingId })}
+				>
+					<UserX className="size-3.5" />
+					Mark no-show
+				</Button>
+			</div>
 		);
 	}
 
 	return (
 		<>
-			<Button
-				variant="outline"
-				size="sm"
-				disabled={!reschedulable}
-				title={
-					reschedulable
-						? undefined
-						: `Too close to the call to reschedule (within ${RESCHEDULE_MIN_NOTICE_HOURS}h)`
-				}
-				onClick={() => setRescheduleOpen(true)}
-			>
-				<CalendarClock className="size-4" />
-				Reschedule
-			</Button>
-			<Button
-				variant="outline"
-				size="sm"
-				className="border-destructive/40 text-destructive hover:bg-destructive/5"
-				onClick={() => setCancelOpen(true)}
-			>
-				<X className="size-4" />
-				Cancel
-			</Button>
+			<div className="flex items-center [&>*:not(:first-child)]:-ml-px">
+				{meetUrl ? (
+					<Button
+						href={meetUrl}
+						isExternal
+						variant="outline"
+						size="sm"
+						className="h-8 rounded-l-full rounded-r-none px-3 text-xs"
+					>
+						<ExternalLink className="size-3.5" />
+						Join Meet
+					</Button>
+				) : null}
+				<Button
+					variant="outline"
+					size="sm"
+					className={`h-8 rounded-none px-3 text-xs ${meetUrl ? "" : "rounded-l-full"}`}
+					disabled={!reschedulable}
+					title={
+						reschedulable
+							? undefined
+							: `Too close to the call to reschedule (within ${RESCHEDULE_MIN_NOTICE_HOURS}h)`
+					}
+					onClick={() => setRescheduleOpen(true)}
+				>
+					<CalendarClock className="size-3.5" />
+					Reschedule
+				</Button>
+				<Button
+					variant="outline"
+					size="sm"
+					className="h-8 rounded-l-none rounded-r-full border-destructive/40 px-3 text-xs text-destructive hover:bg-destructive/5"
+					onClick={() => setCancelOpen(true)}
+				>
+					<X className="size-3.5" />
+					Cancel
+				</Button>
+			</div>
 
 			<Sheet open={rescheduleOpen} onOpenChange={setRescheduleOpen}>
 				<SheetContent className="flex flex-col overflow-y-auto px-4 sm:max-w-2xl! sm:px-6">

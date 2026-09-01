@@ -3,7 +3,7 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
 	FilterBar,
-	FilterPills,
+	DashboardFilter,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
@@ -56,10 +56,10 @@ export function AcademyWaitlistTable({
 		<div>
 			<div className="mb-6 space-y-4">
 				<div className="flex flex-wrap items-center gap-2">
-					<FilterPills
+					<DashboardFilter
 						label="Academy"
 						paramKey="academy"
-						defaultValue=""
+						defaultValue="all"
 						allLabel="All academies"
 						resetPageOnChange
 						options={optionsWithCounts}
@@ -70,7 +70,7 @@ export function AcademyWaitlistTable({
 						placeholder="Search name, email or location…"
 						resetPageOnChange
 					/>
-					<FilterPills
+					<DashboardFilter
 						label="Sort"
 						paramKey="sort"
 						defaultValue="newest"

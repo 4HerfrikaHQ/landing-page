@@ -40,7 +40,7 @@ export function ApplicationDetailSheet({
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="flex flex-col overflow-y-auto px-4 sm:max-w-xl sm:px-6">
+			<SheetContent className="flex flex-col overflow-y-auto px-4 sm:max-w-2xl sm:px-6">
 				<SheetHeader className="px-0">
 					<SheetTitle>{a.name}</SheetTitle>
 				</SheetHeader>
@@ -70,7 +70,7 @@ export function ApplicationDetailSheet({
 							</Field>
 						)}
 						{a.linkedin_url && (
-							<Field label="LinkedIn">
+							<Field label="LinkedIn" full>
 								<a
 									href={a.linkedin_url}
 									target="_blank"

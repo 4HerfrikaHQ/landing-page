@@ -1,7 +1,7 @@
 "use client";
 
 import { formatInTimeZone } from "date-fns-tz";
-import { CalendarDays, ExternalLink, SearchX } from "lucide-react";
+import { CalendarDays, SearchX } from "lucide-react";
 import { parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
 
 import { AvatarCircle } from "@/components/dashboard/avatar-circle";
@@ -9,14 +9,13 @@ import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
 	FilterBar,
-	FilterPills,
+	DashboardFilter,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { StaggerContainer } from "@/components/motion/stagger-container";
 import { StaggerItem } from "@/components/motion/stagger-item";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import type { MentorBookingsResult } from "../_actions";
 import { BookingTab } from "../_schema";
@@ -110,12 +109,12 @@ export function BookingsTabs({
 			<div className="mt-5">
 				<FilterBar>
 					<SearchInput placeholder="Search mentee name or email" />
-					<FilterPills
+					<DashboardFilter
 						label="Status"
 						paramKey="status"
 						options={STATUS_OPTIONS}
 					/>
-					<FilterPills label="Stage" paramKey="stage" options={STAGE_OPTIONS} />
+					<DashboardFilter label="Stage" paramKey="stage" options={STAGE_OPTIONS} />
 				</FilterBar>
 			</div>
 
@@ -208,23 +207,17 @@ function BookingCard({
 					</div>
 					<div className="flex flex-wrap items-center gap-3 sm:justify-end">
 						<StatusBadge status={booking.status} />
-						{isUpcoming && booking.status !== "cancelled" ? (
-							<Button
-								href={booking.meet_url}
-								isExternal
-								variant="outline"
-								size="sm"
-							>
-								<ExternalLink className="size-4" />
-								Join Meet
-							</Button>
-						) : null}
 						<BookingActions
 							bookingId={booking.id}
 							mentorSlug={mentorSlug}
 							startAtUtc={booking.start_at.toISOString()}
 							status={booking.status}
 							isUpcoming={isUpcoming}
+							meetUrl={
+								isUpcoming && booking.status !== "cancelled"
+									? booking.meet_url
+									: undefined
+							}
 						/>
 					</div>
 				</div>
