@@ -30,7 +30,7 @@ export default async function Image({
 		subtitle: mentor?.position
 			? `${mentor.position} · ${t("description", { name: displayName })}`
 			: t("description", { name: displayName }),
-		mentorImage: mentor?.image,
+		mentorImage: mentor?.image ?? undefined,
 		mentorName: displayName,
 	});
 }
