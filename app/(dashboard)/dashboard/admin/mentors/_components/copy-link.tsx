@@ -91,7 +91,7 @@ export function CopyAllMentorLinksButton({
 			}
 		>
 			<Copy className="size-4" />
-			Copy links
+			Copy {mentors.length} link{mentors.length === 1 ? "" : "s"}
 		</Button>
 	);
 }
