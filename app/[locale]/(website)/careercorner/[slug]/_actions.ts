@@ -6,7 +6,7 @@ import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { signBookingToken } from "@/src/lib/booking-tokens";
+import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
@@ -430,10 +430,10 @@ export const createBooking = actionClient
 		}
 
 		// Side effects — best-effort emails
-		const manageToken = signBookingToken({
-			bookingId: booking.id,
+		const manageToken = await createActionLink({
+			resourceId: booking.id,
 			action: "manage",
-			expiresAt: startAt.getTime(),
+			expiresAt: startAt,
 		});
 		const manageUrl = `${siteUrl()}/bookings/${manageToken}`;
 		const mentorTz = availabilityWindows[0]?.timezone ?? "UTC";

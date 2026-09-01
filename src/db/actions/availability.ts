@@ -3,7 +3,7 @@
 import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
-import { verifyBookingToken } from "@/src/lib/booking-tokens";
+import { resolveActionLink } from "@/src/lib/action-links";
 import { requireSuperAdmin } from "@/src/lib/safe-action";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -73,12 +73,8 @@ export async function saveOnboardingAvailability(
 	slots: AvailabilitySlotInput[],
 	timezone: string,
 ): Promise<{ error?: string }> {
-	const verified = verifyBookingToken(token);
-	if (
-		!verified.ok ||
-		verified.action !== "mentor_onboard" ||
-		verified.bookingId !== mentorId
-	) {
+	const link = await resolveActionLink(token, "mentor_onboard");
+	if (!link.ok || link.resourceId !== mentorId) {
 		return { error: "Invalid onboarding link" };
 	}
 	return writeAvailability(mentorId, slots, timezone);

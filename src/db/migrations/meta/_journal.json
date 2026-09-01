@@ -134,6 +134,13 @@
       "when": 1788259800000,
       "tag": "0018_increase_booking_limit",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1788261649319,
+      "tag": "0019_salty_namora",
+      "breakpoints": true
     }
   ]
 }
