@@ -1,13 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { updateMyBookingNotice } from "../../_actions";
 
 export function BookingNoticeForm({ initial }: { initial: number }) {
-	const router = useRouter();
 	const [value, setValue] = useState(String(initial));
 	const [saving, setSaving] = useState(false);
 
@@ -22,7 +20,6 @@ export function BookingNoticeForm({ initial }: { initial: number }) {
 			return;
 		}
 		toast.success("Booking notice updated.");
-		router.refresh();
 	}
 
 	return (
