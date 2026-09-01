@@ -29,30 +29,6 @@ export function hashActionLinkToken(token: string): string {
 	return createHash("sha256").update(token).digest("hex");
 }
 
-export function validateActionLinkRecord(
-	row: {
-		action: string;
-		resourceId: string;
-		expiresAt: Date;
-		usedAt: Date | null;
-	},
-	expectedAction: ActionLinkActionType,
-): ResolveActionLinkResult {
-	const now = new Date();
-	const action = ActionLinkAction.safeParse(row.action);
-	if (!action.success) return { ok: false, reason: "malformed" };
-	if (action.data !== expectedAction)
-		return { ok: false, reason: "wrong_action" };
-	if (row.usedAt) return { ok: false, reason: "used" };
-	if (row.expiresAt.getTime() <= now.getTime())
-		return { ok: false, reason: "expired" };
-	return {
-		ok: true,
-		action: action.data,
-		resourceId: row.resourceId,
-	};
-}
-
 export async function createActionLink(input: {
 	action: ActionLinkActionType;
 	resourceId: string;
@@ -78,19 +54,20 @@ export async function resolveActionLink(
 		.where(eq(actionLinks.token_hash, hashActionLinkToken(token)))
 		.limit(1);
 
-	if (row) {
-		return validateActionLinkRecord(
-			{
-				action: row.action,
-				resourceId: row.resource_id,
-				expiresAt: row.expires_at,
-				usedAt: row.used_at,
-			},
-			expectedAction,
-		);
-	}
+	if (!row) return { ok: false, reason: "malformed" };
 
-	return { ok: false, reason: "malformed" };
+	const action = ActionLinkAction.safeParse(row.action);
+	if (!action.success) return { ok: false, reason: "malformed" };
+	if (action.data !== expectedAction)
+		return { ok: false, reason: "wrong_action" };
+	if (row.used_at) return { ok: false, reason: "used" };
+	if (row.expires_at <= new Date()) return { ok: false, reason: "expired" };
+
+	return {
+		ok: true,
+		action: action.data,
+		resourceId: row.resource_id,
+	};
 }
 
 export async function replaceActionLink(input: {
