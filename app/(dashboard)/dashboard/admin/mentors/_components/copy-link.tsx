@@ -77,25 +77,44 @@ export function CopyAllMentorLinksButton({
 	filters: Pick<MentorAdminFilters, "query" | "status" | "calendar">;
 }) {
 	const [isPending, startTransition] = useTransition();
+	const [loaded, setLoaded] = useState<{
+		key: string;
+		mentors: Awaited<ReturnType<typeof getMentorLinksForAdmin>>;
+	} | null>(null);
+	const filtersKey = `${filters.query ?? ""}\u0000${filters.status ?? ""}\u0000${filters.calendar ?? ""}`;
+	const cachedMentors = loaded?.key === filtersKey ? loaded.mentors : null;
 
 	if (count === 0) return null;
 
 	function copyAll() {
 		if (isPending) return;
 
-		startTransition(async () => {
-			try {
-				const mentors = await getMentorLinksForAdmin(filters);
-				await writeClipboard(
-					mentors
-						.map((m) => `${m.name}\t${mentorPublicUrl(m.slug)}`)
-						.join("\n"),
-					`${mentors.length} link${mentors.length === 1 ? "" : "s"} copied`,
-				);
-			} catch {
-				toast.error("Couldn't load mentor links. Try again.");
-			}
-		});
+		// Clipboard writes must start in this click handler. If the filtered set
+		// has not been loaded yet, make this gesture load it and ask for one
+		// explicit follow-up click rather than losing Safari/Firefox activation.
+		if (!cachedMentors) {
+			startTransition(async () => {
+				try {
+					const mentors = await getMentorLinksForAdmin(filters);
+					setLoaded({ key: filtersKey, mentors });
+					toast.success(
+						`${mentors.length} link${mentors.length === 1 ? "" : "s"} ready — click Copy again to copy`,
+					);
+				} catch {
+					toast.error("Couldn't load mentor links. Try again.");
+				}
+			});
+			return;
+		}
+
+		// Do not await a server action or wrap this call in a transition: the
+		// second user gesture is what authorizes clipboard access in strict browsers.
+		void writeClipboard(
+			cachedMentors
+				.map((m) => `${m.name}\t${mentorPublicUrl(m.slug)}`)
+				.join("\n"),
+			`${cachedMentors.length} link${cachedMentors.length === 1 ? "" : "s"} copied`,
+		);
 	}
 
 	return (
@@ -112,7 +131,9 @@ export function CopyAllMentorLinksButton({
 			) : (
 				<Copy className="size-4" />
 			)}
-			{isPending ? "Copying…" : `Copy ${count} link${count === 1 ? "" : "s"}`}
+			{isPending
+				? "Loading links…"
+				: `Copy ${count} link${count === 1 ? "" : "s"}`}
 		</Button>
 	);
 }
