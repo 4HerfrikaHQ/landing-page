@@ -9,7 +9,7 @@ import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
 	FilterBar,
-	FilterPills,
+	DashboardFilter,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
@@ -51,7 +51,7 @@ export function MenteesGrid({
 		<div className="space-y-5">
 			<FilterBar>
 				<SearchInput placeholder="Search mentee name or email" />
-				<FilterPills
+				<DashboardFilter
 					label="Sort"
 					paramKey="sort"
 					options={SORT_OPTIONS}

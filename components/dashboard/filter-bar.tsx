@@ -84,9 +84,9 @@ export function FilterSelect({
 	);
 }
 
-interface FilterPillsProps {
-	/** Visually-hidden / leading label describing the group. */
-	label?: string;
+interface DashboardFilterProps {
+	/** Label shown within the trigger to keep nearby filters easy to scan. */
+	label: string;
 	options: FilterOption[];
 	/** nuqs query param to read/write. */
 	paramKey: string;
@@ -102,14 +102,17 @@ interface FilterPillsProps {
 	shallow?: boolean;
 	/** Clear the URL page when this filter changes. */
 	resetPageOnChange?: boolean;
+	/** Runs alongside the URL update for filters with dependent state. */
+	onValueChange?: (value: string) => void;
 	className?: string;
 }
 
 /**
- * Pill button group backed by a `nuqs` query param.
- * Uses the blog filter recipe: active = pink, inactive = bordered white.
+ * Reusable dashboard dropdown backed by a `nuqs` query param. Individual
+ * instances can be rendered together while keeping URL state and pagination
+ * behavior consistent across admin and mentor screens.
  */
-export function FilterPills({
+export function DashboardFilter({
 	label,
 	options,
 	paramKey,
@@ -118,8 +121,9 @@ export function FilterPills({
 	allLabel = "All",
 	shallow = false,
 	resetPageOnChange = false,
+	onValueChange,
 	className,
-}: FilterPillsProps) {
+}: DashboardFilterProps) {
 	const [query, setQuery] = useQueryStates(
 		{
 			[paramKey]: parseAsString.withDefault(defaultValue),
@@ -128,51 +132,31 @@ export function FilterPills({
 		{ shallow },
 	);
 	const active = query[paramKey] ?? defaultValue;
-	const pills: FilterOption[] = includeAll
+	const selectOptions: FilterOption[] = includeAll
 		? [{ value: defaultValue, label: allLabel }, ...options]
 		: options;
 
-	const pillClass = (value: string) =>
-		cn(
-			"inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
-			active === value
-				? "bg-primary-500 text-white"
-				: "bg-white border border-[#E0E0E0] text-[#636363] hover:border-primary-500 hover:text-primary-500",
-		);
-
 	return (
-		<div className={cn("flex flex-wrap items-center gap-2", className)}>
-			{label ? (
-				<span className="mr-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-					{label}
-				</span>
-			) : null}
-			{pills.map((opt) => (
-				<button
-					key={opt.value}
-					type="button"
-					onClick={() => {
-						void setQuery({
-							[paramKey]: opt.value,
-							...(resetPageOnChange ? { page: null } : {}),
-						});
-					}}
-					className={pillClass(opt.value)}
-				>
-					{opt.label}
-					{typeof opt.count === "number" ? (
-						<span
-							className={cn(
-								"tabular-nums text-xs",
-								active === opt.value ? "text-white/80" : "text-[#9a9a9a]",
-							)}
-						>
-							{opt.count}
-						</span>
-					) : null}
-				</button>
-			))}
-		</div>
+		<FilterSelect
+			label={label}
+			value={active}
+			options={selectOptions.map((option) => ({
+				...option,
+				label:
+					typeof option.count === "number"
+						? `${option.label} (${option.count})`
+						: option.label,
+			}))}
+			className={className}
+			onValueChange={(value) => {
+				if (!value) return;
+				onValueChange?.(value);
+				void setQuery({
+					[paramKey]: value === defaultValue ? null : value,
+					...(resetPageOnChange ? { page: null } : {}),
+				});
+			}}
+		/>
 	);
 }
 

@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { FilterBar } from "@/components/dashboard/filter-bar";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Pagination } from "@/components/dashboard/pagination";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
 	Table,
 	TableBody,
@@ -19,7 +20,6 @@ import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
-import { SortableTableHead } from "./_components/sortable-table-head";
 import {
 	MentorCalendarFilter,
 	MentorSortDirection,
@@ -91,15 +91,29 @@ export default async function MentorsPage({
 					<TableHeader>
 						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<SortableTableHead value="name">Name</SortableTableHead>
+							<SortableTableHead value="name" defaultSortValue="name">
+								Name
+							</SortableTableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Email
 							</TableHead>
-							<SortableTableHead value="bookings">Bookings</SortableTableHead>
-							<SortableTableHead value="joined">Joined</SortableTableHead>
+							<SortableTableHead
+								value="bookings"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
+								Bookings
+							</SortableTableHead>
+							<SortableTableHead
+								value="joined"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
+								Joined
+							</SortableTableHead>
 							<TableHead className="w-16 text-center font-medium text-muted-foreground">
 								Link
 							</TableHead>
