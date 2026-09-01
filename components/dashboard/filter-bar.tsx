@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { debounce, parseAsString, useQueryState } from "nuqs";
+import { debounce, parseAsString, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { useId } from "react";
 
@@ -72,14 +72,14 @@ export function FilterPills({
 	resetPageOnChange = false,
 	className,
 }: FilterPillsProps) {
-	const [active, setActive] = useQueryState(paramKey, {
-		defaultValue,
-		shallow,
-	});
-	const [, setPage] = useQueryState(
-		"page",
-		parseAsString.withOptions({ shallow }),
+	const [query, setQuery] = useQueryStates(
+		{
+			[paramKey]: parseAsString.withDefault(defaultValue),
+			page: parseAsString,
+		},
+		{ shallow },
 	);
+	const active = query[paramKey] ?? defaultValue;
 	const pills: FilterOption[] = includeAll
 		? [{ value: defaultValue, label: allLabel }, ...options]
 		: options;
@@ -104,8 +104,10 @@ export function FilterPills({
 					key={opt.value}
 					type="button"
 					onClick={() => {
-						void setActive(opt.value);
-						if (resetPageOnChange) void setPage(null);
+						void setQuery({
+							[paramKey]: opt.value,
+							...(resetPageOnChange ? { page: null } : {}),
+						});
 					}}
 					className={pillClass(opt.value)}
 				>
@@ -162,24 +164,27 @@ export function SearchInput({
 	className,
 }: SearchInputProps) {
 	const id = useId();
-	const [queryValue, setQueryValue] = useQueryState(
-		paramKey,
-		parseAsString
-			.withDefault("")
-			.withOptions({ limitUrlUpdates: debounce(debounceMs), shallow }),
+	const [query, setQuery] = useQueryStates(
+		{
+			[paramKey]: parseAsString.withDefault(""),
+			page: parseAsString,
+		},
+		{ shallow },
 	);
-	const value = controlledValue ?? queryValue;
-	const [, setPage] = useQueryState(
-		"page",
-		parseAsString.withOptions({ shallow }),
-	);
+	const value = controlledValue ?? query[paramKey] ?? "";
 	const handleValueChange = (nextValue: string) => {
 		if (onValueChange) {
 			onValueChange(nextValue);
-		} else {
-			void setQueryValue(nextValue || null);
+			if (resetPageOnChange) void setQuery({ page: null });
+			return;
 		}
-		if (resetPageOnChange) void setPage(null);
+		void setQuery(
+			{
+				[paramKey]: nextValue || null,
+				...(resetPageOnChange ? { page: null } : {}),
+			},
+			{ limitUrlUpdates: debounce(debounceMs) },
+		);
 	};
 
 	return (

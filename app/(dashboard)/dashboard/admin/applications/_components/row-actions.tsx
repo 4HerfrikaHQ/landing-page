@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { approveMentorApplication, rejectMentorApplication } from "../_actions";
@@ -16,14 +15,12 @@ export function RowActions({
 	/** Called after a successful approve/reject (e.g. to close a detail sheet). */
 	onDone?: () => void;
 }) {
-	const router = useRouter();
 	const [showReject, setShowReject] = useState(false);
 	const [reason, setReason] = useState("");
 
 	const approve = useAction(approveMentorApplication, {
 		onSuccess: () => {
 			toast.success("Approved. Onboarding email sent.");
-			router.refresh();
 			onDone?.();
 		},
 		onError: ({ error }) => toast.error(error.serverError ?? "Failed"),
@@ -32,7 +29,6 @@ export function RowActions({
 		onSuccess: () => {
 			toast.success("Rejected.");
 			setShowReject(false);
-			router.refresh();
 			onDone?.();
 		},
 		onError: ({ error }) => toast.error(error.serverError ?? "Failed"),

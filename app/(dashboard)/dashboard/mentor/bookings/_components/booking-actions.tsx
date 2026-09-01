@@ -15,7 +15,6 @@ import {
 } from "@/src/lib/booking-rules";
 import { CalendarClock, UserX, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -37,18 +36,19 @@ export function BookingActions({
 	status: string;
 	isUpcoming: boolean;
 }) {
-	const router = useRouter();
 	const [rescheduleOpen, setRescheduleOpen] = useState(false);
 	const [cancelOpen, setCancelOpen] = useState(false);
 	const [reason, setReason] = useState("");
 
-	const reschedulable = canReschedule(new Date(startAtUtc).getTime(), Date.now());
+	const reschedulable = canReschedule(
+		new Date(startAtUtc).getTime(),
+		Date.now(),
+	);
 
 	const reschedule = useAction(rescheduleMyBooking, {
 		onSuccess: () => {
 			toast.success("Rescheduled. The mentee has been emailed.");
 			setRescheduleOpen(false);
-			router.refresh();
 		},
 		onError: ({ error }) =>
 			toast.error(error.serverError ?? "Couldn't reschedule."),
@@ -57,14 +57,13 @@ export function BookingActions({
 		onSuccess: () => {
 			toast.success("Cancelled. The mentee has been emailed.");
 			setCancelOpen(false);
-			router.refresh();
 		},
-		onError: ({ error }) => toast.error(error.serverError ?? "Couldn't cancel."),
+		onError: ({ error }) =>
+			toast.error(error.serverError ?? "Couldn't cancel."),
 	});
 	const noShow = useAction(markMyBookingNoShow, {
 		onSuccess: () => {
 			toast.success("Marked as no-show.");
-			router.refresh();
 		},
 		onError: ({ error }) =>
 			toast.error(error.serverError ?? "Couldn't mark no-show."),
