@@ -578,7 +578,11 @@ export function createMentorCalendarClient(
 				await notifyBrokenConnection(connection);
 				throw new MentorCalendarError("reauth_required", actionMessage(null));
 			}
-			if (!deleteResponse.ok && deleteResponse.status !== 404) {
+			if (
+				!deleteResponse.ok &&
+				deleteResponse.status !== 404 &&
+				deleteResponse.status !== 410
+			) {
 				const details = await logCalendarApiFailure({
 					operation: "delete_cancelled_event",
 					mentorId: connection.mentorId,
@@ -630,7 +634,11 @@ export function createMentorCalendarClient(
 					await notifyBrokenConnection(connection);
 					throw new MentorCalendarError("reauth_required", actionMessage(null));
 				}
-				if (!deleteResponse.ok && deleteResponse.status !== 404) {
+				if (
+					!deleteResponse.ok &&
+					deleteResponse.status !== 404 &&
+					deleteResponse.status !== 410
+				) {
 					const details = await logCalendarApiFailure({
 						operation: "delete_orphaned_event",
 						mentorId: connection.mentorId,

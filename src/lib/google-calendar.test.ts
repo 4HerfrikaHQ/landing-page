@@ -221,7 +221,7 @@ describe("mentor-scoped Google Calendar", () => {
 			fetchImpl: async (input, init) => {
 				calls.push({ url: String(input), method: init?.method });
 				if (init?.method === "DELETE")
-					return new Response(null, { status: 204 });
+					return new Response(null, { status: 410 });
 				if (init?.method === "POST")
 					return response(
 						event(
@@ -301,7 +301,7 @@ describe("mentor-scoped Google Calendar", () => {
 			fetchImpl: async (input, init) => {
 				calls.push({ url: String(input), method: init?.method });
 				if (init?.method === "DELETE")
-					return new Response(null, { status: 204 });
+					return new Response(null, { status: 410 });
 				if (init?.method === "POST")
 					return response(
 						event(
