@@ -1,7 +1,6 @@
 "use client";
 
 import { StatusBadge } from "@/components/dashboard/status-badge";
-import { Button } from "@/components/ui/button";
 import {
 	Sheet,
 	SheetContent,
@@ -9,7 +8,6 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { formatInTimeZone } from "date-fns-tz";
-import { ExternalLink } from "lucide-react";
 import type { ReactNode } from "react";
 import type { AdminBookingRow } from "../_actions";
 import { NoShowButton } from "./no-show-button";
@@ -131,22 +129,14 @@ export function BookingDetailSheet({
 					) : null}
 				</div>
 
-				<div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
-					{canMarkNoShow ? (
+				{canMarkNoShow ? (
+					<div className="sticky bottom-0 -mx-4 flex items-center border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
 						<NoShowButton
 							bookingId={booking.id}
 							menteeName={booking.mentee_name}
 						/>
-					) : (
-						<span />
-					)}
-					{booking.status !== "cancelled" ? (
-						<Button href={booking.meet_url} isExternal size="sm">
-							<ExternalLink className="size-4" />
-							Open meeting
-						</Button>
-					) : null}
-				</div>
+					</div>
+				) : null}
 			</SheetContent>
 		</Sheet>
 	);
