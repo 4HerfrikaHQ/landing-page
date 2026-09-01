@@ -172,16 +172,20 @@ async function logCalendarApiFailure(input: {
 		payload.error && typeof payload.error === "object"
 			? (payload.error as Record<string, unknown>)
 			: undefined;
-	console.error("[mentor-google-calendar-api-failed]", {
+	const details = {
 		operation: input.operation,
-		mentorId: input.mentorId,
-		connectionId: input.connectionId,
-		attemptKey: input.attemptKey,
 		status: input.response.status,
 		googleErrorCode: googleError?.code,
 		googleErrorStatus: googleError?.status,
 		googleErrorMessage: googleError?.message,
+	};
+	console.error("[mentor-google-calendar-api-failed]", {
+		mentorId: input.mentorId,
+		connectionId: input.connectionId,
+		attemptKey: input.attemptKey,
+		...details,
 	});
+	return details;
 }
 
 function googleProvider(
@@ -519,7 +523,7 @@ async function readEvent(
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
 	}
 	if (!response.ok) {
-		await logCalendarApiFailure({
+		const details = await logCalendarApiFailure({
 			operation: "read_event",
 			mentorId: connection.mentorId,
 			connectionId: connection.connectionId,
@@ -528,6 +532,7 @@ async function readEvent(
 		throw new MentorCalendarError(
 			"remote_error",
 			"Google Calendar could not complete the requested operation.",
+			{ cause: details },
 		);
 	}
 	return (await json(response)) as CalendarEvent;
@@ -624,15 +629,6 @@ export function createMentorCalendarClient(
 			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
 		}
-		if (!response.ok) {
-			await logCalendarApiFailure({
-				operation: "create_event",
-				mentorId: connection.mentorId,
-				connectionId: connection.connectionId,
-				attemptKey: params.attemptKey,
-				response,
-			});
-		}
 		if (response.status === 409 || response.status === 412) {
 			const duplicate = await readEvent(connection, token, eventId, fetchImpl);
 			if (duplicate) {
@@ -647,11 +643,20 @@ export function createMentorCalendarClient(
 				return usableEvent(duplicate, connection);
 			}
 		}
-		if (!response.ok)
+		if (!response.ok) {
+			const details = await logCalendarApiFailure({
+				operation: "create_event",
+				mentorId: connection.mentorId,
+				connectionId: connection.connectionId,
+				attemptKey: params.attemptKey,
+				response,
+			});
 			throw new MentorCalendarError(
 				"remote_error",
 				"Google Calendar could not complete the requested operation.",
+				{ cause: details },
 			);
+		}
 		let event = (await json(response)) as CalendarEvent;
 		if (
 			!event.hangoutLink &&

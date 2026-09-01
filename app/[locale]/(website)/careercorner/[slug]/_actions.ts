@@ -42,8 +42,10 @@ function calendarActionError(error: unknown): ActionError {
 		);
 	}
 	if (isMentorCalendarError(error)) {
+		const details =
+			error.cause && typeof error.cause === "object" ? error.cause : undefined;
 		return new ActionError(
-			`${mentorCalendarActionMessage(error)} [debug: ${error.code}]`,
+			`${mentorCalendarActionMessage(error)} [debug: ${JSON.stringify({ name: error.name, code: error.code, message: error.message, details })}]`,
 		);
 	}
 	return new ActionError(mentorCalendarActionMessage(error));
