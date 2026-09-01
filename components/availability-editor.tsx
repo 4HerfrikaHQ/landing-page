@@ -204,12 +204,7 @@ export function AvailabilityEditor({
 		setSlotErrors(new Map());
 
 		startTransition(async () => {
-			const result = await saveAvailability(
-				mentorId,
-				slots,
-				timezone,
-				onboardingToken,
-			);
+			const result = await saveAvailability(mentorId, slots, timezone, onboardingToken);
 			if (result.error) {
 				setError(result.error);
 			} else {

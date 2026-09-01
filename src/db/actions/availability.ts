@@ -8,9 +8,7 @@ import { resolveActionLink } from "@/src/lib/action-links";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export async function getAvailability(
-	mentorId: string,
-): Promise<DbAvailability[]> {
+export async function getAvailability(mentorId: string): Promise<DbAvailability[]> {
 	return db
 		.select()
 		.from(schema.availability)
@@ -47,14 +45,12 @@ export async function saveAvailability(
 		}
 	}
 
-	await db
-		.delete(schema.availability)
-		.where(eq(schema.availability.mentor_id, mentorId));
+	await db.delete(schema.availability).where(eq(schema.availability.mentor_id, mentorId));
 
 	if (slots.length > 0) {
-		await db
-			.insert(schema.availability)
-			.values(slots.map((s) => ({ ...s, mentor_id: mentorId, timezone })));
+		await db.insert(schema.availability).values(
+			slots.map((s) => ({ ...s, mentor_id: mentorId, timezone })),
+		);
 	}
 
 	revalidatePath("/dashboard/admin/mentors");
