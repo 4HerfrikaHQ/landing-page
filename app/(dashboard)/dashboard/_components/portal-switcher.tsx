@@ -33,7 +33,12 @@ export function PortalSwitcher({
 		<Select
 			value={portal}
 			onValueChange={(value) => {
-				if (value && value !== portal) router.push(`/dashboard/${value}`);
+				if (!value || value === portal) return;
+				router.push(
+					value === "admin"
+						? "/dashboard/admin/mentors"
+						: "/dashboard/mentor",
+				);
 			}}
 		>
 			<SelectTrigger

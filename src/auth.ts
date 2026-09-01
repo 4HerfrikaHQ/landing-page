@@ -63,9 +63,9 @@ export async function verifyOtp(email: string, token: string): Promise<{ error: 
   const user = await currentDbUser();
 
   if (user.role === "super_admin") {
-    redirect("/dashboard/admin")
+		redirect("/dashboard/admin/mentors");
   } else {
-    redirect("/dashboard/mentor")
+		redirect("/dashboard/mentor");
   }
 }
 
