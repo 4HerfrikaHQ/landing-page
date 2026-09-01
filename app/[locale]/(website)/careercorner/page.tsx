@@ -2,6 +2,10 @@ import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
+import {
+	absoluteSiteUrl,
+	localizedCareerCornerPath,
+} from "@/src/lib/careercorner-seo";
 import { resolveFeaturedMentor } from "@/src/lib/featured-mentor";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { UserRound } from "lucide-react";
@@ -16,6 +20,7 @@ import { MentorDirectory } from "./_components/mentor-directory";
 const CareersCorner = async ({
 	params,
 }: { params: Promise<{ locale: string }> }) => {
+	const { locale } = await params;
 	await setLocaleFromParams(params);
 
 	const [tCareers, tCommon, mentors, heroMentors, featured] = await Promise.all(
@@ -29,9 +34,46 @@ const CareersCorner = async ({
 	);
 
 	const featuredName = featured ? featured.nickname || featured.name : null;
+	const pageUrl = absoluteSiteUrl(localizedCareerCornerPath(locale));
+	const structuredData = {
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		"@id": `${pageUrl}#webpage`,
+		url: pageUrl,
+		name: tCareers("title"),
+		description: tCareers("counselingDescription"),
+		isPartOf: {
+			"@type": "WebSite",
+			name: "4Herfrika",
+			url: absoluteSiteUrl("/"),
+		},
+		mainEntity: {
+			"@type": "ItemList",
+			itemListElement: mentors.map((mentor, index) => ({
+				"@type": "ListItem",
+				position: index + 1,
+				url: absoluteSiteUrl(
+					localizedCareerCornerPath(locale, `/${mentor.slug}`),
+				),
+				item: {
+					"@type": "Person",
+					name: mentor.nickname || mentor.name,
+					jobTitle: mentor.position || undefined,
+					description: mentor.bio?.slice(0, 240) || undefined,
+					image: mentor.image ? absoluteSiteUrl(mentor.image) : undefined,
+				},
+			})),
+		},
+	};
 
 	return (
-		<section className="overflow-x-hidden">
+		<main className="overflow-x-hidden">
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+				}}
+			/>
 			<CareersHero mentors={heroMentors} />
 
 			{featured && (
@@ -141,7 +183,7 @@ const CareersCorner = async ({
 					</Button>
 				</section>
 			</FadeIn>
-		</section>
+		</main>
 	);
 };
 
