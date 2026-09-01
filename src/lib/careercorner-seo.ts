@@ -3,10 +3,7 @@ import type { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
 
-export function localizedCareerCornerPath(
-	locale: string,
-	suffix = "",
-): string {
+export function localizedCareerCornerPath(locale: string, suffix = ""): string {
 	const path = `/careercorner${suffix}`;
 	return `${locale === routing.defaultLocale ? "" : `/${locale}`}${path}`;
 }
@@ -24,9 +21,6 @@ export function careerCornerMetadata(
 ): Metadata {
 	const localizedPath = (language: string) =>
 		localizedCareerCornerPath(language, suffix);
-	const socialImageUrl = absoluteSiteUrl(
-		`${localizedPath(locale)}/opengraph-image`,
-	);
 	return {
 		title,
 		description,
@@ -49,20 +43,11 @@ export function careerCornerMetadata(
 			url: localizedPath(locale),
 			title,
 			description,
-			images: [
-				{
-					url: socialImageUrl,
-					width: 1200,
-					height: 630,
-					alt: title,
-				},
-			],
 		},
 		twitter: {
 			card: "summary_large_image",
 			title,
 			description,
-			images: [socialImageUrl],
 		},
 	};
 }
