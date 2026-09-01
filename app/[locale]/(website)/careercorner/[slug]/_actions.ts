@@ -60,6 +60,78 @@ async function selectBookingCalendarHost(mentor: {
 	return host;
 }
 
+async function getMentorBookingSettings(mentorId: string) {
+	const [settings] = await db
+		.select()
+		.from(mentorBookingSettings)
+		.where(eq(mentorBookingSettings.mentor_id, mentorId))
+		.limit(1);
+	return settings ?? null;
+}
+
+async function countActiveBookingsForMentee(menteeEmail: string, now: Date) {
+	const [row] = await db
+		.select({ activeCount: sql<number>`count(*)::int` })
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentee_email, menteeEmail),
+				eq(bookings.status, "confirmed"),
+				gt(bookings.start_at, now),
+			),
+		);
+	return row?.activeCount ?? 0;
+}
+
+async function getMentorAvailabilityWindows(mentorId: string) {
+	return db
+		.select()
+		.from(availability)
+		.where(eq(availability.mentor_id, mentorId));
+}
+
+async function getMentorDayBookings(params: {
+	mentorId: string;
+	dayStart: Date;
+	dayEnd: Date;
+}) {
+	return db
+		.select({ startUtc: bookings.start_at, endUtc: bookings.end_at })
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentor_id, params.mentorId),
+				ne(bookings.status, "cancelled"),
+				gte(bookings.start_at, params.dayStart),
+				lt(bookings.start_at, params.dayEnd),
+			),
+		);
+}
+
+async function getBookingValidationData(params: {
+	mentorId: string;
+	menteeEmail: string;
+	dayStart: Date;
+	dayEnd: Date;
+	now: Date;
+}) {
+	const [activeCountRows, availabilityWindows, existing] = await Promise.all([
+		countActiveBookingsForMentee(params.menteeEmail, params.now),
+		getMentorAvailabilityWindows(params.mentorId),
+		getMentorDayBookings({
+			mentorId: params.mentorId,
+			dayStart: params.dayStart,
+			dayEnd: params.dayEnd,
+		}),
+	]);
+
+	return {
+		activeCount: activeCountRows,
+		availabilityWindows,
+		existing,
+	};
+}
+
 function formatInTz(date: Date, tz: string): string {
 	return formatInTimeZone(date, tz, "EEEE, MMM d, yyyy 'at' HH:mm zzz");
 }
@@ -296,32 +368,32 @@ export const createBooking = actionClient
 		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 		const mentorEmail = mentor.email;
-		const hosting = await selectBookingCalendarHost(mentor);
-
-		const [settingsRow] = await db
-			.select()
-			.from(mentorBookingSettings)
-			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
-			.limit(1);
-		if (!settingsRow) throw new ActionError("Mentor booking settings missing");
-		const settings = settingsRow;
+		const [hosting, settings] = await Promise.all([
+			selectBookingCalendarHost(mentor),
+			getMentorBookingSettings(mentor.id),
+		]);
+		if (!settings) throw new ActionError("Mentor booking settings missing");
 
 		const startAt = new Date(parsedInput.startAtUtc);
 		const endAt = new Date(
 			startAt.getTime() + settings.session_duration_minutes * 60_000,
 		);
+		const now = new Date();
 
-		// Per-mentee future-booking cap (across all mentors — prevents one person hoarding slots)
-		const [{ activeCount }] = await db
-			.select({ activeCount: sql<number>`count(*)::int` })
-			.from(bookings)
-			.where(
-				and(
-					eq(bookings.mentee_email, parsedInput.mentee_email),
-					eq(bookings.status, "confirmed"),
-					gt(bookings.start_at, new Date()),
-				),
-			);
+		// Per-mentee cap and slot-validation reads have no data dependency. Keeping
+		// them in one concurrent read group shortens the time before Calendar is called.
+		const dayStart = new Date(startAt);
+		dayStart.setUTCHours(0, 0, 0, 0);
+		const dayEnd = new Date(dayStart);
+		dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
+		const { activeCount, availabilityWindows, existing } =
+			await getBookingValidationData({
+				mentorId: mentor.id,
+				menteeEmail: parsedInput.mentee_email,
+				dayStart,
+				dayEnd,
+				now,
+			});
 		if (activeCount >= settings.max_active_bookings_per_mentee) {
 			throw new ActionError(
 				"You already have an active booking. Please cancel it before booking a new one.",
@@ -329,33 +401,13 @@ export const createBooking = actionClient
 		}
 
 		// Re-check that the slot is still available
-		const dayStart = new Date(startAt);
-		dayStart.setUTCHours(0, 0, 0, 0);
-		const dayEnd = new Date(dayStart);
-		dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
-
-		const availabilityWindows = await db
-			.select()
-			.from(availability)
-			.where(eq(availability.mentor_id, mentor.id));
-		const existing = await db
-			.select({ startUtc: bookings.start_at, endUtc: bookings.end_at })
-			.from(bookings)
-			.where(
-				and(
-					eq(bookings.mentor_id, mentor.id),
-					ne(bookings.status, "cancelled"),
-					gte(bookings.start_at, dayStart),
-					lt(bookings.start_at, dayEnd),
-				),
-			);
 		const slots = computeSlots({
 			availabilityTemplates: availabilityWindows,
 			existingBookings: existing,
 			settings,
 			fromUtc: dayStart,
 			toUtc: dayEnd,
-			now: new Date(),
+			now,
 		});
 		if (!slots.some((s) => s.startUtc === startAt.toISOString())) {
 			throw new ActionError(
