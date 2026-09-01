@@ -160,6 +160,30 @@ async function json(response: Response): Promise<Record<string, unknown>> {
 	}
 }
 
+async function logCalendarApiFailure(input: {
+	operation: "read_event" | "create_event";
+	mentorId: string;
+	connectionId: string;
+	attemptKey?: string;
+	response: Response;
+}) {
+	const payload = await json(input.response.clone());
+	const googleError =
+		payload.error && typeof payload.error === "object"
+			? (payload.error as Record<string, unknown>)
+			: undefined;
+	console.error("[mentor-google-calendar-api-failed]", {
+		operation: input.operation,
+		mentorId: input.mentorId,
+		connectionId: input.connectionId,
+		attemptKey: input.attemptKey,
+		status: input.response.status,
+		googleErrorCode: googleError?.code,
+		googleErrorStatus: googleError?.status,
+		googleErrorMessage: googleError?.message,
+	});
+}
+
 function googleProvider(
 	fetchImpl: CalendarFetch,
 	grantedScopes: string[],
@@ -469,11 +493,18 @@ async function readEvent(
 		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
 	}
-	if (!response.ok)
+	if (!response.ok) {
+		await logCalendarApiFailure({
+			operation: "read_event",
+			mentorId: connection.mentorId,
+			connectionId: connection.connectionId,
+			response,
+		});
 		throw new MentorCalendarError(
 			"remote_error",
 			"Google Calendar could not complete the requested operation.",
 		);
+	}
 	return (await json(response)) as CalendarEvent;
 }
 
@@ -538,7 +569,14 @@ export function createMentorCalendarClient(
 					}),
 				},
 			);
-		} catch {
+		} catch (error) {
+			console.error("[mentor-google-calendar-create-request-failed]", {
+				mentorId: connection.mentorId,
+				connectionId: connection.connectionId,
+				attemptKey: params.attemptKey,
+				errorName: error instanceof Error ? error.name : typeof error,
+				errorMessage: error instanceof Error ? error.message : undefined,
+			});
 			const recovered = await readEvent(connection, token, eventId, fetchImpl);
 			if (recovered) {
 				if (
@@ -560,6 +598,15 @@ export function createMentorCalendarClient(
 			await connection.markReauthRequired().catch(() => undefined);
 			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
+		}
+		if (!response.ok) {
+			await logCalendarApiFailure({
+				operation: "create_event",
+				mentorId: connection.mentorId,
+				connectionId: connection.connectionId,
+				attemptKey: params.attemptKey,
+				response,
+			});
 		}
 		if (response.status === 409 || response.status === 412) {
 			const duplicate = await readEvent(connection, token, eventId, fetchImpl);
