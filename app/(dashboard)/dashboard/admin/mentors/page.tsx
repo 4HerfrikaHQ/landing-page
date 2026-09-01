@@ -19,8 +19,10 @@ import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
+import { SortableTableHead } from "./_components/sortable-table-head";
 import {
-	MentorFeaturedFilter,
+	MentorCalendarFilter,
+	MentorSortDirection,
 	MentorSortValue,
 	MentorStatusFilter,
 } from "./_schema";
@@ -34,7 +36,8 @@ export default async function MentorsPage({
 		q?: string;
 		status?: string;
 		sort?: string;
-		featured?: string;
+		order?: string;
+		calendar?: string;
 		page?: string;
 	}>;
 }) {
@@ -44,13 +47,14 @@ export default async function MentorsPage({
 	const sp = await searchParams;
 	const status = MentorStatusFilter.safeParse(sp.status);
 	const sort = MentorSortValue.safeParse(sp.sort);
-	const featured = MentorFeaturedFilter.safeParse(sp.featured);
+	const order = MentorSortDirection.safeParse(sp.order);
+	const calendar = MentorCalendarFilter.safeParse(sp.calendar);
 	const page = Math.max(1, Number(sp.page) || 1);
 
 	const activeFilters = {
 		query: sp.q,
 		status: status.success ? status.data : undefined,
-		featured: featured.success ? featured.data : undefined,
+		calendar: calendar.success ? calendar.data : undefined,
 	};
 
 	// Links cover every mentor matching the filters, not just this page — there
@@ -59,6 +63,7 @@ export default async function MentorsPage({
 		getMentorsForAdmin({
 			...activeFilters,
 			sort: sort.success ? sort.data : undefined,
+			order: order.success ? order.data : undefined,
 			page,
 			pageSize: PAGE_SIZE,
 		}),
@@ -91,21 +96,15 @@ export default async function MentorsPage({
 					<TableHeader>
 						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<TableHead className="font-medium text-muted-foreground">
-								Name
-							</TableHead>
+							<SortableTableHead value="name">Name</SortableTableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Email
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Bookings
-							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Joined
-							</TableHead>
+							<SortableTableHead value="bookings">Bookings</SortableTableHead>
+							<SortableTableHead value="joined">Joined</SortableTableHead>
 							<TableHead className="w-16 text-center font-medium text-muted-foreground">
 								Link
 							</TableHead>

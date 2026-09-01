@@ -24,13 +24,13 @@ import {
 	desc,
 	eq,
 	ilike,
-	ne,
 	or,
 	sql,
 } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import {
+	type MentorSortDirection,
 	type MentorSortValue,
 	RequestMentorCalendarConnectionSchema,
 	SetFeaturedMentorSchema,
@@ -40,25 +40,21 @@ interface MentorAdminFilters {
 	query?: string;
 	status?: "active" | "inactive";
 	sort?: MentorSortValue;
-	/** When "featured"/"not_featured", filter against the singleton state. */
-	featured?: "featured" | "not_featured";
+	order?: MentorSortDirection;
+	calendar?: "connected" | "not_connected";
 	page?: number;
 	pageSize?: number;
 }
 
-/** Sentinel for "these filters can't match any mentor". */
-const NO_MATCH = Symbol("no-match");
-
 /**
  * Shared filter translation so the paginated table and the "copy every link"
- * action always agree on which mentors match. Returns NO_MATCH when the filters
- * can't match anything (featured filter with no featured mentor set).
+ * action always agree on which mentors match.
  */
-async function mentorFilterWhere({
+function mentorFilterWhere({
 	query,
 	status,
-	featured,
-}: Pick<MentorAdminFilters, "query" | "status" | "featured">) {
+	calendar,
+}: Pick<MentorAdminFilters, "query" | "status" | "calendar">) {
 	const conditions: (SQL<unknown> | undefined)[] = [];
 
 	if (query) {
@@ -79,16 +75,21 @@ async function mentorFilterWhere({
 			break;
 	}
 
-	// Resolve the featured filter into a SQL condition so pagination stays correct
-	// (the singleton featured mentor can't be filtered in-memory after limit/offset).
-	if (featured) {
-		const featuredId = await getFeaturedMentorId();
-		if (featured === "featured") {
-			if (!featuredId) return NO_MATCH;
-			conditions.push(eq(schema.mentors.id, featuredId));
-		} else if (featuredId) {
-			conditions.push(ne(schema.mentors.id, featuredId));
-		}
+	if (calendar === "connected") {
+		conditions.push(
+			and(
+				eq(schema.mentorGoogleConnections.status, "connected"),
+				eq(
+					schema.mentorGoogleConnections.reauthorization_state,
+					"not_required",
+				),
+			),
+		);
+	} else if (calendar === "not_connected") {
+		conditions.push(sql`not (
+			coalesce(${schema.mentorGoogleConnections.status} = 'connected', false)
+			and coalesce(${schema.mentorGoogleConnections.reauthorization_state} = 'not_required', false)
+		)`);
 	}
 
 	return conditions.length ? and(...conditions) : undefined;
@@ -97,19 +98,20 @@ async function mentorFilterWhere({
 export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 	await requireSuperAdmin();
 
-	const { sort = "name", page = 1, pageSize = 20 } = filters;
+	const { sort = "name", order, page = 1, pageSize = 20 } = filters;
 
-	const where = await mentorFilterWhere(filters);
-	if (where === NO_MATCH) return { rows: [], total: 0 };
+	const where = mentorFilterWhere(filters);
 
 	const bookingCount = sql<number>`count(${bookings.id})`.as("booking_count");
 
-	const orderBy =
+	const sortDirection = order ?? (sort === "name" ? "asc" : "desc");
+	const sortColumn =
 		sort === "joined"
-			? desc(schema.mentors.created_at)
+			? schema.mentors.created_at
 			: sort === "bookings"
-				? desc(bookingCount)
-				: asc(schema.users.name);
+				? bookingCount
+				: schema.users.name;
+	const orderBy = sortDirection === "asc" ? asc(sortColumn) : desc(sortColumn);
 
 	const [rows, [{ total }]] = await Promise.all([
 		db
@@ -151,6 +153,10 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.select({ total: count() })
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.leftJoin(
+				schema.mentorGoogleConnections,
+				eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+			)
 			.where(where),
 	]);
 
@@ -162,17 +168,20 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
  * whole set of public links at once instead of page by page.
  */
 export async function getMentorLinksForAdmin(
-	filters: Pick<MentorAdminFilters, "query" | "status" | "featured"> = {},
+	filters: Pick<MentorAdminFilters, "query" | "status" | "calendar"> = {},
 ) {
 	await requireSuperAdmin();
 
-	const where = await mentorFilterWhere(filters);
-	if (where === NO_MATCH) return [];
+	const where = mentorFilterWhere(filters);
 
 	return db
 		.select({ name: schema.users.name, slug: schema.mentors.slug })
 		.from(schema.mentors)
 		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+		.leftJoin(
+			schema.mentorGoogleConnections,
+			eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+		)
 		.where(where)
 		.orderBy(asc(schema.users.name));
 }
