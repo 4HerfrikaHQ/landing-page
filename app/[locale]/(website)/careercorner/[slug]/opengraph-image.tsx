@@ -1,14 +1,11 @@
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { contentType, generateCareerCornerOGImage, size } from "../../_lib/og";
 import { getMentorBySlug } from "./_actions";
-import {
-	contentType,
-	generateCareerCornerOGImage,
-	size,
-} from "../../_lib/og";
 
 export { size, contentType };
 
+export const alt = "Book a mentorship call on 4Herfrika";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
