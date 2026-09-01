@@ -11,6 +11,7 @@ import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
+	isMentorCalendarError,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
@@ -38,6 +39,13 @@ function calendarActionError(error: unknown): ActionError {
 			error.code === "connection_unavailable"
 				? "Booking is temporarily unavailable. Please try again later."
 				: "The calendar could not complete the requested operation.",
+		);
+	}
+	if (process.env.VERCEL_ENV === "preview" && isMentorCalendarError(error)) {
+		const details =
+			error.cause && typeof error.cause === "object" ? error.cause : undefined;
+		return new ActionError(
+			`${mentorCalendarActionMessage(error)} [debug: ${JSON.stringify({ name: error.name, code: error.code, message: error.message, details })}]`,
 		);
 	}
 	return new ActionError(mentorCalendarActionMessage(error));
