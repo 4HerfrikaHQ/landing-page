@@ -21,10 +21,20 @@ import {
 } from "lucide-react";
 import type { Route } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";
 import { PortalSwitcher } from "../../_components/portal-switcher";
+
+function PendingLinkIndicator() {
+	const { pending } = useLinkStatus();
+
+	return pending ? (
+		<span className="ml-0.5 inline-flex" aria-hidden="true">
+			<span className="size-3 animate-spin rounded-full border border-current border-t-transparent" />
+		</span>
+	) : null;
+}
 
 const NAV_ITEMS: {
 	key: string;
@@ -131,6 +141,7 @@ export function MentorHeader({
 								>
 									<Icon className="size-4" />
 									{item.label}
+									<PendingLinkIndicator />
 								</Link>
 							);
 						})}
@@ -187,6 +198,7 @@ export function MentorHeader({
 										>
 											<Icon className="size-4" />
 											{item.label}
+											<PendingLinkIndicator />
 										</SheetClose>
 									);
 								})}

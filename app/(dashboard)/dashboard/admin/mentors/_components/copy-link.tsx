@@ -6,9 +6,10 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Check, Copy, Link2 } from "lucide-react";
-import { useState } from "react";
+import { Check, Copy, Link2, Loader2 } from "lucide-react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { type MentorAdminFilters, getMentorLinksForAdmin } from "../_actions";
 
 // ponytail: same inline env read as every other public-URL site in the app.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
@@ -69,11 +70,52 @@ export function CopyMentorLinkButton({
 }
 
 export function CopyAllMentorLinksButton({
-	mentors,
+	count,
+	filters,
 }: {
-	mentors: { name: string; slug: string }[];
+	count: number;
+	filters: Pick<MentorAdminFilters, "query" | "status" | "calendar">;
 }) {
-	if (mentors.length === 0) return null;
+	const [isPending, startTransition] = useTransition();
+	const [loaded, setLoaded] = useState<{
+		key: string;
+		mentors: Awaited<ReturnType<typeof getMentorLinksForAdmin>>;
+	} | null>(null);
+	const filtersKey = `${filters.query ?? ""}\u0000${filters.status ?? ""}\u0000${filters.calendar ?? ""}`;
+	const cachedMentors = loaded?.key === filtersKey ? loaded.mentors : null;
+
+	if (count === 0) return null;
+
+	function copyAll() {
+		if (isPending) return;
+
+		// Clipboard writes must start in this click handler. If the filtered set
+		// has not been loaded yet, make this gesture load it and ask for one
+		// explicit follow-up click rather than losing Safari/Firefox activation.
+		if (!cachedMentors) {
+			startTransition(async () => {
+				try {
+					const mentors = await getMentorLinksForAdmin(filters);
+					setLoaded({ key: filtersKey, mentors });
+					toast.success(
+						`${mentors.length} link${mentors.length === 1 ? "" : "s"} ready — click Copy again to copy`,
+					);
+				} catch {
+					toast.error("Couldn't load mentor links. Try again.");
+				}
+			});
+			return;
+		}
+
+		// Do not await a server action or wrap this call in a transition: the
+		// second user gesture is what authorizes clipboard access in strict browsers.
+		void writeClipboard(
+			cachedMentors
+				.map((m) => `${m.name}\t${mentorPublicUrl(m.slug)}`)
+				.join("\n"),
+			`${cachedMentors.length} link${cachedMentors.length === 1 ? "" : "s"} copied`,
+		);
+	}
 
 	return (
 		<Button
@@ -81,17 +123,17 @@ export function CopyAllMentorLinksButton({
 			variant="outline"
 			size="sm"
 			className="gap-2"
-			onClick={() =>
-				writeClipboard(
-					mentors
-						.map((m) => `${m.name}\t${mentorPublicUrl(m.slug)}`)
-						.join("\n"),
-					`${mentors.length} link${mentors.length === 1 ? "" : "s"} copied`,
-				)
-			}
+			disabled={isPending}
+			onClick={copyAll}
 		>
-			<Copy className="size-4" />
-			Copy {mentors.length} link{mentors.length === 1 ? "" : "s"}
+			{isPending ? (
+				<Loader2 className="size-4 animate-spin" />
+			) : (
+				<Copy className="size-4" />
+			)}
+			{isPending
+				? "Loading links…"
+				: `Copy ${count} link${count === 1 ? "" : "s"}`}
 		</Button>
 	);
 }

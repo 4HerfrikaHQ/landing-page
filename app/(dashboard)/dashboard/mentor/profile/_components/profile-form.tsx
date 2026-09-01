@@ -82,8 +82,9 @@ export function ProfileForm({
 		e.preventDefault();
 		setError(null);
 		setSaved(false);
+		const formData = new FormData(e.currentTarget);
 		startTransition(async () => {
-			const result = await updateMyProfile(new FormData(e.currentTarget));
+			const result = await updateMyProfile(formData);
 			if (result.error) {
 				setError(result.error);
 			} else {
@@ -153,35 +154,39 @@ export function ProfileForm({
 								name="name"
 								required
 								value={fields.name}
-								onChange={(e) =>
-									setFields((f) => ({ ...f, name: e.target.value }))
-								}
+								onChange={(e) => {
+									setSaved(false);
+									setFields((f) => ({ ...f, name: e.target.value }));
+								}}
 							/>
 							<Field
 								label="Position"
 								name="position"
 								required
 								value={fields.position}
-								onChange={(e) =>
-									setFields((f) => ({ ...f, position: e.target.value }))
-								}
+								onChange={(e) => {
+									setSaved(false);
+									setFields((f) => ({ ...f, position: e.target.value }));
+								}}
 							/>
 							<Field
 								label="Display Name"
 								name="nickname"
 								value={fields.nickname}
-								onChange={(e) =>
-									setFields((f) => ({ ...f, nickname: e.target.value }))
-								}
+								onChange={(e) => {
+									setSaved(false);
+									setFields((f) => ({ ...f, nickname: e.target.value }));
+								}}
 							/>
 							<Field
 								label="LinkedIn URL"
 								name="linkedin_url"
 								type="url"
 								value={fields.linkedin_url}
-								onChange={(e) =>
-									setFields((f) => ({ ...f, linkedin_url: e.target.value }))
-								}
+								onChange={(e) => {
+									setSaved(false);
+									setFields((f) => ({ ...f, linkedin_url: e.target.value }));
+								}}
 							/>
 						</div>
 						<div className="flex flex-col gap-1.5">
@@ -198,9 +203,10 @@ export function ProfileForm({
 								className="resize-none text-sm"
 								placeholder="A short introduction mentees will read first."
 								value={fields.bio}
-								onChange={(e) =>
-									setFields((f) => ({ ...f, bio: e.target.value }))
-								}
+								onChange={(e) => {
+									setSaved(false);
+									setFields((f) => ({ ...f, bio: e.target.value }));
+								}}
 							/>
 						</div>
 					</section>
@@ -213,10 +219,13 @@ export function ProfileForm({
 
 					<div className="flex items-center justify-end gap-3 border-t border-border/60 pt-5">
 						{saved ? (
-							<span className="inline-flex items-center gap-1.5 text-sm text-green-600">
+							<output
+								className="inline-flex items-center gap-1.5 text-sm text-green-600"
+								aria-live="polite"
+							>
 								<CheckCircle2 className="size-4" />
 								Saved
-							</span>
+							</output>
 						) : null}
 						<Button
 							type="submit"
