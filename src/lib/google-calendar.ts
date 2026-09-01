@@ -566,7 +566,7 @@ export function createMentorCalendarClient(
 			if (existingAttempt !== params.attemptKey) {
 				if (
 					!params.allowOrphanedEventOverride ||
-					!existingAttempt?.startsWith("4hf-")
+					(existingAttempt !== undefined && !existingAttempt.startsWith("4hf-"))
 				)
 					throw new MentorCalendarError(
 						"attempt_key_conflict",

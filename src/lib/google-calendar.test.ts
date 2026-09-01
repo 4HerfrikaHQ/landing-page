@@ -220,7 +220,8 @@ describe("mentor-scoped Google Calendar", () => {
 			connectionProvider: provider(connection()),
 			fetchImpl: async (input, init) => {
 				calls.push({ url: String(input), method: init?.method });
-				if (init?.method === "DELETE") return new Response(null, { status: 204 });
+				if (init?.method === "DELETE")
+					return new Response(null, { status: 204 });
 				if (init?.method === "POST")
 					return response(
 						event(
@@ -257,6 +258,39 @@ describe("mentor-scoped Google Calendar", () => {
 				method: "POST",
 			},
 		]);
+	});
+
+	test("replaces an owned markerless orphaned event", async () => {
+		const attemptKey = "replacement-attempt";
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (_input, init) => {
+				if (init?.method === "DELETE")
+					return new Response(null, { status: 204 });
+				if (init?.method === "POST")
+					return response(
+						event(
+							attemptKey,
+							mentorEmail,
+							deterministicCalendarEventId(attemptKey),
+						),
+					);
+				return response({
+					id: deterministicCalendarEventId(attemptKey),
+					organizer: { email: mentorEmail, id: "google-subject-1" },
+					creator: { email: mentorEmail, id: "google-subject-1" },
+				});
+			},
+		});
+
+		await expect(
+			client.createMentorCalendarEvent({
+				...createParams(attemptKey),
+				allowOrphanedEventOverride: true,
+			}),
+		).resolves.toMatchObject({
+			eventId: deterministicCalendarEventId(attemptKey),
+		});
 	});
 
 	test("does not replace an orphaned event owned by another Google account", async () => {
