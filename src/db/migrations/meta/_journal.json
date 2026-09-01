@@ -148,6 +148,13 @@
       "when": 1788262596460,
       "tag": "0020_small_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1788277685919,
+      "tag": "0021_legal_namor",
+      "breakpoints": true
     }
   ]
 }
