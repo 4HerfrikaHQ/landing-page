@@ -80,7 +80,7 @@ export function CopyAllMentorLinksButton({
 
 	if (count === 0) return null;
 
-	function copyAll() {
+	async function copyAll() {
 		if (isCopying) return;
 		setIsCopying(true);
 		try {
