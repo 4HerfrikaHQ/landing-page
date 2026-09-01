@@ -141,6 +141,13 @@
       "when": 1788261649319,
       "tag": "0019_salty_namora",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1788262201326,
+      "tag": "0020_aspiring_krista_starr",
+      "breakpoints": true
     }
   ]
 }
