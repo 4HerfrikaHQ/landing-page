@@ -12,8 +12,8 @@ import { useRouter } from "next/navigation";
 type Portal = "admin" | "mentor";
 
 const PORTAL_LABELS: Record<Portal, string> = {
-	admin: "Admin",
-	mentor: "Mentor",
+	admin: "ADMIN",
+	mentor: "MENTOR",
 };
 
 export function PortalSwitcher({
@@ -44,10 +44,10 @@ export function PortalSwitcher({
 			</SelectTrigger>
 			<SelectContent className="min-w-36 p-1">
 				<SelectItem value="admin" className="py-2">
-					Admin
+					ADMIN
 				</SelectItem>
 				<SelectItem value="mentor" className="py-2">
-					Mentor
+					MENTOR
 				</SelectItem>
 			</SelectContent>
 		</Select>
