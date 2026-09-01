@@ -71,9 +71,10 @@ export default async function MentorDetailPage({
 	}
 	const tc = await getTranslations("common");
 
-	const initialWeekStart = isInactivePreview
-		? null
-		: await getInitialWeekStart(mentor.slug);
+	const canBook = !isInactivePreview || isAdminPreview;
+	const initialWeekStart = canBook
+		? await getInitialWeekStart(mentor.slug)
+		: null;
 	const displayName = mentor.nickname || mentor.name;
 	const pageUrl = absoluteSiteUrl(
 		localizedCareerCornerPath(locale, `/${mentor.slug}`),
@@ -222,11 +223,7 @@ export default async function MentorDetailPage({
 											: "Book a 30-min call"}
 									</h2>
 								</div>
-								{isInactivePreview ? (
-									<p className="mt-2 text-sm leading-6 text-muted-foreground">
-										Bookings are unavailable while this profile is inactive.
-									</p>
-								) : (
+								{canBook ? (
 									<>
 										<p className="mt-2 text-sm text-muted-foreground">
 											Pick a time that works for you. Times are shown in your local
@@ -240,6 +237,10 @@ export default async function MentorDetailPage({
 											/>
 										</div>
 									</>
+								) : (
+									<p className="mt-2 text-sm leading-6 text-muted-foreground">
+										Bookings are unavailable while this profile is inactive.
+									</p>
 								)}
 							</div>
 						</div>
