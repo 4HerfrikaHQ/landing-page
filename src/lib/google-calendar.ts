@@ -346,16 +346,31 @@ async function getConnection(
 	const connection =
 		connectionOverride ??
 		(await (provider ?? connectionProvider).getMentorConnection(input));
-	if (!connection || connection.mentorId !== input.mentorId)
+	if (!connection || connection.mentorId !== input.mentorId) {
+		console.error("[mentor-google-calendar-connection-unavailable]", {
+			mentorId: input.mentorId,
+			hasConnection: Boolean(connection),
+			connectionMentorMatches: connection?.mentorId === input.mentorId,
+		});
 		throw new MentorCalendarError(
 			"connection_unavailable",
 			actionMessage(null),
 		);
+	}
 	if (connection.status === "reauth_required") {
+		console.error("[mentor-google-calendar-reauth-required]", {
+			mentorId: input.mentorId,
+			connectionId: connection.connectionId,
+		});
 		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
 	}
 	if (connection.status !== "connected") {
+		console.error("[mentor-google-calendar-connection-unavailable]", {
+			mentorId: input.mentorId,
+			connectionId: connection.connectionId,
+			connectionStatus: connection.status,
+		});
 		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError(
 			"connection_unavailable",
@@ -366,6 +381,10 @@ async function getConnection(
 		normalizedEmail(connection.identity.email) !==
 		normalizedEmail(input.mentorEmail)
 	) {
+		console.error("[mentor-google-calendar-identity-mismatch]", {
+			mentorId: input.mentorId,
+			connectionId: connection.connectionId,
+		});
 		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError(
 			"identity_mismatch",
@@ -385,6 +404,12 @@ async function accessToken(
 		if (!token) throw new Error("missing access token");
 		return token;
 	} catch (error) {
+		console.error("[mentor-google-calendar-token-failed]", {
+			mentorId: connection.mentorId,
+			connectionId: connection.connectionId,
+			errorName: error instanceof Error ? error.name : typeof error,
+			errorMessage: error instanceof Error ? error.message : undefined,
+		});
 		if (isInvalidGrant(error)) {
 			await connection.markReauthRequired().catch(() => undefined);
 			await notifyBrokenConnection(connection);
