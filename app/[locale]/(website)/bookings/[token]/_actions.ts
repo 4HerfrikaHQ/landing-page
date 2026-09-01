@@ -1,16 +1,20 @@
 "use server";
 
 import { db } from "@/src/db";
+import { actionLinks } from "@/src/db/schema/tables/action-links";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { resolveActionLink } from "@/src/lib/action-links";
+import {
+	hashActionLinkToken,
+	resolveActionLink,
+} from "@/src/lib/action-links";
 import {
 	cancelBookingCore,
 	rescheduleBookingCore,
 } from "@/src/lib/booking-mutations";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { eq, getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns, isNotNull } from "drizzle-orm";
 import { loadRescheduleContext } from "./_helpers";
 import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
 
@@ -18,6 +22,37 @@ import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
 export async function loadBookingFromToken(token: string) {
 	const verified = await resolveActionLink(token, "manage");
 	if (!verified.ok) {
+		// Older cancellations consumed the manage link. The link cannot be used for
+		// any action, but it can still safely show the cancelled confirmation page.
+		if (verified.reason === "used") {
+			const [link] = await db
+				.select({ resourceId: actionLinks.resource_id })
+				.from(actionLinks)
+				.where(
+					and(
+						eq(actionLinks.token_hash, hashActionLinkToken(token)),
+						eq(actionLinks.action, "manage"),
+						isNotNull(actionLinks.used_at),
+					),
+				)
+				.limit(1);
+			if (link) {
+				const [booking] = await db
+					.select()
+					.from(bookings)
+					.where(eq(bookings.id, link.resourceId))
+					.limit(1);
+				if (booking?.status === "cancelled") {
+					const [mentor] = await db
+						.select({ ...getTableColumns(mentors), name: users.name })
+						.from(mentors)
+						.innerJoin(users, eq(users.id, mentors.user_id))
+						.where(eq(mentors.id, booking.mentor_id))
+						.limit(1);
+					return { ok: true as const, booking, mentor };
+				}
+			}
+		}
 		return {
 			ok: false as const,
 			reason: verified.reason,
