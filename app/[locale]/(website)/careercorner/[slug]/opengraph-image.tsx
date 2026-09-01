@@ -23,11 +23,10 @@ export default async function Image({
 	const displayName = mentor?.nickname || mentor?.name || "Your next mentor";
 
 	return generateCareerCornerOGImage({
-		title: mentor ? t("title", { name: displayName }) : "Career Corner",
-		subtitle: mentor?.position
-			? `${mentor.position} · ${t("description", { name: displayName })}`
-			: t("description", { name: displayName }),
+		title: mentor ? t("ogTitle", { name: displayName }) : "Career Corner",
+		subtitle: mentor?.position ?? undefined,
 		mentorImage: mentor?.image ?? undefined,
 		mentorName: displayName,
+		displayUrl: `4herfrika.org/careercorner/${slug}`,
 	});
 }

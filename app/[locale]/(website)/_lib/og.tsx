@@ -109,6 +109,7 @@ export async function generateCareerCornerOGImage(options: {
 	mentorImage?: string;
 	mentorName?: string;
 	mentors?: CareerCornerMentor[];
+	displayUrl?: string;
 }) {
 	const logoData = await readFile(
 		join(process.cwd(), "public/assets/nameless-logo.png"),
@@ -148,31 +149,6 @@ export async function generateCareerCornerOGImage(options: {
 					display: "flex",
 				}}
 			/>
-			<div
-				style={{
-					position: "absolute",
-					top: "-180px",
-					right: "-80px",
-					width: "650px",
-					height: "650px",
-					borderRadius: "50%",
-					background: "#181b73",
-					display: "flex",
-				}}
-			/>
-			<div
-				style={{
-					position: "absolute",
-					bottom: "-230px",
-					left: "-100px",
-					width: "500px",
-					height: "500px",
-					borderRadius: "50%",
-					border: "2px solid rgba(255,255,255,0.12)",
-					display: "flex",
-				}}
-			/>
-
 			<div
 				style={{
 					display: "flex",
@@ -229,20 +205,22 @@ export async function generateCareerCornerOGImage(options: {
 							{options.subtitle}
 						</div>
 					)}
-					<div
-						style={{
-							display: "flex",
-							alignItems: "center",
-							background: "#ec008c",
-							borderRadius: "999px",
-							padding: "11px 19px",
-							fontSize: "18px",
-							fontWeight: 600,
-							color: "white",
-							width: "fit-content",
-						}}
-					>
-						Free 30-minute mentorship call
+					<div style={{ display: "flex", alignItems: "flex-start" }}>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								background: "#ec008c",
+								borderRadius: "999px",
+								padding: "11px 19px",
+								fontSize: "18px",
+								fontWeight: 600,
+								color: "white",
+								whiteSpace: "nowrap",
+							}}
+						>
+							Free 30-minute mentorship call
+						</div>
 					</div>
 				</div>
 				<div
@@ -252,7 +230,7 @@ export async function generateCareerCornerOGImage(options: {
 						display: "flex",
 					}}
 				>
-					4herfrika.org/careercorner
+					{options.displayUrl ?? "4herfrika.org/careercorner"}
 				</div>
 			</div>
 
@@ -266,23 +244,18 @@ export async function generateCareerCornerOGImage(options: {
 				}}
 			>
 				{primaryImage ? (
-					<div
+					<img
+						src={primaryImage}
+						alt={mentorName}
 						style={{
 							width: "300px",
 							height: "390px",
 							borderRadius: "150px 150px 36px 36px",
 							border: "10px solid #ff8dcd",
 							background: "#ffffff",
-							overflow: "hidden",
-							display: "flex",
+							objectFit: "cover",
 						}}
-					>
-						<img
-							src={primaryImage}
-							alt={mentorName}
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
-					</div>
+					/>
 				) : directoryMentors.length > 0 ? (
 					<div
 						style={{
@@ -292,43 +265,42 @@ export async function generateCareerCornerOGImage(options: {
 							width: "340px",
 						}}
 					>
-						{directoryMentors.map((mentor) => (
-							<div
-								key={`${mentor.name}-${mentor.image}`}
-								style={{
-									width: "148px",
-									height: "148px",
-									borderRadius: "50%",
-									border: "6px solid #ff8dcd",
-									background: "#ffffff",
-									overflow: "hidden",
-									display: "flex",
-								}}
-							>
-								{mentor.imageData ? (
-									<img
-										src={mentor.imageData}
-										alt=""
-										style={{
-											width: "100%",
-											height: "100%",
-											objectFit: "cover",
-										}}
-									/>
-								) : (
-									<div
-										style={{
-											color: "#03065c",
-											fontSize: "38px",
-											fontWeight: 700,
-											display: "flex",
-										}}
-									>
-										{initials(mentor.name)}
-									</div>
-								)}
-							</div>
-						))}
+						{directoryMentors.map((mentor) =>
+							mentor.imageData ? (
+								<img
+									key={`${mentor.name}-${mentor.image}`}
+									src={mentor.imageData}
+									alt=""
+									style={{
+										width: "148px",
+										height: "148px",
+										borderRadius: "50%",
+										border: "6px solid #ff8dcd",
+										background: "#ffffff",
+										objectFit: "cover",
+									}}
+								/>
+							) : (
+								<div
+									key={`${mentor.name}-${mentor.image}`}
+									style={{
+										width: "148px",
+										height: "148px",
+										borderRadius: "50%",
+										border: "6px solid #ff8dcd",
+										background: "#ffffff",
+										color: "#03065c",
+										fontSize: "38px",
+										fontWeight: 700,
+										alignItems: "center",
+										justifyContent: "center",
+										display: "flex",
+									}}
+								>
+									{initials(mentor.name)}
+								</div>
+							),
+						)}
 					</div>
 				) : (
 					<div
