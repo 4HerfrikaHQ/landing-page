@@ -39,11 +39,13 @@ export function SlotPicker({
 	initialWeekStart,
 	selectedStartUtc,
 	onSelect,
+	canSelectSlots = true,
 }: {
 	mentorSlug: string;
 	initialWeekStart: string | null;
 	selectedStartUtc: string | null;
 	onSelect: (startUtc: string) => void;
+	canSelectSlots?: boolean;
 }) {
 	const [weekParam, setWeekParam] = useQueryState("week");
 	const [dayParam, setDayParam] = useQueryState("day");
@@ -279,12 +281,15 @@ export function SlotPicker({
 										<button
 											key={s.startUtc}
 											type="button"
+											disabled={!canSelectSlots}
 											onClick={() => onSelect(s.startUtc)}
 											className={cn(
-												"rounded-lg border px-2 py-2 text-sm font-medium transition-all active:scale-[0.97]",
+												"rounded-lg border px-2 py-2 text-sm font-medium transition-all active:scale-[0.97] disabled:cursor-default disabled:opacity-70",
 												isSelected
 													? "border-primary-500 bg-primary-500 text-white shadow-[0_4px_14px_rgba(236,0,140,0.3)]"
-													: "border-border/60 text-foreground hover:border-primary-500 hover:bg-surface-pink hover:text-primary-500",
+													: canSelectSlots
+														? "border-border/60 text-foreground hover:border-primary-500 hover:bg-surface-pink hover:text-primary-500"
+														: "border-border/60 text-foreground",
 											)}
 										>
 											{formatInTimeZone(new Date(s.startUtc), tz, "HH:mm")}

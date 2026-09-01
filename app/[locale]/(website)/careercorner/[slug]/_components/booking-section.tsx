@@ -17,10 +17,12 @@ export function BookingSection({
 	mentorSlug,
 	mentorName,
 	initialWeekStart,
+	readOnly = false,
 }: {
 	mentorSlug: string;
 	mentorName: string;
 	initialWeekStart: string | null;
+	readOnly?: boolean;
 }) {
 	const [selected, setSelected] = useQueryState("slot");
 	const [tzParam] = useQueryState("tz");
@@ -52,13 +54,21 @@ export function BookingSection({
 				mentorSlug={mentorSlug}
 				initialWeekStart={initialWeekStart}
 				selectedStartUtc={selected}
+				canSelectSlots={!readOnly}
 				onSelect={(s) => {
+					if (readOnly) return;
 					trackEvent("booking_slot_selected", { mentor_slug: mentorSlug });
 					void setSelected(s);
 				}}
 			/>
+			{readOnly && (
+				<p className="mt-4 text-sm leading-6 text-muted-foreground">
+					Preview only. Select a day to check your open times. Booking is
+					disabled while this profile is inactive.
+				</p>
+			)}
 			<Sheet
-				open={open}
+				open={!readOnly && open}
 				onOpenChange={(o) => {
 					if (!o) setSelected(null);
 				}}
