@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { format } from "date-fns";
 import { FileDown } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import type { ApplicationRow } from "../_actions";
 import { getCvSignedUrl } from "../_actions";
 import { RowActions } from "./row-actions";
@@ -40,7 +40,7 @@ export function ApplicationDetailSheet({
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="flex flex-col overflow-y-auto px-4 sm:max-w-2xl sm:px-6">
+			<SheetContent className="flex flex-col overflow-y-auto px-4 sm:w-[64rem] sm:max-w-[calc(100vw-2rem)] sm:px-6">
 				<SheetHeader className="px-0">
 					<SheetTitle>{a.name}</SheetTitle>
 				</SheetHeader>
@@ -54,7 +54,7 @@ export function ApplicationDetailSheet({
 					</div>
 
 					<dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-						<Field label="Email">
+						<Field label="Email" full>
 							<a
 								href={`mailto:${a.email}`}
 								className="text-primary-500 hover:underline"
