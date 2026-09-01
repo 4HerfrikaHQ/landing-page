@@ -19,7 +19,10 @@ export function NoShowButton({ bookingId }: { bookingId: string }) {
 			variant="outline"
 			size="sm"
 			disabled={action.isPending}
-			onClick={() => action.execute({ bookingId })}
+			onClick={(event) => {
+				event.stopPropagation();
+				action.execute({ bookingId });
+			}}
 		>
 			<UserX className="size-4" />
 			No-show
