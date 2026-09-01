@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+exec vercel logs \
+	--project website \
+	--scope 4herfrika-8392s-projects \
+	--no-branch \
+	--no-follow \
+	"$@"

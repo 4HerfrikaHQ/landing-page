@@ -11,6 +11,7 @@ import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
+	isMentorCalendarError,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
@@ -32,7 +33,38 @@ import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
-function calendarActionError(error: unknown): ActionError {
+type CalendarErrorContext = {
+	mentorId: string;
+	phase: "select_host" | "create_event";
+	hostingMode?: "mentor_google" | "org_google";
+	attemptKey?: string;
+};
+
+function calendarActionError(
+	error: unknown,
+	context: CalendarErrorContext,
+): ActionError {
+	const errorDetails = isMentorCalendarError(error)
+		? {
+				errorType: error.name,
+				errorCode: error.code,
+				errorMessage: error.message,
+			}
+		: error instanceof OrgGoogleCalendarError
+			? {
+					errorType: error.name,
+					errorCode: error.code,
+					errorMessage: error.message,
+				}
+			: {
+					errorType: error instanceof Error ? error.name : typeof error,
+					errorMessage: error instanceof Error ? error.message : undefined,
+				};
+	console.error("[booking-calendar-failed]", {
+		...context,
+		...errorDetails,
+	});
+
 	if (error instanceof OrgGoogleCalendarError) {
 		return new ActionError(
 			error.code === "connection_unavailable"
@@ -55,7 +87,11 @@ async function selectBookingCalendarHost(mentor: {
 		try {
 			await ensureOrgGoogleCalendarConnection();
 		} catch (error) {
-			throw calendarActionError(error);
+			throw calendarActionError(error, {
+				mentorId: mentor.id,
+				phase: "select_host",
+				hostingMode: host.mode,
+			});
 		}
 	}
 	return host;
@@ -481,7 +517,12 @@ export const createBooking = actionClient
 					? await createMentorCalendarEvent(calendarParams)
 					: await createOrgGoogleCalendarEvent(calendarParams);
 		} catch (error) {
-			throw calendarActionError(error);
+			throw calendarActionError(error, {
+				mentorId: mentor.id,
+				phase: "create_event",
+				hostingMode: hosting.mode,
+				attemptKey,
+			});
 		}
 		const eventId = event.eventId;
 		const meetUrl = event.meetUrl;
