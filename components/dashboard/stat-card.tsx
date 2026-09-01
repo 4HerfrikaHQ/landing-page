@@ -72,7 +72,13 @@ export function StatCard({
 						compact && "text-xl leading-tight",
 					)}
 				>
-					{formatValue ? (
+					{compact ? (
+						formatValue ? (
+							formatValue(value)
+						) : (
+							value
+						)
+					) : formatValue ? (
 						<FormattedCounter value={value} format={formatValue} />
 					) : (
 						<AnimatedCounter target={value} />
