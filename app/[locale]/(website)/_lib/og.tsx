@@ -1,38 +1,93 @@
 import { readFile } from "node:fs/promises";
 import { extname } from "node:path";
 import { join } from "node:path";
+import {
+	isTrustedLocalMentorImagePath,
+	isTrustedMentorAvatarUrl,
+} from "@/src/lib/mentor-image-url";
 import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+const MAX_SOCIAL_IMAGE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_SOCIAL_IMAGE_TYPES = new Set([
+	"image/jpeg",
+	"image/png",
+	"image/webp",
+]);
 
 type CareerCornerMentor = {
 	image: string;
 	name: string;
 };
 
+async function readBoundedImageResponse(
+	response: Response,
+): Promise<Buffer | undefined> {
+	const declaredLength = Number(response.headers.get("content-length"));
+	if (
+		Number.isFinite(declaredLength) &&
+		declaredLength > MAX_SOCIAL_IMAGE_BYTES
+	) {
+		return undefined;
+	}
+	if (!response.body) return undefined;
+
+	const reader = response.body.getReader();
+	const chunks: Uint8Array[] = [];
+	let totalBytes = 0;
+
+	while (true) {
+		const { done, value } = await reader.read();
+		if (done) break;
+		totalBytes += value.byteLength;
+		if (totalBytes > MAX_SOCIAL_IMAGE_BYTES) {
+			await reader.cancel();
+			return undefined;
+		}
+		chunks.push(value);
+	}
+
+	return Buffer.concat(
+		chunks.map((chunk) => Buffer.from(chunk)),
+		totalBytes,
+	);
+}
+
 async function imageDataUri(imageUrl?: string): Promise<string | undefined> {
 	if (!imageUrl) return undefined;
 
 	try {
 		if (imageUrl.startsWith("/")) {
+			if (!isTrustedLocalMentorImagePath(imageUrl)) return undefined;
 			const image = await readFile(join(process.cwd(), "public", imageUrl));
+			if (image.byteLength > MAX_SOCIAL_IMAGE_BYTES) return undefined;
 			const extension = extname(imageUrl).toLowerCase();
-			const mimeType = extension === ".jpg" || extension === ".jpeg"
-				? "image/jpeg"
-				: extension === ".webp"
-					? "image/webp"
-					: "image/png";
+			const mimeType =
+				extension === ".jpg" || extension === ".jpeg"
+					? "image/jpeg"
+					: extension === ".webp"
+						? "image/webp"
+						: "image/png";
 			return `data:${mimeType};base64,${image.toString("base64")}`;
 		}
+		if (!isTrustedMentorAvatarUrl(imageUrl)) return undefined;
 
+		// Never follow storage redirects: a trusted URL must not be able to pivot
+		// this server-side request to an internal or otherwise untrusted host.
 		const response = await fetch(imageUrl, {
+			redirect: "manual",
 			signal: AbortSignal.timeout(5000),
 		});
-		if (!response.ok) return undefined;
+		if (!response.ok || !isTrustedMentorAvatarUrl(response.url))
+			return undefined;
 		const contentType = response.headers.get("content-type")?.split(";")[0];
-		if (!contentType?.startsWith("image/")) return undefined;
-		const image = Buffer.from(await response.arrayBuffer());
+		if (!contentType || !ALLOWED_SOCIAL_IMAGE_TYPES.has(contentType)) {
+			return undefined;
+		}
+		const image = await readBoundedImageResponse(response);
+		if (!image) return undefined;
 		return `data:${contentType};base64,${image.toString("base64")}`;
 	} catch {
 		return undefined;
@@ -61,8 +116,13 @@ export async function generateCareerCornerOGImage(options: {
 	const logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`;
 	const mentorName = options.mentorName ?? "Career Corner";
 	const primaryImage = await imageDataUri(options.mentorImage);
-	const directoryImages = options.mentors
-		? await Promise.all(options.mentors.slice(0, 4).map((mentor) => imageDataUri(mentor.image)))
+	const directoryMentors = options.mentors
+		? await Promise.all(
+				options.mentors.slice(0, 4).map(async (mentor) => ({
+					...mentor,
+					imageData: await imageDataUri(mentor.image),
+				})),
+			)
 		: [];
 
 	return new ImageResponse(
@@ -223,7 +283,7 @@ export async function generateCareerCornerOGImage(options: {
 							style={{ width: "100%", height: "100%", objectFit: "cover" }}
 						/>
 					</div>
-				) : directoryImages.length > 0 ? (
+				) : directoryMentors.length > 0 ? (
 					<div
 						style={{
 							display: "flex",
@@ -232,9 +292,9 @@ export async function generateCareerCornerOGImage(options: {
 							width: "340px",
 						}}
 					>
-						{directoryImages.map((image, index) => (
+						{directoryMentors.map((mentor) => (
 							<div
-								key={index}
+								key={`${mentor.name}-${mentor.image}`}
 								style={{
 									width: "148px",
 									height: "148px",
@@ -245,11 +305,26 @@ export async function generateCareerCornerOGImage(options: {
 									display: "flex",
 								}}
 							>
-								{image ? (
-									<img src={image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+								{mentor.imageData ? (
+									<img
+										src={mentor.imageData}
+										alt=""
+										style={{
+											width: "100%",
+											height: "100%",
+											objectFit: "cover",
+										}}
+									/>
 								) : (
-									<div style={{ color: "#03065c", fontSize: "38px", fontWeight: 700, display: "flex" }}>
-										{initials(options.mentors?.[index]?.name ?? "4H")}
+									<div
+										style={{
+											color: "#03065c",
+											fontSize: "38px",
+											fontWeight: 700,
+											display: "flex",
+										}}
+									>
+										{initials(mentor.name)}
 									</div>
 								)}
 							</div>
