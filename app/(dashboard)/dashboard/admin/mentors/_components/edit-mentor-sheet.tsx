@@ -154,7 +154,7 @@ export function EditMentorSheet({
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent
-				className="flex flex-col p-0 max-w-none! w-140!"
+				className="flex w-full! max-w-none! flex-col p-0 sm:w-180!"
 				showCloseButton={false}
 			>
 				<SheetHeader className="px-6 pt-6 pb-4 border-b">
@@ -270,7 +270,7 @@ export function EditMentorSheet({
 										autoCorrect="off"
 										spellCheck={false}
 										aria-invalid={!parsedSlug.success}
-										className="h-9 rounded-none border-0 bg-transparent px-1 font-mono shadow-none focus-visible:ring-0 sm:px-0"
+										className="h-9 min-w-0 rounded-none border-0 bg-transparent px-1 font-mono shadow-none focus-visible:ring-0 sm:px-0"
 									/>
 								</div>
 								{!parsedSlug.success ? (
