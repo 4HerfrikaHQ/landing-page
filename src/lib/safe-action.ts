@@ -1,4 +1,4 @@
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor, currentDbUser } from "@/src/auth";
 import { createSafeActionClient } from "next-safe-action";
 
 class ActionError extends Error {}
@@ -25,16 +25,13 @@ export const adminAction = actionClient.use(async ({ next }) => {
 });
 
 export const mentorAction = actionClient.use(async ({ next }) => {
-	let user: Awaited<ReturnType<typeof currentDbUser>>;
+	let mentorContext: Awaited<ReturnType<typeof currentDbMentor>>;
 	try {
-		user = await currentDbUser();
+		mentorContext = await currentDbMentor();
 	} catch {
 		throw new ActionError("Unauthorized");
 	}
-	if (user.role !== "mentor") {
-		throw new ActionError("Unauthorized");
-	}
-	return next({ ctx: user });
+	return next({ ctx: mentorContext });
 });
 
 /**

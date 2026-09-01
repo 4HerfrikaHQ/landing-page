@@ -1,6 +1,6 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
@@ -14,7 +14,7 @@ import { revalidatePath } from "next/cache";
 export async function getMentorProfile(): Promise<
 	DbMentorWithAvailability | undefined
 > {
-	const user = await currentDbUser();
+	const { user } = await currentDbMentor();
 
 	const mentor = await db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),

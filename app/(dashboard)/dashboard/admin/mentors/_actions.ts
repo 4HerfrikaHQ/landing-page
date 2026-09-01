@@ -46,6 +46,8 @@ interface MentorAdminFilters {
 }
 
 export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
+	await requireSuperAdmin();
+
 	const {
 		query,
 		status,

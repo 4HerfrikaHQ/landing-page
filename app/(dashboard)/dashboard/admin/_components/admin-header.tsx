@@ -72,7 +72,11 @@ const NAV_ITEMS: {
 	},
 ];
 
-export function AdminHeader() {
+export function AdminHeader({
+	showMentorPortal = false,
+}: {
+	showMentorPortal?: boolean;
+}) {
 	const pathname = usePathname();
 	const [isPending, startTransition] = useTransition();
 	const [mobileOpen, setMobileOpen] = useState(false);
@@ -141,6 +145,14 @@ export function AdminHeader() {
 
 				{/* Right: nav + sign out + mobile trigger */}
 				<div className="flex items-center gap-2">
+					{showMentorPortal ? (
+						<Link
+							href={"/dashboard/mentor" as Route}
+							className="hidden rounded-full border border-border/60 px-3 py-1.5 text-sm font-medium text-muted-foreground no-underline transition-colors hover:border-primary-500 hover:text-primary-500 sm:inline-flex"
+						>
+							Mentor portal
+						</Link>
+					) : null}
 					<nav className="hidden items-center gap-1 lg:flex">
 						{NAV_ITEMS.map((item) => {
 							const isActive = item.key === activeKey;
@@ -191,6 +203,18 @@ export function AdminHeader() {
 						<SheetContent side="right" className="w-72">
 							<SheetTitle className="px-4 pt-4">Admin</SheetTitle>
 							<nav className="flex flex-col gap-1 px-2 py-2">
+								{showMentorPortal ? (
+									<SheetClose
+										render={
+											<Link
+												href={"/dashboard/mentor" as Route}
+												className="mb-2 inline-flex items-center gap-3 rounded-xl border border-border/60 px-3 py-2.5 text-sm font-medium text-foreground no-underline transition-colors hover:border-primary-500 hover:text-primary-500"
+											/>
+										}
+									>
+										Mentor portal
+									</SheetClose>
+								) : null}
 								{NAV_ITEMS.map((item) => {
 									const isActive = item.key === activeKey;
 									const Icon = item.icon;

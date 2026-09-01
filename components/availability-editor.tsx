@@ -8,7 +8,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 } from "@/components/ui/select";
-import { saveAvailability } from "@/src/db/actions/availability";
+import type { AvailabilitySlotInput } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
 import type { DayOfWeek } from "@/src/db/schema/tables";
 import { cn } from "@/utils/cn";
@@ -137,9 +137,15 @@ function validateSlots(slots: SlotRow[]): Map<string, string> {
 export function AvailabilityEditor({
 	mentorId,
 	initialSlots,
+	onSave,
 }: {
 	mentorId: string;
 	initialSlots: DbAvailability[];
+	onSave: (
+		mentorId: string,
+		slots: AvailabilitySlotInput[],
+		timezone: string,
+	) => Promise<{ error?: string }>;
 }) {
 	const [timezone, setTimezone] = useState(
 		initialSlots[0]?.timezone ?? "Africa/Lagos",
@@ -202,7 +208,7 @@ export function AvailabilityEditor({
 		setSlotErrors(new Map());
 
 		startTransition(async () => {
-			const result = await saveAvailability(mentorId, slots, timezone);
+			const result = await onSave(mentorId, slots, timezone);
 			if (result.error) {
 				setError(result.error);
 			} else {

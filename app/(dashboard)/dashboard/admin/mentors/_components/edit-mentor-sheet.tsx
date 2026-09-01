@@ -10,7 +10,10 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { getAvailability } from "@/src/db/actions/availability";
+import {
+	getAvailabilityForAdmin,
+	saveAvailabilityForAdmin,
+} from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
 import { DownloadIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
@@ -49,7 +52,7 @@ export function EditMentorSheet({
 	// Load availability lazily on first switch to that tab
 	useEffect(() => {
 		if (tab === "availability" && availabilitySlots === null) {
-			getAvailability(mentor.id).then(setAvailabilitySlots);
+			getAvailabilityForAdmin(mentor.id).then(setAvailabilitySlots);
 		}
 	}, [tab, mentor.id, availabilitySlots]);
 
@@ -287,6 +290,7 @@ export function EditMentorSheet({
 							<AvailabilityEditor
 								mentorId={mentor.id}
 								initialSlots={availabilitySlots}
+								onSave={saveAvailabilityForAdmin}
 							/>
 						)}
 					</div>
