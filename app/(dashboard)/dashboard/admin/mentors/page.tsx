@@ -15,6 +15,7 @@ import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getMentorsForAdmin } from "./_actions";
+import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
@@ -60,7 +61,12 @@ export default async function MentorsPage({
 			<PageHeader
 				title="Mentors"
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
-				action={<CreateMentorSheet />}
+				action={
+					<div className="flex items-center gap-2">
+						<CopyAllMentorLinksButton mentors={mentors} />
+						<CreateMentorSheet />
+					</div>
+				}
 			/>
 
 			<div className="mb-6">
@@ -91,6 +97,9 @@ export default async function MentorsPage({
 							<TableHead className="font-medium text-muted-foreground">
 								Joined
 							</TableHead>
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Link
+							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
@@ -102,7 +111,7 @@ export default async function MentorsPage({
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} className="p-0">
+								<TableCell colSpan={9} className="p-0">
 									<EmptyState
 										icon={Users}
 										title="No mentors match these filters"

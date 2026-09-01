@@ -101,6 +101,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.select({
 				id: schema.mentors.id,
 				name: schema.users.name,
+				slug: schema.mentors.slug,
 				position: schema.mentors.position,
 				image: schema.mentors.image,
 				email: schema.users.email,
