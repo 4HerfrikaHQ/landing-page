@@ -69,7 +69,10 @@ export default async function MentorDetailPage({
 												alt={mentor.name}
 												fill
 												sizes="128px"
-												unoptimized={mentor.image.includes("localhost")}
+												unoptimized={
+													mentor.image.includes("localhost") ||
+													mentor.image.includes("127.0.0.1")
+												}
 												className="object-cover object-top"
 											/>
 										) : (

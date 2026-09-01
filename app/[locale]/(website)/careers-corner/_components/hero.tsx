@@ -59,7 +59,10 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 								alt={mentor.name}
 								width={700}
 								height={1000}
-								unoptimized={mentor.image.includes("localhost")}
+								unoptimized={
+									mentor.image.includes("localhost") ||
+									mentor.image.includes("127.0.0.1")
+								}
 								className={`${slot.size} object-cover object-top aspect-square rounded-full shadow-lg shadow-primary-300/50`}
 								style={{
 									filter: "drop-shadow(0 0 8px rgba(156, 163, 175, 0.5))",

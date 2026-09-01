@@ -108,7 +108,10 @@ export default async function ManageBookingPage({
 										alt={mentor.name}
 										fill
 										sizes="48px"
-										unoptimized={mentor.image.includes("localhost")}
+										unoptimized={
+											mentor.image.includes("localhost") ||
+											mentor.image.includes("127.0.0.1")
+										}
 										className="object-cover object-top"
 									/>
 								) : (
