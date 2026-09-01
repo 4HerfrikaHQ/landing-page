@@ -571,6 +571,12 @@ export function createMentorCalendarClient(
 					throw new MentorCalendarError(
 						"attempt_key_conflict",
 						"Google Calendar returned an event for a different booking attempt.",
+						{
+							cause: {
+								existingAttempt: existingAttempt ?? null,
+								allowOrphanedEventOverride: params.allowOrphanedEventOverride,
+							},
+						},
 					);
 				eventOwnerMatches(existing, connection);
 				const deleteResponse = await fetchImpl(
