@@ -45,7 +45,7 @@ export function PortalSwitcher({
 				aria-label="Switch portal"
 				className="h-9 min-w-28 border-transparent bg-transparent px-2 text-base font-medium hover:bg-muted focus-visible:border-ring"
 			>
-				<SelectValue />
+				<SelectValue>{PORTAL_LABELS[portal]}</SelectValue>
 			</SelectTrigger>
 			<SelectContent className="min-w-36 p-1">
 				<SelectItem value="admin" className="py-2">
