@@ -1,5 +1,6 @@
 "use client";
 
+import { MentorImage } from "@/components/mentor-image";
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +15,6 @@ import type { DayOfWeek } from "@/src/db/schema/tables/availability";
 import { format, parse } from "date-fns";
 import { CalendarClock, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 
 const DAY_ORDER: DayOfWeek[] = [
 	"Monday",
@@ -41,7 +41,9 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	const tc = useTranslations("common");
 	const displayName = mentor.nickname || mentor.name;
 	const availability = mentor.availability ?? [];
-	const timezones = Array.from(new Set(availability.map((slot) => slot.timezone)));
+	const timezones = Array.from(
+		new Set(availability.map((slot) => slot.timezone)),
+	);
 	const slotsByDay = DAY_ORDER.map((day) => ({
 		day,
 		slots: availability
@@ -54,13 +56,12 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 			<div className="group flex h-full w-full flex-col rounded-2xl border border-border/60 bg-white p-3 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(0,0,0,0.10)]">
 				<div className="relative aspect-[4/5] w-full overflow-hidden rounded-[14px]">
 					{mentor.image ? (
-						<Image
+						<MentorImage
 							src={mentor.image}
 							alt={mentor.name}
-							fill
+							crop={mentor.image_crop}
 							sizes="(max-width: 768px) 50vw, 25vw"
-							unoptimized={mentor.image.includes("localhost")}
-							className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+							className="size-full transition-transform duration-500 group-hover:scale-105"
 						/>
 					) : (
 						<div className="flex h-full w-full items-center justify-center bg-surface-pink">
@@ -98,15 +99,14 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 					<div className="grid gap-6 lg:grid-cols-2 lg:gap-16">
 						{/* Profile Image */}
 						<div className="flex justify-center">
-							<div className="relative aspect-3/4 h-75 w-full max-w-md overflow-hidden rounded-2xl shadow-md ring-1 ring-border/60 sm:h-100">
+							<div className="relative aspect-[4/5] w-full max-w-md overflow-hidden rounded-2xl shadow-md ring-1 ring-border/60">
 								{mentor.image ? (
-									<Image
+									<MentorImage
 										src={mentor.image}
 										alt={mentor.name}
-										fill
+										crop={mentor.image_crop}
 										sizes="(max-width: 768px) 100vw, 400px"
-										className="object-cover object-top"
-										unoptimized={mentor.image.includes("localhost")}
+										className="size-full"
 									/>
 								) : (
 									<div className="flex h-full w-full items-center justify-center bg-surface-pink">
@@ -144,8 +144,11 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 																key={slot.start_time}
 																className="tabular-nums"
 															>
-																{formatTime(slot.start_time)} – {formatTime(slot.end_time)}
-																{timezones.length > 1 ? ` ${slot.timezone}` : ""}
+																{formatTime(slot.start_time)} –{" "}
+																{formatTime(slot.end_time)}
+																{timezones.length > 1
+																	? ` ${slot.timezone}`
+																	: ""}
 															</span>
 														))}
 													</span>

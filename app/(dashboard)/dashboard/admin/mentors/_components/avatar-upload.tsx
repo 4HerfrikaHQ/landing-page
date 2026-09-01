@@ -1,7 +1,8 @@
 "use client";
 
+import { MentorImage } from "@/components/mentor-image";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { CameraIcon, Loader2Icon } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ImageCropDialog } from "../../../mentor/profile/_components/image-crop-dialog";
@@ -18,6 +19,8 @@ export function AvatarUpload({
 }) {
 	const [preview, setPreview] = useState<string | null>(image);
 	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
 	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [isPending, setIsPending] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -29,9 +32,9 @@ export function AvatarUpload({
 
 	useEffect(() => {
 		return () => {
-			if (cropSource) URL.revokeObjectURL(cropSource);
+			if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
 		};
-	}, [cropSource]);
+	}, [cropFile, cropSource]);
 
 	const initials = name
 		.split(" ")
@@ -49,14 +52,24 @@ export function AvatarUpload({
 			return;
 		}
 
+		setCropFile(file);
+		setCropInitial(null);
 		setCropSource(URL.createObjectURL(file));
 		setIsCropOpen(true);
 		e.currentTarget.value = "";
 	}
 
-	async function handleCropSave(file: File) {
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropInitial(null);
+		setCropSource(null);
+	}
+
+	async function handleCropSave(crop: MentorImageCrop) {
 		const formData = new FormData();
-		formData.append("file", file);
+		if (cropFile) formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(crop));
 
 		setIsPending(true);
 		try {
@@ -67,7 +80,7 @@ export function AvatarUpload({
 			}
 			if (result.url) setPreview(result.url);
 			setIsCropOpen(false);
-			setCropSource(null);
+			clearCropState();
 			toast.success("Successfully updated avatar");
 		} catch (err) {
 			toast.error(`Upload failed: ${String(err)}`);
@@ -85,13 +98,12 @@ export function AvatarUpload({
 				title="Upload photo"
 			>
 				{preview ? (
-					<Image
+					<MentorImage
 						src={preview}
 						alt={name}
-						fill
-						className="object-cover object-top"
+						crop={null}
+						className="size-full"
 						sizes="32px"
-						unoptimized
 					/>
 				) : (
 					<span className="flex size-full items-center justify-center bg-gray-100 text-gray-500 text-xs font-medium">
@@ -119,9 +131,10 @@ export function AvatarUpload({
 				open={isCropOpen}
 				onOpenChange={(open) => {
 					setIsCropOpen(open);
-					if (!open) setCropSource(null);
+					if (!open) clearCropState();
 				}}
 				imageUrl={cropSource}
+				initialCrop={cropInitial}
 				onSave={handleCropSave}
 				isSaving={isPending}
 			/>

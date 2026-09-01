@@ -1,4 +1,5 @@
 import { AvailabilityEditor } from "@/components/availability-editor";
+import { MentorImage } from "@/components/mentor-image";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import {
@@ -12,8 +13,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { getAvailability } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { DownloadIcon, ImagePlusIcon, Loader2Icon } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ImageCropDialog } from "../../../mentor/profile/_components/image-crop-dialog";
@@ -25,6 +26,7 @@ type Mentor = {
 	id: string;
 	name: string;
 	image: string | null;
+	image_crop: MentorImageCrop | null;
 	position: string | null;
 	bio: string | null;
 	nickname: string | null;
@@ -45,7 +47,12 @@ export function EditMentorSheet({
 	const [isPending, startTransition] = useTransition();
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [imagePreview, setImagePreview] = useState(mentor.image);
+	const [imageCrop, setImageCrop] = useState<MentorImageCrop | null>(
+		mentor.image_crop,
+	);
 	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
 	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const imageInputRef = useRef<HTMLInputElement>(null);
@@ -62,13 +69,14 @@ export function EditMentorSheet({
 
 	useEffect(() => {
 		setImagePreview(mentor.image);
-	}, [mentor.image]);
+		setImageCrop(mentor.image_crop);
+	}, [mentor.image, mentor.image_crop]);
 
 	useEffect(() => {
 		return () => {
-			if (cropSource) URL.revokeObjectURL(cropSource);
+			if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
 		};
-	}, [cropSource]);
+	}, [cropFile, cropSource]);
 
 	const onOpenChange = (open: boolean) => {
 		if (open === false) {
@@ -101,14 +109,32 @@ export function EditMentorSheet({
 			return;
 		}
 
+		setCropFile(file);
+		setCropInitial(null);
 		setCropSource(URL.createObjectURL(file));
 		setIsCropOpen(true);
 		e.currentTarget.value = "";
 	}
 
-	async function handleCropSave(file: File) {
+	function handleReframe() {
+		if (!imagePreview) return;
+		setCropFile(null);
+		setCropInitial(imageCrop);
+		setCropSource(imagePreview);
+		setIsCropOpen(true);
+	}
+
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropInitial(null);
+		setCropSource(null);
+	}
+
+	async function handleCropSave(crop: MentorImageCrop) {
 		const formData = new FormData();
-		formData.append("file", file);
+		if (cropFile) formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(crop));
 
 		setIsUploading(true);
 		try {
@@ -118,8 +144,9 @@ export function EditMentorSheet({
 				return;
 			}
 			if (result.url) setImagePreview(result.url);
+			setImageCrop(crop);
 			setIsCropOpen(false);
-			setCropSource(null);
+			clearCropState();
 			toast.success("Profile photo updated");
 		} catch (err) {
 			toast.error(`Upload failed: ${String(err)}`);
@@ -222,13 +249,12 @@ export function EditMentorSheet({
 								<div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
 									<div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
 										{imagePreview ? (
-											<Image
+											<MentorImage
 												src={imagePreview}
 												alt={mentor.name}
-												fill
-												className="object-cover object-top"
+												crop={null}
+												className="size-full"
 												sizes="64px"
-												unoptimized
 											/>
 										) : (
 											<span className="flex size-full items-center justify-center text-sm font-medium text-gray-500">
@@ -274,6 +300,18 @@ export function EditMentorSheet({
 														? "Replace photo"
 														: "Upload photo"}
 											</Button>
+											{imagePreview ? (
+												<Button
+													type="button"
+													variant="ghost"
+													size="sm"
+													className="gap-1.5"
+													onClick={handleReframe}
+													disabled={isUploading}
+												>
+													Adjust framing
+												</Button>
+											) : null}
 											<Button
 												type="button"
 												variant="ghost"
@@ -376,9 +414,10 @@ export function EditMentorSheet({
 				open={isCropOpen}
 				onOpenChange={(open) => {
 					setIsCropOpen(open);
-					if (!open) setCropSource(null);
+					if (!open) clearCropState();
 				}}
 				imageUrl={cropSource}
+				initialCrop={cropInitial}
 				onSave={handleCropSave}
 				isSaving={isUploading}
 			/>

@@ -98,6 +98,7 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				name: schema.users.name,
 				position: schema.mentors.position,
 				image: schema.mentors.image,
+				image_crop: schema.mentors.image_crop,
 				email: schema.users.email,
 				bio: schema.mentors.bio,
 				nickname: schema.mentors.nickname,

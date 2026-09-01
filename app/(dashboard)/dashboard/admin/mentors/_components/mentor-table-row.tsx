@@ -1,6 +1,7 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { format } from "date-fns";
 import { useState } from "react";
 import { AvatarUpload } from "./avatar-upload";
@@ -13,6 +14,7 @@ type Mentor = {
 	name: string;
 	position: string | null;
 	image: string | null;
+	image_crop: MentorImageCrop | null;
 	email: string;
 	bio: string | null;
 	nickname: string | null;
