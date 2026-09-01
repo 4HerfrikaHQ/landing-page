@@ -1,12 +1,13 @@
 "use server";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
-import { eq } from "drizzle-orm";
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { AuthError, User } from "@supabase/supabase-js";
+import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
+import { cache } from "react";
 
 export async function createClient() {
 	const cookieStore = await cookies();
@@ -76,17 +77,17 @@ export async function logout() {
 }
 
 /** Gets the Supabase auth user. Calls unauthorized() if not logged in. */
-export async function currentUser(): Promise<User> {
+export const currentUser = cache(async (): Promise<User> => {
 	const supabase = await createClient();
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
 	if (user) return user;
 	unauthorized();
-}
+});
 
 /** Gets the public.users row that matches the Supabase auth user. */
-export async function currentDbUser() {
+export const currentDbUser = cache(async () => {
 	const user = await currentUser();
 	const dbUser = await db
 		.select()
@@ -96,14 +97,14 @@ export async function currentDbUser() {
 		.then((rows) => rows[0] ?? null);
 	if (!dbUser) unauthorized();
 	return dbUser;
-}
+});
 
 /**
  * Resolves the signed-in user's capabilities without changing their persisted
  * role. A linked mentor record is the mentor capability, so a super admin can
  * also act as their own mentor when they have one.
  */
-export async function currentUserCapabilities() {
+export const currentUserCapabilities = cache(async () => {
 	const user = await currentDbUser();
 	const mentor = await db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),
@@ -115,11 +116,11 @@ export async function currentUserCapabilities() {
 		isAdmin: user.role === "super_admin",
 		isMentor: Boolean(mentor),
 	};
-}
+});
 
 /** Gets the owned mentor record for the signed-in user, or rejects the request. */
-export async function currentDbMentor() {
+export const currentDbMentor = cache(async () => {
 	const { user, mentor } = await currentUserCapabilities();
 	if (!mentor) unauthorized();
 	return { user, mentor };
-}
+});
