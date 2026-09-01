@@ -1,18 +1,20 @@
 "use client";
 
 import { AvailabilityEditor } from "@/components/availability-editor";
-import { saveMyAvailability } from "@/src/db/actions/availability";
+import { MentorImage } from "@/components/mentor-image";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { logout } from "@/src/auth";
+import { saveMyAvailability } from "@/src/db/actions/availability";
 import type { DbUser } from "@/src/db/schema/tables";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { CameraIcon, Loader2Icon } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { getMentorProfile, updateMyProfile, uploadMyImage } from "../_actions";
+import { ImageCropDialog } from "../profile/_components/image-crop-dialog";
 
 type Tab = "profile" | "availability";
 
@@ -31,10 +33,17 @@ export function MentorProfile({
 	});
 
 	const [preview, setPreview] = useState<string | null>(dbMentor.image);
+	const [imageCrop, setImageCrop] = useState<MentorImageCrop | null>(
+		dbMentor.image_crop,
+	);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 	const [isSigningOut, startSignOutTransition] = useTransition();
-	const [isUploading, startUploadTransition] = useTransition();
+	const [isUploading, setIsUploading] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// Sync controlled state when the server re-renders with fresh data after revalidatePath
@@ -46,7 +55,15 @@ export function MentorProfile({
 			bio: dbMentor.bio ?? "",
 			linkedin_url: dbMentor.linkedin_url ?? "",
 		});
+		setPreview(dbMentor.image);
+		setImageCrop(dbMentor.image_crop);
 	}, [dbMentor]);
+
+	useEffect(() => {
+		return () => {
+			if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropFile, cropSource]);
 
 	const firstName = user.name.split(" ")[0];
 	const initials = fields.name
@@ -66,24 +83,49 @@ export function MentorProfile({
 			return;
 		}
 
-		setPreview(URL.createObjectURL(file));
-		const formData = new FormData();
-		formData.append("file", file);
+		setCropFile(file);
+		setCropInitial(null);
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
 
-		startUploadTransition(async () => {
-			try {
-				const result = await uploadMyImage(formData);
-				if (result.error) {
-					setPreview(dbMentor.image);
-					toast.error(`Upload failed: ${result.error}`);
-				} else if (result.url) {
-					setPreview(result.url);
-				}
-			} catch (err) {
-				setPreview(dbMentor.image);
-				toast.error(`Upload failed: ${String(err)}`);
+	function handleReframe() {
+		if (!preview) return;
+		setCropFile(null);
+		setCropInitial(imageCrop);
+		setCropSource(preview);
+		setIsCropOpen(true);
+	}
+
+	async function handleCropSave(crop: MentorImageCrop) {
+		const formData = new FormData();
+		if (cropFile) formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(crop));
+
+		setIsUploading(true);
+		try {
+			const result = await uploadMyImage(formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
 			}
-		});
+			if (result.url) setPreview(result.url);
+			setImageCrop(crop);
+			setIsCropOpen(false);
+			clearCropState();
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsUploading(false);
+		}
+	}
+
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropInitial(null);
+		setCropSource(null);
 	}
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -125,6 +167,7 @@ export function MentorProfile({
 					</nav>
 				</div>
 				<button
+					type="button"
 					onClick={() =>
 						startSignOutTransition(async () => {
 							await logout();
@@ -168,13 +211,12 @@ export function MentorProfile({
 									className="group relative size-20 rounded-full overflow-hidden cursor-pointer shrink-0"
 								>
 									{preview ? (
-										<Image
+										<MentorImage
 											src={preview}
 											alt={fields.name}
-											fill
-											className="object-cover object-top"
+											crop={null}
+											className="size-full"
 											sizes="80px"
-											unoptimized
 										/>
 									) : (
 										<span className="flex size-full items-center justify-center bg-gray-100 text-gray-500 text-lg font-medium">
@@ -194,6 +236,16 @@ export function MentorProfile({
 										{fields.name}
 									</p>
 									<p className="text-xs text-gray-400">Click photo to update</p>
+									{preview && (
+										<button
+											type="button"
+											onClick={handleReframe}
+											className="mt-1 text-xs font-medium text-primary-500 hover:underline"
+											disabled={isUploading}
+										>
+											Adjust framing
+										</button>
+									)}
 								</div>
 							</div>
 							<input
@@ -232,10 +284,14 @@ export function MentorProfile({
 							/>
 
 							<div className="flex flex-col gap-1.5">
-								<label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+								<label
+									htmlFor="bio"
+									className="text-xs font-medium text-gray-500 uppercase tracking-wide"
+								>
 									Bio
 								</label>
 								<Textarea
+									id="bio"
 									name="bio"
 									rows={4}
 									className="text-sm resize-none"
@@ -283,6 +339,17 @@ export function MentorProfile({
 					/>
 				)}
 			</div>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) clearCropState();
+				}}
+				imageUrl={cropSource}
+				initialCrop={cropInitial}
+				onSave={handleCropSave}
+				isSaving={isUploading}
+			/>
 		</div>
 	);
 }

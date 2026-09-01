@@ -1,6 +1,7 @@
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
+import { MentorImageCropSchema } from "@/src/lib/mentor-image";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { eq } from "drizzle-orm";
 
@@ -21,29 +22,88 @@ export async function uploadMentorAvatar(
 	formData: FormData,
 ): Promise<{ url?: string; error?: string }> {
 	try {
-		const file = formData.get("file") as File;
-		if (!file?.name) return { error: "No file received." };
+		const fileValue = formData.get("file");
+		const file = fileValue instanceof File && fileValue.name ? fileValue : null;
+		const cropValue = formData.get("crop");
+		let crop = null;
+		if (cropValue) {
+			if (typeof cropValue !== "string") {
+				return {
+					error: "The image framing is invalid: expected text data.",
+				};
+			}
 
-		const ext = file.name.split(".").pop();
+			let decodedCrop: unknown;
+			try {
+				decodedCrop = JSON.parse(cropValue);
+			} catch {
+				return {
+					error:
+						"The image framing is invalid: framing data could not be read.",
+				};
+			}
+
+			const parsedCrop = MentorImageCropSchema.safeParse(decodedCrop);
+			if (!parsedCrop.success) {
+				const reason = parsedCrop.error.issues[0]?.message;
+				return {
+					error: reason
+						? `The image framing is invalid: ${reason}`
+						: "The image framing is invalid.",
+				};
+			}
+			crop = parsedCrop.data;
+		}
+
+		if (!file) {
+			if (!crop) return { error: "No file or image framing received." };
+			await db
+				.update(schema.mentors)
+				.set({ image_crop: crop })
+				.where(eq(schema.mentors.id, mentorId));
+			return {};
+		}
+
+		if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+			return { error: "Please upload a JPEG, PNG, or WebP image." };
+		}
+		if (file.size > 4 * 1024 * 1024) {
+			return { error: "Image must be under 4MB." };
+		}
+
+		const ext =
+			file.type === "image/webp"
+				? "webp"
+				: file.type === "image/png"
+					? "png"
+					: "jpg";
 		const path = `${mentorId}.${ext}`;
+		const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+		const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+		if (!supabaseUrl || !serviceRoleKey) {
+			return { error: "Image uploads are not configured." };
+		}
 
-		const adminClient = createAdminClient(
-			process.env.NEXT_PUBLIC_SUPABASE_URL!,
-			process.env.SUPABASE_SERVICE_ROLE_KEY!,
-		);
+		const adminClient = createAdminClient(supabaseUrl, serviceRoleKey);
 
 		const { error: uploadError } = await adminClient.storage
 			.from("mentor-avatars")
-			.upload(path, file, { upsert: true, contentType: file.type });
+			.upload(path, file, {
+				upsert: true,
+				contentType: file.type,
+				cacheControl: "31536000",
+			});
 
 		if (uploadError) return { error: uploadError.message };
 
-		const { data } = adminClient.storage.from("mentor-avatars").getPublicUrl(path);
+		const { data } = adminClient.storage
+			.from("mentor-avatars")
+			.getPublicUrl(path);
 		const url = `${data.publicUrl}?t=${Date.now()}`;
 
 		await db
 			.update(schema.mentors)
-			.set({ image: url })
+			.set({ image: url, image_crop: crop })
 			.where(eq(schema.mentors.id, mentorId));
 
 		return { url };

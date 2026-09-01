@@ -1,3 +1,4 @@
+import { MentorImage } from "@/components/mentor-image";
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
@@ -7,12 +8,10 @@ import {
 	localizedCareerCornerPath,
 } from "@/src/lib/careercorner-seo";
 import { resolveFeaturedMentor } from "@/src/lib/featured-mentor";
-import { isLocalImageUrl } from "@/src/lib/image-url";
 import { UserRound } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { getHeroMentors, getMentors } from "./_actions";
 import { CareersHero } from "./_components/hero";
 import { MentorDirectory } from "./_components/mentor-directory";
@@ -80,15 +79,14 @@ const CareersCorner = async ({
 				<section className="bg-muted">
 					<section className="container mx-auto grid h-full grid-cols-1 items-center gap-10 px-4 py-8 sm:px-6 md:grid-cols-2 md:py-12 lg:px-8 lg:py-16 xl:py-20">
 						<FadeIn direction="left">
-							<div className="group relative flex h-[400px] w-full flex-col justify-end overflow-hidden rounded-tl-[16px] rounded-tr-[16px] rounded-br-[40px] rounded-bl-[40px] p-6 sm:h-[560px] sm:rounded-br-[70px] sm:rounded-bl-[70px] sm:p-8">
+							<div className="group relative flex aspect-[4/5] w-full max-w-xl flex-col justify-end overflow-hidden rounded-tl-[16px] rounded-tr-[16px] rounded-br-[60px] rounded-bl-[60px] p-6 sm:rounded-br-[124px] sm:rounded-bl-[124px] sm:p-8">
 								{featured.image ? (
-									<Image
+									<MentorImage
 										src={featured.image}
 										alt={featured.name}
-										fill
+										crop={featured.image_crop}
 										sizes="(max-width: 768px) 100vw, 50vw"
-										unoptimized={isLocalImageUrl(featured.image)}
-										className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+										className="size-full transition-transform duration-700 group-hover:scale-105"
 									/>
 								) : (
 									<div className="flex h-full w-full items-center justify-center bg-secondary-500/40">

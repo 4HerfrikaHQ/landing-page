@@ -1,15 +1,14 @@
+import { MentorImage } from "@/components/mentor-image";
 import { FadeIn } from "@/components/motion";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import {
 	absoluteSiteUrl,
 	localizedCareerCornerPath,
 } from "@/src/lib/careercorner-seo";
-import { isLocalImageUrl } from "@/src/lib/image-url";
 import { ChevronLeft, Clock, Linkedin, UserRound } from "lucide-react";
 import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import {
@@ -128,13 +127,13 @@ export default async function MentorDetailPage({
 									<div className="absolute -inset-2 rounded-full bg-surface-pink" />
 									<div className="relative size-28 overflow-hidden rounded-full ring-4 ring-primary-500/15 sm:size-32">
 										{mentor.image ? (
-											<Image
+											<MentorImage
 												src={mentor.image}
 												alt={mentor.name}
-												fill
+												crop={mentor.image_crop}
+												aspectRatio={1}
 												sizes="128px"
-												unoptimized={isLocalImageUrl(mentor.image)}
-												className="object-cover object-top"
+												className="size-full"
 											/>
 										) : (
 											<div className="flex h-full w-full items-center justify-center bg-secondary-500/30">

@@ -1,4 +1,5 @@
 import { AvailabilityEditor } from "@/components/availability-editor";
+import { MentorImage } from "@/components/mentor-image";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -16,14 +17,16 @@ import {
 	saveAvailabilityForAdmin,
 } from "@/src/db/actions/availability";
 import type { DbAvailability } from "@/src/db/schema/tables";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import {
 	normalizeMentorSlugInput,
 	parseMentorSlug,
 } from "@/src/lib/mentor-slug";
-import { DownloadIcon, Loader2Icon } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useState, useTransition } from "react";
-import { updateMentor } from "../_actions";
+import { DownloadIcon, ImagePlusIcon, Loader2Icon } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { ImageCropDialog } from "../../../mentor/profile/_components/image-crop-dialog";
+import { updateMentor, uploadMentorImage } from "../_actions";
 
 type Tab = "details" | "availability";
 
@@ -32,6 +35,7 @@ type Mentor = {
 	name: string;
 	slug: string;
 	image: string | null;
+	image_crop: MentorImageCrop | null;
 	position: string | null;
 	bio: string | null;
 	nickname: string | null;
@@ -52,6 +56,16 @@ export function EditMentorSheet({
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 	const [isDownloading, setIsDownloading] = useState(false);
+	const [imagePreview, setImagePreview] = useState(mentor.image);
+	const [imageCrop, setImageCrop] = useState<MentorImageCrop | null>(
+		mentor.image_crop,
+	);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
+	const imageInputRef = useRef<HTMLInputElement>(null);
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
 	>(null);
@@ -78,6 +92,17 @@ export function EditMentorSheet({
 				});
 		}
 	}, [tab, mentor.id, availabilitySlots]);
+
+	useEffect(() => {
+		setImagePreview(mentor.image);
+		setImageCrop(mentor.image_crop);
+	}, [mentor.image, mentor.image_crop]);
+
+	useEffect(() => {
+		return () => {
+			if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropFile, cropSource]);
 
 	const onOpenChange = (open: boolean) => {
 		if (open === false) {
@@ -108,11 +133,65 @@ export function EditMentorSheet({
 		});
 	}
 
+	function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		if (file.size > 4 * 1024 * 1024) {
+			toast.error("Image must be under 4MB.");
+			return;
+		}
+
+		setCropFile(file);
+		setCropInitial(null);
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
+
+	function handleReframe() {
+		if (!imagePreview) return;
+		setCropFile(null);
+		setCropInitial(imageCrop);
+		setCropSource(imagePreview);
+		setIsCropOpen(true);
+	}
+
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropInitial(null);
+		setCropSource(null);
+	}
+
+	async function handleCropSave(crop: MentorImageCrop) {
+		const formData = new FormData();
+		if (cropFile) formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(crop));
+
+		setIsUploading(true);
+		try {
+			const result = await uploadMentorImage(mentor.id, formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
+			}
+			if (result.url) setImagePreview(result.url);
+			setImageCrop(crop);
+			setIsCropOpen(false);
+			clearCropState();
+			toast.success("Profile photo updated");
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsUploading(false);
+		}
+	}
+
 	async function handleImageDownload() {
-		if (!mentor.image) return;
+		if (!imagePreview) return;
 
 		const extension =
-			mentor.image
+			imagePreview
 				.split("?")[0]
 				.split(".")
 				.pop()
@@ -124,7 +203,7 @@ export function EditMentorSheet({
 
 		setIsDownloading(true);
 		try {
-			const response = await fetch(mentor.image);
+			const response = await fetch(imagePreview);
 			if (!response.ok) throw new Error("Image download failed");
 
 			const blob = await response.blob();
@@ -139,7 +218,7 @@ export function EditMentorSheet({
 		} catch {
 			// Keep a native fallback for environments that block cross-origin fetches.
 			const link = document.createElement("a");
-			link.href = mentor.image;
+			link.href = imagePreview;
 			link.download = filename;
 			link.target = "_blank";
 			link.rel = "noreferrer";
@@ -201,14 +280,13 @@ export function EditMentorSheet({
 								</span>
 								<div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
 									<div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
-										{mentor.image ? (
-											<Image
-												src={mentor.image}
+										{imagePreview ? (
+											<MentorImage
+												src={imagePreview}
 												alt={mentor.name}
-												fill
-												className="object-cover object-top"
+												crop={null}
+												className="size-full"
 												sizes="64px"
-												unoptimized
 											/>
 										) : (
 											<span className="flex size-full items-center justify-center text-sm font-medium text-gray-500">
@@ -223,25 +301,65 @@ export function EditMentorSheet({
 									</div>
 									<div className="min-w-0">
 										<p className="truncate text-sm text-gray-700">
-											{mentor.image
+											{imagePreview
 												? "Current profile photo"
 												: "No profile photo uploaded"}
 										</p>
-										<Button
-											type="button"
-											variant="outline"
-											size="sm"
-											className="mt-2 gap-1.5"
-											onClick={handleImageDownload}
-											disabled={!mentor.image || isDownloading}
-										>
-											{isDownloading ? (
-												<Loader2Icon className="size-3.5 animate-spin" />
-											) : (
-												<DownloadIcon className="size-3.5" />
-											)}
-											{isDownloading ? "Downloading…" : "Download image"}
-										</Button>
+										<input
+											ref={imageInputRef}
+											type="file"
+											accept="image/jpeg,image/png,image/webp"
+											className="hidden"
+											onChange={handleImageChange}
+										/>
+										<div className="mt-2 flex flex-wrap gap-2">
+											<Button
+												type="button"
+												variant="outline"
+												size="sm"
+												className="gap-1.5"
+												onClick={() => imageInputRef.current?.click()}
+												disabled={isUploading}
+											>
+												{isUploading ? (
+													<Loader2Icon className="size-3.5 animate-spin" />
+												) : (
+													<ImagePlusIcon className="size-3.5" />
+												)}
+												{isUploading
+													? "Uploading…"
+													: imagePreview
+														? "Replace photo"
+														: "Upload photo"}
+											</Button>
+											{imagePreview ? (
+												<Button
+													type="button"
+													variant="ghost"
+													size="sm"
+													className="gap-1.5"
+													onClick={handleReframe}
+													disabled={isUploading}
+												>
+													Adjust framing
+												</Button>
+											) : null}
+											<Button
+												type="button"
+												variant="ghost"
+												size="sm"
+												className="gap-1.5"
+												onClick={handleImageDownload}
+												disabled={!imagePreview || isDownloading || isUploading}
+											>
+												{isDownloading ? (
+													<Loader2Icon className="size-3.5 animate-spin" />
+												) : (
+													<DownloadIcon className="size-3.5" />
+												)}
+												{isDownloading ? "Downloading…" : "Download"}
+											</Button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -367,6 +485,17 @@ export function EditMentorSheet({
 					</div>
 				)}
 			</SheetContent>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) clearCropState();
+				}}
+				imageUrl={cropSource}
+				initialCrop={cropInitial}
+				onSave={handleCropSave}
+				isSaving={isUploading}
+			/>
 		</Sheet>
 	);
 }

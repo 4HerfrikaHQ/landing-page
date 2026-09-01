@@ -1,17 +1,19 @@
 "use client";
 
 import { CameraIcon, CheckCircle2, Loader2Icon } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
+import { MentorImage } from "@/components/mentor-image";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 
 import { updateMyProfile, uploadMyImage } from "../../_actions";
+import { ImageCropDialog } from "./image-crop-dialog";
 
 export function ProfileForm({
 	mentor: dbMentor,
@@ -25,10 +27,17 @@ export function ProfileForm({
 	});
 
 	const [preview, setPreview] = useState<string | null>(dbMentor.image);
+	const [imageCrop, setImageCrop] = useState<MentorImageCrop | null>(
+		dbMentor.image_crop,
+	);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [saved, setSaved] = useState(false);
 	const [isPending, startTransition] = useTransition();
-	const [isUploading, startUploadTransition] = useTransition();
+	const [isUploading, setIsUploading] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// Sync controlled state when the server re-renders with fresh data after revalidatePath
@@ -40,7 +49,15 @@ export function ProfileForm({
 			bio: dbMentor.bio ?? "",
 			linkedin_url: dbMentor.linkedin_url ?? "",
 		});
+		setPreview(dbMentor.image);
+		setImageCrop(dbMentor.image_crop);
 	}, [dbMentor]);
+
+	useEffect(() => {
+		return () => {
+			if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropFile, cropSource]);
 
 	const initials = fields.name
 		.split(" ")
@@ -58,24 +75,50 @@ export function ProfileForm({
 			return;
 		}
 
-		setPreview(URL.createObjectURL(file));
-		const formData = new FormData();
-		formData.append("file", file);
+		setCropFile(file);
+		setCropInitial(null);
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		// Allow choosing the same file again after cancelling.
+		e.currentTarget.value = "";
+	}
 
-		startUploadTransition(async () => {
-			try {
-				const result = await uploadMyImage(formData);
-				if (result.error) {
-					setPreview(dbMentor.image);
-					toast.error(`Upload failed: ${result.error}`);
-				} else if (result.url) {
-					setPreview(result.url);
-				}
-			} catch (err) {
-				setPreview(dbMentor.image);
-				toast.error(`Upload failed: ${String(err)}`);
+	function handleReframe() {
+		if (!preview) return;
+		setCropFile(null);
+		setCropInitial(imageCrop);
+		setCropSource(preview);
+		setIsCropOpen(true);
+	}
+
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropInitial(null);
+		setCropSource(null);
+	}
+
+	async function handleCropSave(crop: MentorImageCrop) {
+		const formData = new FormData();
+		if (cropFile) formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(crop));
+
+		setIsUploading(true);
+		try {
+			const result = await uploadMyImage(formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
 			}
-		});
+			if (result.url) setPreview(result.url);
+			setImageCrop(crop);
+			setIsCropOpen(false);
+			clearCropState();
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsUploading(false);
+		}
 	}
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -104,13 +147,12 @@ export function ProfileForm({
 							className="group relative size-24 shrink-0 cursor-pointer overflow-hidden rounded-full ring-1 ring-border/60"
 						>
 							{preview ? (
-								<Image
+								<MentorImage
 									src={preview}
 									alt={fields.name}
-									fill
-									className="object-cover object-top"
+									crop={null}
+									className="size-full"
 									sizes="96px"
-									unoptimized
 								/>
 							) : (
 								<span className="flex size-full items-center justify-center bg-surface-pink text-xl font-medium text-primary-500">
@@ -130,8 +172,20 @@ export function ProfileForm({
 								{fields.name}
 							</p>
 							<p className="text-sm text-muted-foreground">
-								Click the photo to upload a new one (under 4MB).
+								Click to upload and frame a new photo (under 4MB).
 							</p>
+							{preview ? (
+								<Button
+									type="button"
+									variant="link"
+									size="sm"
+									className="h-auto px-0 text-xs"
+									onClick={handleReframe}
+									disabled={isUploading}
+								>
+									Adjust framing
+								</Button>
+							) : null}
 						</div>
 					</div>
 					<input
@@ -229,6 +283,17 @@ export function ProfileForm({
 					</div>
 				</DataCardSection>
 			</DataCard>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) clearCropState();
+				}}
+				imageUrl={cropSource}
+				initialCrop={cropInitial}
+				onSave={handleCropSave}
+				isSaving={isUploading}
+			/>
 		</form>
 	);
 }
