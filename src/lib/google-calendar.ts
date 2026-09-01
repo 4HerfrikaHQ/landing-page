@@ -563,7 +563,8 @@ export function createMentorCalendarClient(
 	async function createMentorCalendarEvent(params: MentorCalendarEventParams) {
 		const connection = await getConnection(params, provider, params.connection);
 		const token = await accessToken(connection, params.accessToken);
-		const eventId = deterministicCalendarEventId(params.attemptKey);
+		let eventId = deterministicCalendarEventId(params.attemptKey);
+		let conferenceRequestId = params.attemptKey;
 		const existing = await readEvent(connection, token, eventId, fetchImpl);
 		if (existing?.status === "cancelled") {
 			const deleteResponse = await fetchImpl(
@@ -602,6 +603,28 @@ export function createMentorCalendarClient(
 				eventId,
 				attemptKey: params.attemptKey,
 			});
+			conferenceRequestId = stableCalendarAttemptKey(
+				params.attemptKey,
+				"cancelled-replacement",
+			);
+			eventId = deterministicCalendarEventId(conferenceRequestId);
+			const replacement = await readEvent(
+				connection,
+				token,
+				eventId,
+				fetchImpl,
+			);
+			if (replacement) {
+				if (
+					replacement.extendedProperties?.private?.[ATTEMPT_PROPERTY] !==
+					params.attemptKey
+				)
+					throw new MentorCalendarError(
+						"attempt_key_conflict",
+						"Google Calendar returned an event for a different booking attempt.",
+					);
+				return usableEvent(replacement, connection);
+			}
 		}
 		if (existing && existing.status !== "cancelled") {
 			const existingAttempt =
@@ -683,7 +706,7 @@ export function createMentorCalendarClient(
 						attendees: [{ email: params.menteeEmail }],
 						conferenceData: {
 							createRequest: {
-								requestId: params.attemptKey,
+								requestId: conferenceRequestId,
 								conferenceSolutionKey: { type: "hangoutsMeet" },
 							},
 						},

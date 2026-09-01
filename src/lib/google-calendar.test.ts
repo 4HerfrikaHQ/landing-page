@@ -295,6 +295,7 @@ describe("mentor-scoped Google Calendar", () => {
 
 	test("removes a cancelled foreign event before creating the replacement", async () => {
 		const attemptKey = "replacement-attempt";
+		const originalEventId = deterministicCalendarEventId(attemptKey);
 		const calls: { url: string; method?: string }[] = [];
 		const client = createMentorCalendarClient({
 			connectionProvider: provider(connection()),
@@ -302,14 +303,11 @@ describe("mentor-scoped Google Calendar", () => {
 				calls.push({ url: String(input), method: init?.method });
 				if (init?.method === "DELETE")
 					return new Response(null, { status: 410 });
-				if (init?.method === "POST")
-					return response(
-						event(
-							attemptKey,
-							mentorEmail,
-							deterministicCalendarEventId(attemptKey),
-						),
-					);
+				if (init?.method === "POST") {
+					const body = JSON.parse(String(init.body)) as { id: string };
+					return response(event(attemptKey, mentorEmail, body.id));
+				}
+				if (!String(input).includes(originalEventId)) return response({}, 404);
 				return response({
 					...event("old-attempt", "4herfrika@gmail.com"),
 					status: "cancelled",
@@ -317,14 +315,17 @@ describe("mentor-scoped Google Calendar", () => {
 			},
 		});
 
-		await expect(
-			client.createMentorCalendarEvent(createParams(attemptKey)),
-		).resolves.toMatchObject({
-			eventId: deterministicCalendarEventId(attemptKey),
-		});
+		const created = await client.createMentorCalendarEvent(
+			createParams(attemptKey),
+		);
+		expect(created.eventId).not.toBe(originalEventId);
 		expect(calls[1]).toEqual({
 			url: expect.stringContaining("sendUpdates=none"),
 			method: "DELETE",
+		});
+		expect(calls[2]).toEqual({
+			url: expect.not.stringContaining(originalEventId),
+			method: undefined,
 		});
 	});
 
