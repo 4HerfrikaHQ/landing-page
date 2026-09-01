@@ -214,13 +214,14 @@ export function ProfileForm({
 							<Field
 								label="Position"
 								name="position"
+								required
 								value={fields.position}
 								onChange={(e) =>
 									setFields((f) => ({ ...f, position: e.target.value }))
 								}
 							/>
 							<Field
-								label="Nickname"
+								label="Display Name"
 								name="nickname"
 								value={fields.nickname}
 								onChange={(e) =>

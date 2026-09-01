@@ -180,8 +180,7 @@ export function GalleryGrid() {
 						</p>
 						<div className="mt-6">
 							<Button
-								href="https://drive.google.com/drive/folders/1T9pPsObVV-x7UxGu70cj2XcX5PZNcw3g"
-								isExternal
+								href="/impact"
 								variant="outline"
 								className="inline-flex items-center border border-pink-500 text-pink-500 rounded-full py-2 px-6"
 							>

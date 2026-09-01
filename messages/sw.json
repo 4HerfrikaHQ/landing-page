@@ -85,6 +85,7 @@
 		"yearOneReport": "Angalia Year-One Landscape report yetu hapa!"
 	},
 	"contact": {
+		"altMap": "Ramani inayoonyesha eneo la ofisi ya 4Herfrika",
 		"email": "Anwani ya barua pepe",
 		"errorMessage": "Imeshindikana kutuma ujumbe. Tafadhali angalia maingizo yako na ujaribu tena.",
 		"getInTouch": "Wasiliana nasi",
@@ -162,6 +163,15 @@
 		"wordsOnStreetSub": "Tazama wanachama wetu wanasema nini!"
 	},
 	"impact": {
+		"altYearReport": "Jalada la Ripoti ya Mwaka wa Kwanza ya 4Herfrika, ‘From One to Many’",
+		"altEarth": "Mchoro wa sayari ya Dunia",
+		"altMilestone1": "Wanawake wawili vijana wakiandika msimbo pamoja kwenye kompyuta za mkononi kwenye warsha ya 4Herfrika",
+		"altMilestone2": "Wanawake vijana wakishikilia vyeti vyao kwenye hafla ya kuhitimu ya bootcamp ya 4Herfrika",
+		"altMilestone3": "Washiriki wamekaa katika ukumbi wa mihadhara wakati wa kikao cha 4Herfrika chuoni",
+		"altMiddle": "Mkufunzi akifundisha katika maabara ya kompyuta ya bootcamp ya chuo cha LAUTECH",
+		"altRight": "Mwanamke kijana aliyevaa hijabu akifanya kazi kwenye kompyuta wakati wa bootcamp ya chuo cha LAUTECH",
+		"altLeft": "Wanawake watatu vijana wakitabasamu wakipiga selfie pamoja kwenye tukio la 4Herfrika",
+		"altBeginning": "Washiriki wa 4Herfrika wamevaa fulana za pinki za chapa wakiwa pamoja nje chuoni",
 		"academies": "Akademia 3 zinazostawi: Teknolojia, Biashara, Tabianchi.",
 		"campusesReached": "Kampasi 25+ zilizofikiwa",
 		"girlsMentored": "Wasichana 3,000+ waliopata malezi",
@@ -174,6 +184,7 @@
 	},
 	"nav": {
 		"aboutUs": "Kuhusu Sisi",
+		"impactHub": "Kitovu cha Athari",
 		"blog": "Blogu",
 		"careerCorner": "Career Corner",
 		"contactUs": "Wasiliana nasi",

@@ -14,7 +14,8 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getFeaturedMentorId, getMentorsForAdmin } from "./_actions";
+import { getMentorLinksForAdmin, getMentorsForAdmin } from "./_actions";
+import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
@@ -46,16 +47,22 @@ export default async function MentorsPage({
 	const featured = MentorFeaturedFilter.safeParse(sp.featured);
 	const page = Math.max(1, Number(sp.page) || 1);
 
-	const [{ rows: mentors, total }, currentFeaturedId] = await Promise.all([
+	const activeFilters = {
+		query: sp.q,
+		status: status.success ? status.data : undefined,
+		featured: featured.success ? featured.data : undefined,
+	};
+
+	// Links cover every mentor matching the filters, not just this page — there
+	// are more mentors than fit on one page.
+	const [{ rows: mentors, total }, links] = await Promise.all([
 		getMentorsForAdmin({
-			query: sp.q,
-			status: status.success ? status.data : undefined,
+			...activeFilters,
 			sort: sort.success ? sort.data : undefined,
-			featured: featured.success ? featured.data : undefined,
 			page,
 			pageSize: PAGE_SIZE,
 		}),
-		getFeaturedMentorId(),
+		getMentorLinksForAdmin(activeFilters),
 	]);
 
 	return (
@@ -63,7 +70,12 @@ export default async function MentorsPage({
 			<PageHeader
 				title="Mentors"
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
-				action={<CreateMentorSheet />}
+				action={
+					<div className="flex items-center gap-2">
+						<CopyAllMentorLinksButton mentors={links} />
+						<CreateMentorSheet />
+					</div>
+				}
 			/>
 
 			<div className="mb-6">
@@ -94,18 +106,21 @@ export default async function MentorsPage({
 							<TableHead className="font-medium text-muted-foreground">
 								Joined
 							</TableHead>
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Link
+							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Active
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
-								Featured
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Google Cal
 							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} className="p-0">
+								<TableCell colSpan={9} className="p-0">
 									<EmptyState
 										icon={Users}
 										title="No mentors match these filters"
@@ -116,11 +131,7 @@ export default async function MentorsPage({
 							</TableRow>
 						) : (
 							mentors.map((mentor) => (
-								<MentorTableRow
-									key={mentor.id}
-									mentor={mentor}
-									currentFeaturedId={currentFeaturedId}
-								/>
+								<MentorTableRow key={mentor.id} mentor={mentor} />
 							))
 						)}
 					</TableBody>

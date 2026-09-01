@@ -1,6 +1,6 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
@@ -8,13 +8,14 @@ import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { MinLeadHoursSchema } from "@/src/lib/booking-rules";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import { and, countDistinct, eq, gte, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function getMentorProfile(): Promise<
 	DbMentorWithAvailability | undefined
 > {
-	const user = await currentDbUser();
+	const { user } = await currentDbMentor();
 
 	const mentor = await db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),
@@ -30,7 +31,12 @@ export async function updateMyProfile(
 	const mentor = await getMentorProfile();
 	if (!mentor) return { error: "Mentor profile not found." };
 
-	const name = formData.get("name") as string;
+	const name = ((formData.get("name") as string) || "").trim();
+	if (!name) return { error: "Name is required." };
+
+	// Position gates mentor activation on the admin dashboard, so it can't be blank.
+	const position = ((formData.get("position") as string) || "").trim();
+	if (!position) return { error: "Position is required." };
 
 	// Name lives on the user row; the rest on the mentor row. One transaction
 	// so both land together.
@@ -38,7 +44,7 @@ export async function updateMyProfile(
 		await tx
 			.update(schema.mentors)
 			.set({
-				position: (formData.get("position") as string) || "",
+				position,
 				bio: (formData.get("bio") as string) || undefined,
 				nickname: (formData.get("nickname") as string) || undefined,
 				linkedin_url: (formData.get("linkedin_url") as string) || undefined,
@@ -53,6 +59,43 @@ export async function updateMyProfile(
 
 	revalidatePath("/dashboard/mentor");
 	return {};
+}
+
+export async function updateMySlug(slug: string): Promise<{
+	slug?: string;
+	error?: string;
+}> {
+	const mentor = await getMentorProfile();
+	if (!mentor) return { error: "Mentor profile not found." };
+
+	const parsedSlug = parseMentorSlug(slug);
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+	if (parsedSlug.slug === mentor.slug) return { slug: mentor.slug };
+	const recentlyUsed = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.previous_slug, parsedSlug.slug),
+			ne(schema.mentors.id, mentor.id),
+		),
+		columns: { id: true },
+	});
+	if (recentlyUsed) return { error: "This profile link is already taken." };
+
+	try {
+		await db
+			.update(schema.mentors)
+			.set({ slug: parsedSlug.slug, previous_slug: mentor.slug })
+			.where(eq(schema.mentors.id, mentor.id));
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
+		}
+		throw error;
+	}
+
+	revalidatePath("/dashboard/mentor/profile");
+	revalidatePath(`/careercorner/${mentor.slug}`);
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
+	return { slug: parsedSlug.slug };
 }
 
 export async function getMyBookingNotice(): Promise<{ minLeadHours: number }> {

@@ -1,12 +1,15 @@
 export const NAV_LINKS = [
 	{ name: "About Us", href: "/about" },
 	{
-		name: "Projects",
+		name: "Impact Hub",
 		href: "/projects",
+		dropdownItems: [
+			{ name: "Projects", href: "/projects" },
+			{ name: "Blog", href: "/blog" },
+		],
 	},
 	{ name: "Academy", href: "/academy" },
-	{ name: "Career Corner", href: "/careers-corner" },
-	{ name: "Blog", href: "/blog" },
+	{ name: "Career Corner", href: "/careercorner" },
 	{ name: "Contact Us", href: "/contact-us" },
 ];
 

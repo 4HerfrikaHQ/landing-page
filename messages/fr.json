@@ -85,6 +85,7 @@
 		"yearOneReport": "Consultez notre Year-One Landscape report ici !"
 	},
 	"contact": {
+		"altMap": "Carte indiquant l'emplacement du bureau de 4Herfrika",
 		"email": "Adresse e-mail",
 		"errorMessage": "Échec de l’envoi du message. Veuillez vérifier vos informations et réessayer.",
 		"getInTouch": "Entrer en contact",
@@ -162,6 +163,15 @@
 		"wordsOnStreetSub": "Découvrez ce que disent nos membres !"
 	},
 	"impact": {
+		"altYearReport": "Couverture du Rapport panoramique de la première année de 4Herfrika, « From One to Many »",
+		"altEarth": "Illustration de la planète Terre",
+		"altMilestone1": "Deux jeunes femmes codant ensemble sur des ordinateurs portables lors d'un atelier 4Herfrika",
+		"altMilestone2": "De jeunes femmes tenant leurs certificats lors d'une remise de diplômes d'un bootcamp 4Herfrika",
+		"altMilestone3": "Des participantes assises dans un amphithéâtre pendant une session sur le campus de 4Herfrika",
+		"altMiddle": "Une formatrice enseignant dans la salle informatique du bootcamp du campus LAUTECH",
+		"altRight": "Une jeune femme portant un hijab travaillant sur un ordinateur pendant le bootcamp du campus LAUTECH",
+		"altLeft": "Trois jeunes femmes souriantes prenant un selfie ensemble lors d'un événement 4Herfrika",
+		"altBeginning": "Des participantes de 4Herfrika en t-shirts roses aux couleurs de la marque, réunies en plein air sur le campus",
 		"academies": "3 académies dynamiques : Tech, Business, Climate.",
 		"campusesReached": "25+ campus touchés",
 		"girlsMentored": "3,000+ filles accompagnées",
@@ -174,6 +184,7 @@
 	},
 	"nav": {
 		"aboutUs": "À propos",
+		"impactHub": "Pôle d'impact",
 		"blog": "Blog",
 		"careerCorner": "Career Corner",
 		"contactUs": "Contactez-nous",

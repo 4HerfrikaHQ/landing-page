@@ -80,7 +80,6 @@ export function FilterPills({
 		"page",
 		parseAsString.withOptions({ shallow }),
 	);
-
 	const pills: FilterOption[] = includeAll
 		? [{ value: defaultValue, label: allLabel }, ...options]
 		: options;
@@ -131,6 +130,10 @@ interface SearchInputProps {
 	/** nuqs query param to write the search term to. */
 	paramKey?: string;
 	placeholder?: string;
+	/** Optional controlled value for screens that filter local data immediately. */
+	value?: string;
+	/** Called when a controlled search value changes. */
+	onValueChange?: (value: string) => void;
 	/** Debounce delay in ms before writing the URL param. Default 300. */
 	debounceMs?: number;
 	/**
@@ -151,22 +154,33 @@ interface SearchInputProps {
 export function SearchInput({
 	paramKey = "q",
 	placeholder = "Search…",
+	value: controlledValue,
+	onValueChange,
 	debounceMs = 300,
 	shallow = false,
 	resetPageOnChange = false,
 	className,
 }: SearchInputProps) {
 	const id = useId();
-	const [value, setValue] = useQueryState(
+	const [queryValue, setQueryValue] = useQueryState(
 		paramKey,
 		parseAsString
 			.withDefault("")
 			.withOptions({ limitUrlUpdates: debounce(debounceMs), shallow }),
 	);
+	const value = controlledValue ?? queryValue;
 	const [, setPage] = useQueryState(
 		"page",
 		parseAsString.withOptions({ shallow }),
 	);
+	const handleValueChange = (nextValue: string) => {
+		if (onValueChange) {
+			onValueChange(nextValue);
+		} else {
+			void setQueryValue(nextValue || null);
+		}
+		if (resetPageOnChange) void setPage(null);
+	};
 
 	return (
 		<div className={cn("relative w-full sm:w-64", className)}>
@@ -176,10 +190,7 @@ export function SearchInput({
 				type="search"
 				value={value}
 				placeholder={placeholder}
-				onChange={(e) => {
-					void setValue(e.target.value || null);
-					if (resetPageOnChange) void setPage(null);
-				}}
+				onInput={(e) => handleValueChange(e.currentTarget.value)}
 				className="h-10 w-full rounded-full border border-[#E0E0E0] bg-white pl-9 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:border-primary-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
 			/>
 		</div>

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 6 July 2026_
+_Last updated: 25 August 2026_
 
 This policy explains what we collect, why, and who we share it with. The short
 version: we only collect what the mentorship platform needs to work. We don't
@@ -13,7 +13,7 @@ country, LinkedIn, current role, a short bio, gender, your areas of expertise,
 your motivation, your industry, and a CV file.
 
 **When you have a mentor account**, we store your name, email, and role, plus
-your public profile: bio, position, photo, nickname, and LinkedIn.
+your public profile: bio, position, photo, Display Name, and LinkedIn.
 
 **When you book a session as a mentee**, you give us your name, email, phone,
 gender, country, career stage, timezone, LinkedIn, and what you'd like help
@@ -42,13 +42,55 @@ each one needs:
 - **Supabase** — stores the database, handles sign-in, and keeps uploaded files
   (profile photos and CVs).
 - **Google** — when a session is booked, we create a Google Calendar event with
-  a Meet link, which includes the mentor's and mentee's names and emails.
+  a Meet link. The event includes the mentor's and mentee's names and email
+  addresses, the session time, and the mentee's stated booking purpose.
 - **Resend** — sends transactional emails like booking confirmations.
 - **Google Analytics** — receives the aggregate traffic data described above.
 - **Prismic** — powers the editable content on our public pages (no personal
   data).
 
 We don't sell your data or share it with advertisers.
+
+## When a mentor connects Google Calendar
+
+Mentors can choose to connect their Google account so that 4Herfrika can create
+and manage mentorship booking events on the mentor's primary calendar. We use:
+
+- `https://www.googleapis.com/auth/calendar.events.owned` to create, retrieve,
+  update, and delete specific 4Herfrika mentorship events on calendars owned by
+  the mentor.
+- `openid` and `https://www.googleapis.com/auth/userinfo.email` to identify the
+  selected Google account using its email address and stable Google account
+  identifier, ensuring the connection is linked to the correct mentor.
+
+We store the Google email address, stable account identifier, granted scopes,
+connection status and timestamps, and an encrypted refresh token. We do not
+list, read, or use unrelated events from the mentor's Calendar.
+
+## How we protect Google user data
+
+Google OAuth credentials are processed only by 4Herfrika's server-side systems.
+Communications with Google's OAuth and Calendar APIs use encrypted HTTPS
+connections. We do not store Google authorization codes or access tokens
+durably.
+
+The refresh token required to maintain an active mentor connection is encrypted
+at rest using authenticated encryption and a dedicated server-only key. It is
+not exposed to client-side code, browser storage, or application logs. Access is
+limited to authenticated booking operations for the connected mentor and the
+specific 4Herfrika mentorship events created by the platform.
+
+Application logging is designed to exclude OAuth credentials, authorization
+codes, Meet links, event descriptions, raw Google API responses, and attendee
+details. Google user data is not sold, used for advertising or profiling, or
+used to train artificial-intelligence or machine-learning models.
+
+When a mentor disconnects, Calendar access is disabled and we request
+revocation from Google. After revocation succeeds, or Google confirms that the
+grant is already invalid, the encrypted refresh token is removed from the
+active application database. If revocation temporarily fails, the encrypted
+token is retained only to retry revocation and cannot be used for normal
+Calendar operations.
 
 ## Why we use it
 

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { logout } from "@/src/auth";
+import { saveMyAvailability } from "@/src/db/actions/availability";
 import type { DbUser } from "@/src/db/schema/tables";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import type { MentorImageCrop } from "@/src/lib/mentor-image";
@@ -267,13 +268,14 @@ export function MentorProfile({
 							<Field
 								label="Position"
 								name="position"
+								required
 								value={fields.position}
 								onChange={(e) =>
 									setFields((f) => ({ ...f, position: e.target.value }))
 								}
 							/>
 							<Field
-								label="Nickname"
+								label="Display Name"
 								name="nickname"
 								value={fields.nickname}
 								onChange={(e) =>
@@ -333,6 +335,7 @@ export function MentorProfile({
 					<AvailabilityEditor
 						mentorId={dbMentor.id}
 						initialSlots={dbMentor.availability}
+						onSave={saveMyAvailability}
 					/>
 				)}
 			</div>

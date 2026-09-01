@@ -63,9 +63,9 @@ export async function verifyOtp(email: string, token: string): Promise<{ error: 
   const user = await currentDbUser();
 
   if (user.role === "super_admin") {
-    redirect("/dashboard/admin")
+		redirect("/dashboard/admin/mentors");
   } else {
-    redirect("/dashboard/mentor")
+		redirect("/dashboard/mentor");
   }
 }
 
@@ -96,4 +96,30 @@ export async function currentDbUser() {
 		.then((rows) => rows[0] ?? null);
 	if (!dbUser) unauthorized();
 	return dbUser;
+}
+
+/**
+ * Resolves the signed-in user's capabilities without changing their persisted
+ * role. A linked mentor record is the mentor capability, so a super admin can
+ * also act as their own mentor when they have one.
+ */
+export async function currentUserCapabilities() {
+	const user = await currentDbUser();
+	const mentor = await db.query.mentors.findFirst({
+		where: eq(schema.mentors.user_id, user.id),
+	});
+
+	return {
+		user,
+		mentor,
+		isAdmin: user.role === "super_admin",
+		isMentor: Boolean(mentor),
+	};
+}
+
+/** Gets the owned mentor record for the signed-in user, or rejects the request. */
+export async function currentDbMentor() {
+	const { user, mentor } = await currentUserCapabilities();
+	if (!mentor) unauthorized();
+	return { user, mentor };
 }
