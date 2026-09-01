@@ -7,10 +7,15 @@ export type MentorSlugResult =
 	| { success: true; slug: string }
 	| { success: false; error: string };
 
+export function normalizeMentorSlugInput(input: string): string {
+	return input.toLowerCase().replace(/\s+/g, "-");
+}
+
 export function parseMentorSlug(
 	input: FormDataEntryValue | null,
 ): MentorSlugResult {
-	const slug = typeof input === "string" ? input.trim().toLowerCase() : "";
+	const slug =
+		typeof input === "string" ? normalizeMentorSlugInput(input.trim()) : "";
 
 	if (!slug) {
 		return { success: false, error: "Profile link is required." };

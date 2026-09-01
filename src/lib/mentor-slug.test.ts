@@ -1,5 +1,15 @@
 import { describe, expect, test } from "bun:test";
-import { isUniqueViolation, parseMentorSlug } from "./mentor-slug";
+import {
+	isUniqueViolation,
+	normalizeMentorSlugInput,
+	parseMentorSlug,
+} from "./mentor-slug";
+
+describe("normalizeMentorSlugInput", () => {
+	test("lowercases input and replaces whitespace with hyphens", () => {
+		expect(normalizeMentorSlugInput("My  Unique Link")).toBe("my-unique-link");
+	});
+});
 
 describe("parseMentorSlug", () => {
 	test("normalizes casing and surrounding whitespace", () => {
@@ -9,18 +19,19 @@ describe("parseMentorSlug", () => {
 		});
 	});
 
+	test("normalizes spaces before validating", () => {
+		expect(parseMentorSlug("My Unique Link")).toEqual({
+			success: true,
+			slug: "my-unique-link",
+		});
+	});
+
 	test("accepts URL-safe slugs", () => {
 		expect(parseMentorSlug("ronnie-the-storyteller").success).toBe(true);
 	});
 
 	test("rejects blank, malformed, and reserved slugs", () => {
-		for (const value of [
-			"",
-			"two words",
-			"emoji-✨",
-			"two--hyphens",
-			"apply",
-		]) {
+		for (const value of ["", "emoji-✨", "two--hyphens", "apply"]) {
 			expect(parseMentorSlug(value).success).toBe(false);
 		}
 	});

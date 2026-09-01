@@ -7,6 +7,10 @@ import { toast } from "sonner";
 import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+	normalizeMentorSlugInput,
+	parseMentorSlug,
+} from "@/src/lib/mentor-slug";
 
 import { updateMySlug } from "../../_actions";
 
@@ -25,6 +29,8 @@ export function PublicLinkCard({
 	const [isPending, startTransition] = useTransition();
 	const baseUrl = `${siteUrl}/careercorner/`;
 	const url = `${baseUrl}${savedSlug}`;
+	const parsedDraft = parseMentorSlug(draftSlug);
+	const validationError = parsedDraft.success ? null : parsedDraft.error;
 
 	async function copy() {
 		try {
@@ -44,10 +50,10 @@ export function PublicLinkCard({
 	}
 
 	function saveSlug() {
-		if (isPending || draftSlug === savedSlug) return;
+		if (isPending || draftSlug === savedSlug || !parsedDraft.success) return;
 		setError(null);
 		startTransition(async () => {
-			const result = await updateMySlug(draftSlug);
+			const result = await updateMySlug(parsedDraft.slug);
 			if (result.error || !result.slug) {
 				setError(result.error ?? "Couldn't update the profile link.");
 				return;
@@ -96,7 +102,10 @@ export function PublicLinkCard({
 								aria-label="Profile link"
 								autoFocus
 								value={draftSlug}
-								onChange={(event) => setDraftSlug(event.target.value)}
+								onChange={(event) => {
+									setDraftSlug(normalizeMentorSlugInput(event.target.value));
+									setError(null);
+								}}
 								onKeyDown={(event) => {
 									if (event.key === "Enter") saveSlug();
 									if (event.key === "Escape") cancelEditing();
@@ -111,7 +120,11 @@ export function PublicLinkCard({
 							Changing this immediately breaks links you previously shared. Use
 							only letters, numbers, and single hyphens.
 						</p>
-						{error ? <p className="text-sm text-destructive">{error}</p> : null}
+						{validationError || error ? (
+							<p className="text-sm text-destructive">
+								{validationError ?? error}
+							</p>
+						) : null}
 						<div className="flex justify-end gap-2">
 							<Button
 								type="button"
@@ -129,7 +142,9 @@ export function PublicLinkCard({
 								variant="solid"
 								size="sm"
 								onClick={saveSlug}
-								disabled={isPending || draftSlug === savedSlug}
+								disabled={
+									isPending || draftSlug === savedSlug || !parsedDraft.success
+								}
 							>
 								{isPending ? (
 									<Loader2 className="mr-1.5 size-3.5 animate-spin" />
