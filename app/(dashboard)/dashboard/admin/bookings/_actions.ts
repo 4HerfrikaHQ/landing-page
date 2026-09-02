@@ -169,7 +169,7 @@ export async function getBookingSummaryForAdmin(filters: BookingFilters) {
 			or(
 				eq(bookings.status, "completed"),
 				and(eq(bookings.status, "confirmed"), lt(bookings.start_at, now)),
-			),
+			)!,
 		]),
 		countBookings([...base, eq(bookings.status, "cancelled")]),
 		countBookings([...base, eq(bookings.status, "no_show")]),
