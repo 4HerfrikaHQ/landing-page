@@ -19,7 +19,7 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 	return (
 		<section className="overflow-hidden grid place-content-center relative min-h-[60vh] w-full pt-28 pb-16">
 			<Image
-				src="/assets/careers/Mask.png"
+				src="https://jqmgbdefbzvxxvstfhhb.supabase.co/storage/v1/object/public/site-assets/Career-Corner-Mask.png"
 				alt=""
 				width={700}
 				height={1000}
@@ -27,7 +27,7 @@ export const CareersHero = ({ mentors }: CareersHeroProps) => {
 				style={{ width: "auto" }}
 			/>
 			<Image
-				src="/assets/careers/Mask2.png"
+				src="https://jqmgbdefbzvxxvstfhhb.supabase.co/storage/v1/object/public/site-assets/Career-Corner-Mask2.png"
 				alt=""
 				width={700}
 				height={1000}
