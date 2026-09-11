@@ -316,6 +316,39 @@ export async function updateMentor(
 	return {};
 }
 
+export async function deleteMentor(id: string): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
+	const [target] = await db
+		.select({
+			mentorId: schema.mentors.id,
+			authUserId: schema.users.auth_user_id,
+			role: schema.users.role,
+		})
+		.from(schema.mentors)
+		.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
+		.where(eq(schema.mentors.id, id))
+		.limit(1);
+
+	if (!target) return { error: "Mentor not found." };
+
+	// A super admin may also have a mentor profile. In that case, remove only
+	// the mentor capability so their admin account and login remain intact.
+	if (target.role === "super_admin") {
+		await db
+			.delete(schema.mentors)
+			.where(eq(schema.mentors.id, target.mentorId));
+	} else {
+		const supabase = await createAdminClient();
+		const { error } = await supabase.auth.admin.deleteUser(target.authUserId);
+		if (error) return { error: error.message };
+	}
+
+	revalidatePath("/dashboard/admin/mentors");
+	revalidatePath("/careercorner");
+	return {};
+}
+
 export async function uploadMentorImage(
 	mentorId: string,
 	formData: FormData,
