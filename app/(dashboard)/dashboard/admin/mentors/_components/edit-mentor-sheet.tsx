@@ -442,7 +442,7 @@ export function EditMentorSheet({
 								<DialogContent
 									showCloseButton={false}
 									className="z-[61]"
-									overlayClassName="z-60 bg-black/30"
+									overlayClassName="z-[60] bg-black/30"
 								>
 									<DialogHeader>
 										<DialogTitle>Delete this mentor?</DialogTitle>
