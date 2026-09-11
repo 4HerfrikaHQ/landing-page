@@ -445,16 +445,14 @@ export function EditMentorSheet({
 										className="fixed inset-0 z-[60] bg-black/30"
 									/>
 								) : null}
-								<DialogContent
-									showCloseButton={false}
-									className="z-[61]"
-								>
+								<DialogContent showCloseButton={false} className="z-[61]">
 									<DialogHeader>
 										<DialogTitle>Delete this mentor?</DialogTitle>
 										<DialogDescription>
 											{mentor.name}&apos;s profile, availability, bookings, and
-											mentor access will be permanently removed. This can&apos;t
-											be undone.
+											mentor access will be permanently removed. Upcoming
+											sessions will be cancelled and attendees notified. This
+											can&apos;t be undone.
 										</DialogDescription>
 									</DialogHeader>
 									<DialogFooter>

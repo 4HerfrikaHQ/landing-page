@@ -9,6 +9,7 @@ import {
 	uploadMentorAvatar,
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
+import { cancelBookingCore } from "@/src/lib/booking-mutations";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
 import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
@@ -23,6 +24,7 @@ import {
 	count,
 	desc,
 	eq,
+	gte,
 	ilike,
 	ne,
 	or,
@@ -324,6 +326,9 @@ export async function deleteMentor(id: string): Promise<{ error?: string }> {
 			mentorId: schema.mentors.id,
 			authUserId: schema.users.auth_user_id,
 			role: schema.users.role,
+			name: schema.users.name,
+			email: schema.users.email,
+			slug: schema.mentors.slug,
 		})
 		.from(schema.mentors)
 		.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
@@ -332,6 +337,53 @@ export async function deleteMentor(id: string): Promise<{ error?: string }> {
 
 	if (!target) return { error: "Mentor not found." };
 
+	const upcomingBookings = await db
+		.select()
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentor_id, target.mentorId),
+				eq(bookings.status, "confirmed"),
+				gte(bookings.start_at, new Date()),
+			),
+		)
+		.orderBy(asc(bookings.start_at));
+
+	for (const booking of upcomingBookings) {
+		try {
+			await cancelBookingCore({
+				booking,
+				mentorName: target.name,
+				mentorSlug: target.slug,
+				mentorEmail: target.email,
+				reason: "Mentor is no longer available.",
+			});
+		} catch (error) {
+			return {
+				error:
+					error instanceof Error
+						? error.message
+						: "An upcoming booking could not be cancelled.",
+			};
+		}
+	}
+
+	const supabase = await createAdminClient();
+	const { data: avatarObjects, error: avatarListError } = await supabase.storage
+		.from("mentor-avatars")
+		.list("", { search: `${target.mentorId}.` });
+	if (avatarListError) return { error: avatarListError.message };
+
+	const avatarPaths = avatarObjects
+		.filter((object) => object.name.startsWith(`${target.mentorId}.`))
+		.map((object) => object.name);
+	if (avatarPaths.length > 0) {
+		const { error: avatarDeleteError } = await supabase.storage
+			.from("mentor-avatars")
+			.remove(avatarPaths);
+		if (avatarDeleteError) return { error: avatarDeleteError.message };
+	}
+
 	// A super admin may also have a mentor profile. In that case, remove only
 	// the mentor capability so their admin account and login remain intact.
 	if (target.role === "super_admin") {
@@ -339,7 +391,6 @@ export async function deleteMentor(id: string): Promise<{ error?: string }> {
 			.delete(schema.mentors)
 			.where(eq(schema.mentors.id, target.mentorId));
 	} else {
-		const supabase = await createAdminClient();
 		const { error } = await supabase.auth.admin.deleteUser(target.authUserId);
 		if (error) return { error: error.message };
 	}
