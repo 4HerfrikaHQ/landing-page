@@ -439,7 +439,11 @@ export function EditMentorSheet({
 								>
 									{isDeleting ? "Deleting…" : "Delete"}
 								</Button>
-								<DialogContent showCloseButton={false}>
+								<DialogContent
+									showCloseButton={false}
+									className="z-[61]"
+									overlayClassName="z-60 bg-black/30"
+								>
 									<DialogHeader>
 										<DialogTitle>Delete this mentor?</DialogTitle>
 										<DialogDescription>
