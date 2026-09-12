@@ -169,6 +169,13 @@
       "when": 1789212174799,
       "tag": "0023_marvelous_sue_storm",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1789213617952,
+      "tag": "0024_schedule_booking_lifecycle",
+      "breakpoints": true
     }
   ]
 }
