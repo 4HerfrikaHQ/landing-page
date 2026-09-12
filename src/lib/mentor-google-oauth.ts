@@ -342,8 +342,8 @@ async function createMentorGoogleOAuthUrl(input: {
 		state: state.state,
 		code_challenge: state.codeChallenge,
 		code_challenge_method: "S256",
+		prompt: "consent",
 	});
-	if (input?.forceConsent) params.set("prompt", "consent");
 	return `${GOOGLE_AUTHORIZATION_URL}?${params.toString()}`;
 }
 
