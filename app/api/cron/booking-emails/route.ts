@@ -53,7 +53,7 @@ export async function GET(req: Request) {
 		);
 	}
 
-	const now = Date.now();
+	const runtime = Date.now();
 	const resend = new Resend(process.env.RESEND_API_KEY);
 	const counts = {
 		reminder24h: 0,
@@ -64,9 +64,9 @@ export async function GET(req: Request) {
 	const errors: Array<{ job: string; bookingId: string }> = [];
 	const startedAt = Date.now();
 	console.info("[booking-cron] run started", {
-		now: new Date(now).toISOString(),
+		runtime: new Date(runtime).toISOString(),
 	});
-	const context = { resend, now, counts, errors };
+	const context = { resend, runtime, counts, errors };
 
 	await Promise.all([
 		runLoggedJob("reminder24h", () => run24HourReminderJob(context)),
@@ -89,7 +89,7 @@ export async function GET(req: Request) {
 
 type JobContext = {
 	resend: Resend;
-	now: number;
+	runtime: number;
 	counts: {
 		reminder24h: number;
 		reminder1h: number;
@@ -101,12 +101,12 @@ type JobContext = {
 
 async function run24HourReminderJob({
 	resend,
-	now,
+	runtime,
 	counts,
 	errors,
 }: JobContext) {
-	const lower = new Date(now + 23 * 3600_000);
-	const upper = new Date(now + 25 * 3600_000);
+	const lower = new Date(runtime + 23 * 3600_000);
+	const upper = new Date(runtime + 25 * 3600_000);
 	const rows = await loadDueBookings("reminder_24h_sent_at", lower, upper);
 	for (const b of rows) {
 		const claimedAt = await claim(b.id, "reminder_24h_sent_at");
@@ -141,12 +141,12 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 
 async function run1HourReminderJob({
 	resend,
-	now,
+	runtime,
 	counts,
 	errors,
 }: JobContext) {
-	const lower = new Date(now + 45 * 60_000);
-	const upper = new Date(now + 75 * 60_000);
+	const lower = new Date(runtime + 45 * 60_000);
+	const upper = new Date(runtime + 75 * 60_000);
 	const rows = await loadDueBookings("reminder_1h_sent_at", lower, upper);
 	for (const b of rows) {
 		const claimedAt = await claim(b.id, "reminder_1h_sent_at");
@@ -166,7 +166,7 @@ async function run1HourReminderJob({
 
 async function runFeedbackRequestJob({
 	resend,
-	now,
+	runtime,
 	counts,
 	errors,
 }: JobContext) {
@@ -185,8 +185,8 @@ async function runFeedbackRequestJob({
 				eq(mentors.archived, false),
 				eq(bookings.status, "confirmed"),
 				isNull(bookings.feedback_email_sent_at),
-				gte(bookings.end_at, new Date(now - MAX_BACKLOG_AGE_MS)),
-				lt(bookings.end_at, new Date(now - 30 * 60_000)),
+				gte(bookings.end_at, new Date(runtime - MAX_BACKLOG_AGE_MS)),
+				lt(bookings.end_at, new Date(runtime - 30 * 60_000)),
 			),
 		)
 		.limit(100);
@@ -197,7 +197,7 @@ async function runFeedbackRequestJob({
 			const token = await createActionLink({
 				resourceId: b.id,
 				action: "feedback",
-				expiresAt: new Date(now + 14 * 24 * 3600_000),
+				expiresAt: new Date(runtime + 14 * 24 * 3600_000),
 			});
 			await sendEmail(resend, {
 				from: FROM,
@@ -225,7 +225,7 @@ ${siteUrl()}/bookings/${token}/feedback
 
 async function runMentorFollowupJob({
 	resend,
-	now,
+	runtime,
 	counts,
 	errors,
 }: JobContext) {
@@ -244,8 +244,8 @@ async function runMentorFollowupJob({
 				eq(mentors.archived, false),
 				ne(bookings.status, "cancelled"),
 				isNull(bookings.mentor_followup_sent_at),
-				gte(bookings.end_at, new Date(now - MAX_BACKLOG_AGE_MS)),
-				lt(bookings.end_at, new Date(now - 2 * 3600_000)),
+				gte(bookings.end_at, new Date(runtime - MAX_BACKLOG_AGE_MS)),
+				lt(bookings.end_at, new Date(runtime - 2 * 3600_000)),
 			),
 		)
 		.limit(100);
