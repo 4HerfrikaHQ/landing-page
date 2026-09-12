@@ -112,6 +112,7 @@ export function SlotPicker({
 	const todayKey = formatInTimeZone(today, tz, "yyyy-MM-dd");
 
 	const totalSlots = query.data?.slots?.length ?? 0;
+	const bookingUnavailable = query.data?.bookingUnavailable === true;
 	const weekIsEmpty = !query.isPending && !query.isError && totalSlots === 0;
 
 	// Selected day: explicit choice if it's in this week and bookable, else the
@@ -120,7 +121,9 @@ export function SlotPicker({
 		(k) => (slotsByDay.get(k)?.length ?? 0) > 0,
 	);
 	const selectedDayKey =
-		dayParam && dayKeys.includes(dayParam) && (slotsByDay.get(dayParam)?.length ?? 0) > 0
+		dayParam &&
+		dayKeys.includes(dayParam) &&
+		(slotsByDay.get(dayParam)?.length ?? 0) > 0
 			? dayParam
 			: (firstDayWithSlots ??
 				(dayKeys.includes(todayKey) ? todayKey : dayKeys[0]));
@@ -131,47 +134,49 @@ export function SlotPicker({
 
 	return (
 		<div className="space-y-4">
-			<div className="flex flex-wrap items-center justify-between gap-3">
-				<div className="flex items-center gap-2">
-					<Button
-						variant="outline"
-						size="icon-sm"
-						aria-label="Previous week"
-						onClick={() => goToWeek(addDays(weekStart, -7))}
-					>
-						<ChevronLeft className="size-4" />
-					</Button>
-					<span className="min-w-44 text-center text-sm font-medium text-foreground">
-						{format(weekStart, "MMM d")} –{" "}
-						{format(addDays(weekStart, 6), "MMM d, yyyy")}
-					</span>
-					<Button
-						variant="outline"
-						size="icon-sm"
-						aria-label="Next week"
-						onClick={() => goToWeek(addDays(weekStart, 7))}
-					>
-						<ChevronRight className="size-4" />
-					</Button>
-				</div>
+			{!bookingUnavailable && (
+				<div className="flex flex-wrap items-center justify-between gap-3">
+					<div className="flex items-center gap-2">
+						<Button
+							variant="outline"
+							size="icon-sm"
+							aria-label="Previous week"
+							onClick={() => goToWeek(addDays(weekStart, -7))}
+						>
+							<ChevronLeft className="size-4" />
+						</Button>
+						<span className="min-w-44 text-center text-sm font-medium text-foreground">
+							{format(weekStart, "MMM d")} –{" "}
+							{format(addDays(weekStart, 6), "MMM d, yyyy")}
+						</span>
+						<Button
+							variant="outline"
+							size="icon-sm"
+							aria-label="Next week"
+							onClick={() => goToWeek(addDays(weekStart, 7))}
+						>
+							<ChevronRight className="size-4" />
+						</Button>
+					</div>
 
-				<Select
-					value={tz}
-					onValueChange={(v) => v && setTzParam(v as string)}
-				>
-					<SelectTrigger className="h-9 gap-2 rounded-full bg-white">
-						<Globe className="size-4 text-primary-500" />
-						<SelectValue />
-					</SelectTrigger>
-					<SelectContent className="max-h-72 w-56 p-1">
-						{tzOptions.map((t) => (
-							<SelectItem key={t} value={t} className="py-1.5">
-								{t.replace(/_/g, " ")}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			</div>
+					<Select
+						value={tz}
+						onValueChange={(v) => v && setTzParam(v as string)}
+					>
+						<SelectTrigger className="h-9 gap-2 rounded-full bg-white">
+							<Globe className="size-4 text-primary-500" />
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent className="max-h-72 w-56 p-1">
+							{tzOptions.map((t) => (
+								<SelectItem key={t} value={t} className="py-1.5">
+									{t.replace(/_/g, " ")}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</div>
+			)}
 
 			{query.isError && (
 				<div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -198,6 +203,18 @@ export function SlotPicker({
 							/>
 						))}
 					</div>
+				</div>
+			) : bookingUnavailable ? (
+				<div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-white/50 px-6 py-12 text-center">
+					<span className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-surface-pink text-primary-500">
+						<CalendarX2 className="size-6" strokeWidth={1.75} />
+					</span>
+					<p className="text-sm font-medium text-foreground">
+						Bookings are currently unavailable
+					</p>
+					<p className="mt-1 text-sm text-muted-foreground">
+						Please check back later.
+					</p>
 				</div>
 			) : weekIsEmpty ? (
 				<div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-white/50 px-6 py-12 text-center">
@@ -302,10 +319,12 @@ export function SlotPicker({
 				</div>
 			)}
 
-			<p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-				<Globe className="size-3.5" />
-				All times shown in {tz.replace(/_/g, " ")}.
-			</p>
+			{!bookingUnavailable && (
+				<p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+					<Globe className="size-3.5" />
+					All times shown in {tz.replace(/_/g, " ")}.
+				</p>
+			)}
 		</div>
 	);
 }

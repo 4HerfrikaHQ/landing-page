@@ -287,6 +287,7 @@ export const listMentorSlots = actionClient
 				errorType: error instanceof Error ? error.name : typeof error,
 			});
 			return {
+				bookingUnavailable: true,
 				mentorId: mentor.id,
 				mentorTimezone: "UTC",
 				slots: [],
@@ -331,6 +332,7 @@ export const listMentorSlots = actionClient
 		});
 
 		return {
+			bookingUnavailable: false,
 			mentorId: mentor.id,
 			mentorTimezone: availabilityWindows[0]?.timezone ?? "UTC",
 			slots,
