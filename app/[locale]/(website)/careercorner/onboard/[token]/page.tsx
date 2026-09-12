@@ -1,15 +1,52 @@
-import { AvailabilityEditor } from "@/components/availability-editor";
-import { saveOnboardingAvailability } from "@/src/db/actions/availability";
+import type {
+	MentorCalendarCallbackOutcome,
+	MentorCalendarCallbackReason,
+} from "@/app/(dashboard)/dashboard/mentor/profile/_components/mentor-calendar-connection";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
+import { saveOnboardingAvailability } from "@/src/db/actions/availability";
 import { CircleAlertIcon, SparklesIcon } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import FourHerfrikaLogo from "../../../4herfrika-logo";
 import { loadMentorFromToken } from "./_actions";
-import { OnboardingForm } from "./_components/onboarding-form";
+import { OnboardingCalendarStep } from "./_components/onboarding-calendar-step";
 import { OnboardingStepper } from "./_components/onboarding-stepper";
+
+const ALLOWED_CALLBACK_REASONS: readonly MentorCalendarCallbackReason[] = [
+	"oauth_denied",
+	"google_account_conflict",
+	"expired_state",
+	"invalid_state",
+	"insufficient_scope",
+	"invalid_grant",
+	"oauth_exchange_failed",
+	"identity_lookup_failed",
+	"refresh_token_missing",
+	"connection_unavailable",
+];
+
+function firstSearchParam(value: string | string[] | undefined) {
+	return Array.isArray(value) ? value[0] : value;
+}
+
+function getCallbackOutcome(
+	params: Record<string, string | string[] | undefined> | undefined,
+): MentorCalendarCallbackOutcome | null {
+	if (!params || firstSearchParam(params.googleCalendar) !== "error") {
+		return null;
+	}
+
+	const reason = firstSearchParam(params.reason);
+	return {
+		reason: ALLOWED_CALLBACK_REASONS.includes(
+			reason as MentorCalendarCallbackReason,
+		)
+			? (reason as MentorCalendarCallbackReason)
+			: "connection_unavailable",
+	};
+}
 
 function OnboardShell({ children }: { children: React.ReactNode }) {
 	return (
@@ -44,13 +81,18 @@ export async function generateMetadata({
 
 export default async function OnboardingPage({
 	params,
+	searchParams,
 }: {
 	params: Promise<{ locale: string; token: string }>;
+	searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
 	const { locale, token } = await params;
 	setRequestLocale(locale as Locale);
 
-	const result = await loadMentorFromToken(token);
+	const [result, callbackParams] = await Promise.all([
+		loadMentorFromToken(token),
+		searchParams,
+	]);
 
 	if (!result.ok) {
 		return (
@@ -73,7 +115,8 @@ export default async function OnboardingPage({
 		);
 	}
 
-	const { mentor, availability } = result;
+	const { mentor, availability, calendarConnection } = result;
+	const callbackOutcome = getCallbackOutcome(callbackParams);
 	const saveAvailability = saveOnboardingAvailability.bind(null, token);
 
 	if (mentor.active) {
@@ -114,28 +157,36 @@ export default async function OnboardingPage({
 						Welcome, {mentor.name}
 					</h1>
 					<p className="mt-2 max-w-md text-muted-foreground">
-						Set your availability and profile in two quick steps. You can edit
-						everything later from your dashboard.
+						Set your availability, complete your profile, and connect Google
+						Calendar before going live. You can edit everything later from your
+						dashboard.
 					</p>
 				</header>
 
 				<div className="mt-10 rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8">
 					<OnboardingStepper
-						availabilitySlot={
-							<AvailabilityEditor
-								mentorId={mentor.id}
-								initialSlots={availability}
-								onSave={saveAvailability}
-							/>
-						}
-						profileSlot={
-							<OnboardingForm
+						availability={{
+							mentorId: mentor.id,
+							initialSlots: availability,
+							saveAvailabilityAction: saveAvailability,
+						}}
+						profile={{
+							token,
+							defaultBio: mentor.bio ?? "",
+							defaultDisplayName: mentor.nickname ?? "",
+							defaultImage: mentor.image ?? "",
+						}}
+						calendarSlot={
+							<OnboardingCalendarStep
 								token={token}
-								defaultBio={mentor.bio ?? ""}
-								defaultDisplayName={mentor.nickname ?? ""}
-								defaultImage={mentor.image ?? ""}
+								locale={locale}
+								connection={calendarConnection}
+								callbackOutcome={callbackOutcome}
 							/>
 						}
+						calendarConnected={calendarConnection.status === "connected"}
+						availabilityComplete={availability.length > 0}
+						profileComplete={Boolean(mentor.bio)}
 					/>
 				</div>
 			</FadeIn>

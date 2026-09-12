@@ -10,7 +10,7 @@ import {
 } from "@/src/db/schema/tables/mentor-applications";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { createActionLink } from "@/src/lib/action-links";
+import { sendMentorOnboardingInvite } from "@/src/lib/mentor-onboarding-invite";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { type SQL, and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
@@ -26,29 +26,6 @@ function slugify(input: string): string {
 		.normalize("NFKD")
 		.replace(/[^a-z0-9]+/g, "-")
 		.replace(/(^-|-$)/g, "");
-}
-
-async function sendApprovalEmail(params: {
-	to: string;
-	name: string;
-	onboardToken: string;
-}) {
-	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://4herfrika.org";
-	const url = `${siteUrl}/careercorner/onboard/${params.onboardToken}`;
-	const resend = new Resend(process.env.RESEND_API_KEY);
-	await resend.emails.send({
-		from: FROM,
-		to: params.to,
-		subject: "Welcome to 4HerFrika — finish setting up your mentor profile",
-		text: `Hi ${params.name},
-
-Your mentor application was approved! Finish your profile and set your availability here:
-${url}
-
-This link expires in 30 days.
-
-— 4HerFrika`,
-	});
 }
 
 async function sendRejectionEmail(params: {
@@ -217,16 +194,11 @@ export const approveMentorApplication = adminAction
 			return { mentorId: mentor.id };
 		});
 
-		const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-		const token = await createActionLink({
-			resourceId: result.mentorId,
-			action: "mentor_onboard",
-			expiresAt,
-		});
-		await sendApprovalEmail({
+		await sendMentorOnboardingInvite({
+			mentorId: result.mentorId,
 			to: app.email,
 			name: app.name,
-			onboardToken: token,
+			intro: "Your mentor application was approved!",
 		});
 
 		revalidatePath("/dashboard/admin/applications");

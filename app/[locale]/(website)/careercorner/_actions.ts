@@ -18,9 +18,26 @@ export type HeroMentor = {
 export async function getMentors(): Promise<MentorWithAvailability[]> {
 	const rows = await db.query.mentors.findMany({
 		where: eq(schema.mentors.active, true),
-		with: { availability: true, user: { columns: { name: true } } },
+		with: {
+			availability: true,
+			googleConnection: true,
+			user: { columns: { name: true } },
+		},
 	});
-	return rows.map((m) => ({ ...m, name: m.user.name }));
+	return rows.map((mentor) => {
+		const { googleConnection: connection, user, ...mentorRow } = mentor;
+		const canAcceptBookings =
+			connection?.status === "connected" &&
+			connection.refresh_token_ciphertext !== null &&
+			connection.revocation_state === "not_pending" &&
+			connection.reauthorization_state === "not_required";
+
+		return {
+			...mentorRow,
+			name: user.name,
+			availability: canAcceptBookings ? mentor.availability : [],
+		};
+	});
 }
 
 export async function getHeroMentors(): Promise<HeroMentor[]> {

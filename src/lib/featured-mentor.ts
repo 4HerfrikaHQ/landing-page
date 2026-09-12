@@ -3,7 +3,7 @@ import type {
 	DbFeaturedMentorState,
 	DbMentorWithAvailability,
 } from "@/src/db/schema/tables";
-import { and, eq } from "drizzle-orm";
+import { and, eq, exists, isNotNull } from "drizzle-orm";
 
 export const CYCLE_MS = 3 * 24 * 60 * 60 * 1000;
 export const SINGLETON_ID = "00000000-0000-0000-0000-000000000001";
@@ -26,7 +26,32 @@ function shuffle<T>(input: T[]): T[] {
 
 async function getEligibleMentors(): Promise<DbMentorWithAvailability[]> {
 	const all = await db.query.mentors.findMany({
-		where: eq(schema.mentors.active, true),
+		where: and(
+			eq(schema.mentors.active, true),
+			exists(
+				db
+					.select({ id: schema.mentorGoogleConnections.id })
+					.from(schema.mentorGoogleConnections)
+					.where(
+						and(
+							eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+							eq(schema.mentorGoogleConnections.status, "connected"),
+							isNotNull(
+								schema.mentorGoogleConnections.refresh_token_ciphertext,
+							),
+							eq(
+								schema.mentorGoogleConnections.revocation_state,
+								"not_pending",
+							),
+							eq(
+								schema.mentorGoogleConnections.reauthorization_state,
+								"not_required",
+							),
+						),
+					)
+					.limit(1),
+			),
+		),
 		with: { availability: true, user: { columns: { name: true } } },
 	});
 	return all.filter(isEligible).map((m) => ({ ...m, name: m.user.name }));
@@ -59,6 +84,29 @@ export async function resolveFeaturedMentor(): Promise<DbMentorWithAvailability 
 			where: and(
 				eq(schema.mentors.id, state.featured_mentor_id),
 				eq(schema.mentors.active, true),
+				exists(
+					db
+						.select({ id: schema.mentorGoogleConnections.id })
+						.from(schema.mentorGoogleConnections)
+						.where(
+							and(
+								eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+								eq(schema.mentorGoogleConnections.status, "connected"),
+								isNotNull(
+									schema.mentorGoogleConnections.refresh_token_ciphertext,
+								),
+								eq(
+									schema.mentorGoogleConnections.revocation_state,
+									"not_pending",
+								),
+								eq(
+									schema.mentorGoogleConnections.reauthorization_state,
+									"not_required",
+								),
+							),
+						)
+						.limit(1),
+				),
 			),
 			with: { availability: true, user: { columns: { name: true } } },
 		});
