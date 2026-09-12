@@ -117,6 +117,7 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 			.innerJoin(users, eq(mentors.user_id, users.id))
 			.where(
 				and(
+					eq(mentors.archived, false),
 					eq(bookings.status, "confirmed"),
 					isNull(bookings.feedback_email_sent_at),
 					lt(bookings.end_at, new Date(now - 30 * 60_000)),
@@ -166,6 +167,7 @@ ${siteUrl()}/bookings/${token}/feedback
 			.innerJoin(users, eq(mentors.user_id, users.id))
 			.where(
 				and(
+					eq(mentors.archived, false),
 					ne(bookings.status, "cancelled"),
 					isNull(bookings.mentor_followup_sent_at),
 					lt(bookings.end_at, new Date(now - 2 * 3600_000)),
@@ -255,6 +257,7 @@ async function loadDueBookings(
 		.leftJoin(availability, eq(availability.mentor_id, mentors.id))
 		.where(
 			and(
+				eq(mentors.archived, false),
 				eq(bookings.status, "confirmed"),
 				isNull(sentAtCol),
 				gte(bookings.start_at, lower),

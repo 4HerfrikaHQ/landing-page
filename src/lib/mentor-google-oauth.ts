@@ -107,7 +107,7 @@ const repository: MentorGoogleOAuthRepository = {
 			.select({ userId: mentors.user_id, userEmail: users.email })
 			.from(mentors)
 			.innerJoin(users, eq(users.id, mentors.user_id))
-			.where(eq(mentors.id, input.mentorId))
+			.where(and(eq(mentors.id, input.mentorId), eq(mentors.archived, false)))
 			.limit(1);
 		if (!mentor || mentor.userId !== input.userId) {
 			throw new MentorGoogleOAuthError("state_mentor_mismatch");

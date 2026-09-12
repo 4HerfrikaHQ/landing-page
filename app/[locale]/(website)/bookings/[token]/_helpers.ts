@@ -49,7 +49,7 @@ export async function loadRescheduleContext(bookingId: string) {
 		.select({ mentor: mentors, user: users })
 		.from(mentors)
 		.leftJoin(users, eq(users.id, mentors.user_id))
-		.where(eq(mentors.id, booking.mentor_id))
+		.where(and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)))
 		.limit(1);
 	const mentor = mentorRow?.mentor;
 	const mentorUser = mentorRow?.user;

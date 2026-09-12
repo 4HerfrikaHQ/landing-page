@@ -39,7 +39,7 @@ function bookingConditions(
 	filters: BookingFilters,
 	options: { includeStatus?: boolean } = {},
 ) {
-	const conditions: SQL<unknown>[] = [];
+	const conditions: SQL<unknown>[] = [eq(mentors.archived, false)];
 	const now = new Date();
 
 	if (options.includeStatus !== false) {
@@ -185,6 +185,7 @@ export async function getMentorOptions() {
 		.select({ id: mentors.id, name: users.name, slug: mentors.slug })
 		.from(mentors)
 		.innerJoin(users, eq(mentors.user_id, users.id))
+		.where(eq(mentors.archived, false))
 		.orderBy(asc(users.name));
 }
 

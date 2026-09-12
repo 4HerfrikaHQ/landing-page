@@ -160,7 +160,7 @@ async function loadOwnBooking(bookingId: string) {
 			mentorBookingSettings,
 			eq(mentorBookingSettings.mentor_id, mentors.id),
 		)
-		.where(eq(bookings.id, bookingId))
+		.where(and(eq(bookings.id, bookingId), eq(mentors.archived, false)))
 		.limit(1);
 	if (!row) throw new ActionError("Booking not found");
 	if (row.mentorUserId !== user.id || row.mentorId !== mentor.id) {

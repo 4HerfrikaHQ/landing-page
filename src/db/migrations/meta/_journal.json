@@ -162,6 +162,13 @@
       "when": 1789158966994,
       "tag": "0022_cascade_auth_user_deletion",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1789212174799,
+      "tag": "0023_marvelous_sue_storm",
+      "breakpoints": true
     }
   ]
 }
