@@ -1,5 +1,14 @@
 import { AvailabilityEditor } from "@/components/availability-editor";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,7 +32,7 @@ import {
 import { DownloadIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
-import { updateMentor } from "../_actions";
+import { deleteMentor, updateMentor } from "../_actions";
 
 type Tab = "details" | "availability";
 
@@ -70,7 +79,9 @@ export function EditMentorSheet({
 	const [slug, setSlug] = useState(mentor.slug);
 	const [isDirty, setIsDirty] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
+	const [isDeleting, startDeleteTransition] = useTransition();
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
@@ -130,6 +141,21 @@ export function EditMentorSheet({
 				setIsDirty(false);
 				onOpenChange(false);
 			}
+		});
+	}
+
+	function handleDelete() {
+		setError(null);
+		startDeleteTransition(async () => {
+			const result = await deleteMentor(mentor.id);
+			if (result.error) {
+				setError(result.error);
+				setConfirmDeleteOpen(false);
+				return;
+			}
+
+			setConfirmDeleteOpen(false);
+			onOpenChange(false);
 		});
 	}
 
@@ -398,19 +424,70 @@ export function EditMentorSheet({
 							)}
 						</form>
 
-						<SheetFooter className="px-6 py-4 border-t flex-row justify-end gap-2">
-							<SheetClose render={<Button variant="ghost" size="sm" />}>
-								Cancel
-							</SheetClose>
-							<Button
-								type="submit"
-								form="edit-mentor-form"
-								variant="solid"
-								size="sm"
-								disabled={isPending || !parsedSlug.success}
+						<SheetFooter className="flex-row justify-between gap-2 border-t px-6 py-4">
+							<Dialog
+								open={confirmDeleteOpen}
+								onOpenChange={setConfirmDeleteOpen}
 							>
-								{isPending ? "Saving…" : "Save changes"}
-							</Button>
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="text-destructive hover:bg-destructive/5 hover:text-destructive"
+									disabled={isDeleting}
+									onClick={() => setConfirmDeleteOpen(true)}
+								>
+									{isDeleting ? "Deleting…" : "Delete"}
+								</Button>
+								{confirmDeleteOpen ? (
+									<div
+										aria-hidden
+										className="fixed inset-0 z-[60] bg-black/30"
+									/>
+								) : null}
+								<DialogContent showCloseButton={false} className="z-[61]">
+									<DialogHeader>
+										<DialogTitle>Delete this mentor?</DialogTitle>
+										<DialogDescription>
+											{mentor.name}&apos;s profile, availability, bookings, and
+											mentor access will be permanently removed. Upcoming
+											sessions will be cancelled and attendees notified. This
+											can&apos;t be undone.
+										</DialogDescription>
+									</DialogHeader>
+									<DialogFooter>
+										<DialogClose
+											render={<Button variant="outline" size="sm" />}
+										>
+											Cancel
+										</DialogClose>
+										<Button
+											type="button"
+											variant="solid"
+											size="sm"
+											className="bg-destructive text-white hover:bg-destructive/90"
+											disabled={isDeleting}
+											onClick={handleDelete}
+										>
+											{isDeleting ? "Deleting…" : "Delete mentor"}
+										</Button>
+									</DialogFooter>
+								</DialogContent>
+							</Dialog>
+							<div className="flex gap-2">
+								<SheetClose render={<Button variant="ghost" size="sm" />}>
+									Cancel
+								</SheetClose>
+								<Button
+									type="submit"
+									form="edit-mentor-form"
+									variant="solid"
+									size="sm"
+									disabled={isPending || isDeleting || !parsedSlug.success}
+								>
+									{isPending ? "Saving…" : "Save changes"}
+								</Button>
+							</div>
 						</SheetFooter>
 					</>
 				) : (
