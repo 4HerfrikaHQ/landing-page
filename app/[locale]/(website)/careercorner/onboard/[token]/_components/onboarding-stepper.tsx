@@ -1,6 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { AvailabilityEditor } from "@/components/availability-editor";
+import type { AvailabilitySlotInput } from "@/src/db/actions/availability";
+import type { DbAvailability } from "@/src/db/schema/tables";
 import { cn } from "@/utils/cn";
 import {
 	CalendarClockIcon,
@@ -21,14 +23,22 @@ const steps: { id: StepId; label: string; icon: typeof CalendarClockIcon }[] = [
 ];
 
 export function OnboardingStepper({
-	availabilitySlot,
+	availability,
 	profile,
 	calendarSlot,
 	calendarConnected,
 	availabilityComplete,
 	profileComplete,
 }: {
-	availabilitySlot: ReactNode;
+	availability: {
+		mentorId: string;
+		initialSlots: DbAvailability[];
+		saveAvailabilityAction: (
+			mentorId: string,
+			slots: AvailabilitySlotInput[],
+			timezone: string,
+		) => Promise<{ error?: string }>;
+	};
 	profile: {
 		token: string;
 		defaultBio: string;
@@ -150,18 +160,17 @@ export function OnboardingStepper({
 						title="Set your weekly availability"
 						description="Add at least one slot for each day you can take calls, then save. You can change this anytime from your dashboard."
 					/>
-					{availabilitySlot}
-					<div className="flex justify-end pt-2">
-						<Button
-							size="sm"
-							onClick={() => {
-								setAvailabilityDone(true);
-								setActive("profile");
-							}}
-						>
-							Continue to profile
-						</Button>
-					</div>
+					<AvailabilityEditor
+						mentorId={availability.mentorId}
+						initialSlots={availability.initialSlots}
+						onSave={availability.saveAvailabilityAction}
+						requireAtLeastOneSlot
+						saveLabel="Save availability & continue"
+						onSaved={() => {
+							setAvailabilityDone(true);
+							setActive("profile");
+						}}
+					/>
 				</div>
 			) : visibleActive === "profile" ? (
 				<div className="space-y-6">

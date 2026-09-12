@@ -138,6 +138,9 @@ export function AvailabilityEditor({
 	mentorId,
 	initialSlots,
 	onSave,
+	onSaved,
+	requireAtLeastOneSlot = false,
+	saveLabel = "Save availability",
 }: {
 	mentorId: string;
 	initialSlots: DbAvailability[];
@@ -146,6 +149,9 @@ export function AvailabilityEditor({
 		slots: AvailabilitySlotInput[],
 		timezone: string,
 	) => Promise<{ error?: string }>;
+	onSaved?: () => void;
+	requireAtLeastOneSlot?: boolean;
+	saveLabel?: string;
 }) {
 	const [timezone, setTimezone] = useState(
 		initialSlots[0]?.timezone ?? "Africa/Lagos",
@@ -197,6 +203,10 @@ export function AvailabilityEditor({
 	function handleSave() {
 		setError(null);
 		setSaved(false);
+		if (requireAtLeastOneSlot && slots.length === 0) {
+			setError("Add at least one availability slot before continuing.");
+			return;
+		}
 
 		const validationErrors = validateSlots(slots);
 		if (validationErrors.size > 0) {
@@ -214,6 +224,7 @@ export function AvailabilityEditor({
 					setError(result.error);
 				} else {
 					setSaved(true);
+					onSaved?.();
 				}
 			} catch {
 				setError("Your availability could not be saved. Please try again.");
@@ -433,7 +444,7 @@ export function AvailabilityEditor({
 					onClick={handleSave}
 					disabled={isPending}
 				>
-					{isPending ? "Saving…" : "Save availability"}
+					{isPending ? "Saving…" : saveLabel}
 				</Button>
 			</div>
 		</div>

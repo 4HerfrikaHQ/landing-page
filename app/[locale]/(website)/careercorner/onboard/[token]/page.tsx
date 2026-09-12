@@ -2,7 +2,6 @@ import type {
 	MentorCalendarCallbackOutcome,
 	MentorCalendarCallbackReason,
 } from "@/app/(dashboard)/dashboard/mentor/profile/_components/mentor-calendar-connection";
-import { AvailabilityEditor } from "@/components/availability-editor";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
@@ -166,13 +165,11 @@ export default async function OnboardingPage({
 
 				<div className="mt-10 rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8">
 					<OnboardingStepper
-						availabilitySlot={
-							<AvailabilityEditor
-								mentorId={mentor.id}
-								initialSlots={availability}
-								onSave={saveAvailability}
-							/>
-						}
+						availability={{
+							mentorId: mentor.id,
+							initialSlots: availability,
+							saveAvailabilityAction: saveAvailability,
+						}}
 						profile={{
 							token,
 							defaultBio: mentor.bio ?? "",
