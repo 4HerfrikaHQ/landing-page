@@ -35,6 +35,7 @@ export async function loadBookingFromToken(token: string) {
 		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)))
 		.limit(1);
+	if (!mentor) return { ok: false as const, reason: "not_found" };
 	return { ok: true as const, booking, mentor };
 }
 
