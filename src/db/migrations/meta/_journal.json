@@ -176,6 +176,13 @@
       "when": 1789213617952,
       "tag": "0024_schedule_booking_lifecycle",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1789226793231,
+      "tag": "0025_update_booking_lifecycle_cron_interval",
+      "breakpoints": true
     }
   ]
 }

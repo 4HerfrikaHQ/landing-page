@@ -24,6 +24,7 @@ export const maxDuration = 300;
 const FROM =
 	process.env.RESEND_FROM_HEADER ?? "4HerFrika <bookings@4herfrika.org>";
 const MAX_BACKLOG_AGE_MS = 14 * 24 * 3600_000;
+const AFTER_CALL_EMAIL_DELAY_MS = 5 * 60_000;
 
 function fmt(date: Date, tz: string): string {
 	return formatInTimeZone(date, tz, "EEEE, MMM d, yyyy 'at' HH:mm zzz");
@@ -186,7 +187,7 @@ async function runFeedbackRequestJob({
 				eq(bookings.status, "confirmed"),
 				isNull(bookings.feedback_email_sent_at),
 				gte(bookings.end_at, new Date(runtime - MAX_BACKLOG_AGE_MS)),
-				lt(bookings.end_at, new Date(runtime - 30 * 60_000)),
+				lt(bookings.end_at, new Date(runtime - AFTER_CALL_EMAIL_DELAY_MS)),
 			),
 		)
 		.limit(100);
@@ -245,7 +246,7 @@ async function runMentorFollowupJob({
 				ne(bookings.status, "cancelled"),
 				isNull(bookings.mentor_followup_sent_at),
 				gte(bookings.end_at, new Date(runtime - MAX_BACKLOG_AGE_MS)),
-				lt(bookings.end_at, new Date(runtime - 2 * 3600_000)),
+				lt(bookings.end_at, new Date(runtime - AFTER_CALL_EMAIL_DELAY_MS)),
 			),
 		)
 		.limit(100);
