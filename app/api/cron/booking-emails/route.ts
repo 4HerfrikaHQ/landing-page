@@ -66,165 +66,13 @@ export async function GET(req: Request) {
 	console.info("[booking-cron] run started", {
 		now: new Date(now).toISOString(),
 	});
-
-	async function run24HourReminderJob() {
-		const lower = new Date(now + 23 * 3600_000);
-		const upper = new Date(now + 25 * 3600_000);
-		const rows = await loadDueBookings("reminder_24h_sent_at", lower, upper);
-		for (const b of rows) {
-			const claimedAt = await claim(b.id, "reminder_24h_sent_at");
-			if (!claimedAt) continue;
-			try {
-				const manageToken = await createActionLink({
-					resourceId: b.id,
-					action: "manage",
-					expiresAt: b.start_at,
-				});
-				await sendEmail(resend, {
-					from: FROM,
-					to: b.mentee_email,
-					subject: `Tomorrow: your call with ${b.mentorName}`,
-					text: `Hi ${b.mentee_name},
-
-Quick reminder — your call with ${b.mentorName} is tomorrow at ${fmt(b.start_at, b.mentee_timezone)}.
-
-Join: ${b.meet_url}
-${joinTip(b.mentee_email)}
-Need to reschedule? ${siteUrl()}/bookings/${manageToken}
-
-— 4HerFrika`,
-				});
-				counts.reminder24h += 1;
-			} catch (error) {
-				await release(b.id, "reminder_24h_sent_at", claimedAt);
-				recordError(errors, "reminder24h", b.id, error);
-			}
-		}
-	}
-
-	async function run1HourReminderJob() {
-		const lower = new Date(now + 45 * 60_000);
-		const upper = new Date(now + 75 * 60_000);
-		const rows = await loadDueBookings("reminder_1h_sent_at", lower, upper);
-		for (const b of rows) {
-			const claimedAt = await claim(b.id, "reminder_1h_sent_at");
-			if (!claimedAt) continue;
-			try {
-				await Promise.all([
-					sendMenteeReminder(resend, b),
-					sendMentorReminder(resend, b),
-				]);
-				counts.reminder1h += 1;
-			} catch (error) {
-				await release(b.id, "reminder_1h_sent_at", claimedAt);
-				recordError(errors, "reminder1h", b.id, error);
-			}
-		}
-	}
-
-	async function runFeedbackRequestJob() {
-		const rows = await db
-			.select({
-				id: bookings.id,
-				mentee_name: bookings.mentee_name,
-				mentee_email: bookings.mentee_email,
-				mentorName: users.name,
-			})
-			.from(bookings)
-			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
-			.innerJoin(users, eq(mentors.user_id, users.id))
-			.where(
-				and(
-					eq(mentors.archived, false),
-					eq(bookings.status, "confirmed"),
-					isNull(bookings.feedback_email_sent_at),
-					gte(bookings.end_at, new Date(now - MAX_BACKLOG_AGE_MS)),
-					lt(bookings.end_at, new Date(now - 30 * 60_000)),
-				),
-			)
-			.limit(100);
-		for (const b of rows) {
-			const claimedAt = await claim(b.id, "feedback_email_sent_at");
-			if (!claimedAt) continue;
-			try {
-				const token = await createActionLink({
-					resourceId: b.id,
-					action: "feedback",
-					expiresAt: new Date(now + 14 * 24 * 3600_000),
-				});
-				await sendEmail(resend, {
-					from: FROM,
-					to: b.mentee_email,
-					subject: `How was your call with ${b.mentorName}?`,
-					text: `Hi ${b.mentee_name},
-
-Thanks for booking with 4HerFrika. Would you take a minute to share how the call went?
-
-${siteUrl()}/bookings/${token}/feedback
-
-— 4HerFrika`,
-				});
-				await db
-					.update(bookings)
-					.set({ status: "completed" })
-					.where(eq(bookings.id, b.id));
-				counts.feedback += 1;
-			} catch (error) {
-				await release(b.id, "feedback_email_sent_at", claimedAt);
-				recordError(errors, "feedback", b.id, error);
-			}
-		}
-	}
-
-	async function runMentorFollowupJob() {
-		const rows = await db
-			.select({
-				id: bookings.id,
-				mentee_name: bookings.mentee_name,
-				mentorName: users.name,
-				mentorEmail: users.email,
-			})
-			.from(bookings)
-			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
-			.innerJoin(users, eq(mentors.user_id, users.id))
-			.where(
-				and(
-					eq(mentors.archived, false),
-					ne(bookings.status, "cancelled"),
-					isNull(bookings.mentor_followup_sent_at),
-					gte(bookings.end_at, new Date(now - MAX_BACKLOG_AGE_MS)),
-					lt(bookings.end_at, new Date(now - 2 * 3600_000)),
-				),
-			)
-			.limit(100);
-		for (const b of rows) {
-			const claimedAt = await claim(b.id, "mentor_followup_sent_at");
-			if (!claimedAt) continue;
-			if (!b.mentorEmail) continue;
-			try {
-				await sendEmail(resend, {
-					from: FROM,
-					to: b.mentorEmail,
-					subject: `Follow-up: your call with ${b.mentee_name}`,
-					text: `Hi ${b.mentorName},
-
-Thanks again for showing up. If there's anything you wanted to follow up with ${b.mentee_name} about, now's a good time. You can see your past sessions in your dashboard.
-
-— 4HerFrika`,
-				});
-				counts.mentorFollowup += 1;
-			} catch (error) {
-				await release(b.id, "mentor_followup_sent_at", claimedAt);
-				recordError(errors, "mentorFollowup", b.id, error);
-			}
-		}
-	}
+	const context = { resend, now, counts, errors };
 
 	await Promise.all([
-		runLoggedJob("reminder24h", run24HourReminderJob),
-		runLoggedJob("reminder1h", run1HourReminderJob),
-		runLoggedJob("feedback", runFeedbackRequestJob),
-		runLoggedJob("mentorFollowup", runMentorFollowupJob),
+		runLoggedJob("reminder24h", () => run24HourReminderJob(context)),
+		runLoggedJob("reminder1h", () => run1HourReminderJob(context)),
+		runLoggedJob("feedback", () => runFeedbackRequestJob(context)),
+		runLoggedJob("mentorFollowup", () => runMentorFollowupJob(context)),
 	]);
 
 	console.info("[booking-cron] run completed", {
@@ -237,6 +85,191 @@ Thanks again for showing up. If there's anything you wanted to follow up with ${
 		{ ok: errors.length === 0, counts, errors },
 		{ status: errors.length === 0 ? 200 : 500 },
 	);
+}
+
+type JobContext = {
+	resend: Resend;
+	now: number;
+	counts: {
+		reminder24h: number;
+		reminder1h: number;
+		feedback: number;
+		mentorFollowup: number;
+	};
+	errors: Array<{ job: string; bookingId: string }>;
+};
+
+async function run24HourReminderJob({
+	resend,
+	now,
+	counts,
+	errors,
+}: JobContext) {
+	const lower = new Date(now + 23 * 3600_000);
+	const upper = new Date(now + 25 * 3600_000);
+	const rows = await loadDueBookings("reminder_24h_sent_at", lower, upper);
+	for (const b of rows) {
+		const claimedAt = await claim(b.id, "reminder_24h_sent_at");
+		if (!claimedAt) continue;
+		try {
+			const manageToken = await createActionLink({
+				resourceId: b.id,
+				action: "manage",
+				expiresAt: b.start_at,
+			});
+			await sendEmail(resend, {
+				from: FROM,
+				to: b.mentee_email,
+				subject: `Tomorrow: your call with ${b.mentorName}`,
+				text: `Hi ${b.mentee_name},
+
+Quick reminder — your call with ${b.mentorName} is tomorrow at ${fmt(b.start_at, b.mentee_timezone)}.
+
+Join: ${b.meet_url}
+${joinTip(b.mentee_email)}
+Need to reschedule? ${siteUrl()}/bookings/${manageToken}
+
+— 4HerFrika`,
+			});
+			counts.reminder24h += 1;
+		} catch (error) {
+			await release(b.id, "reminder_24h_sent_at", claimedAt);
+			recordError(errors, "reminder24h", b.id, error);
+		}
+	}
+}
+
+async function run1HourReminderJob({
+	resend,
+	now,
+	counts,
+	errors,
+}: JobContext) {
+	const lower = new Date(now + 45 * 60_000);
+	const upper = new Date(now + 75 * 60_000);
+	const rows = await loadDueBookings("reminder_1h_sent_at", lower, upper);
+	for (const b of rows) {
+		const claimedAt = await claim(b.id, "reminder_1h_sent_at");
+		if (!claimedAt) continue;
+		try {
+			await Promise.all([
+				sendMenteeReminder(resend, b),
+				sendMentorReminder(resend, b),
+			]);
+			counts.reminder1h += 1;
+		} catch (error) {
+			await release(b.id, "reminder_1h_sent_at", claimedAt);
+			recordError(errors, "reminder1h", b.id, error);
+		}
+	}
+}
+
+async function runFeedbackRequestJob({
+	resend,
+	now,
+	counts,
+	errors,
+}: JobContext) {
+	const rows = await db
+		.select({
+			id: bookings.id,
+			mentee_name: bookings.mentee_name,
+			mentee_email: bookings.mentee_email,
+			mentorName: users.name,
+		})
+		.from(bookings)
+		.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+		.innerJoin(users, eq(mentors.user_id, users.id))
+		.where(
+			and(
+				eq(mentors.archived, false),
+				eq(bookings.status, "confirmed"),
+				isNull(bookings.feedback_email_sent_at),
+				gte(bookings.end_at, new Date(now - MAX_BACKLOG_AGE_MS)),
+				lt(bookings.end_at, new Date(now - 30 * 60_000)),
+			),
+		)
+		.limit(100);
+	for (const b of rows) {
+		const claimedAt = await claim(b.id, "feedback_email_sent_at");
+		if (!claimedAt) continue;
+		try {
+			const token = await createActionLink({
+				resourceId: b.id,
+				action: "feedback",
+				expiresAt: new Date(now + 14 * 24 * 3600_000),
+			});
+			await sendEmail(resend, {
+				from: FROM,
+				to: b.mentee_email,
+				subject: `How was your call with ${b.mentorName}?`,
+				text: `Hi ${b.mentee_name},
+
+Thanks for booking with 4HerFrika. Would you take a minute to share how the call went?
+
+${siteUrl()}/bookings/${token}/feedback
+
+— 4HerFrika`,
+			});
+			await db
+				.update(bookings)
+				.set({ status: "completed" })
+				.where(eq(bookings.id, b.id));
+			counts.feedback += 1;
+		} catch (error) {
+			await release(b.id, "feedback_email_sent_at", claimedAt);
+			recordError(errors, "feedback", b.id, error);
+		}
+	}
+}
+
+async function runMentorFollowupJob({
+	resend,
+	now,
+	counts,
+	errors,
+}: JobContext) {
+	const rows = await db
+		.select({
+			id: bookings.id,
+			mentee_name: bookings.mentee_name,
+			mentorName: users.name,
+			mentorEmail: users.email,
+		})
+		.from(bookings)
+		.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+		.innerJoin(users, eq(mentors.user_id, users.id))
+		.where(
+			and(
+				eq(mentors.archived, false),
+				ne(bookings.status, "cancelled"),
+				isNull(bookings.mentor_followup_sent_at),
+				gte(bookings.end_at, new Date(now - MAX_BACKLOG_AGE_MS)),
+				lt(bookings.end_at, new Date(now - 2 * 3600_000)),
+			),
+		)
+		.limit(100);
+	for (const b of rows) {
+		const claimedAt = await claim(b.id, "mentor_followup_sent_at");
+		if (!claimedAt) continue;
+		if (!b.mentorEmail) continue;
+		try {
+			await sendEmail(resend, {
+				from: FROM,
+				to: b.mentorEmail,
+				subject: `Follow-up: your call with ${b.mentee_name}`,
+				text: `Hi ${b.mentorName},
+
+Thanks again for showing up. If there's anything you wanted to follow up with ${b.mentee_name} about, now's a good time. You can see your past sessions in your dashboard.
+
+— 4HerFrika`,
+			});
+			counts.mentorFollowup += 1;
+		} catch (error) {
+			await release(b.id, "mentor_followup_sent_at", claimedAt);
+			recordError(errors, "mentorFollowup", b.id, error);
+		}
+	}
 }
 
 async function runLoggedJob(job: string, run: () => Promise<void>) {
@@ -377,7 +410,6 @@ async function loadDueBookings(
 		.innerJoin(users, eq(mentors.user_id, users.id))
 		.where(
 			and(
-				eq(mentors.archived, false),
 				eq(bookings.status, "confirmed"),
 				isNull(sentAtCol),
 				gte(bookings.start_at, lower),
