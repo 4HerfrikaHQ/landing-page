@@ -9,7 +9,6 @@ import {
 	uploadMentorAvatar,
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
-import { cancelBookingCore } from "@/src/lib/booking-mutations";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
 import {
 	ensureMentorCalendarConnection,
@@ -30,7 +29,6 @@ import {
 	desc,
 	eq,
 	exists,
-	gte,
 	ilike,
 	isNotNull,
 	ne,
@@ -66,6 +64,7 @@ function mentorFilterWhere({
 	calendar,
 }: Pick<MentorAdminFilters, "query" | "status" | "calendar">) {
 	const conditions: (SQL<unknown> | undefined)[] = [];
+	conditions.push(eq(schema.mentors.archived, false));
 
 	if (query) {
 		conditions.push(
@@ -297,7 +296,7 @@ export async function updateMentor(
 	const parsedSlug = parseMentorSlug(formData.get("slug"));
 	if (!parsedSlug.success) return { error: parsedSlug.error };
 	const currentMentor = await db.query.mentors.findFirst({
-		where: eq(schema.mentors.id, id),
+		where: and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
 		columns: { slug: true },
 	});
 	if (!currentMentor) return { error: "Mentor not found." };
@@ -327,7 +326,9 @@ export async function updateMentor(
 					slug: parsedSlug.slug,
 					previous_slug: slugChanged ? currentMentor.slug : undefined,
 				})
-				.where(eq(schema.mentors.id, id))
+				.where(
+					and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
+				)
 				.returning({ userId: schema.mentors.user_id });
 
 			if (row) {
@@ -349,97 +350,40 @@ export async function updateMentor(
 	return {};
 }
 
-export async function deleteMentor(id: string): Promise<{ error?: string }> {
-	await requireSuperAdmin();
-
-	const [target] = await db
-		.select({
-			mentorId: schema.mentors.id,
-			authUserId: schema.users.auth_user_id,
-			role: schema.users.role,
-			name: schema.users.name,
-			email: schema.users.email,
-			slug: schema.mentors.slug,
-		})
-		.from(schema.mentors)
-		.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
-		.where(eq(schema.mentors.id, id))
-		.limit(1);
-
-	if (!target) return { error: "Mentor not found." };
-
-	const upcomingBookings = await db
-		.select()
-		.from(bookings)
-		.where(
-			and(
-				eq(bookings.mentor_id, target.mentorId),
-				eq(bookings.status, "confirmed"),
-				gte(bookings.start_at, new Date()),
-			),
-		)
-		.orderBy(asc(bookings.start_at));
-
-	for (const booking of upcomingBookings) {
-		try {
-			await cancelBookingCore({
-				booking,
-				mentorName: target.name,
-				mentorSlug: target.slug,
-				mentorEmail: target.email,
-				reason: "Mentor is no longer available.",
-			});
-		} catch (error) {
-			return {
-				error:
-					error instanceof Error
-						? error.message
-						: "An upcoming booking could not be cancelled.",
-			};
-		}
-	}
-
-	const supabase = await createAdminClient();
-	const { data: avatarObjects, error: avatarListError } = await supabase.storage
-		.from("mentor-avatars")
-		.list("", { search: `${target.mentorId}.` });
-	if (avatarListError) return { error: avatarListError.message };
-
-	const avatarPaths = avatarObjects
-		.filter((object) => object.name.startsWith(`${target.mentorId}.`))
-		.map((object) => object.name);
-	if (avatarPaths.length > 0) {
-		const { error: avatarDeleteError } = await supabase.storage
-			.from("mentor-avatars")
-			.remove(avatarPaths);
-		if (avatarDeleteError) return { error: avatarDeleteError.message };
-	}
-
-	// A super admin may also have a mentor profile. In that case, remove only
-	// the mentor capability so their admin account and login remain intact.
-	if (target.role === "super_admin") {
-		await db
-			.delete(schema.mentors)
-			.where(eq(schema.mentors.id, target.mentorId));
-	} else {
-		const { error } = await supabase.auth.admin.deleteUser(target.authUserId);
-		if (error) return { error: error.message };
-	}
-
-	revalidatePath("/dashboard/admin/mentors");
-	revalidatePath("/careercorner");
-	return {};
-}
-
 export async function uploadMentorImage(
 	mentorId: string,
 	formData: FormData,
 ): Promise<{ url?: string; error?: string }> {
 	await requireSuperAdmin();
+	const mentor = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.id, mentorId),
+			eq(schema.mentors.archived, false),
+		),
+		columns: { id: true },
+	});
+	if (!mentor) return { error: "Mentor not found." };
 
 	const result = await uploadMentorAvatar(mentorId, formData);
 	if (!result.error) revalidatePath("/dashboard/admin/mentors");
 	return result;
+}
+
+export async function deleteMentor(id: string): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
+	const [mentor] = await db
+		.update(schema.mentors)
+		.set({ archived: true })
+		.where(and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)))
+		.returning({ slug: schema.mentors.slug });
+
+	if (!mentor) return { error: "Mentor not found." };
+
+	revalidatePath("/dashboard/admin/mentors");
+	revalidatePath("/careercorner");
+	revalidatePath(`/careercorner/${mentor.slug}`);
+	return {};
 }
 
 export async function toggleMentorActive(
@@ -450,7 +394,7 @@ export async function toggleMentorActive(
 
 	if (active) {
 		const mentor = await db.query.mentors.findFirst({
-			where: eq(schema.mentors.id, id),
+			where: and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
 			with: {
 				availability: true,
 				user: { columns: { email: true } },
@@ -458,7 +402,7 @@ export async function toggleMentorActive(
 		});
 
 		if (!mentor) {
-			return { error: "Mentor not found" };
+			return { error: "Mentor not found or is archived" };
 		}
 
 		const parsedSlug = parseMentorSlug(mentor.slug);
@@ -500,6 +444,7 @@ export async function toggleMentorActive(
 				? and(
 						eq(schema.mentors.id, id),
 						eq(schema.mentors.active, false),
+						eq(schema.mentors.archived, false),
 						exists(
 							db
 								.select({ id: schema.mentorGoogleConnections.id })
@@ -527,7 +472,7 @@ export async function toggleMentorActive(
 								.limit(1),
 						),
 					)
-				: eq(schema.mentors.id, id),
+				: and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
 		)
 		.returning({ id: schema.mentors.id });
 
@@ -557,10 +502,13 @@ export const setFeaturedMentor = adminAction
 	.schema(SetFeaturedMentorSchema)
 	.action(async ({ parsedInput }) => {
 		const mentor = await db.query.mentors.findFirst({
-			where: eq(schema.mentors.id, parsedInput.mentorId),
+			where: and(
+				eq(schema.mentors.id, parsedInput.mentorId),
+				eq(schema.mentors.archived, false),
+			),
 		});
 
-		if (!mentor || !mentor.active || !mentor.image) {
+		if (!mentor || mentor.archived || !mentor.active || !mentor.image) {
 			throw new ActionError(
 				"Mentor must be active and have a profile photo to be featured",
 			);
@@ -610,7 +558,12 @@ export const requestMentorCalendarConnection = adminAction
 			.select({ email: schema.users.email, name: schema.users.name })
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
-			.where(eq(schema.mentors.id, parsedInput.mentorId))
+			.where(
+				and(
+					eq(schema.mentors.id, parsedInput.mentorId),
+					eq(schema.mentors.archived, false),
+				),
+			)
 			.limit(1);
 
 		if (!mentor?.email) {

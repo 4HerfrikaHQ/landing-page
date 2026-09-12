@@ -217,7 +217,13 @@ export async function getMentorBySlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
+		.where(
+			and(
+				eq(mentors.slug, slug),
+				eq(mentors.active, true),
+				eq(mentors.archived, false),
+			),
+		)
 		.limit(1);
 	return mentor ?? null;
 }
@@ -232,7 +238,13 @@ export async function getInactiveMentorBySlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.slug, slug), eq(mentors.active, false)))
+		.where(
+			and(
+				eq(mentors.slug, slug),
+				eq(mentors.active, false),
+				eq(mentors.archived, false),
+			),
+		)
 		.limit(1);
 	if (!mentor) return null;
 
@@ -268,7 +280,13 @@ export async function getMentorByPreviousSlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.previous_slug, slug), eq(mentors.active, true)))
+		.where(
+			and(
+				eq(mentors.previous_slug, slug),
+				eq(mentors.active, true),
+				eq(mentors.archived, false),
+			),
+		)
 		.limit(1);
 	return mentor ?? null;
 }

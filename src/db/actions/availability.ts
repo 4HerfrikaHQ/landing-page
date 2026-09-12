@@ -5,7 +5,7 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { resolveActionLink } from "@/src/lib/action-links";
 import { requireSuperAdmin } from "@/src/lib/safe-action";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import type { DayOfWeek, DbAvailability } from "@/src/db/schema/tables";
 
@@ -15,9 +15,19 @@ export async function getAvailabilityForAdmin(
 ): Promise<DbAvailability[]> {
 	await requireSuperAdmin();
 	return db
-		.select()
+		.select({ availability: schema.availability })
 		.from(schema.availability)
-		.where(eq(schema.availability.mentor_id, mentorId));
+		.innerJoin(
+			schema.mentors,
+			eq(schema.mentors.id, schema.availability.mentor_id),
+		)
+		.where(
+			and(
+				eq(schema.availability.mentor_id, mentorId),
+				eq(schema.mentors.archived, false),
+			),
+		)
+		.then((rows) => rows.map((row) => row.availability));
 }
 
 export type AvailabilitySlotInput = {
@@ -31,12 +41,23 @@ async function writeAvailability(
 	slots: AvailabilitySlotInput[],
 	timezone: string,
 ): Promise<{ error?: string }> {
-	await db.delete(schema.availability).where(eq(schema.availability.mentor_id, mentorId));
+	const [mentor] = await db
+		.select({ id: schema.mentors.id })
+		.from(schema.mentors)
+		.where(
+			and(eq(schema.mentors.id, mentorId), eq(schema.mentors.archived, false)),
+		)
+		.limit(1);
+	if (!mentor) return { error: "Mentor not found" };
+
+	await db
+		.delete(schema.availability)
+		.where(eq(schema.availability.mentor_id, mentorId));
 
 	if (slots.length > 0) {
-		await db.insert(schema.availability).values(
-			slots.map((s) => ({ ...s, mentor_id: mentorId, timezone })),
-		);
+		await db
+			.insert(schema.availability)
+			.values(slots.map((s) => ({ ...s, mentor_id: mentorId, timezone })));
 	}
 
 	revalidatePath("/dashboard/admin/mentors");

@@ -10,7 +10,7 @@ import {
 	rescheduleBookingCore,
 } from "@/src/lib/booking-mutations";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { eq, getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { loadRescheduleContext } from "./_helpers";
 import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
 
@@ -33,8 +33,9 @@ export async function loadBookingFromToken(token: string) {
 		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(eq(mentors.id, booking.mentor_id))
+		.where(and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)))
 		.limit(1);
+	if (!mentor) return { ok: false as const, reason: "not_found" };
 	return { ok: true as const, booking, mentor };
 }
 
@@ -59,7 +60,9 @@ export const cancelBooking = actionClient
 			.select({ mentor: mentors, user: users })
 			.from(mentors)
 			.leftJoin(users, eq(users.id, mentors.user_id))
-			.where(eq(mentors.id, booking.mentor_id))
+			.where(
+				and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)),
+			)
 			.limit(1);
 		if (!mentorRow?.mentor) throw new ActionError("Mentor not found");
 

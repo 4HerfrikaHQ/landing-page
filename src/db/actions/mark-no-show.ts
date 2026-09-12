@@ -1,5 +1,6 @@
 import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
+import { mentors } from "@/src/db/schema/tables/mentors";
 import { ActionError } from "@/src/lib/safe-action";
 import { and, eq, lt, ne } from "drizzle-orm";
 
@@ -8,6 +9,14 @@ import { and, eq, lt, ne } from "drizzle-orm";
  * is responsible for authorization (mentor ownership or admin role).
  */
 export async function setBookingNoShow(bookingId: string): Promise<void> {
+	const [visible] = await db
+		.select({ id: bookings.id })
+		.from(bookings)
+		.innerJoin(mentors, eq(mentors.id, bookings.mentor_id))
+		.where(and(eq(bookings.id, bookingId), eq(mentors.archived, false)))
+		.limit(1);
+	if (!visible) throw new ActionError("Booking not found.");
+
 	const updated = await db
 		.update(bookings)
 		.set({ status: "no_show", updated_at: new Date() })

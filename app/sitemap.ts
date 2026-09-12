@@ -1,7 +1,7 @@
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import type { MetadataRoute } from "next";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 const BASE_URL = "https://4herfrika.org";
 
@@ -41,7 +41,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	}
 
 	const mentors = await db.query.mentors.findMany({
-		where: eq(schema.mentors.active, true),
+		where: and(
+			eq(schema.mentors.active, true),
+			eq(schema.mentors.archived, false),
+		),
 		columns: { slug: true, created_at: true },
 	});
 

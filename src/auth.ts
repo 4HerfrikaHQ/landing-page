@@ -4,7 +4,7 @@ import { schema } from "@/src/db";
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { AuthError, User } from "@supabase/supabase-js";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
 import { cache } from "react";
@@ -55,19 +55,19 @@ export async function sendOtp(email: string) {
 
 export async function verifyOtp(email: string, token: string): Promise<{ error: AuthError }> {
 	const supabase = await createClient();
-  const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
+	const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
 
-  if (error) {
-    return { error }
-  }
+	if (error) {
+		return { error }
+	}
 
-  const user = await currentDbUser();
+	const user = await currentDbUser();
 
-  if (user.role === "super_admin") {
+	if (user.role === "super_admin") {
 		redirect("/dashboard/admin/mentors");
-  } else {
+	} else {
 		redirect("/dashboard/mentor");
-  }
+	}
 }
 
 export async function logout() {
@@ -107,7 +107,10 @@ export const currentDbUser = cache(async () => {
 export const currentUserCapabilities = cache(async () => {
 	const user = await currentDbUser();
 	const mentor = await db.query.mentors.findFirst({
-		where: eq(schema.mentors.user_id, user.id),
+		where: and(
+			eq(schema.mentors.user_id, user.id),
+			eq(schema.mentors.archived, false),
+		),
 	});
 
 	return {
@@ -138,7 +141,10 @@ export const optionalUserCapabilities = cache(async () => {
 	if (!user) return null;
 
 	const mentor = await db.query.mentors.findFirst({
-		where: eq(schema.mentors.user_id, user.id),
+		where: and(
+			eq(schema.mentors.user_id, user.id),
+			eq(schema.mentors.archived, false),
+		),
 	});
 
 	return {

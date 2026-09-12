@@ -17,7 +17,10 @@ export type HeroMentor = {
 
 export async function getMentors(): Promise<MentorWithAvailability[]> {
 	const rows = await db.query.mentors.findMany({
-		where: eq(schema.mentors.active, true),
+		where: and(
+			eq(schema.mentors.active, true),
+			eq(schema.mentors.archived, false),
+		),
 		with: {
 			availability: true,
 			googleConnection: true,
@@ -44,6 +47,7 @@ export async function getHeroMentors(): Promise<HeroMentor[]> {
 	const rows = await db.query.mentors.findMany({
 		where: and(
 			eq(schema.mentors.active, true),
+			eq(schema.mentors.archived, false),
 			isNotNull(schema.mentors.image),
 			ne(schema.mentors.image, ""),
 		),

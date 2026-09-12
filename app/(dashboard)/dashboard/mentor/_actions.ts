@@ -62,7 +62,10 @@ export async function getMentorProfile(): Promise<
 	const { user } = await currentDbMentor();
 
 	const mentor = await db.query.mentors.findFirst({
-		where: eq(schema.mentors.user_id, user.id),
+		where: and(
+			eq(schema.mentors.user_id, user.id),
+			eq(schema.mentors.archived, false),
+		),
 		with: { availability: true, user: { columns: { name: true } } },
 	});
 	if (!mentor) return undefined;

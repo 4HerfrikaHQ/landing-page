@@ -2,7 +2,7 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 type Executor = Pick<typeof db, "insert">;
 
@@ -21,6 +21,15 @@ export async function uploadMentorAvatar(
 	formData: FormData,
 ): Promise<{ url?: string; error?: string }> {
 	try {
+		const mentor = await db.query.mentors.findFirst({
+			where: and(
+				eq(schema.mentors.id, mentorId),
+				eq(schema.mentors.archived, false),
+			),
+			columns: { id: true },
+		});
+		if (!mentor) return { error: "Mentor not found." };
+
 		const file = formData.get("file") as File;
 		if (!file?.name) return { error: "No file received." };
 
@@ -38,13 +47,22 @@ export async function uploadMentorAvatar(
 
 		if (uploadError) return { error: uploadError.message };
 
-		const { data } = adminClient.storage.from("mentor-avatars").getPublicUrl(path);
+		const { data } = adminClient.storage
+			.from("mentor-avatars")
+			.getPublicUrl(path);
 		const url = `${data.publicUrl}?t=${Date.now()}`;
 
-		await db
+		const updated = await db
 			.update(schema.mentors)
 			.set({ image: url })
-			.where(eq(schema.mentors.id, mentorId));
+			.where(
+				and(
+					eq(schema.mentors.id, mentorId),
+					eq(schema.mentors.archived, false),
+				),
+			)
+			.returning({ id: schema.mentors.id });
+		if (updated.length === 0) return { error: "Mentor not found." };
 
 		return { url };
 	} catch (err) {

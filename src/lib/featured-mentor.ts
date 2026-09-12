@@ -28,6 +28,7 @@ async function getEligibleMentors(): Promise<DbMentorWithAvailability[]> {
 	const all = await db.query.mentors.findMany({
 		where: and(
 			eq(schema.mentors.active, true),
+			eq(schema.mentors.archived, false),
 			exists(
 				db
 					.select({ id: schema.mentorGoogleConnections.id })
@@ -84,6 +85,7 @@ export async function resolveFeaturedMentor(): Promise<DbMentorWithAvailability 
 			where: and(
 				eq(schema.mentors.id, state.featured_mentor_id),
 				eq(schema.mentors.active, true),
+				eq(schema.mentors.archived, false),
 				exists(
 					db
 						.select({ id: schema.mentorGoogleConnections.id })

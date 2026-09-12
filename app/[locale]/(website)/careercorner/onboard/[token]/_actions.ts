@@ -48,7 +48,9 @@ export async function loadMentorFromToken(token: string) {
 		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(eq(mentors.id, verified.resourceId))
+		.where(
+			and(eq(mentors.id, verified.resourceId), eq(mentors.archived, false)),
+		)
 		.limit(1);
 	if (!mentor) return { ok: false as const, reason: "not_found" };
 
@@ -117,7 +119,9 @@ export async function startOnboardingGoogleCalendar(
 	const [mentor] = await db
 		.select({ mentorId: mentors.id, userId: mentors.user_id })
 		.from(mentors)
-		.where(eq(mentors.id, verified.resourceId))
+		.where(
+			and(eq(mentors.id, verified.resourceId), eq(mentors.archived, false)),
+		)
 		.limit(1);
 	if (!mentor) throw new ActionError("Mentor not found");
 
@@ -189,7 +193,7 @@ export const saveMentorOnboardingProfile = actionClient
 		const [mentor] = await db
 			.select()
 			.from(mentors)
-			.where(eq(mentors.id, mentorId))
+			.where(and(eq(mentors.id, mentorId), eq(mentors.archived, false)))
 			.limit(1);
 		if (!mentor) throw new ActionError("Mentor not found");
 
@@ -200,7 +204,7 @@ export const saveMentorOnboardingProfile = actionClient
 				nickname: parsedInput.nickname || null,
 				image: parsedInput.image || null,
 			})
-			.where(eq(mentors.id, mentorId));
+			.where(and(eq(mentors.id, mentorId), eq(mentors.archived, false)));
 
 		revalidatePath(`/careercorner/onboard/${parsedInput.token}`);
 		return {};
@@ -227,7 +231,7 @@ export const completeMentorOnboarding = actionClient
 			})
 			.from(mentors)
 			.innerJoin(users, eq(users.id, mentors.user_id))
-			.where(eq(mentors.id, mentorId))
+			.where(and(eq(mentors.id, mentorId), eq(mentors.archived, false)))
 			.limit(1);
 		if (!mentor) throw new ActionError("Mentor not found");
 		if (!mentor.bio) {
@@ -272,6 +276,7 @@ export const completeMentorOnboarding = actionClient
 					and(
 						eq(mentors.id, mentorId),
 						eq(mentors.active, false),
+						eq(mentors.archived, false),
 						exists(
 							tx
 								.select({ id: mentorGoogleConnections.id })

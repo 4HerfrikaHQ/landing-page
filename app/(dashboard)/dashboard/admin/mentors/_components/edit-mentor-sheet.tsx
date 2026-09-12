@@ -449,10 +449,8 @@ export function EditMentorSheet({
 									<DialogHeader>
 										<DialogTitle>Delete this mentor?</DialogTitle>
 										<DialogDescription>
-											{mentor.name}&apos;s profile, availability, bookings, and
-											mentor access will be permanently removed. Upcoming
-											sessions will be cancelled and attendees notified. This
-											can&apos;t be undone.
+											{mentor.name}&apos;s profile, access, and associated data
+											will be removed from the product.
 										</DialogDescription>
 									</DialogHeader>
 									<DialogFooter>

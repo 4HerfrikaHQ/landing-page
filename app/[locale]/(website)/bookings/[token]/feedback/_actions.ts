@@ -39,8 +39,9 @@ export async function loadFeedbackContext(token: string) {
 		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(eq(mentors.id, booking.mentor_id))
+		.where(and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)))
 		.limit(1);
+	if (!mentor) return { ok: false as const, reason: "not_found" };
 
 	return { ok: true as const, booking, mentor };
 }
@@ -61,6 +62,19 @@ export const submitFeedback = actionClient
 		if (existing) throw new ActionError("Feedback already submitted");
 
 		await db.transaction(async (tx) => {
+			const [booking] = await tx
+				.select({ id: bookings.id })
+				.from(bookings)
+				.innerJoin(mentors, eq(mentors.id, bookings.mentor_id))
+				.where(
+					and(
+						eq(bookings.id, verified.resourceId),
+						eq(mentors.archived, false),
+					),
+				)
+				.limit(1);
+			if (!booking) throw new ActionError("Invalid link");
+
 			await tx.insert(bookingFeedback).values({
 				booking_id: verified.resourceId,
 				call_happened: parsedInput.call_happened,
