@@ -20,18 +20,7 @@ import {
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import {
-	and,
-	eq,
-	exists,
-	getTableColumns,
-	gt,
-	gte,
-	isNotNull,
-	lt,
-	ne,
-	sql,
-} from "drizzle-orm";
+import { and, eq, getTableColumns, gt, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { buildBookingIcs, computeSlots } from "./_helpers";
@@ -228,30 +217,7 @@ export async function getMentorBySlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(
-			and(
-				eq(mentors.slug, slug),
-				eq(mentors.active, true),
-				exists(
-					db
-						.select({ id: mentorGoogleConnections.id })
-						.from(mentorGoogleConnections)
-						.where(
-							and(
-								eq(mentorGoogleConnections.mentor_id, mentors.id),
-								eq(mentorGoogleConnections.status, "connected"),
-								isNotNull(mentorGoogleConnections.refresh_token_ciphertext),
-								eq(mentorGoogleConnections.revocation_state, "not_pending"),
-								eq(
-									mentorGoogleConnections.reauthorization_state,
-									"not_required",
-								),
-							),
-						)
-						.limit(1),
-				),
-			),
-		)
+		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
 		.limit(1);
 	return mentor ?? null;
 }
@@ -320,7 +286,11 @@ export const listMentorSlots = actionClient
 				code: error instanceof CalendarActionError ? error.code : "unknown",
 				errorType: error instanceof Error ? error.name : typeof error,
 			});
-			throw error;
+			return {
+				mentorId: mentor.id,
+				mentorTimezone: "UTC",
+				slots: [],
+			};
 		}
 
 		const [settingsRow] = await db
@@ -381,6 +351,11 @@ export async function getFirstAvailableSlotUtc(
 ): Promise<string | null> {
 	const mentor = await getMentorForAvailabilityBySlug(mentorSlug);
 	if (!mentor) return null;
+	try {
+		await selectBookingCalendarHost(mentor);
+	} catch {
+		return null;
+	}
 
 	const [settingsRow] = await db
 		.select()
