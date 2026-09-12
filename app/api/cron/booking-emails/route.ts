@@ -62,9 +62,12 @@ export async function GET(req: Request) {
 		mentorFollowup: 0,
 	};
 	const errors: Array<{ job: string; bookingId: string }> = [];
+	const startedAt = Date.now();
+	console.info("[booking-cron] run started", {
+		now: new Date(now).toISOString(),
+	});
 
-	// --- 24h reminder (mentee only) ---
-	{
+	async function run24HourReminderJob() {
 		const lower = new Date(now + 23 * 3600_000);
 		const upper = new Date(now + 25 * 3600_000);
 		const rows = await loadDueBookings("reminder_24h_sent_at", lower, upper);
@@ -99,8 +102,7 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 		}
 	}
 
-	// --- 1h reminder (both) ---
-	{
+	async function run1HourReminderJob() {
 		const lower = new Date(now + 45 * 60_000);
 		const upper = new Date(now + 75 * 60_000);
 		const rows = await loadDueBookings("reminder_1h_sent_at", lower, upper);
@@ -120,8 +122,7 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 		}
 	}
 
-	// --- Feedback request (mentee) ---
-	{
+	async function runFeedbackRequestJob() {
 		const rows = await db
 			.select({
 				id: bookings.id,
@@ -175,8 +176,7 @@ ${siteUrl()}/bookings/${token}/feedback
 		}
 	}
 
-	// --- Mentor follow-up ---
-	{
+	async function runMentorFollowupJob() {
 		const rows = await db
 			.select({
 				id: bookings.id,
@@ -220,10 +220,42 @@ Thanks again for showing up. If there's anything you wanted to follow up with ${
 		}
 	}
 
+	await Promise.all([
+		runLoggedJob("reminder24h", run24HourReminderJob),
+		runLoggedJob("reminder1h", run1HourReminderJob),
+		runLoggedJob("feedback", runFeedbackRequestJob),
+		runLoggedJob("mentorFollowup", runMentorFollowupJob),
+	]);
+
+	console.info("[booking-cron] run completed", {
+		counts,
+		failed: errors.length,
+		durationMs: Date.now() - startedAt,
+	});
+
 	return NextResponse.json(
 		{ ok: errors.length === 0, counts, errors },
 		{ status: errors.length === 0 ? 200 : 500 },
 	);
+}
+
+async function runLoggedJob(job: string, run: () => Promise<void>) {
+	const startedAt = Date.now();
+	console.info("[booking-cron] job started", { job });
+	try {
+		await run();
+		console.info("[booking-cron] job completed", {
+			job,
+			durationMs: Date.now() - startedAt,
+		});
+	} catch (error) {
+		console.error("[booking-cron] job crashed", {
+			job,
+			durationMs: Date.now() - startedAt,
+			error,
+		});
+		throw error;
+	}
 }
 
 function isAuthorized(authorization: string | null, secret: string): boolean {
