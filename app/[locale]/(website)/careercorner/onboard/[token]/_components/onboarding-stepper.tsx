@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
+import { OnboardingForm } from "./onboarding-form";
 
 type StepId = "availability" | "profile" | "calendar";
 
@@ -21,14 +22,19 @@ const steps: { id: StepId; label: string; icon: typeof CalendarClockIcon }[] = [
 
 export function OnboardingStepper({
 	availabilitySlot,
-	profileSlot,
+	profile,
 	calendarSlot,
 	calendarConnected,
 	availabilityComplete,
 	profileComplete,
 }: {
 	availabilitySlot: ReactNode;
-	profileSlot: (onSaved: () => void) => ReactNode;
+	profile: {
+		token: string;
+		defaultBio: string;
+		defaultDisplayName: string;
+		defaultImage: string;
+	};
 	calendarSlot: ReactNode;
 	calendarConnected: boolean;
 	availabilityComplete: boolean;
@@ -163,10 +169,13 @@ export function OnboardingStepper({
 						title="Complete your profile"
 						description="This is what mentees see on your booking page. A friendly photo and a short bio go a long way."
 					/>
-					{profileSlot(() => {
-						setProfileDone(true);
-						setActive("calendar");
-					})}
+					<OnboardingForm
+						{...profile}
+						onSaved={() => {
+							setProfileDone(true);
+							setActive("calendar");
+						}}
+					/>
 				</div>
 			) : (
 				<div className="space-y-6">

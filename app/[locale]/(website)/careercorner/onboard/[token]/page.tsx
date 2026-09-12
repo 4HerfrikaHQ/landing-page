@@ -13,7 +13,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import FourHerfrikaLogo from "../../../4herfrika-logo";
 import { loadMentorFromToken } from "./_actions";
 import { OnboardingCalendarStep } from "./_components/onboarding-calendar-step";
-import { OnboardingForm } from "./_components/onboarding-form";
 import { OnboardingStepper } from "./_components/onboarding-stepper";
 
 const ALLOWED_CALLBACK_REASONS: readonly MentorCalendarCallbackReason[] = [
@@ -174,15 +173,12 @@ export default async function OnboardingPage({
 								onSave={saveAvailability}
 							/>
 						}
-						profileSlot={(onSaved) => (
-							<OnboardingForm
-								token={token}
-								defaultBio={mentor.bio ?? ""}
-								defaultDisplayName={mentor.nickname ?? ""}
-								defaultImage={mentor.image ?? ""}
-								onSaved={onSaved}
-							/>
-						)}
+						profile={{
+							token,
+							defaultBio: mentor.bio ?? "",
+							defaultDisplayName: mentor.nickname ?? "",
+							defaultImage: mentor.image ?? "",
+						}}
 						calendarSlot={
 							<OnboardingCalendarStep
 								token={token}
