@@ -1,6 +1,6 @@
 // Server-only: OAuth credentials, database access, and Google token exchange live here.
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import {
 	mentorGoogleConnections,
@@ -30,6 +30,7 @@ import {
 } from "@/src/lib/mentor-google-oauth-core";
 import {
 	createMentorGoogleOAuthProvider,
+	mentorGoogleOAuthConfigured,
 	requireMentorGoogleOAuthConfig,
 } from "@/src/lib/mentor-google-oauth-provider";
 import { and, eq, isNull, lt } from "drizzle-orm";
@@ -190,14 +191,7 @@ async function currentMentorContext(): Promise<{
 	userId: string;
 	mentorEmail: string;
 }> {
-	const user = await currentDbUser();
-	if (user.role !== "mentor") throw new Error("Mentor authorization required");
-	const [mentor] = await db
-		.select({ id: mentors.id })
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
-	if (!mentor) throw new Error("Mentor profile not found");
+	const { user, mentor } = await currentDbMentor();
 	return { mentorId: mentor.id, userId: user.id, mentorEmail: user.email };
 }
 
@@ -512,3 +506,5 @@ export async function retryMentorGoogleRevocation(): Promise<{
 	}
 	return disconnectMentorGoogleConnection({ status: "revoked" });
 }
+
+export { mentorGoogleOAuthConfigured };

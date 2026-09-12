@@ -1,38 +1,69 @@
 import { expect, test } from "bun:test";
-import { sendReconnectNoticeOnce } from "./mentor-google-notifications";
+import { sendClaimedNoticeOnce } from "./mentor-google-notifications";
 
-test("reconnect notice sentinel prevents a second send", async () => {
-	let sentAt: Date | null = null;
+test("a won claim sends, and does not release", async () => {
 	let sends = 0;
-	const send = () => {
-		sends += 1;
-		return Promise.resolve({ data: { id: "email-1" }, error: null });
-	};
-	const markSent = () => {
-		sentAt = new Date("2026-08-02T12:00:00.000Z");
-		return Promise.resolve();
-	};
+	let releases = 0;
 
-	expect(await sendReconnectNoticeOnce({ sentAt, send, markSent })).toBe(true);
-	expect(await sendReconnectNoticeOnce({ sentAt, send, markSent })).toBe(false);
+	const sent = await sendClaimedNoticeOnce({
+		claim: () => Promise.resolve(true),
+		send: () => {
+			sends += 1;
+			return Promise.resolve({ data: { id: "email-1" }, error: null });
+		},
+		release: async () => {
+			releases += 1;
+		},
+	});
+
+	expect(sent).toBe(true);
 	expect(sends).toBe(1);
+	expect(releases).toBe(0);
 });
 
-test("response-level send failures do not mark the reconnect notice sent", async () => {
-	let marked = 0;
+test("a lost claim never sends", async () => {
+	let sends = 0;
 
-	expect(
-		await sendReconnectNoticeOnce({
-			sentAt: null,
-			send: () =>
-				Promise.resolve({
-					data: null,
-					error: { message: "invalid recipient" },
-				}),
-			markSent: async () => {
-				marked += 1;
-			},
-		}),
-	).toBe(false);
-	expect(marked).toBe(0);
+	const sent = await sendClaimedNoticeOnce({
+		claim: () => Promise.resolve(false),
+		send: () => {
+			sends += 1;
+			return Promise.resolve({ data: { id: "email-1" }, error: null });
+		},
+		release: () => Promise.resolve(),
+	});
+
+	expect(sent).toBe(false);
+	expect(sends).toBe(0);
+});
+
+test("a response-level send failure releases the claim so it can retry", async () => {
+	let releases = 0;
+
+	const sent = await sendClaimedNoticeOnce({
+		claim: () => Promise.resolve(true),
+		send: () =>
+			Promise.resolve({ data: null, error: { message: "invalid recipient" } }),
+		release: async () => {
+			releases += 1;
+		},
+	});
+
+	expect(sent).toBe(false);
+	expect(releases).toBe(1);
+});
+
+test("a thrown send failure also releases the claim", async () => {
+	let releases = 0;
+
+	const sent = await sendClaimedNoticeOnce({
+		claim: () => Promise.resolve(true),
+		send: () => Promise.reject(new Error("network down")),
+		release: async () => {
+			releases += 1;
+		},
+	});
+
+	expect(sent).toBe(false);
+	expect(releases).toBe(1);
 });

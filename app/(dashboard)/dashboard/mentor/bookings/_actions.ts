@@ -1,6 +1,6 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
@@ -52,15 +52,7 @@ interface MentorBookingsParams {
 
 /** A mentor's bookings for one tab — searched, filtered, and paginated in SQL. */
 export async function loadMentorBookings(params: MentorBookingsParams = {}) {
-	const user = await currentDbUser();
-	const [mentor] = await db
-		.select()
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
-	if (!mentor) {
-		return { ok: false as const, reason: "no_mentor_profile" as const };
-	}
+	const { mentor } = await currentDbMentor();
 
 	const tab = BookingTab.catch("upcoming").parse(params.tab);
 	const now = new Date();
@@ -150,7 +142,7 @@ export type MentorBookingsResult = Extract<
 
 /** Load a booking and assert it belongs to the logged-in mentor. */
 async function loadOwnBooking(bookingId: string) {
-	const user = await currentDbUser();
+	const { user, mentor } = await currentDbMentor();
 	const [row] = await db
 		.select({
 			booking: bookings,
@@ -171,7 +163,9 @@ async function loadOwnBooking(bookingId: string) {
 		.where(eq(bookings.id, bookingId))
 		.limit(1);
 	if (!row) throw new ActionError("Booking not found");
-	if (row.mentorUserId !== user.id) throw new ActionError("Not your booking");
+	if (row.mentorUserId !== user.id || row.mentorId !== mentor.id) {
+		throw new ActionError("Not your booking");
+	}
 	return row;
 }
 

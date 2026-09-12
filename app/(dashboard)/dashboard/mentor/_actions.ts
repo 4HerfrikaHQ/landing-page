@@ -1,6 +1,6 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { uploadMentorAvatar } from "@/src/db/actions/mentors";
@@ -8,13 +8,58 @@ import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { MinLeadHoursSchema } from "@/src/lib/booking-rules";
+import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import { and, countDistinct, eq, gte, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+
+function loadMentorOverviewCounts(
+	mentorId: string,
+	now: Date,
+	weekAhead: Date,
+) {
+	return db
+		.select({
+			upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now.toISOString()}::timestamptz and ${bookings.start_at} < ${weekAhead.toISOString()}::timestamptz and ${bookings.status} = 'confirmed')::int`,
+			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
+			total: sql<number>`count(*)::int`,
+		})
+		.from(bookings)
+		.where(eq(bookings.mentor_id, mentorId));
+}
+
+function loadMentorOverviewMenteeCount(mentorId: string) {
+	return db
+		.select({ mentees: countDistinct(bookings.mentee_email) })
+		.from(bookings)
+		.where(eq(bookings.mentor_id, mentorId));
+}
+
+function loadMentorRecentBookings(mentorId: string, now: Date) {
+	return db
+		.select({
+			id: bookings.id,
+			menteeName: bookings.mentee_name,
+			menteeEmail: bookings.mentee_email,
+			startAt: bookings.start_at,
+			status: bookings.status,
+			meetUrl: bookings.meet_url,
+		})
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentor_id, mentorId),
+				gte(bookings.start_at, now),
+				ne(bookings.status, "cancelled"),
+			),
+		)
+		.orderBy(bookings.start_at)
+		.limit(5);
+}
 
 export async function getMentorProfile(): Promise<
 	DbMentorWithAvailability | undefined
 > {
-	const user = await currentDbUser();
+	const { user } = await currentDbMentor();
 
 	const mentor = await db.query.mentors.findFirst({
 		where: eq(schema.mentors.user_id, user.id),
@@ -60,6 +105,43 @@ export async function updateMyProfile(
 	return {};
 }
 
+export async function updateMySlug(slug: string): Promise<{
+	slug?: string;
+	error?: string;
+}> {
+	const mentor = await getMentorProfile();
+	if (!mentor) return { error: "Mentor profile not found." };
+
+	const parsedSlug = parseMentorSlug(slug);
+	if (!parsedSlug.success) return { error: parsedSlug.error };
+	if (parsedSlug.slug === mentor.slug) return { slug: mentor.slug };
+	const recentlyUsed = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.previous_slug, parsedSlug.slug),
+			ne(schema.mentors.id, mentor.id),
+		),
+		columns: { id: true },
+	});
+	if (recentlyUsed) return { error: "This profile link is already taken." };
+
+	try {
+		await db
+			.update(schema.mentors)
+			.set({ slug: parsedSlug.slug, previous_slug: mentor.slug })
+			.where(eq(schema.mentors.id, mentor.id));
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			return { error: "This profile link is already taken." };
+		}
+		throw error;
+	}
+
+	revalidatePath("/dashboard/mentor/profile");
+	revalidatePath(`/careercorner/${mentor.slug}`);
+	revalidatePath(`/careercorner/${parsedSlug.slug}`);
+	return { slug: parsedSlug.slug };
+}
+
 export async function getMyBookingNotice(): Promise<{ minLeadHours: number }> {
 	const mentor = await getMentorProfile();
 	if (!mentor) return { minLeadHours: 24 };
@@ -101,39 +183,14 @@ export async function getMentorOverview() {
 	const weekAhead = new Date(now);
 	weekAhead.setDate(weekAhead.getDate() + 7);
 
-	const [counts] = await db
-		.select({
-			upcoming: sql<number>`count(*) filter (where ${bookings.start_at} >= ${now.toISOString()}::timestamptz and ${bookings.start_at} < ${weekAhead.toISOString()}::timestamptz and ${bookings.status} = 'confirmed')::int`,
-			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
-			total: sql<number>`count(*)::int`,
-		})
-		.from(bookings)
-		.where(eq(bookings.mentor_id, mentor.id));
+	const [countRows, menteeRows, recent] = await Promise.all([
+		loadMentorOverviewCounts(mentor.id, now, weekAhead),
+		loadMentorOverviewMenteeCount(mentor.id),
+		loadMentorRecentBookings(mentor.id, now),
+	]);
 
-	const [{ mentees } = { mentees: 0 }] = await db
-		.select({ mentees: countDistinct(bookings.mentee_email) })
-		.from(bookings)
-		.where(eq(bookings.mentor_id, mentor.id));
-
-	const recent = await db
-		.select({
-			id: bookings.id,
-			menteeName: bookings.mentee_name,
-			menteeEmail: bookings.mentee_email,
-			startAt: bookings.start_at,
-			status: bookings.status,
-			meetUrl: bookings.meet_url,
-		})
-		.from(bookings)
-		.where(
-			and(
-				eq(bookings.mentor_id, mentor.id),
-				gte(bookings.start_at, now),
-				ne(bookings.status, "cancelled"),
-			),
-		)
-		.orderBy(bookings.start_at)
-		.limit(5);
+	const counts = countRows[0];
+	const mentees = menteeRows[0]?.mentees ?? 0;
 
 	return {
 		mentor,

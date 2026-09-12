@@ -349,6 +349,7 @@
 		"mentorProfile": {
 			"notFound": "Mentor introuvable — 4HerFrika",
 			"title": "Réservez un appel avec {name} — 4HerFrika",
+			"ogTitle": "Réservez un appel avec {name}",
 			"description": "Réservez un appel de 30 minutes avec {name}."
 		}
 	}

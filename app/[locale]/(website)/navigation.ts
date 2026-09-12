@@ -9,7 +9,7 @@ export const NAV_LINKS = [
 		],
 	},
 	{ name: "Academy", href: "/academy" },
-	{ name: "Career Corner", href: "/careers-corner" },
+	{ name: "Career Corner", href: "/careercorner" },
 	{ name: "Contact Us", href: "/contact-us" },
 ];
 

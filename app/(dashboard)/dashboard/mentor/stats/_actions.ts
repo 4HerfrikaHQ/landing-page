@@ -1,25 +1,65 @@
 "use server";
 
-import { currentDbUser } from "@/src/auth";
+import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { bookings } from "@/src/db/schema/tables/bookings";
-import { mentors } from "@/src/db/schema/tables/mentors";
 import { and, eq, gte, sql } from "drizzle-orm";
 
 import { RANGE_DAYS, type StatsRange } from "./_schema";
 
-export async function loadMentorStats(range: StatsRange) {
-	const user = await currentDbUser();
-	const [mentor] = await db
-		.select()
-		.from(mentors)
-		.where(eq(mentors.user_id, user.id))
-		.limit(1);
+function loadMentorBookingCounts(mentorId: string, since: Date | null) {
+	const rangeFilter = since
+		? and(eq(bookings.mentor_id, mentorId), gte(bookings.created_at, since))
+		: eq(bookings.mentor_id, mentorId);
 
-	if (!mentor) {
-		return { ok: false as const, reason: "no_mentor_profile" as const };
-	}
+	return db
+		.select({
+			total: sql<number>`count(*)::int`,
+			confirmed: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed')::int`,
+			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
+			noShow: sql<number>`count(*) filter (where ${bookings.status} = 'no_show')::int`,
+			cancelled: sql<number>`count(*) filter (where ${bookings.status} = 'cancelled')::int`,
+		})
+		.from(bookings)
+		.where(rangeFilter);
+}
+
+function loadMentorBookingRating(mentorId: string, since: Date | null) {
+	return db
+		.select({
+			avg: sql<number>`coalesce(avg(${bookingFeedback.rating}), 0)::float`,
+		})
+		.from(bookingFeedback)
+		.innerJoin(bookings, eq(bookings.id, bookingFeedback.booking_id))
+		.where(
+			since
+				? and(
+						eq(bookings.mentor_id, mentorId),
+						gte(bookings.created_at, since),
+					)
+				: eq(bookings.mentor_id, mentorId),
+		);
+}
+
+function loadMentorBookingSeries(mentorId: string, since: Date | null) {
+	const rangeFilter = since
+		? and(eq(bookings.mentor_id, mentorId), gte(bookings.created_at, since))
+		: eq(bookings.mentor_id, mentorId);
+
+	return db
+		.select({
+			bucket: sql<string>`to_char(date_trunc('week', ${bookings.created_at}), 'YYYY-MM-DD')`,
+			count: sql<number>`count(*)::int`,
+		})
+		.from(bookings)
+		.where(rangeFilter)
+		.groupBy(sql`date_trunc('week', ${bookings.created_at})`)
+		.orderBy(sql`date_trunc('week', ${bookings.created_at})`);
+}
+
+export async function loadMentorStats(range: StatsRange) {
+	const { mentor } = await currentDbMentor();
 
 	const since =
 		range === "all"
@@ -30,46 +70,14 @@ export async function loadMentorStats(range: StatsRange) {
 					return d;
 				})();
 
-	const rangeFilter = since
-		? and(eq(bookings.mentor_id, mentor.id), gte(bookings.created_at, since))
-		: eq(bookings.mentor_id, mentor.id);
+	const [countRows, ratingRows, series] = await Promise.all([
+		loadMentorBookingCounts(mentor.id, since),
+		loadMentorBookingRating(mentor.id, since),
+		loadMentorBookingSeries(mentor.id, since),
+	]);
 
-	const [counts] = await db
-		.select({
-			total: sql<number>`count(*)::int`,
-			confirmed: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed')::int`,
-			completed: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
-			noShow: sql<number>`count(*) filter (where ${bookings.status} = 'no_show')::int`,
-			cancelled: sql<number>`count(*) filter (where ${bookings.status} = 'cancelled')::int`,
-		})
-		.from(bookings)
-		.where(rangeFilter);
-
-	const [rating] = await db
-		.select({
-			avg: sql<number>`coalesce(avg(${bookingFeedback.rating}), 0)::float`,
-		})
-		.from(bookingFeedback)
-		.innerJoin(bookings, eq(bookings.id, bookingFeedback.booking_id))
-		.where(
-			since
-				? and(
-						eq(bookings.mentor_id, mentor.id),
-						gte(bookings.created_at, since),
-					)
-				: eq(bookings.mentor_id, mentor.id),
-		);
-
-	// Bookings over time, bucketed by week, within the selected range.
-	const series = await db
-		.select({
-			bucket: sql<string>`to_char(date_trunc('week', ${bookings.created_at}), 'YYYY-MM-DD')`,
-			count: sql<number>`count(*)::int`,
-		})
-		.from(bookings)
-		.where(rangeFilter)
-		.groupBy(sql`date_trunc('week', ${bookings.created_at})`)
-		.orderBy(sql`date_trunc('week', ${bookings.created_at})`);
+	const counts = countRows[0];
+	const rating = ratingRows[0];
 
 	return {
 		ok: true as const,

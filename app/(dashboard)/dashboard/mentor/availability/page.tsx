@@ -2,6 +2,7 @@ import { AvailabilityEditor } from "@/components/availability-editor";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { FadeIn } from "@/components/motion/fade-in";
 import { getMentorProfile, getMyBookingNotice } from "../_actions";
+import { saveMyAvailability } from "@/src/db/actions/availability";
 import { BookingNoticeForm } from "./_components/booking-notice-form";
 
 export default async function MentorAvailabilityPage() {
@@ -35,6 +36,7 @@ export default async function MentorAvailabilityPage() {
 				<AvailabilityEditor
 					mentorId={mentor.id}
 					initialSlots={mentor.availability}
+					onSave={saveMyAvailability}
 				/>
 			</FadeIn>
 		</div>

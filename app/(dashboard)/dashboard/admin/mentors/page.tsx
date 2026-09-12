@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { FilterBar } from "@/components/dashboard/filter-bar";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Pagination } from "@/components/dashboard/pagination";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
 	Table,
 	TableBody,
@@ -15,11 +16,13 @@ import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getMentorsForAdmin } from "./_actions";
+import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
 import {
-	MentorFeaturedFilter,
+	MentorCalendarFilter,
+	MentorSortDirection,
 	MentorSortValue,
 	MentorStatusFilter,
 } from "./_schema";
@@ -33,7 +36,8 @@ export default async function MentorsPage({
 		q?: string;
 		status?: string;
 		sort?: string;
-		featured?: string;
+		order?: string;
+		calendar?: string;
 		page?: string;
 	}>;
 }) {
@@ -43,14 +47,20 @@ export default async function MentorsPage({
 	const sp = await searchParams;
 	const status = MentorStatusFilter.safeParse(sp.status);
 	const sort = MentorSortValue.safeParse(sp.sort);
-	const featured = MentorFeaturedFilter.safeParse(sp.featured);
+	const order = MentorSortDirection.safeParse(sp.order);
+	const calendar = MentorCalendarFilter.safeParse(sp.calendar);
 	const page = Math.max(1, Number(sp.page) || 1);
 
-	const { rows: mentors, total } = await getMentorsForAdmin({
+	const activeFilters = {
 		query: sp.q,
 		status: status.success ? status.data : undefined,
+		calendar: calendar.success ? calendar.data : undefined,
+	};
+
+	const { rows: mentors, total } = await getMentorsForAdmin({
+		...activeFilters,
 		sort: sort.success ? sort.data : undefined,
-		featured: featured.success ? featured.data : undefined,
+		order: order.success ? order.data : undefined,
 		page,
 		pageSize: PAGE_SIZE,
 	});
@@ -60,7 +70,12 @@ export default async function MentorsPage({
 			<PageHeader
 				title="Mentors"
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
-				action={<CreateMentorSheet />}
+				action={
+					<div className="flex items-center gap-2">
+						<CopyAllMentorLinksButton count={total} filters={activeFilters} />
+						<CreateMentorSheet />
+					</div>
+				}
 			/>
 
 			<div className="mb-6">
@@ -76,20 +91,31 @@ export default async function MentorsPage({
 					<TableHeader>
 						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<TableHead className="font-medium text-muted-foreground">
+							<SortableTableHead value="name" defaultSortValue="name">
 								Name
-							</TableHead>
+							</SortableTableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Email
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
+							<SortableTableHead
+								value="bookings"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
 								Bookings
-							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
+							</SortableTableHead>
+							<SortableTableHead
+								value="joined"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
 								Joined
+							</SortableTableHead>
+							<TableHead className="w-16 text-center font-medium text-muted-foreground">
+								Link
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Active
@@ -102,7 +128,7 @@ export default async function MentorsPage({
 					<TableBody>
 						{mentors.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} className="p-0">
+								<TableCell colSpan={9} className="p-0">
 									<EmptyState
 										icon={Users}
 										title="No mentors match these filters"

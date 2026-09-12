@@ -13,9 +13,8 @@ import {
 	RESCHEDULE_MIN_NOTICE_HOURS,
 	canReschedule,
 } from "@/src/lib/booking-rules";
-import { CalendarClock, UserX, X } from "lucide-react";
+import { CalendarClock, ExternalLink, UserX, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -30,25 +29,28 @@ export function BookingActions({
 	startAtUtc,
 	status,
 	isUpcoming,
+	meetUrl,
 }: {
 	bookingId: string;
 	mentorSlug: string;
 	startAtUtc: string;
 	status: string;
 	isUpcoming: boolean;
+	meetUrl?: string;
 }) {
-	const router = useRouter();
 	const [rescheduleOpen, setRescheduleOpen] = useState(false);
 	const [cancelOpen, setCancelOpen] = useState(false);
 	const [reason, setReason] = useState("");
 
-	const reschedulable = canReschedule(new Date(startAtUtc).getTime(), Date.now());
+	const reschedulable = canReschedule(
+		new Date(startAtUtc).getTime(),
+		Date.now(),
+	);
 
 	const reschedule = useAction(rescheduleMyBooking, {
 		onSuccess: () => {
 			toast.success("Rescheduled. The mentee has been emailed.");
 			setRescheduleOpen(false);
-			router.refresh();
 		},
 		onError: ({ error }) =>
 			toast.error(error.serverError ?? "Couldn't reschedule."),
@@ -57,14 +59,13 @@ export function BookingActions({
 		onSuccess: () => {
 			toast.success("Cancelled. The mentee has been emailed.");
 			setCancelOpen(false);
-			router.refresh();
 		},
-		onError: ({ error }) => toast.error(error.serverError ?? "Couldn't cancel."),
+		onError: ({ error }) =>
+			toast.error(error.serverError ?? "Couldn't cancel."),
 	});
 	const noShow = useAction(markMyBookingNoShow, {
 		onSuccess: () => {
 			toast.success("Marked as no-show.");
-			router.refresh();
 		},
 		onError: ({ error }) =>
 			toast.error(error.serverError ?? "Couldn't mark no-show."),
@@ -74,43 +75,61 @@ export function BookingActions({
 	if (!isUpcoming) {
 		if (status === "no_show" || status === "cancelled") return null;
 		return (
-			<Button
-				variant="outline"
-				size="sm"
-				disabled={noShow.isPending}
-				onClick={() => noShow.execute({ bookingId })}
-			>
-				<UserX className="size-4" />
-				Mark no-show
-			</Button>
+			<div className="flex items-center">
+				<Button
+					variant="outline"
+					size="sm"
+					className="h-8 rounded-full px-3 text-xs"
+					disabled={noShow.isPending}
+					onClick={() => noShow.execute({ bookingId })}
+				>
+					<UserX className="size-3.5" />
+					Mark no-show
+				</Button>
+			</div>
 		);
 	}
 
 	return (
 		<>
-			<Button
-				variant="outline"
-				size="sm"
-				disabled={!reschedulable}
-				title={
-					reschedulable
-						? undefined
-						: `Too close to the call to reschedule (within ${RESCHEDULE_MIN_NOTICE_HOURS}h)`
-				}
-				onClick={() => setRescheduleOpen(true)}
-			>
-				<CalendarClock className="size-4" />
-				Reschedule
-			</Button>
-			<Button
-				variant="outline"
-				size="sm"
-				className="border-destructive/40 text-destructive hover:bg-destructive/5"
-				onClick={() => setCancelOpen(true)}
-			>
-				<X className="size-4" />
-				Cancel
-			</Button>
+			<div className="flex items-center [&>*:not(:first-child)]:-ml-px">
+				{meetUrl ? (
+					<Button
+						href={meetUrl}
+						isExternal
+						variant="outline"
+						size="sm"
+						className="h-8 rounded-l-full rounded-r-none px-3 text-xs"
+					>
+						<ExternalLink className="size-3.5" />
+						Join Meet
+					</Button>
+				) : null}
+				<Button
+					variant="outline"
+					size="sm"
+					className={`h-8 rounded-none px-3 text-xs ${meetUrl ? "" : "rounded-l-full"}`}
+					disabled={!reschedulable}
+					title={
+						reschedulable
+							? undefined
+							: `Too close to the call to reschedule (within ${RESCHEDULE_MIN_NOTICE_HOURS}h)`
+					}
+					onClick={() => setRescheduleOpen(true)}
+				>
+					<CalendarClock className="size-3.5" />
+					Reschedule
+				</Button>
+				<Button
+					variant="outline"
+					size="sm"
+					className="h-8 rounded-l-none rounded-r-full border-destructive/40 px-3 text-xs text-destructive hover:bg-destructive/5"
+					onClick={() => setCancelOpen(true)}
+				>
+					<X className="size-3.5" />
+					Cancel
+				</Button>
+			</div>
 
 			<Sheet open={rescheduleOpen} onOpenChange={setRescheduleOpen}>
 				<SheetContent className="flex flex-col overflow-y-auto px-4 sm:max-w-2xl! sm:px-6">

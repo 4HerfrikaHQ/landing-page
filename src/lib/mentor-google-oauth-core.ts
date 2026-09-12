@@ -94,6 +94,8 @@ export function isSameOriginMutationRequest(input: {
 export function safeMentorReturnPath(value: string | null | undefined): string {
 	const path = value?.trim() || "/dashboard/mentor";
 	const isOnboardingPath =
+		path.startsWith("/careercorner/onboard/") ||
+		/^\/(?:en|fr|sw)\/careercorner\/onboard\//.test(path) ||
 		path.startsWith("/careers-corner/onboard/") ||
 		/^\/(?:en|fr|sw)\/careers-corner\/onboard\//.test(path);
 	if (

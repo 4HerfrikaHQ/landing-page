@@ -23,6 +23,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";
+import { PortalSwitcher } from "../../_components/portal-switcher";
 
 const SEGMENT_LABELS: Record<string, string> = {
 	dashboard: "Dashboard",
@@ -72,7 +73,11 @@ const NAV_ITEMS: {
 	},
 ];
 
-export function AdminHeader() {
+export function AdminHeader({
+	showMentorPortal = false,
+}: {
+	showMentorPortal?: boolean;
+}) {
 	const pathname = usePathname();
 	const [isPending, startTransition] = useTransition();
 	const [mobileOpen, setMobileOpen] = useState(false);
@@ -83,10 +88,10 @@ export function AdminHeader() {
 	const adminIndex = segments.indexOf("admin");
 
 	const visibleSegments =
-		adminIndex >= 0 ? segments.slice(adminIndex) : segments;
+		adminIndex >= 0 ? segments.slice(adminIndex + 1) : segments;
 
 	const crumbs = visibleSegments.map((seg, i) => {
-		const href = `/${segments.slice(0, adminIndex + i + 1).join("/")}`;
+		const href = `/${segments.slice(0, adminIndex + i + 2).join("/")}`;
 		const label = SEGMENT_LABELS[seg] ?? seg;
 		const isLast = i === visibleSegments.length - 1;
 		return { href, label, isLast };
@@ -115,13 +120,16 @@ export function AdminHeader() {
 						/>
 					</Link>
 					<span className="hidden h-6 w-px bg-border sm:block" />
+					<div className="hidden shrink-0 sm:block">
+						<PortalSwitcher portal="admin" canSwitch={showMentorPortal} />
+					</div>
 					<nav className="hidden min-w-0 items-center gap-1.5 text-sm sm:flex">
-						{crumbs.map((crumb, i) => (
+						{crumbs.map((crumb) => (
 							<span
 								key={crumb.href}
 								className="flex min-w-0 items-center gap-1.5"
 							>
-								{i > 0 && <span className="text-border">/</span>}
+								<span className="text-border">/</span>
 								{crumb.isLast ? (
 									<span className="truncate font-medium text-foreground">
 										{crumb.label}
@@ -189,7 +197,9 @@ export function AdminHeader() {
 							<Menu className="size-5" />
 						</SheetTrigger>
 						<SheetContent side="right" className="w-72">
-							<SheetTitle className="px-4 pt-4">Admin</SheetTitle>
+							<SheetTitle className="px-4 pt-4">
+								<PortalSwitcher portal="admin" canSwitch={showMentorPortal} />
+							</SheetTitle>
 							<nav className="flex flex-col gap-1 px-2 py-2">
 								{NAV_ITEMS.map((item) => {
 									const isActive = item.key === activeKey;

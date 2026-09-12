@@ -38,8 +38,8 @@ function ReviewCard({ review }: { review: Review }) {
 	const rating = Math.max(0, Math.min(5, Math.round(review.rating ?? 5)));
 
 	return (
-		<article className="relative min-w-0 pl-10 sm:pl-[41px]">
-			<div className="flex min-h-[209px] min-w-0 flex-col rounded-2xl bg-[#c62979] py-8 pl-16 pr-8 text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] sm:pl-[57px] sm:pr-[41px]">
+		<article className="relative min-w-0 pl-8 sm:pl-[41px]">
+			<div className="flex min-h-[209px] min-w-0 flex-col rounded-2xl bg-[#c62979] py-6 pl-12 pr-6 text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] sm:py-8 sm:pl-[57px] sm:pr-[41px]">
 				<p className="text-base font-medium leading-6 sm:text-lg sm:leading-[23px]">
 					{review.quote}
 				</p>
@@ -74,7 +74,7 @@ function ReviewCard({ review }: { review: Review }) {
 					alt={review.image.alt}
 					width={82}
 					height={82}
-					className="absolute left-0 top-1/2 size-[82px] -translate-y-1/2 rounded-full object-cover"
+					className="absolute left-0 top-1/2 size-16 -translate-y-1/2 rounded-full object-cover sm:size-[82px]"
 				/>
 			)}
 		</article>
@@ -100,7 +100,7 @@ export function ReviewsSection({
 		<section
 			aria-label="Reviews"
 			className={cn(
-				"relative overflow-x-clip bg-[#f5f5f5] px-6 py-20 xl:px-12 xl:py-[75px] 2xl:px-20",
+				"relative overflow-x-clip bg-[#f5f5f5] px-4 py-14 sm:px-6 sm:py-20 xl:px-12 xl:py-[75px] 2xl:px-20",
 				className,
 			)}
 		>
@@ -121,12 +121,15 @@ export function ReviewsSection({
 
 				{layout === "carousel" ? (
 					<FadeIn>
-						<Carousel opts={{ align: "start" }} className="mt-14 w-full">
-							<CarouselContent className="-ml-10">
+						<Carousel
+							opts={{ align: "start" }}
+							className="mt-10 w-full sm:mt-14"
+						>
+							<CarouselContent className="-ml-4 sm:-ml-10">
 								{reviews.map((review) => (
 									<CarouselItem
 										key={review.id}
-										className="basis-[calc(100%-1rem)] pl-10 md:basis-1/2"
+										className="basis-full pl-4 sm:basis-[calc(100%-1rem)] sm:pl-10 md:basis-1/2"
 									>
 										<ReviewCard review={review} />
 									</CarouselItem>

@@ -1,6 +1,6 @@
 import { CalendarDays, CheckCircle2, Star, UserX, XCircle } from "lucide-react";
 
-import { FilterBar, FilterPills } from "@/components/dashboard/filter-bar";
+import { DashboardFilter, FilterBar } from "@/components/dashboard/filter-bar";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -43,7 +43,7 @@ export default async function MentorStatsPage({
 
 			<FadeIn delay={0.05}>
 				<FilterBar className="mb-6">
-					<FilterPills
+					<DashboardFilter
 						label="Range"
 						paramKey="range"
 						options={RANGE_OPTIONS}

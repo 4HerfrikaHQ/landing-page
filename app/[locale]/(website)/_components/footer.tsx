@@ -11,10 +11,7 @@ export const Footer = async () => {
 	return (
 		<footer className="bg-secondary-500" data-site-footer>
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
-				<StaggerContainer
-					className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5"
-					staggerDelay={0.12}
-				>
+				<StaggerContainer className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
 					<StaggerItem className="text-center sm:text-left">
 						<p className="font-bold text-primary-500 text-xl">
 							{t("quickLinks")}
@@ -30,7 +27,7 @@ export const Footer = async () => {
 							</li>
 							<li>
 								<Link
-									href={"/careers-corner" as Route}
+									href={"/careercorner" as Route}
 									className="text-white transition hover:text-white/75"
 								>
 									Become an Ambassador
@@ -38,7 +35,7 @@ export const Footer = async () => {
 							</li>
 							<li>
 								<Link
-									href={"/careers-corner" as Route}
+									href={"/careercorner" as Route}
 									className="text-white transition hover:text-white/75"
 								>
 									Volunteer as a Mentor
@@ -139,10 +136,7 @@ export const Footer = async () => {
 						{t("allRightsReserved")}
 					</p>
 
-					<StaggerContainer
-						className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start"
-						staggerDelay={0.08}
-					>
+					<StaggerContainer className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
 						<StaggerItem>
 							<a
 								href="https://www.linkedin.com/company/4herfrika"

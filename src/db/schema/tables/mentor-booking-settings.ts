@@ -11,7 +11,7 @@ export const mentorBookingSettings = pgTable("mentor_booking_settings", {
 	min_lead_hours: integer("min_lead_hours").notNull().default(DEFAULT_MIN_LEAD_HOURS),
 	max_horizon_days: integer("max_horizon_days").notNull().default(30),
 	buffer_minutes: integer("buffer_minutes").notNull().default(15),
-	max_active_bookings_per_mentee: integer("max_active_bookings_per_mentee").notNull().default(1),
+	max_active_bookings_per_mentee: integer("max_active_bookings_per_mentee").notNull().default(3),
 });
 
 export type DbMentorBookingSettings = typeof mentorBookingSettings.$inferSelect;

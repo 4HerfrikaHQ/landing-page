@@ -1,5 +1,5 @@
-import { currentUser } from "@/src/auth";
-import { redirect } from "next/navigation";
+import { currentUserCapabilities } from "@/src/auth";
+import { redirect, unauthorized } from "next/navigation";
 import { MentorHeader } from "./_components/mentor-header";
 
 export default async function MentorLayout({
@@ -7,12 +7,14 @@ export default async function MentorLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const user = await currentUser().catch(() => null);
-	if (!user) redirect("/dashboard/login");
+	const capabilities = await currentUserCapabilities().catch(() => null);
+	if (!capabilities) redirect("/dashboard/login");
+	const { isAdmin, isMentor } = capabilities;
+	if (!isMentor) unauthorized();
 
 	return (
 		<div className="min-h-screen bg-muted">
-			<MentorHeader />
+			<MentorHeader showAdminPortal={isAdmin} />
 			{children}
 		</div>
 	);

@@ -349,6 +349,7 @@
 		"mentorProfile": {
 			"notFound": "Mshauri hakupatikana — 4HerFrika",
 			"title": "Weka simu na {name} — 4HerFrika",
+			"ogTitle": "Weka simu na {name}",
 			"description": "Weka simu ya dakika 30 na {name}."
 		}
 	}

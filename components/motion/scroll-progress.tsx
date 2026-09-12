@@ -1,23 +1,14 @@
-"use client";
-
-import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
+import { cn } from "@/utils/cn";
 
 export function ScrollProgress() {
-	const shouldReduce = useReducedMotion();
-	const { scrollYProgress } = useScroll();
-	const scaleX = useSpring(scrollYProgress, {
-		stiffness: 100,
-		damping: 30,
-		restDelta: 0.001,
-	});
-
-	if (shouldReduce) return null;
-
 	return (
-		<motion.div
+		<div
 			data-site-scroll-progress
-			className="fixed top-0 left-0 right-0 h-1 bg-primary-500 origin-left z-[100]"
-			style={{ scaleX }}
+			aria-hidden="true"
+			className={cn(
+				"fixed top-0 left-0 right-0 h-1 origin-left scale-x-0 bg-primary-500 z-[100]",
+				"animate-scroll-progress",
+			)}
 		/>
 	);
 }

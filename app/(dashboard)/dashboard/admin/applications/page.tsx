@@ -15,6 +15,7 @@ export default async function ApplicationsPage({
 		status?: string;
 		q?: string;
 		sort?: string;
+		order?: string;
 		page?: string;
 	}>;
 }) {
@@ -29,6 +30,7 @@ export default async function ApplicationsPage({
 		status,
 		query: sp.q,
 		sort: sp.sort,
+		order: sp.order,
 		page,
 		pageSize: PAGE_SIZE,
 	});

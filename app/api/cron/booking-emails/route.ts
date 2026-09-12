@@ -11,7 +11,7 @@ import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { signBookingToken } from "@/src/lib/booking-tokens";
+import { createActionLink } from "@/src/lib/action-links";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, gte, isNull, lt, lte, ne } from "drizzle-orm";
 import { NextResponse } from "next/server";
@@ -58,10 +58,10 @@ export async function GET(req: Request) {
 		const upper = new Date(now + 25 * 3600_000);
 		const rows = await loadDueBookings("reminder_24h_sent_at", lower, upper);
 		for (const b of rows) {
-			const manageToken = signBookingToken({
-				bookingId: b.id,
+			const manageToken = await createActionLink({
+				resourceId: b.id,
 				action: "manage",
-				expiresAt: b.start_at.getTime(),
+				expiresAt: b.start_at,
 			});
 			await resend.emails.send({
 				from: FROM,
@@ -124,10 +124,10 @@ Need to reschedule? ${siteUrl()}/bookings/${manageToken}
 			)
 			.limit(100);
 		for (const b of rows) {
-			const token = signBookingToken({
-				bookingId: b.id,
+			const token = await createActionLink({
+				resourceId: b.id,
 				action: "feedback",
-				expiresAt: now + 14 * 24 * 3600_000,
+				expiresAt: new Date(now + 14 * 24 * 3600_000),
 			});
 			await resend.emails.send({
 				from: FROM,

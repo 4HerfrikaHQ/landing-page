@@ -1,10 +1,17 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { debounce, parseAsString, useQueryState } from "nuqs";
+import { debounce, parseAsString, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { useId } from "react";
 
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/utils/cn";
 
 /**
@@ -36,9 +43,50 @@ export interface FilterOption {
 	count?: number;
 }
 
-interface FilterPillsProps {
-	/** Visually-hidden / leading label describing the group. */
-	label?: string;
+export function FilterSelect({
+	label,
+	value,
+	options,
+	onValueChange,
+	className,
+}: {
+	label: string;
+	value: string;
+	options: FilterOption[];
+	onValueChange: (value: string | null) => void;
+	className?: string;
+}) {
+	return (
+		<Select value={value} onValueChange={onValueChange}>
+			<SelectTrigger
+				aria-label={label}
+				className={cn(
+					"h-10 w-full rounded-full border-[#E0E0E0] bg-white px-4 sm:w-auto sm:min-w-40",
+					className,
+				)}
+			>
+				<span className="text-muted-foreground">{label}:</span>
+				<SelectValue>
+					{(selectedValue) =>
+						options.find((option) => option.value === selectedValue)?.label ??
+						options[0].label
+					}
+				</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				{options.map((option) => (
+					<SelectItem key={option.value} value={option.value}>
+						{option.label}
+					</SelectItem>
+				))}
+			</SelectContent>
+		</Select>
+	);
+}
+
+interface DashboardFilterProps {
+	/** Label shown within the trigger to keep nearby filters easy to scan. */
+	label: string;
 	options: FilterOption[];
 	/** nuqs query param to read/write. */
 	paramKey: string;
@@ -54,14 +102,17 @@ interface FilterPillsProps {
 	shallow?: boolean;
 	/** Clear the URL page when this filter changes. */
 	resetPageOnChange?: boolean;
+	/** Runs alongside the URL update for filters with dependent state. */
+	onValueChange?: (value: string) => void;
 	className?: string;
 }
 
 /**
- * Pill button group backed by a `nuqs` query param.
- * Uses the blog filter recipe: active = pink, inactive = bordered white.
+ * Reusable dashboard dropdown backed by a `nuqs` query param. Individual
+ * instances can be rendered together while keeping URL state and pagination
+ * behavior consistent across admin and mentor screens.
  */
-export function FilterPills({
+export function DashboardFilter({
 	label,
 	options,
 	paramKey,
@@ -70,59 +121,42 @@ export function FilterPills({
 	allLabel = "All",
 	shallow = false,
 	resetPageOnChange = false,
+	onValueChange,
 	className,
-}: FilterPillsProps) {
-	const [active, setActive] = useQueryState(paramKey, {
-		defaultValue,
-		shallow,
-	});
-	const [, setPage] = useQueryState(
-		"page",
-		parseAsString.withOptions({ shallow }),
+}: DashboardFilterProps) {
+	const [query, setQuery] = useQueryStates(
+		{
+			[paramKey]: parseAsString.withDefault(defaultValue),
+			page: parseAsString,
+		},
+		{ shallow },
 	);
-	const pills: FilterOption[] = includeAll
+	const active = query[paramKey] ?? defaultValue;
+	const selectOptions: FilterOption[] = includeAll
 		? [{ value: defaultValue, label: allLabel }, ...options]
 		: options;
 
-	const pillClass = (value: string) =>
-		cn(
-			"inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
-			active === value
-				? "bg-primary-500 text-white"
-				: "bg-white border border-[#E0E0E0] text-[#636363] hover:border-primary-500 hover:text-primary-500",
-		);
-
 	return (
-		<div className={cn("flex flex-wrap items-center gap-2", className)}>
-			{label ? (
-				<span className="mr-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-					{label}
-				</span>
-			) : null}
-			{pills.map((opt) => (
-				<button
-					key={opt.value}
-					type="button"
-					onClick={() => {
-						void setActive(opt.value);
-						if (resetPageOnChange) void setPage(null);
-					}}
-					className={pillClass(opt.value)}
-				>
-					{opt.label}
-					{typeof opt.count === "number" ? (
-						<span
-							className={cn(
-								"tabular-nums text-xs",
-								active === opt.value ? "text-white/80" : "text-[#9a9a9a]",
-							)}
-						>
-							{opt.count}
-						</span>
-					) : null}
-				</button>
-			))}
-		</div>
+		<FilterSelect
+			label={label}
+			value={active}
+			options={selectOptions.map((option) => ({
+				...option,
+				label:
+					typeof option.count === "number"
+						? `${option.label} (${option.count})`
+						: option.label,
+			}))}
+			className={className}
+			onValueChange={(value) => {
+				if (!value) return;
+				onValueChange?.(value);
+				void setQuery({
+					[paramKey]: value === defaultValue ? null : value,
+					...(resetPageOnChange ? { page: null } : {}),
+				});
+			}}
+		/>
 	);
 }
 
@@ -162,24 +196,27 @@ export function SearchInput({
 	className,
 }: SearchInputProps) {
 	const id = useId();
-	const [queryValue, setQueryValue] = useQueryState(
-		paramKey,
-		parseAsString
-			.withDefault("")
-			.withOptions({ limitUrlUpdates: debounce(debounceMs), shallow }),
+	const [query, setQuery] = useQueryStates(
+		{
+			[paramKey]: parseAsString.withDefault(""),
+			page: parseAsString,
+		},
+		{ shallow },
 	);
-	const value = controlledValue ?? queryValue;
-	const [, setPage] = useQueryState(
-		"page",
-		parseAsString.withOptions({ shallow }),
-	);
+	const value = controlledValue ?? query[paramKey] ?? "";
 	const handleValueChange = (nextValue: string) => {
 		if (onValueChange) {
 			onValueChange(nextValue);
-		} else {
-			void setQueryValue(nextValue || null);
+			if (resetPageOnChange) void setQuery({ page: null });
+			return;
 		}
-		if (resetPageOnChange) void setPage(null);
+		void setQuery(
+			{
+				[paramKey]: nextValue || null,
+				...(resetPageOnChange ? { page: null } : {}),
+			},
+			{ limitUrlUpdates: debounce(debounceMs) },
+		);
 	};
 
 	return (

@@ -5,6 +5,7 @@ import {
 	ReviewsSection,
 } from "@/components/reviews/reviews-section";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/src/lib/analytics";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -16,7 +17,7 @@ import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LocaleSwitcher } from "../../_components/locale-switcher";
 import { SubscribeFormClient } from "../../_components/subscribe-client";
 import { JOIN_US_URL } from "../../navigation";
@@ -99,7 +100,7 @@ const navLinks = [
 	["About Us", "/about"],
 	["Projects", "/projects"],
 	["Academy", "/academy"],
-	["Career Corner", "/careers-corner"],
+	["Career Corner", "/careercorner"],
 	["Blog", "/blog"],
 	["Contact Us", "/contact-us"],
 ] as const;
@@ -158,13 +159,25 @@ export function AcademyPage() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [academyIndex, setAcademyIndex] = useState(0);
 	const [selectedAcademy, setSelectedAcademy] = useState<Academy>("tech");
+	const viewedRef = useRef(false);
 
-	const openWaitlist = (academy: Academy = "tech") => {
+	const openWaitlist = (
+		academy: Academy = "tech",
+		source: "hero" | "academy_card" | "page_cta" = "hero",
+	) => {
+		trackEvent("academy_waitlist_opened", {
+			academy_type: academy,
+			source,
+		});
 		setSelectedAcademy(academy);
 		setModalOpen(true);
 	};
 
 	useEffect(() => {
+		if (!viewedRef.current) {
+			viewedRef.current = true;
+			trackEvent("academy_viewed");
+		}
 		document.body.dataset.academyPage = "true";
 
 		return () => {
@@ -316,7 +329,9 @@ export function AcademyPage() {
 											/>
 											<Button
 												type="button"
-												onClick={() => openWaitlist(academy.academy)}
+												onClick={() =>
+													openWaitlist(academy.academy, "academy_card")
+												}
 												variant="outline-white"
 												size="icon"
 												aria-label={`${t("joinWaitlist")} — ${t(academyTranslationKeys[academy.academy].name)}`}
@@ -353,7 +368,7 @@ export function AcademyPage() {
 					</div>
 					<Button
 						type="button"
-						onClick={() => openWaitlist()}
+						onClick={() => openWaitlist("tech", "page_cta")}
 						variant="outline-white"
 						size="sm"
 						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-lg:static max-lg:self-start"
@@ -425,10 +440,10 @@ function AcademyFooter() {
 								<Link href="/projects">Projects</Link>
 							</li>
 							<li>
-								<Link href="/careers-corner">Become an Ambassador</Link>
+								<Link href="/careercorner">Become an Ambassador</Link>
 							</li>
 							<li>
-								<Link href="/careers-corner">Volunteer as a Mentor</Link>
+								<Link href="/careercorner">Volunteer as a Mentor</Link>
 							</li>
 							<li>
 								<Link href="/donate">Donate</Link>

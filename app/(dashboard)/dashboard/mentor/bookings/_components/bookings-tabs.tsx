@@ -1,22 +1,21 @@
 "use client";
 
 import { formatInTimeZone } from "date-fns-tz";
-import { CalendarDays, ExternalLink, SearchX } from "lucide-react";
+import { CalendarDays, SearchX } from "lucide-react";
 import { parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
 
 import { AvatarCircle } from "@/components/dashboard/avatar-circle";
 import { DataCard, DataCardSection } from "@/components/dashboard/data-card";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import {
+	DashboardFilter,
 	FilterBar,
-	FilterPills,
 	SearchInput,
 } from "@/components/dashboard/filter-bar";
 import { Pagination } from "@/components/dashboard/pagination";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { StaggerContainer } from "@/components/motion/stagger-container";
 import { StaggerItem } from "@/components/motion/stagger-item";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import type { MentorBookingsResult } from "../_actions";
 import { BookingTab } from "../_schema";
@@ -110,12 +109,16 @@ export function BookingsTabs({
 			<div className="mt-5">
 				<FilterBar>
 					<SearchInput placeholder="Search mentee name or email" />
-					<FilterPills
+					<DashboardFilter
 						label="Status"
 						paramKey="status"
 						options={STATUS_OPTIONS}
 					/>
-					<FilterPills label="Stage" paramKey="stage" options={STAGE_OPTIONS} />
+					<DashboardFilter
+						label="Stage"
+						paramKey="stage"
+						options={STAGE_OPTIONS}
+					/>
 				</FilterBar>
 			</div>
 
@@ -176,14 +179,6 @@ function BookingCard({
 	mentorSlug: string;
 	isUpcoming: boolean;
 }) {
-	const contactLine = [
-		booking.mentee_country,
-		booking.mentee_phone,
-		booking.mentee_linkedin,
-	]
-		.filter(Boolean)
-		.join(" · ");
-
 	return (
 		<DataCard>
 			<DataCardSection className="space-y-4">
@@ -208,31 +203,46 @@ function BookingCard({
 					</div>
 					<div className="flex flex-wrap items-center gap-3 sm:justify-end">
 						<StatusBadge status={booking.status} />
-						{isUpcoming && booking.status !== "cancelled" ? (
-							<Button
-								href={booking.meet_url}
-								isExternal
-								variant="outline"
-								size="sm"
-							>
-								<ExternalLink className="size-4" />
-								Join Meet
-							</Button>
-						) : null}
 						<BookingActions
 							bookingId={booking.id}
 							mentorSlug={mentorSlug}
 							startAtUtc={booking.start_at.toISOString()}
 							status={booking.status}
 							isUpcoming={isUpcoming}
+							meetUrl={
+								isUpcoming && booking.status !== "cancelled"
+									? booking.meet_url
+									: undefined
+							}
 						/>
 					</div>
 				</div>
 
-				<div className="space-y-2 border-t border-border/60 pt-4 text-sm">
-					<p className="whitespace-pre-wrap text-foreground">
-						<span className="font-medium">Purpose:</span> {booking.purpose}
-					</p>
+				<div className="space-y-4 border-t border-border/60 pt-4 text-sm">
+					{booking.mentee_country || booking.mentee_phone ? (
+						<dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+							{booking.mentee_country ? (
+								<div>
+									<dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+										Country
+									</dt>
+									<dd className="mt-1 text-foreground">
+										{booking.mentee_country}
+									</dd>
+								</div>
+							) : null}
+							{booking.mentee_phone ? (
+								<div>
+									<dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+										Phone / WhatsApp
+									</dt>
+									<dd className="mt-1 text-foreground">
+										{booking.mentee_phone}
+									</dd>
+								</div>
+							) : null}
+						</dl>
+					) : null}
 					{booking.mentee_career_stage ? (
 						<p className="text-muted-foreground">
 							<span className="font-medium text-foreground">Career stage:</span>{" "}
@@ -240,9 +250,20 @@ function BookingCard({
 								booking.mentee_career_stage}
 						</p>
 					) : null}
-					{contactLine ? (
-						<p className="text-muted-foreground">{contactLine}</p>
+					{booking.mentee_linkedin ? (
+						<p className="break-all text-muted-foreground">
+							<span className="font-medium text-foreground">LinkedIn:</span>{" "}
+							{booking.mentee_linkedin}
+						</p>
 					) : null}
+					<div className="space-y-2">
+						<h3 className="text-xs font-semibold uppercase tracking-wide text-primary-500">
+							Purpose
+						</h3>
+						<p className="whitespace-pre-wrap text-foreground">
+							{booking.purpose}
+						</p>
+					</div>
 				</div>
 
 				{feedback ? (

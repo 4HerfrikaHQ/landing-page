@@ -1,6 +1,7 @@
 "use client";
 
 import { AvailabilityEditor } from "@/components/availability-editor";
+import { saveMyAvailability } from "@/src/db/actions/availability";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
@@ -222,7 +223,7 @@ export function MentorProfile({
 								}
 							/>
 							<Field
-								label="Nickname"
+								label="Display Name"
 								name="nickname"
 								value={fields.nickname}
 								onChange={(e) =>
@@ -278,6 +279,7 @@ export function MentorProfile({
 					<AvailabilityEditor
 						mentorId={dbMentor.id}
 						initialSlots={dbMentor.availability}
+						onSave={saveMyAvailability}
 					/>
 				)}
 			</div>

@@ -349,6 +349,7 @@
 		"mentorProfile": {
 			"notFound": "Mentor not found — 4HerFrika",
 			"title": "Book a call with {name} — 4HerFrika",
+			"ogTitle": "Book a call with {name}",
 			"description": "Book a 30-minute call with {name}."
 		}
 	}
