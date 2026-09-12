@@ -15,6 +15,7 @@ import {
 	ensureMentorCalendarConnection,
 	isMentorCalendarError,
 } from "@/src/lib/google-calendar";
+import { sendMentorOnboardingInvite } from "@/src/lib/mentor-onboarding-invite";
 import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
 	ActionError,
@@ -260,8 +261,25 @@ export async function createMentor(
 		.returning({ id: schema.mentors.id });
 
 	await insertDefaultBookingSettings(db, mentor.id);
-
 	revalidatePath("/dashboard/admin/mentors");
+	try {
+		await sendMentorOnboardingInvite({
+			mentorId: mentor.id,
+			to: email,
+			name,
+			intro: "You've been invited to join 4HerFrika as a mentor.",
+		});
+	} catch (inviteError) {
+		console.error("[mentor-onboarding-invite-failed]", {
+			mentorId: mentor.id,
+			errorType:
+				inviteError instanceof Error ? inviteError.name : typeof inviteError,
+		});
+		return {
+			error: "Mentor was added, but the onboarding email could not be sent.",
+		};
+	}
+
 	return {};
 }
 
