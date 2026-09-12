@@ -21,7 +21,10 @@ import { PublicLinkCard } from "./_components/public-link-card";
 
 async function connectMentorGoogleCalendar() {
 	"use server";
-	return startMentorGoogleOAuth({ returnPath: "/dashboard/mentor/profile" });
+	return startMentorGoogleOAuth({
+		forceConsent: true,
+		returnPath: "/dashboard/mentor/profile",
+	});
 }
 
 async function reconnectMentorGoogleCalendar() {

@@ -33,9 +33,11 @@ export async function GET(request: NextRequest) {
 		const returnPath = safeMentorReturnPath(
 			error instanceof MentorGoogleOAuthError ? error.returnPath : undefined,
 		);
+		const reason = mentorGoogleOAuthErrorReason(error);
+		console.warn("[mentor-google-oauth] callback_failed", { reason });
 		const redirectUrl = new URL(returnPath, request.url);
 		redirectUrl.searchParams.set("googleCalendar", "error");
-		redirectUrl.searchParams.set("reason", mentorGoogleOAuthErrorReason(error));
+		redirectUrl.searchParams.set("reason", reason);
 		return NextResponse.redirect(redirectUrl);
 	}
 }
