@@ -36,13 +36,13 @@ export const Hero = async ({
 			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
 				<div className="w-full">
 					<div className="animate-enter">
-						<p className="text-foreground text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize text-balance">
+						<h1 className="text-foreground text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize text-balance">
 							{t.rich("heroTitle", {
 								highlight: (chunks) => (
 									<span className="text-primary-500">{chunks}</span>
 								),
 							})}
-						</p>
+						</h1>
 					</div>
 					<PrismicImage
 						field={heroImage}

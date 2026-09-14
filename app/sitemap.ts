@@ -1,15 +1,17 @@
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
-import type { MetadataRoute } from "next";
 import { and, eq } from "drizzle-orm";
+import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://4herfrika.org";
 
 const staticRoutes = [
 	"",
 	"/about",
+	"/academy",
 	"/blog",
 	"/careercorner",
+	"/careercorner/apply",
 	"/contact-us",
 	"/donate",
 	"/faq",
@@ -21,9 +23,7 @@ const staticRoutes = [
 
 const locales = ["en", "fr", "sw"];
 
-// Mentor profiles come from the database, so keep the sitemap request-time
-// generated instead of requiring database access during the build.
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const entries: MetadataRoute.Sitemap = [];
@@ -40,13 +40,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		}
 	}
 
-	const mentors = await db.query.mentors.findMany({
-		where: and(
-			eq(schema.mentors.active, true),
-			eq(schema.mentors.archived, false),
-		),
-		columns: { slug: true, created_at: true },
-	});
+	let mentors: Array<{ slug: string; created_at: Date }> = [];
+	try {
+		mentors = await db.query.mentors.findMany({
+			where: and(
+				eq(schema.mentors.active, true),
+				eq(schema.mentors.archived, false),
+			),
+			columns: { slug: true, created_at: true },
+		});
+	} catch (error) {
+		console.error(
+			"sitemap: failed to load mentors, emitting static routes only",
+			error,
+		);
+	}
 
 	for (const mentor of mentors) {
 		for (const locale of locales) {
