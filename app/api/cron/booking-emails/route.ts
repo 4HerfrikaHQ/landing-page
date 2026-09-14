@@ -14,7 +14,19 @@ import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
 import { formatInTimeZone } from "date-fns-tz";
-import { and, eq, gte, isNull, lt, lte, ne, sql } from "drizzle-orm";
+import {
+	and,
+	eq,
+	gt,
+	gte,
+	isNull,
+	lt,
+	lte,
+	ne,
+	notExists,
+	sql,
+} from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -25,6 +37,10 @@ const FROM =
 	process.env.RESEND_FROM_HEADER ?? "4HerFrika <bookings@4herfrika.org>";
 const MAX_BACKLOG_AGE_MS = 14 * 24 * 3600_000;
 const AFTER_CALL_EMAIL_DELAY_MS = 5 * 60_000;
+// Nudge a mentee to rebook ~2 weeks after her session, and only within a
+// 2-week window (14d–28d old) so a first run can't blast the whole backlog.
+const REBOOK_NURTURE_DELAY_MS = 14 * 24 * 3600_000;
+const REBOOK_NURTURE_MAX_AGE_MS = 28 * 24 * 3600_000;
 
 function fmt(date: Date, tz: string): string {
 	return formatInTimeZone(date, tz, "EEEE, MMM d, yyyy 'at' HH:mm zzz");
@@ -61,6 +77,7 @@ export async function GET(req: Request) {
 		reminder1h: 0,
 		feedback: 0,
 		mentorFollowup: 0,
+		rebookNurture: 0,
 	};
 	const errors: Array<{ job: string; bookingId: string }> = [];
 	const startedAt = Date.now();
@@ -74,6 +91,7 @@ export async function GET(req: Request) {
 		runLoggedJob("reminder1h", () => run1HourReminderJob(context)),
 		runLoggedJob("feedback", () => runFeedbackRequestJob(context)),
 		runLoggedJob("mentorFollowup", () => runMentorFollowupJob(context)),
+		runLoggedJob("rebookNurture", () => runRebookNurtureJob(context)),
 	]);
 
 	console.info("[booking-cron] run completed", {
@@ -96,6 +114,7 @@ type JobContext = {
 		reminder1h: number;
 		feedback: number;
 		mentorFollowup: number;
+		rebookNurture: number;
 	};
 	errors: Array<{ job: string; bookingId: string }>;
 };
@@ -273,6 +292,73 @@ Thanks again for showing up. If there's anything you wanted to follow up with ${
 	}
 }
 
+async function runRebookNurtureJob({
+	resend,
+	runtime,
+	counts,
+	errors,
+}: JobContext) {
+	// A mentee has "rebooked" if any newer booking row shares her email.
+	// Reschedules update the same row, so a new row means a genuinely new
+	// booking. Email is free text, so normalize before comparing.
+	const laterBooking = alias(bookings, "later_booking");
+	const rows = await db
+		.select({
+			id: bookings.id,
+			mentee_name: bookings.mentee_name,
+			mentee_email: bookings.mentee_email,
+			mentorName: users.name,
+		})
+		.from(bookings)
+		.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+		.innerJoin(users, eq(mentors.user_id, users.id))
+		.where(
+			and(
+				eq(mentors.archived, false),
+				eq(bookings.status, "completed"),
+				isNull(bookings.rebook_nurture_sent_at),
+				lte(bookings.end_at, new Date(runtime - REBOOK_NURTURE_DELAY_MS)),
+				gte(bookings.end_at, new Date(runtime - REBOOK_NURTURE_MAX_AGE_MS)),
+				notExists(
+					db
+						.select({ one: sql`1` })
+						.from(laterBooking)
+						.where(
+							and(
+								sql`lower(trim(${laterBooking.mentee_email})) = lower(trim(${bookings.mentee_email}))`,
+								gt(laterBooking.created_at, bookings.created_at),
+							),
+						),
+				),
+			),
+		)
+		.limit(100);
+	for (const b of rows) {
+		const claimedAt = await claim(b.id, "rebook_nurture_sent_at");
+		if (!claimedAt) continue;
+		try {
+			await sendEmail(resend, {
+				from: FROM,
+				to: b.mentee_email,
+				subject: "Ready for your next 4HerFrika session?",
+				text: `Hi ${b.mentee_name},
+
+It's been a couple of weeks since your call with ${b.mentorName}. How's it going?
+
+When you're ready for the next step, mentors across medicine, law, engineering, business, tech and more are here to help. Booking is free.
+
+Find your next mentor: ${siteUrl()}/careercorner
+
+— 4HerFrika`,
+			});
+			counts.rebookNurture += 1;
+		} catch (error) {
+			await release(b.id, "rebook_nurture_sent_at", claimedAt);
+			recordError(errors, "rebookNurture", b.id, error);
+		}
+	}
+}
+
 async function runLoggedJob(job: string, run: () => Promise<void>) {
 	const startedAt = Date.now();
 	console.info("[booking-cron] job started", { job });
@@ -303,7 +389,8 @@ type SentAtField =
 	| "reminder_24h_sent_at"
 	| "reminder_1h_sent_at"
 	| "feedback_email_sent_at"
-	| "mentor_followup_sent_at";
+	| "mentor_followup_sent_at"
+	| "rebook_nurture_sent_at";
 
 function sentAtColumn(field: SentAtField) {
 	return bookings[field];

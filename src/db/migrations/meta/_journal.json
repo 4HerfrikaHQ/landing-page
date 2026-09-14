@@ -183,6 +183,13 @@
       "when": 1789226793231,
       "tag": "0025_update_booking_lifecycle_cron_interval",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1789406681304,
+      "tag": "0026_wide_franklin_storm",
+      "breakpoints": true
     }
   ]
 }

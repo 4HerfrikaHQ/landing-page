@@ -80,6 +80,9 @@ export const bookings = pgTable(
 		mentor_followup_sent_at: timestamp("mentor_followup_sent_at", {
 			withTimezone: true,
 		}),
+		rebook_nurture_sent_at: timestamp("rebook_nurture_sent_at", {
+			withTimezone: true,
+		}),
 
 		created_at: timestamp("created_at", { withTimezone: true })
 			.notNull()
