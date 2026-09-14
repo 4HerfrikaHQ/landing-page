@@ -1,6 +1,9 @@
+import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { Button } from "@/components/ui/button";
 import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, CheckCircle2, LinkIcon } from "lucide-react";
+import type { Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { loadFeedbackContext } from "./_actions";
@@ -48,6 +51,14 @@ export default async function FeedbackPage({
 						icon={CheckCircle2}
 						title="We already have your feedback"
 						description="Thanks for sharing. It helps us match mentors better and improve the program."
+						action={
+							<div className="flex flex-col gap-3 sm:flex-row">
+								<Button href={"/careercorner" as Route}>Browse mentors</Button>
+								<Button href={JOIN_US_URL} isExternal variant="outline">
+									Join the community
+								</Button>
+							</div>
+						}
 					/>
 				</Shell>
 			);
@@ -91,7 +102,11 @@ export default async function FeedbackPage({
 				</div>
 
 				<div className="mt-8">
-					<FeedbackForm token={token} />
+					<FeedbackForm
+						token={token}
+						mentorName={mentorName}
+						mentorSlug={result.mentor.slug}
+					/>
 				</div>
 			</div>
 		</main>
