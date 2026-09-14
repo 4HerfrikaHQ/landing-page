@@ -109,12 +109,17 @@ export default async function AdminFeedbackPage({
 								<TableCell className="px-4 whitespace-nowrap">
 									{r.rating ? `${r.rating}/5` : "—"}
 								</TableCell>
-								<TableCell className="px-4 max-w-md">
+								<TableCell className="w-full min-w-64 max-w-md px-4">
 									{r.comment ? (
-										<div className="whitespace-pre-wrap text-foreground">
-											{r.comment}
+										<div className="space-y-1.5">
+											<p
+												className="line-clamp-3 whitespace-pre-wrap break-words text-foreground"
+												title={r.comment}
+											>
+												{r.comment}
+											</p>
 											{r.testimonial_consent ? (
-												<span className="ml-2 inline-flex items-center rounded-full bg-primary-500/10 px-2 py-0.5 text-xs font-medium text-primary-500">
+												<span className="inline-flex items-center rounded-full bg-primary-500/10 px-2 py-0.5 text-xs font-medium text-primary-500">
 													Testimonial OK
 												</span>
 											) : null}
