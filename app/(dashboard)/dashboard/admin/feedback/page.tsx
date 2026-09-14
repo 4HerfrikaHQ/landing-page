@@ -11,26 +11,13 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { currentDbUser } from "@/src/auth";
-import type { CallHappened } from "@/src/db/schema/tables/booking-feedback";
 import { Megaphone, MessageSquareText, Star } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { getFeedbackForAdmin, getFeedbackSummaryForAdmin } from "./_actions";
+import { FeedbackRow } from "./_components/feedback-row";
 
 const PAGE_SIZE = 50;
-
-const CALL_LABELS: Record<CallHappened, string> = {
-	yes: "Call happened",
-	mentor_no_show: "Mentor no-show",
-	mentee_no_show: "Mentee no-show",
-	rescheduled_externally: "Rescheduled externally",
-};
-
-const dateFmt = new Intl.DateTimeFormat("en-GB", {
-	day: "2-digit",
-	month: "short",
-	year: "numeric",
-});
 
 export default async function AdminFeedbackPage({
 	searchParams,
@@ -89,50 +76,16 @@ export default async function AdminFeedbackPage({
 							<TableHead className="px-4">Outcome</TableHead>
 							<TableHead className="px-4">Rating</TableHead>
 							<TableHead className="px-4">Comment</TableHead>
+							<TableHead className="px-4 text-right">Details</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{rows.map((r) => (
-							<TableRow key={r.booking_id} className="align-top">
-								<TableCell className="px-4 whitespace-nowrap text-muted-foreground">
-									{dateFmt.format(r.created_at)}
-								</TableCell>
-								<TableCell className="px-4 whitespace-nowrap font-medium">
-									{r.mentor_name}
-								</TableCell>
-								<TableCell className="px-4 whitespace-nowrap">
-									{r.mentee_name}
-								</TableCell>
-								<TableCell className="px-4 whitespace-nowrap text-muted-foreground">
-									{CALL_LABELS[r.call_happened] ?? r.call_happened}
-								</TableCell>
-								<TableCell className="px-4 whitespace-nowrap">
-									{r.rating ? `${r.rating}/5` : "—"}
-								</TableCell>
-								<TableCell className="w-full min-w-64 max-w-md px-4">
-									{r.comment ? (
-										<div className="space-y-1.5">
-											<p
-												className="line-clamp-3 whitespace-pre-wrap break-words text-foreground"
-												title={r.comment}
-											>
-												{r.comment}
-											</p>
-											{r.testimonial_consent ? (
-												<span className="inline-flex items-center rounded-full bg-primary-500/10 px-2 py-0.5 text-xs font-medium text-primary-500">
-													Testimonial OK
-												</span>
-											) : null}
-										</div>
-									) : (
-										<span className="text-muted-foreground">—</span>
-									)}
-								</TableCell>
-							</TableRow>
+							<FeedbackRow key={r.booking_id} feedback={r} />
 						))}
 						{rows.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={6} className="p-6">
+								<TableCell colSpan={7} className="p-6">
 									<EmptyState
 										icon={MessageSquareText}
 										title="No feedback yet"
