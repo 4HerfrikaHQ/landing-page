@@ -26,8 +26,37 @@ export default async function FAQPage({
 	const t = await getTranslations("faq");
 	const page = await getFaqPage();
 
+	const faqItems = page.data.frequently_asked_questions.flatMap(
+		({ section }) => {
+			const sectionData = (
+				section as unknown as {
+					data?: { faq?: Array<{ question: string; answer: string }> };
+				}
+			).data;
+			return sectionData?.faq ?? [];
+		},
+	);
+
+	const faqSchema = {
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		mainEntity: faqItems.map(({ question, answer }) => ({
+			"@type": "Question",
+			name: question,
+			acceptedAnswer: { "@type": "Answer", text: answer },
+		})),
+	};
+
 	return (
 		<>
+			{faqItems.length > 0 && (
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
+					}}
+				/>
+			)}
 			<div className="faqbg lg:pb-24 md:pb-16 pb-14 relative">
 				{page.data.header_image.url && (
 					<Image
