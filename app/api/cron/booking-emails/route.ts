@@ -10,9 +10,14 @@ import { timingSafeEqual } from "node:crypto";
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
+import { emailUnsubscribes } from "@/src/db/schema/tables/email-unsubscribes";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
+import {
+	unsubscribePostUrl,
+	unsubscribeUrl,
+} from "@/src/lib/email-unsubscribe";
 import { formatInTimeZone } from "date-fns-tz";
 import {
 	and,
@@ -330,6 +335,14 @@ async function runRebookNurtureJob({
 							),
 						),
 				),
+				notExists(
+					db
+						.select({ one: sql`1` })
+						.from(emailUnsubscribes)
+						.where(
+							sql`${emailUnsubscribes.email} = lower(trim(${bookings.mentee_email}))`,
+						),
+				),
 			),
 		)
 		.limit(100);
@@ -349,7 +362,13 @@ When you're ready for the next step, mentors across medicine, law, engineering, 
 
 Find your next mentor: ${siteUrl()}/careercorner
 
-— 4HerFrika`,
+— 4HerFrika
+
+Don't want these reminders? Unsubscribe: ${unsubscribeUrl(b.mentee_email)}`,
+				headers: {
+					"List-Unsubscribe": `<${unsubscribePostUrl(b.mentee_email)}>, <${unsubscribeUrl(b.mentee_email)}>`,
+					"List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+				},
 			});
 			counts.rebookNurture += 1;
 		} catch (error) {
