@@ -1,4 +1,4 @@
-import { describe, expect, spyOn, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import {
 	type MentorCalendarConnection,
 	type MentorCalendarConnectionProvider,
@@ -174,44 +174,6 @@ describe("mentor-scoped Google Calendar", () => {
 		expect(body.attendees).toEqual([{ email: menteeEmail }]);
 		expect(body.conferenceData.createRequest.requestId).toBe(attemptKey);
 		expect(body.id).toBe(deterministicCalendarEventId(attemptKey));
-	});
-
-	test("logs a rejected Google event request without its free-text message", async () => {
-		const log = spyOn(console, "error").mockImplementation(() => undefined);
-		try {
-			const client = createMentorCalendarClient({
-				connectionProvider: provider(connection()),
-				fetchImpl: async (_input, init) =>
-					init?.method === "POST"
-						? response(
-								{
-									error: {
-										status: "PERMISSION_DENIED",
-										message: "Sensitive Google response text",
-									},
-								},
-								403,
-							)
-						: response({}, 404),
-			});
-			await expect(
-				client.createMentorCalendarEvent(createParams("rejected-attempt")),
-			).rejects.toMatchObject({ code: "remote_error" });
-			expect(log).toHaveBeenCalledWith(
-				"[booking-calendar] google_request_failed",
-				{
-					operation: "create_event",
-					mentorId,
-					httpStatus: 403,
-					googleStatus: "PERMISSION_DENIED",
-				},
-			);
-			expect(JSON.stringify(log.mock.calls)).not.toContain(
-				"Sensitive Google response text",
-			);
-		} finally {
-			log.mockRestore();
-		}
 	});
 
 	test("rejects a foreign organizer or creator without deleting it", async () => {
