@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { saveOnboardingAvailability } from "@/src/db/actions/availability";
+import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
 import { CircleAlertIcon, ClockIcon, SparklesIcon } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -51,35 +52,11 @@ function getCallbackOutcome(
 const SUPPORT_MAILTO =
 	"mailto:4herfrika@gmail.com?subject=My%20mentor%20onboarding%20link";
 
-function loginUrl(email: string | null) {
-	return email
-		? `/dashboard/login?email=${encodeURIComponent(email)}`
-		: "/dashboard/login";
-}
-
-const LINK_PROBLEM_COPY: Record<
-	string,
-	{ icon: typeof CircleAlertIcon; title: string; description: string }
-> = {
-	used: {
-		icon: SparklesIcon,
-		title: "You've already set up your profile",
-		description:
-			"This setup link only works once. To update your profile, availability, or see your bookings, sign in with your email. We'll send you a 6-digit code — no password needed.",
-	},
-	expired: {
-		icon: ClockIcon,
-		title: "This setup link has expired",
-		description:
-			"Setup links last 30 days. If you already finished setting up, just sign in. If not, email us and we'll send you a new link.",
-	},
-	malformed: {
-		icon: CircleAlertIcon,
-		title: "This link isn't working",
-		description:
-			"Try opening it straight from your invite email. If you already finished setting up, just sign in instead.",
-	},
-};
+const LINK_PROBLEM = {
+	used: { icon: SparklesIcon, key: "linkUsed" },
+	expired: { icon: ClockIcon, key: "linkExpired" },
+	malformed: { icon: CircleAlertIcon, key: "linkInvalid" },
+} as const;
 
 function OnboardShell({ children }: { children: React.ReactNode }) {
 	return (
@@ -127,27 +104,33 @@ export default async function OnboardingPage({
 		searchParams,
 	]);
 
+	const t = await getTranslations("mentorAuth");
+
 	if (!result.ok) {
-		const loginHref = loginUrl(result.email);
-		const copy =
-			LINK_PROBLEM_COPY[result.reason] ?? LINK_PROBLEM_COPY.malformed;
+		const problem =
+			result.reason === "used" || result.reason === "expired"
+				? LINK_PROBLEM[result.reason]
+				: LINK_PROBLEM.malformed;
 		return (
 			<OnboardShell>
 				<div className="flex flex-col items-center">
 					<FourHerfrikaLogo className="h-10 w-auto" />
 					<EmptyState
 						className="mt-10 w-full border-solid bg-white"
-						icon={copy.icon}
-						title={copy.title}
-						description={copy.description}
+						icon={problem.icon}
+						title={t(`${problem.key}.title`)}
+						description={t(`${problem.key}.description`)}
 						action={
 							<div className="flex flex-wrap items-center justify-center gap-3">
-								<Button href={loginHref} size="sm">
-									Sign in to your dashboard
+								<Button
+									href={mentorLoginUrl({ email: result.email, locale })}
+									size="sm"
+								>
+									{t("signIn")}
 								</Button>
 								{result.reason !== "used" ? (
 									<Button href={SUPPORT_MAILTO} variant="outline" size="sm">
-										Email the 4HerFrika team
+										{t("emailTeam")}
 									</Button>
 								) : null}
 							</div>
@@ -170,19 +153,19 @@ export default async function OnboardingPage({
 					<EmptyState
 						className="mt-10 w-full border-solid bg-surface-pink/40"
 						icon={SparklesIcon}
-						title="Your profile is already live"
-						description="You're all set. Mentees can find you in the directory and book a call. To update your bio, photo, or availability, sign in with your email at 4herfrika.org/dashboard/login."
+						title={t("alreadyLive.title")}
+						description={t("alreadyLive.description")}
 						action={
 							<div className="flex flex-wrap items-center justify-center gap-3">
 								<Button href={`/careercorner/${mentor.slug}`} size="sm">
-									View public profile
+									{t("alreadyLive.viewProfile")}
 								</Button>
 								<Button
-									href={loginUrl(mentor.email)}
+									href={mentorLoginUrl({ email: mentor.email, locale })}
 									variant="outline"
 									size="sm"
 								>
-									Sign in to your dashboard
+									{t("signIn")}
 								</Button>
 							</div>
 						}

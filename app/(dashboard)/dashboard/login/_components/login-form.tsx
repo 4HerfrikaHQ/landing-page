@@ -10,6 +10,7 @@ import {
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
@@ -17,6 +18,7 @@ import { sendLoginCode, verifyLoginCode } from "../_actions";
 import { SendLoginCodeSchema, VerifyLoginCodeSchema } from "../_schema";
 
 export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
+	const t = useTranslations("mentorAuth.login");
 	const [cooldown, setCooldown] = useState(0);
 
 	useEffect(() => {
@@ -59,12 +61,9 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 			<form onSubmit={send.handleSubmitWithAction} className="space-y-6">
 				<div className="space-y-2">
 					<h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground">
-						Sign in to your mentor account
+						{t("title")}
 					</h1>
-					<p className="text-base text-muted-foreground">
-						Enter the email address your invite was sent to. We'll email you a
-						6-digit code. No password needed.
-					</p>
+					<p className="text-base text-muted-foreground">{t("subtitle")}</p>
 				</div>
 
 				<div className="space-y-2">
@@ -72,7 +71,7 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 						htmlFor="email"
 						className="text-sm font-medium text-foreground"
 					>
-						Email address
+						{t("emailLabel")}
 					</label>
 					<Input
 						id="email"
@@ -80,7 +79,7 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 						autoComplete="email"
 						inputMode="email"
 						autoFocus
-						placeholder="you@example.com"
+						placeholder={t("emailPlaceholder")}
 						aria-invalid={error ? true : undefined}
 						aria-describedby={error ? "login-error" : undefined}
 						className="h-12 px-4 text-base md:text-base"
@@ -96,7 +95,7 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 					disabled={send.action.isPending}
 					className="h-12 w-full text-base md:text-base"
 				>
-					{send.action.isPending ? "Sending your code…" : "Email me a code"}
+					{send.action.isPending ? t("sending") : t("sendCode")}
 				</Button>
 			</form>
 		);
@@ -112,14 +111,17 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 		<form onSubmit={verify.handleSubmitWithAction} className="space-y-6">
 			<div className="space-y-2">
 				<h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground">
-					Check your email
+					{t("checkEmail")}
 				</h1>
 				<p className="text-base text-muted-foreground">
-					We sent a 6-digit code to{" "}
-					<span className="break-all font-medium text-foreground">
-						{sentTo}
-					</span>
-					. Type it below.
+					{t.rich("sentTo", {
+						email: sentTo,
+						strong: (chunks) => (
+							<span className="break-all font-medium text-foreground">
+								{chunks}
+							</span>
+						),
+					})}
 				</p>
 			</div>
 
@@ -137,7 +139,7 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 							onChange={field.onChange}
 							onComplete={() => verify.handleSubmitWithAction()}
 							disabled={verifying}
-							aria-label="6-digit code"
+							aria-label={t("codeLabel")}
 							aria-invalid={error ? true : undefined}
 							containerClassName="justify-center"
 						>
@@ -156,23 +158,20 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 				/>
 				<p className="text-sm text-muted-foreground" aria-live="polite">
 					{verifying
-						? "Signing you in…"
+						? t("verifying")
 						: lastSend?.alreadySent
-							? "We already sent you a code a moment ago. Use that one."
+							? t("alreadySent")
 							: resend.hasSucceeded
-								? "New code sent. Use the newest email."
-								: "You'll be signed in as soon as you enter all 6 digits."}
+								? t("resent")
+								: t("hint")}
 				</p>
 			</div>
 
 			<ErrorMessage message={error} />
 
 			<div className="rounded-xl bg-surface-pink/50 px-4 py-3 text-sm text-muted-foreground">
-				<p className="font-medium text-foreground">Can't find the email?</p>
-				<p className="mt-1">
-					It can take a minute to arrive. Check your spam, junk, or promotions
-					folder for an email from 4HerFrika.
-				</p>
+				<p className="font-medium text-foreground">{t("missingTitle")}</p>
+				<p className="mt-1">{t("missingBody")}</p>
 			</div>
 
 			<div className="flex flex-col items-center gap-3 text-sm">
@@ -185,9 +184,7 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 					disabled={resend.isPending || cooldown > 0}
 					className="font-medium text-primary-500 underline-offset-4 hover:underline disabled:text-muted-foreground disabled:no-underline"
 				>
-					{cooldown > 0
-						? `Send a new code in ${cooldown}s`
-						: "Send me a new code"}
+					{cooldown > 0 ? t("resendIn", { seconds: cooldown }) : t("resend")}
 				</button>
 				<button
 					type="button"
@@ -198,7 +195,7 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 					}}
 					className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
 				>
-					Wrong email? Change it
+					{t("changeEmail")}
 				</button>
 			</div>
 		</form>
@@ -206,14 +203,16 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 }
 
 function ErrorMessage({ message }: { message?: string }) {
+	const t = useTranslations("mentorAuth.errors");
 	if (!message) return null;
+	const key = message as Parameters<typeof t>[0];
 	return (
 		<p
 			id="login-error"
 			role="alert"
 			className="rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600"
 		>
-			{message}
+			{t.has(key) ? t(key) : t("generic")}
 		</p>
 	);
 }

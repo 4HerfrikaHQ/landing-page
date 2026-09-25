@@ -1,13 +1,17 @@
 import { SubscribeForm } from "@/app/[locale]/(website)/_components/subscribe";
 import { StaggerContainer, StaggerItem } from "@/components/motion";
+import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
 import { Instagram, Linkedin, Twitter } from "lucide-react";
 import type { Route } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Logo from "../4herfrika-logo";
 
 export const Footer = async () => {
-	const t = await getTranslations("footer");
+	const [t, locale] = await Promise.all([
+		getTranslations("footer"),
+		getLocale(),
+	]);
 	return (
 		<footer className="bg-secondary-500" data-site-footer>
 			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
@@ -43,10 +47,10 @@ export const Footer = async () => {
 							</li>
 							<li>
 								<Link
-									href={"/dashboard/login" as Route}
+									href={mentorLoginUrl({ locale }) as Route}
 									className="text-white transition hover:text-white/75"
 								>
-									Mentor login
+									{t("mentorLogin")}
 								</Link>
 							</li>
 							<li>

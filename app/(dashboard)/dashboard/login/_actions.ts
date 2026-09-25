@@ -12,21 +12,13 @@ function friendlyAuthError(error: AuthError) {
 	switch (error.code) {
 		case "otp_disabled":
 		case "user_not_found":
-			return new ActionError(
-				"We couldn't find a mentor account for this email. Use the email address your invite was sent to.",
-			);
+			return new ActionError("user_not_found");
 		case "otp_expired":
-			return new ActionError(
-				"That code didn't work. It may be mistyped or expired. Check your most recent email, or send a new code.",
-			);
+			return new ActionError("otp_expired");
 		case "over_email_send_rate_limit":
-			return new ActionError(
-				"We've sent a lot of sign-in emails in the last hour. Please try again in a little while, or email 4herfrika@gmail.com for help.",
-			);
+			return new ActionError("email_limit");
 		case "over_request_rate_limit":
-			return new ActionError(
-				"Too many attempts. Please wait a few minutes and try again.",
-			);
+			return new ActionError("too_many_attempts");
 		default:
 			return error;
 	}

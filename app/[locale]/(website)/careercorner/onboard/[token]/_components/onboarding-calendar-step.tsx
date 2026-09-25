@@ -6,9 +6,11 @@ import {
 	type MentorCalendarConnection as MentorCalendarConnectionView,
 } from "@/app/(dashboard)/dashboard/mentor/profile/_components/mentor-calendar-connection";
 import { Button } from "@/components/ui/button";
+import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Route } from "next";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -29,6 +31,7 @@ export function OnboardingCalendarStep({
 	callbackOutcome?: MentorCalendarCallbackOutcome | null;
 }) {
 	const router = useRouter();
+	const t = useTranslations("mentorAuth.goLive");
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		completeMentorOnboarding,
 		zodResolver(ActivateOnboardingSchema),
@@ -36,13 +39,12 @@ export function OnboardingCalendarStep({
 			formProps: { defaultValues: { token } },
 			actionProps: {
 				onSuccess: ({ data }) => {
-					toast.success("All set! Your profile is live.", {
-						description:
-							"Next time, sign in at 4herfrika.org/dashboard/login with your email. Your setup link won't work again.",
+					toast.success(t("title"), {
+						description: t("description"),
 						duration: 15000,
 						action: {
-							label: "Sign in",
-							onClick: () => router.push("/dashboard/login" as Route),
+							label: t("action"),
+							onClick: () => router.push(mentorLoginUrl({ locale }) as Route),
 						},
 					});
 					if (data?.slug) {
