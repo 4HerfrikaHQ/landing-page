@@ -7,20 +7,19 @@ import {
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { sendOtp, verifyOtp } from "@/src/auth";
+import { useHookFormAction } from "@/src/lib/use-hook-form-action";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useAction } from "next-safe-action/hooks";
 import { useEffect, useState } from "react";
+import { Controller } from "react-hook-form";
+import { sendLoginCode, verifyLoginCode } from "../_actions";
+import { SendLoginCodeSchema, VerifyLoginCodeSchema } from "../_schema";
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
 export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
-	const [step, setStep] = useState<"email" | "code">("email");
-	const [email, setEmail] = useState(defaultEmail);
-	const [code, setCode] = useState("");
-	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
 	const [cooldown, setCooldown] = useState(0);
-	const [resent, setResent] = useState(false);
 
 	useEffect(() => {
 		if (cooldown <= 0) return;
@@ -28,48 +27,36 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 		return () => clearTimeout(timer);
 	}, [cooldown]);
 
-	async function requestCode() {
-		setLoading(true);
-		setError(null);
-		const result = await sendOtp(email);
-		setLoading(false);
-		if (result.error) {
-			setError(result.error);
-			return false;
-		}
-		setCooldown(RESEND_COOLDOWN_SECONDS);
-		return true;
-	}
+	const send = useHookFormAction(
+		sendLoginCode,
+		zodResolver(SendLoginCodeSchema),
+		{
+			formProps: { defaultValues: { email: defaultEmail } },
+			actionProps: { onSuccess: () => setCooldown(RESEND_COOLDOWN_SECONDS) },
+		},
+	);
+	const sentTo = send.action.result.data?.email;
 
-	async function handleEmailSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (await requestCode()) {
-			setCode("");
-			setResent(false);
-			setStep("code");
-		}
-	}
+	const resend = useAction(sendLoginCode, {
+		onSuccess: () => setCooldown(RESEND_COOLDOWN_SECONDS),
+	});
 
-	async function handleResend() {
-		setCode("");
-		if (await requestCode()) setResent(true);
-	}
+	const verify = useHookFormAction(
+		verifyLoginCode,
+		zodResolver(VerifyLoginCodeSchema),
+		{
+			formProps: { values: { email: sentTo ?? "", code: "" } },
+			actionProps: { onError: () => verify.form.resetField("code") },
+		},
+	);
 
-	async function submitCode(value: string) {
-		setLoading(true);
-		setError(null);
-		const result = await verifyOtp(email, value);
-		setLoading(false);
-		if (result?.error) {
-			setError(result.error);
-			setCode("");
-		}
-	}
-
-	if (step === "email") {
+	if (!sentTo) {
+		const error =
+			send.form.formState.errors.email?.message ??
+			send.action.result.serverError;
 		return (
-			<form onSubmit={handleEmailSubmit} className="space-y-6">
-				<div className="space-y-2 text-center">
+			<form onSubmit={send.handleSubmitWithAction} className="space-y-6">
+				<div className="space-y-2">
 					<h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground">
 						Sign in to your mentor account
 					</h1>
@@ -92,13 +79,11 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 						autoComplete="email"
 						inputMode="email"
 						autoFocus
-						required
 						placeholder="you@example.com"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
 						aria-invalid={error ? true : undefined}
 						aria-describedby={error ? "login-error" : undefined}
 						className="h-12 px-4 text-base md:text-base"
+						{...send.form.register("email")}
 					/>
 				</div>
 
@@ -107,57 +92,71 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 				<Button
 					type="submit"
 					size="lg"
-					disabled={loading}
+					disabled={send.action.isPending}
 					className="h-12 w-full text-base md:text-base"
 				>
-					{loading ? "Sending your code…" : "Email me a code"}
+					{send.action.isPending ? "Sending your code…" : "Email me a code"}
 				</Button>
 			</form>
 		);
 	}
 
+	const error =
+		verify.form.formState.errors.code?.message ??
+		verify.action.result.serverError ??
+		resend.result.serverError;
+	const verifying = verify.action.isPending || verify.action.hasSucceeded;
+
 	return (
-		<div className="space-y-6">
-			<div className="space-y-2 text-center">
+		<form onSubmit={verify.handleSubmitWithAction} className="space-y-6">
+			<div className="space-y-2">
 				<h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground">
 					Check your email
 				</h1>
 				<p className="text-base text-muted-foreground">
 					We sent a 6-digit code to{" "}
-					<span className="font-medium text-foreground break-all">{email}</span>
+					<span className="break-all font-medium text-foreground">
+						{sentTo}
+					</span>
 					. Type it below.
 				</p>
 			</div>
 
 			<div className="flex flex-col items-center gap-3">
-				<InputOTP
-					maxLength={6}
-					pattern={REGEXP_ONLY_DIGITS}
-					autoComplete="one-time-code"
-					autoFocus
-					value={code}
-					onChange={setCode}
-					onComplete={submitCode}
-					disabled={loading}
-					aria-label="6-digit code"
-					aria-invalid={error ? true : undefined}
-					containerClassName="justify-center"
-				>
-					<InputOTPGroup className="gap-2">
-						{Array.from({ length: 6 }, (_, i) => (
-							<InputOTPSlot
-								// biome-ignore lint/suspicious/noArrayIndexKey: fixed slots
-								key={i}
-								index={i}
-								className="size-11 rounded-lg border text-xl font-medium first:rounded-lg last:rounded-lg sm:size-12"
-							/>
-						))}
-					</InputOTPGroup>
-				</InputOTP>
+				<Controller
+					control={verify.form.control}
+					name="code"
+					render={({ field }) => (
+						<InputOTP
+							maxLength={6}
+							pattern={REGEXP_ONLY_DIGITS}
+							autoComplete="one-time-code"
+							autoFocus
+							value={field.value}
+							onChange={field.onChange}
+							onComplete={() => verify.handleSubmitWithAction()}
+							disabled={verifying}
+							aria-label="6-digit code"
+							aria-invalid={error ? true : undefined}
+							containerClassName="justify-center"
+						>
+							<InputOTPGroup className="gap-2">
+								{Array.from({ length: 6 }, (_, i) => (
+									<InputOTPSlot
+										// biome-ignore lint/suspicious/noArrayIndexKey: fixed slots
+										key={i}
+										index={i}
+										className="size-11 rounded-lg border text-xl font-medium first:rounded-lg last:rounded-lg sm:size-12"
+									/>
+								))}
+							</InputOTPGroup>
+						</InputOTP>
+					)}
+				/>
 				<p className="text-sm text-muted-foreground" aria-live="polite">
-					{loading
-						? "Checking your code…"
-						: resent
+					{verifying
+						? "Signing you in…"
+						: resend.hasSucceeded
 							? "New code sent. Use the newest email."
 							: "You'll be signed in as soon as you enter all 6 digits."}
 				</p>
@@ -176,8 +175,11 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 			<div className="flex flex-col items-center gap-3 text-sm">
 				<button
 					type="button"
-					onClick={handleResend}
-					disabled={loading || cooldown > 0}
+					onClick={() => {
+						verify.resetFormAndAction();
+						resend.execute({ email: sentTo });
+					}}
+					disabled={resend.isPending || cooldown > 0}
 					className="font-medium text-primary-500 underline-offset-4 hover:underline disabled:text-muted-foreground disabled:no-underline"
 				>
 					{cooldown > 0
@@ -187,20 +189,20 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 				<button
 					type="button"
 					onClick={() => {
-						setStep("email");
-						setError(null);
-						setCode("");
+						send.action.reset();
+						resend.reset();
+						verify.resetFormAndAction();
 					}}
 					className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
 				>
 					Wrong email? Change it
 				</button>
 			</div>
-		</div>
+		</form>
 	);
 }
 
-function ErrorMessage({ message }: { message: string | null }) {
+function ErrorMessage({ message }: { message?: string }) {
 	if (!message) return null;
 	return (
 		<p

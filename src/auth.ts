@@ -3,7 +3,7 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import type { AuthError, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
@@ -43,59 +43,6 @@ export async function createAdminClient() {
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
 		process.env.SUPABASE_SERVICE_ROLE_KEY!,
 	);
-}
-
-function friendlyAuthError(error: AuthError): string {
-	switch (error.code) {
-		case "otp_disabled":
-		case "user_not_found":
-			return "We couldn't find a mentor account for this email. Use the email address your invite was sent to.";
-		case "otp_expired":
-			return "That code didn't work. It may be mistyped or expired — check your most recent email, or send a new code.";
-		case "over_email_send_rate_limit":
-		case "over_request_rate_limit":
-			return "Too many attempts. Please wait a minute and try again.";
-		case "email_address_invalid":
-		case "validation_failed":
-			return "That doesn't look like an email address. Please check it and try again.";
-		default:
-			return "Something went wrong on our side. Please try again in a moment.";
-	}
-}
-
-export async function sendOtp(
-	email: string,
-): Promise<{ error: string | null }> {
-	const supabase = await createClient();
-	const { error } = await supabase.auth.signInWithOtp({
-		email: email.trim().toLowerCase(),
-		options: { shouldCreateUser: false }, // invite-only: no new accounts via OTP
-	});
-	return { error: error ? friendlyAuthError(error) : null };
-}
-
-export async function verifyOtp(
-	email: string,
-	token: string,
-): Promise<{ error: string }> {
-	const supabase = await createClient();
-	const { error } = await supabase.auth.verifyOtp({
-		email: email.trim().toLowerCase(),
-		token,
-		type: "email",
-	});
-
-	if (error) {
-		return { error: friendlyAuthError(error) };
-	}
-
-	const user = await currentDbUser();
-
-	if (user.role === "super_admin") {
-		redirect("/dashboard/admin/mentors");
-	} else {
-		redirect("/dashboard/mentor");
-	}
 }
 
 export async function logout() {
