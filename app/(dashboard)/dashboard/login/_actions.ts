@@ -6,6 +6,8 @@ import type { AuthError } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { SendLoginCodeSchema, VerifyLoginCodeSchema } from "./_schema";
 
+const RESEND_COOLDOWN_SECONDS = 60;
+
 function friendlyAuthError(error: AuthError) {
 	switch (error.code) {
 		case "otp_disabled":
@@ -18,9 +20,12 @@ function friendlyAuthError(error: AuthError) {
 				"That code didn't work. It may be mistyped or expired. Check your most recent email, or send a new code.",
 			);
 		case "over_email_send_rate_limit":
+			return new ActionError(
+				"We've sent a lot of sign-in emails in the last hour. Please try again in a little while, or email 4herfrika@gmail.com for help.",
+			);
 		case "over_request_rate_limit":
 			return new ActionError(
-				"Too many attempts. Please wait a minute and try again.",
+				"Too many attempts. Please wait a few minutes and try again.",
 			);
 		default:
 			return error;
@@ -35,8 +40,14 @@ export const sendLoginCode = actionClient
 			email,
 			options: { shouldCreateUser: false },
 		});
-		if (error) throw friendlyAuthError(error);
-		return { email };
+		if (error) {
+			const retryAfter = error.message.match(/after (\d+) seconds?/)?.[1];
+			if (retryAfter) {
+				return { email, retryAfter: Number(retryAfter), alreadySent: true };
+			}
+			throw friendlyAuthError(error);
+		}
+		return { email, retryAfter: RESEND_COOLDOWN_SECONDS, alreadySent: false };
 	});
 
 export const verifyLoginCode = actionClient

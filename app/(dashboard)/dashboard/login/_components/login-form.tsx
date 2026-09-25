@@ -16,8 +16,6 @@ import { Controller } from "react-hook-form";
 import { sendLoginCode, verifyLoginCode } from "../_actions";
 import { SendLoginCodeSchema, VerifyLoginCodeSchema } from "../_schema";
 
-const RESEND_COOLDOWN_SECONDS = 60;
-
 export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 	const [cooldown, setCooldown] = useState(0);
 
@@ -32,14 +30,17 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 		zodResolver(SendLoginCodeSchema),
 		{
 			formProps: { defaultValues: { email: defaultEmail } },
-			actionProps: { onSuccess: () => setCooldown(RESEND_COOLDOWN_SECONDS) },
+			actionProps: {
+				onSuccess: ({ data }) => setCooldown(data?.retryAfter ?? 0),
+			},
 		},
 	);
 	const sentTo = send.action.result.data?.email;
 
 	const resend = useAction(sendLoginCode, {
-		onSuccess: () => setCooldown(RESEND_COOLDOWN_SECONDS),
+		onSuccess: ({ data }) => setCooldown(data?.retryAfter ?? 0),
 	});
+	const lastSend = resend.result.data ?? send.action.result.data;
 
 	const verify = useHookFormAction(
 		verifyLoginCode,
@@ -156,9 +157,11 @@ export function LoginForm({ defaultEmail }: { defaultEmail: string }) {
 				<p className="text-sm text-muted-foreground" aria-live="polite">
 					{verifying
 						? "Signing you in…"
-						: resend.hasSucceeded
-							? "New code sent. Use the newest email."
-							: "You'll be signed in as soon as you enter all 6 digits."}
+						: lastSend?.alreadySent
+							? "We already sent you a code a moment ago. Use that one."
+							: resend.hasSucceeded
+								? "New code sent. Use the newest email."
+								: "You'll be signed in as soon as you enter all 6 digits."}
 				</p>
 			</div>
 
