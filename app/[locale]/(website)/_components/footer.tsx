@@ -43,6 +43,14 @@ export const Footer = async () => {
 							</li>
 							<li>
 								<Link
+									href={"/dashboard/login" as Route}
+									className="text-white transition hover:text-white/75"
+								>
+									Mentor login
+								</Link>
+							</li>
+							<li>
+								<Link
 									href={"/donate" as Route}
 									className="text-white transition hover:text-white/75"
 								>

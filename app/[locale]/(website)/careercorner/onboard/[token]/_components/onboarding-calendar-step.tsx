@@ -36,7 +36,15 @@ export function OnboardingCalendarStep({
 			formProps: { defaultValues: { token } },
 			actionProps: {
 				onSuccess: ({ data }) => {
-					toast.success("All set! Your profile is live.");
+					toast.success("All set! Your profile is live.", {
+						description:
+							"Next time, sign in at 4herfrika.org/dashboard/login with your email. Your setup link won't work again.",
+						duration: 15000,
+						action: {
+							label: "Sign in",
+							onClick: () => router.push("/dashboard/login" as Route),
+						},
+					});
 					if (data?.slug) {
 						const localePrefix =
 							locale === "fr" || locale === "sw" ? `/${locale}` : "";
