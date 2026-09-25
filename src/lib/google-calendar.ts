@@ -430,7 +430,8 @@ function eventOwnerMatches(
 	const organizer = event.organizer;
 	if (
 		organizer?.self === true ||
-		(organizer?.self === undefined &&
+		(organizer &&
+			organizer.self === undefined &&
 			organizer.email &&
 			normalizedEmail(organizer.email) ===
 				normalizedEmail(connection.identity.email))
