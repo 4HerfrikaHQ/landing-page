@@ -63,7 +63,7 @@ export class MentorCalendarError extends Error {
 	}
 }
 
-type GoogleEventIdentity = { email?: string; id?: string };
+type GoogleEventIdentity = { email?: string; id?: string; self?: boolean };
 type CalendarEvent = {
 	id?: string;
 	hangoutLink?: string;
@@ -424,23 +424,22 @@ function eventOwnerMatches(
 	event: CalendarEvent,
 	connection: MentorCalendarConnection,
 ) {
-	const expectedEmail = normalizedEmail(connection.identity.email);
-	for (const owner of [event.organizer, event.creator]) {
-		if (!owner?.email || normalizedEmail(owner.email) !== expectedEmail)
-			throw new MentorCalendarError(
-				"identity_mismatch",
-				"Google Calendar returned an event owned by a different identity.",
-			);
-		if (
-			connection.identity.subject &&
-			owner.id &&
-			owner.id !== connection.identity.subject
-		)
-			throw new MentorCalendarError(
-				"identity_mismatch",
-				"Google Calendar returned an event owned by a different identity.",
-			);
-	}
+	// Calendar's organizer.self identifies the calendar that holds the organizer
+	// copy. Its email can be an old primary-calendar address or alias, and its
+	// Profile ID is not guaranteed to match the OpenID subject from userinfo.
+	const organizer = event.organizer;
+	if (
+		organizer?.self === true ||
+		(organizer?.self === undefined &&
+			organizer.email &&
+			normalizedEmail(organizer.email) ===
+				normalizedEmail(connection.identity.email))
+	)
+		return;
+	throw new MentorCalendarError(
+		"identity_mismatch",
+		"Google Calendar returned an event owned by a different identity.",
+	);
 }
 
 function usableEvent(

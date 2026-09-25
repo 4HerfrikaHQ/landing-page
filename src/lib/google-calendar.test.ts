@@ -176,14 +176,41 @@ describe("mentor-scoped Google Calendar", () => {
 		expect(body.id).toBe(deterministicCalendarEventId(attemptKey));
 	});
 
-	test("rejects a foreign organizer or creator without deleting it", async () => {
+	test("accepts a primary-calendar alias and recovers a previously created event", async () => {
+		const attemptKey = "alias-attempt";
+		let writes = 0;
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (_input, init) => {
+				if (init?.method === "POST") writes += 1;
+				return response({
+					...event(attemptKey, "older-calendar-address@example.com"),
+					organizer: {
+						email: "older-calendar-address@example.com",
+						id: "calendar-profile-id",
+						self: true,
+					},
+					creator: { email: "delegate@example.com" },
+				});
+			},
+		});
+		await expect(
+			client.createMentorCalendarEvent(createParams(attemptKey)),
+		).resolves.toMatchObject({ eventId: "event-1" });
+		expect(writes).toBe(0);
+	});
+
+	test("rejects an event organized on another calendar even with the same email", async () => {
 		let deletes = 0;
 		const client = createMentorCalendarClient({
 			connectionProvider: provider(connection()),
 			fetchImpl: async (_input, init) => {
 				if (init?.method === "DELETE") deletes += 1;
 				return init?.method === "POST"
-					? response(event("attempt", "wrong@example.com"))
+					? response({
+							...event("attempt"),
+							organizer: { email: mentorEmail, self: false },
+						})
 					: response({}, 404);
 			},
 		});
