@@ -1,5 +1,6 @@
 "use client";
 
+import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -13,8 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Star } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { CheckCircle2, Star } from "lucide-react";
+import type { Route } from "next";
 import { useState } from "react";
 import { toast } from "sonner";
 import { submitFeedback } from "../_actions";
@@ -30,9 +31,17 @@ const CALL_OPTIONS = [
 	},
 ] as const;
 
-export function FeedbackForm({ token }: { token: string }) {
-	const router = useRouter();
+export function FeedbackForm({
+	token,
+	mentorName,
+	mentorSlug,
+}: {
+	token: string;
+	mentorName: string;
+	mentorSlug: string;
+}) {
 	const [hovered, setHovered] = useState(0);
+	const [submitted, setSubmitted] = useState(false);
 
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		submitFeedback,
@@ -50,7 +59,7 @@ export function FeedbackForm({ token }: { token: string }) {
 			actionProps: {
 				onSuccess: () => {
 					toast.success("Thanks for your feedback");
-					router.refresh();
+					setSubmitted(true);
 				},
 				onError: ({ error }) =>
 					toast.error(
@@ -62,6 +71,38 @@ export function FeedbackForm({ token }: { token: string }) {
 
 	const happened = form.watch("call_happened");
 	const rating = form.watch("rating") ?? 0;
+
+	if (submitted) {
+		return (
+			<div className="rounded-2xl border border-border/60 bg-white px-6 py-8 text-center shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+				<span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-surface-pink text-primary-500">
+					<CheckCircle2 className="size-6" />
+				</span>
+				<h2 className="text-lg font-semibold text-foreground">
+					Thanks — that really helps.
+				</h2>
+				<p className="mx-auto mt-1 max-w-xs text-sm text-muted-foreground">
+					Your mentorship doesn't have to stop here. Keep the momentum going.
+				</p>
+				<div className="mt-6 flex flex-col gap-3">
+					<Button
+						href={`/careercorner/${mentorSlug}` as Route}
+						className="w-full"
+					>
+						Book another session with {mentorName}
+					</Button>
+					<Button
+						href={JOIN_US_URL}
+						isExternal
+						variant="outline"
+						className="w-full"
+					>
+						Join the 4HerFrika community
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<form onSubmit={handleSubmitWithAction} className="space-y-6">
