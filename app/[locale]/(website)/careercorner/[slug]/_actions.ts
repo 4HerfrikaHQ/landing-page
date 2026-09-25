@@ -42,6 +42,19 @@ function calendarActionError(error: unknown): CalendarActionError {
 	return new CalendarActionError(error);
 }
 
+function logCalendarFailure(
+	stage: "host_selection" | "event_creation",
+	mentorId: string,
+	error: unknown,
+) {
+	console.error("[booking-calendar] booking_failed", {
+		stage,
+		mentorId,
+		code: isMentorCalendarError(error) ? error.code : "unknown",
+		errorType: error instanceof Error ? error.name : typeof error,
+	});
+}
+
 async function selectBookingCalendarHost(mentor: {
 	id: string;
 	email: string;
@@ -52,6 +65,7 @@ async function selectBookingCalendarHost(mentor: {
 			mentorEmail: mentor.email,
 		});
 	} catch (error) {
+		logCalendarFailure("host_selection", mentor.id, error);
 		throw calendarActionError(error);
 	}
 }
@@ -506,6 +520,7 @@ export const createBooking = actionClient
 			};
 			event = await createMentorCalendarEvent(calendarParams);
 		} catch (error) {
+			logCalendarFailure("event_creation", mentor.id, error);
 			throw calendarActionError(error);
 		}
 		const eventId = event.eventId;

@@ -6,6 +6,7 @@ import { decryptMentorRefreshToken } from "@/src/lib/mentor-google-crypto";
 import { sendMentorGoogleReconnectNoticeOnce } from "@/src/lib/mentor-google-notifications";
 import {
 	GoogleOAuthProviderError,
+	MentorGoogleOAuthError,
 	type MentorGoogleOAuthProvider,
 	getMentorGoogleAccessToken,
 } from "@/src/lib/mentor-google-oauth-core";
@@ -155,6 +156,29 @@ async function json(response: Response): Promise<Record<string, unknown>> {
 	} catch {
 		return {};
 	}
+}
+
+async function logGoogleCalendarFailure(
+	operation: "read_event" | "create_event",
+	mentorId: string,
+	response: Response,
+) {
+	const payload = await json(response);
+	const error = payload.error;
+	const status =
+		error && typeof error === "object"
+			? (error as { status?: unknown }).status
+			: undefined;
+	// Google error text can contain user data. Only log its documented symbolic status.
+	console.error("[booking-calendar] google_request_failed", {
+		operation,
+		mentorId,
+		httpStatus: response.status,
+		googleStatus:
+			typeof status === "string" && /^[A-Z_]{1,64}$/.test(status)
+				? status
+				: "unknown",
+	});
 }
 
 function googleProvider(
@@ -359,6 +383,15 @@ async function accessToken(
 		if (!token) throw new Error("missing access token");
 		return token;
 	} catch (error) {
+		console.error("[booking-calendar] token_refresh_failed", {
+			mentorId: connection.mentorId,
+			code:
+				error instanceof GoogleOAuthProviderError ||
+				error instanceof MentorGoogleOAuthError
+					? error.code
+					: "unknown",
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
 		if (isInvalidGrant(error)) {
 			await connection.markReauthRequired().catch(() => undefined);
 			await notifyBrokenConnection(connection);
@@ -420,11 +453,17 @@ function usableEvent(
 		event.conferenceData?.entryPoints?.find(
 			(entry) => entry.entryPointType === "video",
 		)?.uri;
-	if (!event.id || !meetUrl)
+	if (!event.id || !meetUrl) {
+		console.error("[booking-calendar] unusable_event", {
+			mentorId: connection.mentorId,
+			hasEventId: Boolean(event.id),
+			hasMeetUrl: Boolean(meetUrl),
+		});
 		throw new MentorCalendarError(
 			"remote_error",
 			"Google Calendar did not return a usable Meet event.",
 		);
+	}
 	return { eventId: event.id, meetUrl };
 }
 
@@ -439,15 +478,18 @@ async function readEvent(
 	});
 	if (response.status === 404 || response.status === 410) return null;
 	if (response.status === 401) {
+		await logGoogleCalendarFailure("read_event", connection.mentorId, response);
 		await connection.markReauthRequired().catch(() => undefined);
 		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
 	}
-	if (!response.ok)
+	if (!response.ok) {
+		await logGoogleCalendarFailure("read_event", connection.mentorId, response);
 		throw new MentorCalendarError(
 			"remote_error",
 			"Google Calendar could not complete the requested operation.",
 		);
+	}
 	return (await json(response)) as CalendarEvent;
 }
 
@@ -531,6 +573,11 @@ export function createMentorCalendarClient(
 			);
 		}
 		if (response.status === 401) {
+			await logGoogleCalendarFailure(
+				"create_event",
+				connection.mentorId,
+				response,
+			);
 			await connection.markReauthRequired().catch(() => undefined);
 			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
@@ -549,11 +596,17 @@ export function createMentorCalendarClient(
 				return usableEvent(duplicate, connection);
 			}
 		}
-		if (!response.ok)
+		if (!response.ok) {
+			await logGoogleCalendarFailure(
+				"create_event",
+				connection.mentorId,
+				response,
+			);
 			throw new MentorCalendarError(
 				"remote_error",
 				"Google Calendar could not complete the requested operation.",
 			);
+		}
 		let event = (await json(response)) as CalendarEvent;
 		if (
 			!event.hangoutLink &&
