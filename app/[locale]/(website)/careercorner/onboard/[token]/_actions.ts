@@ -39,20 +39,35 @@ function mentorOnboardingPath(token: string, locale?: string) {
 export async function loadMentorFromToken(token: string) {
 	const verified = await resolveActionLink(token, "mentor_onboard");
 	if (!verified.ok) {
+		if (!("resourceId" in verified)) {
+			return { ok: false as const, reason: verified.reason, email: null };
+		}
+		const [owner] = await db
+			.select({ email: users.email })
+			.from(mentors)
+			.innerJoin(users, eq(users.id, mentors.user_id))
+			.where(eq(mentors.id, verified.resourceId))
+			.limit(1);
 		return {
 			ok: false as const,
 			reason: verified.reason,
+			email: owner?.email ?? null,
 		};
 	}
 	const [mentor] = await db
-		.select({ ...getTableColumns(mentors), name: users.name })
+		.select({
+			...getTableColumns(mentors),
+			name: users.name,
+			email: users.email,
+		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
 		.where(
 			and(eq(mentors.id, verified.resourceId), eq(mentors.archived, false)),
 		)
 		.limit(1);
-	if (!mentor) return { ok: false as const, reason: "not_found" };
+	if (!mentor)
+		return { ok: false as const, reason: "not_found" as const, email: null };
 
 	const slots = await db
 		.select()

@@ -139,7 +139,8 @@
 		"subscribe": "S’abonner",
 		"subscribeDescription": "Abonnez-vous à notre newsletter pour recevoir les dernières actualités et mises à jour",
 		"support": "Assistance",
-		"terms": "Conditions"
+		"terms": "Conditions",
+		"mentorLogin": "Connexion mentor"
 	},
 	"home": {
 		"academyDescription": "Plateforme d’apprentissage en ligne pour développer ses compétences",
@@ -351,6 +352,65 @@
 			"title": "Réservez un appel avec {name} — 4HerFrika",
 			"ogTitle": "Réservez un appel avec {name}",
 			"description": "Réservez un appel de 30 minutes avec {name}."
+		}
+	},
+	"mentorAuth": {
+		"signIn": "Se connecter au tableau de bord",
+		"emailTeam": "Écrire à l'équipe 4HerFrika",
+		"linkUsed": {
+			"title": "Votre profil est déjà configuré",
+			"description": "Ce lien de configuration ne fonctionne qu'une seule fois. Pour modifier votre profil, vos disponibilités ou voir vos réservations, connectez-vous avec votre e-mail. Nous vous enverrons un code à 6 chiffres. Aucun mot de passe nécessaire."
+		},
+		"linkExpired": {
+			"title": "Ce lien de configuration a expiré",
+			"description": "Les liens de configuration sont valables 30 jours. Si vous avez déjà terminé, connectez-vous simplement. Sinon, écrivez-nous et nous vous enverrons un nouveau lien."
+		},
+		"linkInvalid": {
+			"title": "Ce lien ne fonctionne pas",
+			"description": "Essayez de l'ouvrir directement depuis votre e-mail d'invitation. Si vous avez déjà terminé la configuration, connectez-vous plutôt."
+		},
+		"alreadyLive": {
+			"title": "Votre profil est déjà en ligne",
+			"description": "Tout est prêt. Les mentorées peuvent vous trouver dans l'annuaire et réserver un appel. Pour modifier votre bio, votre photo ou vos disponibilités, connectez-vous avec votre e-mail sur 4herfrika.org/dashboard/login.",
+			"viewProfile": "Voir le profil public"
+		},
+		"goLive": {
+			"title": "C'est fait ! Votre profil est en ligne.",
+			"description": "La prochaine fois, connectez-vous sur 4herfrika.org/dashboard/login avec votre e-mail. Votre lien de configuration ne fonctionnera plus.",
+			"action": "Se connecter"
+		},
+		"login": {
+			"panelTitle": "Espace",
+			"panelAccent": "Mentor",
+			"panelDescription": "Gérez vos disponibilités, échangez avec vos mentorées et suivez votre impact sur la prochaine génération de talents tech en Afrique.",
+			"title": "Connectez-vous à votre compte mentor",
+			"subtitle": "Saisissez l'adresse e-mail à laquelle votre invitation a été envoyée. Nous vous enverrons un code à 6 chiffres. Aucun mot de passe nécessaire.",
+			"emailLabel": "Adresse e-mail",
+			"emailPlaceholder": "vous@exemple.com",
+			"sendCode": "M'envoyer un code",
+			"sending": "Envoi de votre code…",
+			"checkEmail": "Consultez vos e-mails",
+			"sentTo": "Nous avons envoyé un code à 6 chiffres à <strong>{email}</strong>. Saisissez-le ci-dessous.",
+			"codeLabel": "Code à 6 chiffres",
+			"hint": "Vous serez connectée dès que les 6 chiffres seront saisis.",
+			"verifying": "Connexion en cours…",
+			"alreadySent": "Nous vous avons déjà envoyé un code il y a un instant. Utilisez celui-ci.",
+			"resent": "Nouveau code envoyé. Utilisez l'e-mail le plus récent.",
+			"missingTitle": "Vous ne trouvez pas l'e-mail ?",
+			"missingBody": "Il peut mettre une minute à arriver. Vérifiez vos dossiers spam, courrier indésirable ou promotions pour un e-mail de 4HerFrika.",
+			"resendIn": "Nouveau code dans {seconds} s",
+			"resend": "M'envoyer un nouveau code",
+			"changeEmail": "Mauvais e-mail ? Modifiez-le",
+			"trouble": "Un problème pour vous connecter ? Écrivez-nous à"
+		},
+		"errors": {
+			"user_not_found": "Nous n'avons trouvé aucun compte mentor pour cet e-mail. Utilisez l'adresse à laquelle votre invitation a été envoyée.",
+			"otp_expired": "Ce code n'a pas fonctionné. Il est peut-être mal saisi ou expiré. Consultez votre e-mail le plus récent ou demandez un nouveau code.",
+			"email_limit": "Nous avons envoyé beaucoup d'e-mails de connexion au cours de la dernière heure. Réessayez un peu plus tard ou écrivez à 4herfrika@gmail.com.",
+			"too_many_attempts": "Trop de tentatives. Patientez quelques minutes et réessayez.",
+			"invalid_email": "Cette adresse e-mail ne semble pas valide. Vérifiez-la.",
+			"incomplete_code": "Saisissez les 6 chiffres de votre code.",
+			"generic": "Une erreur s'est produite. Veuillez réessayer."
 		}
 	}
 }

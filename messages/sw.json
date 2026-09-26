@@ -139,7 +139,8 @@
 		"subscribe": "Jiandikishe",
 		"subscribeDescription": "Jiandikishe kwenye jarida letu upate taarifa na habari za hivi punde",
 		"support": "Msaada",
-		"terms": "Masharti"
+		"terms": "Masharti",
+		"mentorLogin": "Kuingia kwa mentor"
 	},
 	"home": {
 		"academyDescription": "Jukwaa la kujifunza mtandaoni kwa ukuzaji wa ujuzi",
@@ -351,6 +352,65 @@
 			"title": "Weka simu na {name} — 4HerFrika",
 			"ogTitle": "Weka simu na {name}",
 			"description": "Weka simu ya dakika 30 na {name}."
+		}
+	},
+	"mentorAuth": {
+		"signIn": "Ingia kwenye dashibodi yako",
+		"emailTeam": "Tuma barua pepe kwa timu ya 4HerFrika",
+		"linkUsed": {
+			"title": "Tayari umeweka wasifu wako",
+			"description": "Kiungo hiki cha kuweka wasifu kinafanya kazi mara moja tu. Ili kubadilisha wasifu wako, muda unaopatikana, au kuona miadi yako, ingia kwa barua pepe yako. Tutakutumia nambari ya tarakimu 6. Huhitaji nenosiri."
+		},
+		"linkExpired": {
+			"title": "Kiungo hiki kimeisha muda wake",
+			"description": "Viungo vya kuweka wasifu hudumu siku 30. Ikiwa tayari umemaliza, ingia tu. Ikiwa bado, tutumie barua pepe na tutakutumia kiungo kipya."
+		},
+		"linkInvalid": {
+			"title": "Kiungo hiki hakifanyi kazi",
+			"description": "Jaribu kukifungua moja kwa moja kutoka kwenye barua pepe yako ya mwaliko. Ikiwa tayari umemaliza, ingia badala yake."
+		},
+		"alreadyLive": {
+			"title": "Wasifu wako tayari uko hewani",
+			"description": "Uko tayari. Wanafunzi wanaweza kukupata kwenye orodha na kupanga simu. Ili kubadilisha wasifu, picha, au muda unaopatikana, ingia kwa barua pepe yako kwenye 4herfrika.org/dashboard/login.",
+			"viewProfile": "Tazama wasifu wa umma"
+		},
+		"goLive": {
+			"title": "Umekamilisha! Wasifu wako uko hewani.",
+			"description": "Wakati ujao, ingia kwenye 4herfrika.org/dashboard/login kwa barua pepe yako. Kiungo chako cha kuweka wasifu hakitafanya kazi tena.",
+			"action": "Ingia"
+		},
+		"login": {
+			"panelTitle": "Lango la",
+			"panelAccent": "Mentor",
+			"panelDescription": "Simamia muda wako unaopatikana, ungana na wanafunzi, na fuatilia mchango wako kwa kizazi kijacho cha vipaji vya teknolojia barani Afrika.",
+			"title": "Ingia kwenye akaunti yako ya mentor",
+			"subtitle": "Weka barua pepe ambayo mwaliko wako ulitumwa. Tutakutumia nambari ya tarakimu 6. Huhitaji nenosiri.",
+			"emailLabel": "Barua pepe",
+			"emailPlaceholder": "wewe@mfano.com",
+			"sendCode": "Nitumie nambari",
+			"sending": "Tunatuma nambari yako…",
+			"checkEmail": "Angalia barua pepe yako",
+			"sentTo": "Tumetuma nambari ya tarakimu 6 kwa <strong>{email}</strong>. Iandike hapa chini.",
+			"codeLabel": "Nambari ya tarakimu 6",
+			"hint": "Utaingia mara tu utakapoandika tarakimu zote 6.",
+			"verifying": "Tunakuingiza…",
+			"alreadySent": "Tayari tumekutumia nambari muda mfupi uliopita. Tumia hiyo.",
+			"resent": "Nambari mpya imetumwa. Tumia barua pepe ya karibuni zaidi.",
+			"missingTitle": "Huoni barua pepe?",
+			"missingBody": "Inaweza kuchukua dakika moja kufika. Angalia folda ya spam, taka, au matangazo kwa barua pepe kutoka 4HerFrika.",
+			"resendIn": "Tuma nambari mpya baada ya sekunde {seconds}",
+			"resend": "Nitumie nambari mpya",
+			"changeEmail": "Barua pepe si sahihi? Ibadilishe",
+			"trouble": "Unapata shida kuingia? Tutumie barua pepe kwa"
+		},
+		"errors": {
+			"user_not_found": "Hatukupata akaunti ya mentor kwa barua pepe hii. Tumia barua pepe ambayo mwaliko wako ulitumwa.",
+			"otp_expired": "Nambari hiyo haikufanya kazi. Huenda imekosewa au imeisha muda. Angalia barua pepe yako ya karibuni, au omba nambari mpya.",
+			"email_limit": "Tumetuma barua pepe nyingi za kuingia katika saa iliyopita. Tafadhali jaribu tena baadaye kidogo, au tuma barua pepe kwa 4herfrika@gmail.com.",
+			"too_many_attempts": "Majaribio mengi mno. Tafadhali subiri dakika chache kisha ujaribu tena.",
+			"invalid_email": "Hii haionekani kuwa barua pepe sahihi. Tafadhali iangalie.",
+			"incomplete_code": "Andika tarakimu zote 6 za nambari yako.",
+			"generic": "Hitilafu imetokea. Tafadhali jaribu tena."
 		}
 	}
 }

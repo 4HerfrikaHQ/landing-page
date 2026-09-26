@@ -3,7 +3,7 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import type { AuthError, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
@@ -43,31 +43,6 @@ export async function createAdminClient() {
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
 		process.env.SUPABASE_SERVICE_ROLE_KEY!,
 	);
-}
-
-export async function sendOtp(email: string) {
-	const supabase = await createClient();
-	return supabase.auth.signInWithOtp({
-		email,
-		options: { shouldCreateUser: false }, // invite-only: no new accounts via OTP
-	});
-}
-
-export async function verifyOtp(email: string, token: string): Promise<{ error: AuthError }> {
-	const supabase = await createClient();
-	const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
-
-	if (error) {
-		return { error }
-	}
-
-	const user = await currentDbUser();
-
-	if (user.role === "super_admin") {
-		redirect("/dashboard/admin/mentors");
-	} else {
-		redirect("/dashboard/mentor");
-	}
 }
 
 export async function logout() {

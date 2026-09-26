@@ -27,7 +27,11 @@ export async function sendMentorOnboardingInvite(params: {
 ${params.intro} Finish your profile, set your availability, and connect Google Calendar here:
 ${url}
 
-This link expires in 30 days.
+This link expires in 30 days and only works once.
+
+After you've finished setting up, sign in anytime at:
+${siteUrl}/dashboard/login
+Enter this email address and we'll send you a 6-digit code. No password needed.
 
 — 4HerFrika`,
 	});
