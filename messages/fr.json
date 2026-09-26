@@ -412,5 +412,186 @@
 			"incomplete_code": "Saisissez les 6 chiffres de votre code.",
 			"generic": "Une erreur s'est produite. Veuillez réessayer."
 		}
+	},
+	"onboarding": {
+		"eyebrow": "Intégration mentor",
+		"welcome": "Bienvenue, {name}",
+		"intro": "Définissez vos disponibilités, complétez votre profil et connectez Google Agenda avant de passer en ligne. Vous pourrez tout modifier plus tard depuis votre tableau de bord.",
+		"stepsLabel": "Étapes d'intégration",
+		"step": "Étape {number}",
+		"steps": {
+			"availability": "Disponibilités",
+			"profile": "Profil",
+			"calendar": "Google Agenda"
+		},
+		"availabilityStep": {
+			"title": "Définissez vos disponibilités hebdomadaires",
+			"description": "Ajoutez au moins un créneau pour chaque jour où vous pouvez prendre des appels, puis enregistrez. Vous pourrez les modifier à tout moment depuis votre tableau de bord.",
+			"save": "Enregistrer et continuer"
+		},
+		"profileStep": {
+			"title": "Complétez votre profil",
+			"description": "C'est ce que les mentorées voient sur votre page de réservation. Une photo souriante et une courte bio font toute la différence."
+		},
+		"calendarStep": {
+			"title": "Connectez Google Agenda",
+			"description": "Associez le Google Agenda que vous utilisez pour le mentorat. Les nouveaux appels y seront programmés."
+		},
+		"form": {
+			"photo": "Photo de profil (facultatif)",
+			"bio": "Bio",
+			"displayName": "Nom affiché (facultatif)",
+			"saving": "Enregistrement…",
+			"save": "Enregistrer le profil et continuer",
+			"saved": "Profil enregistré. Connectez Google Agenda pour continuer.",
+			"saveFailed": "Votre profil n'a pas pu être enregistré. Veuillez réessayer."
+		},
+		"avatar": {
+			"tooLarge": "L'image doit faire moins de 4 Mo.",
+			"uploadFailed": "Échec de l'envoi. Veuillez réessayer.",
+			"uploaded": "Photo envoyée",
+			"uploadTitle": "Envoyer une photo",
+			"alt": "Photo de profil",
+			"change": "Changer la photo",
+			"upload": "Envoyer une photo",
+			"hint": "JPG, PNG ou WebP, jusqu'à 4 Mo."
+		},
+		"goLive": {
+			"button": "Passer en ligne",
+			"pending": "Mise en ligne…",
+			"failed": "Impossible de terminer l'intégration. Veuillez réessayer."
+		},
+		"errors": {
+			"invalid_link": "Ce lien de configuration n'est plus valide. Connectez-vous à votre tableau de bord ou écrivez à 4herfrika@gmail.com pour recevoir un nouveau lien.",
+			"mentor_not_found": "Nous n'avons pas trouvé votre profil mentor. Veuillez écrire à 4herfrika@gmail.com.",
+			"profile_required": "Veuillez enregistrer votre profil avant de passer en ligne.",
+			"availability_required": "Veuillez enregistrer au moins un créneau de disponibilité avant de passer en ligne.",
+			"calendar_reauth_required": "Reconnectez Google Agenda avant de passer en ligne.",
+			"calendar_required": "Connectez Google Agenda avant de passer en ligne.",
+			"calendar_disconnected": "Google Agenda n'est plus connecté. Reconnectez-le avant de passer en ligne.",
+			"bio_too_short": "La bio doit contenir au moins 20 caractères.",
+			"untrusted_image": "Envoyez votre image avec le bouton photo ci-dessus."
+		}
+	},
+	"availabilityEditor": {
+		"timezone": "Fuseau horaire",
+		"timezoneHint": "Tous les créneaux ci-dessous sont dans ce fuseau horaire.",
+		"unavailable": "Indisponible",
+		"slotCount": "{count, plural, one {# créneau} other {# créneaux}}",
+		"removeSlot": "Supprimer le créneau",
+		"addSlot": "Ajouter un créneau",
+		"weeklyPreview": "Aperçu de la semaine",
+		"saved": "Disponibilités enregistrées",
+		"saving": "Enregistrement…",
+		"save": "Enregistrer les disponibilités",
+		"days": {
+			"Monday": "Lundi",
+			"Tuesday": "Mardi",
+			"Wednesday": "Mercredi",
+			"Thursday": "Jeudi",
+			"Friday": "Vendredi",
+			"Saturday": "Samedi",
+			"Sunday": "Dimanche"
+		},
+		"errors": {
+			"endAfterStart": "L'heure de fin doit être après l'heure de début",
+			"overlaps": "Chevauche {range}",
+			"atLeastOne": "Ajoutez au moins un créneau de disponibilité avant de continuer.",
+			"fixHighlighted": "Corrigez les créneaux signalés avant d'enregistrer.",
+			"saveFailed": "Vos disponibilités n'ont pas pu être enregistrées. Veuillez réessayer."
+		}
+	},
+	"calendarConnection": {
+		"status": {
+			"not_connected": "Non connecté",
+			"disconnected": "Déconnecté",
+			"revoked": "Accès révoqué",
+			"connected": "Connecté",
+			"reauth_required": "Nouvelle autorisation requise"
+		},
+		"callback": {
+			"oauth_denied": {
+				"title": "L'accès Google n'a pas été accordé",
+				"description": "Choisissez Connecter Google Agenda quand vous êtes prête à réessayer."
+			},
+			"google_account_conflict": {
+				"title": "Ce compte Google n'est pas associé",
+				"description": "Utilisez Autoriser à nouveau ce compte pour continuer avec le compte Google déjà associé à votre profil mentor."
+			},
+			"expired_state": {
+				"title": "La demande de connexion a expiré",
+				"description": "Relancez la connexion pour obtenir une nouvelle demande sécurisée."
+			},
+			"invalid_state": {
+				"title": "La demande de connexion n'a pas pu être vérifiée",
+				"description": "Relancez la connexion depuis cette page."
+			},
+			"insufficient_scope": {
+				"title": "L'autorisation Agenda est manquante",
+				"description": "Reconnectez-vous et acceptez l'autorisation Agenda demandée avant de pouvoir organiser de nouveaux rendez-vous."
+			},
+			"invalid_grant": {
+				"title": "Google vous demande de vous reconnecter",
+				"description": "Utilisez Autoriser à nouveau ce compte avant de pouvoir organiser de nouveaux rendez-vous."
+			},
+			"oauth_exchange_failed": {
+				"title": "Google n'a pas pu finaliser la connexion",
+				"description": "Réessayez de vous connecter. Vous ne pourrez pas organiser de nouveaux rendez-vous tant que Google Agenda n'est pas connecté."
+			},
+			"identity_lookup_failed": {
+				"title": "Les informations du compte Google n'ont pas pu être confirmées",
+				"description": "Réessayez avec le compte mentor prévu."
+			},
+			"refresh_token_missing": {
+				"title": "Google vous demande de vous reconnecter",
+				"description": "Utilisez Autoriser à nouveau ce compte avant de pouvoir organiser de nouveaux rendez-vous."
+			},
+			"connection_unavailable": {
+				"title": "Google Agenda est indisponible",
+				"description": "Réessayez dans un instant. Vous ne pourrez pas organiser de nouveaux rendez-vous tant que Google Agenda n'est pas connecté."
+			}
+		},
+		"description": {
+			"connected": "Votre compte Google organise les nouveaux appels.",
+			"reauth_required": "Autorisez à nouveau Google Agenda avant de pouvoir organiser de nouveaux rendez-vous.",
+			"revoked": "L'accès Google a été révoqué. Reconnectez-vous avant de pouvoir organiser de nouveaux rendez-vous.",
+			"disconnected": "Reconnectez Google Agenda avant de pouvoir organiser de nouveaux rendez-vous.",
+			"not_connected": "Connectez Google Agenda avant de pouvoir organiser des rendez-vous."
+		},
+		"reconnect": "Reconnecter Google Agenda",
+		"reauthorize": "Autoriser à nouveau ce compte",
+		"connect": "Connecter Google Agenda",
+		"disconnect": "Déconnecter",
+		"connectedDateUnavailable": "Date de connexion indisponible",
+		"connectedOn": "Connecté le {date}",
+		"toast": {
+			"notAvailable": "La connexion Google Agenda n'est pas encore disponible.",
+			"retryFailed": "Google n'a toujours pas confirmé la suppression de l'accès. Réessayez plus tard ou retirez 4Herfrika dans Compte Google → Sécurité → Connexions tierces.",
+			"disconnectUnconfirmed": "Déconnecté ici, mais Google n'a pas confirmé la suppression de l'accès. Vérifiez Compte Google → Sécurité → Connexions tierces et retirez 4Herfrika s'il y figure encore.",
+			"retryNotAttempted": "Aucune révocation Google n'est encore confirmée. Vérifiez Compte Google → Sécurité → Connexions tierces.",
+			"disconnectNotAttempted": "Déconnecté ici. Vérifiez Compte Google → Sécurité → Connexions tierces et retirez 4Herfrika s'il y figure encore.",
+			"revocationConfirmed": "Révocation de l'accès Google confirmée.",
+			"disconnected": "Déconnecté et accès Google révoqué.",
+			"started": "Connexion lancée",
+			"failed": "Google Agenda n'a pas pu être mis à jour. Réessayez."
+		},
+		"eyebrow": "Vos appels",
+		"title": "Google Agenda et Meet",
+		"configMissingTitle": "La connexion Google Agenda n'est pas encore configurée sur ce site",
+		"configMissingBody": "Votre compte n'a aucun problème : il manque au site ses identifiants Google, inutile donc de réessayer. Un administrateur doit les ajouter. D'ici là, vos appels sont hébergés sur l'agenda 4HerFrika.",
+		"healthUnavailable": "L'accès Google n'a pas pu être confirmé pour le moment. Autorisez à nouveau ce compte avant de pouvoir organiser de nouveaux rendez-vous.",
+		"revocationPendingTitle": "La suppression de l'accès Google est toujours en attente.",
+		"revocationPendingBody": "Vous ne pourrez pas organiser de nouveaux rendez-vous tant que Google n'aura pas confirmé la révocation et que vous ne vous serez pas reconnectée. Réessayez maintenant, ou retirez 4HerFrika dans Compte Google → Sécurité → Connexions tierces.",
+		"retryRevocation": "Réessayer la suppression de l'accès Google",
+		"connectedAccount": "Compte connecté",
+		"googleAccount": "Compte Google",
+		"connectionTiming": "Date de connexion",
+		"disconnectTitle": "Déconnecter Google Agenda ?",
+		"disconnectBody": "Vous ne pourrez pas organiser de nouveaux rendez-vous tant que vous n'aurez pas reconnecté Google Agenda.",
+		"confirmDisconnect": "Oui, déconnecter",
+		"keepIt": "Garder",
+		"aboutReauth": "À propos de la nouvelle autorisation",
+		"reauthTooltip": "Renouvelle le consentement pour ce compte Google associé ; cela ne permet pas de changer de compte.",
+		"updating": "Mise à jour de la connexion…"
 	}
 }

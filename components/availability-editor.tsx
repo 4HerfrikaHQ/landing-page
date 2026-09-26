@@ -13,6 +13,7 @@ import type { DbAvailability } from "@/src/db/schema/tables";
 import type { DayOfWeek } from "@/src/db/schema/tables";
 import { cn } from "@/utils/cn";
 import { CheckCircle2, Globe, PlusIcon, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -89,12 +90,15 @@ type SlotRow = {
 
 // Returns a map of tempId → error message for any invalid slots.
 // "HH:MM:SS" strings are zero-padded so lexicographic comparison is correct.
-function validateSlots(slots: SlotRow[]): Map<string, string> {
+function validateSlots(
+	slots: SlotRow[],
+	t: ReturnType<typeof useTranslations<"availabilityEditor.errors">>,
+): Map<string, string> {
 	const errors = new Map<string, string>();
 
 	for (const slot of slots) {
 		if (slot.end_time <= slot.start_time) {
-			errors.set(slot.tempId, "End time must be after start time");
+			errors.set(slot.tempId, t("endAfterStart"));
 		}
 	}
 
@@ -121,11 +125,15 @@ function validateSlots(slots: SlotRow[]): Map<string, string> {
 					TIME_OPTIONS.find((o) => o.value === t)?.label ?? t;
 				errors.set(
 					current.tempId,
-					`Overlaps with ${fmt(previous.start_time)} – ${fmt(previous.end_time)}`,
+					t("overlaps", {
+						range: `${fmt(previous.start_time)} – ${fmt(previous.end_time)}`,
+					}),
 				);
 				errors.set(
 					previous.tempId,
-					`Overlaps with ${fmt(current.start_time)} – ${fmt(current.end_time)}`,
+					t("overlaps", {
+						range: `${fmt(current.start_time)} – ${fmt(current.end_time)}`,
+					}),
 				);
 			}
 		}
@@ -140,7 +148,7 @@ export function AvailabilityEditor({
 	onSave,
 	onSaved,
 	requireAtLeastOneSlot = false,
-	saveLabel = "Save availability",
+	saveLabel,
 }: {
 	mentorId: string;
 	initialSlots: DbAvailability[];
@@ -153,6 +161,8 @@ export function AvailabilityEditor({
 	requireAtLeastOneSlot?: boolean;
 	saveLabel?: string;
 }) {
+	const t = useTranslations("availabilityEditor");
+	const tErrors = useTranslations("availabilityEditor.errors");
 	const [timezone, setTimezone] = useState(
 		initialSlots[0]?.timezone ?? "Africa/Lagos",
 	);
@@ -204,14 +214,14 @@ export function AvailabilityEditor({
 		setError(null);
 		setSaved(false);
 		if (requireAtLeastOneSlot && slots.length === 0) {
-			setError("Add at least one availability slot before continuing.");
+			setError(tErrors("atLeastOne"));
 			return;
 		}
 
-		const validationErrors = validateSlots(slots);
+		const validationErrors = validateSlots(slots, tErrors);
 		if (validationErrors.size > 0) {
 			setSlotErrors(validationErrors);
-			setError("Fix the highlighted slots before saving.");
+			setError(tErrors("fixHighlighted"));
 			return;
 		}
 
@@ -227,7 +237,7 @@ export function AvailabilityEditor({
 					onSaved?.();
 				}
 			} catch {
-				setError("Your availability could not be saved. Please try again.");
+				setError(tErrors("saveFailed"));
 			}
 		});
 	}
@@ -240,7 +250,7 @@ export function AvailabilityEditor({
 			<DataCard>
 				<DataCardSection className="space-y-2">
 					<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-						Timezone
+						{t("timezone")}
 					</p>
 					<Select value={timezone} onValueChange={(v) => v && setTimezone(v)}>
 						<SelectTrigger className="h-10 w-full text-sm">
@@ -258,9 +268,7 @@ export function AvailabilityEditor({
 							))}
 						</SelectContent>
 					</Select>
-					<p className="text-xs text-muted-foreground">
-						All slots below are interpreted in this timezone.
-					</p>
+					<p className="text-xs text-muted-foreground">{t("timezoneHint")}</p>
 				</DataCardSection>
 			</DataCard>
 
@@ -273,15 +281,15 @@ export function AvailabilityEditor({
 							<DataCardSection className="space-y-3">
 								<div className="flex items-center justify-between">
 									<p className="font-heading text-sm font-semibold text-foreground">
-										{day}
+										{t(`days.${day}`)}
 									</p>
 									{daySlots.length === 0 ? (
 										<span className="text-xs text-muted-foreground">
-											Unavailable
+											{t("unavailable")}
 										</span>
 									) : (
 										<span className="text-xs text-muted-foreground">
-											{daySlots.length} slot{daySlots.length === 1 ? "" : "s"}
+											{t("slotCount", { count: daySlots.length })}
 										</span>
 									)}
 								</div>
@@ -354,7 +362,7 @@ export function AvailabilityEditor({
 														type="button"
 														onClick={() => removeSlot(slot.tempId)}
 														className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-														aria-label="Remove slot"
+														aria-label={t("removeSlot")}
 													>
 														<XIcon className="size-4" />
 													</button>
@@ -374,7 +382,7 @@ export function AvailabilityEditor({
 										className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/80 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-primary-500 hover:text-primary-500"
 									>
 										<PlusIcon className="size-4" />
-										Add slot
+										{t("addSlot")}
 									</button>
 								</div>
 							</DataCardSection>
@@ -388,7 +396,7 @@ export function AvailabilityEditor({
 				<DataCard>
 					<DataCardSection className="space-y-3">
 						<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-							Weekly preview
+							{t("weeklyPreview")}
 						</p>
 						<div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
 							{DAYS_OF_WEEK.map((day) => {
@@ -400,7 +408,9 @@ export function AvailabilityEditor({
 										key={day}
 										className="rounded-xl border border-border/60 bg-muted/30 p-3"
 									>
-										<p className="text-xs font-medium text-foreground">{day}</p>
+										<p className="text-xs font-medium text-foreground">
+											{t(`days.${day}`)}
+										</p>
 										{daySlots.length === 0 ? (
 											<p className="mt-1 text-xs text-muted-foreground">—</p>
 										) : (
@@ -434,7 +444,7 @@ export function AvailabilityEditor({
 				{saved ? (
 					<span className="inline-flex items-center gap-1.5 text-sm text-green-600">
 						<CheckCircle2 className="size-4" />
-						Availability saved
+						{t("saved")}
 					</span>
 				) : null}
 				<Button
@@ -444,7 +454,7 @@ export function AvailabilityEditor({
 					onClick={handleSave}
 					disabled={isPending}
 				>
-					{isPending ? "Saving…" : saveLabel}
+					{isPending ? t("saving") : (saveLabel ?? t("save"))}
 				</Button>
 			</div>
 		</div>

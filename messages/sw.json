@@ -412,5 +412,186 @@
 			"incomplete_code": "Andika tarakimu zote 6 za nambari yako.",
 			"generic": "Hitilafu imetokea. Tafadhali jaribu tena."
 		}
+	},
+	"onboarding": {
+		"eyebrow": "Usajili wa mentor",
+		"welcome": "Karibu, {name}",
+		"intro": "Weka muda wako unaopatikana, kamilisha wasifu wako, na unganisha Google Calendar kabla ya kwenda hewani. Unaweza kubadilisha kila kitu baadaye kwenye dashibodi yako.",
+		"stepsLabel": "Hatua za usajili",
+		"step": "Hatua {number}",
+		"steps": {
+			"availability": "Muda unaopatikana",
+			"profile": "Wasifu",
+			"calendar": "Google Calendar"
+		},
+		"availabilityStep": {
+			"title": "Weka muda wako unaopatikana kila wiki",
+			"description": "Ongeza angalau nafasi moja kwa kila siku unayoweza kupokea simu, kisha hifadhi. Unaweza kubadilisha hili wakati wowote kwenye dashibodi yako.",
+			"save": "Hifadhi na uendelee"
+		},
+		"profileStep": {
+			"title": "Kamilisha wasifu wako",
+			"description": "Hiki ndicho wanafunzi wanachokiona kwenye ukurasa wako wa kupanga miadi. Picha ya kirafiki na maelezo mafupi husaidia sana."
+		},
+		"calendarStep": {
+			"title": "Unganisha Google Calendar",
+			"description": "Unganisha Google Calendar unayotumia kwa ushauri. Simu mpya zitapangwa kwenye kalenda hii."
+		},
+		"form": {
+			"photo": "Picha ya wasifu (si lazima)",
+			"bio": "Maelezo kukuhusu",
+			"displayName": "Jina la kuonyesha (si lazima)",
+			"saving": "Inahifadhi…",
+			"save": "Hifadhi wasifu na uendelee",
+			"saved": "Wasifu umehifadhiwa. Unganisha Google Calendar ili kuendelea.",
+			"saveFailed": "Wasifu wako haukuweza kuhifadhiwa. Tafadhali jaribu tena."
+		},
+		"avatar": {
+			"tooLarge": "Picha lazima iwe chini ya MB 4.",
+			"uploadFailed": "Kupakia kumeshindikana. Tafadhali jaribu tena.",
+			"uploaded": "Picha imepakiwa",
+			"uploadTitle": "Pakia picha",
+			"alt": "Picha ya wasifu",
+			"change": "Badilisha picha",
+			"upload": "Pakia picha",
+			"hint": "JPG, PNG au WebP, hadi MB 4."
+		},
+		"goLive": {
+			"button": "Nenda hewani",
+			"pending": "Inaenda hewani…",
+			"failed": "Imeshindikana kukamilisha usajili. Tafadhali jaribu tena."
+		},
+		"errors": {
+			"invalid_link": "Kiungo hiki cha kuweka wasifu si halali tena. Ingia kwenye dashibodi yako, au tuma barua pepe kwa 4herfrika@gmail.com upate kiungo kipya.",
+			"mentor_not_found": "Hatukupata wasifu wako wa mentor. Tafadhali tuma barua pepe kwa 4herfrika@gmail.com.",
+			"profile_required": "Tafadhali hifadhi wasifu wako kabla ya kwenda hewani.",
+			"availability_required": "Tafadhali hifadhi angalau nafasi moja ya muda kabla ya kwenda hewani.",
+			"calendar_reauth_required": "Unganisha tena Google Calendar kabla ya kwenda hewani.",
+			"calendar_required": "Unganisha Google Calendar kabla ya kwenda hewani.",
+			"calendar_disconnected": "Google Calendar haijaunganishwa tena. Iunganishe tena kabla ya kwenda hewani.",
+			"bio_too_short": "Maelezo yanapaswa kuwa na angalau herufi 20.",
+			"untrusted_image": "Pakia picha yako kwa kutumia kitufe cha picha hapo juu."
+		}
+	},
+	"availabilityEditor": {
+		"timezone": "Saa za eneo",
+		"timezoneHint": "Nafasi zote hapa chini zinahesabiwa kwa saa za eneo hili.",
+		"unavailable": "Haupatikani",
+		"slotCount": "{count, plural, one {nafasi #} other {nafasi #}}",
+		"removeSlot": "Ondoa nafasi",
+		"addSlot": "Ongeza nafasi",
+		"weeklyPreview": "Muhtasari wa wiki",
+		"saved": "Muda umehifadhiwa",
+		"saving": "Inahifadhi…",
+		"save": "Hifadhi muda unaopatikana",
+		"days": {
+			"Monday": "Jumatatu",
+			"Tuesday": "Jumanne",
+			"Wednesday": "Jumatano",
+			"Thursday": "Alhamisi",
+			"Friday": "Ijumaa",
+			"Saturday": "Jumamosi",
+			"Sunday": "Jumapili"
+		},
+		"errors": {
+			"endAfterStart": "Muda wa kumaliza lazima uwe baada ya muda wa kuanza",
+			"overlaps": "Inaingiliana na {range}",
+			"atLeastOne": "Ongeza angalau nafasi moja ya muda kabla ya kuendelea.",
+			"fixHighlighted": "Rekebisha nafasi zilizoangaziwa kabla ya kuhifadhi.",
+			"saveFailed": "Muda wako haukuweza kuhifadhiwa. Tafadhali jaribu tena."
+		}
+	},
+	"calendarConnection": {
+		"status": {
+			"not_connected": "Haijaunganishwa",
+			"disconnected": "Imetenganishwa",
+			"revoked": "Ruhusa imeondolewa",
+			"connected": "Imeunganishwa",
+			"reauth_required": "Ruhusa mpya inahitajika"
+		},
+		"callback": {
+			"oauth_denied": {
+				"title": "Ruhusa ya Google haikutolewa",
+				"description": "Chagua Unganisha Google Calendar ukiwa tayari kujaribu tena."
+			},
+			"google_account_conflict": {
+				"title": "Akaunti hiyo ya Google haijaunganishwa",
+				"description": "Tumia Toa ruhusa upya kwa akaunti hii ili kuendelea na akaunti ya Google iliyounganishwa tayari na wasifu wako."
+			},
+			"expired_state": {
+				"title": "Ombi la kuunganisha limeisha muda",
+				"description": "Anza kuunganisha tena upate ombi jipya na salama."
+			},
+			"invalid_state": {
+				"title": "Ombi la kuunganisha halikuweza kuthibitishwa",
+				"description": "Anza kuunganisha tena kutoka ukurasa huu."
+			},
+			"insufficient_scope": {
+				"title": "Ruhusa ya kalenda haipo",
+				"description": "Unganisha tena na ukubali ruhusa ya kalenda kabla ya kuweza kuandaa mikutano mipya."
+			},
+			"invalid_grant": {
+				"title": "Google inakuomba uunganishe tena",
+				"description": "Tumia Toa ruhusa upya kwa akaunti hii kabla ya kuweza kuandaa mikutano mipya."
+			},
+			"oauth_exchange_failed": {
+				"title": "Google haikuweza kukamilisha kuunganisha",
+				"description": "Jaribu kuunganisha tena. Huwezi kuandaa mikutano mipya hadi Google Calendar iunganishwe."
+			},
+			"identity_lookup_failed": {
+				"title": "Taarifa za akaunti ya Google hazikuweza kuthibitishwa",
+				"description": "Jaribu kuunganisha tena kwa akaunti sahihi ya mentor."
+			},
+			"refresh_token_missing": {
+				"title": "Google inakuomba uunganishe tena",
+				"description": "Tumia Toa ruhusa upya kwa akaunti hii kabla ya kuweza kuandaa mikutano mipya."
+			},
+			"connection_unavailable": {
+				"title": "Google Calendar haipatikani",
+				"description": "Jaribu tena baada ya muda mfupi. Huwezi kuandaa mikutano mipya hadi Google Calendar iunganishwe."
+			}
+		},
+		"description": {
+			"connected": "Akaunti yako ya Google inapanga simu mpya.",
+			"reauth_required": "Toa ruhusa upya kwa Google Calendar kabla ya kuweza kuandaa mikutano mipya.",
+			"revoked": "Ruhusa ya Google iliondolewa. Unganisha tena kabla ya kuweza kuandaa mikutano mipya.",
+			"disconnected": "Unganisha tena Google Calendar kabla ya kuweza kuandaa mikutano mipya.",
+			"not_connected": "Unganisha Google Calendar kabla ya kuweza kuandaa mikutano."
+		},
+		"reconnect": "Unganisha tena Google Calendar",
+		"reauthorize": "Toa ruhusa upya kwa akaunti hii",
+		"connect": "Unganisha Google Calendar",
+		"disconnect": "Tenganisha",
+		"connectedDateUnavailable": "Tarehe ya kuunganishwa haipatikani",
+		"connectedOn": "Iliunganishwa {date}",
+		"toast": {
+			"notAvailable": "Kuunganisha Google Calendar bado hakupatikani.",
+			"retryFailed": "Google bado haijathibitisha kuondolewa kwa ruhusa. Jaribu tena baadaye au ondoa 4Herfrika kwenye Akaunti ya Google → Usalama → Miunganisho ya wahusika wengine.",
+			"disconnectUnconfirmed": "Imetenganishwa hapa, lakini Google haijathibitisha kuondolewa kwa ruhusa. Angalia Akaunti ya Google → Usalama → Miunganisho ya wahusika wengine na uondoe 4Herfrika ikiwa bado ipo.",
+			"retryNotAttempted": "Bado hakuna uthibitisho wa Google wa kuondoa ruhusa. Angalia Akaunti ya Google → Usalama → Miunganisho ya wahusika wengine.",
+			"disconnectNotAttempted": "Imetenganishwa hapa. Angalia Akaunti ya Google → Usalama → Miunganisho ya wahusika wengine na uondoe 4Herfrika ikiwa bado ipo.",
+			"revocationConfirmed": "Kuondolewa kwa ruhusa ya Google kumethibitishwa.",
+			"disconnected": "Imetenganishwa na ruhusa ya Google imeondolewa.",
+			"started": "Kuunganisha kumeanza",
+			"failed": "Google Calendar haikuweza kusasishwa. Jaribu tena."
+		},
+		"eyebrow": "Simu zako",
+		"title": "Google Calendar na Meet",
+		"configMissingTitle": "Kuingia kwa Google Calendar bado hakujawekwa kwenye tovuti hii",
+		"configMissingBody": "Hakuna tatizo na akaunti yako — tovuti inakosa vitambulisho vyake vya Google, kwa hivyo hakuna haja ya kujaribu tena. Msimamizi anahitaji kuviongeza. Hadi hapo, simu zako zinaandaliwa kwenye kalenda ya 4HerFrika.",
+		"healthUnavailable": "Ruhusa ya Google haikuweza kuthibitishwa kwa sasa. Toa ruhusa upya kwa akaunti hii kabla ya kuweza kuandaa mikutano mipya.",
+		"revocationPendingTitle": "Kuondolewa kwa ruhusa ya Google bado kunasubiri.",
+		"revocationPendingBody": "Huwezi kuandaa mikutano mipya hadi Google ithibitishe kuondolewa kwa ruhusa na uunganishe tena. Jaribu tena sasa, au ondoa 4HerFrika kwenye Akaunti ya Google → Usalama → Miunganisho ya wahusika wengine.",
+		"retryRevocation": "Jaribu tena kuondoa ruhusa ya Google",
+		"connectedAccount": "Akaunti iliyounganishwa",
+		"googleAccount": "Akaunti ya Google",
+		"connectionTiming": "Muda wa kuunganishwa",
+		"disconnectTitle": "Tenganisha Google Calendar?",
+		"disconnectBody": "Hutaweza kuandaa mikutano mipya hadi uunganishe Google Calendar tena.",
+		"confirmDisconnect": "Ndiyo, tenganisha",
+		"keepIt": "Iache",
+		"aboutReauth": "Kuhusu kutoa ruhusa upya",
+		"reauthTooltip": "Inasasisha ruhusa ya akaunti hii ya Google iliyounganishwa; haiwezi kubadilisha akaunti.",
+		"updating": "Inasasisha muunganisho…"
 	}
 }

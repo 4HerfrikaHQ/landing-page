@@ -10,16 +10,17 @@ import {
 	CheckIcon,
 	UserRoundIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 import { OnboardingForm } from "./onboarding-form";
 
 type StepId = "availability" | "profile" | "calendar";
 
-const steps: { id: StepId; label: string; icon: typeof CalendarClockIcon }[] = [
-	{ id: "availability", label: "Availability", icon: CalendarClockIcon },
-	{ id: "profile", label: "Profile", icon: UserRoundIcon },
-	{ id: "calendar", label: "Google Calendar", icon: CalendarDaysIcon },
+const steps: { id: StepId; icon: typeof CalendarClockIcon }[] = [
+	{ id: "availability", icon: CalendarClockIcon },
+	{ id: "profile", icon: UserRoundIcon },
+	{ id: "calendar", icon: CalendarDaysIcon },
 ];
 
 export function OnboardingStepper({
@@ -50,6 +51,7 @@ export function OnboardingStepper({
 	availabilityComplete: boolean;
 	profileComplete: boolean;
 }) {
+	const t = useTranslations("onboarding");
 	// Step state lives in the URL so it survives refresh and is shareable.
 	const [active, setActive] = useQueryState(
 		"step",
@@ -81,7 +83,7 @@ export function OnboardingStepper({
 
 	return (
 		<div>
-			<nav aria-label="Onboarding steps" className="mb-8">
+			<nav aria-label={t("stepsLabel")} className="mb-8">
 				<ol className="flex items-center gap-3">
 					{steps.map((step, index) => {
 						const isActive = visibleActive === step.id;
@@ -119,7 +121,7 @@ export function OnboardingStepper({
 									</span>
 									<span className="min-w-0">
 										<span className="block text-[11px] uppercase tracking-wide text-muted-foreground">
-											Step {index + 1}
+											{t("step", { number: index + 1 })}
 										</span>
 										<span
 											className={cn(
@@ -127,7 +129,7 @@ export function OnboardingStepper({
 												isActive ? "text-foreground" : "text-muted-foreground",
 											)}
 										>
-											{step.label}
+											{t(`steps.${step.id}`)}
 										</span>
 									</span>
 								</button>
@@ -157,15 +159,15 @@ export function OnboardingStepper({
 			{visibleActive === "availability" ? (
 				<div className="space-y-6">
 					<StepHeader
-						title="Set your weekly availability"
-						description="Add at least one slot for each day you can take calls, then save. You can change this anytime from your dashboard."
+						title={t("availabilityStep.title")}
+						description={t("availabilityStep.description")}
 					/>
 					<AvailabilityEditor
 						mentorId={availability.mentorId}
 						initialSlots={availability.initialSlots}
 						onSave={availability.saveAvailabilityAction}
 						requireAtLeastOneSlot
-						saveLabel="Save availability & continue"
+						saveLabel={t("availabilityStep.save")}
 						onSaved={() => {
 							setAvailabilityDone(true);
 							setActive("profile");
@@ -175,8 +177,8 @@ export function OnboardingStepper({
 			) : visibleActive === "profile" ? (
 				<div className="space-y-6">
 					<StepHeader
-						title="Complete your profile"
-						description="This is what mentees see on your booking page. A friendly photo and a short bio go a long way."
+						title={t("profileStep.title")}
+						description={t("profileStep.description")}
 					/>
 					<OnboardingForm
 						{...profile}
@@ -189,8 +191,8 @@ export function OnboardingStepper({
 			) : (
 				<div className="space-y-6">
 					<StepHeader
-						title="Connect Google Calendar"
-						description="Link the Google Calendar you use for mentoring. New calls will be scheduled on this calendar."
+						title={t("calendarStep.title")}
+						description={t("calendarStep.description")}
 					/>
 					{calendarSlot}
 				</div>

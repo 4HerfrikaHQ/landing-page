@@ -128,7 +128,7 @@ export async function startOnboardingGoogleCalendar(
 ) {
 	const verified = await resolveActionLink(token, "mentor_onboard");
 	if (!verified.ok) {
-		throw new ActionError(`Invalid link: ${verified.reason}`);
+		throw new ActionError("invalid_link");
 	}
 
 	const [mentor] = await db
@@ -138,7 +138,7 @@ export async function startOnboardingGoogleCalendar(
 			and(eq(mentors.id, verified.resourceId), eq(mentors.archived, false)),
 		)
 		.limit(1);
-	if (!mentor) throw new ActionError("Mentor not found");
+	if (!mentor) throw new ActionError("mentor_not_found");
 
 	return startMentorGoogleOAuthForOnboarding({
 		mentorId: mentor.mentorId,
@@ -167,7 +167,7 @@ export async function saveMentorOnboardingAvailability(
 	const verified = await resolveActionLink(parsed.data.token, "mentor_onboard");
 	if (!verified.ok) {
 		return {
-			error: `Invalid link: ${verified.reason}`,
+			error: "invalid_link",
 		};
 	}
 
@@ -186,7 +186,7 @@ export async function uploadOnboardingImage(
 	const verified = await resolveActionLink(token, "mentor_onboard");
 	if (!verified.ok) {
 		return {
-			error: `Invalid link: ${verified.reason}`,
+			error: "invalid_link",
 		};
 	}
 
@@ -201,7 +201,7 @@ export const saveMentorOnboardingProfile = actionClient
 			"mentor_onboard",
 		);
 		if (!verified.ok) {
-			throw new ActionError(`Invalid link: ${verified.reason}`);
+			throw new ActionError("invalid_link");
 		}
 
 		const mentorId = verified.resourceId;
@@ -210,7 +210,7 @@ export const saveMentorOnboardingProfile = actionClient
 			.from(mentors)
 			.where(and(eq(mentors.id, mentorId), eq(mentors.archived, false)))
 			.limit(1);
-		if (!mentor) throw new ActionError("Mentor not found");
+		if (!mentor) throw new ActionError("mentor_not_found");
 
 		await db
 			.update(mentors)
@@ -233,7 +233,7 @@ export const completeMentorOnboarding = actionClient
 			"mentor_onboard",
 		);
 		if (!verified.ok) {
-			throw new ActionError(`Invalid link: ${verified.reason}`);
+			throw new ActionError("invalid_link");
 		}
 
 		const mentorId = verified.resourceId;
@@ -248,9 +248,9 @@ export const completeMentorOnboarding = actionClient
 			.innerJoin(users, eq(users.id, mentors.user_id))
 			.where(and(eq(mentors.id, mentorId), eq(mentors.archived, false)))
 			.limit(1);
-		if (!mentor) throw new ActionError("Mentor not found");
+		if (!mentor) throw new ActionError("mentor_not_found");
 		if (!mentor.bio) {
-			throw new ActionError("Please save your profile before going live.");
+			throw new ActionError("profile_required");
 		}
 
 		const existingSlots = await db
@@ -258,9 +258,7 @@ export const completeMentorOnboarding = actionClient
 			.from(availability)
 			.where(eq(availability.mentor_id, mentorId));
 		if (existingSlots.length === 0) {
-			throw new ActionError(
-				"Please save at least one availability slot before going live.",
-			);
+			throw new ActionError("availability_required");
 		}
 
 		try {
@@ -271,8 +269,8 @@ export const completeMentorOnboarding = actionClient
 		} catch (error) {
 			throw new ActionError(
 				isMentorCalendarError(error) && error.code === "reauth_required"
-					? "Reconnect Google Calendar before going live."
-					: "Connect Google Calendar before going live.",
+					? "calendar_reauth_required"
+					: "calendar_required",
 			);
 		}
 
@@ -328,9 +326,7 @@ export const completeMentorOnboarding = actionClient
 			return activatedMentors;
 		});
 		if (activated.length === 0) {
-			throw new ActionError(
-				"Google Calendar is no longer connected. Reconnect before going live.",
-			);
+			throw new ActionError("calendar_disconnected");
 		}
 
 		revalidatePath("/careercorner");

@@ -412,5 +412,186 @@
 			"incomplete_code": "Enter all 6 digits of your code.",
 			"generic": "Something went wrong. Please try again."
 		}
+	},
+	"onboarding": {
+		"eyebrow": "Mentor onboarding",
+		"welcome": "Welcome, {name}",
+		"intro": "Set your availability, complete your profile, and connect Google Calendar before going live. You can edit everything later from your dashboard.",
+		"stepsLabel": "Onboarding steps",
+		"step": "Step {number}",
+		"steps": {
+			"availability": "Availability",
+			"profile": "Profile",
+			"calendar": "Google Calendar"
+		},
+		"availabilityStep": {
+			"title": "Set your weekly availability",
+			"description": "Add at least one slot for each day you can take calls, then save. You can change this anytime from your dashboard.",
+			"save": "Save availability & continue"
+		},
+		"profileStep": {
+			"title": "Complete your profile",
+			"description": "This is what mentees see on your booking page. A friendly photo and a short bio go a long way."
+		},
+		"calendarStep": {
+			"title": "Connect Google Calendar",
+			"description": "Link the Google Calendar you use for mentoring. New calls will be scheduled on this calendar."
+		},
+		"form": {
+			"photo": "Profile photo (optional)",
+			"bio": "Bio",
+			"displayName": "Display name (optional)",
+			"saving": "Saving…",
+			"save": "Save profile & continue",
+			"saved": "Profile saved. Connect Google Calendar to continue.",
+			"saveFailed": "Your profile could not be saved. Please try again."
+		},
+		"avatar": {
+			"tooLarge": "Image must be under 4MB.",
+			"uploadFailed": "Upload failed. Please try again.",
+			"uploaded": "Photo uploaded",
+			"uploadTitle": "Upload photo",
+			"alt": "Profile photo",
+			"change": "Change photo",
+			"upload": "Upload a photo",
+			"hint": "JPG, PNG or WebP, up to 4MB."
+		},
+		"goLive": {
+			"button": "Go live",
+			"pending": "Going live…",
+			"failed": "Could not complete onboarding. Please try again."
+		},
+		"errors": {
+			"invalid_link": "This setup link is no longer valid. Sign in to your dashboard, or email 4herfrika@gmail.com for a new link.",
+			"mentor_not_found": "We couldn't find your mentor profile. Please email 4herfrika@gmail.com.",
+			"profile_required": "Please save your profile before going live.",
+			"availability_required": "Please save at least one availability slot before going live.",
+			"calendar_reauth_required": "Reconnect Google Calendar before going live.",
+			"calendar_required": "Connect Google Calendar before going live.",
+			"calendar_disconnected": "Google Calendar is no longer connected. Reconnect before going live.",
+			"bio_too_short": "Bio should be at least 20 characters.",
+			"untrusted_image": "Upload your image using the photo button above."
+		}
+	},
+	"availabilityEditor": {
+		"timezone": "Timezone",
+		"timezoneHint": "All slots below are interpreted in this timezone.",
+		"unavailable": "Unavailable",
+		"slotCount": "{count, plural, one {# slot} other {# slots}}",
+		"removeSlot": "Remove slot",
+		"addSlot": "Add slot",
+		"weeklyPreview": "Weekly preview",
+		"saved": "Availability saved",
+		"saving": "Saving…",
+		"save": "Save availability",
+		"days": {
+			"Monday": "Monday",
+			"Tuesday": "Tuesday",
+			"Wednesday": "Wednesday",
+			"Thursday": "Thursday",
+			"Friday": "Friday",
+			"Saturday": "Saturday",
+			"Sunday": "Sunday"
+		},
+		"errors": {
+			"endAfterStart": "End time must be after start time",
+			"overlaps": "Overlaps with {range}",
+			"atLeastOne": "Add at least one availability slot before continuing.",
+			"fixHighlighted": "Fix the highlighted slots before saving.",
+			"saveFailed": "Your availability could not be saved. Please try again."
+		}
+	},
+	"calendarConnection": {
+		"status": {
+			"not_connected": "Not connected",
+			"disconnected": "Disconnected",
+			"revoked": "Access revoked",
+			"connected": "Connected",
+			"reauth_required": "Reauthorization required"
+		},
+		"callback": {
+			"oauth_denied": {
+				"title": "Google access was not granted",
+				"description": "Choose Connect Google Calendar when you are ready to try again."
+			},
+			"google_account_conflict": {
+				"title": "That Google account is not linked",
+				"description": "Use Reauthorize this account to continue with the Google account already linked to your mentor profile."
+			},
+			"expired_state": {
+				"title": "The connection request expired",
+				"description": "Start the connection again to get a fresh, secure request."
+			},
+			"invalid_state": {
+				"title": "The connection request could not be verified",
+				"description": "Start the connection again from this profile page."
+			},
+			"insufficient_scope": {
+				"title": "Calendar permission is missing",
+				"description": "Reconnect and approve the requested Calendar permission before you can host new meetings."
+			},
+			"invalid_grant": {
+				"title": "Google needs you to reconnect",
+				"description": "Use Reauthorize this account before you can host new meetings."
+			},
+			"oauth_exchange_failed": {
+				"title": "Google could not finish the connection",
+				"description": "Try connecting again. You cannot host new meetings until Google Calendar is connected."
+			},
+			"identity_lookup_failed": {
+				"title": "Google account details could not be confirmed",
+				"description": "Try connecting again with the intended mentor account."
+			},
+			"refresh_token_missing": {
+				"title": "Google needs you to reconnect",
+				"description": "Use Reauthorize this account before you can host new meetings."
+			},
+			"connection_unavailable": {
+				"title": "Google Calendar is unavailable",
+				"description": "Try again shortly. You cannot host new meetings until Google Calendar is connected."
+			}
+		},
+		"description": {
+			"connected": "Your Google account organizes new calls.",
+			"reauth_required": "Reauthorize Google Calendar before you can host new meetings.",
+			"revoked": "Google access was revoked. Reconnect before you can host new meetings.",
+			"disconnected": "Reconnect Google Calendar before you can host new meetings.",
+			"not_connected": "Connect Google Calendar before you can host meetings."
+		},
+		"reconnect": "Reconnect Google Calendar",
+		"reauthorize": "Reauthorize this account",
+		"connect": "Connect Google Calendar",
+		"disconnect": "Disconnect",
+		"connectedDateUnavailable": "Connected date unavailable",
+		"connectedOn": "Connected on {date}",
+		"toast": {
+			"notAvailable": "Google Calendar connection is not available yet.",
+			"retryFailed": "Google still has not confirmed access removal. Try again later or remove 4Herfrika from Google Account → Security → Third-party connections.",
+			"disconnectUnconfirmed": "Disconnected here, but Google did not confirm access removal. Check Google Account → Security → Third-party connections and remove 4Herfrika if it is still listed.",
+			"retryNotAttempted": "There is no confirmed Google revocation yet. Check Google Account → Security → Third-party connections.",
+			"disconnectNotAttempted": "Disconnected here. Check Google Account → Security → Third-party connections and remove 4Herfrika if it is still listed.",
+			"revocationConfirmed": "Google access revocation confirmed.",
+			"disconnected": "Disconnected and Google access was revoked.",
+			"started": "Connection started",
+			"failed": "Google Calendar could not be updated. Try again."
+		},
+		"eyebrow": "Your calls",
+		"title": "Google Calendar & Meet",
+		"configMissingTitle": "Google Calendar sign-in isn't set up on this site yet",
+		"configMissingBody": "Nothing is wrong with your account — the site is missing its Google credentials, so there is no point retrying. An admin needs to add them. Your calls are hosted on the 4HerFrika calendar until then.",
+		"healthUnavailable": "Google access could not be confirmed just now. Reauthorize this account before you can host new meetings.",
+		"revocationPendingTitle": "Google access removal is still pending.",
+		"revocationPendingBody": "You cannot host new meetings until Google confirms revocation and you reconnect. Try the protected retry now, or remove 4HerFrika from Google Account → Security → Third-party connections.",
+		"retryRevocation": "Retry Google access removal",
+		"connectedAccount": "Connected account",
+		"googleAccount": "Google account",
+		"connectionTiming": "Connection timing",
+		"disconnectTitle": "Disconnect Google Calendar?",
+		"disconnectBody": "You will not be able to host new meetings until you connect Google Calendar again.",
+		"confirmDisconnect": "Yes, disconnect",
+		"keepIt": "Keep it",
+		"aboutReauth": "About reauthorization",
+		"reauthTooltip": "Refreshes consent for this linked Google account; it cannot switch accounts.",
+		"updating": "Updating connection…"
 	}
 }
