@@ -161,7 +161,16 @@ export async function getBookingSummaryForAdmin(filters: BookingFilters) {
 			eq(bookings.status, "confirmed"),
 			gte(bookings.start_at, now),
 		]),
-		countBookings([...base, eq(bookings.status, "completed")]),
+		// A session is treated as completed once it has passed, unless it was
+		// explicitly cancelled or marked as a no-show. We retain `confirmed` in
+		// the database so an admin can still mark a missed session as a no-show.
+		countBookings([
+			...base,
+			or(
+				eq(bookings.status, "completed"),
+				and(eq(bookings.status, "confirmed"), lt(bookings.start_at, now)),
+			)!,
+		]),
 		countBookings([...base, eq(bookings.status, "cancelled")]),
 		countBookings([...base, eq(bookings.status, "no_show")]),
 	]);
