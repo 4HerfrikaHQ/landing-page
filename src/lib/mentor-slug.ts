@@ -40,10 +40,18 @@ export function parseMentorSlug(
 }
 
 export function isUniqueViolation(error: unknown): boolean {
-	return (
-		typeof error === "object" &&
-		error !== null &&
-		"code" in error &&
-		(error as { code?: unknown }).code === "23505"
-	);
+	const seen = new Set<object>();
+	let current = error;
+
+	while (
+		typeof current === "object" &&
+		current !== null &&
+		!seen.has(current)
+	) {
+		seen.add(current);
+		if ("code" in current && current.code === "23505") return true;
+		current = "cause" in current ? current.cause : undefined;
+	}
+
+	return false;
 }
