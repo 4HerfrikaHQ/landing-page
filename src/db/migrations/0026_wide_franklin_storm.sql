@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" ADD COLUMN "rebook_nurture_sent_at" timestamp with time zone;

@@ -53,6 +53,12 @@ export type {
 	DbBookingFeedbackInsert,
 } from "./booking-feedback";
 
+export { emailUnsubscribes } from "./email-unsubscribes";
+export type {
+	DbEmailUnsubscribe,
+	DbEmailUnsubscribeInsert,
+} from "./email-unsubscribes";
+
 export * from "./relations";
 export { academyWaitlistEntries, Academy } from "./academy-waitlist-entries";
 export type { DbAcademyWaitlistEntry } from "./academy-waitlist-entries";
