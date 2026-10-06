@@ -36,6 +36,12 @@ export const confirmAttendance = actionClient
 			await tx
 				.update(bookings)
 				.set({
+					mentor_attendance: parsedInput.attended ? "attended" : "no_show",
+				})
+				.where(eq(bookings.id, verified.resourceId));
+			await tx
+				.update(bookings)
+				.set({
 					status: parsedInput.attended ? "completed" : "no_show",
 					updated_at: new Date(),
 				})

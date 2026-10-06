@@ -2,6 +2,7 @@
 
 import { db } from "@/src/db";
 import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
+import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { BookingStatus, bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
@@ -115,6 +116,8 @@ export async function getBookingsForAdmin(filters: BookingFilters) {
 				cancel_reason: bookings.cancel_reason,
 				cancelled_at: bookings.cancelled_at,
 				reschedule_count: bookings.reschedule_count,
+				mentor_attendance: bookings.mentor_attendance,
+				mentee_call_happened: bookingFeedback.call_happened,
 				created_at: bookings.created_at,
 				updated_at: bookings.updated_at,
 				mentor_name: users.name,
@@ -123,6 +126,7 @@ export async function getBookingsForAdmin(filters: BookingFilters) {
 			.from(bookings)
 			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
 			.innerJoin(users, eq(mentors.user_id, users.id))
+			.leftJoin(bookingFeedback, eq(bookingFeedback.booking_id, bookings.id))
 			.where(where)
 			.orderBy(
 				filters.status === "cancelled"
