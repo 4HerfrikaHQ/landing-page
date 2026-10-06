@@ -1,5 +1,5 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
-import { CheckCircle2, LinkIcon } from "lucide-react";
+import { LinkIcon } from "lucide-react";
 import type { Locale } from "next-intl";
 import {
 	getFormatter,
@@ -46,19 +46,11 @@ export default async function AttendancePage({
 	if (!result.ok) {
 		return (
 			<Shell>
-				{result.reason === "used" ? (
-					<EmptyState
-						icon={CheckCircle2}
-						title={t("usedTitle")}
-						description={t("usedDescription")}
-					/>
-				) : (
-					<EmptyState
-						icon={LinkIcon}
-						title={t("invalidTitle")}
-						description={t("invalidDescription")}
-					/>
-				)}
+				<EmptyState
+					icon={LinkIcon}
+					title={t("invalidTitle")}
+					description={t("invalidDescription")}
+				/>
 			</Shell>
 		);
 	}
@@ -77,7 +69,7 @@ export default async function AttendancePage({
 			<p className="mt-2 mb-8 text-sm text-muted-foreground">
 				{t("subheading", { date })}
 			</p>
-			<AttendanceForm token={token} />
+			<AttendanceForm token={token} initialAnswer={booking.mentor_attendance} />
 		</Shell>
 	);
 }

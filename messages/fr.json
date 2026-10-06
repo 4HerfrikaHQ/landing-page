@@ -363,12 +363,10 @@
 		"yes": "Oui, l'appel a eu lieu",
 		"no": "Non, la personne ne s'est pas présentée",
 		"savedTitle": "Merci, c'est enregistré",
-		"savedDescription": "Vous pouvez voir toutes vos sessions dans votre tableau de bord.",
-		"usedTitle": "Déjà enregistré",
-		"usedDescription": "Merci, nous avons déjà votre réponse pour cette session.",
 		"invalidTitle": "Ce lien n'est pas valide",
-		"invalidDescription": "Le lien a peut-être expiré ou a déjà été utilisé.",
-		"error": "Impossible d'enregistrer. Veuillez réessayer."
+		"invalidDescription": "Le lien a peut-être expiré.",
+		"error": "Impossible d'enregistrer. Veuillez réessayer.",
+		"canChange": "Vous pouvez modifier votre réponse si vous vous êtes trompé."
 	},
 	"feedback": {
 		"heading": "Comment s'est passé votre appel avec {name} ?",

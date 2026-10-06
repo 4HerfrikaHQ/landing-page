@@ -1,12 +1,12 @@
 "use server";
 
 import { db } from "@/src/db";
-import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import { BookingStatus, bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { adminAction } from "@/src/lib/safe-action";
+import { syncAttendanceStatus } from "@/src/lib/booking-attendance";
+import { ActionError, adminAction } from "@/src/lib/safe-action";
 import {
 	type SQL,
 	and,
@@ -16,7 +16,11 @@ import {
 	eq,
 	gte,
 	ilike,
+	inArray,
+	isNotNull,
 	lt,
+	ne,
+	not,
 	or,
 } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -36,6 +40,27 @@ interface BookingFilters {
 	pageSize?: number;
 }
 
+const disputedCondition = and(
+	isNotNull(bookings.mentor_attendance),
+	inArray(bookingFeedback.call_happened, [
+		"yes",
+		"mentor_no_show",
+		"mentee_no_show",
+	]),
+	not(
+		or(
+			and(
+				eq(bookings.mentor_attendance, "attended"),
+				eq(bookingFeedback.call_happened, "yes"),
+			),
+			and(
+				eq(bookings.mentor_attendance, "no_show"),
+				eq(bookingFeedback.call_happened, "mentee_no_show"),
+			),
+		) as SQL,
+	),
+) as SQL;
+
 function bookingConditions(
 	filters: BookingFilters,
 	options: { includeStatus?: boolean } = {},
@@ -46,6 +71,7 @@ function bookingConditions(
 	if (options.includeStatus !== false) {
 		const status = BookingStatus.safeParse(filters.status);
 		if (status.success) conditions.push(eq(bookings.status, status.data));
+		if (filters.status === "disputed") conditions.push(disputedCondition);
 	}
 
 	if (filters.mentorSlug) {
@@ -117,6 +143,7 @@ export async function getBookingsForAdmin(filters: BookingFilters) {
 				cancelled_at: bookings.cancelled_at,
 				reschedule_count: bookings.reschedule_count,
 				mentor_attendance: bookings.mentor_attendance,
+				outcome_set_by_admin_at: bookings.outcome_set_by_admin_at,
 				mentee_call_happened: bookingFeedback.call_happened,
 				created_at: bookings.created_at,
 				updated_at: bookings.updated_at,
@@ -140,6 +167,7 @@ export async function getBookingsForAdmin(filters: BookingFilters) {
 			.select({ total: count() })
 			.from(bookings)
 			.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+			.leftJoin(bookingFeedback, eq(bookingFeedback.booking_id, bookings.id))
 			.where(where),
 	]);
 
@@ -151,6 +179,7 @@ async function countBookings(conditions: SQL<unknown>[]) {
 		.select({ value: count() })
 		.from(bookings)
 		.innerJoin(mentors, eq(bookings.mentor_id, mentors.id))
+		.leftJoin(bookingFeedback, eq(bookingFeedback.booking_id, bookings.id))
 		.where(conditions.length ? and(...conditions) : undefined);
 	return value;
 }
@@ -195,10 +224,39 @@ export async function getMentorOptions() {
 
 export type MentorOption = Awaited<ReturnType<typeof getMentorOptions>>[number];
 
-export const markBookingNoShow = adminAction
-	.schema(z.object({ bookingId: z.string().uuid() }))
-	.action(async ({ parsedInput }) => {
-		await setBookingNoShow(parsedInput.bookingId);
+export const setBookingOutcome = adminAction
+	.schema(
+		z.object({
+			bookingId: z.string().uuid(),
+			outcome: z.enum(["completed", "no_show", "answers"]),
+		}),
+	)
+	.action(async ({ parsedInput: { bookingId, outcome } }) => {
+		await db.transaction(async (tx) => {
+			const updated = await tx
+				.update(bookings)
+				.set(
+					outcome === "answers"
+						? { outcome_set_by_admin_at: null }
+						: {
+								status: outcome,
+								outcome_set_by_admin_at: new Date(),
+								updated_at: new Date(),
+							},
+				)
+				.where(
+					and(
+						eq(bookings.id, bookingId),
+						lt(bookings.start_at, new Date()),
+						ne(bookings.status, "cancelled"),
+					),
+				)
+				.returning({ id: bookings.id });
+			if (updated.length === 0) {
+				throw new ActionError("Booking not found, cancelled, or not yet past.");
+			}
+			if (outcome === "answers") await syncAttendanceStatus(tx, bookingId);
+		});
 		revalidatePath("/dashboard/admin/bookings");
 		return { ok: true };
 	});

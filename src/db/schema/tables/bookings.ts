@@ -67,6 +67,9 @@ export const bookings = pgTable(
 			.default("confirmed"),
 		cancel_reason: text("cancel_reason"),
 		mentor_attendance: text("mentor_attendance").$type<MentorAttendance>(),
+		outcome_set_by_admin_at: timestamp("outcome_set_by_admin_at", {
+			withTimezone: true,
+		}),
 		reschedule_count: integer("reschedule_count").notNull().default(0),
 
 		confirmation_sent_at: timestamp("confirmation_sent_at", {

@@ -2,7 +2,6 @@
 
 import { currentDbMentor } from "@/src/auth";
 import { db } from "@/src/db";
-import { setBookingNoShow } from "@/src/db/actions/mark-no-show";
 import { bookingFeedback } from "@/src/db/schema/tables/booking-feedback";
 import {
 	BookingStatus,
@@ -12,6 +11,7 @@ import {
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
+import { recordMentorAttendance } from "@/src/lib/booking-attendance";
 import {
 	cancelBookingCore,
 	rescheduleBookingCore,
@@ -210,7 +210,7 @@ export const markMyBookingNoShow = actionClient
 	.schema(MarkNoShowSchema)
 	.action(async ({ parsedInput }) => {
 		const row = await loadOwnBooking(parsedInput.bookingId);
-		await setBookingNoShow(row.booking.id);
+		await recordMentorAttendance(row.booking.id, "no_show");
 		revalidatePath("/dashboard/mentor/bookings");
 		return { ok: true };
 	});

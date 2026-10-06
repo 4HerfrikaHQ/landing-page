@@ -363,12 +363,10 @@
 		"yes": "Ndiyo, alijiunga",
 		"no": "Hapana, hakufika",
 		"savedTitle": "Asante, tumehifadhi jibu lako",
-		"savedDescription": "Unaweza kuona vipindi vyako vyote kwenye dashibodi yako.",
-		"usedTitle": "Tayari limehifadhiwa",
-		"usedDescription": "Asante, tayari tuna jibu lako kwa kipindi hiki.",
 		"invalidTitle": "Kiungo hiki si sahihi",
-		"invalidDescription": "Huenda kiungo kimeisha muda wake au tayari kimetumika.",
-		"error": "Imeshindikana kuhifadhi. Tafadhali jaribu tena."
+		"invalidDescription": "Huenda kiungo kimeisha muda wake.",
+		"error": "Imeshindikana kuhifadhi. Tafadhali jaribu tena.",
+		"canChange": "Unaweza kubadilisha jibu lako ikiwa ulichagua lisilo sahihi."
 	},
 	"feedback": {
 		"heading": "Simu yako na {name} ilikuwaje?",
