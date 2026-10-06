@@ -12,6 +12,7 @@ export const ActionLinkAction = z.enum([
 	"manage",
 	"feedback",
 	"mentor_onboard",
+	"attendance",
 ]);
 export type ActionLinkAction = z.infer<typeof ActionLinkAction>;
 

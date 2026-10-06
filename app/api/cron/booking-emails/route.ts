@@ -14,7 +14,7 @@ import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
 import { formatInTimeZone } from "date-fns-tz";
-import { and, eq, gte, isNull, lt, lte, ne, sql } from "drizzle-orm";
+import { and, eq, gte, inArray, isNull, lt, lte, ne, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -184,7 +184,7 @@ async function runFeedbackRequestJob({
 		.where(
 			and(
 				eq(mentors.archived, false),
-				eq(bookings.status, "confirmed"),
+				inArray(bookings.status, ["confirmed", "completed"]),
 				isNull(bookings.feedback_email_sent_at),
 				gte(bookings.end_at, new Date(runtime - MAX_BACKLOG_AGE_MS)),
 				lt(bookings.end_at, new Date(runtime - AFTER_CALL_EMAIL_DELAY_MS)),
@@ -212,10 +212,6 @@ ${siteUrl()}/bookings/${token}/feedback
 
 — 4HerFrika`,
 			});
-			await db
-				.update(bookings)
-				.set({ status: "completed" })
-				.where(eq(bookings.id, b.id));
 			counts.feedback += 1;
 		} catch (error) {
 			await release(b.id, "feedback_email_sent_at", claimedAt);
@@ -255,13 +251,22 @@ async function runMentorFollowupJob({
 		if (!claimedAt) continue;
 		if (!b.mentorEmail) continue;
 		try {
+			const token = await createActionLink({
+				resourceId: b.id,
+				action: "attendance",
+				expiresAt: new Date(runtime + 14 * 24 * 3600_000),
+			});
 			await sendEmail(resend, {
 				from: FROM,
 				to: b.mentorEmail,
-				subject: `Follow-up: your call with ${b.mentee_name}`,
+				subject: `Did ${b.mentee_name} join your call?`,
 				text: `Hi ${b.mentorName},
 
-Thanks again for showing up. If there's anything you wanted to follow up with ${b.mentee_name} about, now's a good time. You can see your past sessions in your dashboard.
+Please confirm whether ${b.mentee_name} joined your session. It takes one click:
+
+${siteUrl()}/bookings/${token}/attendance
+
+If there's anything you wanted to follow up with ${b.mentee_name} about, now's a good time. You can see your past sessions in your dashboard.
 
 — 4HerFrika`,
 			});

@@ -7,10 +7,13 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
+import type { CallHappened } from "@/src/db/schema/tables/booking-feedback";
+import type { MentorAttendance } from "@/src/db/schema/tables/bookings";
+import { isAttendanceDisputed } from "@/src/lib/booking-rules";
 import { formatInTimeZone } from "date-fns-tz";
 import type { ReactNode } from "react";
 import type { AdminBookingRow } from "../_actions";
-import { NoShowButton } from "./no-show-button";
+import { OutcomeButtons } from "./outcome-buttons";
 
 export function BookingDetailSheet({
 	booking,
@@ -21,10 +24,12 @@ export function BookingDetailSheet({
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 }) {
-	const canMarkNoShow =
-		booking.start_at < new Date() &&
-		booking.status !== "no_show" &&
-		booking.status !== "cancelled";
+	const canSetOutcome =
+		booking.start_at < new Date() && booking.status !== "cancelled";
+	const answers = {
+		mentor: booking.mentor_attendance,
+		mentee: booking.mentee_call_happened,
+	};
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -113,6 +118,38 @@ export function BookingDetailSheet({
 						</p>
 					</Section>
 
+					{booking.end_at < new Date() && booking.status !== "cancelled" ? (
+						<Section title="Attendance">
+							{isAttendanceDisputed(answers) ? (
+								<p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+									Disputed: the mentor and mentee gave different answers.
+								</p>
+							) : null}
+							{booking.outcome_set_by_admin_at ? (
+								<p className="text-sm text-muted-foreground">
+									Status set by an admin{" "}
+									{formatDate(
+										booking.outcome_set_by_admin_at,
+										booking.mentee_timezone,
+									)}
+									. New answers won't change it.
+								</p>
+							) : null}
+							<dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+								<Field label="Mentor says">
+									{booking.mentor_attendance
+										? MENTOR_ANSWERS[booking.mentor_attendance]
+										: "No answer yet"}
+								</Field>
+								<Field label="Mentee says">
+									{booking.mentee_call_happened
+										? MENTEE_ANSWERS[booking.mentee_call_happened]
+										: "No answer yet"}
+								</Field>
+							</dl>
+						</Section>
+					) : null}
+
 					{booking.status === "cancelled" ? (
 						<Section title="Cancellation">
 							<div className="rounded-2xl border border-border/60 bg-muted/50 p-4">
@@ -129,18 +166,27 @@ export function BookingDetailSheet({
 					) : null}
 				</div>
 
-				{canMarkNoShow ? (
+				{canSetOutcome ? (
 					<div className="sticky bottom-0 -mx-4 flex items-center border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
-						<NoShowButton
-							bookingId={booking.id}
-							menteeName={booking.mentee_name}
-						/>
+						<OutcomeButtons booking={booking} />
 					</div>
 				) : null}
 			</SheetContent>
 		</Sheet>
 	);
 }
+
+const MENTOR_ANSWERS: Record<MentorAttendance, string> = {
+	attended: "Mentee joined",
+	no_show: "Mentee didn't show",
+};
+
+const MENTEE_ANSWERS: Record<CallHappened, string> = {
+	yes: "Call happened",
+	mentor_no_show: "Mentor didn't show",
+	mentee_no_show: "Mentee didn't make it",
+	rescheduled_externally: "Rescheduled outside the platform",
+};
 
 function formatDate(date: Date, timezone: string) {
 	return formatInTimeZone(date, timezone, "MMM d, yyyy · HH:mm zzz");
