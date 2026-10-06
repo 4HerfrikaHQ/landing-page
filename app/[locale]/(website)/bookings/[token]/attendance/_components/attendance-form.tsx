@@ -3,22 +3,23 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { confirmAttendance } from "../_actions";
 
 export function AttendanceForm({ token }: { token: string }) {
+	const t = useTranslations("attendance");
 	const confirm = useAction(confirmAttendance, {
-		onError: ({ error }) =>
-			toast.error(error.serverError ?? "Couldn't save. Please try again."),
+		onError: () => toast.error(t("error")),
 	});
 
 	if (confirm.hasSucceeded) {
 		return (
 			<EmptyState
 				icon={CheckCircle2}
-				title="Thanks, we've recorded that"
-				description="You can see all your sessions in your dashboard."
+				title={t("savedTitle")}
+				description={t("savedDescription")}
 			/>
 		);
 	}
@@ -30,7 +31,7 @@ export function AttendanceForm({ token }: { token: string }) {
 				onClick={() => confirm.execute({ token, attended: true })}
 				disabled={confirm.isPending}
 			>
-				Yes, they joined
+				{t("yes")}
 			</Button>
 			<Button
 				variant="outline"
@@ -38,7 +39,7 @@ export function AttendanceForm({ token }: { token: string }) {
 				onClick={() => confirm.execute({ token, attended: false })}
 				disabled={confirm.isPending}
 			>
-				No, they didn't show
+				{t("no")}
 			</Button>
 		</div>
 	);

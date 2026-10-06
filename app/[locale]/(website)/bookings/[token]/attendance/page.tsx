@@ -1,15 +1,27 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
-import { formatInTimeZone } from "date-fns-tz";
 import { CheckCircle2, LinkIcon } from "lucide-react";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import {
+	getFormatter,
+	getTranslations,
+	setRequestLocale,
+} from "next-intl/server";
 import { loadAttendanceContext } from "./_actions";
 import { AttendanceForm } from "./_components/attendance-form";
 
-export const metadata = {
-	title: "Confirm attendance",
-	robots: { index: false, follow: false },
-};
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}) {
+	const { locale } = await params;
+	const t = await getTranslations({ locale, namespace: "seo.attendance" });
+	return {
+		title: t("title"),
+		description: t("description"),
+		robots: { index: false, follow: false },
+	};
+}
 
 function Shell({ children }: { children: React.ReactNode }) {
 	return (
@@ -26,6 +38,8 @@ export default async function AttendancePage({
 }) {
 	const { locale, token } = await params;
 	setRequestLocale(locale as Locale);
+	const t = await getTranslations("attendance");
+	const format = await getFormatter();
 
 	const result = await loadAttendanceContext(token);
 
@@ -35,14 +49,14 @@ export default async function AttendancePage({
 				{result.reason === "used" ? (
 					<EmptyState
 						icon={CheckCircle2}
-						title="Already recorded"
-						description="Thanks, we already have your answer for this session."
+						title={t("usedTitle")}
+						description={t("usedDescription")}
 					/>
 				) : (
 					<EmptyState
 						icon={LinkIcon}
-						title="This link isn't valid"
-						description="The link may have expired or already been used."
+						title={t("invalidTitle")}
+						description={t("invalidDescription")}
 					/>
 				)}
 			</Shell>
@@ -50,19 +64,18 @@ export default async function AttendancePage({
 	}
 
 	const { booking } = result;
-	const whenLabel = formatInTimeZone(
-		booking.start_at,
-		booking.mentee_timezone,
-		"EEE, MMM d, yyyy",
-	);
+	const date = format.dateTime(booking.start_at, {
+		dateStyle: "full",
+		timeZone: booking.mentee_timezone,
+	});
 
 	return (
 		<Shell>
 			<h1 className="text-2xl font-semibold text-foreground">
-				Did {booking.mentee_name} join your call?
+				{t("heading", { name: booking.mentee_name })}
 			</h1>
 			<p className="mt-2 mb-8 text-sm text-muted-foreground">
-				Your session on {whenLabel}. This keeps session records accurate.
+				{t("subheading", { date })}
 			</p>
 			<AttendanceForm token={token} />
 		</Shell>

@@ -351,6 +351,23 @@
 			"title": "Book a call with {name} — 4HerFrika",
 			"ogTitle": "Book a call with {name}",
 			"description": "Book a 30-minute call with {name}."
+		},
+		"attendance": {
+			"title": "Confirm Attendance",
+			"description": "Confirm whether your 4Herfrika mentorship session took place."
 		}
+	},
+	"attendance": {
+		"heading": "Did {name} join your call?",
+		"subheading": "Your session on {date}. This keeps session records accurate.",
+		"yes": "Yes, they joined",
+		"no": "No, they didn't show",
+		"savedTitle": "Thanks, we've recorded that",
+		"savedDescription": "You can see all your sessions in your dashboard.",
+		"usedTitle": "Already recorded",
+		"usedDescription": "Thanks, we already have your answer for this session.",
+		"invalidTitle": "This link isn't valid",
+		"invalidDescription": "The link may have expired or already been used.",
+		"error": "Couldn't save. Please try again."
 	}
 }

@@ -351,6 +351,23 @@
 			"title": "Weka simu na {name} — 4HerFrika",
 			"ogTitle": "Weka simu na {name}",
 			"description": "Weka simu ya dakika 30 na {name}."
+		},
+		"attendance": {
+			"title": "Thibitisha Mahudhurio",
+			"description": "Thibitisha kama kipindi chako cha ushauri cha 4Herfrika kilifanyika."
 		}
+	},
+	"attendance": {
+		"heading": "Je, {name} alijiunga na simu yako?",
+		"subheading": "Kipindi chako cha tarehe {date}. Hii hutusaidia kuweka kumbukumbu sahihi za vipindi.",
+		"yes": "Ndiyo, alijiunga",
+		"no": "Hapana, hakufika",
+		"savedTitle": "Asante, tumehifadhi jibu lako",
+		"savedDescription": "Unaweza kuona vipindi vyako vyote kwenye dashibodi yako.",
+		"usedTitle": "Tayari limehifadhiwa",
+		"usedDescription": "Asante, tayari tuna jibu lako kwa kipindi hiki.",
+		"invalidTitle": "Kiungo hiki si sahihi",
+		"invalidDescription": "Huenda kiungo kimeisha muda wake au tayari kimetumika.",
+		"error": "Imeshindikana kuhifadhi. Tafadhali jaribu tena."
 	}
 }

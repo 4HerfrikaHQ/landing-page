@@ -351,6 +351,23 @@
 			"title": "Réservez un appel avec {name} — 4HerFrika",
 			"ogTitle": "Réservez un appel avec {name}",
 			"description": "Réservez un appel de 30 minutes avec {name}."
+		},
+		"attendance": {
+			"title": "Confirmer la présence",
+			"description": "Confirmez si votre session de mentorat 4Herfrika a eu lieu."
 		}
+	},
+	"attendance": {
+		"heading": "L'appel avec {name} a-t-il eu lieu ?",
+		"subheading": "Votre session du {date}. Cela nous aide à garder un historique des sessions exact.",
+		"yes": "Oui, l'appel a eu lieu",
+		"no": "Non, la personne ne s'est pas présentée",
+		"savedTitle": "Merci, c'est enregistré",
+		"savedDescription": "Vous pouvez voir toutes vos sessions dans votre tableau de bord.",
+		"usedTitle": "Déjà enregistré",
+		"usedDescription": "Merci, nous avons déjà votre réponse pour cette session.",
+		"invalidTitle": "Ce lien n'est pas valide",
+		"invalidDescription": "Le lien a peut-être expiré ou a déjà été utilisé.",
+		"error": "Impossible d'enregistrer. Veuillez réessayer."
 	}
 }
