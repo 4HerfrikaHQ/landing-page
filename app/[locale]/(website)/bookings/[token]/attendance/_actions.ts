@@ -5,7 +5,7 @@ import { actionLinks } from "@/src/db/schema/tables/action-links";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { resolveActionLink } from "@/src/lib/action-links";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { ConfirmAttendanceSchema } from "./_schema";
 
 export async function loadAttendanceContext(token: string) {
@@ -42,7 +42,9 @@ export const confirmAttendance = actionClient
 				.where(
 					and(
 						eq(bookings.id, verified.resourceId),
-						eq(bookings.status, "confirmed"),
+						parsedInput.attended
+							? eq(bookings.status, "confirmed")
+							: inArray(bookings.status, ["confirmed", "completed"]),
 					),
 				);
 			await tx

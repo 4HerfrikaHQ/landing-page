@@ -93,6 +93,18 @@ export const submitFeedback = actionClient
 					.where(eq(bookings.id, verified.resourceId));
 			}
 
+			if (parsedInput.call_happened === "yes") {
+				await tx
+					.update(bookings)
+					.set({ status: "completed" })
+					.where(
+						and(
+							eq(bookings.id, verified.resourceId),
+							eq(bookings.status, "confirmed"),
+						),
+					);
+			}
+
 			await tx
 				.update(actionLinks)
 				.set({ used_at: new Date() })
