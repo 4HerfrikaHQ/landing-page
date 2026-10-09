@@ -1,6 +1,6 @@
 import {
 	type MentorCalendarEventParams,
-	deterministicCalendarEventId,
+	resolveCalendarEventSlot,
 } from "@/src/lib/google-calendar";
 
 export class OrgGoogleCalendarError extends Error {
@@ -25,6 +25,7 @@ type CalendarFetch = typeof fetch;
 type OrgEventIdentity = { email?: string };
 type OrgCalendarEvent = {
 	id?: string;
+	status?: string;
 	hangoutLink?: string;
 	organizer?: OrgEventIdentity;
 	creator?: OrgEventIdentity;
@@ -187,8 +188,10 @@ export async function createOrgGoogleCalendarEvent(
 	fetchImpl: CalendarFetch = fetch,
 ): Promise<{ eventId: string; meetUrl: string }> {
 	const token = await getAccessToken(fetchImpl);
-	const eventId = deterministicCalendarEventId(params.attemptKey);
-	const existing = await readEvent(token, eventId, fetchImpl);
+	const { eventId, requestId, existing } = await resolveCalendarEventSlot(
+		params.attemptKey,
+		(id) => readEvent(token, id, fetchImpl),
+	);
 	if (existing) return eventDetails(existing, params.attemptKey);
 
 	let response: Response;
@@ -213,7 +216,7 @@ export async function createOrgGoogleCalendarEvent(
 					],
 					conferenceData: {
 						createRequest: {
-							requestId: params.attemptKey,
+							requestId,
 							conferenceSolutionKey: { type: "hangoutsMeet" },
 						},
 					},
