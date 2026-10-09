@@ -266,6 +266,23 @@ function BookingCard({
 					</div>
 				</div>
 
+				{booking.status === "cancelled" ? (
+					<div className="rounded-xl bg-muted/50 p-4 text-sm">
+						<p className="font-medium text-foreground">
+							{booking.cancelled_at
+								? `Cancelled ${formatInTimeZone(
+										booking.cancelled_at,
+										booking.mentee_timezone,
+										"MMM d, yyyy 'at' HH:mm zzz",
+									)}`
+								: "Cancelled"}
+						</p>
+						<p className="mt-1 whitespace-pre-wrap text-muted-foreground">
+							{booking.cancel_reason || "No message was sent to the mentee."}
+						</p>
+					</div>
+				) : null}
+
 				{feedback ? (
 					<div className="rounded-xl bg-muted/50 p-4 text-sm">
 						<p className="text-foreground">

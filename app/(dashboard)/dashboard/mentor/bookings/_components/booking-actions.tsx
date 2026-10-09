@@ -72,8 +72,10 @@ export function BookingActions({
 	});
 
 	// Past sessions: offer "mark no-show" unless already resolved that way / cancelled.
+	if (status === "cancelled") return null;
+
 	if (!isUpcoming) {
-		if (status === "no_show" || status === "cancelled") return null;
+		if (status === "no_show") return null;
 		return (
 			<div className="flex items-center">
 				<Button
