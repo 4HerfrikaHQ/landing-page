@@ -69,6 +69,7 @@ export class MentorCalendarError extends Error {
 type GoogleEventIdentity = { email?: string; id?: string; self?: boolean };
 type CalendarEvent = {
 	id?: string;
+	status?: string;
 	hangoutLink?: string;
 	organizer?: GoogleEventIdentity;
 	creator?: GoogleEventIdentity;
@@ -131,6 +132,28 @@ export function stableCalendarAttemptKey(...parts: string[]): string {
 
 export function deterministicCalendarEventId(attemptKey: string): string {
 	return `4hf${createHash("sha256").update(attemptKey).digest("hex")}`;
+}
+
+const MAX_EVENT_ID_GENERATIONS = 20;
+
+export async function resolveCalendarEventSlot<
+	Event extends { status?: string },
+>(attemptKey: string, readEvent: (eventId: string) => Promise<Event | null>) {
+	for (
+		let generation = 0;
+		generation < MAX_EVENT_ID_GENERATIONS;
+		generation++
+	) {
+		const requestId = generation ? `${attemptKey}:${generation}` : attemptKey;
+		const eventId = deterministicCalendarEventId(requestId);
+		const existing = await readEvent(eventId);
+		if (existing?.status !== "cancelled")
+			return { eventId, requestId, existing };
+	}
+	throw new MentorCalendarError(
+		"remote_error",
+		"Google Calendar could not complete the requested operation.",
+	);
 }
 
 const normalizedEmail = (email: string) => email.trim().toLowerCase();
@@ -520,8 +543,10 @@ export function createMentorCalendarClient(
 	async function createMentorCalendarEvent(params: MentorCalendarEventParams) {
 		const connection = await getConnection(params, provider, params.connection);
 		const token = await accessToken(connection, params.accessToken);
-		const eventId = deterministicCalendarEventId(params.attemptKey);
-		const existing = await readEvent(connection, token, eventId, fetchImpl);
+		const { eventId, requestId, existing } = await resolveCalendarEventSlot(
+			params.attemptKey,
+			(id) => readEvent(connection, token, id, fetchImpl),
+		);
 		if (existing) {
 			if (
 				existing.extendedProperties?.private?.[ATTEMPT_PROPERTY] !==
@@ -553,7 +578,7 @@ export function createMentorCalendarClient(
 						attendees: [{ email: params.menteeEmail }],
 						conferenceData: {
 							createRequest: {
-								requestId: params.attemptKey,
+								requestId,
 								conferenceSolutionKey: { type: "hangoutsMeet" },
 							},
 						},
