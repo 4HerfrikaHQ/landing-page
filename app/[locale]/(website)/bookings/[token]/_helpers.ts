@@ -1,4 +1,7 @@
-import { computeSlots } from "@/app/[locale]/(website)/careercorner/[slug]/_helpers";
+import {
+	computeSlots,
+	slotCheckWindow,
+} from "@/app/[locale]/(website)/careercorner/[slug]/_helpers";
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import {
@@ -76,10 +79,7 @@ export async function validateNewSlot(params: {
 }) {
 	const { mentorId, bookingId, newStartUtc } = params;
 
-	const dayStart = new Date(newStartUtc);
-	dayStart.setUTCHours(0, 0, 0, 0);
-	const dayEnd = new Date(dayStart);
-	dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
+	const { fromUtc: dayStart, toUtc: dayEnd } = slotCheckWindow(newStartUtc);
 
 	const templates = await db
 		.select()

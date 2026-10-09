@@ -23,7 +23,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, getTableColumns, gt, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
-import { buildBookingIcs, computeSlots } from "./_helpers";
+import { buildBookingIcs, computeSlots, slotCheckWindow } from "./_helpers";
 import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
@@ -465,10 +465,7 @@ export const createBooking = actionClient
 
 		// Per-mentee cap and slot-validation reads have no data dependency. Keeping
 		// them in one concurrent read group shortens the time before Calendar is called.
-		const dayStart = new Date(startAt);
-		dayStart.setUTCHours(0, 0, 0, 0);
-		const dayEnd = new Date(dayStart);
-		dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
+		const { fromUtc: dayStart, toUtc: dayEnd } = slotCheckWindow(startAt);
 		const { activeCount, availabilityWindows, existing } =
 			await getBookingValidationData({
 				mentorId: mentor.id,
