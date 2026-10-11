@@ -180,6 +180,41 @@ describe("mentor-scoped Google Calendar", () => {
 		expect(body.id).toBe(deterministicCalendarEventId(attemptKey));
 	});
 
+	test("creates a fresh event when the same slot was booked and cancelled before", async () => {
+		const attemptKey = stableCalendarAttemptKey(
+			mentorId,
+			"create",
+			"rebooked-slot",
+		);
+		const cancelledId = deterministicCalendarEventId(attemptKey);
+		const nextId = deterministicCalendarEventId(`${attemptKey}:1`);
+		const posts: RequestInit[] = [];
+		const client = createMentorCalendarClient({
+			connectionProvider: provider(connection()),
+			fetchImpl: async (input, init) => {
+				if (init?.method === "POST") {
+					posts.push(init);
+					return response(event(attemptKey, mentorEmail, nextId));
+				}
+				return String(input).includes(cancelledId)
+					? response({
+							...event(attemptKey, mentorEmail, cancelledId),
+							status: "cancelled",
+						})
+					: response({}, 404);
+			},
+		});
+		await expect(
+			client.createMentorCalendarEvent(createParams(attemptKey)),
+		).resolves.toMatchObject({ eventId: nextId });
+		const body = JSON.parse(String(posts[0].body));
+		expect(body.id).toBe(nextId);
+		expect(body.conferenceData.createRequest.requestId).toBe(`${attemptKey}:1`);
+		expect(body.extendedProperties.private["4herfrikaBookingAttempt"]).toBe(
+			attemptKey,
+		);
+	});
+
 	test("accepts a primary-calendar alias and recovers a previously created event", async () => {
 		const attemptKey = "alias-attempt";
 		let writes = 0;
