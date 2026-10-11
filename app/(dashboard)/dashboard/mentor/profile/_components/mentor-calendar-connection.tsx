@@ -9,6 +9,7 @@ import {
 	RefreshCw,
 	Unplug,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -78,33 +79,27 @@ interface MentorCalendarConnectionProps {
 const STATUS_COPY: Record<
 	MentorCalendarConnectionStatus,
 	{
-		label: string;
 		className: string;
 		icon: typeof CheckCircle2;
 	}
 > = {
 	not_connected: {
-		label: "Not connected",
 		className: "border-amber-200 bg-amber-50 text-amber-800",
 		icon: AlertCircle,
 	},
 	disconnected: {
-		label: "Disconnected",
 		className: "border-slate-200 bg-slate-50 text-slate-700",
 		icon: Unplug,
 	},
 	revoked: {
-		label: "Access revoked",
 		className: "border-rose-200 bg-rose-50 text-rose-800",
 		icon: CalendarX2,
 	},
 	connected: {
-		label: "Connected",
 		className: "border-emerald-200 bg-emerald-50 text-emerald-800",
 		icon: CheckCircle2,
 	},
 	reauth_required: {
-		label: "Reauthorization required",
 		className: "border-rose-200 bg-rose-50 text-rose-800",
 		icon: AlertCircle,
 	},
@@ -117,71 +112,6 @@ const CONNECTED_ACTION_CLASS_NAME = cn(
 	ACTION_FOCUS_CLASS_NAME,
 );
 
-const CALLBACK_COPY: Record<
-	MentorCalendarCallbackReason,
-	{ title: string; description: string }
-> = {
-	oauth_denied: {
-		title: "Google access was not granted",
-		description:
-			"Choose Connect Google Calendar when you are ready to try again.",
-	},
-	google_account_conflict: {
-		title: "That Google account is not linked",
-		description:
-			"Use Reauthorize this account to continue with the Google account already linked to your mentor profile.",
-	},
-	expired_state: {
-		title: "The connection request expired",
-		description: "Start the connection again to get a fresh, secure request.",
-	},
-	invalid_state: {
-		title: "The connection request could not be verified",
-		description: "Start the connection again from this profile page.",
-	},
-	insufficient_scope: {
-		title: "Calendar permission is missing",
-		description:
-			"Reconnect and approve the requested Calendar permission before you can host new meetings.",
-	},
-	invalid_grant: {
-		title: "Google needs you to reconnect",
-		description:
-			"Use Reauthorize this account before you can host new meetings.",
-	},
-	oauth_exchange_failed: {
-		title: "Google could not finish the connection",
-		description:
-			"Try connecting again. You cannot host new meetings until Google Calendar is connected.",
-	},
-	identity_lookup_failed: {
-		title: "Google account details could not be confirmed",
-		description: "Try connecting again with the intended mentor account.",
-	},
-	refresh_token_missing: {
-		title: "Google needs you to reconnect",
-		description:
-			"Use Reauthorize this account before you can host new meetings.",
-	},
-	connection_unavailable: {
-		title: "Google Calendar is unavailable",
-		description:
-			"Try again shortly. You cannot host new meetings until Google Calendar is connected.",
-	},
-};
-
-function formatConnectedAt(value: string | null | undefined) {
-	if (!value) return "Connected date unavailable";
-
-	const date = new Date(value);
-	if (Number.isNaN(date.getTime())) return "Connected date unavailable";
-
-	return `Connected on ${new Intl.DateTimeFormat(undefined, {
-		dateStyle: "medium",
-		timeStyle: "short",
-	}).format(date)}`;
-}
-
 export function MentorCalendarConnection({
 	connection,
 	actions,
@@ -191,6 +121,8 @@ export function MentorCalendarConnection({
 	revocationPending,
 	canRetryRevocation,
 }: MentorCalendarConnectionProps) {
+	const t = useTranslations("calendarConnection");
+	const locale = useLocale();
 	const [isPending, startTransition] = useTransition();
 	const [confirmDisconnect, setConfirmDisconnect] = useState(false);
 	const disconnectButtonRef = useRef<HTMLButtonElement>(null);
@@ -206,19 +138,21 @@ export function MentorCalendarConnection({
 	const isConnected = connection.status === "connected";
 	const isReconnect =
 		connection.status === "reauth_required" || connection.status === "revoked";
-	const description = isConnected
-		? "Your Google account organizes new calls."
-		: connection.status === "reauth_required"
-			? "Reauthorize Google Calendar before you can host new meetings."
-			: connection.status === "revoked"
-				? "Google access was revoked. Reconnect before you can host new meetings."
-				: connection.status === "disconnected"
-					? "Reconnect Google Calendar before you can host new meetings."
-					: "Connect Google Calendar before you can host meetings.";
+	const description = t(`description.${connection.status}`);
 	const reconnectLabel =
-		connection.status === "revoked"
-			? "Reconnect Google Calendar"
-			: "Reauthorize this account";
+		connection.status === "revoked" ? t("reconnect") : t("reauthorize");
+	const connectedAt = connection.connectedAt
+		? new Date(connection.connectedAt)
+		: null;
+	const connectedAtLabel =
+		connectedAt && !Number.isNaN(connectedAt.getTime())
+			? t("connectedOn", {
+					date: new Intl.DateTimeFormat(locale, {
+						dateStyle: "medium",
+						timeStyle: "short",
+					}).format(connectedAt),
+				})
+			: t("connectedDateUnavailable");
 
 	useEffect(() => {
 		if (confirmDisconnect) {
@@ -247,7 +181,7 @@ export function MentorCalendarConnection({
 		kind: "oauth" | "disconnect" | "revocation_retry",
 	) {
 		if (!action) {
-			toast.error("Google Calendar connection is not available yet.");
+			toast.error(t("toast.notAvailable"));
 			return;
 		}
 
@@ -270,26 +204,26 @@ export function MentorCalendarConnection({
 					if (resultRecord?.remoteRevocation === "failed") {
 						toast.error(
 							kind === "revocation_retry"
-								? "Google still has not confirmed access removal. Try again later or remove 4Herfrika from Google Account → Security → Third-party connections."
-								: "Disconnected here, but Google did not confirm access removal. Check Google Account → Security → Third-party connections and remove 4Herfrika if it is still listed.",
+								? t("toast.retryFailed")
+								: t("toast.disconnectUnconfirmed"),
 						);
 					} else if (resultRecord?.remoteRevocation === "not_attempted") {
 						toast.error(
 							kind === "revocation_retry"
-								? "There is no confirmed Google revocation yet. Check Google Account → Security → Third-party connections."
-								: "Disconnected here. Check Google Account → Security → Third-party connections and remove 4Herfrika if it is still listed.",
+								? t("toast.retryNotAttempted")
+								: t("toast.disconnectNotAttempted"),
 						);
 					} else if (kind === "revocation_retry") {
-						toast.success("Google access revocation confirmed.");
+						toast.success(t("toast.revocationConfirmed"));
 					} else {
-						toast.success("Disconnected and Google access was revoked.");
+						toast.success(t("toast.disconnected"));
 					}
 					router.refresh();
 					return;
 				}
-				toast.success("Connection started");
+				toast.success(t("toast.started"));
 			} catch {
-				toast.error("Google Calendar could not be updated. Try again.");
+				toast.error(t("toast.failed"));
 			}
 		});
 	}
@@ -304,20 +238,20 @@ export function MentorCalendarConnection({
 						role="alert"
 					>
 						<p className="font-medium">
-							{CALLBACK_COPY[callbackOutcome.reason].title}
+							{t(`callback.${callbackOutcome.reason}.title`)}
 						</p>
 						<p className="mt-1 leading-5">
-							{CALLBACK_COPY[callbackOutcome.reason].description}
+							{t(`callback.${callbackOutcome.reason}.description`)}
 						</p>
 					</div>
 				) : null}
 				<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 					<div className="min-w-0">
 						<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-							Your calls
+							{t("eyebrow")}
 						</p>
 						<h2 className="mt-1 font-heading text-xl font-semibold text-foreground">
-							Google Calendar &amp; Meet
+							{t("title")}
 						</h2>
 						<p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
 							{description}
@@ -330,7 +264,7 @@ export function MentorCalendarConnection({
 						)}
 					>
 						<StatusIcon className="size-3.5" aria-hidden="true" />
-						{status.label}
+						{t(`status.${connection.status}`)}
 					</div>
 				</div>
 				{configurationMissing ? (
@@ -338,33 +272,19 @@ export function MentorCalendarConnection({
 						className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950"
 						role="alert"
 					>
-						<p className="font-medium">
-							Google Calendar sign-in isn&apos;t set up on this site yet
-						</p>
-						<p className="mt-1">
-							Nothing is wrong with your account — the site is missing its
-							Google credentials, so there is no point retrying. An admin needs
-							to add them. Your calls are hosted on the 4HerFrika calendar until
-							then.
-						</p>
+						<p className="font-medium">{t("configMissingTitle")}</p>
+						<p className="mt-1">{t("configMissingBody")}</p>
 					</div>
 				) : null}
 				{healthCheckUnavailable ? (
 					<div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-5 text-amber-950">
-						Google access could not be confirmed just now. Reauthorize this
-						account before you can host new meetings.
+						{t("healthUnavailable")}
 					</div>
 				) : null}
 				{revocationPending ? (
 					<div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-						<p className="font-medium">
-							Google access removal is still pending.
-						</p>
-						<p className="mt-1 leading-5">
-							You cannot host new meetings until Google confirms revocation and
-							you reconnect. Try the protected retry now, or remove 4HerFrika
-							from Google Account → Security → Third-party connections.
-						</p>
+						<p className="font-medium">{t("revocationPendingTitle")}</p>
+						<p className="mt-1 leading-5">{t("revocationPendingBody")}</p>
 						{canRetryRevocation && actions?.retryRevocation ? (
 							<Button
 								type="button"
@@ -376,7 +296,7 @@ export function MentorCalendarConnection({
 									runAction(actions.retryRevocation, "revocation_retry")
 								}
 							>
-								Retry Google access removal
+								{t("retryRevocation")}
 							</Button>
 						) : null}
 					</div>
@@ -386,12 +306,12 @@ export function MentorCalendarConnection({
 					<div className="grid gap-4 border-y border-border/60 py-4 sm:grid-cols-2">
 						<div>
 							<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-								Connected account
+								{t("connectedAccount")}
 							</p>
 							<p className="mt-1 truncate text-sm font-medium text-foreground">
 								{connection.googleDisplayName ||
 									connection.googleEmail ||
-									"Google account"}
+									t("googleAccount")}
 							</p>
 							{connection.googleDisplayName && connection.googleEmail ? (
 								<p className="truncate text-sm text-muted-foreground">
@@ -401,11 +321,9 @@ export function MentorCalendarConnection({
 						</div>
 						<div>
 							<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-								Connection timing
+								{t("connectionTiming")}
 							</p>
-							<p className="mt-1 text-sm text-foreground">
-								{formatConnectedAt(connection.connectedAt)}
-							</p>
+							<p className="mt-1 text-sm text-foreground">{connectedAtLabel}</p>
 						</div>
 					</div>
 				) : null}
@@ -423,14 +341,13 @@ export function MentorCalendarConnection({
 									id="disconnect-google-calendar-title"
 									className="text-sm font-medium text-rose-950"
 								>
-									Disconnect Google Calendar?
+									{t("disconnectTitle")}
 								</p>
 								<p
 									id="disconnect-google-calendar-description"
 									className="mt-1 text-sm leading-5 text-rose-900/80"
 								>
-									You will not be able to host new meetings until you connect
-									Google Calendar again.
+									{t("disconnectBody")}
 								</p>
 							</div>
 							<div className="grid grid-cols-2 gap-2 sm:flex">
@@ -445,7 +362,7 @@ export function MentorCalendarConnection({
 									disabled={isPending || !actions?.disconnect}
 									onClick={() => runAction(actions?.disconnect, "disconnect")}
 								>
-									Yes, disconnect
+									{t("confirmDisconnect")}
 								</Button>
 								<Button
 									type="button"
@@ -458,7 +375,7 @@ export function MentorCalendarConnection({
 									ref={keepItButtonRef}
 									onClick={cancelDisconnect}
 								>
-									Keep it
+									{t("keepIt")}
 								</Button>
 							</div>
 						</div>
@@ -476,7 +393,7 @@ export function MentorCalendarConnection({
 										onClick={() => runAction(actions?.reconnect, "oauth")}
 									>
 										<RefreshCw className="size-4" aria-hidden="true" />
-										Reauthorize this account
+										{t("reauthorize")}
 									</Button>
 									<Tooltip>
 										<TooltipTrigger
@@ -485,17 +402,14 @@ export function MentorCalendarConnection({
 													type="button"
 													variant="ghost"
 													size="icon-sm"
-													aria-label="About reauthorization"
+													aria-label={t("aboutReauth")}
 													className="text-muted-foreground"
 												/>
 											}
 										>
 											<Info className="size-4" aria-hidden="true" />
 										</TooltipTrigger>
-										<TooltipContent>
-											Refreshes consent for this linked Google account; it
-											cannot switch accounts.
-										</TooltipContent>
+										<TooltipContent>{t("reauthTooltip")}</TooltipContent>
 									</Tooltip>
 								</>
 							) : (
@@ -520,7 +434,7 @@ export function MentorCalendarConnection({
 									) : (
 										<CalendarDays className="size-4" aria-hidden="true" />
 									)}
-									{isReconnect ? reconnectLabel : "Connect Google Calendar"}
+									{isReconnect ? reconnectLabel : t("connect")}
 								</Button>
 							)}
 							{isConnected && actions?.disconnect ? (
@@ -534,14 +448,14 @@ export function MentorCalendarConnection({
 									onClick={() => setConfirmDisconnect(true)}
 								>
 									<Unplug className="size-4" aria-hidden="true" />
-									Disconnect
+									{t("disconnect")}
 								</Button>
 							) : null}
 						</div>
 					)}
 					{isPending ? (
 						<output className="text-sm text-muted-foreground">
-							Updating connection…
+							{t("updating")}
 						</output>
 					) : null}
 				</div>

@@ -6,15 +6,18 @@ import {
 	type MentorCalendarConnection as MentorCalendarConnectionView,
 } from "@/app/(dashboard)/dashboard/mentor/profile/_components/mentor-calendar-connection";
 import { Button } from "@/components/ui/button";
+import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Route } from "next";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
 	completeMentorOnboarding,
 	startOnboardingGoogleCalendar,
 } from "../_actions";
+import { useOnboardingErrorMessage } from "../_hooks/use-onboarding-error-message";
 import { ActivateOnboardingSchema } from "../_schema";
 
 export function OnboardingCalendarStep({
@@ -29,6 +32,9 @@ export function OnboardingCalendarStep({
 	callbackOutcome?: MentorCalendarCallbackOutcome | null;
 }) {
 	const router = useRouter();
+	const t = useTranslations("mentorAuth.goLive");
+	const tGoLive = useTranslations("onboarding.goLive");
+	const errorMessage = useOnboardingErrorMessage();
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		completeMentorOnboarding,
 		zodResolver(ActivateOnboardingSchema),
@@ -36,7 +42,14 @@ export function OnboardingCalendarStep({
 			formProps: { defaultValues: { token } },
 			actionProps: {
 				onSuccess: ({ data }) => {
-					toast.success("All set! Your profile is live.");
+					toast.success(t("title"), {
+						description: t("description"),
+						duration: 15000,
+						action: {
+							label: t("action"),
+							onClick: () => router.push(mentorLoginUrl({ locale }) as Route),
+						},
+					});
 					if (data?.slug) {
 						const localePrefix =
 							locale === "fr" || locale === "sw" ? `/${locale}` : "";
@@ -44,7 +57,7 @@ export function OnboardingCalendarStep({
 					}
 				},
 				onError: ({ error }) => {
-					toast.error(error.serverError ?? "Could not complete onboarding.");
+					toast.error(errorMessage(error.serverError, tGoLive("failed")));
 					router.refresh();
 				},
 			},
@@ -70,7 +83,7 @@ export function OnboardingCalendarStep({
 					className="w-full"
 					disabled={!isConnected || action.isPending}
 				>
-					{action.isPending ? "Going live…" : "Go live"}
+					{action.isPending ? tGoLive("pending") : tGoLive("button")}
 				</Button>
 			</form>
 		</div>

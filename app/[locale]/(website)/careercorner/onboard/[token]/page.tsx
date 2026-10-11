@@ -6,7 +6,8 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { saveOnboardingAvailability } from "@/src/db/actions/availability";
-import { CircleAlertIcon, SparklesIcon } from "lucide-react";
+import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
+import { CircleAlertIcon, ClockIcon, SparklesIcon } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import FourHerfrikaLogo from "../../../4herfrika-logo";
@@ -47,6 +48,15 @@ function getCallbackOutcome(
 			: "connection_unavailable",
 	};
 }
+
+const SUPPORT_MAILTO =
+	"mailto:4herfrika@gmail.com?subject=My%20mentor%20onboarding%20link";
+
+const LINK_PROBLEM = {
+	used: { icon: SparklesIcon, key: "linkUsed" },
+	expired: { icon: ClockIcon, key: "linkExpired" },
+	malformed: { icon: CircleAlertIcon, key: "linkInvalid" },
+} as const;
 
 function OnboardShell({ children }: { children: React.ReactNode }) {
 	return (
@@ -94,20 +104,39 @@ export default async function OnboardingPage({
 		searchParams,
 	]);
 
+	const [t, tOnboarding] = await Promise.all([
+		getTranslations("mentorAuth"),
+		getTranslations("onboarding"),
+	]);
+
 	if (!result.ok) {
+		const problem =
+			result.reason === "used" || result.reason === "expired"
+				? LINK_PROBLEM[result.reason]
+				: LINK_PROBLEM.malformed;
 		return (
 			<OnboardShell>
 				<div className="flex flex-col items-center">
 					<FourHerfrikaLogo className="h-10 w-auto" />
 					<EmptyState
 						className="mt-10 w-full border-solid bg-white"
-						icon={CircleAlertIcon}
-						title="This link can't be used"
-						description={`We couldn't open your onboarding (${result.reason}). Reach out to the 4HerFrika team and we'll send you a fresh link.`}
+						icon={problem.icon}
+						title={t(`${problem.key}.title`)}
+						description={t(`${problem.key}.description`)}
 						action={
-							<Button href="/careercorner" variant="outline" size="sm">
-								Back to mentors
-							</Button>
+							<div className="flex flex-wrap items-center justify-center gap-3">
+								<Button
+									href={mentorLoginUrl({ email: result.email, locale })}
+									size="sm"
+								>
+									{t("signIn")}
+								</Button>
+								{result.reason !== "used" ? (
+									<Button href={SUPPORT_MAILTO} variant="outline" size="sm">
+										{t("emailTeam")}
+									</Button>
+								) : null}
+							</div>
 						}
 					/>
 				</div>
@@ -127,15 +156,19 @@ export default async function OnboardingPage({
 					<EmptyState
 						className="mt-10 w-full border-solid bg-surface-pink/40"
 						icon={SparklesIcon}
-						title="Your profile is already live"
-						description="You're all set. Mentees can find you in the directory and book a call. You can update your bio, photo, and availability anytime from your dashboard."
+						title={t("alreadyLive.title")}
+						description={t("alreadyLive.description")}
 						action={
 							<div className="flex flex-wrap items-center justify-center gap-3">
 								<Button href={`/careercorner/${mentor.slug}`} size="sm">
-									View public profile
+									{t("alreadyLive.viewProfile")}
 								</Button>
-								<Button href="/dashboard/mentor" variant="outline" size="sm">
-									Go to dashboard
+								<Button
+									href={mentorLoginUrl({ email: mentor.email, locale })}
+									variant="outline"
+									size="sm"
+								>
+									{t("signIn")}
 								</Button>
 							</div>
 						}
@@ -151,15 +184,13 @@ export default async function OnboardingPage({
 				<header className="flex flex-col items-center text-center">
 					<FourHerfrikaLogo className="h-10 w-auto" />
 					<p className="mt-8 text-xs uppercase tracking-wide text-primary-500">
-						Mentor onboarding
+						{tOnboarding("eyebrow")}
 					</p>
 					<h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight text-foreground">
-						Welcome, {mentor.name}
+						{tOnboarding("welcome", { name: mentor.name })}
 					</h1>
 					<p className="mt-2 max-w-md text-muted-foreground">
-						Set your availability, complete your profile, and connect Google
-						Calendar before going live. You can edit everything later from your
-						dashboard.
+						{tOnboarding("intro")}
 					</p>
 				</header>
 

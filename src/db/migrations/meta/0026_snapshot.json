@@ -1,5 +1,5 @@
 {
-  "id": "192836cc-b5b1-4c8d-8f76-3f3d4a5fb454",
+  "id": "656a0148-e47b-4013-8dad-a8eff6bc05b6",
   "prevId": "05d36795-bf5a-4a3c-8c2e-e39b9c2c477b",
   "version": "7",
   "dialect": "postgresql",
@@ -439,12 +439,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "mentor_attendance": {
-          "name": "mentor_attendance",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "reschedule_count": {
           "name": "reschedule_count",
           "type": "integer",
@@ -478,6 +472,12 @@
         },
         "mentor_followup_sent_at": {
           "name": "mentor_followup_sent_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rebook_nurture_sent_at": {
+          "name": "rebook_nurture_sent_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false

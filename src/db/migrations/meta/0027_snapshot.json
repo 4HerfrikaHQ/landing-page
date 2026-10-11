@@ -1,6 +1,6 @@
 {
-  "id": "fa651b29-ca4d-473c-b3ec-488d8bdb1109",
-  "prevId": "192836cc-b5b1-4c8d-8f76-3f3d4a5fb454",
+  "id": "5dab5533-217c-48b7-bf9b-c5b7ccf74523",
+  "prevId": "656a0148-e47b-4013-8dad-a8eff6bc05b6",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -439,18 +439,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "mentor_attendance": {
-          "name": "mentor_attendance",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "outcome_set_by_admin_at": {
-          "name": "outcome_set_by_admin_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
         "reschedule_count": {
           "name": "reschedule_count",
           "type": "integer",
@@ -484,6 +472,12 @@
         },
         "mentor_followup_sent_at": {
           "name": "mentor_followup_sent_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rebook_nurture_sent_at": {
+          "name": "rebook_nurture_sent_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -562,6 +556,32 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.email_unsubscribes": {
+      "name": "email_unsubscribes",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

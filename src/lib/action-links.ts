@@ -16,10 +16,8 @@ export type ResolvedActionLink = {
 
 export type ResolveActionLinkResult =
 	| ({ ok: true } & ResolvedActionLink)
-	| {
-			ok: false;
-			reason: "malformed" | "expired" | "used" | "wrong_action";
-	  };
+	| { ok: false; reason: "malformed" | "wrong_action" }
+	| { ok: false; reason: "expired" | "used"; resourceId: string };
 
 export function generateActionLinkToken(): string {
 	return randomBytes(TOKEN_BYTES).toString("base64url");
@@ -60,8 +58,10 @@ export async function resolveActionLink(
 	if (!action.success) return { ok: false, reason: "malformed" };
 	if (action.data !== expectedAction)
 		return { ok: false, reason: "wrong_action" };
-	if (row.used_at) return { ok: false, reason: "used" };
-	if (row.expires_at <= new Date()) return { ok: false, reason: "expired" };
+	if (row.used_at)
+		return { ok: false, reason: "used", resourceId: row.resource_id };
+	if (row.expires_at <= new Date())
+		return { ok: false, reason: "expired", resourceId: row.resource_id };
 
 	return {
 		ok: true,
