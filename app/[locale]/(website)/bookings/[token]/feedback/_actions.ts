@@ -7,6 +7,7 @@ import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { resolveActionLink } from "@/src/lib/action-links";
+import { syncAttendanceStatus } from "@/src/lib/booking-attendance";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 import { SubmitFeedbackSchema } from "./_schema";
@@ -83,15 +84,7 @@ export const submitFeedback = actionClient
 				testimonial_consent: parsedInput.testimonial_consent,
 			});
 
-			if (
-				parsedInput.call_happened === "mentor_no_show" ||
-				parsedInput.call_happened === "mentee_no_show"
-			) {
-				await tx
-					.update(bookings)
-					.set({ status: "no_show" })
-					.where(eq(bookings.id, verified.resourceId));
-			}
+			await syncAttendanceStatus(tx, verified.resourceId);
 
 			await tx
 				.update(actionLinks)

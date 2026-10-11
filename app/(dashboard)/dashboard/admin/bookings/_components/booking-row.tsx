@@ -3,6 +3,7 @@
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { isAttendanceDisputed } from "@/src/lib/booking-rules";
 import { formatInTimeZone } from "date-fns-tz";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -37,7 +38,17 @@ export function BookingRow({ booking }: { booking: AdminBookingRow }) {
 					</p>
 				</TableCell>
 				<TableCell className="min-w-52 px-4 py-3">
-					<StatusBadge status={booking.status} />
+					<div className="flex flex-wrap items-center gap-1.5">
+						<StatusBadge status={booking.status} />
+						{isAttendanceDisputed({
+							mentor: booking.mentor_attendance,
+							mentee: booking.mentee_call_happened,
+						}) ? (
+							<span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800">
+								Disputed
+							</span>
+						) : null}
+					</div>
 					{booking.status === "cancelled" ? (
 						<div className="mt-1.5 max-w-72 text-xs text-muted-foreground">
 							{booking.cancelled_at ? (

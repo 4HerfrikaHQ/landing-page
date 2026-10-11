@@ -1,3 +1,8 @@
+import type { CallHappened } from "@/src/db/schema/tables/booking-feedback";
+import type {
+	BookingStatus,
+	MentorAttendance,
+} from "@/src/db/schema/tables/bookings";
 import { z } from "zod";
 
 /** A booking can be rescheduled only this many hours before it starts. */
@@ -18,3 +23,34 @@ export const MinLeadHoursSchema = z
 	.int()
 	.min(0)
 	.max(MIN_LEAD_HOURS_MAX);
+
+export type AttendanceAnswers = {
+	mentor: MentorAttendance | null;
+	mentee: CallHappened | null;
+};
+
+export function attendanceStatus({
+	mentor,
+	mentee,
+}: AttendanceAnswers): BookingStatus {
+	if (
+		mentor === "no_show" ||
+		mentee === "mentor_no_show" ||
+		mentee === "mentee_no_show"
+	) {
+		return "no_show";
+	}
+	if (mentor === "attended" || mentee === "yes") return "completed";
+	return "confirmed";
+}
+
+export function isAttendanceDisputed({
+	mentor,
+	mentee,
+}: AttendanceAnswers): boolean {
+	if (!mentor || !mentee || mentee === "rescheduled_externally") return false;
+	const agree =
+		(mentor === "attended" && mentee === "yes") ||
+		(mentor === "no_show" && mentee === "mentee_no_show");
+	return !agree;
+}

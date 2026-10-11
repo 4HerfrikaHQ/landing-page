@@ -1,6 +1,9 @@
 "use client";
 
-import { DashboardFilter, SearchInput } from "@/components/dashboard/filter-bar";
+import {
+	DashboardFilter,
+	SearchInput,
+} from "@/components/dashboard/filter-bar";
 import { BookingStatus } from "@/src/db/schema/tables/bookings";
 import { cn } from "@/utils/cn";
 import { X } from "lucide-react";
@@ -19,6 +22,7 @@ const STATUS_OPTIONS = [
 		value,
 		label: STATUS_LABELS[value],
 	})),
+	{ value: "disputed", label: "Disputed" },
 ];
 
 const DATE_OPTIONS = [

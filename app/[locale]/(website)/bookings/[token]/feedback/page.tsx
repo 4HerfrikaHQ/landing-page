@@ -1,11 +1,14 @@
 import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { Button } from "@/components/ui/button";
-import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, CheckCircle2, LinkIcon } from "lucide-react";
 import type { Route } from "next";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import {
+	getFormatter,
+	getTranslations,
+	setRequestLocale,
+} from "next-intl/server";
 import { loadFeedbackContext } from "./_actions";
 import { FeedbackForm } from "./_components/feedback-form";
 
@@ -40,6 +43,8 @@ export default async function FeedbackPage({
 }) {
 	const { locale, token } = await params;
 	setRequestLocale(locale as Locale);
+	const t = await getTranslations("feedback");
+	const format = await getFormatter();
 
 	const result = await loadFeedbackContext(token);
 
@@ -49,13 +54,15 @@ export default async function FeedbackPage({
 				<Shell>
 					<EmptyState
 						icon={CheckCircle2}
-						title="We already have your feedback"
-						description="Thanks for sharing. It helps us match mentors better and improve the program."
+						title={t("alreadyTitle")}
+						description={t("alreadyDescription")}
 						action={
 							<div className="flex flex-col gap-3 sm:flex-row">
-								<Button href={"/careercorner" as Route}>Browse mentors</Button>
+								<Button href={"/careercorner" as Route}>
+									{t("browseMentors")}
+								</Button>
 								<Button href={JOIN_US_URL} isExternal variant="outline">
-									Join the community
+									{t("joinCommunity")}
 								</Button>
 							</div>
 						}
@@ -67,29 +74,26 @@ export default async function FeedbackPage({
 			<Shell>
 				<EmptyState
 					icon={LinkIcon}
-					title="This link isn't valid"
-					description="The link may have expired or already been used."
+					title={t("invalidTitle")}
+					description={t("invalidDescription")}
 				/>
 			</Shell>
 		);
 	}
 
-	const mentorName = result.mentor?.name ?? "your mentor";
-	const whenLabel = formatInTimeZone(
-		result.booking.start_at,
-		result.booking.mentee_timezone,
-		"EEE, MMM d, yyyy",
-	);
+	const mentorName = result.mentor?.name ?? t("fallbackMentor");
+	const whenLabel = format.dateTime(result.booking.start_at, {
+		dateStyle: "medium",
+		timeZone: result.booking.mentee_timezone,
+	});
 
 	return (
 		<main className="bg-muted">
 			<div className="mx-auto max-w-lg px-4 py-12 sm:px-6">
 				<h1 className="text-2xl font-semibold text-foreground">
-					How was your call with {mentorName}?
+					{t("heading", { name: mentorName })}
 				</h1>
-				<p className="mt-2 text-sm text-muted-foreground">
-					Your feedback helps us match mentors better and improve the program.
-				</p>
+				<p className="mt-2 text-sm text-muted-foreground">{t("subheading")}</p>
 
 				<div className="mt-6 flex items-center gap-3 rounded-2xl border border-border/60 bg-white px-4 py-3 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
 					<span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface-pink text-primary-500">

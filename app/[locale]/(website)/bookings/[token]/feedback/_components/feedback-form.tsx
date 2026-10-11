@@ -16,19 +16,17 @@ import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Star } from "lucide-react";
 import type { Route } from "next";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 import { submitFeedback } from "../_actions";
 import { SubmitFeedbackSchema } from "../_schema";
 
 const CALL_OPTIONS = [
-	{ value: "yes", label: "Yes" },
-	{ value: "mentor_no_show", label: "No — mentor didn't show" },
-	{ value: "mentee_no_show", label: "No — I didn't make it" },
-	{
-		value: "rescheduled_externally",
-		label: "We rescheduled outside the platform",
-	},
+	{ value: "yes", labelKey: "optionYes" },
+	{ value: "mentor_no_show", labelKey: "optionMentorNoShow" },
+	{ value: "mentee_no_show", labelKey: "optionMenteeNoShow" },
+	{ value: "rescheduled_externally", labelKey: "optionRescheduled" },
 ] as const;
 
 export function FeedbackForm({
@@ -40,6 +38,7 @@ export function FeedbackForm({
 	mentorName: string;
 	mentorSlug: string;
 }) {
+	const t = useTranslations("feedback");
 	const [hovered, setHovered] = useState(0);
 	const [submitted, setSubmitted] = useState(false);
 
@@ -58,13 +57,10 @@ export function FeedbackForm({
 			},
 			actionProps: {
 				onSuccess: () => {
-					toast.success("Thanks for your feedback");
+					toast.success(t("success"));
 					setSubmitted(true);
 				},
-				onError: ({ error }) =>
-					toast.error(
-						error.serverError ?? "Couldn't submit. Please try again.",
-					),
+				onError: () => toast.error(t("error")),
 			},
 		},
 	);
@@ -79,17 +75,17 @@ export function FeedbackForm({
 					<CheckCircle2 className="size-6" />
 				</span>
 				<h2 className="text-lg font-semibold text-foreground">
-					Thanks — that really helps.
+					{t("thanksTitle")}
 				</h2>
 				<p className="mx-auto mt-1 max-w-xs text-sm text-muted-foreground">
-					Your mentorship doesn't have to stop here. Keep the momentum going.
+					{t("thanksDescription")}
 				</p>
 				<div className="mt-6 flex flex-col gap-3">
 					<Button
 						href={`/careercorner/${mentorSlug}` as Route}
 						className="w-full"
 					>
-						Book another session with {mentorName}
+						{t("bookAgain", { name: mentorName })}
 					</Button>
 					<Button
 						href={JOIN_US_URL}
@@ -97,7 +93,7 @@ export function FeedbackForm({
 						variant="outline"
 						className="w-full"
 					>
-						Join the 4HerFrika community
+						{t("joinCommunityFull")}
 					</Button>
 				</div>
 			</div>
@@ -109,7 +105,7 @@ export function FeedbackForm({
 			<input type="hidden" {...form.register("token")} />
 
 			<div className="space-y-1.5">
-				<Label>Did the call happen?</Label>
+				<Label>{t("callHappened")}</Label>
 				<Select
 					value={form.watch("call_happened")}
 					onValueChange={(v) =>
@@ -122,12 +118,12 @@ export function FeedbackForm({
 					}
 				>
 					<SelectTrigger className="h-10 w-full rounded-lg bg-white">
-						<SelectValue placeholder="Select" />
+						<SelectValue placeholder={t("select")} />
 					</SelectTrigger>
 					<SelectContent>
 						{CALL_OPTIONS.map((o) => (
 							<SelectItem key={o.value} value={o.value}>
-								{o.label}
+								{t(o.labelKey)}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -136,7 +132,7 @@ export function FeedbackForm({
 
 			{happened === "yes" && (
 				<div className="space-y-2">
-					<Label>How would you rate it?</Label>
+					<Label>{t("rating")}</Label>
 					<div className="flex items-center gap-1.5">
 						{[1, 2, 3, 4, 5].map((n) => {
 							const active = (hovered || rating) >= n;
@@ -144,7 +140,7 @@ export function FeedbackForm({
 								<button
 									key={n}
 									type="button"
-									aria-label={`${n} star${n > 1 ? "s" : ""}`}
+									aria-label={t("stars", { count: n })}
 									onMouseEnter={() => setHovered(n)}
 									onMouseLeave={() => setHovered(0)}
 									onClick={() =>
@@ -168,10 +164,10 @@ export function FeedbackForm({
 			)}
 
 			<div className="space-y-1.5">
-				<Label>Anything else? (optional)</Label>
+				<Label>{t("comment")}</Label>
 				<Textarea
 					rows={4}
-					placeholder="Share what went well or how we could improve."
+					placeholder={t("commentPlaceholder")}
 					{...form.register("comment")}
 				/>
 			</div>
@@ -182,13 +178,11 @@ export function FeedbackForm({
 					{...form.register("testimonial_consent")}
 					className="mt-0.5 size-4 accent-primary-500"
 				/>
-				<span>
-					Allow 4HerFrika to share my comment publicly as a testimonial.
-				</span>
+				<span>{t("consent")}</span>
 			</label>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">
-				{action.isPending ? "Submitting…" : "Submit feedback"}
+				{action.isPending ? t("submitting") : t("submit")}
 			</Button>
 		</form>
 	);
