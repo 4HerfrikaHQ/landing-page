@@ -106,7 +106,8 @@
 		"subscribe": "Subscribe",
 		"emailPlaceholder": "Email Address",
 		"subscribeDescription": "Subscribe to our newsletter for the latest updates and news",
-		"allRightsReserved": "All rights reserved."
+		"allRightsReserved": "All rights reserved.",
+		"mentorLogin": "Mentor login"
 	},
 	"careers": {
 		"title": "Career Corner",
@@ -351,6 +352,65 @@
 			"title": "Book a call with {name} — 4HerFrika",
 			"ogTitle": "Book a call with {name}",
 			"description": "Book a 30-minute call with {name}."
+		}
+	},
+	"mentorAuth": {
+		"signIn": "Sign in to your dashboard",
+		"emailTeam": "Email the 4HerFrika team",
+		"linkUsed": {
+			"title": "You've already set up your profile",
+			"description": "This setup link only works once. To update your profile, availability, or see your bookings, sign in with your email. We'll send you a 6-digit code. No password needed."
+		},
+		"linkExpired": {
+			"title": "This setup link has expired",
+			"description": "Setup links last 30 days. If you already finished setting up, just sign in. If not, email us and we'll send you a new link."
+		},
+		"linkInvalid": {
+			"title": "This link isn't working",
+			"description": "Try opening it straight from your invite email. If you already finished setting up, just sign in instead."
+		},
+		"alreadyLive": {
+			"title": "Your profile is already live",
+			"description": "You're all set. Mentees can find you in the directory and book a call. To update your bio, photo, or availability, sign in with your email at 4herfrika.org/dashboard/login.",
+			"viewProfile": "View public profile"
+		},
+		"goLive": {
+			"title": "All set! Your profile is live.",
+			"description": "Next time, sign in at 4herfrika.org/dashboard/login with your email. Your setup link won't work again.",
+			"action": "Sign in"
+		},
+		"login": {
+			"panelTitle": "Mentor",
+			"panelAccent": "Portal",
+			"panelDescription": "Manage your availability, connect with mentees, and track your impact on Africa's next generation of tech talent.",
+			"title": "Sign in to your mentor account",
+			"subtitle": "Enter the email address your invite was sent to. We'll email you a 6-digit code. No password needed.",
+			"emailLabel": "Email address",
+			"emailPlaceholder": "you@example.com",
+			"sendCode": "Email me a code",
+			"sending": "Sending your code…",
+			"checkEmail": "Check your email",
+			"sentTo": "We sent a 6-digit code to <strong>{email}</strong>. Type it below.",
+			"codeLabel": "6-digit code",
+			"hint": "You'll be signed in as soon as you enter all 6 digits.",
+			"verifying": "Signing you in…",
+			"alreadySent": "We already sent you a code a moment ago. Use that one.",
+			"resent": "New code sent. Use the newest email.",
+			"missingTitle": "Can't find the email?",
+			"missingBody": "It can take a minute to arrive. Check your spam, junk, or promotions folder for an email from 4HerFrika.",
+			"resendIn": "Send a new code in {seconds}s",
+			"resend": "Send me a new code",
+			"changeEmail": "Wrong email? Change it",
+			"trouble": "Trouble signing in? Email us at"
+		},
+		"errors": {
+			"user_not_found": "We couldn't find a mentor account for this email. Use the email address your invite was sent to.",
+			"otp_expired": "That code didn't work. It may be mistyped or expired. Check your most recent email, or send a new code.",
+			"email_limit": "We've sent a lot of sign-in emails in the last hour. Please try again in a little while, or email 4herfrika@gmail.com for help.",
+			"too_many_attempts": "Too many attempts. Please wait a few minutes and try again.",
+			"invalid_email": "That doesn't look like an email address. Please check it.",
+			"incomplete_code": "Enter all 6 digits of your code.",
+			"generic": "Something went wrong. Please try again."
 		}
 	}
 }
