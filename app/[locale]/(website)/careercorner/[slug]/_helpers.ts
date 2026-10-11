@@ -128,6 +128,10 @@ export function computeSlots(opts: {
 	);
 }
 
+export function slotCheckWindow(startUtc: Date) {
+	return { fromUtc: addDays(startUtc, -1), toUtc: addDays(startUtc, 1) };
+}
+
 function rangesOverlap(
 	aStart: Date,
 	aEnd: Date,
