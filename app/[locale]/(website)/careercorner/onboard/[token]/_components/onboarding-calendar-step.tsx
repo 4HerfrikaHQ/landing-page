@@ -17,6 +17,7 @@ import {
 	completeMentorOnboarding,
 	startOnboardingGoogleCalendar,
 } from "../_actions";
+import { useOnboardingErrorMessage } from "../_hooks/use-onboarding-error-message";
 import { ActivateOnboardingSchema } from "../_schema";
 
 export function OnboardingCalendarStep({
@@ -32,6 +33,8 @@ export function OnboardingCalendarStep({
 }) {
 	const router = useRouter();
 	const t = useTranslations("mentorAuth.goLive");
+	const tGoLive = useTranslations("onboarding.goLive");
+	const errorMessage = useOnboardingErrorMessage();
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		completeMentorOnboarding,
 		zodResolver(ActivateOnboardingSchema),
@@ -54,7 +57,7 @@ export function OnboardingCalendarStep({
 					}
 				},
 				onError: ({ error }) => {
-					toast.error(error.serverError ?? "Could not complete onboarding.");
+					toast.error(errorMessage(error.serverError, tGoLive("failed")));
 					router.refresh();
 				},
 			},
@@ -80,7 +83,7 @@ export function OnboardingCalendarStep({
 					className="w-full"
 					disabled={!isConnected || action.isPending}
 				>
-					{action.isPending ? "Going live…" : "Go live"}
+					{action.isPending ? tGoLive("pending") : tGoLive("button")}
 				</Button>
 			</form>
 		</div>

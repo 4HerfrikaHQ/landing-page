@@ -104,7 +104,10 @@ export default async function OnboardingPage({
 		searchParams,
 	]);
 
-	const t = await getTranslations("mentorAuth");
+	const [t, tOnboarding] = await Promise.all([
+		getTranslations("mentorAuth"),
+		getTranslations("onboarding"),
+	]);
 
 	if (!result.ok) {
 		const problem =
@@ -181,15 +184,13 @@ export default async function OnboardingPage({
 				<header className="flex flex-col items-center text-center">
 					<FourHerfrikaLogo className="h-10 w-auto" />
 					<p className="mt-8 text-xs uppercase tracking-wide text-primary-500">
-						Mentor onboarding
+						{tOnboarding("eyebrow")}
 					</p>
 					<h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight text-foreground">
-						Welcome, {mentor.name}
+						{tOnboarding("welcome", { name: mentor.name })}
 					</h1>
 					<p className="mt-2 max-w-md text-muted-foreground">
-						Set your availability, complete your profile, and connect Google
-						Calendar before going live. You can edit everything later from your
-						dashboard.
+						{tOnboarding("intro")}
 					</p>
 				</header>
 
