@@ -29,7 +29,6 @@ import {
 	ilike,
 	inArray,
 	lt,
-	ne,
 	or,
 } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -76,11 +75,7 @@ export async function loadMentorBookings(params: MentorBookingsParams = {}) {
 		);
 	}
 
-	const upcomingWhere = and(
-		...filters,
-		gte(bookings.start_at, now),
-		ne(bookings.status, "cancelled"),
-	);
+	const upcomingWhere = and(...filters, gte(bookings.start_at, now));
 	const pastWhere = and(...filters, lt(bookings.start_at, now));
 
 	const countBookings = (where: SQL<unknown> | undefined) =>
