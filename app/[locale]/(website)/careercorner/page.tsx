@@ -16,22 +16,32 @@ import Image from "next/image";
 import { getHeroMentors, getMentors } from "./_actions";
 import { CareersHero } from "./_components/hero";
 import { MentorDirectory } from "./_components/mentor-directory";
+import { MENTOR_PAGE_SIZE } from "./_utils/mentor-search";
 
 const CareersCorner = async ({
 	params,
-}: { params: Promise<{ locale: string }> }) => {
+	searchParams,
+}: {
+	params: Promise<{ locale: string }>;
+	searchParams: Promise<{ q?: string; available?: string; page?: string }>;
+}) => {
 	const { locale } = await params;
 	await setLocaleFromParams(params);
+	const sp = await searchParams;
+	const page = Math.max(1, Number(sp.page) || 1);
 
-	const [tCareers, tCommon, mentors, heroMentors, featured] = await Promise.all(
-		[
+	const [tCareers, tCommon, { mentors, total }, heroMentors, featured] =
+		await Promise.all([
 			getTranslations("careers"),
 			getTranslations("common"),
-			getMentors(),
+			getMentors({
+				query: typeof sp.q === "string" ? sp.q : "",
+				onlyAvailable: sp.available === "1",
+				page,
+			}),
 			getHeroMentors(),
 			resolveFeaturedMentor(),
-		],
-	);
+		]);
 
 	const featuredName = featured ? featured.nickname || featured.name : null;
 	const pageUrl = absoluteSiteUrl(localizedCareerCornerPath(locale));
@@ -49,9 +59,10 @@ const CareersCorner = async ({
 		},
 		mainEntity: {
 			"@type": "ItemList",
+			numberOfItems: total,
 			itemListElement: mentors.map((mentor, index) => ({
 				"@type": "ListItem",
-				position: index + 1,
+				position: (page - 1) * MENTOR_PAGE_SIZE + index + 1,
 				url: absoluteSiteUrl(
 					localizedCareerCornerPath(locale, `/${mentor.slug}`),
 				),
@@ -163,6 +174,8 @@ const CareersCorner = async ({
 					<div className="rounded-3xl bg-white/95 p-5 shadow-[0_10px_40px_rgba(0,0,0,0.12)] sm:p-8">
 						<MentorDirectory
 							mentors={mentors}
+							total={total}
+							page={page}
 							searchPlaceholder={tCareers("searchMentor")}
 							availableLabel={tCareers("availableThisWeek")}
 						/>

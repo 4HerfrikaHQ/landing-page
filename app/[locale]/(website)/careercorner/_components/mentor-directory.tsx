@@ -2,47 +2,48 @@
 
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { SearchInput } from "@/components/dashboard/filter-bar";
+import { Pagination } from "@/components/dashboard/pagination";
 import { HoverCard, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { trackEvent } from "@/src/lib/analytics";
 import { cn } from "@/utils/cn";
 import { SearchX } from "lucide-react";
-import { parseAsString, useQueryState } from "nuqs";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { filterMentors } from "../_utils/mentor-directory-filters";
+import { parseAsString, useQueryStates } from "nuqs";
+import { useEffect, useRef } from "react";
+import { MENTOR_PAGE_SIZE } from "../_utils/mentor-search";
 import { MentorCard } from "./mentor-modal";
 
 export function MentorDirectory({
 	mentors,
+	total,
+	page,
 	searchPlaceholder,
 	availableLabel,
 }: {
 	mentors: DbMentorWithAvailability[];
+	total: number;
+	page: number;
 	searchPlaceholder: string;
 	availableLabel: string;
 }) {
-	const [q, setQ] = useQueryState(
-		"q",
-		parseAsString.withDefault("").withOptions({ shallow: true }),
+	const [{ q, available }, setFilters] = useQueryStates(
+		{
+			q: parseAsString.withDefault(""),
+			available: parseAsString.withDefault(""),
+			page: parseAsString,
+		},
+		{ shallow: false },
 	);
-	const [available, setAvailable] = useQueryState("available", {
-		defaultValue: "",
-	});
-	const [hasInteracted, setHasInteracted] = useState(false);
 	const viewedRef = useRef(false);
 	const onlyAvailable = available === "1";
-
-	const filtered = useMemo(
-		() => filterMentors(mentors, q, onlyAvailable),
-		[mentors, q, onlyAvailable],
-	);
+	const isFiltered = Boolean(q) || onlyAvailable || page > 1;
 
 	useEffect(() => {
 		if (viewedRef.current) return;
 		viewedRef.current = true;
-		trackEvent("career_corner_viewed", { mentor_count: mentors.length });
-	}, [mentors.length]);
+		trackEvent("career_corner_viewed", { mentor_count: total });
+	}, [total]);
 
 	useEffect(() => {
 		const searchTerm = q.trim();
@@ -51,41 +52,32 @@ export function MentorDirectory({
 		const timeout = window.setTimeout(() => {
 			trackEvent("mentor_search", {
 				search_term: searchTerm.slice(0, 100),
-				result_count: filtered.length,
+				result_count: total,
 				available_only: onlyAvailable,
 			});
 		}, 600);
 
 		return () => window.clearTimeout(timeout);
-	}, [filtered.length, onlyAvailable, q]);
+	}, [total, onlyAvailable, q]);
 
 	function clearFilters() {
-		setHasInteracted(true);
-		void setQ(null);
-		void setAvailable(null);
+		void setFilters({ q: null, available: null, page: null });
 	}
 
 	return (
 		<>
 			<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-				<SearchInput
-					placeholder={searchPlaceholder}
-					value={q}
-					onValueChange={(value) => {
-						setHasInteracted(true);
-						void setQ(value || null);
-					}}
-					shallow
-				/>
+				<SearchInput placeholder={searchPlaceholder} resetPageOnChange />
 				<button
 					type="button"
 					onClick={() => {
-						setHasInteracted(true);
 						trackEvent("mentor_availability_filter_changed", {
 							enabled: !onlyAvailable,
-							result_count: filterMentors(mentors, q, !onlyAvailable).length,
 						});
-						void setAvailable(onlyAvailable ? null : "1");
+						void setFilters({
+							available: onlyAvailable ? null : "1",
+							page: null,
+						});
 					}}
 					className={cn(
 						"inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
@@ -98,16 +90,19 @@ export function MentorDirectory({
 				</button>
 			</div>
 
-			{filtered.length > 0 ? (
-				<StaggerContainer className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-					{filtered.map((mentor) => (
-						<StaggerItem key={mentor.id} immediate={hasInteracted}>
-							<HoverCard>
-								<MentorCard mentor={mentor} />
-							</HoverCard>
-						</StaggerItem>
-					))}
-				</StaggerContainer>
+			{mentors.length > 0 ? (
+				<>
+					<StaggerContainer className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+						{mentors.map((mentor) => (
+							<StaggerItem key={mentor.id} immediate={isFiltered}>
+								<HoverCard>
+									<MentorCard mentor={mentor} />
+								</HoverCard>
+							</StaggerItem>
+						))}
+					</StaggerContainer>
+					<Pagination page={page} pageSize={MENTOR_PAGE_SIZE} total={total} />
+				</>
 			) : (
 				<div className="mt-8">
 					<EmptyState
