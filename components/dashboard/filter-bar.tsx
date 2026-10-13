@@ -1,8 +1,8 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { debounce, parseAsString, useQueryStates } from "nuqs";
-import type { ReactNode } from "react";
+import type { ReactNode, TransitionStartFunction } from "react";
 import { useId } from "react";
 
 import {
@@ -177,6 +177,10 @@ interface SearchInputProps {
 	shallow?: boolean;
 	/** Clear the URL page when the search term changes. */
 	resetPageOnChange?: boolean;
+	/** Runs the URL update in a transition so the caller can track the refetch. */
+	startTransition?: TransitionStartFunction;
+	/** Swaps the search icon for a spinner while results load. */
+	pending?: boolean;
 	className?: string;
 }
 
@@ -193,6 +197,8 @@ export function SearchInput({
 	debounceMs = 300,
 	shallow = false,
 	resetPageOnChange = false,
+	startTransition,
+	pending = false,
 	className,
 }: SearchInputProps) {
 	const id = useId();
@@ -201,7 +207,7 @@ export function SearchInput({
 			[paramKey]: parseAsString.withDefault(""),
 			page: parseAsString,
 		},
-		{ shallow },
+		{ shallow, startTransition },
 	);
 	const value = controlledValue ?? query[paramKey] ?? "";
 	const handleValueChange = (nextValue: string) => {
@@ -221,7 +227,11 @@ export function SearchInput({
 
 	return (
 		<div className={cn("relative w-full sm:w-64", className)}>
-			<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+			{pending ? (
+				<Loader2 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-primary-500" />
+			) : (
+				<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+			)}
 			<input
 				id={id}
 				type="search"
