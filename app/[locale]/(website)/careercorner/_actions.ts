@@ -12,7 +12,6 @@ import {
 	inArray,
 	isNotNull,
 	ne,
-	or,
 	sql,
 } from "drizzle-orm";
 import {
@@ -43,27 +42,26 @@ export async function getMentors({
 	onlyAvailable?: boolean;
 	page?: number;
 }): Promise<{ mentors: MentorWithAvailability[]; total: number }> {
-	const { mentors, users, mentorGoogleConnections, availability } = schema;
+	const { mentors, mentorGoogleConnections, availability } = schema;
 	const pageSize = MENTOR_PAGE_SIZE;
 	const offset = (Math.max(1, Math.floor(page) || 1) - 1) * pageSize;
 	const term = query.trim().slice(0, MENTOR_SEARCH_MAX_LENGTH);
 	const prefixQuery = toPrefixTsQuery(term);
 
-	const document = sql`
-		setweight(to_tsvector('english', ${users.name} || ' ' || coalesce(${mentors.nickname}, '')), 'A')
-		|| setweight(to_tsvector('english', coalesce(${mentors.position}, '')), 'B')
-		|| setweight(to_tsvector('english', coalesce(${mentors.bio}, '')), 'C')`;
+	const searchDocument = sql`${mentors}.search_document`;
+	const searchText = sql`${mentors}.search_text`;
 	const tsQuery = sql`to_tsquery('english', ${prefixQuery})`;
-	const typoSimilarity = sql`extensions.word_similarity(${term}, ${users.name} || ' ' || coalesce(${mentors.nickname}, '') || ' ' || coalesce(${mentors.position}, ''))`;
+	const typoSimilarity = sql`extensions.word_similarity(${term}, ${searchText})`;
 
 	const where = and(
 		eq(mentors.active, true),
 		eq(mentors.archived, false),
 		term
-			? or(
-					prefixQuery ? sql`${document} @@ ${tsQuery}` : undefined,
-					sql`${typoSimilarity} >= ${MIN_TYPO_SIMILARITY}`,
-				)
+			? sql`${mentors.id} in (
+					select m.id from ${mentors} m
+					where m.search_text operator(extensions.%>) ${term}
+					${prefixQuery ? sql`union all select m.id from ${mentors} m where m.search_document @@ ${tsQuery}` : sql``}
+				)`
 			: undefined,
 		onlyAvailable
 			? and(
@@ -82,14 +80,16 @@ export async function getMentors({
 	);
 
 	const relevance = prefixQuery
-		? sql`ts_rank(${document}, ${tsQuery}) + ${typoSimilarity}`
+		? sql`ts_rank(${searchDocument}, ${tsQuery}) + ${typoSimilarity}`
 		: typoSimilarity;
 
-	const [matches, [{ total }]] = await Promise.all([
-		db
+	const { matches, total } = await db.transaction(async (tx) => {
+		await tx.execute(
+			sql`select set_config('pg_trgm.word_similarity_threshold', ${String(MIN_TYPO_SIMILARITY)}, true)`,
+		);
+		const matches = await tx
 			.select({ id: mentors.id })
 			.from(mentors)
-			.innerJoin(users, eq(mentors.user_id, users.id))
 			.leftJoin(
 				mentorGoogleConnections,
 				eq(mentorGoogleConnections.mentor_id, mentors.id),
@@ -101,17 +101,17 @@ export async function getMentors({
 				asc(mentors.id),
 			)
 			.limit(pageSize)
-			.offset(offset),
-		db
+			.offset(offset);
+		const [{ total }] = await tx
 			.select({ total: count() })
 			.from(mentors)
-			.innerJoin(users, eq(mentors.user_id, users.id))
 			.leftJoin(
 				mentorGoogleConnections,
 				eq(mentorGoogleConnections.mentor_id, mentors.id),
 			)
-			.where(where),
-	]);
+			.where(where);
+		return { matches, total };
+	});
 
 	if (matches.length === 0) return { mentors: [], total };
 
