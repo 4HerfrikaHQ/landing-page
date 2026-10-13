@@ -10,7 +10,7 @@ import { trackEvent } from "@/src/lib/analytics";
 import { cn } from "@/utils/cn";
 import { SearchX } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useTransition } from "react";
 import { MENTOR_PAGE_SIZE } from "../_utils/mentor-search";
 import { MentorCard } from "./mentor-modal";
 
@@ -27,13 +27,14 @@ export function MentorDirectory({
 	searchPlaceholder: string;
 	availableLabel: string;
 }) {
+	const [isPending, startTransition] = useTransition();
 	const [{ q, available }, setFilters] = useQueryStates(
 		{
 			q: parseAsString.withDefault(""),
 			available: parseAsString.withDefault(""),
 			page: parseAsString,
 		},
-		{ shallow: false },
+		{ shallow: false, startTransition },
 	);
 	const viewedRef = useRef(false);
 	const onlyAvailable = available === "1";
@@ -67,7 +68,12 @@ export function MentorDirectory({
 	return (
 		<>
 			<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-				<SearchInput placeholder={searchPlaceholder} resetPageOnChange />
+				<SearchInput
+					placeholder={searchPlaceholder}
+					resetPageOnChange
+					startTransition={startTransition}
+					pending={isPending}
+				/>
 				<button
 					type="button"
 					onClick={() => {
@@ -90,33 +96,46 @@ export function MentorDirectory({
 				</button>
 			</div>
 
-			{mentors.length > 0 ? (
-				<>
-					<StaggerContainer className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-						{mentors.map((mentor) => (
-							<StaggerItem key={mentor.id} immediate={isFiltered}>
-								<HoverCard>
-									<MentorCard mentor={mentor} />
-								</HoverCard>
-							</StaggerItem>
-						))}
-					</StaggerContainer>
-					<Pagination page={page} pageSize={MENTOR_PAGE_SIZE} total={total} />
-				</>
-			) : (
-				<div className="mt-8">
-					<EmptyState
-						icon={SearchX}
-						title="No mentors match that filter yet"
-						description="Try a different name or role, or clear the filters to see everyone."
-						action={
-							<Button variant="outline" size="sm" onClick={clearFilters}>
-								Clear filters
-							</Button>
-						}
-					/>
-				</div>
-			)}
+			<div
+				aria-busy={isPending}
+				className={cn(
+					"transition-opacity duration-200",
+					isPending && "pointer-events-none opacity-50",
+				)}
+			>
+				{mentors.length > 0 ? (
+					<>
+						<StaggerContainer className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+							{mentors.map((mentor) => (
+								<StaggerItem key={mentor.id} immediate={isFiltered}>
+									<HoverCard>
+										<MentorCard mentor={mentor} />
+									</HoverCard>
+								</StaggerItem>
+							))}
+						</StaggerContainer>
+						<Pagination
+							page={page}
+							pageSize={MENTOR_PAGE_SIZE}
+							total={total}
+							startTransition={startTransition}
+						/>
+					</>
+				) : (
+					<div className="mt-8">
+						<EmptyState
+							icon={SearchX}
+							title="No mentors match that filter yet"
+							description="Try a different name or role, or clear the filters to see everyone."
+							action={
+								<Button variant="outline" size="sm" onClick={clearFilters}>
+									Clear filters
+								</Button>
+							}
+						/>
+					</div>
+				)}
+			</div>
 		</>
 	);
 }
