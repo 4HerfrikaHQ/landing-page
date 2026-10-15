@@ -1,3 +1,5 @@
+import Fuse from "fuse.js";
+
 type MentorFilterRecord = {
 	nickname: string | null;
 	name: string;
@@ -10,16 +12,22 @@ export function filterMentors<T extends MentorFilterRecord>(
 	query: string,
 	onlyAvailable: boolean,
 ): T[] {
-	const term = query.trim().toLowerCase();
+	const eligible = onlyAvailable
+		? mentors.filter((mentor) => (mentor.availability?.length ?? 0) > 0)
+		: mentors;
+	if (!query.trim()) return eligible;
 
-	return mentors.filter((mentor) => {
-		if (onlyAvailable && (mentor.availability?.length ?? 0) === 0) {
-			return false;
-		}
-		if (!term) return true;
-
-		const haystack =
-			`${mentor.nickname ?? ""} ${mentor.name} ${mentor.position ?? ""}`.toLowerCase();
-		return haystack.includes(term);
-	});
+	return new Fuse(eligible, {
+		keys: ["nickname", "name", "position"],
+		useTokenSearch: true,
+		tokenMatch: "all",
+		ignoreDiacritics: true,
+		ignoreLocation: true,
+		// Four edits in "management" still match "manager". All words must match.
+		threshold: 0.4,
+		minMatchCharLength: 2,
+		shouldSort: false,
+	})
+		.search(query)
+		.map(({ item }) => item);
 }
