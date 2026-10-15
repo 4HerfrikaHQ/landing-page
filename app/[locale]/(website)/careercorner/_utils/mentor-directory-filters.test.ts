@@ -72,15 +72,23 @@ describe("mentor directory fuzzy search", () => {
 	});
 
 	test("requires every query word and rejects unrelated roles and short-word typos", () => {
-		for (const query of [
-			"product accountant",
-			"astronaut",
-			"production manager",
-			"xyz",
-			"axa",
-		]) {
+		for (const query of ["product accountant", "astronaut", "xyz", "axa"]) {
 			expect(search(query)).toEqual([]);
 		}
+	});
+
+	test("uses fuzzy similarity for nearby words without custom role-ending rules", () => {
+		expect(search("production manager")).toEqual(["Déborah Ade"]);
+	});
+
+	test("supports two-letter names across a multi-word query", () => {
+		expect(
+			filterMentors(
+				[{ name: "Li Chen", nickname: null, position: "Product Manager" }],
+				"Li product",
+				false,
+			),
+		).toHaveLength(1);
 	});
 
 	test("blank queries preserve order, including incomplete profiles", () => {
