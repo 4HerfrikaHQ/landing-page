@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
+import type { TransitionStartFunction } from "react";
 
 import { cn } from "@/utils/cn";
 
@@ -27,16 +28,18 @@ export function Pagination({
 	page,
 	pageSize,
 	total,
+	startTransition,
 	className,
 }: {
 	page: number;
 	pageSize: number;
 	total: number;
+	startTransition?: TransitionStartFunction;
 	className?: string;
 }) {
 	const [, setPage] = useQueryState(
 		"page",
-		parseAsString.withOptions({ shallow: false }),
+		parseAsString.withOptions({ shallow: false, startTransition }),
 	);
 
 	const lastPage = Math.max(1, Math.ceil(total / pageSize));

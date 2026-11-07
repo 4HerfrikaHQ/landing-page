@@ -11,7 +11,6 @@ type AnalyticsEvents = {
 	};
 	mentor_availability_filter_changed: {
 		enabled: boolean;
-		result_count: number;
 	};
 	mentor_details_viewed: {
 		mentor_id: string;
