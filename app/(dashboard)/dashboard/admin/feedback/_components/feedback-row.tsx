@@ -32,7 +32,7 @@ export function FeedbackRow({ feedback }: { feedback: AdminFeedbackRow }) {
 				<TableCell className="w-full min-w-64 max-w-md px-4 py-3">
 					{feedback.comment ? (
 						<div className="space-y-1.5">
-							<p className="line-clamp-2 break-words text-foreground">
+							<p className="line-clamp-2 wrap-break-word text-foreground">
 								{feedback.comment}
 							</p>
 							{feedback.testimonial_consent ? (

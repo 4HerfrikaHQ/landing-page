@@ -82,7 +82,7 @@ export function BlogSection({ posts, categories }: Props) {
           })}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-[400px] mt-10">
+        <div className="flex flex-col items-center justify-center min-h-100 mt-10">
           <p className="text-xl text-muted-foreground">No posts in this category yet</p>
           <p className="text-sm text-muted-foreground mt-1">Check back soon</p>
         </div>

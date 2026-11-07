@@ -117,7 +117,7 @@ export function BecomeAMentorForm() {
 			<FormField label="About you" error={errors.bio?.message}>
 				<Textarea
 					rows={6}
-					className="min-h-[120px] resize-none"
+					className="min-h-30 resize-none"
 					placeholder="Tell us a bit about your background, what you do, and why you want to mentor young African women."
 					{...form.register("bio")}
 				/>

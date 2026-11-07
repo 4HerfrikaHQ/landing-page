@@ -6,7 +6,7 @@ export default function UnauthorizedPage() {
 	return (
 		<main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-muted px-4">
 			{/* soft brand glow */}
-			<div className="pointer-events-none absolute -top-32 left-1/2 size-[28rem] -translate-x-1/2 rounded-full bg-primary-500/10 blur-3xl" />
+			<div className="pointer-events-none absolute -top-32 left-1/2 size-112 -translate-x-1/2 rounded-full bg-primary-500/10 blur-3xl" />
 
 			<div className="relative w-full max-w-md text-center">
 				<span className="mx-auto mb-7 flex size-20 items-center justify-center rounded-3xl bg-surface-pink text-primary-500 ring-1 ring-primary-500/20">

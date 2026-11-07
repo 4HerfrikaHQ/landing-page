@@ -55,7 +55,7 @@ export default async function LoginPage({
 				</div>
 			</div>
 
-			<main className="flex flex-col items-center bg-gradient-to-b from-surface-pink via-white to-white px-4 py-16 lg:justify-center lg:bg-none lg:bg-white">
+			<main className="flex flex-col items-center bg-linear-to-b from-surface-pink via-white to-white px-4 py-16 lg:justify-center lg:bg-none lg:bg-white">
 				<div className="w-full max-w-md">
 					<a
 						href="/"

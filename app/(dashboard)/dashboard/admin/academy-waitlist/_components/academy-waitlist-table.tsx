@@ -79,7 +79,7 @@ export function AcademyWaitlistTable({
 				/>
 			) : (
 				<div className="overflow-x-auto rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-					<Table className="min-w-[760px]">
+					<Table className="min-w-190">
 						<TableHeader>
 							<TableRow className="bg-muted">
 								<TableHead className="font-medium text-muted-foreground">

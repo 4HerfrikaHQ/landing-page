@@ -43,7 +43,7 @@ export default async function BlogPage({
 	return (
 		<>
 			<section
-				className="-mt-16 lg:-mt-[90px] pt-16 lg:pt-[90px] flex flex-col items-center justify-center text-center px-4 min-h-[580px]"
+				className="-mt-16 lg:-mt-22.5 pt-16 lg:pt-22.5 flex flex-col items-center justify-center text-center px-4 min-h-145"
 				style={{
 					background:
 						"linear-gradient(180deg, rgba(236,0,140,0.18) 0%, rgba(236,0,140,0.08) 45%, rgba(255,255,255,1) 85%)",
@@ -60,7 +60,7 @@ export default async function BlogPage({
 					</p>
 					<Link
 						href="#blog-grid"
-						className="inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:!no-underline hover:brightness-90 transition-all"
+						className="inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:no-underline! hover:brightness-90 transition-all"
 					>
 						Read Latest Stories
 						<ArrowRight className="size-5" />
@@ -86,7 +86,7 @@ export default async function BlogPage({
 				/>
 			</Suspense>
 
-			<section className="my-16 h-[420px] sm:h-[600px] relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
+			<section className="my-16 h-105 sm:h-150 relative overflow-hidden rounded-[40px] bg-[#F24DAF] px-6 sm:px-8 lg:px-24 py-12 sm:py-20">
 				<div
 					className={circle(
 						"big",
@@ -112,14 +112,14 @@ export default async function BlogPage({
 					)}
 				/>
 
-				<div className="relative z-10 flex flex-col justify-center items-center text-center max-w-[733px] mx-auto h-full">
+				<div className="relative z-10 flex flex-col justify-center items-center text-center max-w-183.25 mx-auto h-full">
 					<h2 className="text-[32px] sm:text-[56px] font-bold leading-[1.4] text-white mb-4 sm:mb-6">
 						Stay Connected
 					</h2>
 					<p className="text-base sm:text-lg text-white mb-10 sm:mb-20">
 						Get stories, opportunities, and insights delivered directly to you.
 					</p>
-					<form className="flex flex-col sm:flex-row w-full max-w-[420px] sm:max-w-none gap-3 sm:gap-4">
+					<form className="flex flex-col sm:flex-row w-full max-w-105 sm:max-w-none gap-3 sm:gap-4">
 						<input
 							type="email"
 							placeholder="Enter your email"

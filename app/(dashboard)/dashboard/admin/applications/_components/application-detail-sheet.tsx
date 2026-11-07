@@ -99,7 +99,7 @@ export function ApplicationDetailSheet({
 
 					{a.bio && (
 						<Section title="About">
-							<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/80">
+							<p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed text-foreground/80">
 								{a.bio}
 							</p>
 						</Section>
@@ -107,7 +107,7 @@ export function ApplicationDetailSheet({
 
 					{a.status === "rejected" && a.reject_reason && (
 						<Section title="Reason for rejection">
-							<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-muted-foreground">
+							<p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed text-muted-foreground">
 								{a.reject_reason}
 							</p>
 						</Section>

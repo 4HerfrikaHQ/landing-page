@@ -52,7 +52,7 @@ function PostCard({
 
 function EmptyState({ category }: { category: string }) {
 	return (
-		<div className="col-span-full flex flex-col items-center justify-center min-h-[430px]">
+		<div className="col-span-full flex flex-col items-center justify-center min-h-107.5">
 			<p className="text-xl text-muted-foreground">
 				No posts found for {category}
 			</p>

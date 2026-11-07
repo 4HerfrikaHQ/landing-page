@@ -36,8 +36,8 @@ export function FeaturedStory({
 				className="object-cover transition-transform duration-700 group-hover:scale-105"
 				priority
 			/>
-			<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-			<div className="relative z-10 flex max-w-[768px] flex-col gap-4 sm:gap-6">
+			<div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
+			<div className="relative z-10 flex max-w-3xl flex-col gap-4 sm:gap-6">
 				<span className="inline-flex w-fit items-center rounded-full bg-primary-500 px-3 py-1 sm:px-4 sm:py-[6.5px] text-xs sm:text-sm font-medium text-white">
 					Featured Story
 				</span>
@@ -52,7 +52,7 @@ export function FeaturedStory({
 
 				<Link
 					href={`/blog/${uid}` as Route}
-					className="flex w-fit items-center gap-2 text-white hover:!no-underline"
+					className="flex w-fit items-center gap-2 text-white hover:no-underline!"
 				>
 					<span className="text-sm sm:text-base font-medium">Read Full Story</span>
 					<ArrowRight className="size-4 sm:size-5 transition-transform duration-300 group-hover:translate-x-1" />

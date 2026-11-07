@@ -68,7 +68,7 @@ export default async function BlogPostPage({
   return (
     <main className="bg-background">
       <section className="px-4 pt-6 md:pt-10 pb-20">
-        <div className="mx-auto max-w-[1144px] flex flex-col gap-8">
+        <div className="mx-auto max-w-286 flex flex-col gap-8">
           <div className="flex flex-col gap-16">
             <div className="flex flex-col gap-3">
               <Breadcrumbs
@@ -78,7 +78,7 @@ export default async function BlogPostPage({
                   { label: post.data.title ?? "" },
                 ]}
               />
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold md:leading-[75px] text-foreground pb-3 mb-8 border-b border-[#E5E7EB]">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold md:leading-18.75 text-foreground pb-3 mb-8 border-b border-[#E5E7EB]">
                 {post.data.title}
               </h1>
               <ul className="flex flex-wrap items-center gap-6 text-[#555555]">
@@ -100,7 +100,7 @@ export default async function BlogPostPage({
             </div>
 
             {post.data.cover_image?.url && (
-              <div className="relative rounded-2xl overflow-hidden h-64 sm:h-80 md:h-[500px]">
+              <div className="relative rounded-2xl overflow-hidden h-64 sm:h-80 md:h-125">
                 <Image
                   src={post.data.cover_image.url}
                   alt={post.data.cover_image.alt ?? post.data.title ?? ""}
