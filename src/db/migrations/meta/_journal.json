@@ -218,6 +218,13 @@
       "when": 1791913422731,
       "tag": "0030_mentor_search_index",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1794080146318,
+      "tag": "0031_mentor_image_crop",
+      "breakpoints": true
     }
   ]
 }
