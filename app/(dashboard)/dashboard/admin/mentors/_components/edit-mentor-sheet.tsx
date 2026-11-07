@@ -1,5 +1,14 @@
 import { AvailabilityEditor } from "@/components/availability-editor";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,7 +32,7 @@ import {
 import { DownloadIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
-import { updateMentor } from "../_actions";
+import { deleteMentor, updateMentor } from "../_actions";
 
 type Tab = "details" | "availability";
 
@@ -38,6 +47,24 @@ type Mentor = {
 	linkedin_url: string | null;
 };
 
+type MentorFields = {
+	name: string;
+	position: string;
+	nickname: string;
+	bio: string;
+	linkedin_url: string;
+};
+
+function fieldsFromMentor(mentor: Mentor): MentorFields {
+	return {
+		name: mentor.name,
+		position: mentor.position ?? "",
+		nickname: mentor.nickname ?? "",
+		bio: mentor.bio ?? "",
+		linkedin_url: mentor.linkedin_url ?? "",
+	};
+}
+
 export function EditMentorSheet({
 	mentor,
 	open,
@@ -48,9 +75,13 @@ export function EditMentorSheet({
 	onOpenChange: (open: boolean) => void;
 }) {
 	const [tab, setTab] = useState<Tab>("details");
+	const [fields, setFields] = useState(() => fieldsFromMentor(mentor));
 	const [slug, setSlug] = useState(mentor.slug);
+	const [isDirty, setIsDirty] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
+	const [isDeleting, startDeleteTransition] = useTransition();
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [availabilitySlots, setAvailabilitySlots] = useState<
 		DbAvailability[] | null
@@ -63,8 +94,10 @@ export function EditMentorSheet({
 	const publicLinkPrefix = `${siteUrl}/careercorner/`;
 
 	useEffect(() => {
+		if (isDirty) return;
+		setFields(fieldsFromMentor(mentor));
 		setSlug(mentor.slug);
-	}, [mentor.slug]);
+	}, [mentor, isDirty]);
 
 	// Load availability lazily on first switch to that tab
 	useEffect(() => {
@@ -83,7 +116,9 @@ export function EditMentorSheet({
 		if (open === false) {
 			// Reset state
 			setTab("details");
+			setFields(fieldsFromMentor(mentor));
 			setSlug(mentor.slug);
+			setIsDirty(false);
 			setError(null);
 			setAvailabilitySlots(null);
 			setAvailabilityError(null);
@@ -103,8 +138,24 @@ export function EditMentorSheet({
 			if (result.error) {
 				setError(result.error);
 			} else {
+				setIsDirty(false);
 				onOpenChange(false);
 			}
+		});
+	}
+
+	function handleDelete() {
+		setError(null);
+		startDeleteTransition(async () => {
+			const result = await deleteMentor(mentor.id);
+			if (result.error) {
+				setError(result.error);
+				setConfirmDeleteOpen(false);
+				return;
+			}
+
+			setConfirmDeleteOpen(false);
+			onOpenChange(false);
 		});
 	}
 
@@ -192,7 +243,15 @@ export function EditMentorSheet({
 								label="Name"
 								name="name"
 								required
-								defaultValue={mentor.name}
+								value={fields.name}
+								onChange={(event) => {
+									setError(null);
+									setIsDirty(true);
+									setFields((current) => ({
+										...current,
+										name: event.target.value,
+									}));
+								}}
 							/>
 
 							<div className="flex flex-col gap-1.5">
@@ -265,6 +324,7 @@ export function EditMentorSheet({
 										onChange={(event) => {
 											setSlug(normalizeMentorSlugInput(event.target.value));
 											setError(null);
+											setIsDirty(true);
 										}}
 										autoCapitalize="none"
 										autoCorrect="off"
@@ -293,12 +353,28 @@ export function EditMentorSheet({
 							<Field
 								label="Position"
 								name="position"
-								defaultValue={mentor.position ?? ""}
+								value={fields.position}
+								onChange={(event) => {
+									setError(null);
+									setIsDirty(true);
+									setFields((current) => ({
+										...current,
+										position: event.target.value,
+									}));
+								}}
 							/>
 							<Field
 								label="Display Name"
 								name="nickname"
-								defaultValue={mentor.nickname ?? ""}
+								value={fields.nickname}
+								onChange={(event) => {
+									setError(null);
+									setIsDirty(true);
+									setFields((current) => ({
+										...current,
+										nickname: event.target.value,
+									}));
+								}}
 							/>
 
 							<div className="flex flex-col gap-1.5">
@@ -314,7 +390,15 @@ export function EditMentorSheet({
 									rows={3}
 									className="text-sm resize-none"
 									placeholder="Short bio…"
-									defaultValue={mentor.bio ?? ""}
+									value={fields.bio}
+									onChange={(event) => {
+										setError(null);
+										setIsDirty(true);
+										setFields((current) => ({
+											...current,
+											bio: event.target.value,
+										}));
+									}}
 								/>
 							</div>
 
@@ -322,7 +406,15 @@ export function EditMentorSheet({
 								label="LinkedIn URL"
 								name="linkedin_url"
 								type="url"
-								defaultValue={mentor.linkedin_url ?? ""}
+								value={fields.linkedin_url}
+								onChange={(event) => {
+									setError(null);
+									setIsDirty(true);
+									setFields((current) => ({
+										...current,
+										linkedin_url: event.target.value,
+									}));
+								}}
 							/>
 
 							{error && (
@@ -332,19 +424,68 @@ export function EditMentorSheet({
 							)}
 						</form>
 
-						<SheetFooter className="px-6 py-4 border-t flex-row justify-end gap-2">
-							<SheetClose render={<Button variant="ghost" size="sm" />}>
-								Cancel
-							</SheetClose>
-							<Button
-								type="submit"
-								form="edit-mentor-form"
-								variant="solid"
-								size="sm"
-								disabled={isPending || !parsedSlug.success}
+						<SheetFooter className="flex-row justify-between gap-2 border-t px-6 py-4">
+							<Dialog
+								open={confirmDeleteOpen}
+								onOpenChange={setConfirmDeleteOpen}
 							>
-								{isPending ? "Saving…" : "Save changes"}
-							</Button>
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="text-destructive hover:bg-destructive/5 hover:text-destructive"
+									disabled={isDeleting}
+									onClick={() => setConfirmDeleteOpen(true)}
+								>
+									{isDeleting ? "Deleting…" : "Delete"}
+								</Button>
+								{confirmDeleteOpen ? (
+									<div
+										aria-hidden
+										className="fixed inset-0 z-[60] bg-black/30"
+									/>
+								) : null}
+								<DialogContent showCloseButton={false} className="z-[61]">
+									<DialogHeader>
+										<DialogTitle>Delete this mentor?</DialogTitle>
+										<DialogDescription>
+											{mentor.name}&apos;s profile, access, and associated data
+											will be removed from the product.
+										</DialogDescription>
+									</DialogHeader>
+									<DialogFooter>
+										<DialogClose
+											render={<Button variant="outline" size="sm" />}
+										>
+											Cancel
+										</DialogClose>
+										<Button
+											type="button"
+											variant="solid"
+											size="sm"
+											className="bg-destructive text-white hover:bg-destructive/90"
+											disabled={isDeleting}
+											onClick={handleDelete}
+										>
+											{isDeleting ? "Deleting…" : "Delete mentor"}
+										</Button>
+									</DialogFooter>
+								</DialogContent>
+							</Dialog>
+							<div className="flex gap-2">
+								<SheetClose render={<Button variant="ghost" size="sm" />}>
+									Cancel
+								</SheetClose>
+								<Button
+									type="submit"
+									form="edit-mentor-form"
+									variant="solid"
+									size="sm"
+									disabled={isPending || isDeleting || !parsedSlug.success}
+								>
+									{isPending ? "Saving…" : "Save changes"}
+								</Button>
+							</div>
 						</SheetFooter>
 					</>
 				) : (

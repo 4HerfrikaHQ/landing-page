@@ -1,193 +1,90 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { sendOtp, verifyOtp } from "@/src/auth";
+import FourHerfrikaLogo from "@/app/[locale]/(website)/4herfrika-logo";
+import { routing } from "@/i18n/routing";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { LoginForm } from "./_components/login-form";
 
-export default function LoginPage() {
-	const router = useRouter();
-	const [step, setStep] = useState<"email" | "otp">("email");
-	const [email, setEmail] = useState("");
-	const [otp, setOtp] = useState("");
-	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
-
-	async function handleSendOtp(e: React.FormEvent) {
-		e.preventDefault();
-		setLoading(true);
-		setError(null);
-		const { error } = await sendOtp(email);
-		setLoading(false);
-		if (error) {
-			setError(error.message);
-			return;
-		}
-		setStep("otp");
-	}
-
-	async function handleVerifyOtp(e: React.FormEvent) {
-		e.preventDefault();
-		setLoading(true);
-		setError(null);
-		const { error } = await verifyOtp(email, otp);
-		setLoading(false);
-		if (error) {
-			setError(error.message);
-			return;
-		}
-	}
+export default async function LoginPage({
+	searchParams,
+}: {
+	searchParams: Promise<{
+		email?: string | string[];
+		locale?: string | string[];
+	}>;
+}) {
+	const [params, cookieStore] = await Promise.all([searchParams, cookies()]);
+	const requested = params.locale ?? cookieStore.get("NEXT_LOCALE")?.value;
+	const locale = hasLocale(routing.locales, requested)
+		? requested
+		: routing.defaultLocale;
+	const [t, messages] = await Promise.all([
+		getTranslations({ locale, namespace: "mentorAuth.login" }),
+		getMessages({ locale }),
+	]);
+	const email = typeof params.email === "string" ? params.email : "";
 
 	return (
-		<div className="min-h-screen grid lg:grid-cols-[40%_60%]">
-			{/* Left — branded panel */}
-			<div
-				className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden"
-				style={{ background: "#03065c" }}
-			>
-				{/* Decorative circles */}
-				<div
-					className="absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-10"
-					style={{ background: "#ec008c" }}
-				/>
-				<div
-					className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-[0.07] translate-x-1/3 translate-y-1/3"
-					style={{ background: "#ec008c" }}
-				/>
-				<div
-					className="absolute top-1/2 -right-12 w-48 h-48 rounded-full opacity-10"
-					style={{ background: "#f700dd" }}
-				/>
+		<div lang={locale} className="grid min-h-screen lg:grid-cols-[40%_60%]">
+			<div className="relative hidden flex-col justify-between overflow-hidden bg-secondary-500 p-12 lg:flex">
+				<div className="absolute -top-24 -left-24 size-96 rounded-full bg-primary-500 opacity-10" />
+				<div className="absolute right-0 bottom-0 size-80 translate-x-1/3 translate-y-1/3 rounded-full bg-primary-500 opacity-[0.07]" />
+				<div className="absolute top-1/2 -right-12 size-48 rounded-full bg-primary-100 opacity-10" />
 
-				{/* Logo */}
-				<div className="relative z-10">
+				<a href="/" aria-label="4HerFrika home" className="relative z-10">
 					<Image
 						src="/assets/nameless-logo-white.png"
-						alt="4herfrika"
+						alt="4HerFrika"
 						width={140}
 						height={40}
 						className="object-contain"
 					/>
-				</div>
+				</a>
 
-				{/* Tagline */}
 				<div className="relative z-10 space-y-4">
-					<div
-						className="w-10 h-1 rounded-full"
-						style={{ background: "#ec008c" }}
-					/>
-					<h2 className="text-4xl font-bold text-white leading-tight">
-						Mentor
+					<div className="h-1 w-10 rounded-full bg-primary-500" />
+					<h2 className="text-4xl leading-tight font-bold text-white">
+						{t("panelTitle")}
 						<br />
-						<span style={{ color: "#ec008c" }}>Portal</span>
+						<span className="text-primary-500">{t("panelAccent")}</span>
 					</h2>
-					<p className="text-white/50 text-sm max-w-xs leading-relaxed">
-						Manage your availability, connect with mentees, and track your
-						impact on Africa's next generation of tech talent.
+					<p className="max-w-xs text-sm leading-relaxed text-white/60">
+						{t("panelDescription")}
 					</p>
 				</div>
 			</div>
 
-			{/* Right — form panel */}
-			<div className="flex justify-center pt-32 p-8 bg-white">
-				<div className="w-full max-w-sm space-y-8">
-					{/* Mobile logo */}
-					<div className="lg:hidden">
-						<Image
-							src="/assets/navbar-logo.png"
-							alt="4herfrika"
-							width={120}
-							height={36}
-							className="object-contain"
-						/>
+			<main className="flex flex-col items-center bg-gradient-to-b from-surface-pink via-white to-white px-4 py-16 lg:justify-center lg:bg-none lg:bg-white">
+				<div className="w-full max-w-md">
+					<a
+						href="/"
+						aria-label="4HerFrika home"
+						className="mb-10 flex justify-center lg:hidden"
+					>
+						<FourHerfrikaLogo className="h-10 w-auto" />
+					</a>
+
+					<div className="rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8 lg:border-0 lg:p-0 lg:shadow-none">
+						<NextIntlClientProvider
+							locale={locale}
+							messages={{ mentorAuth: messages.mentorAuth }}
+						>
+							<LoginForm defaultEmail={email} />
+						</NextIntlClientProvider>
 					</div>
 
-					<div className="space-y-1">
-						<h1 className="text-2xl font-bold text-gray-900">
-							{step === "email" ? "Sign in" : "Check your email"}
-						</h1>
-						<p className="text-sm text-gray-500">
-							{step === "email"
-								? "Enter your email to receive a sign-in code."
-								: `We sent a 6-digit code to ${email}`}
-						</p>
-					</div>
-
-					{step === "email" ? (
-						<form onSubmit={handleSendOtp} className="space-y-4">
-							<div className="flex flex-col gap-3">
-								<label className="text-xs font-medium text-gray-600 uppercase tracking-wide">
-									Email address
-								</label>
-								<Input
-									type="email"
-									placeholder="you@4herfrika.org"
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
-									required
-									className="h-12 bg-gray-50 border-gray-200 focus:border-primary-500 focus:ring-primary-500"
-								/>
-							</div>
-							<Button
-								type="submit"
-								className="w-full h-12 text-sm font-semibold"
-								disabled={loading}
-								style={{
-									background: loading ? "#f100a1" : "#ec008c",
-								}}
-							>
-								{loading ? "Sending…" : "Send code →"}
-							</Button>
-						</form>
-					) : (
-						<form onSubmit={handleVerifyOtp} className="space-y-4">
-							<div className="flex flex-col gap-3">
-								<label className="text-xs font-medium text-gray-600 uppercase tracking-wide">
-									6-digit code
-								</label>
-								<Input
-									type="text"
-									inputMode="numeric"
-									placeholder="000000"
-									maxLength={6}
-									value={otp}
-									onChange={(e) => setOtp(e.target.value)}
-									required
-									className="h-12 bg-gray-50 border-gray-200 text-center text-xl tracking-[0.5em] font-mono focus:border-primary-500 focus:ring-primary-500"
-								/>
-							</div>
-							<Button
-								type="submit"
-								className="w-full h-12 text-sm font-semibold"
-								disabled={loading}
-								style={{
-									background: loading ? "#f100a1" : "#ec008c",
-								}}
-							>
-								{loading ? "Verifying…" : "Verify →"}
-							</Button>
-							<button
-								type="button"
-								className="text-xs text-gray-400 w-full text-center hover:text-gray-600 transition-colors"
-								onClick={() => {
-									setStep("email");
-									setError(null);
-								}}
-							>
-								← Use a different email
-							</button>
-						</form>
-					)}
-
-					{error && (
-						<p className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-3">
-							{error}
-						</p>
-					)}
+					<p className="mt-8 text-center text-sm text-muted-foreground lg:text-left">
+						{t("trouble")}{" "}
+						<a
+							href="mailto:4herfrika@gmail.com?subject=Help%20signing%20in"
+							className="font-medium text-primary-500 underline-offset-4 hover:underline"
+						>
+							4herfrika@gmail.com
+						</a>
+					</p>
 				</div>
-			</div>
+			</main>
 		</div>
 	);
 }

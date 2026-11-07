@@ -1,63 +1,145 @@
 "use server";
 
+import { optionalUserCapabilities } from "@/src/auth";
 import { db } from "@/src/db";
 import { availability } from "@/src/db/schema/tables/availability";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentorBookingSettings } from "@/src/db/schema/tables/mentor-booking-settings";
+import { mentorGoogleConnections } from "@/src/db/schema/tables/mentor-google-connections";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
 import { createActionLink } from "@/src/lib/action-links";
 import {
 	createMentorCalendarEvent,
 	deleteMentorCalendarEvent,
+	isMentorCalendarError,
 	mentorCalendarActionMessage,
 	selectNewBookingCalendarHost,
 	stableCalendarAttemptKey,
 } from "@/src/lib/google-calendar";
-import {
-	OrgGoogleCalendarError,
-	createOrgGoogleCalendarEvent,
-	deleteOrgGoogleCalendarEvent,
-	ensureOrgGoogleCalendarConnection,
-} from "@/src/lib/org-google-calendar";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import { addDays, startOfWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { and, eq, getTableColumns, gt, gte, lt, ne, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
-import { buildBookingIcs, computeSlots } from "./_helpers";
+import { buildBookingIcs, computeSlots, slotCheckWindow } from "./_helpers";
 import { CreateBookingSchema, ListSlotsSchema } from "./_schema";
 
 const FROM = "4herfrika <hello@4herfrika.org>";
 
-function calendarActionError(error: unknown): ActionError {
-	if (error instanceof OrgGoogleCalendarError) {
-		return new ActionError(
-			error.code === "connection_unavailable"
-				? "Booking is temporarily unavailable. Please try again later."
-				: "The calendar could not complete the requested operation.",
-		);
+class CalendarActionError extends ActionError {
+	readonly code: string;
+
+	constructor(error: unknown) {
+		super(mentorCalendarActionMessage(error));
+		this.name = "CalendarActionError";
+		this.code = isMentorCalendarError(error) ? error.code : "unknown";
 	}
-	return new ActionError(mentorCalendarActionMessage(error));
+}
+
+function calendarActionError(error: unknown): CalendarActionError {
+	return new CalendarActionError(error);
+}
+
+function logCalendarFailure(
+	stage: "host_selection" | "event_creation",
+	mentorId: string,
+	error: unknown,
+) {
+	console.error("[booking-calendar] booking_failed", {
+		stage,
+		mentorId,
+		code: isMentorCalendarError(error) ? error.code : "unknown",
+		errorType: error instanceof Error ? error.name : typeof error,
+	});
 }
 
 async function selectBookingCalendarHost(mentor: {
 	id: string;
 	email: string;
 }) {
-	const host = await selectNewBookingCalendarHost({
-		mentorId: mentor.id,
-		mentorEmail: mentor.email,
-	});
-	if (host.mode === "org_google") {
-		try {
-			await ensureOrgGoogleCalendarConnection();
-		} catch (error) {
-			throw calendarActionError(error);
-		}
+	try {
+		return await selectNewBookingCalendarHost({
+			mentorId: mentor.id,
+			mentorEmail: mentor.email,
+		});
+	} catch (error) {
+		logCalendarFailure("host_selection", mentor.id, error);
+		throw calendarActionError(error);
 	}
-	return host;
+}
+
+async function getMentorBookingSettings(mentorId: string) {
+	const [settings] = await db
+		.select()
+		.from(mentorBookingSettings)
+		.where(eq(mentorBookingSettings.mentor_id, mentorId))
+		.limit(1);
+	return settings ?? null;
+}
+
+async function countActiveBookingsForMentee(menteeEmail: string, now: Date) {
+	const [row] = await db
+		.select({ activeCount: sql<number>`count(*)::int` })
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentee_email, menteeEmail),
+				eq(bookings.status, "confirmed"),
+				gt(bookings.start_at, now),
+			),
+		);
+	return row?.activeCount ?? 0;
+}
+
+async function getMentorAvailabilityWindows(mentorId: string) {
+	return db
+		.select()
+		.from(availability)
+		.where(eq(availability.mentor_id, mentorId));
+}
+
+async function getMentorDayBookings(params: {
+	mentorId: string;
+	dayStart: Date;
+	dayEnd: Date;
+}) {
+	return db
+		.select({ startUtc: bookings.start_at, endUtc: bookings.end_at })
+		.from(bookings)
+		.where(
+			and(
+				eq(bookings.mentor_id, params.mentorId),
+				ne(bookings.status, "cancelled"),
+				gte(bookings.start_at, params.dayStart),
+				lt(bookings.start_at, params.dayEnd),
+			),
+		);
+}
+
+async function getBookingValidationData(params: {
+	mentorId: string;
+	menteeEmail: string;
+	dayStart: Date;
+	dayEnd: Date;
+	now: Date;
+}) {
+	const [activeCountRows, availabilityWindows, existing] = await Promise.all([
+		countActiveBookingsForMentee(params.menteeEmail, params.now),
+		getMentorAvailabilityWindows(params.mentorId),
+		getMentorDayBookings({
+			mentorId: params.mentorId,
+			dayStart: params.dayStart,
+			dayEnd: params.dayEnd,
+		}),
+	]);
+
+	return {
+		activeCount: activeCountRows,
+		availabilityWindows,
+		existing,
+	};
 }
 
 function formatInTz(date: Date, tz: string): string {
@@ -149,9 +231,58 @@ export async function getMentorBySlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.slug, slug), eq(mentors.active, true)))
+		.where(
+			and(
+				eq(mentors.slug, slug),
+				eq(mentors.active, true),
+				eq(mentors.archived, false),
+			),
+		)
 		.limit(1);
 	return mentor ?? null;
+}
+
+/** Fetches an inactive profile only for a super admin or its owning mentor. */
+export async function getInactiveMentorBySlug(slug: string) {
+	const [mentor] = await db
+		.select({
+			...getTableColumns(mentors),
+			name: users.name,
+			email: users.email,
+		})
+		.from(mentors)
+		.innerJoin(users, eq(users.id, mentors.user_id))
+		.where(
+			and(
+				eq(mentors.slug, slug),
+				eq(mentors.active, false),
+				eq(mentors.archived, false),
+			),
+		)
+		.limit(1);
+	if (!mentor) return null;
+
+	const viewer = await optionalUserCapabilities();
+	const canPreview = viewer?.isAdmin || viewer?.mentor?.id === mentor.id;
+	return canPreview ? mentor : null;
+}
+
+/** Active availability is public; inactive availability is visible to its owner and admins. */
+async function getMentorForAvailabilityBySlug(slug: string) {
+	const activeMentor = await getMentorBySlug(slug);
+	if (activeMentor) return activeMentor;
+	return getInactiveMentorBySlug(slug);
+}
+
+/** Active mentors are bookable publicly; inactive mentors are bookable to admins only. */
+async function getMentorForBookingBySlug(slug: string) {
+	const mentor = await getMentorForAvailabilityBySlug(slug);
+	if (!mentor) return null;
+	if (mentor.active) return mentor;
+
+	const viewer = await optionalUserCapabilities();
+	if (!viewer?.isAdmin) return null;
+	return mentor;
 }
 
 export async function getMentorByPreviousSlug(slug: string) {
@@ -163,7 +294,13 @@ export async function getMentorByPreviousSlug(slug: string) {
 		})
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(and(eq(mentors.previous_slug, slug), eq(mentors.active, true)))
+		.where(
+			and(
+				eq(mentors.previous_slug, slug),
+				eq(mentors.active, true),
+				eq(mentors.archived, false),
+			),
+		)
 		.limit(1);
 	return mentor ?? null;
 }
@@ -171,8 +308,23 @@ export async function getMentorByPreviousSlug(slug: string) {
 export const listMentorSlots = actionClient
 	.schema(ListSlotsSchema)
 	.action(async ({ parsedInput }) => {
-		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
+		const mentor = await getMentorForAvailabilityBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
+		try {
+			await selectBookingCalendarHost(mentor);
+		} catch (error) {
+			console.error("[booking-calendar] availability_check_failed", {
+				mentorId: mentor.id,
+				code: error instanceof CalendarActionError ? error.code : "unknown",
+				errorType: error instanceof Error ? error.name : typeof error,
+			});
+			return {
+				bookingUnavailable: true,
+				mentorId: mentor.id,
+				mentorTimezone: "UTC",
+				slots: [],
+			};
+		}
 
 		const [settingsRow] = await db
 			.select()
@@ -212,6 +364,7 @@ export const listMentorSlots = actionClient
 		});
 
 		return {
+			bookingUnavailable: false,
 			mentorId: mentor.id,
 			mentorTimezone: availabilityWindows[0]?.timezone ?? "UTC",
 			slots,
@@ -230,8 +383,13 @@ export const listMentorSlots = actionClient
 export async function getFirstAvailableSlotUtc(
 	mentorSlug: string,
 ): Promise<string | null> {
-	const mentor = await getMentorBySlug(mentorSlug);
+	const mentor = await getMentorForAvailabilityBySlug(mentorSlug);
 	if (!mentor) return null;
+	try {
+		await selectBookingCalendarHost(mentor);
+	} catch {
+		return null;
+	}
 
 	const [settingsRow] = await db
 		.select()
@@ -293,35 +451,29 @@ export async function getInitialWeekStart(
 export const createBooking = actionClient
 	.schema(CreateBookingSchema)
 	.action(async ({ parsedInput }) => {
-		const mentor = await getMentorBySlug(parsedInput.mentorSlug);
+		const mentor = await getMentorForBookingBySlug(parsedInput.mentorSlug);
 		if (!mentor) throw new ActionError("Mentor not found");
 		const mentorEmail = mentor.email;
-		const hosting = await selectBookingCalendarHost(mentor);
-
-		const [settingsRow] = await db
-			.select()
-			.from(mentorBookingSettings)
-			.where(eq(mentorBookingSettings.mentor_id, mentor.id))
-			.limit(1);
-		if (!settingsRow) throw new ActionError("Mentor booking settings missing");
-		const settings = settingsRow;
+		const settings = await getMentorBookingSettings(mentor.id);
+		if (!settings) throw new ActionError("Mentor booking settings missing");
 
 		const startAt = new Date(parsedInput.startAtUtc);
 		const endAt = new Date(
 			startAt.getTime() + settings.session_duration_minutes * 60_000,
 		);
+		const now = new Date();
 
-		// Per-mentee future-booking cap (across all mentors — prevents one person hoarding slots)
-		const [{ activeCount }] = await db
-			.select({ activeCount: sql<number>`count(*)::int` })
-			.from(bookings)
-			.where(
-				and(
-					eq(bookings.mentee_email, parsedInput.mentee_email),
-					eq(bookings.status, "confirmed"),
-					gt(bookings.start_at, new Date()),
-				),
-			);
+		// Per-mentee cap and slot-validation reads have no data dependency. Keeping
+		// them in one concurrent read group shortens the time before Calendar is called.
+		const { fromUtc: dayStart, toUtc: dayEnd } = slotCheckWindow(startAt);
+		const { activeCount, availabilityWindows, existing } =
+			await getBookingValidationData({
+				mentorId: mentor.id,
+				menteeEmail: parsedInput.mentee_email,
+				dayStart,
+				dayEnd,
+				now,
+			});
 		if (activeCount >= settings.max_active_bookings_per_mentee) {
 			throw new ActionError(
 				"You already have an active booking. Please cancel it before booking a new one.",
@@ -329,39 +481,20 @@ export const createBooking = actionClient
 		}
 
 		// Re-check that the slot is still available
-		const dayStart = new Date(startAt);
-		dayStart.setUTCHours(0, 0, 0, 0);
-		const dayEnd = new Date(dayStart);
-		dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
-
-		const availabilityWindows = await db
-			.select()
-			.from(availability)
-			.where(eq(availability.mentor_id, mentor.id));
-		const existing = await db
-			.select({ startUtc: bookings.start_at, endUtc: bookings.end_at })
-			.from(bookings)
-			.where(
-				and(
-					eq(bookings.mentor_id, mentor.id),
-					ne(bookings.status, "cancelled"),
-					gte(bookings.start_at, dayStart),
-					lt(bookings.start_at, dayEnd),
-				),
-			);
 		const slots = computeSlots({
 			availabilityTemplates: availabilityWindows,
 			existingBookings: existing,
 			settings,
 			fromUtc: dayStart,
 			toUtc: dayEnd,
-			now: new Date(),
+			now,
 		});
 		if (!slots.some((s) => s.startUtc === startAt.toISOString())) {
 			throw new ActionError(
 				"That slot is no longer available. Please pick another time.",
 			);
 		}
+		const latestHosting = await selectBookingCalendarHost(mentor);
 		const attemptKey = stableCalendarAttemptKey(
 			mentor.id,
 			"create",
@@ -379,18 +512,12 @@ export const createBooking = actionClient
 				startAtUtc: startAt,
 				endAtUtc: endAt,
 				attemptKey,
-				...(hosting.mode === "mentor_google"
-					? {
-							connection: hosting.connection,
-							accessToken: hosting.accessToken,
-						}
-					: {}),
+				connection: latestHosting.connection,
+				accessToken: latestHosting.accessToken,
 			};
-			event =
-				hosting.mode === "mentor_google"
-					? await createMentorCalendarEvent(calendarParams)
-					: await createOrgGoogleCalendarEvent(calendarParams);
+			event = await createMentorCalendarEvent(calendarParams);
 		} catch (error) {
+			logCalendarFailure("event_creation", mentor.id, error);
 			throw calendarActionError(error);
 		}
 		const eventId = event.eventId;
@@ -402,6 +529,31 @@ export const createBooking = actionClient
 		let booking: typeof bookings.$inferSelect;
 		try {
 			booking = await db.transaction(async (tx) => {
+				const [connection] = await tx
+					.select({
+						id: mentorGoogleConnections.id,
+						status: mentorGoogleConnections.status,
+						reauthorizationState: mentorGoogleConnections.reauthorization_state,
+						revocationState: mentorGoogleConnections.revocation_state,
+						refreshTokenCiphertext:
+							mentorGoogleConnections.refresh_token_ciphertext,
+					})
+					.from(mentorGoogleConnections)
+					.where(eq(mentorGoogleConnections.mentor_id, mentor.id))
+					.for("update")
+					.limit(1);
+				if (
+					!connection ||
+					connection.id !== latestHosting.connection.connectionId ||
+					connection.status !== "connected" ||
+					connection.reauthorizationState !== "not_required" ||
+					connection.revocationState !== "not_pending" ||
+					!connection.refreshTokenCiphertext
+				) {
+					throw new ActionError(
+						"The mentor's Google Calendar is no longer available. Please choose another time.",
+					);
+				}
 				const [row] = await tx
 					.insert(bookings)
 					.values({
@@ -419,7 +571,7 @@ export const createBooking = actionClient
 						mentee_timezone: parsedInput.menteeTimezone,
 						meet_url: meetUrl,
 						google_event_id: eventId,
-						hosting_mode: hosting.mode,
+						hosting_mode: latestHosting.mode,
 					})
 					.returning();
 				return row;
@@ -428,16 +580,15 @@ export const createBooking = actionClient
 			console.error("[booking-insert-failed]", {
 				errorType: error instanceof Error ? error.name : typeof error,
 			});
-			if (hosting.mode === "mentor_google") {
-				await deleteMentorCalendarEvent({
-					mentorId: mentor.id,
-					mentorEmail,
-					eventId,
-					expectedAttemptKey: attemptKey,
-				}).catch(() => undefined);
-			} else {
-				await deleteOrgGoogleCalendarEvent({ eventId }).catch(() => undefined);
-			}
+			await deleteMentorCalendarEvent({
+				mentorId: mentor.id,
+				mentorEmail,
+				eventId,
+				connection: latestHosting.connection,
+				accessToken: latestHosting.accessToken,
+				expectedAttemptKey: attemptKey,
+			}).catch(() => undefined);
+			if (error instanceof ActionError) throw error;
 			throw new ActionError(
 				"Booking could not be saved. Please retry or contact support for calendar resolution.",
 			);

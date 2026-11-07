@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { FilterBar } from "@/components/dashboard/filter-bar";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Pagination } from "@/components/dashboard/pagination";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
 	Table,
 	TableBody,
@@ -14,12 +15,11 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getMentorLinksForAdmin, getMentorsForAdmin } from "./_actions";
+import { getMentorsForAdmin } from "./_actions";
 import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
-import { SortableTableHead } from "./_components/sortable-table-head";
 import {
 	MentorCalendarFilter,
 	MentorSortDirection,
@@ -57,18 +57,13 @@ export default async function MentorsPage({
 		calendar: calendar.success ? calendar.data : undefined,
 	};
 
-	// Links cover every mentor matching the filters, not just this page — there
-	// are more mentors than fit on one page.
-	const [{ rows: mentors, total }, links] = await Promise.all([
-		getMentorsForAdmin({
-			...activeFilters,
-			sort: sort.success ? sort.data : undefined,
-			order: order.success ? order.data : undefined,
-			page,
-			pageSize: PAGE_SIZE,
-		}),
-		getMentorLinksForAdmin(activeFilters),
-	]);
+	const { rows: mentors, total } = await getMentorsForAdmin({
+		...activeFilters,
+		sort: sort.success ? sort.data : undefined,
+		order: order.success ? order.data : undefined,
+		page,
+		pageSize: PAGE_SIZE,
+	});
 
 	return (
 		<div>
@@ -77,7 +72,7 @@ export default async function MentorsPage({
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
 				action={
 					<div className="flex items-center gap-2">
-						<CopyAllMentorLinksButton mentors={links} />
+						<CopyAllMentorLinksButton count={total} filters={activeFilters} />
 						<CreateMentorSheet />
 					</div>
 				}
@@ -96,15 +91,29 @@ export default async function MentorsPage({
 					<TableHeader>
 						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<SortableTableHead value="name">Name</SortableTableHead>
+							<SortableTableHead value="name" defaultSortValue="name">
+								Name
+							</SortableTableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Email
 							</TableHead>
-							<SortableTableHead value="bookings">Bookings</SortableTableHead>
-							<SortableTableHead value="joined">Joined</SortableTableHead>
+							<SortableTableHead
+								value="bookings"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
+								Bookings
+							</SortableTableHead>
+							<SortableTableHead
+								value="joined"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
+								Joined
+							</SortableTableHead>
 							<TableHead className="w-16 text-center font-medium text-muted-foreground">
 								Link
 							</TableHead>

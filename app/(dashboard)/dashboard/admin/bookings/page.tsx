@@ -1,15 +1,33 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { FilterBar } from "@/components/dashboard/filter-bar";
 import { PageHeader } from "@/components/dashboard/page-header";
-import { StatusBadge } from "@/components/dashboard/status-badge";
+import { Pagination } from "@/components/dashboard/pagination";
+import { StatCard } from "@/components/dashboard/stat-card";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import { currentDbUser } from "@/src/auth";
-import { CalendarDays } from "lucide-react";
+import {
+	CalendarDays,
+	CheckCircle2,
+	Clock3,
+	UserX,
+	XCircle,
+} from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getBookingsForAdmin, getMentorOptions } from "./_actions";
+import {
+	getBookingSummaryForAdmin,
+	getBookingsForAdmin,
+	getMentorOptions,
+} from "./_actions";
 import { BookingFilters } from "./_components/booking-filters";
 import { BookingRow } from "./_components/booking-row";
-import { Pagination } from "@/components/dashboard/pagination";
 
 const PAGE_SIZE = 50;
 
@@ -19,6 +37,7 @@ export default async function AdminBookingsPage({
 	searchParams: Promise<{
 		status?: string;
 		mentor?: string;
+		date?: string;
 		from?: string;
 		to?: string;
 		q?: string;
@@ -30,30 +49,73 @@ export default async function AdminBookingsPage({
 
 	const sp = await searchParams;
 	const page = Math.max(1, Number(sp.page) || 1);
+	const filters = {
+		status: sp.status,
+		mentorSlug: sp.mentor,
+		dateRange: sp.date,
+		from: sp.from,
+		to: sp.to,
+		query: sp.q,
+	};
 
-	const [{ rows, total }, mentorOptions] = await Promise.all([
+	const [{ rows, total }, mentorOptions, summary] = await Promise.all([
 		getBookingsForAdmin({
-			status: sp.status,
-			mentorSlug: sp.mentor,
-			from: sp.from,
-			to: sp.to,
-			query: sp.q,
+			...filters,
 			page,
 			pageSize: PAGE_SIZE,
 		}),
 		getMentorOptions(),
+		getBookingSummaryForAdmin(filters),
 	]);
 
 	const hasFilters = Boolean(
-		sp.status || sp.mentor || sp.from || sp.to || sp.q,
+		sp.status || sp.mentor || sp.date || sp.from || sp.to || sp.q,
 	);
+	const cancelledView = sp.status === "cancelled";
 
 	return (
 		<div>
 			<PageHeader
-				title="All bookings"
-				subtitle={`${total} booking${total === 1 ? "" : "s"} across all mentors`}
+				title="Bookings"
+				subtitle={
+					cancelledView
+						? `${total} cancelled booking${total === 1 ? "" : "s"}`
+						: `${total} booking${total === 1 ? "" : "s"} across all mentors`
+				}
 			/>
+
+			<div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+				<StatCard
+					compact
+					icon={CalendarDays}
+					label="Total bookings"
+					value={summary.total}
+				/>
+				<StatCard
+					compact
+					icon={Clock3}
+					label="Upcoming"
+					value={summary.upcoming}
+				/>
+				<StatCard
+					compact
+					icon={CheckCircle2}
+					label="Completed"
+					value={summary.completed}
+				/>
+				<StatCard
+					compact
+					icon={XCircle}
+					label={`Cancelled · ${summary.cancellationRate}%`}
+					value={summary.cancelled}
+				/>
+				<StatCard
+					compact
+					icon={UserX}
+					label="No shows"
+					value={summary.noShow}
+				/>
+			</div>
 
 			<div className="mb-6">
 				<Suspense>
@@ -64,39 +126,44 @@ export default async function AdminBookingsPage({
 			</div>
 
 			<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-				<table className="w-full text-sm">
-					<thead className="bg-muted text-left text-xs uppercase tracking-wide text-muted-foreground">
-						<tr>
-							<th className="px-4 py-3 font-medium">When</th>
-							<th className="px-4 py-3 font-medium">Mentor</th>
-							<th className="px-4 py-3 font-medium">Mentee</th>
-							<th className="px-4 py-3 font-medium">Status</th>
-						</tr>
-					</thead>
-					<tbody>
+				<Table>
+					<TableHeader>
+						<TableRow className="bg-muted text-xs uppercase tracking-wide text-muted-foreground hover:bg-muted">
+							<TableHead className="px-4">When</TableHead>
+							<TableHead className="px-4">Mentor</TableHead>
+							<TableHead className="px-4">Mentee</TableHead>
+							<TableHead className="px-4">Status</TableHead>
+							<TableHead className="px-4 text-right">Details</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
 						{rows.map((r) => (
 							<BookingRow key={r.id} booking={r} />
 						))}
-					</tbody>
-				</table>
-
-				{rows.length === 0 ? (
-					<div className="p-6">
-						<EmptyState
-							icon={CalendarDays}
-							title={
-								hasFilters
-									? "No bookings match these filters"
-									: "No bookings yet"
-							}
-							description={
-								hasFilters
-									? "Try clearing or adjusting the filters above."
-									: "Bookings will appear here as mentees book sessions."
-							}
-						/>
-					</div>
-				) : null}
+						{rows.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={5} className="p-6">
+									<EmptyState
+										icon={cancelledView ? XCircle : CalendarDays}
+										title={
+											cancelledView
+												? "No cancellations in this period"
+												: hasFilters
+													? "No bookings match these filters"
+													: "No bookings yet"
+										}
+										description={
+											cancelledView || hasFilters
+												? "Try clearing or adjusting the filters above."
+												: "Bookings will appear here as mentees book sessions."
+										}
+										className="border-0 bg-transparent"
+									/>
+								</TableCell>
+							</TableRow>
+						) : null}
+					</TableBody>
+				</Table>
 			</div>
 
 			<Suspense>

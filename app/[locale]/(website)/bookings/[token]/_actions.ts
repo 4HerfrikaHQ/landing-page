@@ -4,13 +4,13 @@ import { db } from "@/src/db";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { mentors } from "@/src/db/schema/tables/mentors";
 import { users } from "@/src/db/schema/tables/users";
-import { consumeActionLinks, resolveActionLink } from "@/src/lib/action-links";
+import { resolveActionLink } from "@/src/lib/action-links";
 import {
 	cancelBookingCore,
 	rescheduleBookingCore,
 } from "@/src/lib/booking-mutations";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
-import { eq, getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { loadRescheduleContext } from "./_helpers";
 import { CancelBookingSchema, RescheduleBookingSchema } from "./_schema";
 
@@ -33,8 +33,9 @@ export async function loadBookingFromToken(token: string) {
 		.select({ ...getTableColumns(mentors), name: users.name })
 		.from(mentors)
 		.innerJoin(users, eq(users.id, mentors.user_id))
-		.where(eq(mentors.id, booking.mentor_id))
+		.where(and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)))
 		.limit(1);
+	if (!mentor) return { ok: false as const, reason: "not_found" };
 	return { ok: true as const, booking, mentor };
 }
 
@@ -52,7 +53,6 @@ export const cancelBooking = actionClient
 			.limit(1);
 		if (!booking) throw new ActionError("Booking not found");
 		if (booking.status === "cancelled") {
-			await consumeActionLinks({ action: "manage", resourceId: booking.id });
 			return { ok: true };
 		}
 
@@ -60,7 +60,9 @@ export const cancelBooking = actionClient
 			.select({ mentor: mentors, user: users })
 			.from(mentors)
 			.leftJoin(users, eq(users.id, mentors.user_id))
-			.where(eq(mentors.id, booking.mentor_id))
+			.where(
+				and(eq(mentors.id, booking.mentor_id), eq(mentors.archived, false)),
+			)
 			.limit(1);
 		if (!mentorRow?.mentor) throw new ActionError("Mentor not found");
 
@@ -71,7 +73,6 @@ export const cancelBooking = actionClient
 			mentorEmail: mentorRow.user?.email ?? undefined,
 			reason: parsedInput.reason,
 		});
-		await consumeActionLinks({ action: "manage", resourceId: booking.id });
 		return { ok: true };
 	});
 

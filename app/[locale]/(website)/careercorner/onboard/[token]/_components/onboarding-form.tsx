@@ -6,10 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { completeMentorOnboarding } from "../_actions";
+import { saveMentorOnboardingProfile } from "../_actions";
+import { useOnboardingErrorMessage } from "../_hooks/use-onboarding-error-message";
 import { CompleteOnboardingSchema } from "../_schema";
 import { OnboardingAvatarUpload } from "./onboarding-avatar-upload";
 
@@ -18,16 +18,18 @@ export function OnboardingForm({
 	defaultBio,
 	defaultDisplayName,
 	defaultImage,
+	onSaved,
 }: {
 	token: string;
 	defaultBio: string;
 	defaultDisplayName: string;
 	defaultImage: string;
+	onSaved: () => void;
 }) {
-	const router = useRouter();
-
+	const t = useTranslations("onboarding.form");
+	const errorMessage = useOnboardingErrorMessage();
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
-		completeMentorOnboarding,
+		saveMentorOnboardingProfile,
 		zodResolver(CompleteOnboardingSchema),
 		{
 			formProps: {
@@ -39,14 +41,12 @@ export function OnboardingForm({
 				},
 			},
 			actionProps: {
-				onSuccess: ({ data }) => {
-					toast.success("All set! Your profile is live.");
-					if (data?.slug) {
-						router.push(`/careercorner/${data.slug}` as Route);
-					}
+				onSuccess: () => {
+					toast.success(t("saved"));
+					onSaved();
 				},
 				onError: ({ error }) =>
-					toast.error(error.serverError ?? "Failed to save."),
+					toast.error(errorMessage(error.serverError, t("saveFailed"))),
 			},
 		},
 	);
@@ -59,7 +59,7 @@ export function OnboardingForm({
 
 			<input type="hidden" {...form.register("image")} />
 			<div className="space-y-1.5">
-				<Label>Profile photo (optional)</Label>
+				<Label>{t("photo")}</Label>
 				<OnboardingAvatarUpload
 					token={token}
 					value={form.watch("image") ?? ""}
@@ -68,25 +68,29 @@ export function OnboardingForm({
 					}
 				/>
 				{errors.image && (
-					<p className="text-sm text-destructive">{errors.image.message}</p>
+					<p className="text-sm text-destructive">
+						{errorMessage(errors.image.message, errors.image.message)}
+					</p>
 				)}
 			</div>
 
 			<div className="space-y-1.5">
-				<Label>Bio</Label>
+				<Label>{t("bio")}</Label>
 				<Textarea rows={4} {...form.register("bio")} />
 				{errors.bio && (
-					<p className="text-sm text-destructive">{errors.bio.message}</p>
+					<p className="text-sm text-destructive">
+						{errorMessage(errors.bio.message, errors.bio.message)}
+					</p>
 				)}
 			</div>
 
 			<div className="space-y-1.5">
-				<Label>Display Name (optional)</Label>
+				<Label>{t("displayName")}</Label>
 				<Input {...form.register("nickname")} />
 			</div>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">
-				{action.isPending ? "Saving…" : "Save profile & go live"}
+				{action.isPending ? t("saving") : t("save")}
 			</Button>
 		</form>
 	);

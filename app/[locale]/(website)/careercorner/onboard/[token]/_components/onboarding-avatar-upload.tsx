@@ -2,10 +2,12 @@
 
 import { cn } from "@/utils/cn";
 import { CameraIcon, Loader2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { uploadOnboardingImage } from "../_actions";
+import { useOnboardingErrorMessage } from "../_hooks/use-onboarding-error-message";
 
 export function OnboardingAvatarUpload({
 	token,
@@ -16,6 +18,8 @@ export function OnboardingAvatarUpload({
 	value: string;
 	onChange: (url: string) => void;
 }) {
+	const t = useTranslations("onboarding.avatar");
+	const errorMessage = useOnboardingErrorMessage();
 	const [preview, setPreview] = useState<string | null>(value || null);
 	const [isPending, startTransition] = useTransition();
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -25,7 +29,7 @@ export function OnboardingAvatarUpload({
 		if (!file) return;
 
 		if (file.size > 4 * 1024 * 1024) {
-			toast.error("Image must be under 4MB.");
+			toast.error(t("tooLarge"));
 			return;
 		}
 
@@ -40,15 +44,15 @@ export function OnboardingAvatarUpload({
 				const result = await uploadOnboardingImage(token, formData);
 				if (result.error) {
 					setPreview(previous);
-					toast.error(`Upload failed: ${result.error}`);
+					toast.error(errorMessage(result.error, t("uploadFailed")));
 				} else if (result.url) {
 					setPreview(result.url);
 					onChange(result.url);
-					toast.success("Photo uploaded");
+					toast.success(t("uploaded"));
 				}
-			} catch (err) {
+			} catch {
 				setPreview(previous);
-				toast.error(`Upload failed: ${String(err)}`);
+				toast.error(t("uploadFailed"));
 			}
 		});
 	}
@@ -59,12 +63,12 @@ export function OnboardingAvatarUpload({
 				type="button"
 				onClick={() => inputRef.current?.click()}
 				className="group relative size-20 rounded-full overflow-hidden cursor-pointer shrink-0 border border-border"
-				title="Upload photo"
+				title={t("uploadTitle")}
 			>
 				{preview ? (
 					<Image
 						src={preview}
-						alt="Profile photo"
+						alt={t("alt")}
 						fill
 						className="object-cover object-top"
 						sizes="80px"
@@ -96,9 +100,9 @@ export function OnboardingAvatarUpload({
 					onClick={() => inputRef.current?.click()}
 					className="text-sm font-medium text-primary-500 hover:underline"
 				>
-					{preview ? "Change photo" : "Upload a photo"}
+					{preview ? t("change") : t("upload")}
 				</button>
-				<p className="text-xs text-gray-500">JPG, PNG or WebP, up to 4MB.</p>
+				<p className="text-xs text-gray-500">{t("hint")}</p>
 			</div>
 
 			<input

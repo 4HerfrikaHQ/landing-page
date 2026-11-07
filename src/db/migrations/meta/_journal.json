@@ -148,6 +148,62 @@
       "when": 1788262596460,
       "tag": "0020_small_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1788277685919,
+      "tag": "0021_legal_namor",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1789158966994,
+      "tag": "0022_cascade_auth_user_deletion",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1789212174799,
+      "tag": "0023_marvelous_sue_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1789213617952,
+      "tag": "0024_schedule_booking_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1789226793231,
+      "tag": "0025_update_booking_lifecycle_cron_interval",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1789406681304,
+      "tag": "0026_wide_franklin_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1789407196318,
+      "tag": "0027_silly_mikhail_rasputin",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1791747661766,
+      "tag": "0028_mentor_attendance",
+      "breakpoints": true
     }
   ]
 }

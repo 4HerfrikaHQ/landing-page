@@ -15,6 +15,7 @@ import {
 	LogOut,
 	type LucideIcon,
 	Menu,
+	MessageSquareText,
 	Shield,
 	Users,
 } from "lucide-react";
@@ -33,6 +34,7 @@ const SEGMENT_LABELS: Record<string, string> = {
 	applications: "Applications",
 	"academy-waitlist": "Academy waitlist",
 	bookings: "Bookings",
+	feedback: "Feedback",
 };
 
 const NAV_ITEMS: {
@@ -52,6 +54,12 @@ const NAV_ITEMS: {
 		label: "Bookings",
 		href: "/dashboard/admin/bookings" as Route,
 		icon: CalendarDays,
+	},
+	{
+		key: "feedback",
+		label: "Feedback",
+		href: "/dashboard/admin/feedback" as Route,
+		icon: MessageSquareText,
 	},
 	{
 		key: "applications",

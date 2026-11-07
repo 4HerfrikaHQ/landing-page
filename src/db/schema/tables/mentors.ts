@@ -28,6 +28,7 @@ export const mentors = pgTable(
 		slug: text("slug").notNull().unique(),
 		previous_slug: text("previous_slug").unique(),
 		active: boolean("active").notNull().default(false),
+		archived: boolean("archived").notNull().default(false),
 		created_at: timestamp("created_at", { withTimezone: true })
 			.notNull()
 			.defaultNow(),

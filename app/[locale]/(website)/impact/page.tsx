@@ -129,8 +129,8 @@ export default async function ReportPage({
 					/>
 				</div>
 				<div className="flex justify-center">
-					<Button
-						href="/reports/4herfrika-Annual-report.pdf"
+						<Button
+							href="https://jqmgbdefbzvxxvstfhhb.supabase.co/storage/v1/object/public/site-assets/4herfrika-Annual-report.pdf"
 						isExternal
 						className="w-fit"
 					>

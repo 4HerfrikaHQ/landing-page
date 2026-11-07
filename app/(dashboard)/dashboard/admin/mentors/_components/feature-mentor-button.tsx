@@ -9,7 +9,6 @@ import {
 import { cn } from "@/utils/cn";
 import { Star } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { setFeaturedMentor } from "../_actions";
 
@@ -23,12 +22,9 @@ export function FeatureMentorButton({
 	/** A mentor must be active and have a photo before it can be featured. */
 	eligible?: boolean;
 }) {
-	const router = useRouter();
-
 	const feature = useAction(setFeaturedMentor, {
 		onSuccess: () => {
 			toast.success("Mentor featured");
-			router.refresh();
 		},
 		onError: ({ error }) =>
 			toast.error(error.serverError ?? "Failed to feature mentor"),
