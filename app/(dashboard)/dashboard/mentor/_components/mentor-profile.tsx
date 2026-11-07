@@ -214,7 +214,8 @@ export function MentorProfile({
 										<MentorImage
 											src={preview}
 											alt={fields.name}
-											crop={null}
+											crop={imageCrop}
+											aspectRatio={1}
 											className="size-full"
 											sizes="80px"
 										/>

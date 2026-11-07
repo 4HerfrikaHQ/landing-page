@@ -119,6 +119,7 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 						id={mentor.id}
 						name={mentor.name}
 						image={mentor.image}
+						imageCrop={mentor.image_crop}
 					/>
 				</TableCell>
 				<TableCell className="font-medium text-foreground">

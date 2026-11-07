@@ -1,5 +1,6 @@
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import {
+	MENTOR_IMAGE_CROP_EPSILON,
 	type MentorImageCrop,
 	cropMentorImageToAspectRatio,
 } from "@/src/lib/mentor-image";
@@ -35,8 +36,8 @@ export function MentorImage({
 			: crop;
 	const hasCrop =
 		displayCrop &&
-		displayCrop.x + displayCrop.width <= 1 &&
-		displayCrop.y + displayCrop.height <= 1;
+		displayCrop.x + displayCrop.width <= 1 + MENTOR_IMAGE_CROP_EPSILON &&
+		displayCrop.y + displayCrop.height <= 1 + MENTOR_IMAGE_CROP_EPSILON;
 
 	return (
 		<div className={cn("relative overflow-hidden", className)}>
@@ -59,7 +60,7 @@ export function MentorImage({
 					fill
 					sizes={sizes}
 					unoptimized={isLocalImageUrl(src)}
-					className="object-cover object-center"
+					className="object-cover object-top"
 				/>
 			)}
 		</div>

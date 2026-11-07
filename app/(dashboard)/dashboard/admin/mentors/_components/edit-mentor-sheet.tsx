@@ -343,7 +343,8 @@ export function EditMentorSheet({
 											<MentorImage
 												src={imagePreview}
 												alt={mentor.name}
-												crop={null}
+												crop={imageCrop}
+												aspectRatio={1}
 												className="size-full"
 												sizes="64px"
 											/>

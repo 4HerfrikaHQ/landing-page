@@ -23,6 +23,7 @@ export function OnboardingAvatarUpload({
 	const t = useTranslations("onboarding.avatar");
 	const errorMessage = useOnboardingErrorMessage();
 	const [preview, setPreview] = useState<string | null>(value || null);
+	const [savedCrop, setSavedCrop] = useState<MentorImageCrop | null>(null);
 	const [cropSource, setCropSource] = useState<string | null>(null);
 	const [cropFile, setCropFile] = useState<File | null>(null);
 	const [isCropOpen, setIsCropOpen] = useState(false);
@@ -63,6 +64,7 @@ export function OnboardingAvatarUpload({
 					toast.error(errorMessage(result.error, t("uploadFailed")));
 				} else if (result.url) {
 					setPreview(result.url);
+					setSavedCrop(crop);
 					onChange(result.url);
 					setIsCropOpen(false);
 					clearCropState();
@@ -86,7 +88,8 @@ export function OnboardingAvatarUpload({
 					<MentorImage
 						src={preview}
 						alt={t("alt")}
-						crop={null}
+						crop={savedCrop}
+						aspectRatio={1}
 						className="size-full"
 						sizes="80px"
 					/>

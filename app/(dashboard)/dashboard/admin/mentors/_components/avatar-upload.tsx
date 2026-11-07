@@ -12,12 +12,15 @@ export function AvatarUpload({
 	id,
 	name,
 	image,
+	imageCrop,
 }: {
 	id: string;
 	name: string;
 	image: string | null;
+	imageCrop: MentorImageCrop | null;
 }) {
 	const [preview, setPreview] = useState<string | null>(image);
+	const [crop, setCrop] = useState<MentorImageCrop | null>(imageCrop);
 	const [cropSource, setCropSource] = useState<string | null>(null);
 	const [cropFile, setCropFile] = useState<File | null>(null);
 	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
@@ -28,7 +31,8 @@ export function AvatarUpload({
 	// Sync preview when the server re-renders with a new image URL
 	useEffect(() => {
 		setPreview(image);
-	}, [image]);
+		setCrop(imageCrop);
+	}, [image, imageCrop]);
 
 	useEffect(() => {
 		return () => {
@@ -66,10 +70,10 @@ export function AvatarUpload({
 		setCropSource(null);
 	}
 
-	async function handleCropSave(crop: MentorImageCrop) {
+	async function handleCropSave(nextCrop: MentorImageCrop) {
 		const formData = new FormData();
 		if (cropFile) formData.append("file", cropFile);
-		formData.append("crop", JSON.stringify(crop));
+		formData.append("crop", JSON.stringify(nextCrop));
 
 		setIsPending(true);
 		try {
@@ -79,6 +83,7 @@ export function AvatarUpload({
 				return;
 			}
 			if (result.url) setPreview(result.url);
+			setCrop(nextCrop);
 			setIsCropOpen(false);
 			clearCropState();
 			toast.success("Successfully updated avatar");
@@ -101,7 +106,8 @@ export function AvatarUpload({
 					<MentorImage
 						src={preview}
 						alt={name}
-						crop={null}
+						crop={crop}
+						aspectRatio={1}
 						className="size-full"
 						sizes="32px"
 					/>

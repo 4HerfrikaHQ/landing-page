@@ -259,7 +259,13 @@ export function ImageCropDialog({
 	}
 
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
+		<Dialog
+			open={open}
+			onOpenChange={(next) => {
+				if (!next && isSaving) return;
+				onOpenChange(next);
+			}}
+		>
 			<DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto rounded-3xl p-0 sm:max-w-3xl">
 				<div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_240px]">
 					<div className="bg-[#171717] p-5 sm:p-8">
