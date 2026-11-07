@@ -11,10 +11,12 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { trackEvent } from "@/src/lib/analytics";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { CalendarClock } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 /** Loose RHF field-error shape (covers FieldError and nested Merge variants). */
 type RhfError = { message?: unknown } | string | undefined;
@@ -60,6 +62,8 @@ export function BookingForm({
 	onSuccess: () => void;
 }) {
 	const queryClient = useQueryClient();
+	const startedRef = useRef(false);
+	const completedRef = useRef(false);
 
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		createBooking,
@@ -81,20 +85,46 @@ export function BookingForm({
 			},
 			actionProps: {
 				onSuccess: () => {
+					completedRef.current = true;
+					trackEvent("booking_completed", { mentor_slug: mentorSlug });
 					toast.success("Booked. Check your email for the calendar invite.");
 					queryClient.invalidateQueries({ queryKey: ["slots", mentorSlug] });
 					onSuccess();
 				},
-				onError: ({ error }) =>
-					toast.error(error.serverError ?? "Couldn't book. Please try again."),
+				onError: ({ error }) => {
+					trackEvent("booking_failed", { mentor_slug: mentorSlug });
+					toast.error(error.serverError ?? "Couldn't book. Please try again.");
+				},
 			},
 		},
 	);
 
 	const errors = form.formState.errors;
 
+	useEffect(
+		() => () => {
+			if (startedRef.current && !completedRef.current) {
+				trackEvent("booking_form_abandoned", { mentor_slug: mentorSlug });
+			}
+		},
+		[mentorSlug],
+	);
+
+	function markStarted() {
+		if (startedRef.current) return;
+		startedRef.current = true;
+		trackEvent("booking_form_started", { mentor_slug: mentorSlug });
+	}
+
 	return (
-		<form onSubmit={handleSubmitWithAction} className="flex h-full flex-col">
+		<form
+			onFocusCapture={markStarted}
+			onSubmit={(event) => {
+				trackEvent("booking_submitted", { mentor_slug: mentorSlug });
+				handleSubmitWithAction(event);
+			}}
+			className="flex h-full flex-col"
+		>
 			<input type="hidden" {...form.register("mentorSlug")} />
 			<input type="hidden" {...form.register("startAtUtc")} />
 			<input type="hidden" {...form.register("menteeTimezone")} />

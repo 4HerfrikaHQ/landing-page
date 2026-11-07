@@ -6,6 +6,7 @@ import { getHeroMentors } from "./_actions";
 export { size, contentType };
 
 export const alt = "Find a mentor in the 4Herfrika Career Corner";
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export default async function Image({
@@ -15,7 +16,7 @@ export default async function Image({
 }) {
 	const { locale } = await params;
 	const t = await getTranslations({ locale, namespace: "seo.careers" });
-	const mentors = await getHeroMentors();
+	const mentors = await getHeroMentors().catch(() => []);
 	return generateCareerCornerOGImage({
 		title: t("ogTitle"),
 		subtitle: t("ogSubtitle"),

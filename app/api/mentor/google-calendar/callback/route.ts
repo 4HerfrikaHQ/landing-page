@@ -1,5 +1,9 @@
 // Server-only mentor OAuth callback route. Google must be configured with this exact path.
-import { finishMentorGoogleOAuth } from "@/src/lib/mentor-google-oauth";
+import {
+	finishMentorGoogleOAuth,
+	finishMentorGoogleOAuthFromOnboarding,
+} from "@/src/lib/mentor-google-oauth";
+import { MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX } from "@/src/lib/mentor-google-oauth-core";
 import {
 	MentorGoogleOAuthError,
 	safeMentorReturnPath,
@@ -17,7 +21,10 @@ export async function GET(request: NextRequest) {
 	}
 
 	try {
-		const result = await finishMentorGoogleOAuth({
+		const finish = state.startsWith(MENTOR_GOOGLE_ONBOARDING_STATE_PREFIX)
+			? finishMentorGoogleOAuthFromOnboarding
+			: finishMentorGoogleOAuth;
+		const result = await finish({
 			state,
 			code: request.nextUrl.searchParams.get("code"),
 		});
@@ -26,9 +33,11 @@ export async function GET(request: NextRequest) {
 		const returnPath = safeMentorReturnPath(
 			error instanceof MentorGoogleOAuthError ? error.returnPath : undefined,
 		);
+		const reason = mentorGoogleOAuthErrorReason(error);
+		console.warn("[mentor-google-oauth] callback_failed", { reason });
 		const redirectUrl = new URL(returnPath, request.url);
 		redirectUrl.searchParams.set("googleCalendar", "error");
-		redirectUrl.searchParams.set("reason", mentorGoogleOAuthErrorReason(error));
+		redirectUrl.searchParams.set("reason", reason);
 		return NextResponse.redirect(redirectUrl);
 	}
 }

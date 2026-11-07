@@ -5,10 +5,11 @@ import { SearchInput } from "@/components/dashboard/filter-bar";
 import { HoverCard, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
+import { trackEvent } from "@/src/lib/analytics";
 import { cn } from "@/utils/cn";
 import { SearchX } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { filterMentors } from "../_utils/mentor-directory-filters";
 import { MentorCard } from "./mentor-modal";
 
@@ -29,12 +30,34 @@ export function MentorDirectory({
 		defaultValue: "",
 	});
 	const [hasInteracted, setHasInteracted] = useState(false);
+	const viewedRef = useRef(false);
 	const onlyAvailable = available === "1";
 
 	const filtered = useMemo(
 		() => filterMentors(mentors, q, onlyAvailable),
 		[mentors, q, onlyAvailable],
 	);
+
+	useEffect(() => {
+		if (viewedRef.current) return;
+		viewedRef.current = true;
+		trackEvent("career_corner_viewed", { mentor_count: mentors.length });
+	}, [mentors.length]);
+
+	useEffect(() => {
+		const searchTerm = q.trim();
+		if (!searchTerm) return;
+
+		const timeout = window.setTimeout(() => {
+			trackEvent("mentor_search", {
+				search_term: searchTerm.slice(0, 100),
+				result_count: filtered.length,
+				available_only: onlyAvailable,
+			});
+		}, 600);
+
+		return () => window.clearTimeout(timeout);
+	}, [filtered.length, onlyAvailable, q]);
 
 	function clearFilters() {
 		setHasInteracted(true);
@@ -58,6 +81,10 @@ export function MentorDirectory({
 					type="button"
 					onClick={() => {
 						setHasInteracted(true);
+						trackEvent("mentor_availability_filter_changed", {
+							enabled: !onlyAvailable,
+							result_count: filterMentors(mentors, q, !onlyAvailable).length,
+						});
 						void setAvailable(onlyAvailable ? null : "1");
 					}}
 					className={cn(

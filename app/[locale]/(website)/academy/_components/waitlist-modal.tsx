@@ -9,10 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { type AcademyType, trackEvent } from "@/src/lib/analytics";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { joinAcademyWaitlist } from "../_actions";
 import { AcademyWaitlistSchema } from "../_schema";
@@ -33,6 +34,7 @@ export function WaitlistModal({
 	academy?: "tech" | "business" | "climate";
 }) {
 	const t = useTranslations("academy");
+	const startedRef = useRef(false);
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		joinAcademyWaitlist,
 		zodResolver(AcademyWaitlistSchema),
@@ -48,17 +50,26 @@ export function WaitlistModal({
 			},
 			actionProps: {
 				onSuccess: () => {
+					trackEvent("academy_waitlist_completed", {
+						academy_type: form.getValues("academy"),
+					});
 					toast.success(t("success"));
 					form.reset();
 					onOpenChange(false);
 				},
-				onError: ({ error }) => toast.error(error.serverError ?? t("error")),
+				onError: ({ error }) => {
+					trackEvent("academy_waitlist_failed", {
+						academy_type: form.getValues("academy"),
+					});
+					toast.error(error.serverError ?? t("error"));
+				},
 			},
 		},
 	);
 
 	useEffect(() => {
 		if (!open) return;
+		startedRef.current = false;
 
 		form.reset({
 			name: "",
@@ -68,6 +79,15 @@ export function WaitlistModal({
 			location: "",
 		});
 	}, [academy, form, open]);
+
+	function markStarted() {
+		if (startedRef.current) return;
+		startedRef.current = true;
+		trackEvent("academy_waitlist_started", {
+			academy_type: form.getValues("academy"),
+		});
+	}
+	const academyRegistration = form.register("academy");
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -81,7 +101,16 @@ export function WaitlistModal({
 					</p>
 				</DialogHeader>
 
-				<form onSubmit={handleSubmitWithAction} className="mt-5 space-y-5">
+				<form
+					onFocusCapture={markStarted}
+					onSubmit={(event) => {
+						trackEvent("academy_waitlist_submitted", {
+							academy_type: form.getValues("academy"),
+						});
+						handleSubmitWithAction(event);
+					}}
+					className="mt-5 space-y-5"
+				>
 					{(["name", "email", "phone", "location"] as const).map((field) => (
 						<div key={field} className="space-y-2">
 							<Label htmlFor={field}>
@@ -108,7 +137,13 @@ export function WaitlistModal({
 						</Label>
 						<select
 							id="academy"
-							{...form.register("academy")}
+							{...academyRegistration}
+							onChange={(event) => {
+								void academyRegistration.onChange(event);
+								trackEvent("academy_selected", {
+									academy_type: event.target.value as AcademyType,
+								});
+							}}
 							className="h-12 w-full rounded-xl border border-input bg-background px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 						>
 							{academyOptions.map(({ value, label }) => (

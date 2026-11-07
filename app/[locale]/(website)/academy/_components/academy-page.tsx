@@ -1,10 +1,8 @@
 "use client";
 
-import {
-	type Review,
-	ReviewsSection,
-} from "@/components/reviews/reviews-section";
+import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/src/lib/analytics";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -16,113 +14,72 @@ import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import {
+	useEffect,
+	useReducer,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
 import { LocaleSwitcher } from "../../_components/locale-switcher";
 import { SubscribeFormClient } from "../../_components/subscribe-client";
 import { JOIN_US_URL } from "../../navigation";
+import {
+	type Academy,
+	academies,
+	academyTranslationKeys,
+	navLinks,
+	testimonials,
+} from "../_schema";
+import {
+	type CarouselDirection,
+	carouselReducer,
+	initialCarouselState,
+	withClones,
+} from "../_utils/carousel-machine";
 import { WaitlistModal } from "./waitlist-modal";
 
-const academies = [
-	{
-		academy: "tech",
-		name: "Tech Academy",
-		description:
-			"Master product design, web development, product management, and more. Join 1000+ women already shaping Africa's tech future.",
-		image: "/assets/academy/tech-source.jpg",
-	},
-	{
-		academy: "business",
-		name: "Business Academy",
-		description:
-			"Turn your ideas into sustainable ventures with practical business skills, mentorship, and a community built to help you grow.",
-		image: "/assets/academy/business-source.jpg",
-	},
-	{
-		academy: "climate",
-		name: "Climate Academy",
-		description:
-			"Shape Africa's environmental future. Build the skills to lead in green innovation, sustainability, and climate advocacy.",
-		image: "/assets/academy/climate-source.jpg",
-	},
-] as const;
+const ACADEMY_AUTOPLAY_MS = 3_000;
 
-type Academy = (typeof academies)[number]["academy"];
+const SLIDE_DURATION_MS = 500;
+const SWIPE_THRESHOLD_PX = 50;
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
-const academyTranslationKeys = {
-	tech: { name: "techAcademy", description: "techDescription" },
-	business: { name: "businessAcademy", description: "businessDescription" },
-	climate: { name: "climateAcademy", description: "climateDescription" },
-} as const;
+function subscribeToReducedMotion(onChange: () => void) {
+	const query = window.matchMedia(REDUCED_MOTION_QUERY);
+	query.addEventListener("change", onChange);
+	return () => query.removeEventListener("change", onChange);
+}
 
-const testimonials: readonly Review[] = [
-	{
-		id: "adesola-adewale",
-		quote:
-			"I came with no tech background. Now I'm a product designer at a global firm. This academy changed my entire career trajectory.",
-		name: "Adesola Adewale",
-		title: "Founder, ReadEvolve",
-		image: { src: "/assets/academy/adesola_crop.png", alt: "Adesola Adewale" },
-	},
-	{
-		id: "adeleke-glory",
-		quote:
-			"I walked in with an idea. I walked out with a registered business, three clients, and the confidence to lead a team.",
-		name: "Adeleke Glory",
-		title: "Student, Lautech Campus",
-		image: { src: "/assets/academy/glory_crop.png", alt: "Adeleke Glory" },
-	},
-	{
-		id: "elizabeth-akinmolayan",
-		quote:
-			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
-		name: "Elizabeth Akinmolayan",
-		title: "Student, FUTA Campus",
-		image: {
-			src: "/assets/academy/elizabeth_crop.png",
-			alt: "Elizabeth Akinmolayan",
-		},
-	},
-	{
-		id: "olafisoye-theresa",
-		quote:
-			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
-		name: "Olafisoye Theresa",
-		title: "Campus lead, 4Herfrika FUTA campus",
-		image: {
-			src: "/assets/academy/theresa_crop.png",
-			alt: "Olafisoye Theresa",
-		},
-	},
-] as const;
-
-const navLinks = [
-	["About Us", "/about"],
-	["Projects", "/projects"],
-	["Academy", "/academy"],
-	["Career Corner", "/careercorner"],
-	["Blog", "/blog"],
-	["Contact Us", "/contact-us"],
-] as const;
+function usePrefersReducedMotion() {
+	return useSyncExternalStore(
+		subscribeToReducedMotion,
+		() => window.matchMedia(REDUCED_MOTION_QUERY).matches,
+		() => false,
+	);
+}
 
 function AcademyNav() {
 	return (
 		<>
-			<nav className="fixed left-1/2 top-6 z-50 hidden h-16 w-[calc(100%-206px)] max-w-[1258px] -translate-x-1/2 items-center rounded-full bg-white px-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)] xl:flex">
+			<nav className="fixed left-1/2 top-6 z-50 hidden h-16 w-[calc(100%-206px)] max-w-314.5 -translate-x-1/2 items-center rounded-full bg-white px-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)] xl:flex">
 				<Link href={"/" as Route} className="shrink-0">
 					<Image
 						src="/assets/academy/academy-logo.png"
 						alt="4Herfrika"
 						width={127}
 						height={36}
-						className="h-9 w-[127px] object-contain"
+						className="h-9 w-31.75 object-contain"
 					/>
 				</Link>
-				<div className="ml-auto flex h-full items-center gap-5 whitespace-nowrap text-[17px] text-[#333] min-[1400px]:gap-[30px]">
+				<div className="ml-auto flex h-full items-center gap-5 whitespace-nowrap text-[17px] text-foreground min-[1400px]:gap-7.5">
 					{navLinks.map(([label, href]) => (
 						<Link
 							key={label}
 							href={href}
-							className={label === "Academy" ? "text-[#ec008c] underline" : ""}
+							className={
+								label === "Academy" ? "text-primary-500 underline" : ""
+							}
 						>
 							{label}
 						</Link>
@@ -131,10 +88,10 @@ function AcademyNav() {
 				<div className="ml-6">
 					<LocaleSwitcher />
 				</div>
-				<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-[104px]">
+				<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-26">
 					<Link
 						href="/donate"
-						className="rounded-full border border-[#ec008c] px-[30px] py-2.5 text-[#ec008c]"
+						className="rounded-full border border-primary-500 px-7.5 py-2.5 text-primary-500"
 					>
 						Donate
 					</Link>
@@ -143,7 +100,7 @@ function AcademyNav() {
 						isExternal
 						variant="solid"
 						size="sm"
-						className="bg-[#ec008c] px-[30px] py-2.5 text-[19px] text-white"
+						className="bg-primary-500 px-7.5 py-2.5 text-[19px] text-white"
 					>
 						Join Us
 					</Button>
@@ -155,36 +112,70 @@ function AcademyNav() {
 
 export function AcademyPage() {
 	const t = useTranslations("academy");
-	const [modalOpen, setModalOpen] = useState(false);
-	const [academyIndex, setAcademyIndex] = useState(0);
-	const [selectedAcademy, setSelectedAcademy] = useState<Academy>("tech");
+	const [waitlist, setWaitlist] = useState<{ open: boolean; academy: Academy }>(
+		{
+			open: false,
+			academy: "tech",
+		},
+	);
+	const reducedMotion = usePrefersReducedMotion();
+	const [carousel, send] = useReducer(
+		carouselReducer,
+		academies.length,
+		initialCarouselState,
+	);
+	const swipeStartX = useRef<number | null>(null);
+	const pathsRef = useRef<HTMLDivElement>(null);
 
-	const openWaitlist = (academy: Academy = "tech") => {
-		setSelectedAcademy(academy);
-		setModalOpen(true);
+	const openWaitlist = (
+		academy: Academy = "tech",
+		source: "hero" | "academy_card" | "page_cta" = "hero",
+	) => {
+		trackEvent("academy_waitlist_opened", {
+			academy_type: academy,
+			source,
+		});
+		setWaitlist({ open: true, academy });
 	};
 
 	useEffect(() => {
-		document.body.dataset.academyPage = "true";
-
-		return () => {
-			delete document.body.dataset.academyPage;
-		};
+		trackEvent("academy_viewed");
 	}, []);
 
 	useEffect(() => {
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		if (waitlist.open || reducedMotion) return;
+		const interval = window.setInterval(() => {
+			const paths = pathsRef.current;
+			const focused = document.activeElement;
+			const userIsThere =
+				paths?.matches(":hover") ||
+				(focused &&
+					paths?.contains(focused) &&
+					focused.matches(":focus-visible"));
+			if (!userIsThere) {
+				send({ type: "MOVE", direction: "next", instant: false });
+			}
+		}, ACADEMY_AUTOPLAY_MS);
+		return () => window.clearInterval(interval);
+	}, [waitlist.open, reducedMotion]);
 
-		const timeout = window.setTimeout(() => {
-			setAcademyIndex((index) => (index + 1) % academies.length);
-		}, 3_000);
-
+	useEffect(() => {
+		if (carousel.status !== "sliding") return;
+		const timeout = window.setTimeout(
+			() => send({ type: "SLIDE_END" }),
+			SLIDE_DURATION_MS,
+		);
 		return () => window.clearTimeout(timeout);
-	}, [academyIndex]);
+	}, [carousel.status]);
+
+	const goTo = (direction: CarouselDirection) =>
+		send({ type: "MOVE", direction, instant: reducedMotion });
+	const slides = withClones(academies);
+	const isSliding = carousel.status === "sliding";
 
 	return (
-		<main className="academy-exact-page bg-white text-[#333]">
-			<section className="relative h-[845px] overflow-hidden text-white max-lg:h-[720px]">
+		<main className="academy-exact-page overflow-x-clip bg-white text-foreground">
+			<section className="relative h-211.25 overflow-hidden text-white max-lg:h-180">
 				<Image
 					src="/assets/academy/hero-source.jpg"
 					alt="Three women collaborating at 4Herfrika Academy"
@@ -196,22 +187,22 @@ export function AcademyPage() {
 				<div className="absolute inset-0 bg-black/60" />
 				<AcademyNav />
 
-				<div className="absolute left-1/2 top-[260px] z-10 w-[973px] max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:top-44">
+				<div className="absolute left-1/2 top-65 z-10 w-243.25 max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:top-44">
 					<h1 className="text-[64px] font-medium leading-[1.265] tracking-[-1px] max-sm:text-5xl">
 						<span className="block">{t("heroFirst")}</span>
-						<em className="block font-playfair font-black text-[#ec008c]">
+						<em className="block font-playfair font-black text-primary-500">
 							{t("heroSecond")}
 						</em>
 					</h1>
-					<p className="mx-auto mt-4 max-w-[665px] text-xl leading-8 max-sm:text-base">
+					<p className="mx-auto mt-4 max-w-166.25 text-xl leading-8 max-sm:text-base">
 						{t("heroDescription")}
 					</p>
-					<div className="mt-[34px] flex justify-center gap-4 max-sm:flex-col max-sm:items-center">
+					<div className="mt-8.5 flex justify-center gap-4 max-sm:flex-col max-sm:items-center">
 						<Button
 							type="button"
 							onClick={() => openWaitlist()}
 							size="lg"
-							className="h-[53px] gap-2 bg-[#ec008c] px-6 text-xl font-medium hover:bg-[#d1007c]"
+							className="h-13.25 gap-2 px-6 text-xl font-medium"
 						>
 							{t("joinWaitlist")} <ArrowRight className="size-5" />
 						</Button>
@@ -219,7 +210,7 @@ export function AcademyPage() {
 							href="/contact-us"
 							variant="outline-white"
 							size="lg"
-							className="h-[53px] border-[#ccc] px-6 text-xl font-medium text-[#eee] hover:border-[#ec008c]"
+							className="h-13.25 px-6 text-xl font-medium"
 						>
 							{t("contactUs")}
 						</Button>
@@ -227,8 +218,8 @@ export function AcademyPage() {
 				</div>
 			</section>
 
-			<section className="bg-[rgba(236,0,140,0.02)] px-6 py-20 lg:px-12 xl:px-12 xl:py-[107px] 2xl:px-20">
-				<div className="mx-auto max-w-[1280px]">
+			<section className="bg-[rgba(236,0,140,0.02)] px-6 py-20 lg:px-12 xl:px-12 xl:py-26.75 2xl:px-20">
+				<div className="mx-auto max-w-7xl">
 					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
 						{[
 							["3000+", t("girlsMentored")],
@@ -241,56 +232,51 @@ export function AcademyPage() {
 								className="flex min-w-0 items-center justify-center gap-8 lg:gap-11"
 							>
 								<div className="min-w-0 text-center">
-									<p className="text-5xl font-semibold leading-[60px] text-[#03065c]">
+									<p className="text-5xl font-semibold leading-15 text-secondary-500">
 										{value}
 									</p>
-									<p className="mt-2.5 text-[15px] font-medium text-[#333]">
+									<p className="mt-2.5 text-[15px] font-medium text-foreground">
 										{label}
 									</p>
 								</div>
 								{index < 3 && (
-									<span className="hidden h-[95px] w-px shrink-0 bg-[#ec008c] lg:block" />
+									<span className="hidden h-23.75 w-px shrink-0 bg-primary-500 lg:block" />
 								)}
 							</div>
 						))}
 					</div>
 
-					<div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-end lg:gap-8 xl:mt-[114px] xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20">
-						<div className="flex min-w-0 flex-col justify-between gap-12 lg:min-h-[478px] xl:min-h-[746px]">
+					<div
+						ref={pathsRef}
+						className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-stretch lg:gap-8 xl:mt-28.5 xl:grid-cols-[minmax(0,1fr)_minmax(0,669px)] xl:gap-12 2xl:gap-20"
+					>
+						<div className="flex min-w-0 flex-col justify-between gap-12">
 							<div>
-								<h2 className="text-5xl font-bold leading-[1] text-black">
+								<h2 className="text-5xl font-bold leading-none text-black">
 									{t("pathsFirst")}
 									<br />
-									<em className="font-playfair font-extrabold text-[#ec008c]">
+									<em className="font-playfair font-extrabold text-primary-500">
 										{t("pathsSecond")}
 									</em>
 								</h2>
-								<p className="mt-9 w-[548px] max-w-full text-xl leading-8 text-[#4b4b4b]">
+								<p className="mt-9 w-137 max-w-full text-xl leading-8 text-muted-foreground">
 									{t("pathsDescription")}
 								</p>
 							</div>
 							<div className="flex gap-6">
 								<button
 									type="button"
-									onClick={() =>
-										setAcademyIndex((index) => Math.max(0, index - 1))
-									}
-									disabled={academyIndex === 0}
+									onClick={() => goTo("prev")}
 									aria-label={t("previous")}
-									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === 0 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
+									className="grid size-9.25 cursor-pointer place-items-center rounded-xl border border-primary-500 bg-primary-500/10 text-primary-500 transition-colors hover:bg-primary-500/20"
 								>
 									<ArrowLeft className="size-5" />
 								</button>
 								<button
 									type="button"
-									onClick={() =>
-										setAcademyIndex((index) =>
-											Math.min(academies.length - 1, index + 1),
-										)
-									}
-									disabled={academyIndex === academies.length - 1}
+									onClick={() => goTo("next")}
 									aria-label={t("next")}
-									className={`grid size-[37px] place-items-center rounded-xl border transition-colors ${academyIndex === academies.length - 1 ? "cursor-not-allowed border-[#8e8e8e] text-[#8e8e8e]" : "cursor-pointer border-[#ec008c] bg-[#ec008c]/10 text-[#ec008c] hover:bg-[#ec008c]/20"}`}
+									className="grid size-9.25 cursor-pointer place-items-center rounded-xl border border-primary-500 bg-primary-500/10 text-primary-500 transition-colors hover:bg-primary-500/20"
 								>
 									<ArrowRight className="size-5" />
 								</button>
@@ -298,54 +284,80 @@ export function AcademyPage() {
 						</div>
 
 						<div className="min-w-0">
-							<div className="grid">
-								{academies.map((academy, index) => (
-									<article
-										key={academy.name}
-										aria-hidden={index !== academyIndex}
-										inert={index !== academyIndex}
-										className={`col-start-1 row-start-1 mx-auto h-auto w-full max-w-[520px] overflow-hidden rounded-3xl bg-white p-6 shadow-[0_0_45px_rgba(0,0,0,0.10)] transition-opacity duration-500 ease-out motion-reduce:transition-none sm:rounded-[36px] sm:p-8 lg:mx-0 xl:h-[860px] xl:max-w-[669px] xl:rounded-[54px] xl:p-[46px] ${index === academyIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+							<section
+								aria-label="Academy paths"
+								onPointerDown={(event) => {
+									swipeStartX.current = event.clientX;
+								}}
+								onPointerUp={(event) => {
+									if (swipeStartX.current === null) return;
+									const distance = event.clientX - swipeStartX.current;
+									swipeStartX.current = null;
+									if (Math.abs(distance) > SWIPE_THRESHOLD_PX) {
+										goTo(distance < 0 ? "next" : "prev");
+									}
+								}}
+								onPointerCancel={() => {
+									swipeStartX.current = null;
+								}}
+								className="-m-8 flex touch-pan-y overflow-hidden p-8"
+							>
+								{slides.map((academy, slide) => (
+									<div
+										key={`${slide}-${academy.name}`}
+										aria-hidden={slide !== carousel.slide}
+										inert={slide !== carousel.slide}
+										style={{
+											transform: `translateX(-${carousel.slide * 100}%)`,
+											transitionDuration: `${SLIDE_DURATION_MS}ms`,
+										}}
+										className={`w-[calc(100%-1.5rem)] max-w-118.5 shrink-0 pr-6 xl:max-w-150.5 xl:pr-8 ${isSliding ? "transition-transform ease-out" : ""} ${slide < carousel.slide - (isSliding ? 1 : 0) ? "invisible" : ""}`}
 									>
-										<div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-[16/10] sm:rounded-[28px] xl:h-[564px] xl:rounded-[54px]">
-											<Image
-												src={academy.image}
-												alt={t(academyTranslationKeys[academy.academy].name)}
-												fill
-												sizes="(max-width: 1279px) 520px, 669px"
-												className="object-cover"
-											/>
-											<Button
-												type="button"
-												onClick={() => openWaitlist(academy.academy)}
-												variant="outline-white"
-												size="icon"
-												aria-label={`${t("joinWaitlist")} — ${t(academyTranslationKeys[academy.academy].name)}`}
-												className="absolute bottom-5 right-5 size-10 border-2 text-white sm:bottom-6 sm:right-6 sm:size-12 xl:bottom-9 xl:right-9"
-											>
-												<ArrowRight className="size-5 -rotate-45 sm:size-6" />
-											</Button>
-										</div>
-										<h3 className="mt-5 text-xl font-semibold leading-8 text-black sm:text-2xl sm:leading-[38px] xl:mt-6">
-											{t(academyTranslationKeys[academy.academy].name)}
-										</h3>
-										<p className="mt-1 text-base leading-6 text-[#4b4b4b] sm:text-lg sm:leading-[25px] xl:text-xl">
-											{t(academyTranslationKeys[academy.academy].description)}
-										</p>
-									</article>
+										<article className="overflow-hidden rounded-2xl bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] sm:rounded-3xl sm:p-6 xl:rounded-[40px] xl:p-8">
+											<div className="relative aspect-3/2 overflow-hidden rounded-xl sm:rounded-2xl xl:rounded-[32px]">
+												<Image
+													src={academy.image}
+													alt={t(academyTranslationKeys[academy.academy].name)}
+													fill
+													sizes="(max-width: 1279px) 520px, 669px"
+													draggable={false}
+													className="object-cover"
+												/>
+												<Button
+													type="button"
+													onClick={() =>
+														openWaitlist(academy.academy, "academy_card")
+													}
+													variant="outline-white"
+													size="icon"
+													aria-label={`${t("joinWaitlist")} — ${t(academyTranslationKeys[academy.academy].name)}`}
+													className="absolute bottom-5 right-5 size-10 border-2 text-white sm:bottom-6 sm:right-6 sm:size-12 xl:bottom-9 xl:right-9"
+												>
+													<ArrowRight className="size-5 -rotate-45 sm:size-6" />
+												</Button>
+											</div>
+											<h3 className="mt-4 text-lg font-semibold leading-7 text-black sm:text-xl sm:leading-8 xl:mt-5">
+												{t(academyTranslationKeys[academy.academy].name)}
+											</h3>
+											<p className="mt-1 text-sm leading-5 text-muted-foreground sm:text-base sm:leading-6">
+												{t(academyTranslationKeys[academy.academy].description)}
+											</p>
+										</article>
+									</div>
 								))}
-							</div>
+							</section>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<section className="flex h-[737px] overflow-hidden rounded-t-[64px] bg-white text-white max-lg:h-auto max-lg:flex-col max-lg:rounded-t-[40px]">
-				<div className="relative h-full w-1/2 bg-[#03065c] max-lg:flex max-lg:h-auto max-lg:w-full max-lg:flex-col max-lg:gap-8 max-lg:px-8 max-lg:py-16 max-sm:px-6 max-sm:py-12">
-					<div className="absolute left-[82px] top-24 max-w-[491px] max-lg:static max-lg:max-w-none">
-						<span className="inline-flex rounded-full bg-[#fff0f9] px-3 py-1.5 text-xs text-[#ec008c]">
+			<section className="flex h-184.25 overflow-hidden rounded-t-[64px] bg-white text-white max-lg:h-auto max-lg:flex-col max-lg:rounded-t-[40px]">
+				<div className="relative h-full w-1/2 bg-secondary-500 max-lg:flex max-lg:h-auto max-lg:w-full max-lg:flex-col max-lg:gap-8 max-lg:px-8 max-lg:py-16 max-sm:px-6 max-sm:py-12">
+					<div className="absolute left-20.5 top-24 max-w-122.75 max-lg:static max-lg:max-w-none">
+						<span className="inline-flex rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 							Our Impact
 						</span>
-						<h2 className="mt-4 text-4xl font-bold leading-[45px] tracking-[-.9px]">
+						<h2 className="mt-4 text-4xl font-bold leading-11.25 tracking-[-.9px]">
 							Equipping the next generation of{" "}
 							<em className="font-playfair font-extrabold">African women</em> in
 							tech, business, and climate.
@@ -353,15 +365,15 @@ export function AcademyPage() {
 					</div>
 					<Button
 						type="button"
-						onClick={() => openWaitlist()}
+						onClick={() => openWaitlist("tech", "page_cta")}
 						variant="outline-white"
 						size="sm"
-						className="absolute bottom-[101px] left-[72px] h-11 gap-2 px-6 font-medium max-lg:static max-lg:self-start"
+						className="absolute bottom-25.25 left-18 h-11 gap-2 px-6 font-medium max-lg:static max-lg:self-start"
 					>
-						{t("joinWaitlist")} <ArrowRight className="size-[18px]" />
+						{t("joinWaitlist")} <ArrowRight className="size-4.5" />
 					</Button>
 				</div>
-				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-[719/737] max-lg:h-auto max-lg:w-full">
+				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-719/737 max-lg:h-auto max-lg:w-full">
 					<Image
 						src="/assets/academy/impact-source.jpg"
 						alt="4Herfrika participant working on a laptop"
@@ -375,8 +387,8 @@ export function AcademyPage() {
 			<ReviewsSection
 				heading={
 					<>
-						<span className="text-[#ec008c]">Don’t</span> Take our{" "}
-						<span className="text-[#ec008c]">Words</span> for it!
+						<span className="text-primary-500">Don’t</span> Take our{" "}
+						<span className="text-primary-500">Words</span> for it!
 					</>
 				}
 				subheading="Take a look at what our learners say!"
@@ -388,14 +400,14 @@ export function AcademyPage() {
 							alt=""
 							width={173}
 							height={251}
-							className="pointer-events-none absolute -right-2 top-16 h-[251px] w-[173px] -rotate-[24deg] opacity-15"
+							className="pointer-events-none absolute -right-2 top-16 h-62.75 w-43.25 -rotate-24 opacity-15"
 						/>
 						<Image
 							src="/assets/academy/decorative-logo.png"
 							alt=""
 							width={173}
 							height={251}
-							className="pointer-events-none absolute -left-[106px] bottom-[-40px] h-[251px] w-[173px] -rotate-[40deg] opacity-15"
+							className="pointer-events-none absolute -left-26.5 -bottom-10 h-62.75 w-43.25 -rotate-40 opacity-15"
 						/>
 					</>
 				}
@@ -403,9 +415,11 @@ export function AcademyPage() {
 
 			<AcademyFooter />
 			<WaitlistModal
-				open={modalOpen}
-				onOpenChange={setModalOpen}
-				academy={selectedAcademy}
+				open={waitlist.open}
+				onOpenChange={(open) =>
+					setWaitlist((current) => ({ ...current, open }))
+				}
+				academy={waitlist.academy}
 			/>
 		</main>
 	);
@@ -415,8 +429,8 @@ function AcademyFooter() {
 	const t = useTranslations("footer");
 
 	return (
-		<footer className="relative h-[555px] bg-[#03065c] text-white max-lg:h-auto max-lg:px-6 max-lg:py-16">
-			<div className="absolute left-1/2 top-[94px] w-[1088px] -translate-x-1/2 max-lg:static max-lg:w-full max-lg:translate-x-0">
+		<footer className="relative h-138.75 bg-secondary-500 text-white max-lg:h-auto max-lg:px-6 max-lg:py-16">
+			<div className="absolute left-1/2 top-23.5 w-272 -translate-x-1/2 max-lg:static max-lg:w-full max-lg:translate-x-0">
 				<div className="grid grid-cols-[166px_112px_176px_338px] justify-between gap-10 max-lg:grid-cols-2 max-sm:grid-cols-1">
 					<div>
 						<h2 className="text-[15px] font-bold">Quick Links</h2>
@@ -469,7 +483,7 @@ function AcademyFooter() {
 						description={t("subscribeDescription")}
 					/>
 				</div>
-				<div className="mt-[51px] h-px bg-white/10" />
+				<div className="mt-12.75 h-px bg-white/10" />
 				<div className="mt-7 flex items-center justify-between max-sm:flex-col max-sm:gap-6">
 					<div className="rounded bg-white px-2 py-1">
 						<Image
@@ -477,7 +491,7 @@ function AcademyFooter() {
 							alt="4Herfrika"
 							width={145}
 							height={41}
-							className="h-[41px] w-[145px] object-contain"
+							className="h-10.25 w-36.25 object-contain"
 						/>
 					</div>
 					<p className="text-[13px] font-medium">
@@ -487,21 +501,21 @@ function AcademyFooter() {
 						<a
 							href="https://www.linkedin.com/company/4herfrika"
 							aria-label="LinkedIn"
-							className="grid size-[35px] place-items-center rounded-full border border-white/10"
+							className="grid size-8.75 place-items-center rounded-full border border-white/10"
 						>
 							<Linkedin className="size-3" />
 						</a>
 						<a
 							href="https://www.instagram.com/4herfrika"
 							aria-label="Instagram"
-							className="grid size-[35px] place-items-center rounded-full border border-white/10"
+							className="grid size-8.75 place-items-center rounded-full border border-white/10"
 						>
 							<Instagram className="size-3" />
 						</a>
 						<a
 							href="https://x.com/4herfrika"
 							aria-label="X"
-							className="grid size-[35px] place-items-center rounded-full border border-white/10"
+							className="grid size-8.75 place-items-center rounded-full border border-white/10"
 						>
 							<Twitter className="size-3" />
 						</a>

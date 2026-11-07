@@ -1,5 +1,5 @@
 {
-  "id": "9bb18356-8d47-4cbf-8161-7334c8b35701",
+  "id": "a4ad70c3-72bd-4948-b856-2c63f3b199b6",
   "prevId": "2b2109ba-03aa-4a92-8f8e-df92251defad",
   "version": "7",
   "dialect": "postgresql",
@@ -221,7 +221,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "availability_mentor_id_idx": {
+          "name": "availability_mentor_id_idx",
+          "columns": [
+            {
+              "expression": "mentor_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "availability_mentor_id_mentors_id_fk": {
           "name": "availability_mentor_id_mentors_id_fk",
@@ -1262,12 +1278,6 @@
         "image": {
           "name": "image",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "image_crop": {
-          "name": "image_crop",
-          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },

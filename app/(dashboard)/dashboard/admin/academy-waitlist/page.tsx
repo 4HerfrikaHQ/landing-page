@@ -16,6 +16,7 @@ export default async function AcademyWaitlistPage({
 		q?: string;
 		page?: string;
 		sort?: string;
+		order?: string;
 	}>;
 }) {
 	const user = await currentDbUser();
@@ -26,7 +27,7 @@ export default async function AcademyWaitlistPage({
 		: undefined;
 	const q = sp.q?.trim();
 	const page = Math.max(1, Number(sp.page) || 1);
-	const sort = sp.sort === "oldest" ? "oldest" : "newest";
+	const sort = sp.order === "asc" || sp.sort === "oldest" ? "oldest" : "newest";
 	const where = and(
 		academy ? eq(schema.academyWaitlistEntries.academy, academy) : undefined,
 		q

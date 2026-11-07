@@ -1,11 +1,11 @@
 import { readFile } from "node:fs/promises";
-import { extname } from "node:path";
 import { join } from "node:path";
 import {
 	isTrustedLocalMentorImagePath,
 	isTrustedMentorAvatarUrl,
 } from "@/src/lib/mentor-image-url";
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -21,6 +21,31 @@ type CareerCornerMentor = {
 	image: string;
 	name: string;
 };
+
+async function normalizedImageDataUri(
+	image: Buffer,
+): Promise<string | undefined> {
+	try {
+		const normalized = await sharp(image, {
+			failOn: "error",
+			limitInputPixels: 40_000_000,
+		})
+			.rotate()
+			.resize({
+				width: 1600,
+				height: 1600,
+				fit: "inside",
+				withoutEnlargement: true,
+			})
+			.png({ compressionLevel: 7 })
+			.toBuffer();
+
+		if (normalized.byteLength > MAX_SOCIAL_IMAGE_BYTES) return undefined;
+		return `data:image/png;base64,${normalized.toString("base64")}`;
+	} catch {
+		return undefined;
+	}
+}
 
 async function readBoundedImageResponse(
 	response: Response,
@@ -63,14 +88,7 @@ async function imageDataUri(imageUrl?: string): Promise<string | undefined> {
 			if (!isTrustedLocalMentorImagePath(imageUrl)) return undefined;
 			const image = await readFile(join(process.cwd(), "public", imageUrl));
 			if (image.byteLength > MAX_SOCIAL_IMAGE_BYTES) return undefined;
-			const extension = extname(imageUrl).toLowerCase();
-			const mimeType =
-				extension === ".jpg" || extension === ".jpeg"
-					? "image/jpeg"
-					: extension === ".webp"
-						? "image/webp"
-						: "image/png";
-			return `data:${mimeType};base64,${image.toString("base64")}`;
+			return normalizedImageDataUri(image);
 		}
 		if (!isTrustedMentorAvatarUrl(imageUrl)) return undefined;
 
@@ -88,7 +106,7 @@ async function imageDataUri(imageUrl?: string): Promise<string | undefined> {
 		}
 		const image = await readBoundedImageResponse(response);
 		if (!image) return undefined;
-		return `data:${contentType};base64,${image.toString("base64")}`;
+		return normalizedImageDataUri(image);
 	} catch {
 		return undefined;
 	}
@@ -109,6 +127,7 @@ export async function generateCareerCornerOGImage(options: {
 	mentorImage?: string;
 	mentorName?: string;
 	mentors?: CareerCornerMentor[];
+	displayUrl?: string;
 }) {
 	const logoData = await readFile(
 		join(process.cwd(), "public/assets/nameless-logo.png"),
@@ -133,7 +152,7 @@ export async function generateCareerCornerOGImage(options: {
 				display: "flex",
 				position: "relative",
 				overflow: "hidden",
-				backgroundColor: "#03065c",
+				backgroundColor: "#ffffff",
 				fontFamily: "sans-serif",
 			}}
 		>
@@ -150,31 +169,6 @@ export async function generateCareerCornerOGImage(options: {
 			/>
 			<div
 				style={{
-					position: "absolute",
-					top: "-180px",
-					right: "-80px",
-					width: "650px",
-					height: "650px",
-					borderRadius: "50%",
-					background: "#181b73",
-					display: "flex",
-				}}
-			/>
-			<div
-				style={{
-					position: "absolute",
-					bottom: "-230px",
-					left: "-100px",
-					width: "500px",
-					height: "500px",
-					borderRadius: "50%",
-					border: "2px solid rgba(255,255,255,0.12)",
-					display: "flex",
-				}}
-			/>
-
-			<div
-				style={{
 					display: "flex",
 					flexDirection: "column",
 					justifyContent: "space-between",
@@ -189,7 +183,7 @@ export async function generateCareerCornerOGImage(options: {
 						style={{
 							fontSize: "27px",
 							fontWeight: 700,
-							color: "#ff8dcd",
+							color: "#03065c",
 						}}
 					>
 						4Herfrika
@@ -201,7 +195,7 @@ export async function generateCareerCornerOGImage(options: {
 							fontSize: "18px",
 							fontWeight: 700,
 							letterSpacing: "4px",
-							color: "#ff8dcd",
+							color: "#ec008c",
 						}}
 					>
 						CAREER CORNER
@@ -211,7 +205,7 @@ export async function generateCareerCornerOGImage(options: {
 							fontSize: options.title.length > 52 ? "39px" : "46px",
 							fontWeight: 700,
 							lineHeight: 1.08,
-							color: "#ffffff",
+							color: "#ec008c",
 							maxWidth: "640px",
 						}}
 					>
@@ -222,37 +216,39 @@ export async function generateCareerCornerOGImage(options: {
 							style={{
 								fontSize: "22px",
 								lineHeight: 1.35,
-								color: "#d9daf3",
+								color: "#4a4b66",
 								maxWidth: "590px",
 							}}
 						>
 							{options.subtitle}
 						</div>
 					)}
-					<div
-						style={{
-							display: "flex",
-							alignItems: "center",
-							background: "#ec008c",
-							borderRadius: "999px",
-							padding: "11px 19px",
-							fontSize: "18px",
-							fontWeight: 600,
-							color: "white",
-							width: "fit-content",
-						}}
-					>
-						Free 30-minute mentorship call
+					<div style={{ display: "flex", alignItems: "flex-start" }}>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								background: "#ec008c",
+								borderRadius: "999px",
+								padding: "11px 19px",
+								fontSize: "18px",
+								fontWeight: 600,
+								color: "white",
+								whiteSpace: "nowrap",
+							}}
+						>
+							Free 30-minute mentorship call
+						</div>
 					</div>
 				</div>
 				<div
 					style={{
 						fontSize: "18px",
-						color: "#ff8dcd",
+						color: "#ec008c",
 						display: "flex",
 					}}
 				>
-					4herfrika.org/careercorner
+					{options.displayUrl ?? "4herfrika.org/careercorner"}
 				</div>
 			</div>
 
@@ -266,23 +262,18 @@ export async function generateCareerCornerOGImage(options: {
 				}}
 			>
 				{primaryImage ? (
-					<div
+					<img
+						src={primaryImage}
+						alt={mentorName}
 						style={{
 							width: "300px",
 							height: "390px",
 							borderRadius: "150px 150px 36px 36px",
 							border: "10px solid #ff8dcd",
 							background: "#ffffff",
-							overflow: "hidden",
-							display: "flex",
+							objectFit: "cover",
 						}}
-					>
-						<img
-							src={primaryImage}
-							alt={mentorName}
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
-					</div>
+					/>
 				) : directoryMentors.length > 0 ? (
 					<div
 						style={{
@@ -292,43 +283,42 @@ export async function generateCareerCornerOGImage(options: {
 							width: "340px",
 						}}
 					>
-						{directoryMentors.map((mentor) => (
-							<div
-								key={`${mentor.name}-${mentor.image}`}
-								style={{
-									width: "148px",
-									height: "148px",
-									borderRadius: "50%",
-									border: "6px solid #ff8dcd",
-									background: "#ffffff",
-									overflow: "hidden",
-									display: "flex",
-								}}
-							>
-								{mentor.imageData ? (
-									<img
-										src={mentor.imageData}
-										alt=""
-										style={{
-											width: "100%",
-											height: "100%",
-											objectFit: "cover",
-										}}
-									/>
-								) : (
-									<div
-										style={{
-											color: "#03065c",
-											fontSize: "38px",
-											fontWeight: 700,
-											display: "flex",
-										}}
-									>
-										{initials(mentor.name)}
-									</div>
-								)}
-							</div>
-						))}
+						{directoryMentors.map((mentor) =>
+							mentor.imageData ? (
+								<img
+									key={`${mentor.name}-${mentor.image}`}
+									src={mentor.imageData}
+									alt=""
+									style={{
+										width: "148px",
+										height: "148px",
+										borderRadius: "50%",
+										border: "6px solid #ff8dcd",
+										background: "#ffffff",
+										objectFit: "cover",
+									}}
+								/>
+							) : (
+								<div
+									key={`${mentor.name}-${mentor.image}`}
+									style={{
+										width: "148px",
+										height: "148px",
+										borderRadius: "50%",
+										border: "6px solid #ff8dcd",
+										background: "#ffffff",
+										color: "#03065c",
+										fontSize: "38px",
+										fontWeight: 700,
+										alignItems: "center",
+										justifyContent: "center",
+										display: "flex",
+									}}
+								>
+									{initials(mentor.name)}
+								</div>
+							),
+						)}
 					</div>
 				) : (
 					<div

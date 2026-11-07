@@ -1,5 +1,6 @@
 "use client";
 
+import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -13,26 +14,33 @@ import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Star } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { CheckCircle2, Star } from "lucide-react";
+import type { Route } from "next";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 import { submitFeedback } from "../_actions";
 import { SubmitFeedbackSchema } from "../_schema";
 
 const CALL_OPTIONS = [
-	{ value: "yes", label: "Yes" },
-	{ value: "mentor_no_show", label: "No — mentor didn't show" },
-	{ value: "mentee_no_show", label: "No — I didn't make it" },
-	{
-		value: "rescheduled_externally",
-		label: "We rescheduled outside the platform",
-	},
+	{ value: "yes", labelKey: "optionYes" },
+	{ value: "mentor_no_show", labelKey: "optionMentorNoShow" },
+	{ value: "mentee_no_show", labelKey: "optionMenteeNoShow" },
+	{ value: "rescheduled_externally", labelKey: "optionRescheduled" },
 ] as const;
 
-export function FeedbackForm({ token }: { token: string }) {
-	const router = useRouter();
+export function FeedbackForm({
+	token,
+	mentorName,
+	mentorSlug,
+}: {
+	token: string;
+	mentorName: string;
+	mentorSlug: string;
+}) {
+	const t = useTranslations("feedback");
 	const [hovered, setHovered] = useState(0);
+	const [submitted, setSubmitted] = useState(false);
 
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		submitFeedback,
@@ -49,13 +57,10 @@ export function FeedbackForm({ token }: { token: string }) {
 			},
 			actionProps: {
 				onSuccess: () => {
-					toast.success("Thanks for your feedback");
-					router.refresh();
+					toast.success(t("success"));
+					setSubmitted(true);
 				},
-				onError: ({ error }) =>
-					toast.error(
-						error.serverError ?? "Couldn't submit. Please try again.",
-					),
+				onError: () => toast.error(t("error")),
 			},
 		},
 	);
@@ -63,12 +68,44 @@ export function FeedbackForm({ token }: { token: string }) {
 	const happened = form.watch("call_happened");
 	const rating = form.watch("rating") ?? 0;
 
+	if (submitted) {
+		return (
+			<div className="rounded-2xl border border-border/60 bg-white px-6 py-8 text-center shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+				<span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-surface-pink text-primary-500">
+					<CheckCircle2 className="size-6" />
+				</span>
+				<h2 className="text-lg font-semibold text-foreground">
+					{t("thanksTitle")}
+				</h2>
+				<p className="mx-auto mt-1 max-w-xs text-sm text-muted-foreground">
+					{t("thanksDescription")}
+				</p>
+				<div className="mt-6 flex flex-col gap-3">
+					<Button
+						href={`/careercorner/${mentorSlug}` as Route}
+						className="w-full"
+					>
+						{t("bookAgain", { name: mentorName })}
+					</Button>
+					<Button
+						href={JOIN_US_URL}
+						isExternal
+						variant="outline"
+						className="w-full"
+					>
+						{t("joinCommunityFull")}
+					</Button>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<form onSubmit={handleSubmitWithAction} className="space-y-6">
 			<input type="hidden" {...form.register("token")} />
 
 			<div className="space-y-1.5">
-				<Label>Did the call happen?</Label>
+				<Label>{t("callHappened")}</Label>
 				<Select
 					value={form.watch("call_happened")}
 					onValueChange={(v) =>
@@ -81,12 +118,12 @@ export function FeedbackForm({ token }: { token: string }) {
 					}
 				>
 					<SelectTrigger className="h-10 w-full rounded-lg bg-white">
-						<SelectValue placeholder="Select" />
+						<SelectValue placeholder={t("select")} />
 					</SelectTrigger>
 					<SelectContent>
 						{CALL_OPTIONS.map((o) => (
 							<SelectItem key={o.value} value={o.value}>
-								{o.label}
+								{t(o.labelKey)}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -95,7 +132,7 @@ export function FeedbackForm({ token }: { token: string }) {
 
 			{happened === "yes" && (
 				<div className="space-y-2">
-					<Label>How would you rate it?</Label>
+					<Label>{t("rating")}</Label>
 					<div className="flex items-center gap-1.5">
 						{[1, 2, 3, 4, 5].map((n) => {
 							const active = (hovered || rating) >= n;
@@ -103,7 +140,7 @@ export function FeedbackForm({ token }: { token: string }) {
 								<button
 									key={n}
 									type="button"
-									aria-label={`${n} star${n > 1 ? "s" : ""}`}
+									aria-label={t("stars", { count: n })}
 									onMouseEnter={() => setHovered(n)}
 									onMouseLeave={() => setHovered(0)}
 									onClick={() =>
@@ -127,10 +164,10 @@ export function FeedbackForm({ token }: { token: string }) {
 			)}
 
 			<div className="space-y-1.5">
-				<Label>Anything else? (optional)</Label>
+				<Label>{t("comment")}</Label>
 				<Textarea
 					rows={4}
-					placeholder="Share what went well or how we could improve."
+					placeholder={t("commentPlaceholder")}
 					{...form.register("comment")}
 				/>
 			</div>
@@ -141,13 +178,11 @@ export function FeedbackForm({ token }: { token: string }) {
 					{...form.register("testimonial_consent")}
 					className="mt-0.5 size-4 accent-primary-500"
 				/>
-				<span>
-					Allow 4HerFrika to share my comment publicly as a testimonial.
-				</span>
+				<span>{t("consent")}</span>
 			</label>
 
 			<Button type="submit" disabled={action.isPending} className="w-full">
-				{action.isPending ? "Submitting…" : "Submit feedback"}
+				{action.isPending ? t("submitting") : t("submit")}
 			</Button>
 		</form>
 	);

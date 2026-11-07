@@ -1,3 +1,4 @@
+import { isLocalImageUrl } from "@/src/lib/image-url";
 import {
 	type MentorImageCrop,
 	cropMentorImageToAspectRatio,
@@ -57,7 +58,7 @@ export function MentorImage({
 					alt={alt}
 					fill
 					sizes={sizes}
-					unoptimized={src.includes("localhost") || src.includes("127.0.0.1")}
+					unoptimized={isLocalImageUrl(src)}
 					className="object-cover object-center"
 				/>
 			)}

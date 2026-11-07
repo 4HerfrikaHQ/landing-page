@@ -6,6 +6,7 @@ import { decryptMentorRefreshToken } from "@/src/lib/mentor-google-crypto";
 import { sendMentorGoogleReconnectNoticeOnce } from "@/src/lib/mentor-google-notifications";
 import {
 	GoogleOAuthProviderError,
+	MentorGoogleOAuthError,
 	type MentorGoogleOAuthProvider,
 	getMentorGoogleAccessToken,
 } from "@/src/lib/mentor-google-oauth-core";
@@ -25,6 +26,9 @@ export type MentorCalendarConnection = {
 	status: MentorCalendarConnectionStatus;
 	identity: MentorCalendarIdentity;
 	getAccessToken: () => Promise<string>;
+	getAccessTokenIdentity: (
+		accessToken: string,
+	) => Promise<MentorCalendarIdentity>;
 	markReauthRequired: () => Promise<void>;
 	sendReauthorizationNotice?: () => Promise<void>;
 };
@@ -62,9 +66,10 @@ export class MentorCalendarError extends Error {
 	}
 }
 
-type GoogleEventIdentity = { email?: string; id?: string };
+type GoogleEventIdentity = { email?: string; id?: string; self?: boolean };
 type CalendarEvent = {
 	id?: string;
+	status?: string;
 	hangoutLink?: string;
 	organizer?: GoogleEventIdentity;
 	creator?: GoogleEventIdentity;
@@ -92,16 +97,11 @@ export type MentorCalendarEventParams = {
 	accessToken?: string;
 };
 
-export type NewBookingCalendarHost =
-	| {
-			mode: "mentor_google";
-			connection: MentorCalendarConnection;
-			accessToken: string;
-	  }
-	| {
-			mode: "org_google";
-			reason: "no_connection" | "connection_unavailable";
-	  };
+export type NewBookingCalendarHost = {
+	mode: "mentor_google";
+	connection: MentorCalendarConnection;
+	accessToken: string;
+};
 
 export type MentorCalendarOperations = {
 	createMentorCalendarEvent: (
@@ -112,6 +112,8 @@ export type MentorCalendarOperations = {
 			mentorId: string;
 			mentorEmail: string;
 			eventId: string;
+			connection?: MentorCalendarConnection;
+			accessToken?: string;
 		} & (
 			| { attemptKey: string; expectedAttemptKey?: string }
 			| { attemptKey?: string; expectedAttemptKey: string }
@@ -130,6 +132,28 @@ export function stableCalendarAttemptKey(...parts: string[]): string {
 
 export function deterministicCalendarEventId(attemptKey: string): string {
 	return `4hf${createHash("sha256").update(attemptKey).digest("hex")}`;
+}
+
+const MAX_EVENT_ID_GENERATIONS = 20;
+
+export async function resolveCalendarEventSlot<
+	Event extends { status?: string },
+>(attemptKey: string, readEvent: (eventId: string) => Promise<Event | null>) {
+	for (
+		let generation = 0;
+		generation < MAX_EVENT_ID_GENERATIONS;
+		generation++
+	) {
+		const requestId = generation ? `${attemptKey}:${generation}` : attemptKey;
+		const eventId = deterministicCalendarEventId(requestId);
+		const existing = await readEvent(eventId);
+		if (existing?.status !== "cancelled")
+			return { eventId, requestId, existing };
+	}
+	throw new MentorCalendarError(
+		"remote_error",
+		"Google Calendar could not complete the requested operation.",
+	);
 }
 
 const normalizedEmail = (email: string) => email.trim().toLowerCase();
@@ -158,6 +182,29 @@ async function json(response: Response): Promise<Record<string, unknown>> {
 	} catch {
 		return {};
 	}
+}
+
+async function logGoogleCalendarFailure(
+	operation: "read_event" | "create_event",
+	mentorId: string,
+	response: Response,
+) {
+	const payload = await json(response);
+	const error = payload.error;
+	const status =
+		error && typeof error === "object"
+			? (error as { status?: unknown }).status
+			: undefined;
+	// Google error text can contain user data. Only log its documented symbolic status.
+	console.error("[booking-calendar] google_request_failed", {
+		operation,
+		mentorId,
+		httpStatus: response.status,
+		googleStatus:
+			typeof status === "string" && /^[A-Z_]{1,64}$/.test(status)
+				? status
+				: "unknown",
+	});
 }
 
 function googleProvider(
@@ -247,7 +294,8 @@ const databaseProvider: MentorCalendarConnectionProvider = {
 			mentorId: row.mentor_id,
 			status:
 				row.status === "connected" &&
-				row.reauthorization_state === "not_required"
+				row.reauthorization_state === "not_required" &&
+				row.revocation_state === "not_pending"
 					? "connected"
 					: row.status === "reauth_required"
 						? "reauth_required"
@@ -274,6 +322,8 @@ const databaseProvider: MentorCalendarConnectionProvider = {
 				});
 				return token.accessToken;
 			},
+			getAccessTokenIdentity: (accessToken) =>
+				googleProvider(fetch, row.granted_scopes).getIdentity(accessToken),
 			markReauthRequired,
 			sendReauthorizationNotice: async () => {
 				await sendMentorGoogleReconnectNoticeOnce({
@@ -355,12 +405,20 @@ async function accessToken(
 	connection: MentorCalendarConnection,
 	knownAccessToken?: string,
 ) {
-	if (knownAccessToken) return knownAccessToken;
+	let token = knownAccessToken;
 	try {
-		const token = await connection.getAccessToken();
+		token ??= await connection.getAccessToken();
 		if (!token) throw new Error("missing access token");
-		return token;
 	} catch (error) {
+		console.error("[booking-calendar] token_refresh_failed", {
+			mentorId: connection.mentorId,
+			code:
+				error instanceof GoogleOAuthProviderError ||
+				error instanceof MentorGoogleOAuthError
+					? error.code
+					: "unknown",
+			errorType: error instanceof Error ? error.name : typeof error,
+		});
 		if (isInvalidGrant(error)) {
 			await connection.markReauthRequired().catch(() => undefined);
 			await notifyBrokenConnection(connection);
@@ -372,6 +430,24 @@ async function accessToken(
 			actionMessage(null),
 		);
 	}
+	let identity: MentorCalendarIdentity;
+	try {
+		identity = await connection.getAccessTokenIdentity(token);
+	} catch {
+		throw new MentorCalendarError(
+			"connection_unavailable",
+			actionMessage(null),
+		);
+	}
+	if (
+		!connection.identity.subject ||
+		identity.subject !== connection.identity.subject
+	)
+		throw new MentorCalendarError(
+			"identity_mismatch",
+			"The Google access token does not belong to the connected mentor account.",
+		);
+	return token;
 }
 
 async function notifyBrokenConnection(connection: MentorCalendarConnection) {
@@ -384,73 +460,42 @@ export async function selectNewBookingCalendarHost(input: {
 	connectionProvider?: MentorCalendarConnectionProvider;
 }): Promise<NewBookingCalendarHost> {
 	const provider = input.connectionProvider ?? connectionProvider;
-	const connection = await provider.getMentorConnection(input);
-	if (!connection) {
-		return { mode: "org_google", reason: "no_connection" };
-	}
-	if (connection.mentorId !== input.mentorId) {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
-	if (connection.status !== "connected") {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
-	if (
-		normalizedEmail(connection.identity.email) !==
-		normalizedEmail(input.mentorEmail)
-	) {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
-
-	try {
-		const token = await accessToken(connection);
-		return { mode: "mentor_google", connection, accessToken: token };
-	} catch {
-		await notifyBrokenConnection(connection);
-		return { mode: "org_google", reason: "connection_unavailable" };
-	}
+	const connection = await getConnection(input, provider);
+	const token = await accessToken(connection);
+	return { mode: "mentor_google", connection, accessToken: token };
 }
 
-function eventOwnerMatches(
-	event: CalendarEvent,
-	connection: MentorCalendarConnection,
-) {
-	const expectedEmail = normalizedEmail(connection.identity.email);
-	for (const owner of [event.organizer, event.creator]) {
-		if (!owner?.email || normalizedEmail(owner.email) !== expectedEmail)
-			throw new MentorCalendarError(
-				"identity_mismatch",
-				"Google Calendar returned an event owned by a different identity.",
-			);
-		if (
-			connection.identity.subject &&
-			owner.id &&
-			owner.id !== connection.identity.subject
-		)
-			throw new MentorCalendarError(
-				"identity_mismatch",
-				"Google Calendar returned an event owned by a different identity.",
-			);
-	}
+function eventOwnerMatches(event: CalendarEvent) {
+	// The token is bound to the connected account before this event is read.
+	// `self` binds its organizer to that account's requested primary calendar.
+	if (event.organizer?.self === true) return;
+	throw new MentorCalendarError(
+		"identity_mismatch",
+		"Google Calendar returned an event owned by a different identity.",
+	);
 }
 
 function usableEvent(
 	event: CalendarEvent,
 	connection: MentorCalendarConnection,
 ) {
-	eventOwnerMatches(event, connection);
+	eventOwnerMatches(event);
 	const meetUrl =
 		event.hangoutLink ??
 		event.conferenceData?.entryPoints?.find(
 			(entry) => entry.entryPointType === "video",
 		)?.uri;
-	if (!event.id || !meetUrl)
+	if (!event.id || !meetUrl) {
+		console.error("[booking-calendar] unusable_event", {
+			mentorId: connection.mentorId,
+			hasEventId: Boolean(event.id),
+			hasMeetUrl: Boolean(meetUrl),
+		});
 		throw new MentorCalendarError(
 			"remote_error",
 			"Google Calendar did not return a usable Meet event.",
 		);
+	}
 	return { eventId: event.id, meetUrl };
 }
 
@@ -465,15 +510,18 @@ async function readEvent(
 	});
 	if (response.status === 404 || response.status === 410) return null;
 	if (response.status === 401) {
+		await logGoogleCalendarFailure("read_event", connection.mentorId, response);
 		await connection.markReauthRequired().catch(() => undefined);
 		await notifyBrokenConnection(connection);
 		throw new MentorCalendarError("reauth_required", actionMessage(null));
 	}
-	if (!response.ok)
+	if (!response.ok) {
+		await logGoogleCalendarFailure("read_event", connection.mentorId, response);
 		throw new MentorCalendarError(
 			"remote_error",
 			"Google Calendar could not complete the requested operation.",
 		);
+	}
 	return (await json(response)) as CalendarEvent;
 }
 
@@ -495,8 +543,10 @@ export function createMentorCalendarClient(
 	async function createMentorCalendarEvent(params: MentorCalendarEventParams) {
 		const connection = await getConnection(params, provider, params.connection);
 		const token = await accessToken(connection, params.accessToken);
-		const eventId = deterministicCalendarEventId(params.attemptKey);
-		const existing = await readEvent(connection, token, eventId, fetchImpl);
+		const { eventId, requestId, existing } = await resolveCalendarEventSlot(
+			params.attemptKey,
+			(id) => readEvent(connection, token, id, fetchImpl),
+		);
 		if (existing) {
 			if (
 				existing.extendedProperties?.private?.[ATTEMPT_PROPERTY] !==
@@ -528,7 +578,7 @@ export function createMentorCalendarClient(
 						attendees: [{ email: params.menteeEmail }],
 						conferenceData: {
 							createRequest: {
-								requestId: params.attemptKey,
+								requestId,
 								conferenceSolutionKey: { type: "hangoutsMeet" },
 							},
 						},
@@ -557,6 +607,11 @@ export function createMentorCalendarClient(
 			);
 		}
 		if (response.status === 401) {
+			await logGoogleCalendarFailure(
+				"create_event",
+				connection.mentorId,
+				response,
+			);
 			await connection.markReauthRequired().catch(() => undefined);
 			await notifyBrokenConnection(connection);
 			throw new MentorCalendarError("reauth_required", actionMessage(null));
@@ -575,11 +630,17 @@ export function createMentorCalendarClient(
 				return usableEvent(duplicate, connection);
 			}
 		}
-		if (!response.ok)
+		if (!response.ok) {
+			await logGoogleCalendarFailure(
+				"create_event",
+				connection.mentorId,
+				response,
+			);
 			throw new MentorCalendarError(
 				"remote_error",
 				"Google Calendar could not complete the requested operation.",
 			);
+		}
 		let event = (await json(response)) as CalendarEvent;
 		if (
 			!event.hangoutLink &&
@@ -597,16 +658,18 @@ export function createMentorCalendarClient(
 			mentorId: string;
 			mentorEmail: string;
 			eventId: string;
+			connection?: MentorCalendarConnection;
+			accessToken?: string;
 		} & (
 			| { attemptKey: string; expectedAttemptKey?: string }
 			| { attemptKey?: string; expectedAttemptKey: string }
 		),
 	) {
-		const connection = await getConnection(params, provider);
-		const token = await accessToken(connection);
+		const connection = await getConnection(params, provider, params.connection);
+		const token = await accessToken(connection, params.accessToken);
 		const event = await readEvent(connection, token, params.eventId, fetchImpl);
 		if (!event) return;
-		eventOwnerMatches(event, connection);
+		eventOwnerMatches(event);
 		const expectedAttempt = params.expectedAttemptKey ?? params.attemptKey;
 		if (!expectedAttempt) {
 			throw new MentorCalendarError(

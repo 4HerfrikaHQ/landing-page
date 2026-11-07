@@ -10,6 +10,11 @@ import {
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
+import {
+	ensureMentorCalendarConnection,
+	isMentorCalendarError,
+} from "@/src/lib/google-calendar";
+import { sendMentorOnboardingInvite } from "@/src/lib/mentor-onboarding-invite";
 import { isUniqueViolation, parseMentorSlug } from "@/src/lib/mentor-slug";
 import {
 	ActionError,
@@ -23,7 +28,9 @@ import {
 	count,
 	desc,
 	eq,
+	exists,
 	ilike,
+	isNotNull,
 	ne,
 	or,
 	sql,
@@ -31,35 +38,33 @@ import {
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import {
+	type MentorSortDirection,
 	type MentorSortValue,
 	RequestMentorCalendarConnectionSchema,
 	SetFeaturedMentorSchema,
 } from "./_schema";
 
-interface MentorAdminFilters {
+export interface MentorAdminFilters {
 	query?: string;
 	status?: "active" | "inactive";
 	sort?: MentorSortValue;
-	/** When "featured"/"not_featured", filter against the singleton state. */
-	featured?: "featured" | "not_featured";
+	order?: MentorSortDirection;
+	calendar?: "connected" | "not_connected";
 	page?: number;
 	pageSize?: number;
 }
 
-/** Sentinel for "these filters can't match any mentor". */
-const NO_MATCH = Symbol("no-match");
-
 /**
  * Shared filter translation so the paginated table and the "copy every link"
- * action always agree on which mentors match. Returns NO_MATCH when the filters
- * can't match anything (featured filter with no featured mentor set).
+ * action always agree on which mentors match.
  */
-async function mentorFilterWhere({
+function mentorFilterWhere({
 	query,
 	status,
-	featured,
-}: Pick<MentorAdminFilters, "query" | "status" | "featured">) {
+	calendar,
+}: Pick<MentorAdminFilters, "query" | "status" | "calendar">) {
 	const conditions: (SQL<unknown> | undefined)[] = [];
+	conditions.push(eq(schema.mentors.archived, false));
 
 	if (query) {
 		conditions.push(
@@ -79,16 +84,21 @@ async function mentorFilterWhere({
 			break;
 	}
 
-	// Resolve the featured filter into a SQL condition so pagination stays correct
-	// (the singleton featured mentor can't be filtered in-memory after limit/offset).
-	if (featured) {
-		const featuredId = await getFeaturedMentorId();
-		if (featured === "featured") {
-			if (!featuredId) return NO_MATCH;
-			conditions.push(eq(schema.mentors.id, featuredId));
-		} else if (featuredId) {
-			conditions.push(ne(schema.mentors.id, featuredId));
-		}
+	if (calendar === "connected") {
+		conditions.push(
+			and(
+				eq(schema.mentorGoogleConnections.status, "connected"),
+				eq(
+					schema.mentorGoogleConnections.reauthorization_state,
+					"not_required",
+				),
+			),
+		);
+	} else if (calendar === "not_connected") {
+		conditions.push(sql`not (
+			coalesce(${schema.mentorGoogleConnections.status} = 'connected', false)
+			and coalesce(${schema.mentorGoogleConnections.reauthorization_state} = 'not_required', false)
+		)`);
 	}
 
 	return conditions.length ? and(...conditions) : undefined;
@@ -97,19 +107,20 @@ async function mentorFilterWhere({
 export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 	await requireSuperAdmin();
 
-	const { sort = "name", page = 1, pageSize = 20 } = filters;
+	const { sort = "name", order, page = 1, pageSize = 20 } = filters;
 
-	const where = await mentorFilterWhere(filters);
-	if (where === NO_MATCH) return { rows: [], total: 0 };
+	const where = mentorFilterWhere(filters);
 
 	const bookingCount = sql<number>`count(${bookings.id})`.as("booking_count");
 
-	const orderBy =
+	const sortDirection = order ?? (sort === "name" ? "asc" : "desc");
+	const sortColumn =
 		sort === "joined"
-			? desc(schema.mentors.created_at)
+			? schema.mentors.created_at
 			: sort === "bookings"
-				? desc(bookingCount)
-				: asc(schema.users.name);
+				? bookingCount
+				: schema.users.name;
+	const orderBy = sortDirection === "asc" ? asc(sortColumn) : desc(sortColumn);
 
 	const [rows, [{ total }]] = await Promise.all([
 		db
@@ -128,6 +139,11 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				google_connection_status: schema.mentorGoogleConnections.status,
 				google_reauthorization_state:
 					schema.mentorGoogleConnections.reauthorization_state,
+				google_revocation_state:
+					schema.mentorGoogleConnections.revocation_state,
+				google_has_refresh_token: sql<boolean>`
+					${schema.mentorGoogleConnections.refresh_token_ciphertext} is not null
+				`,
 				created_at: schema.mentors.created_at,
 				booking_count: bookingCount,
 			})
@@ -144,6 +160,8 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 				schema.users.id,
 				schema.mentorGoogleConnections.status,
 				schema.mentorGoogleConnections.reauthorization_state,
+				schema.mentorGoogleConnections.revocation_state,
+				schema.mentorGoogleConnections.refresh_token_ciphertext,
 			)
 			.orderBy(orderBy)
 			.limit(pageSize)
@@ -152,6 +170,10 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
 			.select({ total: count() })
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+			.leftJoin(
+				schema.mentorGoogleConnections,
+				eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+			)
 			.where(where),
 	]);
 
@@ -163,17 +185,20 @@ export async function getMentorsForAdmin(filters: MentorAdminFilters = {}) {
  * whole set of public links at once instead of page by page.
  */
 export async function getMentorLinksForAdmin(
-	filters: Pick<MentorAdminFilters, "query" | "status" | "featured"> = {},
+	filters: Pick<MentorAdminFilters, "query" | "status" | "calendar"> = {},
 ) {
 	await requireSuperAdmin();
 
-	const where = await mentorFilterWhere(filters);
-	if (where === NO_MATCH) return [];
+	const where = mentorFilterWhere(filters);
 
 	return db
 		.select({ name: schema.users.name, slug: schema.mentors.slug })
 		.from(schema.mentors)
 		.innerJoin(schema.users, eq(schema.mentors.user_id, schema.users.id))
+		.leftJoin(
+			schema.mentorGoogleConnections,
+			eq(schema.mentorGoogleConnections.mentor_id, schema.mentors.id),
+		)
 		.where(where)
 		.orderBy(asc(schema.users.name));
 }
@@ -236,8 +261,25 @@ export async function createMentor(
 		.returning({ id: schema.mentors.id });
 
 	await insertDefaultBookingSettings(db, mentor.id);
-
 	revalidatePath("/dashboard/admin/mentors");
+	try {
+		await sendMentorOnboardingInvite({
+			mentorId: mentor.id,
+			to: email,
+			name,
+			intro: "You've been invited to join 4HerFrika as a mentor.",
+		});
+	} catch (inviteError) {
+		console.error("[mentor-onboarding-invite-failed]", {
+			mentorId: mentor.id,
+			errorType:
+				inviteError instanceof Error ? inviteError.name : typeof inviteError,
+		});
+		return {
+			error: "Mentor was added, but the onboarding email could not be sent.",
+		};
+	}
+
 	return {};
 }
 
@@ -255,7 +297,7 @@ export async function updateMentor(
 	const parsedSlug = parseMentorSlug(formData.get("slug"));
 	if (!parsedSlug.success) return { error: parsedSlug.error };
 	const currentMentor = await db.query.mentors.findFirst({
-		where: eq(schema.mentors.id, id),
+		where: and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
 		columns: { slug: true },
 	});
 	if (!currentMentor) return { error: "Mentor not found." };
@@ -285,7 +327,9 @@ export async function updateMentor(
 					slug: parsedSlug.slug,
 					previous_slug: slugChanged ? currentMentor.slug : undefined,
 				})
-				.where(eq(schema.mentors.id, id))
+				.where(
+					and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
+				)
 				.returning({ userId: schema.mentors.user_id });
 
 			if (row) {
@@ -312,10 +356,35 @@ export async function uploadMentorImage(
 	formData: FormData,
 ): Promise<{ url?: string; error?: string }> {
 	await requireSuperAdmin();
+	const mentor = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.id, mentorId),
+			eq(schema.mentors.archived, false),
+		),
+		columns: { id: true },
+	});
+	if (!mentor) return { error: "Mentor not found." };
 
 	const result = await uploadMentorAvatar(mentorId, formData);
 	if (!result.error) revalidatePath("/dashboard/admin/mentors");
 	return result;
+}
+
+export async function deleteMentor(id: string): Promise<{ error?: string }> {
+	await requireSuperAdmin();
+
+	const [mentor] = await db
+		.update(schema.mentors)
+		.set({ archived: true })
+		.where(and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)))
+		.returning({ slug: schema.mentors.slug });
+
+	if (!mentor) return { error: "Mentor not found." };
+
+	revalidatePath("/dashboard/admin/mentors");
+	revalidatePath("/careercorner");
+	revalidatePath(`/careercorner/${mentor.slug}`);
+	return {};
 }
 
 export async function toggleMentorActive(
@@ -326,12 +395,15 @@ export async function toggleMentorActive(
 
 	if (active) {
 		const mentor = await db.query.mentors.findFirst({
-			where: eq(schema.mentors.id, id),
-			with: { availability: true },
+			where: and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
+			with: {
+				availability: true,
+				user: { columns: { email: true } },
+			},
 		});
 
 		if (!mentor) {
-			return { error: "Mentor not found" };
+			return { error: "Mentor not found or is archived" };
 		}
 
 		const parsedSlug = parseMentorSlug(mentor.slug);
@@ -349,12 +421,68 @@ export async function toggleMentorActive(
 					"Cannot activate mentor. Please ensure position and bio are both set.",
 			};
 		}
+
+		try {
+			await ensureMentorCalendarConnection({
+				mentorId: mentor.id,
+				mentorEmail: mentor.user.email,
+			});
+		} catch (error) {
+			return {
+				error:
+					isMentorCalendarError(error) && error.code === "reauth_required"
+						? "Cannot activate mentor. Reconnect Google Calendar before activating this mentor."
+						: "Cannot activate mentor. Connect Google Calendar before activating this mentor.",
+			};
+		}
 	}
 
-	await db
+	const updated = await db
 		.update(schema.mentors)
 		.set({ active })
-		.where(eq(schema.mentors.id, id));
+		.where(
+			active
+				? and(
+						eq(schema.mentors.id, id),
+						eq(schema.mentors.active, false),
+						eq(schema.mentors.archived, false),
+						exists(
+							db
+								.select({ id: schema.mentorGoogleConnections.id })
+								.from(schema.mentorGoogleConnections)
+								.where(
+									and(
+										eq(
+											schema.mentorGoogleConnections.mentor_id,
+											schema.mentors.id,
+										),
+										eq(schema.mentorGoogleConnections.status, "connected"),
+										isNotNull(
+											schema.mentorGoogleConnections.refresh_token_ciphertext,
+										),
+										eq(
+											schema.mentorGoogleConnections.revocation_state,
+											"not_pending",
+										),
+										eq(
+											schema.mentorGoogleConnections.reauthorization_state,
+											"not_required",
+										),
+									),
+								)
+								.limit(1),
+						),
+					)
+				: and(eq(schema.mentors.id, id), eq(schema.mentors.archived, false)),
+		)
+		.returning({ id: schema.mentors.id });
+
+	if (active && updated.length === 0) {
+		return {
+			error:
+				"Cannot activate mentor. Google Calendar must remain connected to activate this mentor.",
+		};
+	}
 
 	revalidatePath("/dashboard/admin/mentors");
 	return {};
@@ -375,10 +503,13 @@ export const setFeaturedMentor = adminAction
 	.schema(SetFeaturedMentorSchema)
 	.action(async ({ parsedInput }) => {
 		const mentor = await db.query.mentors.findFirst({
-			where: eq(schema.mentors.id, parsedInput.mentorId),
+			where: and(
+				eq(schema.mentors.id, parsedInput.mentorId),
+				eq(schema.mentors.archived, false),
+			),
 		});
 
-		if (!mentor || !mentor.active || !mentor.image) {
+		if (!mentor || mentor.archived || !mentor.active || !mentor.image) {
 			throw new ActionError(
 				"Mentor must be active and have a profile photo to be featured",
 			);
@@ -428,7 +559,12 @@ export const requestMentorCalendarConnection = adminAction
 			.select({ email: schema.users.email, name: schema.users.name })
 			.from(schema.mentors)
 			.innerJoin(schema.users, eq(schema.users.id, schema.mentors.user_id))
-			.where(eq(schema.mentors.id, parsedInput.mentorId))
+			.where(
+				and(
+					eq(schema.mentors.id, parsedInput.mentorId),
+					eq(schema.mentors.archived, false),
+				),
+			)
 			.limit(1);
 
 		if (!mentor?.email) {

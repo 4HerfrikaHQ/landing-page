@@ -28,6 +28,19 @@
 	/* ── Animations ── */
 	--animate-marquee: marquee var(--animation-duration, 25s) linear infinite;
 	--animate-marquee2: marquee2 var(--animation-duration, 25s) linear infinite;
+	--animate-caret-blink: caret-blink 1.25s ease-out infinite;
+
+	@keyframes caret-blink {
+		0%,
+		70%,
+		100% {
+			opacity: 1;
+		}
+		20%,
+		50% {
+			opacity: 0;
+		}
+	}
 
 	@keyframes marquee {
 		0% {
@@ -307,17 +320,15 @@ body:has(.academy-exact-page) [data-site-scroll-progress] {
 	display: none;
 }
 
-/* The website chrome sits outside the Academy route tree. The page sets this
-   attribute while mounted: mobile keeps the shared navigation, desktop uses
-   the Academy-specific pill navigation. */
-body[data-academy-page] [data-site-footer],
-body[data-academy-page] [data-site-scroll-progress] {
+/* The website chrome sits outside the Academy route tree: mobile keeps the
+   shared navigation, desktop uses the Academy-specific pill navigation. */
+body:has(.academy-exact-page) [data-site-footer],
+body:has(.academy-exact-page) [data-site-scroll-progress] {
 	display: none !important;
 }
 
 @media (min-width: 1280px) {
-	body:has(.academy-exact-page) [data-site-navbar],
-	body[data-academy-page] [data-site-navbar] {
+	body:has(.academy-exact-page) [data-site-navbar] {
 		display: none !important;
 	}
 }

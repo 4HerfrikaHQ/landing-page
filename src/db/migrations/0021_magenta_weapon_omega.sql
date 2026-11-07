@@ -1,1 +1,0 @@
-ALTER TABLE "mentors" ADD COLUMN "image_crop" jsonb;

@@ -43,4 +43,13 @@ describe("isUniqueViolation", () => {
 		expect(isUniqueViolation({ code: "23514" })).toBe(false);
 		expect(isUniqueViolation(new Error("duplicate"))).toBe(false);
 	});
+
+	test("recognizes unique violations wrapped by the database client", () => {
+		expect(
+			isUniqueViolation({
+				message: 'Failed query: update "mentors" set "slug" = $1',
+				cause: { code: "23505", constraint_name: "mentors_slug_unique" },
+			}),
+		).toBe(true);
+	});
 });

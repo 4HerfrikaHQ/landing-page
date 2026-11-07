@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/dashboard/empty-state";
 import { FilterBar } from "@/components/dashboard/filter-bar";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Pagination } from "@/components/dashboard/pagination";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
 	Table,
 	TableBody,
@@ -14,13 +15,14 @@ import { currentDbUser } from "@/src/auth";
 import { Users } from "lucide-react";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getMentorLinksForAdmin, getMentorsForAdmin } from "./_actions";
+import { getMentorsForAdmin } from "./_actions";
 import { CopyAllMentorLinksButton } from "./_components/copy-link";
 import { CreateMentorSheet } from "./_components/create-mentor-sheet";
 import { MentorFilters } from "./_components/mentor-filters";
 import { MentorTableRow } from "./_components/mentor-table-row";
 import {
-	MentorFeaturedFilter,
+	MentorCalendarFilter,
+	MentorSortDirection,
 	MentorSortValue,
 	MentorStatusFilter,
 } from "./_schema";
@@ -34,7 +36,8 @@ export default async function MentorsPage({
 		q?: string;
 		status?: string;
 		sort?: string;
-		featured?: string;
+		order?: string;
+		calendar?: string;
 		page?: string;
 	}>;
 }) {
@@ -44,26 +47,23 @@ export default async function MentorsPage({
 	const sp = await searchParams;
 	const status = MentorStatusFilter.safeParse(sp.status);
 	const sort = MentorSortValue.safeParse(sp.sort);
-	const featured = MentorFeaturedFilter.safeParse(sp.featured);
+	const order = MentorSortDirection.safeParse(sp.order);
+	const calendar = MentorCalendarFilter.safeParse(sp.calendar);
 	const page = Math.max(1, Number(sp.page) || 1);
 
 	const activeFilters = {
 		query: sp.q,
 		status: status.success ? status.data : undefined,
-		featured: featured.success ? featured.data : undefined,
+		calendar: calendar.success ? calendar.data : undefined,
 	};
 
-	// Links cover every mentor matching the filters, not just this page — there
-	// are more mentors than fit on one page.
-	const [{ rows: mentors, total }, links] = await Promise.all([
-		getMentorsForAdmin({
-			...activeFilters,
-			sort: sort.success ? sort.data : undefined,
-			page,
-			pageSize: PAGE_SIZE,
-		}),
-		getMentorLinksForAdmin(activeFilters),
-	]);
+	const { rows: mentors, total } = await getMentorsForAdmin({
+		...activeFilters,
+		sort: sort.success ? sort.data : undefined,
+		order: order.success ? order.data : undefined,
+		page,
+		pageSize: PAGE_SIZE,
+	});
 
 	return (
 		<div>
@@ -72,7 +72,7 @@ export default async function MentorsPage({
 				subtitle={`${total} mentor${total === 1 ? "" : "s"}`}
 				action={
 					<div className="flex items-center gap-2">
-						<CopyAllMentorLinksButton mentors={links} />
+						<CopyAllMentorLinksButton count={total} filters={activeFilters} />
 						<CreateMentorSheet />
 					</div>
 				}
@@ -91,21 +91,29 @@ export default async function MentorsPage({
 					<TableHeader>
 						<TableRow className="bg-muted">
 							<TableHead className="w-10" />
-							<TableHead className="font-medium text-muted-foreground">
+							<SortableTableHead value="name" defaultSortValue="name">
 								Name
-							</TableHead>
+							</SortableTableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Position
 							</TableHead>
 							<TableHead className="font-medium text-muted-foreground">
 								Email
 							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
+							<SortableTableHead
+								value="bookings"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
 								Bookings
-							</TableHead>
-							<TableHead className="font-medium text-muted-foreground">
+							</SortableTableHead>
+							<SortableTableHead
+								value="joined"
+								defaultSortValue="name"
+								defaultDirection="desc"
+							>
 								Joined
-							</TableHead>
+							</SortableTableHead>
 							<TableHead className="w-16 text-center font-medium text-muted-foreground">
 								Link
 							</TableHead>

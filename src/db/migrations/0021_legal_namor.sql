@@ -1,0 +1,1 @@
+CREATE INDEX "availability_mentor_id_idx" ON "availability" USING btree ("mentor_id");

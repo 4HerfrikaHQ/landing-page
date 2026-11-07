@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import type { DayOfWeek } from "@/src/db/schema/tables/availability";
+import { trackEvent } from "@/src/lib/analytics";
 import { format, parse } from "date-fns";
 import { CalendarClock, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -50,6 +51,11 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 			.filter((slot) => slot.day === day)
 			.sort((a, b) => a.start_time.localeCompare(b.start_time)),
 	})).filter((group) => group.slots.length > 0);
+	const analyticsMentor = {
+		mentor_id: mentor.id,
+		mentor_slug: mentor.slug,
+		mentor_name: displayName,
+	};
 
 	return (
 		<Dialog>
@@ -75,6 +81,13 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 						{mentor.position}
 					</p>
 					<DialogTrigger
+						onClick={() =>
+							trackEvent("mentor_details_viewed", {
+								...analyticsMentor,
+								mentor_role: mentor.position ?? "",
+								has_availability: availability.length > 0,
+							})
+						}
 						render={
 							<Button
 								variant="outline"
@@ -193,6 +206,12 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 									variant="solid"
 									size="lg"
 									href={`/careercorner/${mentor.slug}`}
+									onClick={() =>
+										trackEvent("mentor_booking_clicked", {
+											...analyticsMentor,
+											source: "mentor_details",
+										})
+									}
 									className="w-full sm:w-auto"
 								>
 									{tc("bookACall")}
