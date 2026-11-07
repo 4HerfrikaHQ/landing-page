@@ -1,8 +1,10 @@
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { sql } from "drizzle-orm";
 import {
 	boolean,
 	check,
 	index,
+	jsonb,
 	pgTable,
 	text,
 	timestamp,
@@ -23,6 +25,7 @@ export const mentors = pgTable(
 		bio: text("bio"),
 		position: text("position"),
 		image: text("image"),
+		image_crop: jsonb("image_crop").$type<MentorImageCrop | null>(),
 		linkedin_url: text("linkedin_url"),
 		nickname: text("nickname"),
 		slug: text("slug").notNull().unique(),

@@ -1,9 +1,11 @@
 "use client";
 
+import { ImageCropDialog } from "@/app/(dashboard)/dashboard/mentor/profile/_components/image-crop-dialog";
+import { MentorImage } from "@/components/mentor-image";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { cn } from "@/utils/cn";
 import { CameraIcon, Loader2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { uploadOnboardingImage } from "../_actions";
@@ -21,6 +23,10 @@ export function OnboardingAvatarUpload({
 	const t = useTranslations("onboarding.avatar");
 	const errorMessage = useOnboardingErrorMessage();
 	const [preview, setPreview] = useState<string | null>(value || null);
+	const [savedCrop, setSavedCrop] = useState<MentorImageCrop | null>(null);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,25 +39,38 @@ export function OnboardingAvatarUpload({
 			return;
 		}
 
-		const previous = preview;
-		setPreview(URL.createObjectURL(file));
+		setCropFile(file);
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
 
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropSource(null);
+	}
+
+	async function handleCropSave(crop: MentorImageCrop) {
+		if (!cropFile) return;
 		const formData = new FormData();
-		formData.append("file", file);
+		formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(crop));
 
 		startTransition(async () => {
 			try {
 				const result = await uploadOnboardingImage(token, formData);
 				if (result.error) {
-					setPreview(previous);
 					toast.error(errorMessage(result.error, t("uploadFailed")));
 				} else if (result.url) {
 					setPreview(result.url);
+					setSavedCrop(crop);
 					onChange(result.url);
+					setIsCropOpen(false);
+					clearCropState();
 					toast.success(t("uploaded"));
 				}
 			} catch {
-				setPreview(previous);
 				toast.error(t("uploadFailed"));
 			}
 		});
@@ -66,13 +85,13 @@ export function OnboardingAvatarUpload({
 				title={t("uploadTitle")}
 			>
 				{preview ? (
-					<Image
+					<MentorImage
 						src={preview}
 						alt={t("alt")}
-						fill
-						className="object-cover object-top"
+						crop={savedCrop}
+						aspectRatio={1}
+						className="size-full"
 						sizes="80px"
-						unoptimized
 					/>
 				) : (
 					<span className="flex size-full items-center justify-center bg-gray-100 text-gray-400">
@@ -111,6 +130,16 @@ export function OnboardingAvatarUpload({
 				accept="image/jpeg,image/png,image/webp"
 				className="hidden"
 				onChange={handleChange}
+			/>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) clearCropState();
+				}}
+				imageUrl={cropSource}
+				onSave={handleCropSave}
+				isSaving={isPending}
 			/>
 		</div>
 	);

@@ -1,28 +1,44 @@
 "use client";
 
+import { MentorImage } from "@/components/mentor-image";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { CameraIcon, Loader2Icon } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { ImageCropDialog } from "../../../mentor/profile/_components/image-crop-dialog";
 import { uploadMentorImage } from "../_actions";
 
 export function AvatarUpload({
 	id,
 	name,
 	image,
+	imageCrop,
 }: {
 	id: string;
 	name: string;
 	image: string | null;
+	imageCrop: MentorImageCrop | null;
 }) {
 	const [preview, setPreview] = useState<string | null>(image);
-	const [isPending, startTransition] = useTransition();
+	const [crop, setCrop] = useState<MentorImageCrop | null>(imageCrop);
+	const [cropSource, setCropSource] = useState<string | null>(null);
+	const [cropFile, setCropFile] = useState<File | null>(null);
+	const [cropInitial, setCropInitial] = useState<MentorImageCrop | null>(null);
+	const [isCropOpen, setIsCropOpen] = useState(false);
+	const [isPending, setIsPending] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	// Sync preview when the server re-renders with a new image URL
 	useEffect(() => {
 		setPreview(image);
-	}, [image]);
+		setCrop(imageCrop);
+	}, [image, imageCrop]);
+
+	useEffect(() => {
+		return () => {
+			if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		};
+	}, [cropFile, cropSource]);
 
 	const initials = name
 		.split(" ")
@@ -40,26 +56,42 @@ export function AvatarUpload({
 			return;
 		}
 
-		setPreview(URL.createObjectURL(file));
+		setCropFile(file);
+		setCropInitial(null);
+		setCropSource(URL.createObjectURL(file));
+		setIsCropOpen(true);
+		e.currentTarget.value = "";
+	}
 
+	function clearCropState() {
+		if (cropFile && cropSource) URL.revokeObjectURL(cropSource);
+		setCropFile(null);
+		setCropInitial(null);
+		setCropSource(null);
+	}
+
+	async function handleCropSave(nextCrop: MentorImageCrop) {
 		const formData = new FormData();
-		formData.append("file", file);
+		if (cropFile) formData.append("file", cropFile);
+		formData.append("crop", JSON.stringify(nextCrop));
 
-		startTransition(async () => {
-			try {
-				const result = await uploadMentorImage(id, formData);
-				if (result.error) {
-					setPreview(image);
-					toast.error(`Upload failed: ${result.error}`);
-				} else if (result.url) {
-					setPreview(result.url);
-					toast.success("Successfully updated avatar");
-				}
-			} catch (err) {
-				setPreview(image);
-				toast.error(`Upload failed: ${String(err)}`);
+		setIsPending(true);
+		try {
+			const result = await uploadMentorImage(id, formData);
+			if (result.error) {
+				toast.error(`Upload failed: ${result.error}`);
+				return;
 			}
-		});
+			if (result.url) setPreview(result.url);
+			setCrop(nextCrop);
+			setIsCropOpen(false);
+			clearCropState();
+			toast.success("Successfully updated avatar");
+		} catch (err) {
+			toast.error(`Upload failed: ${String(err)}`);
+		} finally {
+			setIsPending(false);
+		}
 	}
 
 	return (
@@ -71,13 +103,13 @@ export function AvatarUpload({
 				title="Upload photo"
 			>
 				{preview ? (
-					<Image
+					<MentorImage
 						src={preview}
 						alt={name}
-						fill
-						className="object-cover object-top"
+						crop={crop}
+						aspectRatio={1}
+						className="size-full"
 						sizes="32px"
-						unoptimized
 					/>
 				) : (
 					<span className="flex size-full items-center justify-center bg-gray-100 text-gray-500 text-xs font-medium">
@@ -100,6 +132,17 @@ export function AvatarUpload({
 				accept="image/jpeg,image/png,image/webp"
 				className="hidden"
 				onChange={handleChange}
+			/>
+			<ImageCropDialog
+				open={isCropOpen}
+				onOpenChange={(open) => {
+					setIsCropOpen(open);
+					if (!open) clearCropState();
+				}}
+				imageUrl={cropSource}
+				initialCrop={cropInitial}
+				onSave={handleCropSave}
+				isSaving={isPending}
 			/>
 		</>
 	);

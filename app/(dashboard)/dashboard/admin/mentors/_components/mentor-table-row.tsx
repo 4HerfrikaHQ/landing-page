@@ -6,6 +6,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { cn } from "@/utils/cn";
 import { format } from "date-fns";
 import {
@@ -29,6 +30,7 @@ type Mentor = {
 	slug: string;
 	position: string | null;
 	image: string | null;
+	image_crop: MentorImageCrop | null;
 	email: string;
 	bio: string | null;
 	nickname: string | null;
@@ -117,6 +119,7 @@ export function MentorTableRow({ mentor }: { mentor: Mentor }) {
 						id={mentor.id}
 						name={mentor.name}
 						image={mentor.image}
+						imageCrop={mentor.image_crop}
 					/>
 				</TableCell>
 				<TableCell className="font-medium text-foreground">

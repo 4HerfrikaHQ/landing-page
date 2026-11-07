@@ -74,9 +74,7 @@ export default async function ManageBookingPage({
 						<Button
 							variant="outline"
 							size="sm"
-							href={
-								mentor ? `/careercorner/${mentor.slug}` : "/careercorner"
-							}
+							href={mentor ? `/careercorner/${mentor.slug}` : "/careercorner"}
 						>
 							Book again
 						</Button>

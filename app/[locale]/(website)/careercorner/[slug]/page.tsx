@@ -1,3 +1,4 @@
+import { MentorImage } from "@/components/mentor-image";
 import { FadeIn } from "@/components/motion";
 import { optionalUserCapabilities } from "@/src/auth";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
@@ -5,17 +6,15 @@ import {
 	absoluteSiteUrl,
 	localizedCareerCornerPath,
 } from "@/src/lib/careercorner-seo";
-import { isLocalImageUrl } from "@/src/lib/image-url";
 import { ChevronLeft, Clock, Eye, Linkedin, UserRound } from "lucide-react";
 import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import {
-	getInitialWeekStart,
 	getInactiveMentorBySlug,
+	getInitialWeekStart,
 	getMentorByPreviousSlug,
 	getMentorBySlug,
 } from "./_actions";
@@ -124,8 +123,8 @@ export default async function MentorDetailPage({
 						<Eye className="mt-0.5 size-5 shrink-0 text-amber-700" />
 						<p className="text-sm leading-6">
 							<span className="font-semibold">Inactive profile preview.</span>{" "}
-							This mentor is not currently visible to the public. You can
-							see this page because you are {" "}
+							This mentor is not currently visible to the public. You can see
+							this page because you are{" "}
 							{isAdminPreview
 								? "a super admin"
 								: "the mentor who owns this profile"}
@@ -160,13 +159,13 @@ export default async function MentorDetailPage({
 									<div className="absolute -inset-2 rounded-full bg-surface-pink" />
 									<div className="relative size-28 overflow-hidden rounded-full ring-4 ring-primary-500/15 sm:size-32">
 										{mentor.image ? (
-											<Image
+											<MentorImage
 												src={mentor.image}
 												alt={mentor.name}
-												fill
+												crop={mentor.image_crop}
+												aspectRatio={1}
 												sizes="128px"
-												unoptimized={isLocalImageUrl(mentor.image)}
-												className="object-cover object-top"
+												className="size-full"
 											/>
 										) : (
 											<div className="flex h-full w-full items-center justify-center bg-secondary-500/30">
@@ -224,8 +223,8 @@ export default async function MentorDetailPage({
 								{canCreateBooking ? (
 									<>
 										<p className="mt-2 text-sm text-muted-foreground">
-											Pick a time that works for you. Times are shown in your local
-											timezone.
+											Pick a time that works for you. Times are shown in your
+											local timezone.
 										</p>
 										<div className="mt-6">
 											<BookingSection
