@@ -17,6 +17,7 @@ import {
 import {
 	MENTOR_PAGE_SIZE,
 	MENTOR_SEARCH_MAX_LENGTH,
+	parseMentorPage,
 	toPrefixTsQuery,
 } from "./_utils/mentor-search";
 
@@ -44,7 +45,7 @@ export async function getMentors({
 }): Promise<{ mentors: MentorWithAvailability[]; total: number }> {
 	const { mentors, mentorGoogleConnections, availability } = schema;
 	const pageSize = MENTOR_PAGE_SIZE;
-	const offset = (Math.max(1, Math.floor(page) || 1) - 1) * pageSize;
+	const offset = (parseMentorPage(page) - 1) * pageSize;
 	const term = query.trim().slice(0, MENTOR_SEARCH_MAX_LENGTH);
 	const prefixQuery = toPrefixTsQuery(term);
 

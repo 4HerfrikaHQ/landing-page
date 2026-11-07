@@ -16,7 +16,7 @@ import Image from "next/image";
 import { getHeroMentors, getMentors } from "./_actions";
 import { CareersHero } from "./_components/hero";
 import { MentorDirectory } from "./_components/mentor-directory";
-import { MENTOR_PAGE_SIZE } from "./_utils/mentor-search";
+import { MENTOR_PAGE_SIZE, parseMentorPage } from "./_utils/mentor-search";
 
 const CareersCorner = async ({
 	params,
@@ -28,7 +28,7 @@ const CareersCorner = async ({
 	const { locale } = await params;
 	await setLocaleFromParams(params);
 	const sp = await searchParams;
-	const page = Math.max(1, Number(sp.page) || 1);
+	const page = parseMentorPage(sp.page);
 
 	const [tCareers, tCommon, { mentors, total }, heroMentors, featured] =
 		await Promise.all([
