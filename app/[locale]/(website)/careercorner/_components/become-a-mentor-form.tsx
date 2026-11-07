@@ -17,9 +17,9 @@ import {
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { uploadMentorCv } from "../apply/_upload-cv";
 import { submitMentorApplication } from "../apply/_actions";
 import { SubmitApplicationSchema } from "../apply/_schema";
-import { uploadMentorCv } from "../apply/_upload-cv";
 
 export function BecomeAMentorForm() {
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
@@ -110,10 +110,7 @@ export function BecomeAMentorForm() {
 				<Input {...form.register("country")} />
 			</FormField>
 
-			<FormField
-				label="LinkedIn Profile URL"
-				error={errors.linkedin_url?.message}
-			>
+			<FormField label="LinkedIn Profile URL" error={errors.linkedin_url?.message}>
 				<Input type="url" {...form.register("linkedin_url")} />
 			</FormField>
 
@@ -127,10 +124,7 @@ export function BecomeAMentorForm() {
 			</FormField>
 
 			<FormField label="Primary Industry" error={errors.industry?.message}>
-				<Input
-					placeholder="e.g. Tech, Healthcare, Finance…"
-					{...form.register("industry")}
-				/>
+				<Input placeholder="e.g. Tech, Healthcare, Finance…" {...form.register("industry")} />
 			</FormField>
 
 			<FormField label="CV" error={errors.cv_path?.message}>

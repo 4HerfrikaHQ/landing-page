@@ -14,8 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import {
-	getInactiveMentorBySlug,
 	getInitialWeekStart,
+	getInactiveMentorBySlug,
 	getMentorByPreviousSlug,
 	getMentorBySlug,
 } from "./_actions";
@@ -124,8 +124,8 @@ export default async function MentorDetailPage({
 						<Eye className="mt-0.5 size-5 shrink-0 text-amber-700" />
 						<p className="text-sm leading-6">
 							<span className="font-semibold">Inactive profile preview.</span>{" "}
-							This mentor is not currently visible to the public. You can see
-							this page because you are{" "}
+							This mentor is not currently visible to the public. You can
+							see this page because you are {" "}
 							{isAdminPreview
 								? "a super admin"
 								: "the mentor who owns this profile"}
@@ -224,8 +224,8 @@ export default async function MentorDetailPage({
 								{canCreateBooking ? (
 									<>
 										<p className="mt-2 text-sm text-muted-foreground">
-											Pick a time that works for you. Times are shown in your
-											local timezone.
+											Pick a time that works for you. Times are shown in your local
+											timezone.
 										</p>
 										<div className="mt-6">
 											<BookingSection
