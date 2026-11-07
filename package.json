@@ -67,6 +67,7 @@
     "@slicemachine/adapter-next": "^0.3.65",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/bun": "^1.4.4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
