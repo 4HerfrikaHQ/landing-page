@@ -38,18 +38,18 @@ function ReviewCard({ review }: { review: Review }) {
 	const rating = Math.max(0, Math.min(5, Math.round(review.rating ?? 5)));
 
 	return (
-		<article className="relative min-w-0 pl-8 sm:pl-[41px]">
-			<div className="flex min-h-[209px] min-w-0 flex-col rounded-2xl bg-[#c62979] py-6 pl-12 pr-6 text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] sm:py-8 sm:pl-[57px] sm:pr-[41px]">
-				<p className="text-base font-medium leading-6 sm:text-lg sm:leading-[23px]">
+		<article className="relative min-w-0 pl-8 sm:pl-10.25">
+			<div className="flex min-h-52.25 min-w-0 flex-col rounded-2xl bg-[#c62979] py-6 pl-12 pr-6 text-white shadow-[2px_10px_25px_rgba(0,0,0,0.18)] sm:py-8 sm:pl-14.25 sm:pr-10.25">
+				<p className="text-base font-medium leading-6 sm:text-lg sm:leading-5.75">
 					{review.quote}
 				</p>
 				<div className="mt-6 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
 					<div className="min-w-0">
-						<h3 className="text-xl font-semibold leading-[25px]">
+						<h3 className="text-xl font-semibold leading-6.25">
 							{review.name}
 						</h3>
 						{review.title && (
-							<p className="mt-2 text-sm leading-[18px]">{review.title}</p>
+							<p className="mt-2 text-sm leading-4.5">{review.title}</p>
 						)}
 					</div>
 					{rating > 0 && (
@@ -74,7 +74,7 @@ function ReviewCard({ review }: { review: Review }) {
 					alt={review.image.alt}
 					width={82}
 					height={82}
-					className="absolute left-0 top-1/2 size-16 -translate-y-1/2 rounded-full object-cover sm:size-[82px]"
+					className="absolute left-0 top-1/2 size-16 -translate-y-1/2 rounded-full object-cover sm:size-20.5"
 				/>
 			)}
 		</article>
@@ -105,14 +105,14 @@ export function ReviewsSection({
 			)}
 		>
 			{decorations}
-			<div className="relative z-10 mx-auto max-w-[1280px]">
+			<div className="relative z-10 mx-auto max-w-7xl">
 				<FadeIn>
-					<div className="mx-auto max-w-[880px] text-center">
-						<h2 className="text-[63px] font-semibold leading-[66px] max-sm:text-4xl max-sm:leading-tight">
+					<div className="mx-auto max-w-220 text-center">
+						<h2 className="text-[63px] font-semibold leading-16.5 max-sm:text-4xl max-sm:leading-tight">
 							{heading}
 						</h2>
 						{subheading && (
-							<p className="mt-6 text-xl font-medium leading-[27px]">
+							<p className="mt-6 text-xl font-medium leading-6.75">
 								{subheading}
 							</p>
 						)}
@@ -136,13 +136,13 @@ export function ReviewsSection({
 								))}
 							</CarouselContent>
 							<div className="mt-10 flex justify-center gap-4">
-								<CarouselPrevious className="static translate-y-0 border-[#ec008c] text-[#ec008c] hover:bg-[#ec008c] hover:text-white" />
-								<CarouselNext className="static translate-y-0 border-[#ec008c] text-[#ec008c] hover:bg-[#ec008c] hover:text-white" />
+								<CarouselPrevious className="static translate-y-0 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white" />
+								<CarouselNext className="static translate-y-0 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white" />
 							</div>
 						</Carousel>
 					</FadeIn>
 				) : (
-					<div className="mt-14 grid grid-cols-1 gap-x-[52px] gap-y-14 md:grid-cols-2">
+					<div className="mt-14 grid grid-cols-1 gap-x-13 gap-y-14 md:grid-cols-2">
 						{reviews.map((review) => (
 							<ReviewCard key={review.id} review={review} />
 						))}

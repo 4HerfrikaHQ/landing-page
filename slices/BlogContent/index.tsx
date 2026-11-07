@@ -40,7 +40,7 @@ const BlogContent: FC<BlogContentProps> = ({ slice }) => {
 				data-slice-type={slice.slice_type}
 				data-slice-variation={slice.variation}
 			>
-				<p className="text-lg md:text-2xl font-normal md:leading-[39px] leading-relaxed text-[#1E2939]">
+				<p className="text-lg md:text-2xl font-normal md:leading-9.75 leading-relaxed text-[#1E2939]">
 					{slice.primary.text}
 				</p>
 			</blockquote>

@@ -22,7 +22,7 @@ export default function AcademyWaitlistLoading() {
 				</div>
 			</div>
 			<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-				<table className="w-full min-w-[760px] text-left text-sm">
+				<table className="w-full min-w-190 text-left text-sm">
 					<tbody>
 						{ROWS.map((row) => (
 							<tr key={row} className="border-b border-border/60 last:border-0">

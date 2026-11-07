@@ -66,7 +66,7 @@ export function FeedbackDetailSheet({
 
 					<Section title="Comment">
 						{feedback.comment ? (
-							<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/80">
+							<p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed text-foreground/80">
 								{feedback.comment}
 							</p>
 						) : (

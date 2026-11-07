@@ -60,10 +60,10 @@ const LINK_PROBLEM = {
 
 function OnboardShell({ children }: { children: React.ReactNode }) {
 	return (
-		<main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-surface-pink via-white to-white px-4 py-16">
+		<main className="relative min-h-screen overflow-hidden bg-linear-to-b from-surface-pink via-white to-white px-4 py-16">
 			<div
 				aria-hidden
-				className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-surface-pink to-transparent"
+				className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-linear-to-b from-surface-pink to-transparent"
 			/>
 			<div className="relative mx-auto w-full max-w-2xl">{children}</div>
 		</main>

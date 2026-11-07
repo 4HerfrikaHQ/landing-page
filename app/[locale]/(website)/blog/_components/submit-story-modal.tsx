@@ -103,7 +103,7 @@ export function SubmitStoryModal({ categories }: Props) {
 
 			<DialogContent className="max-w-[92vw] sm:max-w-[70vw] max-h-[90vh] overflow-y-auto rounded-3xl p-8">
 				<DialogHeader>
-					<DialogTitle className="text-[48px] font-bold leading-[48px] text-foreground">
+					<DialogTitle className="text-[48px] font-bold leading-12 text-foreground">
 						Submit Your Story
 					</DialogTitle>
 					<p className="text-xl font-normal leading-[32.5px] text-foreground/60 mt-1">

@@ -113,7 +113,7 @@ export function BookingDetailSheet({
 					</Section>
 
 					<Section title="What they want to discuss">
-						<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/80">
+						<p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed text-foreground/80">
 							{booking.purpose}
 						</p>
 					</Section>
@@ -158,7 +158,7 @@ export function BookingDetailSheet({
 										? `Cancelled ${formatDate(booking.cancelled_at, booking.mentee_timezone)}`
 										: "Cancelled"}
 								</p>
-								<p className="mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed text-muted-foreground">
+								<p className="mt-2 whitespace-pre-wrap wrap-break-word text-sm leading-relaxed text-muted-foreground">
 									{booking.cancel_reason || "No reason was provided."}
 								</p>
 							</div>

@@ -25,10 +25,10 @@ export default async function ApplyPage({
 	setRequestLocale(locale as Locale);
 
 	return (
-		<main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-surface-pink via-white to-white px-4 py-16">
+		<main className="relative min-h-screen overflow-hidden bg-linear-to-b from-surface-pink via-white to-white px-4 py-16">
 			<div
 				aria-hidden
-				className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-surface-pink to-transparent"
+				className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-linear-to-b from-surface-pink to-transparent"
 			/>
 			<FadeIn className="relative mx-auto w-full max-w-2xl">
 				<div className="flex flex-col items-center text-center">

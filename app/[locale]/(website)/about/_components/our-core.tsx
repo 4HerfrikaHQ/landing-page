@@ -33,7 +33,7 @@ const coreValueKeys = [
 export const OurCore = async () => {
 	const t = await getTranslations("about");
 	return (
-		<section className="bg-gradient-to-br from-pink-100 via-purple-50 to-pink-100 w-full py-16 md:py-24 relative overflow-hidden">
+		<section className="bg-linear-to-br from-pink-100 via-purple-50 to-pink-100 w-full py-16 md:py-24 relative overflow-hidden">
 			<div className="absolute inset-0 opacity-20">
 				<div className="absolute top-10 left-6 w-24 h-24 md:w-32 md:h-32 bg-pink-200 rounded-full blur-xl" />
 				<div className="absolute bottom-10 right-6 w-28 h-28 md:w-40 md:h-40 bg-purple-200 rounded-full blur-xl" />
@@ -45,10 +45,10 @@ export const OurCore = async () => {
 					{t("coreValues")}
 				</h1>
 
-				<div className="hidden md:flex justify-center items-center min-h-[600px] lg:min-h-[700px] relative">
-					<div className="w-[400px] h-[400px] lg:w-[600px] lg:h-[600px] border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/2" />
-					<div className="w-[350px] h-[350px] lg:w-[500px] lg:h-[500px] border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
-					<div className="w-[280px] h-[280px] lg:w-[400px] lg:h-[400px] border border-surface-teal rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
+				<div className="hidden md:flex justify-center items-center min-h-150 lg:min-h-175 relative">
+					<div className="w-100 h-100 lg:w-150 lg:h-150 border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/2" />
+					<div className="w-87.5 h-87.5 lg:w-125 lg:h-125 border border-secondary-500/40 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
+					<div className="w-70 h-70 lg:w-100 lg:h-100 border border-surface-teal rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary-500/5" />
 
 					<FadeIn
 						className="relative z-10 w-44 sm:w-52 md:w-60 lg:w-auto"
@@ -76,7 +76,7 @@ export const OurCore = async () => {
 						>
 							<div className="relative">
 								<div
-									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-gradient-to-br ${coreValueKeys[i].bg} rounded-full opacity-30 blur-sm transform`}
+									className={`absolute inset-0 w-40 h-40 lg:w-48 lg:h-48 bg-linear-to-br ${coreValueKeys[i].bg} rounded-full opacity-30 blur-sm transform`}
 								/>
 								<div className="relative bg-background/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-border w-36 lg:w-40 text-center">
 									<div className="mb-3">
@@ -105,7 +105,7 @@ export const OurCore = async () => {
 								className="relative w-full h-full max-w-xs flex flex-col"
 							>
 								<div
-									className={`absolute inset-0 w-full h-full bg-gradient-to-br ${card.bg} rounded-2xl opacity-20 blur-sm`}
+									className={`absolute inset-0 w-full h-full bg-linear-to-br ${card.bg} rounded-2xl opacity-20 blur-sm`}
 								/>
 								<div className="relative bg-background/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-border text-center h-full flex flex-col">
 									<div className="mb-2">
@@ -117,7 +117,7 @@ export const OurCore = async () => {
 											className="mx-auto"
 										/>
 									</div>
-									<p className="text-foreground font-medium text-sm flex-grow">
+									<p className="text-foreground font-medium text-sm grow">
 										{t(card.textKey)}
 									</p>
 								</div>

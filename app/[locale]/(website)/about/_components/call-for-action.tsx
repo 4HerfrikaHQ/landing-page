@@ -44,7 +44,7 @@ export const CallForAction = async () => {
 					src={CallForActionImage.src}
 					height={CallForActionImage.height}
 					width={CallForActionImage.width}
-					className="rounded-md h-[300px] md:h-[400px] lg:h-[500px] w-full object-cover"
+					className="rounded-md h-75 md:h-100 lg:h-125 w-full object-cover"
 				/>
 			</FadeIn>
 		</section>

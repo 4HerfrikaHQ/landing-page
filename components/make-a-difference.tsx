@@ -23,7 +23,7 @@ export function MakeADifference() {
 				height={322}
 				className="pointer-events-none absolute bottom-0 right-0 max-w-[50%] h-auto"
 			/>
-			<div className="relative z-10 mx-auto flex max-w-[733px] flex-col items-center text-center">
+			<div className="relative z-10 mx-auto flex max-w-183.25 flex-col items-center text-center">
 				<h2 className="text-3xl md:text-5xl leading-loose font-semibold text-[#333333] mb-6 md:mb-9">Make a Difference</h2>
 				<p className="text-lg md:text-2xl leading-7 md:leading-8 text-[#333333]/80 mb-8 md:mb-14">
 					Your support can help us continue creating impact in communities across Africa

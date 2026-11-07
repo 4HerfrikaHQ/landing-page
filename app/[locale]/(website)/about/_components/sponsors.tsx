@@ -30,7 +30,7 @@ export function Sponsors() {
 						target="_blank"
 						rel="noreferrer noopener"
 						aria-label={sponsor.name}
-						className="group flex aspect-[4/3] items-center justify-center rounded-2xl border border-foreground/10 bg-white px-4 py-3 transition hover:border-primary-500/40 hover:shadow-md"
+						className="group flex aspect-4/3 items-center justify-center rounded-2xl border border-foreground/10 bg-white px-4 py-3 transition hover:border-primary-500/40 hover:shadow-md"
 					>
 						<Image
 							src={sponsor.logo}

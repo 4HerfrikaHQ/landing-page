@@ -80,7 +80,7 @@ const CareersCorner = async ({
 				<section className="bg-muted">
 					<section className="container mx-auto grid h-full grid-cols-1 items-center gap-10 px-4 py-8 sm:px-6 md:grid-cols-2 md:py-12 lg:px-8 lg:py-16 xl:py-20">
 						<FadeIn direction="left">
-							<div className="group relative flex h-[400px] w-full flex-col justify-end overflow-hidden rounded-tl-[16px] rounded-tr-[16px] rounded-br-[40px] rounded-bl-[40px] p-6 sm:h-[560px] sm:rounded-br-[70px] sm:rounded-bl-[70px] sm:p-8">
+							<div className="group relative flex h-100 w-full flex-col justify-end overflow-hidden rounded-tl-[16px] rounded-tr-[16px] rounded-br-[40px] rounded-bl-[40px] p-6 sm:h-140 sm:rounded-br-[70px] sm:rounded-bl-[70px] sm:p-8">
 								{featured.image ? (
 									<Image
 										src={featured.image}
@@ -95,7 +95,7 @@ const CareersCorner = async ({
 										<UserRound className="size-28 text-white/70" />
 									</div>
 								)}
-								<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+								<div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 								<div className="relative z-10 flex flex-col gap-3">
 									<span className="inline-flex w-fit items-center rounded-full bg-primary-500 px-4 py-1.5 text-xs font-medium text-white sm:text-sm">
 										{tCareers("featuredMentor")}
