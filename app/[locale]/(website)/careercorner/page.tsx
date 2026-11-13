@@ -90,7 +90,7 @@ const CareersCorner = async ({
 				<section className="bg-muted">
 					<section className="container mx-auto grid h-full grid-cols-1 items-center gap-10 px-4 py-8 sm:px-6 md:grid-cols-2 md:py-12 lg:px-8 lg:py-16 xl:py-20">
 						<FadeIn direction="left">
-							<div className="group relative flex aspect-[4/5] w-full max-w-xl flex-col justify-end overflow-hidden rounded-tl-[16px] rounded-tr-[16px] rounded-br-[60px] rounded-bl-[60px] p-6 sm:rounded-br-[124px] sm:rounded-bl-[124px] sm:p-8">
+							<div className="group relative flex aspect-[4/5] w-full max-w-xl flex-col justify-end overflow-hidden rounded-t-[16px] rounded-b-[24px] p-6 sm:rounded-b-[32px] sm:p-8">
 								{featured.image ? (
 									<MentorImage
 										src={featured.image}
