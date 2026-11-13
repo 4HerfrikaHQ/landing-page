@@ -97,10 +97,10 @@ const CareersCorner = async ({
 										alt={featured.name}
 										crop={featured.image_crop}
 										sizes="(max-width: 768px) 100vw, 50vw"
-										className="size-full transition-transform duration-700 group-hover:scale-105"
+										className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
 									/>
 								) : (
-									<div className="flex h-full w-full items-center justify-center bg-secondary-500/40">
+									<div className="absolute inset-0 flex items-center justify-center bg-secondary-500/40">
 										<UserRound className="size-28 text-white/70" />
 									</div>
 								)}
