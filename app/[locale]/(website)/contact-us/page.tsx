@@ -1,120 +1,15 @@
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
+import { FadeIn } from "@/components/motion";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
-import {
-	Instagram,
-	Linkedin,
-	Mail,
-	MapPin,
-	Phone,
-	Twitter,
-} from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
-import ContactForm from "./_components/contact-form";
-
-const Contact = async ({ params }: { params: Promise<{ locale: string }> }) => {
-	await setLocaleFromParams(params);
-	const t = await getTranslations("contact");
-
-	return (
-		<section className="h-screen grid py-10 relative">
-			<Image
-				src="/assets/contact/background.png"
-				alt=""
-				className="object-cover absolute top-0 w-full"
-				fill
-				sizes="100vw"
-			/>
-			<FadeIn className="z-10">
-				<section className="shadow-lg max-w-5xl container mx-auto p-16 rounded-lg bg-background z-10">
-					<h1 className="text-primary-500 text-2xl p-4 text-center underline underline-offset-4 capitalize font-semibold">
-						{t("getInTouch")}
-					</h1>
-
-					<section className="mt-10 flex gap-10">
-						<ContactForm />
-						<StaggerContainer className="w-full md:col-span-2 flex flex-col gap-4">
-							<StaggerItem>
-								<p className="flex text-lg items-center gap-3 text-muted-foreground">
-									<MapPin className="h-5 w-5" /> <span>Africa</span>
-								</p>
-							</StaggerItem>
-							<StaggerItem>
-								<p className="flex text-lg items-center gap-3 text-muted-foreground my-3">
-									<Phone className="h-5 w-5" />
-									<a
-										href="tel:+2349082009908"
-										className="hover:underline transition"
-									>
-										+234(0)9082009908
-									</a>
-								</p>
-							</StaggerItem>
-							<StaggerItem>
-								<p className="flex text-lg items-center gap-3 text-muted-foreground">
-									<Mail className="h-5 w-5" />
-									<a
-										href="mailto:4herfrika@gmail.com"
-										className="hover:underline transition"
-									>
-										4herfrika@gmail.com
-									</a>
-								</p>
-							</StaggerItem>
-							<StaggerItem>
-								<ul className="flex items-center gap-6 text-muted-foreground mt-4">
-									<li>
-										<a
-											href="https://www.instagram.com/4herfrika?igsh=MXN1dDZzcjc2d3dwaA=="
-											rel="noreferrer"
-											target="_blank"
-											className="hover:text-muted-foreground transition"
-										>
-											<Instagram className="h-5 w-5" />
-										</a>
-									</li>
-									<li>
-										<a
-											href="https://twitter.com/4herfrika"
-											rel="noreferrer"
-											target="_blank"
-											className="hover:text-muted-foreground transition"
-										>
-											<Twitter className="h-5 w-5" />
-										</a>
-									</li>
-									<li>
-										<a
-											href="https://www.linkedin.com/company/4herfrika"
-											rel="noreferrer"
-											target="_blank"
-											className="hover:text-muted-foreground transition"
-										>
-											<Linkedin className="h-5 w-5" />
-										</a>
-									</li>
-								</ul>
-							</StaggerItem>
-							<StaggerItem>
-								<div className="relative w-full min-h-48 mt-7">
-									<Image
-										src="/assets/contact/map.jpg"
-										alt={t("altMap")}
-										fill
-										sizes="(max-width: 768px) 100vw, 50vw"
-										className="object-cover rounded-md"
-									/>
-								</div>
-							</StaggerItem>
-						</StaggerContainer>
-					</section>
-				</section>
-			</FadeIn>
-		</section>
-	);
-};
+import { ContactForm } from "./_components/contact-form";
+import { ContactHero } from "./_components/contact-hero";
+import { DirectDetails } from "./_components/direct-details";
+import { PartnersBand } from "./_components/partners-band";
+import { QuickAnswers } from "./_components/quick-answers";
+import { SentGate } from "./_components/sent-gate";
+import { TopicCards } from "./_components/topic-cards";
 
 export async function generateMetadata({
 	params,
@@ -126,4 +21,50 @@ export async function generateMetadata({
 	return { title: t("title"), description: t("description") };
 }
 
-export default Contact;
+export default async function Contact({
+	params,
+}: { params: Promise<{ locale: string }> }) {
+	await setLocaleFromParams(params);
+	const t = await getTranslations("contact");
+
+	return (
+		<SentGate>
+			<main className="overflow-x-clip bg-white text-foreground">
+				<ContactHero />
+
+				<section
+					id="topics"
+					className="scroll-mt-24 bg-primary-500/2 px-4 py-14 lg:px-20 lg:py-24"
+				>
+					<FadeIn className="mx-auto max-w-6xl">
+						<div className="text-center">
+							<h2 className="text-[32px] font-bold leading-tight lg:text-5xl">
+								{t("topicsHeading")}{" "}
+								<em className="font-playfair font-black text-primary-500">
+									{t("topicsAccent")}
+								</em>
+							</h2>
+							<p className="mt-3 text-[17px] text-muted-foreground">
+								{t("topicsHint")}
+							</p>
+						</div>
+						<TopicCards />
+					</FadeIn>
+				</section>
+
+				<section
+					id="form"
+					className="scroll-mt-24 px-4 py-14 lg:px-20 lg:py-24"
+				>
+					<FadeIn className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-start">
+						<ContactForm />
+						<DirectDetails />
+					</FadeIn>
+				</section>
+
+				<PartnersBand />
+				<QuickAnswers />
+			</main>
+		</SentGate>
+	);
+}

@@ -164,21 +164,89 @@
 		"bankTransferNote": "Use the account details below to make your transfer"
 	},
 	"contact": {
-		"altMap": "Map showing 4Herfrika's office location",
-		"title": "Contact Us",
-		"name": "Name",
-		"email": "Email Address",
-		"message": "Message",
-		"send": "Send",
-		"phone": "Phone",
-		"location": "Location",
-		"getInTouch": "Get in touch",
+		"heroImageAlt": "Three young women taking a selfie together at a 4HerFrika event",
+		"heroBadge": "Contact us",
+		"heroFirst": "We'd love to",
+		"heroSecond": "hear from you.",
+		"heroDescription": "Tell us what you need and we'll pass it to the right person.",
+		"chooseTopic": "Choose a topic ↓",
+		"topicsHeading": "What can we",
+		"topicsAccent": "help with?",
+		"topicsHint": "Pick one. The form opens on that topic.",
+		"topics": {
+			"partner": {
+				"title": "Partner with us",
+				"description": "Companies, funders and universities"
+			},
+			"press": {
+				"title": "Press and media",
+				"description": "Interviews, stories and photos"
+			},
+			"mentorship": {
+				"title": "Mentorship help",
+				"description": "Finding a mentor or a booked call"
+			},
+			"academy": {
+				"title": "Academy or certificate",
+				"description": "Sign-in, quizzes, your certificate link"
+			},
+			"ambassador": {
+				"title": "Campus ambassador",
+				"description": "Bring 4HerFrika to your campus"
+			},
+			"other": {
+				"title": "Something else",
+				"description": "Anything that doesn't fit above"
+			}
+		},
 		"leaveMessage": "Leave us a message",
-		"messagePlaceholder": "Your Message",
+		"requiredNote": "All fields are required unless they say optional.",
+		"change": "Change",
+		"fullName": "Full name",
+		"emailLabel": "Email address",
+		"topicLabel": "Topic",
+		"topicPlaceholder": "Choose a topic",
+		"phoneLabel": "Phone / WhatsApp",
+		"optional": "(optional)",
+		"phoneHint": "Only if you'd like us to call or message you back.",
+		"certificateCode": "Certificate code",
+		"certificateHint": "The last part of your link: 4herfrika.org/certificates/code",
+		"yourMessage": "Your message",
+		"send": "Send message",
 		"sending": "Sending...",
-		"successMessage": "Message sent successfully!",
+		"privacyNote": "We'll only use your details to reply.",
+		"privacyLink": "Privacy",
+		"errors": {
+			"nameRequired": "Please enter your name.",
+			"emailInvalid": "That doesn't look like an email address. Please check it.",
+			"topicRequired": "Please choose a topic.",
+			"messageRequired": "Please write a message."
+		},
+		"errorMessage": "Failed to send message. Please check your inputs and try again.",
+		"directTitle": "Prefer to reach us directly?",
+		"region": "Africa",
+		"socialLabel": "4HerFrika on social media",
+		"faqHeading": "Your answer might be here already",
+		"allFaqs": "All FAQs",
+		"readAnswer": "Read the answer",
+		"partnersBadge": "Partners",
+		"partnersFirst": "Help us reach",
+		"partnersSecond": "2 million girls.",
+		"partnersDescription": "In Year 1 we mentored 3,000+ girls across 25+ campuses in 5 countries. Companies, funders and universities make the next step possible, like Ordina did with our first free online course.",
+		"partnersCta": "Start a partnership conversation",
+		"partnersImageAlt": "A facilitator teaching participants in a computer lab",
+		"successFirst": "Message sent",
+		"successSecond": "successfully!",
 		"successDescription": "Thank you for getting in touch. We'll get back to you soon.",
-		"errorMessage": "Failed to send message. Please check your inputs and try again."
+		"replyTo": "Reply to",
+		"spamNote": "Can't see our reply? Check your spam or promotions folder.",
+		"backHome": "Back to home",
+		"browseFaq": "Browse the FAQ",
+		"whileYouWait": "While you wait",
+		"startCourse": "Start the free course",
+		"courseDescription": "AI for Your Next Opportunity, with Ordina",
+		"bookMentor": "Book a mentor",
+		"mentorDescription": "30-minute calls on Google Meet"
 	},
 	"impact": {
 		"altYearReport": "Cover of 4Herfrika's Year-One Landscape Report, ‘From One to Many’",
