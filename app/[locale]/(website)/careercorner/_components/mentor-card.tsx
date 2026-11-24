@@ -12,7 +12,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	const displayName = mentor.nickname || mentor.name;
 
 	return (
-		<article className="flex h-full flex-col rounded-2xl bg-white p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:-translate-y-1 lg:rounded-[32px] lg:p-3">
+		<article className="flex h-full flex-col rounded-2xl bg-white p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:-translate-y-1 lg:rounded-[20px] lg:p-3">
 			<div className="relative aspect-4/5 w-full overflow-hidden rounded-xl lg:rounded-3xl">
 				{mentor.image ? (
 					<MentorImage

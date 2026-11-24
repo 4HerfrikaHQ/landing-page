@@ -26,7 +26,7 @@ export async function FeaturedMentorCard({
 			className="px-4 pt-14 lg:px-20 lg:pt-20"
 		>
 			<div className="mx-auto max-w-6xl">
-				<article className="relative grid overflow-hidden rounded-[32px] bg-surface-pink shadow-[0_12px_24px_rgba(0,0,0,0.08)] lg:grid-cols-[1.15fr_1fr] lg:rounded-[40px]">
+				<article className="relative grid overflow-hidden rounded-[20px] bg-surface-pink shadow-[0_12px_24px_rgba(0,0,0,0.08)] lg:grid-cols-[1.15fr_1fr] lg:rounded-[40px]">
 					<div className="relative h-95 bg-white lg:order-2 lg:h-120">
 						{mentor.image ? (
 							<MentorImage
