@@ -2,6 +2,7 @@ import { jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { enrolments } from "./enrolments";
 
 export type CertificatePartner = { name: string; logoUrl: string | null };
+export type CertificateSignatory = { name: string; title: string };
 
 export const certificates = pgTable("certificates", {
 	id: uuid("id").primaryKey().defaultRandom(),
@@ -15,6 +16,7 @@ export const certificates = pgTable("certificates", {
 	issuer: text("issuer").notNull(),
 	attribution: text("attribution"),
 	partners: jsonb("partners").$type<CertificatePartner[]>().notNull(),
+	signatories: jsonb("signatories").$type<CertificateSignatory[]>().notNull(),
 	completed_at: timestamp("completed_at", { withTimezone: true }).notNull(),
 	issued_at: timestamp("issued_at", { withTimezone: true })
 		.notNull()

@@ -7,6 +7,7 @@ CREATE TABLE "certificates" (
 	"issuer" text NOT NULL,
 	"attribution" text,
 	"partners" jsonb NOT NULL,
+	"signatories" jsonb NOT NULL,
 	"completed_at" timestamp with time zone NOT NULL,
 	"issued_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"revoked_at" timestamp with time zone,

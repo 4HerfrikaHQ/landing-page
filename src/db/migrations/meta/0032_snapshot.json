@@ -627,6 +627,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "signatories": {
+          "name": "signatories",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
         "completed_at": {
           "name": "completed_at",
           "type": "timestamp with time zone",
