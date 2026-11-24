@@ -10,7 +10,7 @@ export function ProjectContent({ children }: { children: React.ReactNode }) {
         prose-strong:text-foreground
         prose-li:marker:text-primary-500
         prose-a:text-primary-500 prose-a:no-underline hover:prose-a:underline
-        prose-img:rounded-[28px]
+        prose-img:rounded-[20px]
       "
 		>
 			{children}

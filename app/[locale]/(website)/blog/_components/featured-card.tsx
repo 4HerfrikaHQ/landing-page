@@ -8,7 +8,7 @@ export function FeaturedCard({ card }: { card: CardData }) {
 			<div className="mx-auto max-w-6xl">
 				<Link
 					href={card.href as Route}
-					className="group grid overflow-hidden rounded-[32px] bg-white text-foreground no-underline shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none hover:no-underline! focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 lg:grid-cols-2 lg:rounded-[40px]"
+					className="group grid overflow-hidden rounded-[20px] bg-white text-foreground no-underline shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none hover:no-underline! focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 lg:grid-cols-2 lg:rounded-[40px]"
 				>
 					<FeedImage
 						src={card.imageSrc}
