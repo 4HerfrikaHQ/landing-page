@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/src/lib/analytics";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { type ReactNode, useState } from "react";
 import { type Academy, academies, academyType } from "../_schema";
 import { WaitlistModal } from "./waitlist-modal";
@@ -13,6 +14,10 @@ type Filter = "all" | Academy;
 export type CatalogItem = { uid: string; track: Academy; card: ReactNode };
 
 const FILTERS: readonly Filter[] = ["all", ...academyType.options];
+
+const trackParam = parseAsStringLiteral(FILTERS)
+	.withDefault("all")
+	.withOptions({ history: "replace", scroll: false });
 
 const COMING_SOON_SURFACE: Record<Academy, string> = {
 	tech: "bg-surface-indigo",
@@ -41,7 +46,7 @@ function tracksWithoutCourse(items: CatalogItem[], filter: Filter) {
 
 export function CatalogBrowser({ items }: { items: CatalogItem[] }) {
 	const t = useTranslations("academy.catalog");
-	const [filter, setFilter] = useState<Filter>("all");
+	const [filter, setFilter] = useQueryState("track", trackParam);
 	const [waitlist, setWaitlist] = useState<{ open: boolean; track: Academy }>({
 		open: false,
 		track: "tech",
