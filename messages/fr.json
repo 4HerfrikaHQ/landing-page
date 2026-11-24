@@ -484,6 +484,10 @@
 		"attendance": {
 			"title": "Confirmer la présence",
 			"description": "Confirmez si votre session de mentorat 4Herfrika a eu lieu."
+		},
+		"impactReports": {
+			"title": "Rapports d’impact — Chaque année, comptée à voix haute",
+			"description": "Lisez en ligne les rapports d’impact annuels de 4Herfrika ou téléchargez le PDF, des plus de 3 000 filles accompagnées la première année à notre objectif de 2 millions de femmes et de filles d’ici 2030."
 		}
 	},
 	"attendance": {
@@ -766,5 +770,42 @@
 		"aboutReauth": "À propos de la nouvelle autorisation",
 		"reauthTooltip": "Renouvelle le consentement pour ce compte Google associé ; cela ne permet pas de changer de compte.",
 		"updating": "Mise à jour de la connexion…"
+	},
+	"impactIndex": {
+		"heroEyebrow": "Rapports annuels",
+		"heroFirst": "Chaque année,",
+		"heroSecond": "comptée à voix haute.",
+		"heroDescription": "Voici tous les rapports que nous avons publiés, avec les chiffres derrière notre travail.",
+		"seeReports": "Voir les rapports",
+		"donate": "Faire un don",
+		"join": "Rejoignez-nous",
+		"statsCaption": "La première année en chiffres",
+		"statGirls": "filles accompagnées",
+		"statCampuses": "campus touchés",
+		"statCountries": "pays",
+		"statGraduates": "diplômées de la Tech Academy",
+		"reportsPill": "Rapports annuels",
+		"reportsFirst": "Tous les rapports,",
+		"reportsSecond": "au même endroit.",
+		"readOnline": "Lire en ligne",
+		"downloadPdf": "Télécharger le PDF · 25,6 Mo",
+		"largeFileNote": "Fichier volumineux. Avec des données mobiles, la lecture en ligne consomme bien moins.",
+		"year1": {
+			"coverAlt": "Couverture du rapport de la première année, From One to Many",
+			"label": "Année 1",
+			"title": "D’un seul à beaucoup",
+			"summary": "Ce qui a commencé sur un seul campus au Nigeria s’est étendu à 25 campus dans cinq pays en douze mois.",
+			"figureGirls": "Filles accompagnées",
+			"figureCampuses": "Campus touchés",
+			"figureGraduates": "Diplômées de la Tech Academy",
+			"figureCountries": "Pays"
+		},
+		"goalPill": "L’objectif 2030",
+		"goalFirst": "Deux millions",
+		"goalSecond": "d’ici 2030.",
+		"goalDescription": "D’ici 2030, 4HerFrika imagine 2 millions de femmes et de filles autonomisées à travers l’Afrique, avec les compétences et les personnes pour mener.",
+		"ctaFirst": "Aidez-nous à atteindre",
+		"ctaSecond": "deux millions.",
+		"ctaDescription": "Chaque don et chaque bénévole aident davantage de filles à être accompagnées, formées et connectées."
 	}
 }

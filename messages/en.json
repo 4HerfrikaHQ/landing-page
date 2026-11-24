@@ -484,6 +484,10 @@
 		"attendance": {
 			"title": "Confirm Attendance",
 			"description": "Confirm whether your 4Herfrika mentorship session took place."
+		},
+		"impactReports": {
+			"title": "Impact Reports — Every Year, Counted Out Loud",
+			"description": "Read 4Herfrika's annual impact reports online or download the PDF, from 3,000+ girls mentored in year one to our goal of 2 million women and girls by 2030."
 		}
 	},
 	"attendance": {
@@ -766,5 +770,42 @@
 		"aboutReauth": "About reauthorization",
 		"reauthTooltip": "Refreshes consent for this linked Google account; it cannot switch accounts.",
 		"updating": "Updating connection…"
+	},
+	"impactIndex": {
+		"heroEyebrow": "Annual reports",
+		"heroFirst": "Every year,",
+		"heroSecond": "counted out loud.",
+		"heroDescription": "Here is every report we have published, with the numbers behind the work.",
+		"seeReports": "See the reports",
+		"donate": "Donate",
+		"join": "Join us",
+		"statsCaption": "Year 1 in numbers",
+		"statGirls": "girls mentored",
+		"statCampuses": "campuses reached",
+		"statCountries": "countries",
+		"statGraduates": "Tech Academy graduates",
+		"reportsPill": "Annual reports",
+		"reportsFirst": "Every report,",
+		"reportsSecond": "in one place.",
+		"readOnline": "Read online",
+		"downloadPdf": "Download PDF · 25.6 MB",
+		"largeFileNote": "Large file. On mobile data, reading online uses far less.",
+		"year1": {
+			"coverAlt": "Cover of the Year 1 report, From One to Many",
+			"label": "Year 1",
+			"title": "From one to many",
+			"summary": "What started on a single campus in Nigeria spread to 25 campuses in five countries in twelve months.",
+			"figureGirls": "Girls mentored",
+			"figureCampuses": "Campuses reached",
+			"figureGraduates": "Tech Academy graduates",
+			"figureCountries": "Countries"
+		},
+		"goalPill": "The 2030 goal",
+		"goalFirst": "Two million",
+		"goalSecond": "by 2030.",
+		"goalDescription": "By 2030, 4HerFrika envisions 2 million women and girls empowered across Africa, with the skills and the people to lead.",
+		"ctaFirst": "Help us reach",
+		"ctaSecond": "two million.",
+		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected."
 	}
 }
