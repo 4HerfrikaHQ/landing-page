@@ -41,20 +41,25 @@ async function refreshDashboardSession(request: NextRequest) {
 	return response;
 }
 
-async function refreshSessionOnto(
-	request: NextRequest,
-	response: NextResponse,
-) {
+async function routeWithFreshSession(request: NextRequest) {
+	const refreshed: Parameters<SetAllCookies>[0] = [];
+	const refreshHeaders: Record<string, string> = {};
 	const supabase = createSessionClient(request, (cookiesToSet, headers) => {
-		for (const { name, value, options } of cookiesToSet) {
-			response.cookies.set(name, value, options);
+		for (const { name, value } of cookiesToSet) {
+			request.cookies.set(name, value);
 		}
-		for (const [name, value] of Object.entries(headers)) {
-			response.headers.set(name, value);
-		}
+		refreshed.push(...cookiesToSet);
+		Object.assign(refreshHeaders, headers);
 	});
 
 	await supabase.auth.getClaims();
+	const response = handleI18nRouting(request);
+	for (const { name, value, options } of refreshed) {
+		response.cookies.set(name, value, options);
+	}
+	for (const [name, value] of Object.entries(refreshHeaders)) {
+		response.headers.set(name, value);
+	}
 	return response;
 }
 
@@ -64,11 +69,10 @@ export default async function proxy(request: NextRequest) {
 		return refreshDashboardSession(request);
 	}
 
-	const response = handleI18nRouting(request);
 	if (isAcademyPath(pathname)) {
-		return refreshSessionOnto(request, response);
+		return routeWithFreshSession(request);
 	}
-	return response;
+	return handleI18nRouting(request);
 }
 
 export const config = {
