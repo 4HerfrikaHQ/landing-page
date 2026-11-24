@@ -1003,7 +1003,9 @@
 				"course_not_found": "Hatukuweza kupata kozi hii.",
 				"generic": "Kuna hitilafu. Tafadhali jaribu tena."
 			},
-			"metaFallback": "Kozi ya bure ya 4HerFrika Academy yenye cheti."
+			"metaFallback": "Kozi ya bure ya 4HerFrika Academy yenye cheti.",
+			"viewCertificate": "Tazama cheti chako",
+			"myLearning": "Masomo yangu"
 		},
 		"lesson": {
 			"close": "Rudi kwenye kozi",
@@ -1106,7 +1108,8 @@
 			"finish": {
 				"title": "Umemaliza kozi",
 				"body": "Masomo yote yanayohitajika yamekamilika. Hongera.",
-				"action": "Rudi kwenye kozi"
+				"action": "Rudi kwenye kozi",
+				"seeCertificate": "Tazama cheti chako"
 			},
 			"errors": {
 				"generic": "Kuna hitilafu. Tafadhali jaribu tena.",
@@ -1118,6 +1121,43 @@
 				"already_submitted": "Tayari umetuma kazi hii. Subiri ukaguzi.",
 				"track_required": "Chagua njia kwanza."
 			}
+		},
+		"complete": {
+			"metaTitle": "Umemaliza kozi",
+			"badge": "Umemaliza kozi",
+			"titleLead": "Hongera,",
+			"modules": "{count, plural, one {moduli #} other {moduli #}}",
+			"quizzes": "{count, plural, one {jaribio #} other {majaribio #}}",
+			"tasks": "{count, plural, one {kazi #} other {kazi #}}",
+			"oneCertificate": "Cheti kimoja ambacho ni chako milele.",
+			"completedOn": "Umemaliza tarehe {date}",
+			"certificateId": "Kitambulisho",
+			"steps": {
+				"emailed": "Umetumiwa barua pepe, pamoja na kiungo ambacho mtu yeyote anaweza kukikagua",
+				"linkedin": "Kiongeze kwenye LinkedIn chini ya Leseni na vyeti",
+				"mentor": "Inayofuata: weka miadi ya simu ya bure na mshauri"
+			},
+			"navLabel": "Baada ya kozi",
+			"myLearning": "Masomo yangu",
+			"backToCourse": "Rudi kwenye kozi",
+			"backToCourses": "Kozi zote"
+		},
+		"me": {
+			"metaTitle": "Masomo yangu",
+			"title": "Masomo ya {name}",
+			"emptyTitle": "Bado hujaanza kozi yoyote",
+			"emptyBody": "Chagua kozi na itaonekana hapa pamoja na maendeleo yako na cheti chako.",
+			"browse": "Tazama kozi",
+			"inProgress": "Inaendelea",
+			"moduleOf": "Moduli {current} kati ya {total}",
+			"progress": "Maendeleo katika {course}",
+			"continueLesson": "Endelea: {title}",
+			"review": "Pitia kozi",
+			"certificates": "Vyeti",
+			"firstCertificateTitle": "Cheti chako cha kwanza kiko karibu",
+			"firstCertificateBody": "Maliza kozi na cheti chako kitaonekana hapa.",
+			"completedBadge": "Imekamilika",
+			"viewCertificate": "Tazama cheti"
 		}
 	},
 	"seo": {
@@ -2214,6 +2254,62 @@
 			"titleFirst": "Unahitaji kitu",
 			"titleSecond": "kingine?",
 			"text": "Ukubwa maalum, chapa shirikishi au swali la vyombo vya habari? Tuandikie nasi tutakusaidia."
+		}
+	},
+	"certificates": {
+		"card": {
+			"label": "Cheti cha kuhitimu",
+			"heading": "Cheti cha kuhitimu",
+			"certifies": "Hiki ni kuthibitisha kwamba",
+			"completed": "amemaliza kozi ya",
+			"issuedBy": "Kimetolewa na {issuer}"
+		},
+		"share": {
+			"linkedin": "Ongeza kwenye wasifu wa LinkedIn",
+			"whatsapp": "WhatsApp",
+			"copyLink": "Nakili kiungo",
+			"copied": "Kiungo kimenakiliwa",
+			"copyFailed": "Imeshindikana kunakili kiungo",
+			"savePdf": "Hifadhi kama PDF",
+			"opensNewTab": "(inafunguka kwenye kichupo kipya)",
+			"whatsappMessage": "Nimemaliza tu {course} kwenye 4HerFrika Academy. Unaweza kukagua cheti changu hapa:"
+		},
+		"check": {
+			"metaTitle": "Ukaguzi wa cheti",
+			"validTitle": "Cheti halali",
+			"issuedBy": "Kimetolewa na {issuer}",
+			"completedOn": "Alimaliza tarehe",
+			"status": "Hali",
+			"valid": "Halali",
+			"proof": "Ukurasa huu ndio uthibitisho. Unatoka moja kwa moja kwenye kumbukumbu za 4HerFrika na mmiliki hawezi kuubadilisha.",
+			"about": "4HerFrika Academy ni nini?",
+			"notFoundTitle": "Hatukukipata cheti hicho",
+			"notFoundBody": "Angalia kama kitambulisho kina makosa. Kina herufi na namba 8, kama K7P2-QX9M. Ukishindwa bado kukipata, tuandikie hello@4herfrika.org.",
+			"withdrawnTitle": "Cheti hiki kimeondolewa",
+			"withdrawnBody": "Tarehe {date}. Hakiko halali tena.",
+			"course": "Kozi",
+			"withdrawnOn": "Kimeondolewa tarehe",
+			"withdrawn": "Kimeondolewa",
+			"withdrawnNote": "Jina la mmiliki na tarehe ya kuhitimu hufichwa cheti kikishaondolewa. Unadhani ni kosa? Tuandikie <email>hello@4herfrika.org</email> ukiambatisha kiungo cha ukurasa huu."
+		},
+		"print": {
+			"metaTitle": "Chapisha cheti",
+			"title": "Chapisha cheti chako",
+			"hint": "Chagua Hifadhi kama PDF kwenye dirisha la kuchapisha ili kuweka nakala. Kinachapishwa kwenye ukurasa mmoja wa A4, mlalo.",
+			"print": "Chapisha au hifadhi kama PDF",
+			"hasCompleted": "amemaliza kozi ya",
+			"completedOn": "Alimaliza tarehe",
+			"certificateId": "Kitambulisho cha cheti",
+			"verifyAt": "Kagua kwenye {url}"
+		},
+		"email": {
+			"subject": "Cheti chako kiko tayari",
+			"greeting": "Habari {name},",
+			"body": "Umemaliza {course}. Hongera. Cheti chako kiko tayari:",
+			"share": "Ukurasa huo ndio uthibitisho wako. Kiongeze kwenye wasifu wako wa LinkedIn, kitume kwa WhatsApp, au kihifadhi kama PDF. Yeyote anayekifungua anaweza kuona kwamba ni halali.",
+			"certificateId": "Kitambulisho cha cheti: {code}",
+			"signoff": "— 4HerFrika",
+			"footer": "Unapata ujumbe huu kwa sababu umemaliza kozi kwenye 4herfrika.org/academy."
 		}
 	}
 }

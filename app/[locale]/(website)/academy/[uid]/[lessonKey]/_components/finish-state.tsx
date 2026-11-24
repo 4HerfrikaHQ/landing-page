@@ -23,8 +23,11 @@ export function FinishState({
 				{t("title")}
 			</h2>
 			<p className="text-lg text-secondary-500">{t("body")}</p>
-			<Link href={courseHref as Route} className={SECONDARY_ACTION}>
-				{t("action")}
+			<Link
+				href={`${courseHref}/complete` as Route}
+				className={SECONDARY_ACTION}
+			>
+				{t("seeCertificate")}
 			</Link>
 		</section>
 	);

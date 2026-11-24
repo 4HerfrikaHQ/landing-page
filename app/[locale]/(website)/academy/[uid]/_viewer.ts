@@ -12,6 +12,7 @@ export type Viewer =
 			kind: "enrolled";
 			name: string;
 			policy: CompletionPolicy;
+			finished: boolean;
 			completed: ReadonlySet<string>;
 	  };
 
@@ -27,6 +28,7 @@ export async function loadViewer(course: Course): Promise<Viewer> {
 		kind: "enrolled",
 		name,
 		policy: enrolment.completion_policy,
+		finished: enrolment.completed_at !== null,
 		completed: await completedLessonIds(enrolment.id),
 	};
 }

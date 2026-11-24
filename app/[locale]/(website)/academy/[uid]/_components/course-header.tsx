@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -7,22 +7,34 @@ import { PartnerLogo } from "../../_components/course-card";
 import { CourseChips } from "../../_components/course-chips";
 import type { Course } from "../../_helpers";
 import { ACADEMY_HOME_PATH, localizedPath } from "../../sign-in/_helpers";
-import { splitTitle } from "../_helpers";
+import { MY_LEARNING_PATH, splitTitle } from "../_helpers";
 
-export function CourseHeader({ course }: { course: Course }) {
+const BACK_LINK_CLASS =
+	"-ml-1 inline-flex min-h-11 w-fit items-center gap-2 rounded-md px-1 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary-500";
+
+export function CourseHeader({
+	course,
+	showMyLearning,
+}: {
+	course: Course;
+	showMyLearning: boolean;
+}) {
 	const t = useTranslations("academy.course");
 	const locale = useLocale();
 	const { lead, accent } = splitTitle(course.title);
 
 	return (
 		<header className="flex flex-col gap-5">
-			<Link
-				href={localizedPath(locale, ACADEMY_HOME_PATH) as Route}
-				className="-ml-1 inline-flex min-h-11 w-fit items-center gap-2 rounded-md px-1 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary-500"
-			>
-				<ArrowLeft className="size-4" aria-hidden="true" />
-				{t("backToCourses")}
-			</Link>
+			<div className="flex flex-wrap items-center justify-between gap-x-6">
+				<Link
+					href={localizedPath(locale, ACADEMY_HOME_PATH) as Route}
+					className={BACK_LINK_CLASS}
+				>
+					<ArrowLeft className="size-4" aria-hidden="true" />
+					{t("backToCourses")}
+				</Link>
+				<MyLearningLink show={showMyLearning} />
+			</div>
 			<div className="flex flex-wrap gap-2">
 				<CourseChips track={course.track} level={course.level} />
 			</div>
@@ -34,6 +46,21 @@ export function CourseHeader({ course }: { course: Course }) {
 			<PartnerStrip partners={course.partners} />
 			<Stats course={course} />
 		</header>
+	);
+}
+
+function MyLearningLink({ show }: { show: boolean }) {
+	const t = useTranslations("academy.course");
+	const locale = useLocale();
+	if (!show) return null;
+	return (
+		<Link
+			href={localizedPath(locale, MY_LEARNING_PATH) as Route}
+			className={`${BACK_LINK_CLASS} font-semibold text-primary-700`}
+		>
+			{t("myLearning")}
+			<ArrowRight className="size-4" aria-hidden="true" />
+		</Link>
 	);
 }
 

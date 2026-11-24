@@ -4,7 +4,13 @@ import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import type { Course } from "../../_helpers";
 import { localizedPath, signInPath, welcomePath } from "../../sign-in/_helpers";
-import { coursePath, firstLesson, lessonPath, nextLesson } from "../_helpers";
+import {
+	completePath,
+	coursePath,
+	firstLesson,
+	lessonPath,
+	nextLesson,
+} from "../_helpers";
 import type { Viewer } from "../_viewer";
 import { EnrolButton } from "./enrol-button";
 
@@ -46,6 +52,17 @@ export function CourseAction({
 	}
 	if (viewer.kind === "learner") return <EnrolButton uid={course.uid} />;
 
+	if (viewer.finished) {
+		return (
+			<Button
+				href={localizedPath(locale, completePath(course.uid))}
+				size="lg"
+				className={ACTION_CLASS}
+			>
+				{t("viewCertificate")} <ArrowRight className="size-4" />
+			</Button>
+		);
+	}
 	const next = nextLesson(course, viewer.policy, viewer.completed);
 	const lesson = next ?? firstLesson(course);
 	const label = next ? t("continue") : t("review");

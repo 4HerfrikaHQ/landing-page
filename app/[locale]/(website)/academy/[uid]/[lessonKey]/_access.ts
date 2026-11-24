@@ -3,11 +3,15 @@ import { db } from "@/src/db";
 import { enrolments, lessonProgress } from "@/src/db/schema/tables";
 import { ActionError } from "@/src/lib/safe-action";
 import { and, eq, isNull, sql } from "drizzle-orm";
+import { getLocale } from "next-intl/server";
 import { cache } from "react";
+import { issueCertificate } from "../../../certificates/_certificate";
+import { sendCertificateReadyEmail } from "../../../certificates/_email";
+import { buildCertificateSnapshot } from "../../../certificates/_helpers";
 import { getCourse } from "../../_content";
 import { completedLessonIds, findEnrolment } from "../../_enrolment";
 import { type Course, isCourseComplete, toPolicyModules } from "../../_helpers";
-import { currentLearner } from "../../_learner";
+import { currentAuthUser, currentLearner } from "../../_learner";
 import { canOpenLesson, findLesson } from "./_helpers";
 
 export const loadCourse = cache(getCourse);
@@ -94,9 +98,31 @@ export async function markLessonComplete(
 		});
 }
 
+type Learner = NonNullable<Awaited<ReturnType<typeof currentLearner>>>;
+
+async function notifyCertificateIssued(
+	certificate: { code: string; course_title: string },
+	learner: Learner,
+) {
+	try {
+		const user = await currentAuthUser();
+		if (!user?.email) return;
+		await sendCertificateReadyEmail({
+			to: user.email,
+			name: learner.certificate_name,
+			courseTitle: certificate.course_title,
+			code: certificate.code,
+			locale: await getLocale(),
+		});
+	} catch (error) {
+		console.error("[certificate-ready] email failed", error);
+	}
+}
+
 export async function concludeCourse(
 	course: Course,
 	enrolment: NonNullable<Awaited<ReturnType<typeof findEnrolment>>>,
+	learner: Learner,
 ) {
 	if (enrolment.completed_at) return false;
 	const completed = await completedLessonIds(enrolment.id);
@@ -106,12 +132,27 @@ export async function concludeCourse(
 		completed,
 	);
 	if (!finished) return false;
-	await db
-		.update(enrolments)
-		.set({ completed_at: new Date() })
-		.where(
-			and(eq(enrolments.id, enrolment.id), isNull(enrolments.completed_at)),
-		);
+	const completedAt = new Date();
+	const snapshot = buildCertificateSnapshot({
+		learnerName: learner.certificate_name,
+		course,
+		completedAt,
+	});
+	const outcome = await db.transaction(async (tx) => {
+		const [concluded] = await tx
+			.update(enrolments)
+			.set({ completed_at: completedAt })
+			.where(
+				and(eq(enrolments.id, enrolment.id), isNull(enrolments.completed_at)),
+			)
+			.returning({ id: enrolments.id });
+		if (!concluded) return null;
+		return { certificate: await issueCertificate(tx, enrolment.id, snapshot) };
+	});
+	if (!outcome) return false;
+	if (outcome.certificate) {
+		await notifyCertificateIssued(outcome.certificate, learner);
+	}
 	return true;
 }
 
@@ -125,5 +166,5 @@ export async function actionAccess(uid: string, lessonKey: string) {
 		getCourse,
 	);
 	if (access.kind !== "ok") throw new ActionError("lesson_unavailable");
-	return access;
+	return { ...access, learner };
 }
