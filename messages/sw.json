@@ -466,6 +466,68 @@
 			"generic": "Hitilafu imetokea. Tafadhali jaribu tena."
 		}
 	},
+	"academyAuth": {
+		"signIn": {
+			"metaTitle": "Ingia kwenye Akademi",
+			"metaDescription": "Fungua akaunti yako ya bure ya 4HerFrika Academy au ingia kwa msimbo wa tarakimu 6 kupitia barua pepe au Google.",
+			"badge": "AI kwa Fursa Yako Ijayo",
+			"title": "Anza kujifunza, <accent>bure.</accent>",
+			"subtitle": "Akaunti moja kwa kozi zote. Maendeleo yako huhifadhiwa kwenye kifaa chochote.",
+			"google": "Endelea na Google",
+			"googleOpening": "Inafungua Google…",
+			"divider": "au kwa barua pepe",
+			"emailLabel": "Anwani ya barua pepe",
+			"emailPlaceholder": "wewe@mfano.com",
+			"emailHint": "Tutakutumia msimbo wa tarakimu 6. Hakuna nenosiri.",
+			"sendCode": "Nitumie msimbo wangu",
+			"sending": "Inatuma msimbo wako…",
+			"legal": "Kwa kuendelea, unakubali <link>sera yetu ya faragha</link>."
+		},
+		"code": {
+			"title": "Angalia barua pepe yako",
+			"sentTo": "Tumetuma msimbo wa tarakimu 6 kwa <strong>{email}</strong>. Unafanya kazi kwa dakika 10.",
+			"codeLabel": "Msimbo wa tarakimu 6",
+			"didntGetIt": "Hujaupata? Angalia barua taka, au",
+			"resendIn": "tuma tena baada ya {time}",
+			"resend": "tuma msimbo mpya",
+			"verify": "Thibitisha",
+			"verifying": "Inakuingiza…",
+			"changeEmail": "Tumia barua pepe nyingine"
+		},
+		"welcome": {
+			"metaTitle": "Kidogo kukuhusu",
+			"title": "Kidogo kukuhusu",
+			"subtitle": "Tunauliza hili mara moja tu.",
+			"nameLabel": "Jina lako kwa cheti",
+			"namePlaceholder": "Amara Okafor",
+			"nameHint": "Liandike kama unavyotaka waajiri walione. Ili kulibadilisha baadaye, tuandikie hello@4herfrika.org.",
+			"countryLabel": "Nchi",
+			"countryPlaceholder": "Chagua nchi yako",
+			"countryGroupAfrica": "Afrika",
+			"countryGroupOther": "Sehemu nyingine za dunia",
+			"campusLabel": "Chuo (si lazima)",
+			"campusPlaceholder": "mfano LAUTECH",
+			"ageLabel": "Nina umri wa <strong>miaka {minAge} au zaidi</strong>.",
+			"ageNote": "Baadhi ya zana za AI katika kozi hii zina umri wake wa chini.",
+			"submit": "Endelea",
+			"saving": "Inahifadhi…"
+		},
+		"errors": {
+			"otp_expired": "Msimbo huo haukufanya kazi. Huenda umeandikwa vibaya au umeisha muda. Angalia barua pepe yako ya hivi karibuni, au tuma msimbo mpya.",
+			"email_limit": "Tumetuma barua pepe nyingi za kuingia katika saa moja iliyopita. Tafadhali jaribu tena baada ya muda mfupi, au tuandikie hello@4herfrika.org kwa msaada.",
+			"too_many_attempts": "Majaribio mengi mno. Tafadhali subiri dakika chache kisha ujaribu tena.",
+			"invalid_email": "Hiyo haionekani kama anwani ya barua pepe. Tafadhali iangalie.",
+			"incomplete_code": "Weka tarakimu zote 6 za msimbo wako.",
+			"callback_failed": "Hatukuweza kukamilisha kukuingiza. Tafadhali jaribu tena.",
+			"session_expired": "Kipindi chako kimeisha. Tafadhali ingia tena.",
+			"name_required": "Weka jina lako kama linavyopaswa kuonekana kwenye cheti chako.",
+			"name_too_long": "Jina lako lisizidi herufi 120.",
+			"country_required": "Chagua nchi yako.",
+			"campus_too_long": "Jina la chuo chako lisizidi herufi 120.",
+			"age_required": "Tafadhali thibitisha umri wako ili kuendelea.",
+			"generic": "Kuna tatizo lililotokea. Tafadhali jaribu tena."
+		}
+	},
 	"onboarding": {
 		"eyebrow": "Usajili wa mentor",
 		"welcome": "Karibu, {name}",
