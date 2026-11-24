@@ -5,7 +5,7 @@ import Link from "next/link";
 import { joinOptions } from "../_schema";
 
 const cardClass =
-	"block h-full rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 lg:rounded-[32px] lg:p-8";
+	"block h-full rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 lg:rounded-[20px] lg:p-8";
 
 export async function AboutJoin() {
 	const t = await getTranslations("about");

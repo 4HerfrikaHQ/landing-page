@@ -29,7 +29,7 @@ function StatementCard({
 					src={image}
 					alt={alt}
 					sizes="(max-width: 1024px) 100vw, 560px"
-					className="aspect-2/1 w-full rounded-xl object-cover lg:rounded-[28px]"
+					className="aspect-2/1 w-full rounded-xl object-cover lg:rounded-[20px]"
 				/>
 				<div className="flex flex-1 flex-col p-2 pt-5 lg:p-4">
 					<h3 className="text-xl font-semibold">{title}</h3>
