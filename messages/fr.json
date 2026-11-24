@@ -652,6 +652,7 @@
 		"updating": "Mise à jour de la connexion…"
 	},
 	"impactIndex": {
+		"allReports": "Tous les rapports",
 		"heroEyebrow": "Rapports annuels",
 		"heroFirst": "Chaque année,",
 		"heroSecond": "comptée à voix haute.",

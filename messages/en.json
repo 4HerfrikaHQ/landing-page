@@ -652,6 +652,7 @@
 		"updating": "Updating connection…"
 	},
 	"impactIndex": {
+		"allReports": "All reports",
 		"heroEyebrow": "Annual reports",
 		"heroFirst": "Every year,",
 		"heroSecond": "counted out loud.",
