@@ -394,7 +394,8 @@ html {
 }
 
 ::view-transition-old(root),
-::view-transition-new(root) {
+::view-transition-new(root),
+::view-transition-group(page) {
 	animation: none;
 }
 
