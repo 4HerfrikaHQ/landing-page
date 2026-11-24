@@ -1,12 +1,8 @@
-import {
-	FadeIn,
-	StaggerContainer,
-	StaggerItem,
-	TextReveal,
-} from "@/components/motion";
+import { FadeIn, TextReveal } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import { cn } from "@/utils/cn";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
@@ -24,6 +20,19 @@ import milestone1 from "./milestone-1.jpg";
 import milestone2 from "./milestone-2.jpg";
 import milestone3 from "./milestone-3.jpg";
 import Squiggle from "./squiggle";
+
+const MILESTONES = [
+	"girlsMentored",
+	"campusesReached",
+	"graduates",
+	"academies",
+] as const;
+
+const MILESTONE_PHOTOS = [
+	{ src: milestone1, alt: "altMilestone1" },
+	{ src: milestone2, alt: "altMilestone2" },
+	{ src: milestone3, alt: "altMilestone3" },
+] as const;
 
 export async function generateMetadata({
 	params,
@@ -88,45 +97,42 @@ export default async function YearOneReportPage({
 			<p className="mx-auto mb-16 max-w-4xl px-6 text-center text-lg leading-relaxed text-muted-foreground lg:mb-52 lg:px-20 lg:text-[32px] lg:leading-snug">
 				{t("whatStarted")}
 			</p>
-			<div className="bg-surface-pink pt-16 md:pt-30 pb-44 md:pb-105 flex flex-col text-center relative">
-				<h2 className="mb-12 text-[32px] font-bold leading-tight text-secondary-500 lg:text-5xl">
-					{t("milestones")}
-				</h2>
-				<StaggerContainer
-					className="list-disc space-y-4 px-6 text-center text-lg text-foreground marker:text-primary-500 md:space-y-6 md:text-2xl"
-					style={{ listStyleType: "disc" }}
-				>
-					<StaggerItem>
-						<li className="w-fit mx-auto">{t("girlsMentored")}</li>
-					</StaggerItem>
-					<StaggerItem>
-						<li className="w-fit mx-auto">{t("campusesReached")}</li>
-					</StaggerItem>
-					<StaggerItem>
-						<li className="w-fit mx-auto">{t("graduates")}</li>
-					</StaggerItem>
-					<StaggerItem>
-						<li className="w-fit mx-auto">{t("academies")}</li>
-					</StaggerItem>
-				</StaggerContainer>
-				<div className="grid grid-cols-2 gap-4 px-6 mt-12 md:mt-0">
-					<Image
-						src={milestone1}
-						alt={t("altMilestone1")}
-						className="relative md:absolute h-40 left-0 md:top-1/2 md:-translate-y-1/2 md:size-[16vw] object-cover md:rounded-full"
-					/>
-					<Image
-						src={milestone2}
-						alt={t("altMilestone2")}
-						className="relative md:absolute h-40 md:right-60 md:bottom-48 md:size-[14vw] object-cover md:rounded-full"
-					/>
-					<Image
-						src={milestone3}
-						alt={t("altMilestone3")}
-						className="relative col-span-2 h-80 md:absolute md:right-20 md:top-20 md:size-[10vw] object-cover md:rounded-full"
-					/>
+			<section className="bg-surface-pink px-4 pt-16 pb-40 lg:px-20 lg:pt-24 lg:pb-56">
+				<div className="mx-auto max-w-6xl">
+					<h2 className="text-center text-[32px] font-bold leading-tight text-secondary-500 lg:text-5xl">
+						{t("milestones")}
+					</h2>
+					<ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:gap-6">
+						{MILESTONES.map((key) => (
+							<li
+								key={key}
+								className="flex items-center gap-4 rounded-[20px] bg-white p-6 text-lg font-medium text-foreground shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:p-8 lg:text-2xl"
+							>
+								<span
+									aria-hidden="true"
+									className="size-3 shrink-0 rounded-full bg-primary-500"
+								/>
+								{t(key)}
+							</li>
+						))}
+					</ul>
+					<div className="mt-10 grid grid-cols-2 gap-4 lg:mt-14 lg:grid-cols-3 lg:gap-6">
+						{MILESTONE_PHOTOS.map((photo, index) => (
+							<Image
+								key={photo.alt}
+								src={photo.src}
+								alt={t(photo.alt)}
+								sizes="(min-width: 1024px) 360px, 50vw"
+								className={cn(
+									"aspect-4/3 h-auto w-full rounded-[20px] object-cover shadow-[0_12px_24px_rgba(0,0,0,0.10)]",
+									index === 2 &&
+										"col-span-2 aspect-video lg:col-span-1 lg:aspect-4/3",
+								)}
+							/>
+						))}
+					</div>
 				</div>
-			</div>
+			</section>
 			<div className="bg-surface-indigo -mt-24 md:-mt-36 relative z-10 rounded-t-[100px] md:rounded-t-[248px]">
 				<span className="h-12 md:h-32 block" />
 				<p className="mx-auto mb-12 max-w-4xl px-6 text-center text-lg leading-relaxed text-muted-foreground lg:mb-32 lg:px-20 lg:text-[32px] lg:leading-snug">
