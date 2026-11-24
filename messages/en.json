@@ -597,6 +597,10 @@
 		"impactReports": {
 			"title": "Impact Reports — Every Year, Counted Out Loud",
 			"description": "Read 4Herfrika's annual impact reports online or download the PDF, from 3,000+ girls mentored in year one to our goal of 2 million women and girls by 2030."
+		},
+		"blogCategory": {
+			"title": "{name} — The Pink Blog",
+			"description": "Stories and updates in {name} from 4HerFrika, the mentorship network for young African women."
 		}
 	},
 	"attendance": {
@@ -1242,5 +1246,57 @@
 			"step2Body": "If it's a match, we send you a link to set up your mentor profile and availability.",
 			"back": "Back to mentors"
 		}
+	},
+	"blogPage": {
+		"stories": "Stories",
+		"projects": "Projects",
+		"all": "All",
+		"filterLabel": "Blog categories",
+		"heroBadge": "The Pink Blog",
+		"heroFirst": "Stories from the girls",
+		"heroSecond": "changing Africa.",
+		"heroDescription": "Projects, campus events, Academy news and career advice. Everything we do, told by the women who do it.",
+		"heroAlt": "Three women talking around a laptop at a 4HerFrika session",
+		"freshFrom": "Fresh from",
+		"freshEm": "the community",
+		"projectsLiveHere": "Projects now live here too.",
+		"minRead": "{minutes} min read",
+		"readStory": "Read the story",
+		"readProject": "Read the project",
+		"loadMore": "Load more posts",
+		"showing": "Showing {shown} of {total} posts",
+		"empty": "No posts in this category yet",
+		"emptyHint": "Check back soon.",
+		"movedBadge": "Projects have moved",
+		"movedTitle": "Looking for our projects?",
+		"movedEm": "They live here now.",
+		"movedDescription": "StopTheViolence, SkillUp with 4Herfrika and the GirlsTech Bootcamp, with what we did and who we did it with.",
+		"movedCta": "See all projects",
+		"storyTitle": "Your story could be",
+		"storyEm": "the next one.",
+		"storyDescription": "A first mentor call, a bootcamp that changed your mind, a job you didn't think you'd get. Tell us and we'll help you shape it.",
+		"newsletterBadge": "Newsletter",
+		"newsletterTitle": "One email a month.",
+		"newsletterEm": "All the good bits.",
+		"newsletterDescription": "New stories, open mentor slots and Academy courses before anyone else. Unsubscribe anytime.",
+		"newsletterAlt": "A young woman smiling at her laptop on a campus bench",
+		"breadcrumb": "Breadcrumb",
+		"writtenBy": "Written by",
+		"shareHeading": "Share this story",
+		"shareWhatsapp": "WhatsApp",
+		"shareX": "X",
+		"shareLinkedin": "LinkedIn",
+		"copyLink": "Copy link",
+		"linkCopied": "Link copied",
+		"keep": "Keep",
+		"reading": "reading",
+		"allIn": "All in {category}",
+		"careerBadge": "Career Corner",
+		"careerTitle": "Want to talk it through with someone who has been there?",
+		"careerBody": "Book a free 30-minute call with a mentor who works in your field.",
+		"careerCta": "Book a call",
+		"inboxTitle": "Get the next story",
+		"inboxEm": "in your inbox.",
+		"inboxDescription": "One email a month. Unsubscribe anytime."
 	}
 }
