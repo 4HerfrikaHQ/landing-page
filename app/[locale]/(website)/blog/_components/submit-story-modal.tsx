@@ -12,6 +12,7 @@ import {
 import { cn } from "@/utils/cn";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import { submitStory } from "../_actions";
 
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024
@@ -164,12 +165,12 @@ export function SubmitStoryModal({ categories }: Props) {
 					</div>
 
 					<div>
-						<Label className={labelClass}>
+						<Label htmlFor="story-category" className={labelClass}>
 							Category{required}
 						</Label>
-						<select
+						<NativeSelect
+							id="story-category"
 							name="categoryId"
-							className={cn(rawInputClass, "appearance-none cursor-pointer")}
 							required
 							defaultValue=""
 						>
@@ -179,7 +180,7 @@ export function SubmitStoryModal({ categories }: Props) {
 									{cat.name}
 								</option>
 							))}
-						</select>
+						</NativeSelect>
 					</div>
 
 					<div>
