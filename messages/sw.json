@@ -201,14 +201,38 @@
 		"language": "Lugha"
 	},
 	"notFound": {
-		"backToHome": "Rudi Nyumbani",
-		"couldntFind": "Hatukuweza kupata ukurasa uliokuwa unatafuta, lakini usijali!",
-		"description": "Ukurasa unaoutafuta haupo au umehamishwa.",
-		"everyDetour": "Kila njia ya pembeni ni fursa ya kugundua jambo jipya.",
-		"takeMeHome": "Nipeleke Nyumbani",
-		"title": "Oops! Ukurasa Haujapatikana",
-		"tryAgain": "Jaribu tena",
-		"venturedOff": "Inaonekana umefika nje ya njia uliyoizoea..."
+		"eyebrow": "Hitilafu 404 · Ukurasa haupatikani",
+		"titleLead": "Ukurasa huu ulipitia",
+		"titleAccent": "njia ya kando.",
+		"body": "Hatukupata ukurasa uliokuwa unautafuta, lakini usijali. Kila mchepuko ni nafasi ya kugundua kitu kipya.",
+		"takeMeHome": "Nirudishe mwanzo",
+		"photoAlt": "Kundi la wanawake vijana wenye fulana za waridi za 4HerFrika wakitabasamu pamoja",
+		"hereTitle": "Uko hapa",
+		"hereBody": "nje kidogo ya ramani",
+		"routesTitle": "Ungependa kwenda wapi?",
+		"home": {
+			"title": "Mwanzo",
+			"body": "Anza tena kutoka mlangoni.",
+			"cta": "Nenda mwanzo"
+		},
+		"academy": {
+			"title": "Akademia",
+			"body": "Ujuzi wa vitendo, ushauri wa kitaaluma na miradi halisi.",
+			"cta": "Gundua Akademia"
+		},
+		"mentors": {
+			"title": "Washauri",
+			"body": "Weka simu ya dakika 30 na mtu aliyepita njia yako.",
+			"cta": "Tafuta mshauri"
+		},
+		"blog": {
+			"title": "Blogu",
+			"body": "Hadithi, miradi na habari kutoka kwa wasichana na vyuo.",
+			"cta": "Soma hadithi"
+		},
+		"reportLead": "Umefuata kiungo kilichovunjika kwenye tovuti yetu? Tuambie kupitia",
+		"reportTail": "nasi tutakirekebisha.",
+		"reportSubject": "Kiungo kilichovunjika"
 	},
 	"projects": {
 		"campusBootcamp": "4HerFrika | Campus Bootcamp",
@@ -646,5 +670,99 @@
 		"aboutReauth": "Kuhusu kutoa ruhusa upya",
 		"reauthTooltip": "Inasasisha ruhusa ya akaunti hii ya Google iliyounganishwa; haiwezi kubadilisha akaunti.",
 		"updating": "Inasasisha muunganisho…"
+	},
+	"legal": {
+		"breadcrumbHome": "Mwanzo",
+		"breadcrumbLabel": "Njia ya ukurasa",
+		"onThisPage": "Katika ukurasa huu",
+		"sectionCount": "Sehemu {count}",
+		"questionsTitle": "Una maswali?",
+		"questionsBody": "Tuandikie barua pepe nasi tutalishughulikia.",
+		"backToTop": "Rudi juu",
+		"email": "hello@4herfrika.org",
+		"privacy": {
+			"breadcrumb": "Faragha",
+			"contactTitle": "Una maswali kuhusu faragha yako?",
+			"contactBody": "Tuandikie nasi tutalishughulikia, iwe ni swali, nakala ya data yako, au ombi la kufutwa.",
+			"otherLink": "Soma Masharti yetu"
+		},
+		"terms": {
+			"breadcrumb": "Masharti",
+			"contactTitle": "Una maswali kuhusu masharti haya?",
+			"contactBody": "Kuna kitu kisichoeleweka kabla ya kujisajili au kuweka kikao? Tuandikie na uulize.",
+			"otherLink": "Soma Sera yetu ya Faragha"
+		}
+	},
+	"unsubscribe": {
+		"metaTitle": "Jiondoe",
+		"photoAlt": "Mwanamke kijana akifanya kazi kwenye kompyuta mpakato kwenye benchi la nje",
+		"photoCaption": "Simu ulizokwisha kuweka zinabaki, chochote utakachochagua hapa.",
+		"dataNote": "Una maswali kuhusu data yako? Soma <link>Sera yetu ya Faragha</link>.",
+		"backToHome": "Rudi mwanzo",
+		"confirm": {
+			"eyebrow": "Mapendeleo ya barua pepe",
+			"titleLead": "Acha vikumbusho vya",
+			"titleAccent": "kuweka tena?",
+			"body": "Tutaacha kutuma vikumbusho vya kuweka tena kikao kwa <b>{email}</b>.",
+			"stopsLabel": "Vinavyoacha",
+			"stopsItem": "Vikumbusho vya kuweka tena",
+			"stopsNote": "Barua pepe pekee inayoacha.",
+			"keepsLabel": "Vinavyoendelea",
+			"keepsConfirmations": "Uthibitisho wa uwekaji",
+			"keepsReminders": "Vikumbusho vya simu unazoweka",
+			"submit": "Ndiyo, jiondoe",
+			"submitting": "Inakuondoa…",
+			"keep": "Weka vikumbusho vyangu",
+			"error": "Imeshindwa kukuondoa. Tafadhali jaribu tena."
+		},
+		"done": {
+			"eyebrow": "Imekamilika",
+			"titleLead": "Umeondolewa",
+			"titleAccent": "kwenye orodha.",
+			"body": "Hutapokea tena vikumbusho vya kuweka tena kikao kutoka kwetu. Uthibitisho wa uwekaji na vikumbusho vya simu unazopanga bado vitaendelea kufika.",
+			"oopsTitle": "Lo, haukukusudia?",
+			"oopsBody": "Washa tena vikumbusho vya kuweka tena kwa mguso mmoja.",
+			"resubscribe": "Jiunge tena",
+			"resubscribing": "Inakurudisha…",
+			"error": "Imeshindwa kukurudisha. Tafadhali jaribu tena.",
+			"hereLabel": "Ukiwa hapa",
+			"findMentor": "Tafuta mshauri",
+			"academy": "Gundua Akademia"
+		},
+		"resubscribed": {
+			"eyebrow": "Karibu tena",
+			"titleLead": "Vikumbusho",
+			"titleAccent": "vimewashwa tena.",
+			"body": "Tutakutumia tena vikumbusho vya kuweka tena kikao kwa <b>{email}</b>. Kila barua pepe ya kikumbusho ina kiungo cha kujiondoa ukibadili mawazo.",
+			"bookNext": "Weka simu yako inayofuata"
+		},
+		"invalid": {
+			"eyebrow": "Tatizo la kiungo",
+			"titleLead": "Kiungo hiki",
+			"titleAccent": "si halali.",
+			"body": "Kiungo cha kujiondoa kinaweza kuwa pungufu. Jaribu tena kiungo kilicho kwenye barua pepe yako, au kibonyeze badala ya kukinakili.",
+			"stillTitle": "Bado hakifanyi kazi?",
+			"stillBody": "Tuandikie kwa <mail>{email}</mail> kutoka anwani unayotaka kuondolewa nasi tutakufanyia."
+		}
+	},
+	"unauthorized": {
+		"metaTitle": "Ufikiaji umekataliwa",
+		"eyebrow": "Hitilafu 403",
+		"titleLead": "Akaunti hii ni",
+		"titleAccent": "ya timu yetu.",
+		"body": "Umeingia, lakini dashibodi hii ni ya wafanyakazi na washauri wa 4HerFrika pekee. Unasoma kozi ya Akademia? Uko hatua moja kutoka kwake.",
+		"learnerBadge": "Upo kwa ajili ya kozi ya Akademia?",
+		"learnerTitle": "Wanafunzi huingia kupitia Akademia.",
+		"learnerBody": "Kozi yako, maendeleo yako na maswali ya majaribio yako huko, na barua pepe ile ile inafanya kazi.",
+		"learnerCta": "Nenda kwenye kuingia kwa Akademia",
+		"photoAlt": "Wanawake watatu wakishirikiana katika Akademia ya 4HerFrika",
+		"staffLabel": "Mfanyakazi au mshauri?",
+		"staffCta": "Ingia kwa akaunti nyingine",
+		"backToSite": "Rudi kwenye tovuti",
+		"needAccess": "Unahitaji ufikiaji? Muulize msimamizi, au tuandikie",
+		"logoAlt": "Mwanzo wa 4HerFrika",
+		"bodySignedOut": "Dashibodi hii ni ya wafanyakazi na washauri wa 4HerFrika pekee. Unasoma kozi ya Akademia? Uko hatua moja kutoka kwake.",
+		"staffSignIn": "Kuingia kwa wafanyakazi",
+		"signedInAs": "Umeingia kama <b>{email}</b>"
 	}
 }
