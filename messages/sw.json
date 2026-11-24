@@ -120,13 +120,24 @@
 		"title": "Saidia Dhamira Yetu"
 	},
 	"faq": {
-		"askAnything": "Tuulize chochote",
-		"cantFindAnswer": "Hujapata jibu unalolitafuta? Tafadhali wasiliana na timu yetu yenye urafiki.",
-		"description": "Katika sehemu hii unaweza kupata majibu yote ambayo huenda unayatafuta",
-		"getInTouch": "Wasiliana nasi",
+		"title": "Maswali Yanayoulizwa Mara kwa Mara",
+		"heroFirst": "Tuulize",
+		"heroSecond": "chochote.",
+		"description": "Majibu ambayo watu wengi wanayatafuta, mahali pamoja.",
+		"searchLabel": "Tafuta kwenye maswali",
 		"searchPlaceholder": "Tafuta hapa",
-		"stillHaveQuestions": "Bado una maswali?",
-		"title": "Maswali Yanayoulizwa Mara kwa Mara"
+		"searchButton": "Tafuta",
+		"topicsLabel": "Mada za maswali",
+		"questionCount": "{count, plural, one {swali #} other {maswali #}}",
+		"resultsCount": "{count, plural, =0 {Hakuna swali lililopatikana} one {Swali # limepatikana} other {Maswali # yamepatikana}}",
+		"noResultsTitle": "Hakuna swali lililopatikana",
+		"noResultsBody": "Hakuna kinacholingana na “{query}”. Jaribu neno lingine, au uliza timu yetu moja kwa moja hapa chini.",
+		"clearSearch": "Futa utafutaji",
+		"loadError": "Hatuwezi kupakia maswali kwa sasa. Tafadhali jaribu tena baada ya dakika chache, au wasiliana na timu yetu hapa chini.",
+		"stuckFirst": "Bado umekwama?",
+		"stuckSecond": "Wasiliana nasi.",
+		"stuckBody": "Hujapata jibu unalolitafuta? Timu yetu iko tayari kukusaidia.",
+		"getInTouch": "Wasiliana nasi"
 	},
 	"footer": {
 		"allRightsReserved": "Haki zote zimehifadhiwa.",
