@@ -23,7 +23,7 @@ type AnalyticsEvents = {
 		mentor_id: string;
 		mentor_slug: string;
 		mentor_name: string;
-		source: "mentor_details";
+		source: "mentor_details" | "directory" | "featured";
 	};
 	mentor_booking_page_viewed: {
 		mentor_slug: string;

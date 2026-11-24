@@ -181,6 +181,9 @@ interface SearchInputProps {
 	startTransition?: TransitionStartFunction;
 	/** Swaps the search icon for a spinner while results load. */
 	pending?: boolean;
+	/** Accessible name rendered as a screen-reader-only label. */
+	label?: string;
+	inputClassName?: string;
 	className?: string;
 }
 
@@ -199,6 +202,8 @@ export function SearchInput({
 	resetPageOnChange = false,
 	startTransition,
 	pending = false,
+	label,
+	inputClassName,
 	className,
 }: SearchInputProps) {
 	const id = useId();
@@ -232,13 +237,21 @@ export function SearchInput({
 			) : (
 				<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 			)}
+			{label ? (
+				<label htmlFor={id} className="sr-only">
+					{label}
+				</label>
+			) : null}
 			<input
 				id={id}
 				type="search"
 				value={value}
 				placeholder={placeholder}
 				onInput={(e) => handleValueChange(e.currentTarget.value)}
-				className="h-10 w-full rounded-full border border-[#E0E0E0] bg-white pl-9 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:border-primary-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+				className={cn(
+					"h-10 w-full rounded-full border border-[#E0E0E0] bg-white pl-9 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground hover:border-primary-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40",
+					inputClassName,
+				)}
 			/>
 		</div>
 	);
