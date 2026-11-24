@@ -1,51 +1,78 @@
-import { createServerClient } from "@supabase/ssr";
+import { type SetAllCookies, createServerClient } from "@supabase/ssr";
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
+import { isAcademyPath } from "./app/[locale]/(website)/academy/sign-in/_helpers";
 import { routing } from "./i18n/routing";
 
 const handleI18nRouting = createMiddleware(routing);
 
-async function refreshDashboardSession(request: NextRequest) {
+function createSessionClient(request: NextRequest, onCookies: SetAllCookies) {
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 	const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 	if (!supabaseUrl || !supabaseAnonKey) {
 		throw new Error("Supabase environment variables are not configured");
 	}
 
-	let response = NextResponse.next({ request });
-	const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+	return createServerClient(supabaseUrl, supabaseAnonKey, {
 		cookies: {
 			getAll: () => request.cookies.getAll(),
-			setAll: (cookiesToSet, headers) => {
-				for (const { name, value } of cookiesToSet) {
-					request.cookies.set(name, value);
-				}
-
-				response = NextResponse.next({ request });
-				for (const { name, value, options } of cookiesToSet) {
-					response.cookies.set(name, value, options);
-				}
-				for (const [name, value] of Object.entries(headers)) {
-					response.headers.set(name, value);
-				}
-			},
+			setAll: onCookies,
 		},
+	});
+}
+
+async function refreshDashboardSession(request: NextRequest) {
+	let response = NextResponse.next({ request });
+	const supabase = createSessionClient(request, (cookiesToSet, headers) => {
+		for (const { name, value } of cookiesToSet) {
+			request.cookies.set(name, value);
+		}
+
+		response = NextResponse.next({ request });
+		for (const { name, value, options } of cookiesToSet) {
+			response.cookies.set(name, value, options);
+		}
+		for (const [name, value] of Object.entries(headers)) {
+			response.headers.set(name, value);
+		}
 	});
 
 	await supabase.auth.getClaims();
 	return response;
 }
 
-export default function proxy(request: NextRequest) {
-	if (request.nextUrl.pathname.startsWith("/dashboard")) {
+async function refreshSessionOnto(
+	request: NextRequest,
+	response: NextResponse,
+) {
+	const supabase = createSessionClient(request, (cookiesToSet, headers) => {
+		for (const { name, value, options } of cookiesToSet) {
+			response.cookies.set(name, value, options);
+		}
+		for (const [name, value] of Object.entries(headers)) {
+			response.headers.set(name, value);
+		}
+	});
+
+	await supabase.auth.getClaims();
+	return response;
+}
+
+export default async function proxy(request: NextRequest) {
+	const { pathname } = request.nextUrl;
+	if (pathname.startsWith("/dashboard")) {
 		return refreshDashboardSession(request);
 	}
 
-	return handleI18nRouting(request);
+	const response = handleI18nRouting(request);
+	if (isAcademyPath(pathname)) {
+		return refreshSessionOnto(request, response);
+	}
+	return response;
 }
 
 export const config = {
 	matcher: [
-		"/((?!api|_next|_vercel|assets|favicon|reports|.*(?:opengraph-image|twitter-image).*|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|woff|woff2|ttf|txt|xml|json|pdf|zip)$).*)",
+		"/((?!api|auth/callback|_next|_vercel|assets|favicon|reports|.*(?:opengraph-image|twitter-image).*|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|woff|woff2|ttf|txt|xml|json|pdf|zip)$).*)",
 	],
 };

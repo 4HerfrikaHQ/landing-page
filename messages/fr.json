@@ -1109,6 +1109,68 @@
 			"generic": "Une erreur s'est produite. Veuillez réessayer."
 		}
 	},
+	"academyAuth": {
+		"signIn": {
+			"metaTitle": "Se connecter à l'Académie",
+			"metaDescription": "Créez votre compte gratuit 4HerFrika Academy ou connectez-vous avec un code à 6 chiffres reçu par e-mail ou avec Google.",
+			"badge": "L'IA pour votre prochaine opportunité",
+			"title": "Commencez à apprendre, <accent>gratuitement.</accent>",
+			"subtitle": "Un seul compte pour tous les cours. Votre progression est enregistrée sur tous vos appareils.",
+			"google": "Continuer avec Google",
+			"googleOpening": "Ouverture de Google…",
+			"divider": "ou avec votre e-mail",
+			"emailLabel": "Adresse e-mail",
+			"emailPlaceholder": "vous@exemple.com",
+			"emailHint": "Nous vous enverrons un code à 6 chiffres. Pas de mot de passe.",
+			"sendCode": "Envoyer mon code",
+			"sending": "Envoi de votre code…",
+			"legal": "En continuant, vous acceptez notre <link>politique de confidentialité</link>."
+		},
+		"code": {
+			"title": "Vérifiez vos e-mails",
+			"sentTo": "Nous avons envoyé un code à 6 chiffres à <strong>{email}</strong>. Il est valable 10 minutes.",
+			"codeLabel": "Code à 6 chiffres",
+			"didntGetIt": "Vous ne l'avez pas reçu ? Vérifiez vos courriers indésirables, ou",
+			"resendIn": "renvoyer dans {time}",
+			"resend": "envoyer un nouveau code",
+			"verify": "Vérifier",
+			"verifying": "Connexion en cours…",
+			"changeEmail": "Utiliser une autre adresse e-mail"
+		},
+		"welcome": {
+			"metaTitle": "Quelques mots sur vous",
+			"title": "Quelques mots sur vous",
+			"subtitle": "Nous ne vous le demandons qu'une seule fois.",
+			"nameLabel": "Votre nom pour le certificat",
+			"namePlaceholder": "Amara Okafor",
+			"nameHint": "Écrivez-le exactement comme vous voulez que les employeurs le voient. Pour le modifier plus tard, écrivez à hello@4herfrika.org.",
+			"countryLabel": "Pays",
+			"countryPlaceholder": "Sélectionnez votre pays",
+			"countryGroupAfrica": "Afrique",
+			"countryGroupOther": "Reste du monde",
+			"campusLabel": "Campus (facultatif)",
+			"campusPlaceholder": "p. ex. LAUTECH",
+			"ageLabel": "J'ai <strong>{minAge} ans ou plus</strong>.",
+			"ageNote": "Certains outils d'IA de ce cours imposent leur propre âge minimum.",
+			"submit": "Continuer",
+			"saving": "Enregistrement…"
+		},
+		"errors": {
+			"otp_expired": "Ce code n'a pas fonctionné. Il est peut-être mal saisi ou expiré. Consultez votre e-mail le plus récent ou demandez un nouveau code.",
+			"email_limit": "Nous avons envoyé beaucoup d'e-mails de connexion durant la dernière heure. Réessayez dans un instant ou écrivez à hello@4herfrika.org pour obtenir de l'aide.",
+			"too_many_attempts": "Trop de tentatives. Veuillez patienter quelques minutes, puis réessayer.",
+			"invalid_email": "Cela ne ressemble pas à une adresse e-mail. Veuillez la vérifier.",
+			"incomplete_code": "Saisissez les 6 chiffres de votre code.",
+			"callback_failed": "Nous n'avons pas pu terminer votre connexion. Veuillez réessayer.",
+			"session_expired": "Votre session a expiré. Veuillez vous reconnecter.",
+			"name_required": "Saisissez votre nom tel qu'il doit apparaître sur votre certificat.",
+			"name_too_long": "Votre nom ne peut pas dépasser 120 caractères.",
+			"country_required": "Choisissez votre pays.",
+			"campus_too_long": "Le nom de votre campus ne peut pas dépasser 120 caractères.",
+			"age_required": "Veuillez confirmer votre âge pour continuer.",
+			"generic": "Une erreur s'est produite. Veuillez réessayer."
+		}
+	},
 	"onboarding": {
 		"eyebrow": "Intégration mentor",
 		"intro": "Définissez vos disponibilités, complétez votre profil et connectez Google Agenda avant de passer en ligne. Vous pourrez tout modifier plus tard depuis votre tableau de bord.",
