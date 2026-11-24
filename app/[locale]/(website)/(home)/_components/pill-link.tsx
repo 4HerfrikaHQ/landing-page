@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import type { Route } from "next";
@@ -41,14 +42,14 @@ export function PillLink({
 	if (external) {
 		return (
 			<a href={href} target="_blank" rel="noreferrer" className={classes}>
-				{children}
+				<RollLabel>{children}</RollLabel>
 			</a>
 		);
 	}
 
 	return (
 		<Link href={href as Route} className={classes}>
-			{children}
+			<RollLabel>{children}</RollLabel>
 		</Link>
 	);
 }
