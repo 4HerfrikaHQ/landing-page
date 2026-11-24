@@ -393,8 +393,18 @@ html {
 	transform: scale(0.97);
 }
 
+[data-site-navbar] {
+	view-transition-name: site-nav;
+}
+
 ::view-transition-old(root),
+::view-transition-old(site-nav) {
+	display: none;
+}
+
 ::view-transition-new(root),
+::view-transition-new(site-nav),
+::view-transition-group(site-nav),
 ::view-transition-group(page) {
 	animation: none;
 }
