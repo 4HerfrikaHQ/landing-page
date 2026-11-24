@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const text = z.string().trim().min(1);
 const key = z.string().regex(/^[A-Za-z0-9-]+$/);
+const uid = z.string().regex(/^[a-z0-9-]+$/);
 
 export const Block = z.object({
 	type: z.enum([
@@ -72,7 +73,7 @@ export const CourseManifest = z
 		partners: z
 			.array(
 				z.object({
-					uid: key,
+					uid,
 					name: text,
 					website: z.url().optional(),
 					attribution: text.optional(),
@@ -80,7 +81,7 @@ export const CourseManifest = z
 			)
 			.default([]),
 		course: z.object({
-			uid: key,
+			uid,
 			title: text,
 			summary: text,
 			track: z.enum(["tech", "business", "climate"]),
