@@ -68,7 +68,9 @@
 		"joinAmbassadorLink": "Kuwa balozi",
 		"joinAcademyTitle": "Jenga ujuzi wako",
 		"joinAcademyDescription": "Mafunzo ya vitendo katika Teknolojia, Biashara na Tabianchi, pamoja na umlezi na miradi halisi.",
-		"joinAcademyLink": "Gundua Academy"
+		"joinAcademyLink": "Gundua Academy",
+		"partnerLogoAlt": "Nembo ya {name}",
+		"partnerLinkLabel": "Tembelea tovuti ya {name} (inafunguka kwenye kichupo kipya)"
 	},
 	"blog": {
 		"blogName": "'The Pink Blog'",

@@ -129,7 +129,9 @@
 		"joinAmbassadorLink": "Become an ambassador",
 		"joinAcademyTitle": "Build your skills",
 		"joinAcademyDescription": "Practical learning in Tech, Business and Climate, with mentorship and real projects.",
-		"joinAcademyLink": "Explore the Academy"
+		"joinAcademyLink": "Explore the Academy",
+		"partnerLogoAlt": "{name} logo",
+		"partnerLinkLabel": "Visit the {name} website (opens in a new tab)"
 	},
 	"blog": {
 		"greeting": "Hi Divas,",
