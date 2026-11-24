@@ -232,6 +232,13 @@
       "when": 1795531499917,
       "tag": "0032_academy_learners",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1795536590951,
+      "tag": "0033_drop_signup_trigger",
+      "breakpoints": true
     }
   ]
 }

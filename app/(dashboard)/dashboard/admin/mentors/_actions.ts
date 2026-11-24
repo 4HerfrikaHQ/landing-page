@@ -1,7 +1,7 @@
 "use server";
 
 import { createHash } from "node:crypto";
-import { createAdminClient } from "@/src/auth";
+import { AccountError, addMentorUser } from "@/src/accounts";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import {
@@ -9,6 +9,7 @@ import {
 	uploadMentorAvatar,
 } from "@/src/db/actions/mentors";
 import { bookings } from "@/src/db/schema/tables/bookings";
+import type { DbUser } from "@/src/db/schema/tables/users";
 import { CYCLE_MS, SINGLETON_ID } from "@/src/lib/featured-mentor";
 import {
 	ensureMentorCalendarConnection,
@@ -219,22 +220,22 @@ export async function createMentor(
 	const nickname = (formData.get("nickname") as string) || undefined;
 	const linkedin_url = (formData.get("linkedin_url") as string) || undefined;
 
-	const supabase = await createAdminClient();
-	const { data, error } = await supabase.auth.admin.createUser({
-		email,
-		email_confirm: true,
-		user_metadata: { name },
+	let dbUser: DbUser;
+	try {
+		dbUser = await addMentorUser({ email, name });
+	} catch (error) {
+		if (error instanceof AccountError) return { error: error.message };
+		throw error;
+	}
+
+	const existingMentor = await db.query.mentors.findFirst({
+		where: and(
+			eq(schema.mentors.user_id, dbUser.id),
+			eq(schema.mentors.archived, false),
+		),
+		columns: { id: true },
 	});
-	if (error) return { error: error.message };
-
-	const dbUser = await db
-		.select()
-		.from(schema.users)
-		.where(eq(schema.users.auth_user_id, data.user.id))
-		.limit(1)
-		.then((rows) => rows[0]);
-
-	if (!dbUser) return { error: "User record not found after creation." };
+	if (existingMentor) return { error: `${email} is already a mentor.` };
 
 	const baseSlug =
 		(nickname || name)
