@@ -496,7 +496,7 @@
 	},
 	"onboarding": {
 		"eyebrow": "Usajili wa mentor",
-		"welcome": "Karibu, {name}",
+		"welcomeFirst": "Karibu,",
 		"intro": "Weka muda wako unaopatikana, kamilisha wasifu wako, na unganisha Google Calendar kabla ya kwenda hewani. Unaweza kubadilisha kila kitu baadaye kwenye dashibodi yako.",
 		"stepsLabel": "Hatua za usajili",
 		"step": "Hatua {number}",
@@ -674,5 +674,73 @@
 		"aboutReauth": "Kuhusu kutoa ruhusa upya",
 		"reauthTooltip": "Inasasisha ruhusa ya akaunti hii ya Google iliyounganishwa; haiwezi kubadilisha akaunti.",
 		"updating": "Inasasisha muunganisho…"
+	},
+	"mentorApply": {
+		"badge": "Kuwa mlezi",
+		"titleFirst": "Tuambie kuhusu",
+		"titleSecond": "safari yako.",
+		"intro": "Tuambie kidogo kukuhusu. Timu yetu hupitia kila ombi na hukujibu ndani ya siku chache.",
+		"formTitle": "Ombi lako",
+		"allRequired": "Sehemu zote zinahitajika.",
+		"aside": {
+			"badge": "Ulezi unahusu nini",
+			"title": "Utarajie nini",
+			"timeTitle": "Dakika 30 kwa kila simu",
+			"timeBody": "Kila simu ni mazungumzo ya bure ya dakika 30 na binti aliye mahali ulipokuwa wewe.",
+			"callsTitle": "Simu kwenye Google Meet",
+			"callsBody": "Wanaolelewa huchagua muda wazi kwenye kalenda yako na hupata kiungo cha Google Meet kwa barua pepe.",
+			"scheduleTitle": "Wewe unapanga ratiba yako",
+			"scheduleBody": "Ukishakubaliwa, unachagua muda wako wa kila wiki na kuunganisha Google Calendar. Unaweza kubadilisha kila kitu baadaye kutoka kwenye dashibodi yako.",
+			"reviewTitle": "Tunapitia kila ombi",
+			"reviewBody": "Timu yetu husoma kila ombi binafsi na hukujibu ndani ya siku chache."
+		},
+		"fields": {
+			"name": "Jina kamili",
+			"email": "Barua pepe",
+			"phone": "Simu / WhatsApp",
+			"country": "Nchi",
+			"linkedin": "Kiungo cha wasifu wako wa LinkedIn",
+			"linkedinPlaceholder": "https://www.linkedin.com/in/jina-lako",
+			"industry": "Sekta kuu",
+			"industryPlaceholder": "mfano: Teknolojia, Afya, Fedha",
+			"bio": "Kukuhusu",
+			"bioPlaceholder": "Tuambie kuhusu uzoefu wako, unachofanya, na kwa nini unataka kuwalea wasichana wa Kiafrika.",
+			"bioCount": "{count} / 1000",
+			"cv": "CV"
+		},
+		"cv": {
+			"upload": "Pakia CV yako",
+			"hint": "PDF, DOC au DOCX, hadi MB 10",
+			"remove": "Ondoa faili",
+			"uploading": "Inapakia…",
+			"fileType": "Hati za PDF na Word pekee ndizo zinazokubaliwa.",
+			"fileSize": "Faili lako lazima liwe chini ya MB 10.",
+			"uploadFailed": "Hatukuweza kupakia CV yako. Tafadhali jaribu tena."
+		},
+		"errors": {
+			"name": "Weka jina lako kamili.",
+			"email": "Weka barua pepe halali.",
+			"phone": "Weka namba yako ya simu au WhatsApp.",
+			"country": "Weka nchi yako.",
+			"linkedin_url": "Weka kiungo halali cha LinkedIn.",
+			"industry": "Weka sekta yako kuu.",
+			"bio": "Tuambie zaidi kidogo, angalau herufi 10.",
+			"bioTooLong": "Usizidi herufi 1000.",
+			"cv_path": "Tafadhali pakia CV yako.",
+			"tooLong": "Ni ndefu mno. Tafadhali ifupishe."
+		},
+		"submit": "Wasilisha ombi",
+		"uploadingCv": "Inapakia CV…",
+		"submitting": "Inawasilisha…",
+		"serverError": "Hatukuweza kuwasilisha ombi lako. Tafadhali jaribu tena, au tuandikie hello@4herfrika.org.",
+		"success": {
+			"title": "Ombi limepokelewa",
+			"description": "Asante kwa kutoa muda wako. Haya ndiyo yanayofuata.",
+			"step1Title": "Tunapitia ombi lako",
+			"step1Body": "Timu yetu hupitia kila ombi binafsi na hukujibu ndani ya siku chache.",
+			"step2Title": "Unapata kiungo cha kujisajili",
+			"step2Body": "Ikiwa unafaa, tunakutumia kiungo cha kuweka wasifu wako wa mlezi na muda wako.",
+			"back": "Rudi kwa walezi"
+		}
 	}
 }

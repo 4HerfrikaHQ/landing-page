@@ -84,7 +84,7 @@ export function OnboardingStepper({
 	return (
 		<div>
 			<nav aria-label={t("stepsLabel")} className="mb-8">
-				<ol className="flex items-center gap-3">
+				<ol className="grid grid-cols-3 gap-2 sm:gap-3">
 					{steps.map((step, index) => {
 						const isActive = visibleActive === step.id;
 						const isDone =
@@ -97,24 +97,29 @@ export function OnboardingStepper({
 							(step.id === "calendar" && availabilityReady && profileReady);
 						const Icon = isDone ? CheckIcon : step.icon;
 						return (
-							<li key={step.id} className="flex flex-1 items-center gap-3">
+							<li key={step.id}>
 								<button
 									type="button"
 									disabled={!canVisit}
+									aria-current={isActive ? "step" : undefined}
 									onClick={() => canVisit && setActive(step.id)}
 									className={cn(
-										"flex flex-1 items-center gap-3 text-left",
+										"flex min-h-20 w-full flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-center transition-[background-color,border-color,box-shadow] duration-200 focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:outline-none motion-reduce:transition-none sm:flex-row sm:gap-3 sm:px-4 sm:text-left",
+										isActive
+											? "border-primary-500 bg-surface-pink"
+											: "border-border bg-white",
+										canVisit && !isActive && "hover:border-primary-500/50",
 										!canVisit && "cursor-not-allowed opacity-60",
 									)}
 								>
 									<span
 										className={cn(
-											"flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors",
+											"flex size-9 shrink-0 items-center justify-center rounded-full",
 											isActive
-												? "border-primary-500 bg-primary-500 text-white"
+												? "bg-primary-500 text-white"
 												: isDone
-													? "border-primary-500 bg-surface-pink text-primary-500"
-													: "border-border bg-white text-muted-foreground",
+													? "bg-surface-pink text-primary-500"
+													: "bg-muted text-muted-foreground",
 										)}
 									>
 										<Icon className="size-4" strokeWidth={2} />
@@ -125,31 +130,16 @@ export function OnboardingStepper({
 										</span>
 										<span
 											className={cn(
-												"block text-sm font-medium",
-												isActive ? "text-foreground" : "text-muted-foreground",
+												"block text-[13px] leading-tight font-semibold sm:text-sm",
+												isActive
+													? "text-secondary-500"
+													: "text-muted-foreground",
 											)}
 										>
 											{t(`steps.${step.id}`)}
 										</span>
 									</span>
 								</button>
-								{index < steps.length - 1 ? (
-									<span
-										aria-hidden
-										className={cn(
-											"hidden h-px flex-1 sm:block",
-											(
-												step.id === "availability"
-													? availabilityReady
-													: step.id === "profile"
-														? profileReady
-														: calendarConnected
-											)
-												? "bg-primary-500/40"
-												: "bg-border",
-										)}
-									/>
-								) : null}
 							</li>
 						);
 					})}
@@ -209,11 +199,13 @@ function StepHeader({
 	description: string;
 }) {
 	return (
-		<div className="space-y-1">
-			<h2 className="font-heading text-lg font-semibold text-foreground">
+		<div className="space-y-2">
+			<h2 className="text-2xl font-bold leading-tight text-secondary-500">
 				{title}
 			</h2>
-			<p className="text-sm text-muted-foreground">{description}</p>
+			<p className="text-[15px] leading-relaxed text-muted-foreground">
+				{description}
+			</p>
 		</div>
 	);
 }

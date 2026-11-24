@@ -496,7 +496,7 @@
 	},
 	"onboarding": {
 		"eyebrow": "Mentor onboarding",
-		"welcome": "Welcome, {name}",
+		"welcomeFirst": "Welcome,",
 		"intro": "Set your availability, complete your profile, and connect Google Calendar before going live. You can edit everything later from your dashboard.",
 		"stepsLabel": "Onboarding steps",
 		"step": "Step {number}",
@@ -674,5 +674,73 @@
 		"aboutReauth": "About reauthorization",
 		"reauthTooltip": "Refreshes consent for this linked Google account; it cannot switch accounts.",
 		"updating": "Updating connection…"
+	},
+	"mentorApply": {
+		"badge": "Become a mentor",
+		"titleFirst": "Tell us about",
+		"titleSecond": "your journey.",
+		"intro": "Tell us a bit about you. Our team reviews every application and reaches out within a few days.",
+		"formTitle": "Your application",
+		"allRequired": "All fields are required.",
+		"aside": {
+			"badge": "What mentoring involves",
+			"title": "What to expect",
+			"timeTitle": "30 minutes per call",
+			"timeBody": "Each call is a free 30-minute conversation with a young woman who is exactly where you once were.",
+			"callsTitle": "Calls on Google Meet",
+			"callsBody": "Mentees pick a free slot from your calendar and get a Google Meet link by email.",
+			"scheduleTitle": "You set your schedule",
+			"scheduleBody": "Once you're approved, you choose your weekly availability and connect Google Calendar. You can edit everything later from your dashboard.",
+			"reviewTitle": "We review every application",
+			"reviewBody": "Our team reads each application personally and gets back to you within a few days."
+		},
+		"fields": {
+			"name": "Full name",
+			"email": "Email address",
+			"phone": "Phone / WhatsApp",
+			"country": "Country",
+			"linkedin": "LinkedIn profile URL",
+			"linkedinPlaceholder": "https://www.linkedin.com/in/your-name",
+			"industry": "Primary industry",
+			"industryPlaceholder": "e.g. Tech, Healthcare, Finance",
+			"bio": "About you",
+			"bioPlaceholder": "Tell us about your background, what you do, and why you want to mentor young African women.",
+			"bioCount": "{count} / 1000",
+			"cv": "CV"
+		},
+		"cv": {
+			"upload": "Upload your CV",
+			"hint": "PDF, DOC or DOCX, up to 10 MB",
+			"remove": "Remove file",
+			"uploading": "Uploading…",
+			"fileType": "Only PDF and Word documents are accepted.",
+			"fileSize": "Your file must be under 10 MB.",
+			"uploadFailed": "We couldn't upload your CV. Please try again."
+		},
+		"errors": {
+			"name": "Enter your full name.",
+			"email": "Enter a valid email address.",
+			"phone": "Enter your phone or WhatsApp number.",
+			"country": "Enter your country.",
+			"linkedin_url": "Enter a valid LinkedIn URL.",
+			"industry": "Enter your primary industry.",
+			"bio": "Tell us a bit more, at least 10 characters.",
+			"bioTooLong": "Keep it under 1000 characters.",
+			"cv_path": "Please upload your CV.",
+			"tooLong": "That's too long. Please shorten it."
+		},
+		"submit": "Submit application",
+		"uploadingCv": "Uploading CV…",
+		"submitting": "Submitting…",
+		"serverError": "We couldn't submit your application. Please try again, or email hello@4herfrika.org.",
+		"success": {
+			"title": "Application received",
+			"description": "Thank you for offering your time. Here's what happens next.",
+			"step1Title": "We review your application",
+			"step1Body": "Our team reviews each application personally and gets back to you within a few days.",
+			"step2Title": "You get a setup link",
+			"step2Body": "If it's a match, we send you a link to set up your mentor profile and availability.",
+			"back": "Back to mentors"
+		}
 	}
 }

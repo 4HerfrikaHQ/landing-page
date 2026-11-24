@@ -13,10 +13,12 @@ import { useOnboardingErrorMessage } from "../_hooks/use-onboarding-error-messag
 
 export function OnboardingAvatarUpload({
 	token,
+	labelId,
 	value,
 	onChange,
 }: {
 	token: string;
+	labelId: string;
 	value: string;
 	onChange: (url: string) => void;
 }) {
@@ -77,11 +79,13 @@ export function OnboardingAvatarUpload({
 	}
 
 	return (
-		<div className="flex items-center gap-4">
+		<div className="flex items-center gap-4 sm:gap-5">
 			<button
 				type="button"
 				onClick={() => inputRef.current?.click()}
-				className="group relative size-20 rounded-full overflow-hidden cursor-pointer shrink-0 border border-border"
+				disabled={isPending}
+				aria-labelledby={labelId}
+				className="group relative size-24 shrink-0 cursor-pointer overflow-hidden rounded-full border-2 border-dashed border-input bg-surface-pink/40 transition-[border-color,box-shadow] duration-200 hover:border-primary-500 focus-visible:border-primary-500 focus-visible:ring-3 focus-visible:ring-primary-500/30 focus-visible:outline-none motion-reduce:transition-none"
 				title={t("uploadTitle")}
 			>
 				{preview ? (
@@ -91,37 +95,40 @@ export function OnboardingAvatarUpload({
 						crop={savedCrop}
 						aspectRatio={1}
 						className="size-full"
-						sizes="80px"
+						sizes="96px"
 					/>
 				) : (
-					<span className="flex size-full items-center justify-center bg-gray-100 text-gray-400">
-						<CameraIcon className="size-6" />
+					<span className="flex size-full items-center justify-center text-primary-500">
+						<CameraIcon className="size-7" strokeWidth={1.75} />
 					</span>
 				)}
 
 				<span
 					className={cn(
-						"absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity",
-						isPending ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+						"absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity motion-reduce:transition-none",
+						isPending
+							? "opacity-100"
+							: "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100",
 					)}
 				>
 					{isPending ? (
-						<Loader2Icon className="size-5 text-white animate-spin" />
+						<Loader2Icon className="size-5 animate-spin text-white motion-reduce:animate-none" />
 					) : (
 						<CameraIcon className="size-5 text-white" />
 					)}
 				</span>
 			</button>
 
-			<div className="space-y-1">
+			<div className="space-y-1.5">
 				<button
 					type="button"
 					onClick={() => inputRef.current?.click()}
-					className="text-sm font-medium text-primary-500 hover:underline"
+					disabled={isPending}
+					className="inline-flex h-11 items-center rounded-full border border-primary-500 px-5 text-sm font-semibold text-primary-500 transition-colors hover:bg-primary-500 hover:text-white focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
 				>
 					{preview ? t("change") : t("upload")}
 				</button>
-				<p className="text-xs text-gray-500">{t("hint")}</p>
+				<p className="text-xs text-muted-foreground">{t("hint")}</p>
 			</div>
 
 			<input
