@@ -8,7 +8,7 @@ export async function ProjectsMovedBand() {
 
 	return (
 		<section className="px-4 pb-16 lg:px-20 lg:pb-24">
-			<div className="mx-auto grid max-w-6xl items-center gap-6 rounded-[32px] bg-surface-pink p-6 lg:grid-cols-[1fr_auto] lg:rounded-[40px] lg:p-12">
+			<div className="mx-auto grid max-w-6xl items-center gap-6 rounded-[20px] bg-surface-pink p-6 lg:grid-cols-[1fr_auto] lg:rounded-[40px] lg:p-12">
 				<div>
 					<span className="rounded-pill bg-white px-3 py-1.5 text-xs text-primary-500">
 						{t("movedBadge")}

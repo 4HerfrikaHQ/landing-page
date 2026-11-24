@@ -49,7 +49,7 @@ export function FeedCard({ card }: { card: CardData }) {
 	return (
 		<Link
 			href={card.href as Route}
-			className="group flex h-full flex-col overflow-hidden rounded-[28px] bg-white text-foreground no-underline shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none transition-shadow hover:no-underline! hover:shadow-[0_16px_32px_rgba(0,0,0,0.14)] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 lg:rounded-[32px]"
+			className="group flex h-full flex-col overflow-hidden rounded-[20px] bg-white text-foreground no-underline shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none transition-shadow hover:no-underline! hover:shadow-[0_16px_32px_rgba(0,0,0,0.14)] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 lg:rounded-[20px]"
 		>
 			<FeedImage
 				src={card.imageSrc}

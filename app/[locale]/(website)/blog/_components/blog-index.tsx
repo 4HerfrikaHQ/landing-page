@@ -84,7 +84,7 @@ export async function BlogIndex({ locale, category }: Props) {
 							})}
 						/>
 					) : (
-						<div className="rounded-[28px] bg-surface-pink px-6 py-16 text-center">
+						<div className="rounded-[20px] bg-surface-pink px-6 py-16 text-center">
 							<p className="text-xl font-semibold">{t("empty")}</p>
 							<p className="mt-1 text-muted-foreground">{t("emptyHint")}</p>
 						</div>

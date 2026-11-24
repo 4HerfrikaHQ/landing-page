@@ -5,7 +5,7 @@ export async function CareerCard() {
 	const t = await getTranslations("blogPage");
 
 	return (
-		<aside className="rounded-[28px] bg-surface-pink p-6 lg:sticky lg:top-28 lg:self-start lg:rounded-[32px]">
+		<aside className="rounded-[20px] bg-surface-pink p-6 lg:sticky lg:top-28 lg:self-start lg:rounded-[20px]">
 			<span className="rounded-pill bg-white px-3 py-1.5 text-xs text-primary-500">
 				{t("careerBadge")}
 			</span>
