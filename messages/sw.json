@@ -31,6 +31,136 @@
 		"searchPlaceholder": "Tafuta chapisho",
 		"welcome": "Karibu kwenye"
 	},
+	"mentorProfile": {
+		"back": "Rudi kwa walezi",
+		"inactivePreview": {
+			"title": "Hakikisho la wasifu usiotumika.",
+			"adminBody": "Mlezi huyu haonekani kwa umma kwa sasa. Unaona ukurasa huu kwa sababu wewe ni msimamizi mkuu.",
+			"ownerBody": "Mlezi huyu haonekani kwa umma kwa sasa. Unaona ukurasa huu kwa sababu wewe ni mlezi mwenye wasifu huu."
+		},
+		"hero": {
+			"eyebrow": "Mlezi wa Career Corner",
+			"titleLead": "Panga simu",
+			"titleWith": "na <em>{name}.</em>",
+			"freeThisWeek": "Anapatikana wiki hii",
+			"duration": "Dakika 30",
+			"meet": "Google Meet",
+			"free": "Bure",
+			"bookCta": "Panga simu",
+			"photoFallback": "{name}, mlezi wa 4HerFrika"
+		},
+		"about": {
+			"tag": "Kuhusu",
+			"title": "Mfahamu <em>{name}</em>"
+		},
+		"testimonials": {
+			"tag": "Maneno mazuri",
+			"title": "Wanafunzi <em>wanasemaje</em>",
+			"rating": "Nyota {rating} kati ya 5",
+			"from": "{name}, aliyelelewa"
+		},
+		"steps": {
+			"tag": "Baada ya kupanga",
+			"title": "Nini kitafuata",
+			"one": {
+				"title": "Angalia barua pepe yako",
+				"body": "Mwaliko wa kalenda wenye kiungo cha Google Meet utafika ndani ya dakika chache. Tumia kiungo kwenye barua pepe kubadilisha au kughairi."
+			},
+			"two": {
+				"title": "{name} anasoma maelezo yako",
+				"body": "Maelezo yako yatamfikia {name} kabla ya simu, ili mazungumzo yaanzie unapohitaji."
+			},
+			"three": {
+				"title": "Kutana kwa dakika 30",
+				"body": "Jiunge kupitia simu au kompyuta yako. Njoo na swali moja au mawili."
+			}
+		},
+		"more": {
+			"title": "Walezi wengine <em>kama yeye</em>",
+			"all": "Tazama walezi wote",
+			"book": "Panga simu"
+		},
+		"volunteer": {
+			"tag": "Rudisha fadhila",
+			"title": "Kuwa mlezi <em>uliyemhitaji.</em>",
+			"body": "Mpe dakika 30 msichana aliye pale ulipokuwa wewe zamani.",
+			"imageAlt": "Wasichana wakitabasamu nje wakiwa wamevaa fulana za waridi za 4HerFrika"
+		},
+		"booking": {
+			"title": "Panga simu ya dakika 30",
+			"previewTitle": "Upatikanaji wa kupanga simu",
+			"subtitle": "Bure · Google Meet",
+			"previewOnly": "Hakikisho tu. Chagua siku kuona nyakati zilizo wazi. Kupanga simu kumezimwa wakati wasifu huu haujatumika.",
+			"sheetTitle": "Panga simu na {name}",
+			"close": "Funga",
+			"summaryTitle": "Simu ya dakika 30 na {name}",
+			"change": "Badilisha muda"
+		},
+		"slots": {
+			"previousWeek": "Wiki iliyopita",
+			"nextWeek": "Wiki ijayo",
+			"weekRange": "{start} – {end}",
+			"timezone": "Saa za eneo",
+			"loadError": "Imeshindwa kupakia upatikanaji. Jaribu tena.",
+			"unavailableTitle": "Kupanga simu hakupatikani kwa sasa",
+			"unavailableBody": "Tafadhali rudi baadaye.",
+			"emptyTitle": "Hakuna nyakati wazi wiki hii",
+			"emptyBody": "{name} hana nafasi wazi kuanzia {range}. Nyakati zake zinazofuata zinaweza kuwa wiki ijayo.",
+			"tryNextWeek": "Jaribu wiki ijayo",
+			"pickDay": "Chagua siku",
+			"noTimesDay": "Hakuna nyakati wazi siku hii.",
+			"today": "leo",
+			"allTimesIn": "Nyakati zote zinaonyeshwa kwa {timezone}."
+		},
+		"form": {
+			"name": "Jina",
+			"namePlaceholder": "Jina lako kamili",
+			"email": "Barua pepe",
+			"emailPlaceholder": "wewe@mfano.com",
+			"gender": "Jinsia",
+			"female": "Mwanamke",
+			"male": "Mwanaume",
+			"nonBinary": "Isiyo ya kawaida",
+			"preferNotToSay": "Sipendelei kusema",
+			"select": "Chagua",
+			"discuss": "Unataka kujadili nini?",
+			"discussPlaceholder": "Shiriki maelezo mafupi ili mlezi wako ajiandae.",
+			"discussHint": "Angalau herufi 20.",
+			"more": "Zaidi kukuhusu",
+			"optional": "Hiari",
+			"country": "Nchi",
+			"careerStage": "Hatua ya kazi",
+			"student": "Mwanafunzi",
+			"earlyCareer": "Mwanzo wa kazi",
+			"midCareer": "Katikati ya kazi",
+			"founder": "Mwanzilishi",
+			"other": "Nyingine",
+			"phone": "Simu / WhatsApp",
+			"linkedin": "Kiungo cha LinkedIn / portfolio",
+			"confirm": "Thibitisha",
+			"confirming": "Inapanga…",
+			"errorTitle": "Hatukuweza kupanga muda huo",
+			"errorFallback": "Imeshindwa kupanga. Tafadhali jaribu tena.",
+			"pickAnother": "Chagua muda mwingine",
+			"errors": {
+				"name": "Weka jina lako (angalau herufi 2).",
+				"email": "Weka barua pepe halali.",
+				"purpose": "Mweleze mlezi zaidi kidogo, angalau herufi 20.",
+				"linkedin": "Weka kiungo kamili, kinachoanza na https://."
+			}
+		},
+		"confirmed": {
+			"title": "Umepanga simu na <em>{name}.</em>",
+			"body": "Mwaliko wako na kiungo cha Google Meet vinakuja kwa {email}.",
+			"when": "Lini",
+			"where": "Wapi",
+			"whereValue": "Google Meet",
+			"whereNote": "kiungo kiko kwenye mwaliko wako",
+			"manage": "Unahitaji kubadilisha? Tumia “Simamia uhifadhi” kwenye barua pepe yako kubadilisha au kughairi.",
+			"back": "Rudi kwa walezi",
+			"done": "Imekamilika"
+		}
+	},
 	"careers": {
 		"attachFile": "Ambatisha faili. Ukubwa wa faili ya nyaraka zako usizidi 10MB",
 		"availableThisWeek": "Inapatikana wiki hii",
