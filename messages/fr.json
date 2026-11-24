@@ -794,9 +794,9 @@
 	"impactBanner": {
 		"label": "Rapport d’impact de la 2e année",
 		"badge": "Année 2",
-		"title": "Rapport d’impact bientôt disponible",
-		"description": "Soyez la première personne à découvrir ce qu’une deuxième année de mentorat a changé.",
-		"cta": "Le recevoir en premier",
+		"title": "Notre rapport d’impact de la 2e année est disponible",
+		"description": "Découvrez ce qu’une deuxième année de mentorat a changé.",
+		"cta": "Lire le rapport",
 		"dismiss": "Masquer cette bannière"
 	}
 }

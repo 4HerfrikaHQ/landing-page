@@ -1,24 +1,13 @@
 "use client";
 
 import { RollLabel } from "@/components/ui/roll-label";
-import { usePathname } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { MouseEvent } from "react";
 import { useDismissed } from "./use-dismissed";
 
-const DISMISS_KEY = "banner:year-2-teaser";
-const HIDDEN_ON = ["/donate"];
-
-function goToNewsletter(event: MouseEvent<HTMLAnchorElement>) {
-	const input = document.querySelector<HTMLInputElement>(
-		"#newsletter input[type='email']",
-	);
-	if (!input) return;
-	event.preventDefault();
-	input.scrollIntoView({ block: "center" });
-	input.focus({ preventScroll: true });
-}
+const DISMISS_KEY = "banner:year-2-report";
+const HIDDEN_ON = ["/donate", "/impact/year-2"];
 
 export function ImpactBanner() {
 	const t = useTranslations("impactBanner");
@@ -44,13 +33,12 @@ export function ImpactBanner() {
 						{t("description")}
 					</span>
 				</p>
-				<a
-					href="#newsletter"
-					onClick={goToNewsletter}
+				<Link
+					href="/impact/year-2"
 					className="press ml-auto inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-secondary-500 px-4 text-sm font-semibold text-white outline-none hover:bg-white hover:text-secondary-500 hover:no-underline focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-bright lg:px-5"
 				>
 					<RollLabel>{t("cta")} →</RollLabel>
-				</a>
+				</Link>
 				<button
 					type="button"
 					onClick={dismiss}
