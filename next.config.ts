@@ -11,11 +11,21 @@ const nextConfig: NextConfig = {
 	async redirects() {
 		// Keep old bookmarks, mentor links, and onboarding invitations working.
 		// Explicit English URLs go straight to the unprefixed canonical URL.
-		return ["", "/en", "/fr", "/sw"].map((prefix) => ({
-			source: `${prefix}/careers-corner/:path*`,
-			destination: `${prefix === "/en" ? "" : prefix}/careercorner/:path*`,
-			permanent: true,
-		}));
+		const prefixes = ["", "/en", "/fr", "/sw"];
+		const canonicalPrefix = (prefix: string) =>
+			prefix === "/en" ? "" : prefix;
+		return [
+			...prefixes.map((prefix) => ({
+				source: `${prefix}/careers-corner/:path*`,
+				destination: `${canonicalPrefix(prefix)}/careercorner/:path*`,
+				permanent: true,
+			})),
+			...prefixes.map((prefix) => ({
+				source: `${prefix}/projects`,
+				destination: `${canonicalPrefix(prefix)}/blog/category/projects`,
+				permanent: true,
+			})),
+		];
 	},
 	experimental: {
 		authInterrupts: true,

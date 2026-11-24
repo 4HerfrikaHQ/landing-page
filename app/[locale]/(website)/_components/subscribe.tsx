@@ -1,11 +1,15 @@
 import { getTranslations } from "next-intl/server";
-import { SubscribeFormClient } from "./subscribe-client";
+import { SubscribeFormClient, type SubscribeTone } from "./subscribe-client";
 
-export const SubscribeForm = async () => {
+type SubscribeFormProps = { tone?: SubscribeTone; showCopy?: boolean };
+
+export const SubscribeForm = async ({ tone, showCopy }: SubscribeFormProps) => {
 	const t = await getTranslations("footer");
 
 	return (
 		<SubscribeFormClient
+			tone={tone}
+			showCopy={showCopy}
 			label={t("newsletterTitle")}
 			placeholder={t("emailPlaceholder")}
 			description={t("subscribeDescription")}

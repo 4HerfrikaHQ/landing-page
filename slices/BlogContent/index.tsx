@@ -1,34 +1,44 @@
-import type { FC } from "react";
 import type { Content } from "@prismicio/client";
 import type { JSXMapSerializer, SliceComponentProps } from "@prismicio/react";
 import { PrismicRichText } from "@prismicio/react";
+import type { FC } from "react";
 
 export type BlogContentProps = SliceComponentProps<Content.BlogContentSlice>;
 
 const richTextComponents: JSXMapSerializer = {
 	paragraph: ({ children }) => (
-		<p className="text-lg md:text-2xl font-normal leading-relaxed text-[#364153]">{children}</p>
+		<p className="text-[17px] leading-[1.75] text-foreground/90">{children}</p>
 	),
 	heading1: ({ children }) => (
-		<h2 className="text-2xl md:text-4xl font-bold leading-tight text-foreground">{children}</h2>
+		<h2 className="mt-6 text-[26px] font-bold leading-tight text-foreground lg:text-[32px]">
+			{children}
+		</h2>
 	),
 	heading2: ({ children }) => (
-		<h2 className="text-xl md:text-3xl font-bold leading-tight text-foreground">{children}</h2>
+		<h2 className="mt-6 text-[26px] font-bold leading-tight text-foreground lg:text-[32px]">
+			{children}
+		</h2>
 	),
 	heading3: ({ children }) => (
-		<h3 className="text-lg md:text-2xl font-semibold leading-tight text-foreground">{children}</h3>
+		<h3 className="mt-4 text-xl font-semibold leading-tight text-foreground lg:text-2xl">
+			{children}
+		</h3>
 	),
 	list: ({ children }) => (
-		<ul className="list-disc list-outside pl-6 text-[#364153]">{children}</ul>
+		<ul className="list-disc list-outside pl-6 text-foreground/90 marker:text-primary-500">
+			{children}
+		</ul>
 	),
 	oList: ({ children }) => (
-		<ol className="list-decimal list-outside pl-6 text-[#364153]">{children}</ol>
+		<ol className="list-decimal list-outside pl-6 text-foreground/90 marker:text-primary-500">
+			{children}
+		</ol>
 	),
 	listItem: ({ children }) => (
-		<li className="text-lg md:text-2xl font-normal leading-relaxed">{children}</li>
+		<li className="text-[17px] leading-[1.75]">{children}</li>
 	),
 	oListItem: ({ children }) => (
-		<li className="text-lg md:text-2xl font-normal leading-relaxed">{children}</li>
+		<li className="text-[17px] leading-[1.75]">{children}</li>
 	),
 };
 
@@ -36,11 +46,11 @@ const BlogContent: FC<BlogContentProps> = ({ slice }) => {
 	if (slice.variation === "quote") {
 		return (
 			<blockquote
-				className="border-l-4 border-[rgba(236,0,140,0.6)] rounded-r-[14px] bg-[#FDF2F8] pt-6 pr-6 pb-6 pl-9"
+				className="my-4 rounded-[28px] bg-surface-pink px-6 py-8 lg:rounded-[32px] lg:px-10 lg:py-10"
 				data-slice-type={slice.slice_type}
 				data-slice-variation={slice.variation}
 			>
-				<p className="text-lg md:text-2xl font-normal md:leading-[39px] leading-relaxed text-[#1E2939]">
+				<p className="font-playfair text-[28px] font-black italic leading-tight text-primary-500 lg:text-[36px]">
 					{slice.primary.text}
 				</p>
 			</blockquote>
@@ -53,7 +63,10 @@ const BlogContent: FC<BlogContentProps> = ({ slice }) => {
 			data-slice-type={slice.slice_type}
 			data-slice-variation={slice.variation}
 		>
-			<PrismicRichText field={slice.primary.text} components={richTextComponents} />
+			<PrismicRichText
+				field={slice.primary.text}
+				components={richTextComponents}
+			/>
 		</div>
 	);
 };
