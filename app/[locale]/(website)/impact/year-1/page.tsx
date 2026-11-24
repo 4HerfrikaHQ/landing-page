@@ -116,7 +116,7 @@ export default async function YearOneReportPage({
 							</li>
 						))}
 					</ul>
-					<div className="mt-10 grid grid-cols-2 gap-4 lg:mt-14 lg:grid-cols-3 lg:gap-6">
+					<div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:mt-14 lg:gap-6">
 						{MILESTONE_PHOTOS.map((photo, index) => (
 							<Image
 								key={photo.alt}
@@ -126,7 +126,7 @@ export default async function YearOneReportPage({
 								className={cn(
 									"aspect-4/3 h-auto w-full rounded-[20px] object-cover shadow-[0_12px_24px_rgba(0,0,0,0.10)]",
 									index === 2 &&
-										"col-span-2 aspect-video lg:col-span-1 lg:aspect-4/3",
+										"col-span-2 aspect-video md:col-span-1 md:aspect-4/3",
 								)}
 							/>
 						))}
