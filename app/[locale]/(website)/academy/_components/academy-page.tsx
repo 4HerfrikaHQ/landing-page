@@ -258,7 +258,7 @@ export function AcademyPage({ catalog }: { catalog: ReactNode }) {
 										className={`w-[calc(100%-1.5rem)] max-w-118.5 shrink-0 pr-6 xl:max-w-150.5 xl:pr-8 ${isSliding ? "transition-transform ease-out" : ""} ${slide < carousel.slide - (isSliding ? 1 : 0) ? "invisible" : ""}`}
 									>
 										<article className="overflow-hidden rounded-2xl bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] sm:rounded-3xl sm:p-6 xl:rounded-[40px] xl:p-8">
-											<div className="relative aspect-3/2 overflow-hidden rounded-xl sm:rounded-2xl xl:rounded-[32px]">
+											<div className="relative aspect-3/2 overflow-hidden rounded-xl sm:rounded-2xl xl:rounded-[20px]">
 												<Image
 													src={academy.image}
 													alt={t(academyTranslationKeys[academy.academy].name)}
