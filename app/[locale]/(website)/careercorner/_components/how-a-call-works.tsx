@@ -25,7 +25,7 @@ export async function HowACallWorks() {
 					{STEPS.map((step, index) => (
 						<li
 							key={step.title}
-							className="rounded-2xl bg-white p-6 lg:rounded-[32px] lg:p-8"
+							className="rounded-2xl bg-white p-6 lg:rounded-[20px] lg:p-8"
 						>
 							<span
 								aria-hidden="true"
