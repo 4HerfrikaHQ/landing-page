@@ -39,6 +39,13 @@ async function getLessonSummaries(ids: string[]) {
 	});
 }
 
+function isMissingCourseError(error: unknown) {
+	return (
+		error instanceof prismic.NotFoundError ||
+		error instanceof prismic.ParsingError
+	);
+}
+
 export async function getCourse(uid: string) {
 	try {
 		const document = await createClient().getByUID("course", uid, {
@@ -48,7 +55,7 @@ export async function getCourse(uid: string) {
 		const lessons = await getLessonSummaries(lessonIdsInCourse(document));
 		return toCourse(document, lessons);
 	} catch (error) {
-		if (error instanceof prismic.NotFoundError) return null;
+		if (isMissingCourseError(error)) return null;
 		throw error;
 	}
 }

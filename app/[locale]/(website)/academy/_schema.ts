@@ -208,6 +208,7 @@ export const CourseDocument = z.object({
 		hours_label: nullableText,
 		outcomes: z.array(z.object({ outcome: nullableText })).nullish(),
 		partners: z.array(z.object({ partner: z.unknown() })).nullish(),
+		notice: z.array(z.object({ text: z.string().nullish() }).loose()).nullish(),
 		certificate_issuer: nullableText,
 		certificate_attribution: nullableText,
 		certificate_signatories: z
