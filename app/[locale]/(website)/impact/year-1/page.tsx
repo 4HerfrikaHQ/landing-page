@@ -67,7 +67,7 @@ export default async function YearOneReportPage({
 						alt={t("altYearReport")}
 						priority
 						sizes="(max-width: 1024px) 100vw, 1024px"
-						className="mx-auto mt-10 w-full max-w-5xl rounded-[28px] shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:mt-14 lg:rounded-[40px]"
+						className="mx-auto mt-10 w-full max-w-5xl rounded-[20px] shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:mt-14 lg:rounded-[40px]"
 					/>
 				</div>
 			</header>
@@ -136,17 +136,17 @@ export default async function YearOneReportPage({
 					<Image
 						src={middle}
 						alt={t("altMiddle")}
-						className="w-full h-full md:w-[30vw] md:h-141.25 object-cover mx-auto relative rounded-[28px] shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
+						className="w-full h-full md:w-[30vw] md:h-141.25 object-cover mx-auto relative rounded-[20px] shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
 					/>
 					<Image
 						src={right}
 						alt={t("altRight")}
-						className="w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-25 right-0 md:top-32 rounded-[28px] shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
+						className="w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-25 right-0 md:top-32 rounded-[20px] shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
 					/>
 					<Image
 						src={left}
 						alt={t("altLeft")}
-						className="col-span-2 w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-[-25deg] left-0 md:top-32 rounded-[28px] shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
+						className="col-span-2 w-full h-full md:w-[30vw] md:h-141.25 object-cover md:absolute md:rotate-[-25deg] left-0 md:top-32 rounded-[20px] shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
 					/>
 				</div>
 				<div className="flex justify-center">
@@ -179,7 +179,7 @@ export default async function YearOneReportPage({
 					<Image
 						src={beginning}
 						alt={t("altBeginning")}
-						className="h-135 w-full rounded-[28px] object-cover shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[40px]"
+						className="h-135 w-full rounded-[20px] object-cover shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[40px]"
 					/>
 				</div>
 			</FadeIn>

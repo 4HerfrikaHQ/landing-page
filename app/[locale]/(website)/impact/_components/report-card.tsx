@@ -11,12 +11,12 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 
 	return (
 		<FadeIn>
-			<article className="rounded-[28px] bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:grid lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:rounded-[40px] lg:p-8">
+			<article className="rounded-[20px] bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:grid lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:rounded-[40px] lg:p-8">
 				<Image
 					src={report.cover}
 					alt={t(`${key}.coverAlt`)}
 					sizes="(max-width: 1024px) 100vw, 560px"
-					className="aspect-4/3 w-full rounded-2xl object-cover lg:rounded-[28px]"
+					className="aspect-4/3 w-full rounded-2xl object-cover lg:rounded-[20px]"
 				/>
 				<div className="pt-5 lg:pt-2">
 					<p className="text-sm text-muted-foreground">{t(`${key}.label`)}</p>
