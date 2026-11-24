@@ -1,5 +1,6 @@
 import { PrismicPreview } from "@prismicio/next";
 import { Outfit, Playfair_Display } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { repositoryName } from "@/prismicio";
@@ -19,13 +20,14 @@ const playfairDisplay = Playfair_Display({
 	variable: "--font-playfair",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const locale = await getLocale();
 	return (
-		<html lang="en" data-scroll-behavior="smooth">
+		<html lang={locale} data-scroll-behavior="smooth">
 			<body
 				className={`${outfitSans.className} ${playfairDisplay.variable} antialiased`}
 			>
