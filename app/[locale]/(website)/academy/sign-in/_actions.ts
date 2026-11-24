@@ -3,6 +3,7 @@
 import { createClient } from "@/src/auth";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import type { AuthError } from "@supabase/supabase-js";
+import type { Route } from "next";
 import { getLocale } from "next-intl/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -108,5 +109,5 @@ export const continueWithGoogle = actionClient
 			},
 		});
 		if (error) throw friendlyAuthError(error);
-		redirect(data.url);
+		redirect(data.url as Route);
 	});

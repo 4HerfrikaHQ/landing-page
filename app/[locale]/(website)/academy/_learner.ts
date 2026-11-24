@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import "server-only";
 import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
@@ -37,7 +38,10 @@ export const currentLearner = cache(async () => {
 	return user ? findLearner(user.id) : null;
 });
 
-export async function afterSignInPath(authUserId: string, target: string) {
+export async function afterSignInPath(
+	authUserId: string,
+	target: Route,
+): Promise<Route> {
 	const learner = await findLearner(authUserId);
 	return learner ? target : welcomePath(localeFromPath(target), target);
 }

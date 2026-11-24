@@ -1,4 +1,5 @@
 import { routing } from "@/i18n/routing";
+import type { Route } from "next";
 import { type Locale, hasLocale } from "next-intl";
 
 export const ACADEMY_HOME_PATH = "/academy";
@@ -25,8 +26,8 @@ export function isSafeNextPath(value: unknown): value is string {
 	}
 }
 
-export function resolveNext(value: unknown, fallback: string): string {
-	return isSafeNextPath(value) ? value : fallback;
+export function resolveNext(value: unknown, fallback: string): Route {
+	return (isSafeNextPath(value) ? value : fallback) as Route;
 }
 
 export function isAcademyPath(pathname: string): boolean {
@@ -38,19 +39,21 @@ export function localeFromPath(path: string): Locale {
 	return hasLocale(routing.locales, segment) ? segment : routing.defaultLocale;
 }
 
-export function localizedPath(locale: Locale, path: string): string {
-	return locale === routing.defaultLocale ? path : `/${locale}${path}`;
+export function localizedPath(locale: Locale, path: string): Route {
+	return (
+		locale === routing.defaultLocale ? path : `/${locale}${path}`
+	) as Route;
 }
 
-export function pathWithNext(basePath: string, next: string): string {
-	return `${basePath}?next=${encodeURIComponent(next)}`;
+export function pathWithNext(basePath: string, next: string): Route {
+	return `${basePath}?next=${encodeURIComponent(next)}` as Route;
 }
 
-export function signInPath(locale: Locale, next: string): string {
+export function signInPath(locale: Locale, next: string): Route {
 	return pathWithNext(localizedPath(locale, SIGN_IN_PATH), next);
 }
 
-export function welcomePath(locale: Locale, next: string): string {
+export function welcomePath(locale: Locale, next: string): Route {
 	return pathWithNext(localizedPath(locale, WELCOME_PATH), next);
 }
 

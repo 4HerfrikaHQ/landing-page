@@ -67,6 +67,7 @@ export function EmailStep({
 			</div>
 
 			<form
+				noValidate
 				onSubmit={send.handleSubmitWithAction}
 				className="flex flex-col gap-4"
 			>
