@@ -81,8 +81,7 @@
 		"submit": "Wasilisha",
 		"tryAgain": "Jaribu tena",
 		"viewProjects": "Tazama Miradi",
-		"volunteerAsMentor": "Jitolee kama mlezi",
-		"yearOneReport": "Angalia Year-One Landscape report yetu hapa!"
+		"volunteerAsMentor": "Jitolee kama mlezi"
 	},
 	"contact": {
 		"altMap": "Ramani inayoonyesha eneo la ofisi ya 4Herfrika",
@@ -131,16 +130,19 @@
 	},
 	"footer": {
 		"allRightsReserved": "Haki zote zimehifadhiwa.",
-		"contactUs": "Wasiliana nasi",
-		"emailPlaceholder": "Anwani ya barua pepe",
-		"legal": "Kisheria",
+		"emailPlaceholder": "Barua pepe yako",
 		"privacy": "Faragha",
 		"quickLinks": "Viungo vya Haraka",
 		"subscribe": "Jiandikishe",
-		"subscribeDescription": "Jiandikishe kwenye jarida letu upate taarifa na habari za hivi punde",
-		"support": "Msaada",
+		"subscribeDescription": "Barua pepe moja kwa mwezi. Wasichana halisi, ushindi halisi.",
 		"terms": "Masharti",
-		"mentorLogin": "Kuingia kwa mentor"
+		"mentorLogin": "Kuingia kwa mentor",
+		"impact": "Athari",
+		"contact": "Mawasiliano",
+		"faqs": "Maswali ya mara kwa mara",
+		"newsletterTitle": "Pata hadithi ya mwezi",
+		"subscribeSuccess": "Asante kwa kujiandikisha!",
+		"socialLabel": "Mitandao ya kijamii"
 	},
 	"home": {
 		"academyDescription": "Jukwaa la kujifunza mtandaoni kwa ukuzaji wa ujuzi",
@@ -184,13 +186,19 @@
 		"whatStarted": "Kilichoanza katika kampasi moja nchini Nigeria sasa kimesambaa katika kampasi 25 nchini Nigeria, Ghana, Sierra Leone, Kenya, na Kameruni. Katika mwaka mmoja tu, 4HerFrika imekuwa jumuiya ambapo wasichana hugundua sauti zao, hukuza ujuzi wao, na kujiandaa kuiongoza Afrika ya baadaye."
 	},
 	"nav": {
-		"aboutUs": "Kuhusu Sisi",
-		"impactHub": "Kitovu cha Athari",
 		"blog": "Blogu",
 		"careerCorner": "Career Corner",
-		"contactUs": "Wasiliana nasi",
 		"projects": "Miradi",
-		"academy": "Akademia"
+		"academy": "Akademia",
+		"about": "Kuhusu",
+		"impact": "Athari",
+		"contact": "Wasiliana",
+		"homeLabel": "Ukurasa wa mwanzo wa 4HerFrika",
+		"mainLabel": "Kuu",
+		"openMenu": "Fungua menyu",
+		"closeMenu": "Funga menyu",
+		"menuTitle": "Menyu ya urambazaji",
+		"language": "Lugha"
 	},
 	"notFound": {
 		"backToHome": "Rudi Nyumbani",

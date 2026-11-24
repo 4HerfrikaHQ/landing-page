@@ -83,12 +83,3 @@ export const testimonials: readonly Review[] = [
 		},
 	},
 ] as const;
-
-export const navLinks = [
-	["About Us", "/about"],
-	["Projects", "/projects"],
-	["Academy", "/academy"],
-	["Career Corner", "/careercorner"],
-	["Blog", "/blog"],
-	["Contact Us", "/contact-us"],
-] as const;

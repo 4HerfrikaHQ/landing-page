@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@base-ui/react";
-import { ArrowRight } from "lucide-react";
-import { useTransition } from "react";
+import { useId, useTransition } from "react";
 import { toast } from "sonner";
 import { subscribeAction } from "./subscribe-action";
 
@@ -10,14 +9,19 @@ type SubscribeFormClientProps = {
 	label: string;
 	placeholder: string;
 	description: string;
+	submitLabel: string;
+	successMessage: string;
 };
 
 export const SubscribeFormClient = ({
 	label,
 	placeholder,
 	description,
+	submitLabel,
+	successMessage,
 }: SubscribeFormClientProps) => {
 	const [isPending, startTransition] = useTransition();
+	const emailId = useId();
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -28,43 +32,38 @@ export const SubscribeFormClient = ({
 			if (result?.error) {
 				toast.error(result.error);
 			} else {
-				toast.success("Thanks for subscribing!");
+				toast.success(successMessage);
 				form.reset();
 			}
 		});
 	};
 
 	return (
-		<div className="bg-muted/20 p-12 rounded-2xl md:mt-4 lg:-mt-8">
-			<p className="font-bold text-white text-2xl">{label}</p>
-
-			<div className="mx-auto mt-4 md:max-w-md sm:ms-0">
-				<form className="mt-4" onSubmit={handleSubmit}>
-					<div className="flex flex-row lg:items-start">
-						<label htmlFor="email" className="sr-only">
-							{placeholder}
-						</label>
-
-						<input
-							id="email"
-							name="email"
-							className="bg-white w-full rounded-tl-md rounded-bl-md border-border px-6 py-3 shadow-sm placeholder:text-primary-500/60 focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs"
-							type="email"
-							placeholder={placeholder}
-							required
-						/>
-
-						<Button
-							className="rounded-br-md rounded-tr-md rounded-tl-none rounded-bl-none bg-primary-500/60 px-8 py-4 font-bold text-white hover:bg-primary-500/65 disabled:opacity-50 disabled:cursor-not-allowed"
-							type="submit"
-							disabled={isPending}
-						>
-							<ArrowRight className="h-4 w-4 text-white" />
-						</Button>
-					</div>
-					<p className="text-lg text-white/60 mt-2">{description}</p>
-				</form>
-			</div>
+		<div className="min-w-0">
+			<h2 className="text-[15px] font-bold">{label}</h2>
+			<p className="mt-4 text-[15px] text-white/85">{description}</p>
+			<form className="mt-4 flex min-w-0 gap-2" onSubmit={handleSubmit}>
+				<label htmlFor={emailId} className="sr-only">
+					{placeholder}
+				</label>
+				<input
+					id={emailId}
+					name="email"
+					type="email"
+					size={1}
+					autoComplete="email"
+					placeholder={placeholder}
+					required
+					className="h-11 min-w-0 flex-1 rounded-pill bg-white/10 px-4 text-[15px] text-white placeholder:text-white/70 outline-none focus-visible:ring-2 focus-visible:ring-white"
+				/>
+				<Button
+					type="submit"
+					disabled={isPending}
+					className="h-11 shrink-0 cursor-pointer rounded-pill bg-primary-bright px-5 text-[15px] font-medium text-secondary outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary disabled:cursor-not-allowed disabled:opacity-50"
+				>
+					{submitLabel}
+				</Button>
+			</form>
 		</div>
 	);
 };

@@ -6,9 +6,11 @@ export const SubscribeForm = async () => {
 
 	return (
 		<SubscribeFormClient
-			label={t("subscribe")}
+			label={t("newsletterTitle")}
 			placeholder={t("emailPlaceholder")}
 			description={t("subscribeDescription")}
+			submitLabel={t("subscribe")}
+			successMessage={t("subscribeSuccess")}
 		/>
 	);
 };

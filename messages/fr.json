@@ -81,8 +81,7 @@
 		"submit": "Envoyer",
 		"tryAgain": "Réessayer",
 		"viewProjects": "Voir les projets",
-		"volunteerAsMentor": "Devenir mentor bénévole",
-		"yearOneReport": "Consultez notre Year-One Landscape report ici !"
+		"volunteerAsMentor": "Devenir mentor bénévole"
 	},
 	"contact": {
 		"altMap": "Carte indiquant l'emplacement du bureau de 4Herfrika",
@@ -131,16 +130,19 @@
 	},
 	"footer": {
 		"allRightsReserved": "Tous droits réservés.",
-		"contactUs": "Contactez-nous",
-		"emailPlaceholder": "Adresse e-mail",
-		"legal": "Mentions légales",
+		"emailPlaceholder": "Votre e-mail",
 		"privacy": "Confidentialité",
 		"quickLinks": "Liens rapides",
 		"subscribe": "S’abonner",
-		"subscribeDescription": "Abonnez-vous à notre newsletter pour recevoir les dernières actualités et mises à jour",
-		"support": "Assistance",
+		"subscribeDescription": "Un e-mail par mois. De vraies filles, de vraies victoires.",
 		"terms": "Conditions",
-		"mentorLogin": "Connexion mentor"
+		"mentorLogin": "Connexion mentor",
+		"impact": "Impact",
+		"contact": "Contact",
+		"faqs": "FAQ",
+		"newsletterTitle": "Recevez l’histoire du mois",
+		"subscribeSuccess": "Merci pour votre abonnement !",
+		"socialLabel": "Réseaux sociaux"
 	},
 	"home": {
 		"academyDescription": "Plateforme d’apprentissage en ligne pour développer ses compétences",
@@ -184,13 +186,19 @@
 		"whatStarted": "Ce qui a commencé sur un seul campus au Nigeria s’est aujourd’hui étendu à 25 campus au Nigeria, au Ghana, en Sierra Leone, au Kenya et au Cameroun. En seulement un an, 4HerFrika est devenue une communauté où les filles trouvent leur voix, développent leurs compétences et se préparent à façonner l’avenir de l’Afrique."
 	},
 	"nav": {
-		"aboutUs": "À propos",
-		"impactHub": "Pôle d'impact",
 		"blog": "Blog",
 		"careerCorner": "Career Corner",
-		"contactUs": "Contactez-nous",
 		"projects": "Projets",
-		"academy": "Académie"
+		"academy": "Académie",
+		"about": "À propos",
+		"impact": "Impact",
+		"contact": "Contact",
+		"homeLabel": "Accueil 4HerFrika",
+		"mainLabel": "Principale",
+		"openMenu": "Ouvrir le menu",
+		"closeMenu": "Fermer le menu",
+		"menuTitle": "Menu de navigation",
+		"language": "Langue"
 	},
 	"notFound": {
 		"backToHome": "Retour à l'accueil",

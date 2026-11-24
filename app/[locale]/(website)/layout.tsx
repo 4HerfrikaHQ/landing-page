@@ -13,7 +13,7 @@ export default function WebLayout({
 		<NuqsAdapter>
 			<ScrollProgress />
 			<Navbar />
-			{children}
+			<div className="site-page">{children}</div>
 			<Footer />
 		</NuqsAdapter>
 	);

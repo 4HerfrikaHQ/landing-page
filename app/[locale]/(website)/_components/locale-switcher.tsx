@@ -1,68 +1,57 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { LOCALES } from "@/i18n/routing";
-import { Globe } from "lucide-react";
-import { useLocale } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { Menu } from "@base-ui/react/menu";
+import { Check, ChevronDown } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { NAV_FOCUS_RING } from "./nav-styles";
+
+type Locale = (typeof LOCALES)[number]["locale"];
 
 export function LocaleSwitcher() {
+	const t = useTranslations("nav");
 	const locale = useLocale();
 	const router = useRouter();
 	const pathname = usePathname();
-	const [open, setOpen] = useState(false);
-	const ref = useRef<HTMLDivElement>(null);
 
-	const current = LOCALES.find((l) => l.locale === locale);
-
-	// Close on outside click
-	useEffect(() => {
-		function handleClick(e: MouseEvent) {
-			if (ref.current && !ref.current.contains(e.target as Node))
-				setOpen(false);
-		}
-		document.addEventListener("mousedown", handleClick);
-		return () => document.removeEventListener("mousedown", handleClick);
-	}, []);
-
-	function switchLocale(nextLocale: (typeof LOCALES)[number]["locale"]) {
+	const switchLocale = (nextLocale: Locale) => {
 		router.replace(pathname, { locale: nextLocale });
-		setOpen(false);
-	}
+	};
 
 	return (
-		<div className="relative" ref={ref}>
-			<Button
-				variant="ghost"
-				size="sm"
-				onClick={() => setOpen(!open)}
-				className="gap-1.5"
+		<Menu.Root>
+			<Menu.Trigger
+				aria-label={t("language")}
+				className={`inline-flex h-11 min-w-11 cursor-pointer items-center justify-center gap-1 rounded-pill px-3 text-sm text-muted-foreground transition-colors hover:text-foreground ${NAV_FOCUS_RING}`}
 			>
-				<Globe className="h-4 w-4" />
-				<span className="hidden sm:inline">{current?.name}</span>
-				<span className="sm:hidden">{current?.flag}</span>
-			</Button>
-
-			{open && (
-				<div className="absolute right-0 top-full mt-2 bg-background border border-border rounded-lg shadow-lg z-50 min-w-[140px] py-1">
-					{LOCALES.map((l) => (
-						<button
-							key={l.locale}
-							type="button"
-							onClick={() => switchLocale(l.locale)}
-							className={`w-full px-4 py-2 text-left text-sm flex items-center gap-2 hover:bg-muted transition-colors ${
-								l.locale === locale
-									? "text-primary-500 font-medium"
-									: "text-foreground"
-							}`}
+				<span aria-hidden="true">{locale.toUpperCase()}</span>
+				<ChevronDown aria-hidden="true" className="size-4" />
+			</Menu.Trigger>
+			<Menu.Portal>
+				<Menu.Positioner align="end" sideOffset={8} className="z-60">
+					<Menu.Popup className="min-w-40 rounded-2xl border border-border bg-background p-1 shadow-lg outline-none">
+						<Menu.RadioGroup
+							value={locale}
+							onValueChange={(value: Locale) => switchLocale(value)}
 						>
-							<span>{l.flag}</span>
-							<span>{l.name}</span>
-						</button>
-					))}
-				</div>
-			)}
-		</div>
+							{LOCALES.map((option) => (
+								<Menu.RadioItem
+									key={option.locale}
+									value={option.locale}
+									lang={option.locale}
+									className="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl px-3 text-sm text-foreground outline-none data-highlighted:bg-muted data-checked:font-semibold data-checked:text-primary"
+								>
+									{option.name}
+									<Menu.RadioItemIndicator>
+										<Check aria-hidden="true" className="size-4" />
+									</Menu.RadioItemIndicator>
+								</Menu.RadioItem>
+							))}
+						</Menu.RadioGroup>
+					</Menu.Popup>
+				</Menu.Positioner>
+			</Menu.Portal>
+		</Menu.Root>
 	);
 }

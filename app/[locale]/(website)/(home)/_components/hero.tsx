@@ -33,7 +33,7 @@ export const Hero = async ({
 				className="w-full h-full left-0 -bottom-4 sm:-bottom-6 md:-bottom-8 lg:bottom-20 absolute -z-1"
 			/>
 
-			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-32 relative z-1 mx-auto container">
+			<section className="grid lg:grid-cols-[1fr_1.2fr] gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-16 xl:pt-24 relative z-1 mx-auto container">
 				<div className="w-full">
 					<div className="animate-enter">
 						<h1 className="text-foreground text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl leading-tight mb-3 lg:mb-8 lg:tracking-widest font-bold capitalize text-balance">

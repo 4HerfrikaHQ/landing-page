@@ -78,7 +78,10 @@ export default async function About({
 
 	return (
 		<div className="overflow-x-hidden">
-			<section className="relative min-h-125 xl:min-h-[70vh] w-full flex items-center justify-center">
+			<section
+				data-hero="full-bleed"
+				className="relative min-h-125 xl:min-h-[70vh] w-full flex items-center justify-center"
+			>
 				<div className="absolute top-0 left-0 size-full">
 					<PrismicImage
 						field={hero_image}

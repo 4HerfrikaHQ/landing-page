@@ -11,7 +11,8 @@
 	--color-primary-200: #f500c9;
 	--color-primary-300: #f300b5;
 	--color-primary-400: #f100a1;
-	--color-primary-500: #ec008c;
+	--color-primary-500: #c8007a;
+	--color-primary-bright: #ff5cc0;
 	--color-primary-700: #a91b6f;
 
 	/* ── Brand Secondary (deep blue) ── */
@@ -21,6 +22,8 @@
 	--color-surface-pink: #fff4fc;
 	--color-surface-indigo: #edeeff;
 	--color-surface-teal: #d4eaea;
+
+	--radius-pill: 9999px;
 
 	/* ── Layout ── */
 	--max-width-9xl: 72rem;
@@ -95,7 +98,7 @@
 	--background: #ffffff;
 	--foreground: #171717;
 
-	--primary: #ec008c;
+	--primary: #c8007a;
 	--primary-foreground: #ffffff;
 
 	--secondary: #03065c;
@@ -301,35 +304,39 @@ html {
 	scroll-behavior: smooth;
 }
 
-html:has(.academy-exact-page) {
-	scroll-behavior: auto;
-	scrollbar-width: none;
-}
-
-html:has(.academy-exact-page)::-webkit-scrollbar,
-body:has(.academy-exact-page) nextjs-portal {
-	display: none;
-}
-
 .font-playfair {
 	font-family: var(--font-playfair), Georgia, serif;
 }
 
-body:has(.academy-exact-page) [data-site-footer],
-body:has(.academy-exact-page) [data-site-scroll-progress] {
-	display: none;
-}
-
-/* The website chrome sits outside the Academy route tree: mobile keeps the
-   shared navigation, desktop uses the Academy-specific pill navigation. */
-body:has(.academy-exact-page) [data-site-footer],
-body:has(.academy-exact-page) [data-site-scroll-progress] {
-	display: none !important;
+.site-page {
+	padding-top: 5rem;
 }
 
 @media (min-width: 1280px) {
-	body:has(.academy-exact-page) [data-site-navbar] {
-		display: none !important;
+	.site-page {
+		padding-top: 7rem;
+	}
+}
+
+.site-page:has([data-hero="full-bleed"]:first-child) {
+	padding-top: 0;
+}
+
+.site-nav {
+	transition: translate 300ms ease;
+}
+
+.site-nav[data-hidden="true"]:not(:focus-within) {
+	translate: 0 calc(-100% - 2rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.site-nav {
+		transition: none;
+	}
+
+	.site-nav[data-hidden="true"] {
+		translate: none;
 	}
 }
 

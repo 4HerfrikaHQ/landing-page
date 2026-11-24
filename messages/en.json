@@ -1,7 +1,7 @@
 {
 	"common": {
 		"donate": "Donate",
-		"joinUs": "Join Us",
+		"joinUs": "Join us",
 		"learnMore": "Learn more",
 		"joinCommunity": "Join Our Community",
 		"viewProjects": "View Projects",
@@ -12,8 +12,8 @@
 		"backToHome": "Back to Home",
 		"tryAgain": "Try Again",
 		"comingSoon": "Coming Soon",
-		"becomeAmbassador": "Become an Ambassador",
-		"volunteerAsMentor": "Volunteer as a Mentor",
+		"becomeAmbassador": "Become an ambassador",
+		"volunteerAsMentor": "Volunteer as a mentor",
 		"downloadReport": "Download our report",
 		"goToHomepage": "Go to Homepage",
 		"bookACall": "Book a call",
@@ -22,17 +22,22 @@
 		"exploreProject": "Explore Project",
 		"seeDetails": "See Details",
 		"startAChapter": "Start a Chapter",
-		"yearOneReport": "Check out our Year-One Landscape report here!",
 		"home": "Home"
 	},
 	"nav": {
-		"aboutUs": "About Us",
-		"impactHub": "Impact Hub",
 		"projects": "Projects",
 		"academy": "Academy",
 		"careerCorner": "Career Corner",
 		"blog": "Blog",
-		"contactUs": "Contact Us"
+		"about": "About",
+		"impact": "Impact",
+		"contact": "Contact",
+		"homeLabel": "4HerFrika home",
+		"mainLabel": "Main",
+		"openMenu": "Open menu",
+		"closeMenu": "Close menu",
+		"menuTitle": "Navigation menu",
+		"language": "Language"
 	},
 	"home": {
 		"heroTitle": "Raising <highlight>World-Class</highlight> Women",
@@ -97,17 +102,20 @@
 		"getInTouch": "Get in touch"
 	},
 	"footer": {
-		"quickLinks": "Quick Links",
-		"legal": "Legal",
+		"quickLinks": "Quick links",
 		"terms": "Terms",
 		"privacy": "Privacy",
-		"contactUs": "Contact Us",
-		"support": "Support",
 		"subscribe": "Subscribe",
-		"emailPlaceholder": "Email Address",
-		"subscribeDescription": "Subscribe to our newsletter for the latest updates and news",
+		"emailPlaceholder": "Your email",
+		"subscribeDescription": "One email a month. Real girls, real wins.",
 		"allRightsReserved": "All rights reserved.",
-		"mentorLogin": "Mentor login"
+		"mentorLogin": "Mentor login",
+		"impact": "Impact",
+		"contact": "Contact",
+		"faqs": "FAQs",
+		"newsletterTitle": "Get the monthly story",
+		"subscribeSuccess": "Thanks for subscribing!",
+		"socialLabel": "Social media"
 	},
 	"careers": {
 		"title": "Career Corner",
