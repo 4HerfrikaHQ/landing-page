@@ -152,16 +152,16 @@ const DocumentLink = z.object({
 });
 
 export const PolicyFields = z.object({
-	pass_mark_percent: nullableNumber,
+	pass_mark_percent: z.number().int().min(1).max(100).nullish().catch(null),
 	attempt_rule: z.enum(["per_hour", "cooldown"]).nullish(),
-	attempt_value: nullableNumber,
+	attempt_value: z.number().int().positive().nullish().catch(null),
 	fail_feedback: FailFeedback.nullish(),
 	reveal_answers_on_pass: nullableBoolean,
 	video_must_finish: nullableBoolean,
 	reading_ack: nullableBoolean,
 	sequential_unlock: nullableBoolean,
 	tasks_required: nullableBoolean,
-	min_age: nullableNumber,
+	min_age: z.number().int().min(13).nullish().catch(null),
 });
 export type PolicyFields = z.input<typeof PolicyFields>;
 

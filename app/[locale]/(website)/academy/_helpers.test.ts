@@ -470,4 +470,14 @@ describe("course content", () => {
 	test("an empty policy tab is the default policy", () => {
 		expect(toCompletionPolicy({})).toEqual(DEFAULT_COMPLETION_POLICY);
 	});
+	test("out-of-range numbers fall back to the default instead of opening the gate", () => {
+		expect(
+			toCompletionPolicy({
+				pass_mark_percent: 0,
+				attempt_rule: "per_hour",
+				attempt_value: 2.5,
+				min_age: 5,
+			}),
+		).toEqual(DEFAULT_COMPLETION_POLICY);
+	});
 });

@@ -9,7 +9,6 @@ import {
 import { CourseManifest } from "./_schema";
 
 const LANG = "en-us";
-const TAGS = ["academy"];
 
 function identityOf(document: prismic.PrismicDocument): string | undefined {
 	const lessonKey = (document.data as { lesson_key?: unknown }).lesson_key;
@@ -41,7 +40,10 @@ function formatIssues(error: {
 		.join("\n");
 }
 
-async function existingDocuments(client: prismic.WriteClient) {
+async function existingDocuments(
+	client: prismic.WriteClient,
+	courseTag: string,
+) {
 	const releases = await client.getReleases();
 	const refs = [undefined, ...releases.map((release) => release.ref)];
 	const byKey = new Map<string, prismic.PrismicDocument>();
@@ -57,6 +59,8 @@ async function existingDocuments(client: prismic.WriteClient) {
 			const documents = await client.getAllByType(type, { ref, lang: LANG });
 			for (const document of documents) {
 				const identity = identityOf(document);
+				const isLesson = type !== "partner" && type !== "course";
+				if (isLesson && !document.tags.includes(courseTag)) continue;
 				if (identity) byKey.set(`${type}:${identity}`, document);
 			}
 		}
@@ -103,7 +107,8 @@ async function main() {
 		writeToken,
 		accessToken,
 	});
-	const existing = await existingDocuments(client);
+	const courseTag = `course:${manifest.course.uid}`;
+	const existing = await existingDocuments(client, courseTag);
 	const migration = prismic.createMigration();
 	const registered = new Map<string, prismic.PrismicMigrationDocument>();
 
@@ -112,7 +117,7 @@ async function main() {
 		const found = existing.get(key);
 		const entry = found
 			? migration.updateDocument(
-					{ ...found, data: document.data } as never,
+					{ ...found, data: { ...found.data, ...document.data } } as never,
 					document.title,
 				)
 			: migration.createDocument(
@@ -120,7 +125,7 @@ async function main() {
 						type: document.type,
 						uid: document.uid,
 						lang: LANG,
-						tags: TAGS,
+						tags: ["academy", courseTag],
 						data: document.data,
 					} as never,
 					document.title,
