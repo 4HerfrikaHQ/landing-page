@@ -239,13 +239,24 @@
 		"title": "Soutenez notre mission"
 	},
 	"faq": {
-		"askAnything": "Posez-nous toutes vos questions",
-		"cantFindAnswer": "Vous ne trouvez pas la réponse que vous cherchez ? N’hésitez pas à discuter avec notre équipe bienveillante.",
-		"description": "Dans cette section, vous trouverez toutes les réponses que vous cherchez probablement",
-		"getInTouch": "Contactez-nous",
+		"title": "FAQ",
+		"heroFirst": "Posez-nous",
+		"heroSecond": "toutes vos questions.",
+		"description": "Les réponses que la plupart des gens cherchent, au même endroit.",
+		"searchLabel": "Rechercher dans la FAQ",
 		"searchPlaceholder": "Recherchez ici",
-		"stillHaveQuestions": "Vous avez encore des questions ?",
-		"title": "FAQ"
+		"searchButton": "Rechercher",
+		"topicsLabel": "Thèmes de la FAQ",
+		"questionCount": "{count, plural, one {# question} other {# questions}}",
+		"resultsCount": "{count, plural, =0 {Aucune question trouvée} one {# question trouvée} other {# questions trouvées}}",
+		"noResultsTitle": "Aucune question trouvée",
+		"noResultsBody": "Rien ne correspond à « {query} ». Essayez un autre mot ou écrivez directement à notre équipe ci-dessous.",
+		"clearSearch": "Effacer la recherche",
+		"loadError": "Nous ne pouvons pas charger les questions pour le moment. Réessayez dans quelques minutes ou contactez notre équipe ci-dessous.",
+		"stuckFirst": "Toujours bloquée ?",
+		"stuckSecond": "Écrivez-nous.",
+		"stuckBody": "Vous ne trouvez pas la réponse que vous cherchez ? Notre équipe se fera un plaisir de vous aider.",
+		"getInTouch": "Contactez-nous"
 	},
 	"footer": {
 		"allRightsReserved": "Tous droits réservés.",
