@@ -1,5 +1,6 @@
 "use server";
 
+import { AccountError, addAdmin } from "@/src/accounts";
 import { createAdminClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { schema } from "@/src/db";
@@ -59,16 +60,12 @@ export async function createAdmin(
 	const name = formData.get("name") as string;
 	const email = formData.get("email") as string;
 
-	const supabase = await createAdminClient();
-	const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-		data: { name },
-	});
-	if (error) return { error: error.message };
-
-	await db
-		.update(schema.users)
-		.set({ name, email, role: "super_admin" })
-		.where(eq(schema.users.auth_user_id, data.user.id));
+	try {
+		await addAdmin({ email, name });
+	} catch (error) {
+		if (error instanceof AccountError) return { error: error.message };
+		throw error;
+	}
 
 	revalidatePath("/dashboard/admin/admins");
 	return {};
