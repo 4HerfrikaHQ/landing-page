@@ -80,7 +80,7 @@ export default async function UnauthorizedPage() {
 
 					<aside
 						aria-labelledby="learner-title"
-						className="overflow-hidden rounded-[28px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:rounded-[40px]"
+						className="overflow-hidden rounded-[20px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:rounded-[40px]"
 					>
 						<div className="relative hidden aspect-[16/10] lg:block">
 							<Image

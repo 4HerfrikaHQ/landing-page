@@ -17,7 +17,7 @@ const ARTICLE_STYLES = [
 	"prose-strong:text-foreground prose-code:break-all prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.85em] prose-code:font-normal prose-code:before:content-none prose-code:after:content-none",
 	"prose-a:font-medium prose-a:text-primary prose-a:underline-offset-4",
 	"[&>p:first-child]:hidden",
-	"[&>p:nth-child(2)]:mt-0 [&>p:nth-child(2)]:rounded-[28px] [&>p:nth-child(2)]:bg-surface-pink [&>p:nth-child(2)]:p-6 [&>p:nth-child(2)]:text-lg [&>p:nth-child(2)]:font-medium [&>p:nth-child(2)]:leading-snug lg:[&>p:nth-child(2)]:rounded-[32px] lg:[&>p:nth-child(2)]:p-8 lg:[&>p:nth-child(2)]:text-xl",
+	"[&>p:nth-child(2)]:mt-0 [&>p:nth-child(2)]:rounded-[20px] [&>p:nth-child(2)]:bg-surface-pink [&>p:nth-child(2)]:p-6 [&>p:nth-child(2)]:text-lg [&>p:nth-child(2)]:font-medium [&>p:nth-child(2)]:leading-snug lg:[&>p:nth-child(2)]:rounded-[20px] lg:[&>p:nth-child(2)]:p-8 lg:[&>p:nth-child(2)]:text-xl",
 ].join(" ");
 
 const PILL_BUTTON =
@@ -148,7 +148,7 @@ export async function LegalPage({
 							<Content components={legalMdxComponents(source.headings)} />
 						</article>
 
-						<div className="mt-14 max-w-[620px] rounded-[28px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[32px] lg:p-8">
+						<div className="mt-14 max-w-[620px] rounded-[20px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[20px] lg:p-8">
 							<h2 className="text-[26px] font-semibold leading-tight tracking-tight lg:text-[30px]">
 								{t(`${kind}.contactTitle`)}
 							</h2>
