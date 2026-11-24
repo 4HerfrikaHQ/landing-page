@@ -217,6 +217,29 @@
           "label": "Certificate attribution (e.g. Course content by Ordina)",
           "placeholder": ""
         }
+      },
+      "certificate_signatories": {
+        "type": "Group",
+        "config": {
+          "label": "Certificate signatories (who signs, in order)",
+          "repeat": true,
+          "fields": {
+            "name": {
+              "type": "Text",
+              "config": {
+                "label": "Name",
+                "placeholder": "e.g. Ademide"
+              }
+            },
+            "title": {
+              "type": "Text",
+              "config": {
+                "label": "Title",
+                "placeholder": "e.g. Founder, 4HerFrika"
+              }
+            }
+          }
+        }
       }
     },
     "SEO & Metadata": {

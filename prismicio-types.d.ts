@@ -409,6 +409,31 @@ export interface CourseDocumentDataPartnersItem {
 type CourseDocumentDataSlicesSlice = CourseModuleSlice;
 
 /**
+ * Item in *Course → Certificate signatories (who signs, in order)*
+ */
+export interface CourseDocumentDataCertificateSignatoriesItem {
+  /**
+   * Name field in *Course → Certificate signatories (who signs, in order)*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. Ademide
+   * - **API ID Path**: course.certificate_signatories[].name
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * Title field in *Course → Certificate signatories (who signs, in order)*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. Founder, 4HerFrika
+   * - **API ID Path**: course.certificate_signatories[].title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+}
+
+/**
  * Content for Course documents
  */
 interface CourseDocumentData {
@@ -662,7 +687,20 @@ interface CourseDocumentData {
    * - **Tab**: Completion policy
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  certificate_attribution: prismic.KeyTextField; /**
+  certificate_attribution: prismic.KeyTextField;
+
+  /**
+   * Certificate signatories (who signs, in order) field in *Course*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.certificate_signatories[]
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  certificate_signatories: prismic.GroupField<
+    Simplify<CourseDocumentDataCertificateSignatoriesItem>
+  >; /**
    * Meta title field in *Course*
    *
    * - **Field Type**: Text
@@ -1916,6 +1954,7 @@ declare module "@prismicio/client" {
       CourseDocumentDataOutcomesItem,
       CourseDocumentDataPartnersItem,
       CourseDocumentDataSlicesSlice,
+      CourseDocumentDataCertificateSignatoriesItem,
       FaqDocument,
       FaqDocumentData,
       FaqDocumentDataFaqItem,

@@ -370,6 +370,11 @@ describe("course content", () => {
 			sequential_unlock: true,
 			certificate_issuer: null,
 			certificate_attribution: "Course content by Ordina",
+			certificate_signatories: [
+				{ name: "Ademide", title: "Founder, 4HerFrika" },
+				{ name: "Hack Angel", title: null },
+				{ name: "", title: "Draft row" },
+			],
 			slices: [
 				{
 					slice_type: "course_module",
@@ -431,7 +436,7 @@ describe("course content", () => {
 		]);
 		expect(course.modules[0].lessons[0].durationSeconds).toBe(343);
 	});
-	test("trims text, drops empty outcomes and unloaded partners, applies defaults", () => {
+	test("trims text, drops empty outcomes, unloaded partners and nameless signatories, applies defaults", () => {
 		const course = toCourse(courseDocument, lessons);
 		expect(course.summary).toBe("Sample summary");
 		expect(course.outcomes).toEqual(["Write a clear prompt"]);
@@ -446,6 +451,10 @@ describe("course content", () => {
 		expect(course.certificate).toEqual({
 			issuer: "4HerFrika",
 			attribution: "Course content by Ordina",
+			signatories: [
+				{ name: "Ademide", title: "Founder, 4HerFrika" },
+				{ name: "Hack Angel", title: "" },
+			],
 		});
 	});
 	test("reads the strict policy, filling unset fields from the default", () => {
