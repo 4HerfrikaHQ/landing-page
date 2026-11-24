@@ -52,7 +52,10 @@ export default async function CoursePage({
 		<main className="bg-linear-to-b from-surface-pink via-white to-white px-5 pt-6 lg:px-8">
 			<div className="mx-auto grid max-w-6xl gap-8 pb-16 lg:grid-cols-[minmax(0,1fr)_22.5rem] lg:gap-12 lg:pt-6">
 				<div className="flex min-w-0 flex-col gap-8">
-					<CourseHeader course={course} />
+					<CourseHeader
+						course={course}
+						showMyLearning={viewer.kind === "enrolled"}
+					/>
 					<CourseBody
 						course={course}
 						viewer={viewer}
