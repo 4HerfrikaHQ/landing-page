@@ -56,3 +56,9 @@ export async function recordUnsubscribe(email: string): Promise<void> {
 		.values({ email: normalizeEmail(email) })
 		.onConflictDoNothing();
 }
+
+export async function recordResubscribe(email: string): Promise<void> {
+	await db
+		.delete(emailUnsubscribes)
+		.where(eq(emailUnsubscribes.email, normalizeEmail(email)));
+}

@@ -445,14 +445,38 @@
 		"campusBootcamp": "4Herfrika | Campus Bootcamp"
 	},
 	"notFound": {
-		"title": "Oops! Page Not Found",
-		"description": "The page you are looking for doesn't exist or has been moved.",
-		"backToHome": "Back to Home",
-		"tryAgain": "Try Again",
-		"venturedOff": "It looks like you've ventured off the beaten path...",
-		"couldntFind": "We couldn't find the page you were looking for, but don't worry!",
-		"everyDetour": "Every detour is an opportunity to discover something new.",
-		"takeMeHome": "Take me home"
+		"takeMeHome": "Take me home",
+		"eyebrow": "Error 404 · Page not found",
+		"titleLead": "This page took",
+		"titleAccent": "a detour.",
+		"body": "We couldn't find the page you were looking for, but don't worry. Every detour is an opportunity to discover something new.",
+		"photoAlt": "A group of young women in matching pink 4HerFrika shirts smiling together",
+		"hereTitle": "You are here",
+		"hereBody": "a little off the map",
+		"routesTitle": "Where would you like to go?",
+		"home": {
+			"title": "Home",
+			"body": "Start again from the front door.",
+			"cta": "Go home"
+		},
+		"academy": {
+			"title": "Academy",
+			"body": "Practical skills, industry mentorship and real-world projects.",
+			"cta": "Explore the Academy"
+		},
+		"mentors": {
+			"title": "Mentors",
+			"body": "Book a 30-minute call with someone who's walked your path.",
+			"cta": "Find a mentor"
+		},
+		"blog": {
+			"title": "Blog",
+			"body": "Stories, projects and news from the girls and campuses.",
+			"cta": "Read stories"
+		},
+		"reportLead": "Followed a broken link on our site? Tell us at",
+		"reportTail": "and we'll fix it.",
+		"reportSubject": "Broken link"
 	},
 	"academy": {
 		"metaTitle": "4Herfrika Academy",
@@ -1302,5 +1326,99 @@
 		"categoryHeroDescription": "Every story and update filed under this category, told by the women who live it.",
 		"opensInNewTab": "(opens in a new tab)",
 		"downloadImage": "Download image"
+	},
+	"legal": {
+		"breadcrumbHome": "Home",
+		"breadcrumbLabel": "Breadcrumb",
+		"onThisPage": "On this page",
+		"sectionCount": "{count} sections",
+		"questionsTitle": "Questions?",
+		"questionsBody": "Email us and we'll take care of it.",
+		"backToTop": "Back to top",
+		"email": "hello@4herfrika.org",
+		"privacy": {
+			"breadcrumb": "Privacy",
+			"contactTitle": "Questions about your privacy?",
+			"contactBody": "Email us and we'll take care of it, whether it's a question, a copy of your data, or a deletion.",
+			"otherLink": "Read our Terms"
+		},
+		"terms": {
+			"breadcrumb": "Terms",
+			"contactTitle": "Questions about these terms?",
+			"contactBody": "Something unclear before you sign up or book a session? Email us and ask.",
+			"otherLink": "Read our Privacy Policy"
+		}
+	},
+	"unsubscribe": {
+		"metaTitle": "Unsubscribe",
+		"photoAlt": "A young woman working on a laptop on an outdoor bench",
+		"photoCaption": "Calls you've already booked stay booked, whatever you choose here.",
+		"dataNote": "Questions about your data? Read our <link>Privacy Policy</link>.",
+		"backToHome": "Back to home",
+		"confirm": {
+			"eyebrow": "Email preferences",
+			"titleLead": "Stop rebooking",
+			"titleAccent": "reminders?",
+			"body": "We'll stop sending rebooking reminders to <b>{email}</b>.",
+			"stopsLabel": "Stops",
+			"stopsItem": "Rebooking reminders",
+			"stopsNote": "The only email that stops.",
+			"keepsLabel": "Keeps coming",
+			"keepsConfirmations": "Booking confirmations",
+			"keepsReminders": "Reminders for calls you book",
+			"submit": "Yes, unsubscribe",
+			"submitting": "Unsubscribing…",
+			"keep": "Keep my reminders",
+			"error": "Couldn't unsubscribe. Please try again."
+		},
+		"done": {
+			"eyebrow": "Done",
+			"titleLead": "You've been",
+			"titleAccent": "unsubscribed.",
+			"body": "You won't get rebooking reminders from us anymore. Booking confirmations and reminders for calls you schedule still come through.",
+			"oopsTitle": "Oops, didn't mean to?",
+			"oopsBody": "Turn rebooking reminders back on in one tap.",
+			"resubscribe": "Resubscribe",
+			"resubscribing": "Resubscribing…",
+			"error": "Couldn't resubscribe. Please try again.",
+			"hereLabel": "While you're here",
+			"findMentor": "Find a mentor",
+			"academy": "Explore the Academy"
+		},
+		"resubscribed": {
+			"eyebrow": "Welcome back",
+			"titleLead": "Reminders are",
+			"titleAccent": "back on.",
+			"body": "We'll send rebooking reminders to <b>{email}</b> again. Every reminder email has an unsubscribe link if you change your mind.",
+			"bookNext": "Book your next call"
+		},
+		"invalid": {
+			"eyebrow": "Link problem",
+			"titleLead": "This link",
+			"titleAccent": "isn't valid.",
+			"body": "The unsubscribe link may be incomplete. Try the link in your email again, or tap it instead of copying it.",
+			"stillTitle": "Still not working?",
+			"stillBody": "Email <mail>{email}</mail> from the address you want removed and we'll do it for you."
+		}
+	},
+	"unauthorized": {
+		"metaTitle": "Access denied",
+		"eyebrow": "Error 403",
+		"titleLead": "This login is",
+		"titleAccent": "for our team.",
+		"body": "You're signed in, but this dashboard is only for 4HerFrika staff and mentors. Taking the Academy course? You're one tap away from it.",
+		"learnerBadge": "Here for the Academy course?",
+		"learnerTitle": "Learners sign in on the Academy.",
+		"learnerBody": "Your course, progress and quizzes live there, and the same email works.",
+		"learnerCta": "Go to Academy sign-in",
+		"photoAlt": "Three women collaborating at 4HerFrika Academy",
+		"staffLabel": "Staff or mentor?",
+		"staffCta": "Sign in with another account",
+		"backToSite": "Back to site",
+		"needAccess": "Need access? Ask an admin, or email",
+		"logoAlt": "4HerFrika home",
+		"bodySignedOut": "This dashboard is only for 4HerFrika staff and mentors. Taking the Academy course? You're one tap away from it.",
+		"staffSignIn": "Staff sign-in",
+		"signedInAs": "Signed in as <b>{email}</b>"
 	}
 }
