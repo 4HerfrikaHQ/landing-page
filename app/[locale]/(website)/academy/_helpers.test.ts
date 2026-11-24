@@ -368,6 +368,11 @@ describe("course content", () => {
 			video_must_finish: true,
 			tasks_required: true,
 			sequential_unlock: true,
+			notice: [
+				{ type: "paragraph", text: " Course content by Ordina. " },
+				{ type: "paragraph", text: "" },
+				{ type: "paragraph", text: "Please do not share it." },
+			],
 			certificate_issuer: null,
 			certificate_attribution: "Course content by Ordina",
 			certificate_signatories: [
@@ -456,6 +461,31 @@ describe("course content", () => {
 				{ name: "Hack Angel", title: "" },
 			],
 		});
+	});
+	test("returns the licence notice as trimmed paragraphs", () => {
+		expect(toCourse(courseDocument, lessons).notice).toEqual([
+			"Course content by Ordina.",
+			"Please do not share it.",
+		]);
+	});
+	test("counts required lessons that failed to load, ignoring optional and empty links", () => {
+		expect(toCourse(courseDocument, lessons).missingRequiredLessons).toBe(1);
+		const withEmptyLink = structuredClone(courseDocument);
+		withEmptyLink.data.slices[0].primary.lessons.push({
+			lesson: { link_type: "Any" },
+			required: true,
+		});
+		expect(toCourse(withEmptyLink, lessons).missingRequiredLessons).toBe(1);
+		expect(
+			toCourse(courseDocument, [
+				...lessons,
+				{
+					id: "missing",
+					type: "reading",
+					data: { lesson_key: "M1-R", title: "Reading", minutes: 5 },
+				},
+			]).missingRequiredLessons,
+		).toBe(0);
 	});
 	test("reads the strict policy, filling unset fields from the default", () => {
 		expect(toCourse(courseDocument, lessons).policy).toEqual({

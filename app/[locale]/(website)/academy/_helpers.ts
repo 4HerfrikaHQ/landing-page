@@ -128,7 +128,7 @@ export function isModuleUnlocked(
 		.every((lesson) => completedLessonIds.has(lesson.id));
 }
 
-function lessonsCountedForCompletion(
+export function lessonsCountedForCompletion(
 	policy: CompletionPolicy,
 	modules: CourseModule[],
 ): CourseLesson[] {
@@ -215,7 +215,16 @@ export function toCourse(courseDocument: unknown, lessonDocuments: unknown[]) {
 			return lesson.success ? [[lesson.data.id, lesson.data] as const] : [];
 		}),
 	);
-	const modules = linkedLessons(data.slices).map((module) => ({
+	const linkedModules = linkedLessons(data.slices);
+	const missingRequiredLessons = linkedModules
+		.flatMap((module) => module.lessons)
+		.filter(
+			({ lesson, required }) =>
+				lesson.link_type === "Document" &&
+				(required ?? true) &&
+				!(lesson.id && lessonsById.has(lesson.id)),
+		).length;
+	const modules = linkedModules.map((module) => ({
 		key: module.module_key,
 		title: module.title,
 		summary: module.summary,
@@ -250,6 +259,10 @@ export function toCourse(courseDocument: unknown, lessonDocuments: unknown[]) {
 		track: data.track ?? "tech",
 		level: data.level ?? "beginner",
 		hoursLabel: data.hours_label,
+		notice: (data.notice ?? []).flatMap(({ text }) =>
+			text?.trim() ? [text.trim()] : [],
+		),
+		missingRequiredLessons,
 		outcomes: (data.outcomes ?? []).flatMap(({ outcome }) =>
 			outcome ? [outcome] : [],
 		),
