@@ -1,0 +1,28 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "module_key": {
+        "__TYPE__": "FieldContent",
+        "value": "M1",
+        "type": "Text"
+      },
+      "title": {
+        "__TYPE__": "FieldContent",
+        "value": "Sample module",
+        "type": "Text"
+      },
+      "summary": {
+        "__TYPE__": "FieldContent",
+        "value": "A sample module with placeholder lessons.",
+        "type": "Text"
+      },
+      "lessons": {
+        "__TYPE__": "GroupContentType",
+        "value": []
+      }
+    },
+    "items": []
+  }
+]

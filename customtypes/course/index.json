@@ -1,0 +1,247 @@
+{
+  "format": "page",
+  "id": "course",
+  "label": "Course",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "title": {
+        "type": "Text",
+        "config": {
+          "label": "Title",
+          "placeholder": ""
+        }
+      },
+      "summary": {
+        "type": "Text",
+        "config": {
+          "label": "Summary",
+          "placeholder": ""
+        }
+      },
+      "cover": {
+        "type": "Image",
+        "config": {
+          "label": "Cover",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "track": {
+        "type": "Select",
+        "config": {
+          "label": "Track",
+          "placeholder": "",
+          "options": [
+            "tech",
+            "business",
+            "climate"
+          ],
+          "default_value": "tech"
+        }
+      },
+      "level": {
+        "type": "Select",
+        "config": {
+          "label": "Level",
+          "placeholder": "",
+          "options": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ],
+          "default_value": "beginner"
+        }
+      },
+      "hours_label": {
+        "type": "Text",
+        "config": {
+          "label": "Length label (e.g. About 4\u20135 hours)",
+          "placeholder": ""
+        }
+      },
+      "outcomes": {
+        "type": "Group",
+        "config": {
+          "label": "What you'll be able to do",
+          "repeat": true,
+          "fields": {
+            "outcome": {
+              "type": "Text",
+              "config": {
+                "label": "Outcome",
+                "placeholder": ""
+              }
+            }
+          }
+        }
+      },
+      "partners": {
+        "type": "Group",
+        "config": {
+          "label": "Partners",
+          "repeat": true,
+          "fields": {
+            "partner": {
+              "type": "Link",
+              "config": {
+                "label": "Partner",
+                "select": "document",
+                "customtypes": [
+                  "partner"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "notice": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Licence notice shown on course pages",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong,em,hyperlink"
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Modules",
+        "config": {
+          "choices": {
+            "course_module": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "Completion policy": {
+      "pass_mark_percent": {
+        "type": "Number",
+        "config": {
+          "label": "Quiz pass mark % (default 70)",
+          "placeholder": ""
+        }
+      },
+      "attempt_rule": {
+        "type": "Select",
+        "config": {
+          "label": "Quiz attempt rule",
+          "placeholder": "",
+          "options": [
+            "per_hour",
+            "cooldown"
+          ],
+          "default_value": "per_hour"
+        }
+      },
+      "attempt_value": {
+        "type": "Number",
+        "config": {
+          "label": "Attempts per hour, or cooldown minutes (default 3 per hour)",
+          "placeholder": ""
+        }
+      },
+      "fail_feedback": {
+        "type": "Select",
+        "config": {
+          "label": "After a failed quiz show",
+          "placeholder": "",
+          "options": [
+            "score",
+            "score_and_topics"
+          ],
+          "default_value": "score"
+        }
+      },
+      "reveal_answers_on_pass": {
+        "type": "Boolean",
+        "config": {
+          "label": "Show answers and why after passing",
+          "default_value": false
+        }
+      },
+      "video_must_finish": {
+        "type": "Boolean",
+        "config": {
+          "label": "Videos must be watched to the end",
+          "default_value": false
+        }
+      },
+      "reading_ack": {
+        "type": "Boolean",
+        "config": {
+          "label": "Readings need 'I have read this'",
+          "default_value": false
+        }
+      },
+      "sequential_unlock": {
+        "type": "Boolean",
+        "config": {
+          "label": "Modules unlock in order",
+          "default_value": false
+        }
+      },
+      "tasks_required": {
+        "type": "Boolean",
+        "config": {
+          "label": "Tasks are required for the certificate",
+          "default_value": false
+        }
+      },
+      "min_age": {
+        "type": "Number",
+        "config": {
+          "label": "Minimum age (default 16)",
+          "placeholder": ""
+        }
+      },
+      "certificate_issuer": {
+        "type": "Text",
+        "config": {
+          "label": "Certificate issued by (default 4HerFrika)",
+          "placeholder": ""
+        }
+      },
+      "certificate_attribution": {
+        "type": "Text",
+        "config": {
+          "label": "Certificate attribution (e.g. Course content by Ordina)",
+          "placeholder": ""
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "type": "Text",
+        "config": {
+          "label": "Meta title",
+          "placeholder": ""
+        }
+      },
+      "meta_description": {
+        "type": "Text",
+        "config": {
+          "label": "Meta description",
+          "placeholder": ""
+        }
+      },
+      "meta_image": {
+        "type": "Image",
+        "config": {
+          "label": "Meta image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      }
+    }
+  }
+}

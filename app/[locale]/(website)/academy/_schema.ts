@@ -121,3 +121,142 @@ export const CourseModule = z.object({
 	lessons: z.array(CourseLesson),
 });
 export type CourseModule = z.infer<typeof CourseModule>;
+
+export const CourseLevel = z.enum(["beginner", "intermediate", "advanced"]);
+export type CourseLevel = z.infer<typeof CourseLevel>;
+
+export const LessonDocumentType = z.enum([
+	"video_lesson",
+	"reading",
+	"quiz",
+	"task",
+]);
+export type LessonDocumentType = z.infer<typeof LessonDocumentType>;
+
+const nullableText = z
+	.string()
+	.nullish()
+	.transform((value) => value?.trim() || null);
+const nullableNumber = z.number().nullish();
+const nullableBoolean = z.boolean().nullish();
+
+const imageField = z
+	.object({ url: z.string().nullish() })
+	.nullish()
+	.transform((image) => image?.url ?? null);
+
+const DocumentLink = z.object({
+	id: z.string().optional(),
+	link_type: z.string(),
+	isBroken: z.boolean().optional(),
+});
+
+export const PolicyFields = z.object({
+	pass_mark_percent: nullableNumber,
+	attempt_rule: z.enum(["per_hour", "cooldown"]).nullish(),
+	attempt_value: nullableNumber,
+	fail_feedback: FailFeedback.nullish(),
+	reveal_answers_on_pass: nullableBoolean,
+	video_must_finish: nullableBoolean,
+	reading_ack: nullableBoolean,
+	sequential_unlock: nullableBoolean,
+	tasks_required: nullableBoolean,
+	min_age: nullableNumber,
+});
+export type PolicyFields = z.input<typeof PolicyFields>;
+
+export const LessonSummaryDocument = z.object({
+	id: z.string(),
+	type: LessonDocumentType,
+	data: z.object({
+		lesson_key: z.string().min(1),
+		title: z.string().min(1),
+		duration_seconds: nullableNumber,
+		minutes: nullableNumber,
+	}),
+});
+
+export const ModuleSlice = z.object({
+	slice_type: z.literal("course_module"),
+	primary: z.object({
+		module_key: z.string().min(1),
+		title: z.string().min(1),
+		summary: nullableText,
+		lessons: z.array(
+			z.object({ lesson: DocumentLink, required: nullableBoolean }),
+		),
+	}),
+});
+
+export const PartnerDocument = z.object({
+	data: z.object({
+		name: z.string().min(1),
+		logo: imageField,
+		attribution: nullableText,
+	}),
+});
+
+export const CourseDocument = z.object({
+	id: z.string(),
+	uid: z.string(),
+	data: PolicyFields.extend({
+		title: z.string().min(1),
+		summary: nullableText,
+		cover: imageField,
+		track: academyType.nullish(),
+		level: CourseLevel.nullish(),
+		hours_label: nullableText,
+		outcomes: z.array(z.object({ outcome: nullableText })).nullish(),
+		partners: z.array(z.object({ partner: z.unknown() })).nullish(),
+		certificate_issuer: nullableText,
+		certificate_attribution: nullableText,
+		slices: z.array(z.unknown()),
+	}),
+});
+
+const QUESTION_KEY_PATTERN = /^(M\d+|FINAL)-\d{2}$/;
+
+export const QuizOptionLetter = z.enum(["A", "B", "C", "D"]);
+export type QuizOptionLetter = z.infer<typeof QuizOptionLetter>;
+
+export const QuizDocument = z.object({
+	id: z.string(),
+	type: z.literal("quiz"),
+	data: z.object({
+		lesson_key: z.string().min(1),
+		title: z.string().min(1),
+		questions: z
+			.array(
+				z.object({
+					question_key: z.string().regex(QUESTION_KEY_PATTERN),
+					prompt: z.string().min(1),
+					option_a: z.string().min(1),
+					option_b: z.string().min(1),
+					option_c: z.string().min(1),
+					option_d: z.string().min(1),
+					correct: QuizOptionLetter,
+					why: nullableText,
+					topic: nullableText,
+				}),
+			)
+			.min(1)
+			.refine(
+				(questions) =>
+					new Set(questions.map((question) => question.question_key)).size ===
+					questions.length,
+				"Question keys must be unique within a quiz",
+			),
+	}),
+});
+
+export const QUIZ_OPTION_COUNT = 4;
+
+export const QuizSubmission = z.record(
+	z.string(),
+	z
+		.number()
+		.int()
+		.min(0)
+		.max(QUIZ_OPTION_COUNT - 1),
+);
+export type QuizSubmission = z.infer<typeof QuizSubmission>;
