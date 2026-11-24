@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import { type AcademyType, trackEvent } from "@/src/lib/analytics";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -135,7 +136,7 @@ export function WaitlistModal({
 						<Label htmlFor="academy">
 							{t("academyLabel")} <span className="text-destructive">*</span>
 						</Label>
-						<select
+						<NativeSelect
 							id="academy"
 							{...academyRegistration}
 							onChange={(event) => {
@@ -144,14 +145,13 @@ export function WaitlistModal({
 									academy_type: event.target.value as AcademyType,
 								});
 							}}
-							className="h-12 w-full rounded-xl border border-input bg-background px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 						>
 							{academyOptions.map(({ value, label }) => (
 								<option key={value} value={value}>
 									{t(label)}
 								</option>
 							))}
-						</select>
+						</NativeSelect>
 					</div>
 
 					<Button

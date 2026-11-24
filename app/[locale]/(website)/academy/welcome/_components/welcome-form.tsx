@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NativeSelect } from "@/components/ui/native-select";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -9,9 +10,6 @@ import { AuthError } from "../../sign-in/_components/auth-error";
 import { createLearner } from "../_actions";
 import type { countryOptions } from "../_helpers";
 import { CreateLearnerSchema } from "../_schema";
-
-const SELECT_CLASS =
-	"h-12 w-full rounded-lg border border-input bg-transparent px-4 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive";
 
 export function WelcomeForm({
 	next,
@@ -92,11 +90,10 @@ export function WelcomeForm({
 					<label htmlFor="country" className="text-sm font-medium">
 						{t("countryLabel")}
 					</label>
-					<select
+					<NativeSelect
 						id="country"
 						autoComplete="country"
 						aria-invalid={Boolean(formState.errors.country)}
-						className={SELECT_CLASS}
 						{...register("country")}
 					>
 						<option value="">{t("countryPlaceholder")}</option>
@@ -114,7 +111,7 @@ export function WelcomeForm({
 								</option>
 							))}
 						</optgroup>
-					</select>
+					</NativeSelect>
 					<AuthError
 						message={formState.errors.country?.message}
 						id="country-error"
