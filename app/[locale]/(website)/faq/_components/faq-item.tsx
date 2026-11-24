@@ -17,9 +17,9 @@ export function FaqItem({ item }: { item: FaqItemData }) {
 		<details
 			id={item.id}
 			open={targeted || undefined}
-			className="group scroll-mt-28 rounded-2xl bg-white shadow-sm transition-shadow open:shadow-[0_12px_24px_rgba(0,0,0,0.10)] motion-reduce:transition-none lg:rounded-[28px]"
+			className="group scroll-mt-28 rounded-2xl bg-white shadow-sm transition-shadow open:shadow-[0_12px_24px_rgba(0,0,0,0.10)] motion-reduce:transition-none lg:rounded-[20px]"
 		>
-			<summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-5 py-4 text-[17px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 lg:rounded-[28px] lg:px-7 lg:text-lg [&::-webkit-details-marker]:hidden">
+			<summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-5 py-4 text-[17px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 lg:rounded-[20px] lg:px-7 lg:text-lg [&::-webkit-details-marker]:hidden">
 				{item.question}
 				<span
 					aria-hidden="true"
