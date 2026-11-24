@@ -258,6 +258,9 @@ export function toCourse(courseDocument: unknown, lessonDocuments: unknown[]) {
 		certificate: {
 			issuer: data.certificate_issuer ?? DEFAULT_CERTIFICATE_ISSUER,
 			attribution: data.certificate_attribution,
+			signatories: (data.certificate_signatories ?? []).flatMap(
+				({ name, title }) => (name ? [{ name, title: title ?? "" }] : []),
+			),
 		},
 		modules,
 	};
