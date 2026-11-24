@@ -525,6 +525,11 @@
 			"firstCertificateBody": "Maliza kozi na cheti chako kitaonekana hapa.",
 			"completedBadge": "Imekamilika",
 			"viewCertificate": "Tazama cheti"
+		},
+		"testimonials": {
+			"titleFirst": "Usitegemee maneno yetu",
+			"titleSecond": "pekee.",
+			"description": "Jamii yetu inasema nini kuhusu 4HerFrika."
 		}
 	},
 	"seo": {

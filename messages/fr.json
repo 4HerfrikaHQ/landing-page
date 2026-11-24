@@ -525,6 +525,11 @@
 			"firstCertificateBody": "Terminez un cours et votre certificat apparaîtra ici.",
 			"completedBadge": "Terminé",
 			"viewCertificate": "Voir le certificat"
+		},
+		"testimonials": {
+			"titleFirst": "Ne nous croyez pas",
+			"titleSecond": "sur parole.",
+			"description": "Ce que notre communauté dit de 4HerFrika."
 		}
 	},
 	"seo": {

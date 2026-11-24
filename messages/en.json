@@ -525,6 +525,11 @@
 			"firstCertificateBody": "Finish a course and your certificate appears here.",
 			"completedBadge": "Completed",
 			"viewCertificate": "View certificate"
+		},
+		"testimonials": {
+			"titleFirst": "Don’t take our word",
+			"titleSecond": "for it.",
+			"description": "What our community says about 4HerFrika."
 		}
 	},
 	"seo": {

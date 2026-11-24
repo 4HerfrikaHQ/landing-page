@@ -1,4 +1,3 @@
-import type { Review } from "@/components/reviews/reviews-section";
 import { z } from "zod";
 
 export const academyType = z.enum(["tech", "business", "climate"]);
@@ -47,46 +46,16 @@ export const academyTranslationKeys = {
 	climate: { name: "climateAcademy", description: "climateDescription" },
 } as const;
 
-export const testimonials: readonly Review[] = [
-	{
-		id: "adesola-adewale",
-		quote:
-			"I came with no tech background. Now I'm a product designer at a global firm. This academy changed my entire career trajectory.",
-		name: "Adesola Adewale",
-		title: "Founder, ReadEvolve",
-		image: { src: "/assets/academy/adesola_crop.png", alt: "Adesola Adewale" },
-	},
-	{
-		id: "adeleke-glory",
-		quote:
-			"I walked in with an idea. I walked out with a registered business, three clients, and the confidence to lead a team.",
-		name: "Adeleke Glory",
-		title: "Student, Lautech Campus",
-		image: { src: "/assets/academy/glory_crop.png", alt: "Adeleke Glory" },
-	},
-	{
-		id: "elizabeth-akinmolayan",
-		quote:
-			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
-		name: "Elizabeth Akinmolayan",
-		title: "Student, FUTA Campus",
-		image: {
-			src: "/assets/academy/elizabeth_crop.png",
-			alt: "Elizabeth Akinmolayan",
-		},
-	},
-	{
-		id: "olafisoye-theresa",
-		quote:
-			"The Climate Academy gave me the language and the network to turn frustration into a movement in my community.",
-		name: "Olafisoye Theresa",
-		title: "Campus lead, 4Herfrika FUTA campus",
-		image: {
-			src: "/assets/academy/theresa_crop.png",
-			alt: "Olafisoye Theresa",
-		},
-	},
-] as const;
+export const CommunityTestimonial = z.object({
+	name: z.string().trim().min(1),
+	testimonial: z.string().trim().min(1),
+	role_and_location: z
+		.string()
+		.nullish()
+		.transform((value) => value ?? ""),
+	profile_picture: z.object({ url: z.string().url() }),
+});
+export type CommunityTestimonial = z.infer<typeof CommunityTestimonial>;
 
 export const QuizAttemptLimit = z.discriminatedUnion("kind", [
 	z.object({ kind: z.literal("per_hour"), max: z.number().int().min(1) }),
