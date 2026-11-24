@@ -22,9 +22,10 @@ export async function AboutPartners() {
 					{sponsors.map((sponsor) => (
 						<li key={sponsor.name}>
 							<PartnerTile
-								name={sponsor.name}
 								logo={sponsor.logo}
 								url={sponsor.url}
+								logoAlt={t("partnerLogoAlt", { name: sponsor.name })}
+								linkLabel={t("partnerLinkLabel", { name: sponsor.name })}
 							/>
 						</li>
 					))}
@@ -43,33 +44,35 @@ export async function AboutPartners() {
 }
 
 function PartnerTile({
-	name,
 	logo,
 	url,
+	logoAlt,
+	linkLabel,
 }: {
-	name: string;
 	logo: string;
 	url: string | null;
+	logoAlt: string;
+	linkLabel: string;
 }) {
-	const image = (
+	const image = (alt: string) => (
 		<Image
 			src={logo}
-			alt={name}
+			alt={alt}
 			width={200}
 			height={120}
 			className={logoClass}
 		/>
 	);
-	if (!url) return <div className={tileClass}>{image}</div>;
+	if (!url) return <div className={tileClass}>{image(logoAlt)}</div>;
 	return (
 		<a
 			href={url}
 			target="_blank"
 			rel="noreferrer noopener"
-			aria-label={name}
+			aria-label={linkLabel}
 			className={tileClass}
 		>
-			{image}
+			{image("")}
 		</a>
 	);
 }

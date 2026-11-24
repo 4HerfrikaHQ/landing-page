@@ -68,7 +68,9 @@
 		"joinAmbassadorLink": "Devenir ambassadrice",
 		"joinAcademyTitle": "Développez vos compétences",
 		"joinAcademyDescription": "Un apprentissage pratique en Tech, Business et Climat, avec du mentorat et de vrais projets.",
-		"joinAcademyLink": "Découvrir l’Academy"
+		"joinAcademyLink": "Découvrir l’Academy",
+		"partnerLogoAlt": "Logo de {name}",
+		"partnerLinkLabel": "Visiter le site de {name} (s’ouvre dans un nouvel onglet)"
 	},
 	"blog": {
 		"blogName": "'The Pink Blog'",
