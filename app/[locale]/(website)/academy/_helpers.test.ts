@@ -8,11 +8,13 @@ import {
 	isQuizPassed,
 	lessonIdsInCourse,
 	missingForCompletion,
+	moduleAssetKeys,
 	nextQuizAttempt,
 	toCompletionPolicy,
 	toCourse,
 	toLearnerQuiz,
 	toQuizAnswerKey,
+	videoObjectPath,
 } from "./_helpers";
 import {
 	type CompletionPolicy,
@@ -509,5 +511,23 @@ describe("course content", () => {
 				min_age: 5,
 			}),
 		).toEqual(DEFAULT_COMPLETION_POLICY);
+	});
+});
+
+describe("video storage paths", () => {
+	test("builds quality paths under the asset key folder", () => {
+		expect(videoObjectPath("ai-for-your-next-opportunity/m1", 480)).toBe(
+			"ai-for-your-next-opportunity/m1/480.mp4",
+		);
+		expect(videoObjectPath("ai-for-your-next-opportunity/m1", 720)).toBe(
+			"ai-for-your-next-opportunity/m1/720.mp4",
+		);
+	});
+
+	test("derives asset and captions keys from course uid and module number", () => {
+		expect(moduleAssetKeys("ai-for-your-next-opportunity", 3)).toEqual({
+			assetKey: "ai-for-your-next-opportunity/m3",
+			captionsKey: "ai-for-your-next-opportunity/m3.vtt",
+		});
 	});
 });
