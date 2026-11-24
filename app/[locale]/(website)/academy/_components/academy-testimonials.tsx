@@ -43,11 +43,11 @@ export async function AcademyTestimonials() {
 				<p className="mt-3 text-center text-lg text-muted-foreground">
 					{t("description")}
 				</p>
-				<ul className="mt-10 grid gap-4 md:grid-cols-2">
+				<ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{testimonials.map((item) => (
 						<li
 							key={item.name}
-							className="flex flex-col rounded-[28px] bg-white p-6 shadow-sm"
+							className="flex flex-col rounded-[20px] bg-white p-6 shadow-sm"
 						>
 							<figure className="flex h-full flex-col">
 								<blockquote className="text-lg leading-relaxed">
