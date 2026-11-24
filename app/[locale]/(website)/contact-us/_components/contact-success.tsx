@@ -29,7 +29,7 @@ export function ContactSuccess({ sent }: { sent: SentMessage }) {
 
 	return (
 		<main className="bg-primary-500/2 px-4 py-14 text-foreground lg:px-20 lg:py-24">
-			<output className="mx-auto block max-w-2xl rounded-[28px] bg-white p-6 text-center shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[40px] lg:p-12">
+			<output className="mx-auto block max-w-2xl rounded-[20px] bg-white p-6 text-center shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[40px] lg:p-12">
 				<span className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-emerald-700 text-white">
 					<Check className="size-8" strokeWidth={2.5} aria-hidden="true" />
 				</span>
@@ -80,7 +80,7 @@ export function ContactSuccess({ sent }: { sent: SentMessage }) {
 						<li key={href}>
 							<Link
 								href={href}
-								className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm outline-none transition hover:no-underline hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-500 lg:rounded-[32px] lg:p-5"
+								className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm outline-none transition hover:no-underline hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-500 lg:rounded-[20px] lg:p-5"
 							>
 								<span className="relative size-20 shrink-0 overflow-hidden rounded-xl lg:size-24 lg:rounded-2xl">
 									<Image
