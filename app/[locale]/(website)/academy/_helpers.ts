@@ -361,3 +361,17 @@ export function gradeQuiz(
 		],
 	};
 }
+
+export const COURSE_VIDEOS_BUCKET = "course-videos";
+export const VIDEO_QUALITIES = [480, 720] as const;
+export type VideoQuality = (typeof VIDEO_QUALITIES)[number];
+export const VIDEO_URL_TTL_SECONDS = 2 * 60 * 60;
+
+export function videoObjectPath(assetKey: string, quality: VideoQuality) {
+	return `${assetKey}/${quality}.mp4`;
+}
+
+export function moduleAssetKeys(courseUid: string, moduleNumber: number) {
+	const assetKey = `${courseUid}/m${moduleNumber}`;
+	return { assetKey, captionsKey: `${assetKey}.vtt` };
+}
