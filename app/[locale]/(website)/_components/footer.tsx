@@ -6,6 +6,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
 import Logo from "../4herfrika-logo";
+import { JOIN_US_URL } from "../navigation";
 import { SubscribeForm } from "./subscribe";
 import { XLogo } from "./x-logo";
 
@@ -48,8 +49,8 @@ export const Footer = async () => {
 
 	const quickLinks = [
 		{ label: tn("academy"), href: "/academy" },
-		{ label: tc("becomeAmbassador"), href: "/careercorner" },
-		{ label: tc("volunteerAsMentor"), href: "/careercorner" },
+		{ label: tc("becomeAmbassador"), href: JOIN_US_URL },
+		{ label: tc("volunteerAsMentor"), href: "/careercorner/apply" },
 		{ label: t("faqs"), href: "/faq" },
 	] as const;
 
@@ -69,9 +70,7 @@ export const Footer = async () => {
 					<FooterColumn title={t("quickLinks")}>
 						{quickLinks.map((link) => (
 							<li key={link.label}>
-								<Link href={link.href} className={FOOTER_LINK_STYLES}>
-									{link.label}
-								</Link>
+								<FooterLink href={link.href} label={link.label} />
 							</li>
 						))}
 						<li>
@@ -158,3 +157,23 @@ export const Footer = async () => {
 		</footer>
 	);
 };
+
+function FooterLink({ href, label }: { href: string; label: string }) {
+	if (href.startsWith("http")) {
+		return (
+			<a
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				className={FOOTER_LINK_STYLES}
+			>
+				{label}
+			</a>
+		);
+	}
+	return (
+		<Link href={href as Route} className={FOOTER_LINK_STYLES}>
+			{label}
+		</Link>
+	);
+}
