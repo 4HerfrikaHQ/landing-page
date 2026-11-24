@@ -141,8 +141,10 @@ a[data-active="true"] {
 	font-weight: 700;
 }
 
-a:hover {
-	text-decoration: underline;
+@layer base {
+	a:hover {
+		text-decoration: underline;
+	}
 }
 
 .faqbg {
