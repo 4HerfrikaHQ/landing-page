@@ -44,6 +44,7 @@ export function WelcomeForm({
 
 	return (
 		<form
+			noValidate
 			onSubmit={create.handleSubmitWithAction}
 			className="flex flex-col gap-6"
 		>
