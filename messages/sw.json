@@ -364,6 +364,10 @@
 		"attendance": {
 			"title": "Thibitisha Mahudhurio",
 			"description": "Thibitisha kama kipindi chako cha ushauri cha 4Herfrika kilifanyika."
+		},
+		"impactReports": {
+			"title": "Ripoti za Athari — Kila Mwaka, Tunahesabu kwa Sauti",
+			"description": "Soma ripoti za athari za mwaka za 4Herfrika mtandaoni au pakua PDF, kuanzia wasichana zaidi ya 3,000 walioshauriwa mwaka wa kwanza hadi lengo letu la wanawake na wasichana milioni 2 kufikia 2030."
 		}
 	},
 	"attendance": {
@@ -646,5 +650,42 @@
 		"aboutReauth": "Kuhusu kutoa ruhusa upya",
 		"reauthTooltip": "Inasasisha ruhusa ya akaunti hii ya Google iliyounganishwa; haiwezi kubadilisha akaunti.",
 		"updating": "Inasasisha muunganisho…"
+	},
+	"impactIndex": {
+		"heroEyebrow": "Ripoti za mwaka",
+		"heroFirst": "Kila mwaka,",
+		"heroSecond": "tunahesabu kwa sauti.",
+		"heroDescription": "Hizi ndizo ripoti zote tulizochapisha, pamoja na takwimu za kazi yetu.",
+		"seeReports": "Tazama ripoti",
+		"donate": "Changia",
+		"join": "Jiunge Nasi",
+		"statsCaption": "Mwaka wa kwanza kwa takwimu",
+		"statGirls": "wasichana waliopata malezi",
+		"statCampuses": "kampasi zilizofikiwa",
+		"statCountries": "nchi",
+		"statGraduates": "wahitimu wa Tech Academy",
+		"reportsPill": "Ripoti za mwaka",
+		"reportsFirst": "Ripoti zote,",
+		"reportsSecond": "mahali pamoja.",
+		"readOnline": "Soma mtandaoni",
+		"downloadPdf": "Pakua PDF · MB 25.6",
+		"largeFileNote": "Faili kubwa. Ukitumia data ya simu, kusoma mtandaoni hutumia kidogo zaidi.",
+		"year1": {
+			"coverAlt": "Jalada la ripoti ya Mwaka wa Kwanza, From One to Many",
+			"label": "Mwaka wa 1",
+			"title": "Kutoka mmoja hadi wengi",
+			"summary": "Kilichoanza katika kampasi moja nchini Nigeria kilisambaa hadi kampasi 25 katika nchi tano ndani ya miezi kumi na miwili.",
+			"figureGirls": "Wasichana waliopata malezi",
+			"figureCampuses": "Kampasi zilizofikiwa",
+			"figureGraduates": "Wahitimu wa Tech Academy",
+			"figureCountries": "Nchi"
+		},
+		"goalPill": "Lengo la 2030",
+		"goalFirst": "Milioni mbili",
+		"goalSecond": "kufikia 2030.",
+		"goalDescription": "Kufikia 2030, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika, wenye ujuzi na watu wa kuongoza.",
+		"ctaFirst": "Tusaidie kufikia",
+		"ctaSecond": "milioni mbili.",
+		"ctaDescription": "Kila mchango na kila mjitolea husaidia wasichana wengi zaidi kupata malezi, mafunzo na uhusiano."
 	}
 }

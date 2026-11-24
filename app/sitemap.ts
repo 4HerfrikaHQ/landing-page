@@ -16,6 +16,7 @@ const staticRoutes = [
 	"/donate",
 	"/faq",
 	"/impact",
+	"/impact/year-1",
 	"/privacy",
 	"/projects",
 	"/terms",
