@@ -377,6 +377,338 @@ export type BlogPostDocument<Lang extends string = string> =
   >;
 
 /**
+ * Item in *Course → What you'll be able to do*
+ */
+export interface CourseDocumentDataOutcomesItem {
+  /**
+   * Outcome field in *Course → What you'll be able to do*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.outcomes[].outcome
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  outcome: prismic.KeyTextField;
+}
+
+/**
+ * Item in *Course → Partners*
+ */
+export interface CourseDocumentDataPartnersItem {
+  /**
+   * Partner field in *Course → Partners*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.partners[].partner
+   * - **Documentation**: https://prismic.io/docs/fields/content-relationship
+   */
+  partner: prismic.ContentRelationshipField<"partner">;
+}
+
+type CourseDocumentDataSlicesSlice = CourseModuleSlice;
+
+/**
+ * Content for Course documents
+ */
+interface CourseDocumentData {
+  /**
+   * Title field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Summary field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.summary
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  summary: prismic.KeyTextField;
+
+  /**
+   * Cover field in *Course*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.cover
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  cover: prismic.ImageField<never>;
+
+  /**
+   * Track field in *Course*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: tech
+   * - **API ID Path**: course.track
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  track: prismic.SelectField<"tech" | "business" | "climate", "filled">;
+
+  /**
+   * Level field in *Course*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: beginner
+   * - **API ID Path**: course.level
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  level: prismic.SelectField<
+    "beginner" | "intermediate" | "advanced",
+    "filled"
+  >;
+
+  /**
+   * Length label (e.g. About 4–5 hours) field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.hours_label
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  hours_label: prismic.KeyTextField;
+
+  /**
+   * What you'll be able to do field in *Course*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.outcomes[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  outcomes: prismic.GroupField<Simplify<CourseDocumentDataOutcomesItem>>;
+
+  /**
+   * Partners field in *Course*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.partners[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  partners: prismic.GroupField<Simplify<CourseDocumentDataPartnersItem>>;
+
+  /**
+   * Licence notice shown on course pages field in *Course*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.notice
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  notice: prismic.RichTextField;
+
+  /**
+   * Modules field in *Course*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/slices
+   */
+  slices: prismic.SliceZone<CourseDocumentDataSlicesSlice>; /**
+   * Quiz pass mark % (default 70) field in *Course*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.pass_mark_percent
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  pass_mark_percent: prismic.NumberField;
+
+  /**
+   * Quiz attempt rule field in *Course*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: per_hour
+   * - **API ID Path**: course.attempt_rule
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  attempt_rule: prismic.SelectField<"per_hour" | "cooldown", "filled">;
+
+  /**
+   * Attempts per hour, or cooldown minutes (default 3 per hour) field in *Course*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.attempt_value
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  attempt_value: prismic.NumberField;
+
+  /**
+   * After a failed quiz show field in *Course*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: score
+   * - **API ID Path**: course.fail_feedback
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  fail_feedback: prismic.SelectField<"score" | "score_and_topics", "filled">;
+
+  /**
+   * Show answers and why after passing field in *Course*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: course.reveal_answers_on_pass
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  reveal_answers_on_pass: prismic.BooleanField;
+
+  /**
+   * Videos must be watched to the end field in *Course*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: course.video_must_finish
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  video_must_finish: prismic.BooleanField;
+
+  /**
+   * Readings need 'I have read this' field in *Course*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: course.reading_ack
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  reading_ack: prismic.BooleanField;
+
+  /**
+   * Modules unlock in order field in *Course*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: course.sequential_unlock
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  sequential_unlock: prismic.BooleanField;
+
+  /**
+   * Tasks are required for the certificate field in *Course*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: course.tasks_required
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  tasks_required: prismic.BooleanField;
+
+  /**
+   * Minimum age (default 16) field in *Course*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.min_age
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  min_age: prismic.NumberField;
+
+  /**
+   * Certificate issued by (default 4HerFrika) field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.certificate_issuer
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  certificate_issuer: prismic.KeyTextField;
+
+  /**
+   * Certificate attribution (e.g. Course content by Ordina) field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.certificate_attribution
+   * - **Tab**: Completion policy
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  certificate_attribution: prismic.KeyTextField; /**
+   * Meta title field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_title: prismic.KeyTextField;
+
+  /**
+   * Meta description field in *Course*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_description: prismic.KeyTextField;
+
+  /**
+   * Meta image field in *Course*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  meta_image: prismic.ImageField<never>;
+}
+
+/**
+ * Course document from Prismic
+ *
+ * - **API ID**: `course`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type CourseDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<CourseDocumentData>, "course", Lang>;
+
+/**
  * Item in *Frequently Asked Question Section (About Page) → FAQ*
  */
 export interface FaqDocumentDataFaqItem {
@@ -864,14 +1196,507 @@ interface MentorDocumentData {
 export type MentorDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<MentorDocumentData>, "mentor", Lang>;
 
+/**
+ * Content for Partner documents
+ */
+interface PartnerDocumentData {
+  /**
+   * Name field in *Partner*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: partner.name
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * Logo field in *Partner*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: partner.logo
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  logo: prismic.ImageField<never>;
+
+  /**
+   * Website field in *Partner*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: partner.website
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  website: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * Attribution line (e.g. Course content by Ordina) field in *Partner*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: partner.attribution
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  attribution: prismic.KeyTextField;
+}
+
+/**
+ * Partner document from Prismic
+ *
+ * - **API ID**: `partner`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type PartnerDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<PartnerDocumentData>,
+    "partner",
+    Lang
+  >;
+
+/**
+ * Item in *Course · Quiz → Questions*
+ */
+export interface QuizDocumentDataQuestionsItem {
+  /**
+   * Question key (e.g. M1-01, never change after publishing) field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].question_key
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  question_key: prismic.KeyTextField;
+
+  /**
+   * Question field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].prompt
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  prompt: prismic.KeyTextField;
+
+  /**
+   * Option A field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].option_a
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  option_a: prismic.KeyTextField;
+
+  /**
+   * Option B field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].option_b
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  option_b: prismic.KeyTextField;
+
+  /**
+   * Option C field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].option_c
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  option_c: prismic.KeyTextField;
+
+  /**
+   * Option D field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].option_d
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  option_d: prismic.KeyTextField;
+
+  /**
+   * Correct option field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: A
+   * - **API ID Path**: quiz.questions[].correct
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  correct: prismic.SelectField<"A" | "B" | "C" | "D", "filled">;
+
+  /**
+   * Why (shown only after passing) field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].why
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  why: prismic.KeyTextField;
+
+  /**
+   * Topic to review if missed field in *Course · Quiz → Questions*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[].topic
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  topic: prismic.KeyTextField;
+}
+
+/**
+ * Content for Course · Quiz documents
+ */
+interface QuizDocumentData {
+  /**
+   * Lesson key (e.g. M1-V, never change after publishing) field in *Course · Quiz*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.lesson_key
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  lesson_key: prismic.KeyTextField;
+
+  /**
+   * Title field in *Course · Quiz*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Questions field in *Course · Quiz*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quiz.questions[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  questions: prismic.GroupField<Simplify<QuizDocumentDataQuestionsItem>>;
+}
+
+/**
+ * Course · Quiz document from Prismic
+ *
+ * - **API ID**: `quiz`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type QuizDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<Simplify<QuizDocumentData>, "quiz", Lang>;
+
+/**
+ * Content for Course · Reading documents
+ */
+interface ReadingDocumentData {
+  /**
+   * Lesson key (e.g. M1-V, never change after publishing) field in *Course · Reading*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: reading.lesson_key
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  lesson_key: prismic.KeyTextField;
+
+  /**
+   * Title field in *Course · Reading*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: reading.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Reading time (minutes) field in *Course · Reading*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: reading.minutes
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  minutes: prismic.NumberField;
+
+  /**
+   * Body field in *Course · Reading*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: reading.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * PDF for offline reading field in *Course · Reading*
+   *
+   * - **Field Type**: Link to Media
+   * - **Placeholder**: *None*
+   * - **API ID Path**: reading.pdf
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link-to-media
+   */
+  pdf: prismic.LinkToMediaField<prismic.FieldState, never>;
+}
+
+/**
+ * Course · Reading document from Prismic
+ *
+ * - **API ID**: `reading`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ReadingDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<ReadingDocumentData>,
+    "reading",
+    Lang
+  >;
+
+/**
+ * Item in *Course · Task → Tracks (leave empty for a single track)*
+ */
+export interface TaskDocumentDataTracksItem {
+  /**
+   * Track key (e.g. A) field in *Course · Task → Tracks (leave empty for a single track)*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.tracks[].track_key
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  track_key: prismic.KeyTextField;
+
+  /**
+   * Title field in *Course · Task → Tracks (leave empty for a single track)*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.tracks[].title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Instructions field in *Course · Task → Tracks (leave empty for a single track)*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.tracks[].instructions
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  instructions: prismic.RichTextField;
+}
+
+/**
+ * Content for Course · Task documents
+ */
+interface TaskDocumentData {
+  /**
+   * Lesson key (e.g. M1-V, never change after publishing) field in *Course · Task*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.lesson_key
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  lesson_key: prismic.KeyTextField;
+
+  /**
+   * Title field in *Course · Task*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Instructions field in *Course · Task*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.instructions
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  instructions: prismic.RichTextField;
+
+  /**
+   * Tracks (leave empty for a single track) field in *Course · Task*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: task.tracks[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  tracks: prismic.GroupField<Simplify<TaskDocumentDataTracksItem>>;
+}
+
+/**
+ * Course · Task document from Prismic
+ *
+ * - **API ID**: `task`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type TaskDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<Simplify<TaskDocumentData>, "task", Lang>;
+
+/**
+ * Content for Course · Video lesson documents
+ */
+interface VideoLessonDocumentData {
+  /**
+   * Lesson key (e.g. M1-V, never change after publishing) field in *Course · Video lesson*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.lesson_key
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  lesson_key: prismic.KeyTextField;
+
+  /**
+   * Title field in *Course · Video lesson*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Video file key in private storage (without quality suffix) field in *Course · Video lesson*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.video_asset_key
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  video_asset_key: prismic.KeyTextField;
+
+  /**
+   * Duration (seconds) field in *Course · Video lesson*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.duration_seconds
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  duration_seconds: prismic.NumberField;
+
+  /**
+   * Captions file key (VTT) field in *Course · Video lesson*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.captions_key
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  captions_key: prismic.KeyTextField;
+
+  /**
+   * Poster image field in *Course · Video lesson*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.poster
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  poster: prismic.ImageField<never>;
+
+  /**
+   * Transcript field in *Course · Video lesson*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_lesson.transcript
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  transcript: prismic.RichTextField;
+}
+
+/**
+ * Course · Video lesson document from Prismic
+ *
+ * - **API ID**: `video_lesson`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type VideoLessonDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<VideoLessonDocumentData>,
+    "video_lesson",
+    Lang
+  >;
+
 export type AllDocumentTypes =
   | AboutPageDocument
   | BlogCategoryDocument
   | BlogPostDocument
+  | CourseDocument
   | FaqDocument
   | FaqPageDocument
   | HomepageDocument
-  | MentorDocument;
+  | MentorDocument
+  | PartnerDocument
+  | QuizDocument
+  | ReadingDocument
+  | TaskDocument
+  | VideoLessonDocument;
 
 /**
  * Primary content in *BlogContent → Paragraph → Primary*
@@ -948,6 +1773,113 @@ export type BlogContentSlice = prismic.SharedSlice<
   BlogContentSliceVariation
 >;
 
+/**
+ * Item in *CourseModule → Default → Primary → Lessons*
+ */
+export interface CourseModuleSliceDefaultPrimaryLessonsItem {
+  /**
+   * Lesson field in *CourseModule → Default → Primary → Lessons*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course_module.default.primary.lessons[].lesson
+   * - **Documentation**: https://prismic.io/docs/fields/content-relationship
+   */
+  lesson:
+    | prismic.ContentRelationshipField<"video_lesson">
+    | prismic.ContentRelationshipField<"reading">
+    | prismic.ContentRelationshipField<"quiz">
+    | prismic.ContentRelationshipField<"task">;
+
+  /**
+   * Required field in *CourseModule → Default → Primary → Lessons*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: true
+   * - **API ID Path**: course_module.default.primary.lessons[].required
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  required: prismic.BooleanField;
+}
+
+/**
+ * Primary content in *CourseModule → Default → Primary*
+ */
+export interface CourseModuleSliceDefaultPrimary {
+  /**
+   * Module key (e.g. M1, never change after publishing) field in *CourseModule → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course_module.default.primary.module_key
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  module_key: prismic.KeyTextField;
+
+  /**
+   * Title field in *CourseModule → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course_module.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Summary field in *CourseModule → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course_module.default.primary.summary
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  summary: prismic.KeyTextField;
+
+  /**
+   * Lessons field in *CourseModule → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: course_module.default.primary.lessons[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  lessons: prismic.GroupField<
+    Simplify<CourseModuleSliceDefaultPrimaryLessonsItem>
+  >;
+}
+
+/**
+ * Default variation for CourseModule Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CourseModuleSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CourseModuleSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CourseModule*
+ */
+type CourseModuleSliceVariation = CourseModuleSliceDefault;
+
+/**
+ * CourseModule Shared Slice
+ *
+ * - **API ID**: `course_module`
+ * - **Description**: A module: an ordered list of lessons
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CourseModuleSlice = prismic.SharedSlice<
+  "course_module",
+  CourseModuleSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -979,6 +1911,11 @@ declare module "@prismicio/client" {
       BlogPostDocument,
       BlogPostDocumentData,
       BlogPostDocumentDataSlicesSlice,
+      CourseDocument,
+      CourseDocumentData,
+      CourseDocumentDataOutcomesItem,
+      CourseDocumentDataPartnersItem,
+      CourseDocumentDataSlicesSlice,
       FaqDocument,
       FaqDocumentData,
       FaqDocumentDataFaqItem,
@@ -993,6 +1930,18 @@ declare module "@prismicio/client" {
       MentorDocument,
       MentorDocumentData,
       MentorDocumentDataLinksItem,
+      PartnerDocument,
+      PartnerDocumentData,
+      QuizDocument,
+      QuizDocumentData,
+      QuizDocumentDataQuestionsItem,
+      ReadingDocument,
+      ReadingDocumentData,
+      TaskDocument,
+      TaskDocumentData,
+      TaskDocumentDataTracksItem,
+      VideoLessonDocument,
+      VideoLessonDocumentData,
       AllDocumentTypes,
       BlogContentSlice,
       BlogContentSliceDefaultPrimary,
@@ -1000,6 +1949,11 @@ declare module "@prismicio/client" {
       BlogContentSliceVariation,
       BlogContentSliceDefault,
       BlogContentSliceQuote,
+      CourseModuleSlice,
+      CourseModuleSliceDefaultPrimaryLessonsItem,
+      CourseModuleSliceDefaultPrimary,
+      CourseModuleSliceVariation,
+      CourseModuleSliceDefault,
     };
   }
 }
