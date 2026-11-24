@@ -2,11 +2,17 @@ import {
 	DEFAULT_COMPLETION_POLICY,
 	canCompleteVideo,
 	clampVideoSeek,
+	gradeQuiz,
 	isCourseComplete,
 	isModuleUnlocked,
 	isQuizPassed,
+	lessonIdsInCourse,
 	missingForCompletion,
 	nextQuizAttempt,
+	toCompletionPolicy,
+	toCourse,
+	toLearnerQuiz,
+	toQuizAnswerKey,
 } from "./_helpers";
 import {
 	type CompletionPolicy,
@@ -249,5 +255,210 @@ describe("per hour attempt edges", () => {
 		expect(
 			nextQuizAttempt(DEFAULT_COMPLETION_POLICY, [0, HOUR / 2, HOUR / 2], HOUR),
 		).toEqual({ allowed: true });
+	});
+});
+
+const quizDocument = {
+	id: "quiz-1",
+	type: "quiz",
+	data: {
+		lesson_key: "M1-Q",
+		title: "Module 1 quiz",
+		questions: [
+			{
+				question_key: "M1-01",
+				prompt: "Sample question one",
+				option_a: "Alpha",
+				option_b: "Bravo",
+				option_c: "Charlie",
+				option_d: "Delta",
+				correct: "C",
+				why: "Sample reason",
+				topic: "Prompts",
+			},
+			{
+				question_key: "M1-02",
+				prompt: "Sample question two",
+				option_a: "One",
+				option_b: "Two",
+				option_c: "Three",
+				option_d: "Four",
+				correct: "A",
+				why: null,
+				topic: "Checking answers",
+			},
+		],
+	},
+};
+
+function sequence(values: number[]) {
+	let index = 0;
+	return () => values[index++ % values.length];
+}
+
+describe("quiz content", () => {
+	test("the learner quiz never carries the answer, the why or the topic", () => {
+		const serialized = JSON.stringify(toLearnerQuiz(quizDocument, Math.random));
+		expect(serialized).not.toContain("correct");
+		expect(serialized).not.toContain("Sample reason");
+		expect(serialized).not.toContain("Prompts");
+	});
+	test("options keep their stable index while their order is shuffled", () => {
+		const quiz = toLearnerQuiz(quizDocument, sequence([0.1, 0.9, 0.5]));
+		for (const question of quiz.questions) {
+			expect(question.options.map((option) => option.index).sort()).toEqual([
+				0, 1, 2, 3,
+			]);
+		}
+		const first = quiz.questions.find((question) => question.key === "M1-01");
+		expect(
+			first?.options.find((option) => option.text === "Charlie")?.index,
+		).toBe(2);
+	});
+	test("grading uses the stable index, whatever order the learner saw", () => {
+		const key = toQuizAnswerKey(quizDocument);
+		expect(gradeQuiz(key, { "M1-01": 2, "M1-02": 0 })).toEqual({
+			correctCount: 2,
+			questionCount: 2,
+			missedTopics: [],
+		});
+		expect(gradeQuiz(key, { "M1-01": 1 })).toEqual({
+			correctCount: 0,
+			questionCount: 2,
+			missedTopics: ["Prompts", "Checking answers"],
+		});
+	});
+	test("duplicate or malformed question keys are rejected", () => {
+		const duplicate = structuredClone(quizDocument);
+		duplicate.data.questions[1].question_key = "M1-01";
+		expect(() => toQuizAnswerKey(duplicate)).toThrow();
+		const malformed = structuredClone(quizDocument);
+		malformed.data.questions[0].question_key = "q1";
+		expect(() => toQuizAnswerKey(malformed)).toThrow();
+	});
+});
+
+describe("course content", () => {
+	const courseDocument = {
+		id: "course-1",
+		uid: "ai-for-your-next-opportunity",
+		data: {
+			title: "AI for Your Next Opportunity",
+			summary: "  Sample summary  ",
+			cover: { url: "https://images.example/cover.jpg" },
+			track: "tech",
+			level: null,
+			hours_label: "About 4–5 hours",
+			outcomes: [{ outcome: "Write a clear prompt" }, { outcome: "" }],
+			partners: [
+				{
+					partner: {
+						data: {
+							name: "Ordina",
+							logo: { url: "https://images.example/ordina.png" },
+							attribution: "Course content by Ordina",
+						},
+					},
+				},
+				{ partner: { link_type: "Document" } },
+			],
+			pass_mark_percent: 100,
+			attempt_rule: "cooldown",
+			attempt_value: null,
+			video_must_finish: true,
+			tasks_required: true,
+			sequential_unlock: true,
+			certificate_issuer: null,
+			certificate_attribution: "Course content by Ordina",
+			slices: [
+				{
+					slice_type: "course_module",
+					primary: {
+						module_key: "M1",
+						title: "Foundations",
+						summary: null,
+						lessons: [
+							{ lesson: { link_type: "Document", id: "v1" }, required: null },
+							{
+								lesson: { link_type: "Document", id: "missing" },
+								required: true,
+							},
+							{
+								lesson: { link_type: "Document", id: "t1", isBroken: true },
+								required: false,
+							},
+							{ lesson: { link_type: "Document", id: "t1" }, required: false },
+						],
+					},
+				},
+				{ slice_type: "something_else", primary: {} },
+			],
+		},
+	};
+	const lessons = [
+		{
+			id: "v1",
+			type: "video_lesson",
+			data: {
+				lesson_key: "M1-V",
+				title: "Meet your study partner",
+				duration_seconds: 343,
+			},
+		},
+		{
+			id: "t1",
+			type: "task",
+			data: { lesson_key: "M1-T", title: "Study plan" },
+		},
+	];
+
+	test("lesson ids skip broken links and other slice types", () => {
+		expect(lessonIdsInCourse(courseDocument)).toEqual(["v1", "missing", "t1"]);
+	});
+	test("builds modules from linked lessons, dropping ones that didn't load", () => {
+		const course = toCourse(courseDocument, lessons);
+		expect(course.modules).toHaveLength(1);
+		expect(
+			course.modules[0].lessons.map((lesson) => [
+				lesson.id,
+				lesson.kind,
+				lesson.required,
+			]),
+		).toEqual([
+			["v1", "video", true],
+			["t1", "task", false],
+			["t1", "task", false],
+		]);
+		expect(course.modules[0].lessons[0].durationSeconds).toBe(343);
+	});
+	test("trims text, drops empty outcomes and unloaded partners, applies defaults", () => {
+		const course = toCourse(courseDocument, lessons);
+		expect(course.summary).toBe("Sample summary");
+		expect(course.outcomes).toEqual(["Write a clear prompt"]);
+		expect(course.partners).toEqual([
+			{
+				name: "Ordina",
+				logoUrl: "https://images.example/ordina.png",
+				attribution: "Course content by Ordina",
+			},
+		]);
+		expect(course.level).toBe("beginner");
+		expect(course.certificate).toEqual({
+			issuer: "4HerFrika",
+			attribution: "Course content by Ordina",
+		});
+	});
+	test("reads the strict policy, filling unset fields from the default", () => {
+		expect(toCourse(courseDocument, lessons).policy).toEqual({
+			...DEFAULT_COMPLETION_POLICY,
+			passMarkPercent: 100,
+			attemptLimit: { kind: "cooldown", minutes: 10 },
+			videoMustFinish: true,
+			tasksRequired: true,
+			sequentialUnlock: true,
+		});
+	});
+	test("an empty policy tab is the default policy", () => {
+		expect(toCompletionPolicy({})).toEqual(DEFAULT_COMPLETION_POLICY);
 	});
 });

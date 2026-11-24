@@ -1,0 +1,69 @@
+{
+  "id": "course_module",
+  "type": "SharedSlice",
+  "name": "CourseModule",
+  "description": "A module: an ordered list of lessons",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "module_key": {
+          "type": "Text",
+          "config": {
+            "label": "Module key (e.g. M1, never change after publishing)",
+            "placeholder": ""
+          }
+        },
+        "title": {
+          "type": "Text",
+          "config": {
+            "label": "Title",
+            "placeholder": ""
+          }
+        },
+        "summary": {
+          "type": "Text",
+          "config": {
+            "label": "Summary",
+            "placeholder": ""
+          }
+        },
+        "lessons": {
+          "type": "Group",
+          "config": {
+            "label": "Lessons",
+            "repeat": true,
+            "fields": {
+              "lesson": {
+                "type": "Link",
+                "config": {
+                  "label": "Lesson",
+                  "select": "document",
+                  "customtypes": [
+                    "video_lesson",
+                    "reading",
+                    "quiz",
+                    "task"
+                  ]
+                }
+              },
+              "required": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Required",
+                  "default_value": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

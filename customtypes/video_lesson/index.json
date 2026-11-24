@@ -1,0 +1,63 @@
+{
+  "format": "custom",
+  "id": "video_lesson",
+  "label": "Course \u00b7 Video lesson",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "lesson_key": {
+        "type": "Text",
+        "config": {
+          "label": "Lesson key (e.g. M1-V, never change after publishing)",
+          "placeholder": ""
+        }
+      },
+      "title": {
+        "type": "Text",
+        "config": {
+          "label": "Title",
+          "placeholder": ""
+        }
+      },
+      "video_asset_key": {
+        "type": "Text",
+        "config": {
+          "label": "Video file key in private storage (without quality suffix)",
+          "placeholder": ""
+        }
+      },
+      "duration_seconds": {
+        "type": "Number",
+        "config": {
+          "label": "Duration (seconds)",
+          "placeholder": ""
+        }
+      },
+      "captions_key": {
+        "type": "Text",
+        "config": {
+          "label": "Captions file key (VTT)",
+          "placeholder": ""
+        }
+      },
+      "poster": {
+        "type": "Image",
+        "config": {
+          "label": "Poster image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "transcript": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Transcript",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item,heading2,heading3"
+        }
+      }
+    }
+  }
+}

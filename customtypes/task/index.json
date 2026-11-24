@@ -1,0 +1,66 @@
+{
+  "format": "custom",
+  "id": "task",
+  "label": "Course \u00b7 Task",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "lesson_key": {
+        "type": "Text",
+        "config": {
+          "label": "Lesson key (e.g. M1-V, never change after publishing)",
+          "placeholder": ""
+        }
+      },
+      "title": {
+        "type": "Text",
+        "config": {
+          "label": "Title",
+          "placeholder": ""
+        }
+      },
+      "instructions": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Instructions",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item,heading2,heading3"
+        }
+      },
+      "tracks": {
+        "type": "Group",
+        "config": {
+          "label": "Tracks (leave empty for a single track)",
+          "repeat": true,
+          "fields": {
+            "track_key": {
+              "type": "Text",
+              "config": {
+                "label": "Track key (e.g. A)",
+                "placeholder": ""
+              }
+            },
+            "title": {
+              "type": "Text",
+              "config": {
+                "label": "Title",
+                "placeholder": ""
+              }
+            },
+            "instructions": {
+              "type": "StructuredText",
+              "config": {
+                "label": "Instructions",
+                "placeholder": "",
+                "allowTargetBlank": true,
+                "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item,heading2,heading3"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

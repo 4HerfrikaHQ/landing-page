@@ -1,3 +1,4 @@
+import "server-only";
 import * as prismic from "@prismicio/client";
 import * as prismicNext from "@prismicio/next";
 import config from "./slicemachine.config.json";
@@ -35,6 +36,7 @@ const routes: prismic.ClientConfig["routes"] = [
 export const createClient = (config: prismic.ClientConfig = {}) => {
   const client = prismic.createClient(repositoryName, {
     routes,
+    accessToken: process.env.PRISMIC_ACCESS_TOKEN,
     fetchOptions:
       process.env.NODE_ENV === "production"
         ? { next: { tags: ["prismic"] }, cache: "force-cache" }
