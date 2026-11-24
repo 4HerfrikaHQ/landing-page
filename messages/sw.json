@@ -790,5 +790,13 @@
 		"howWeCountBody": "“Ameshauriwa” inamaanisha angalau kikao kimoja kilichokamilika. Takwimu za vyuo zinatoka kwenye karatasi za mahudhurio za mabalozi, na za wahitimu kutoka kwenye rekodi za bootcamp za Academy. Mwaka wa 2 unahusu 1 Sep 2025 hadi 31 Ago 2026.",
 		"donate": "Changia",
 		"year1Report": "Ripoti ya Mwaka wa 1"
+	},
+	"impactBanner": {
+		"label": "Ripoti ya athari ya Mwaka wa 2",
+		"badge": "Mwaka 2",
+		"title": "Ripoti ya athari inakuja hivi karibuni",
+		"description": "Kuwa wa kwanza kusoma kile mwaka wa pili wa ushauri ulichobadilisha.",
+		"cta": "Ipate kwanza",
+		"dismiss": "Ficha bango hili"
 	}
 }

@@ -790,5 +790,13 @@
 		"howWeCountBody": "“Mentored” means at least one completed session. Campus numbers come from ambassador sign-in sheets, and graduate numbers from Academy bootcamp records. Year 2 covers 1 Sept 2025 to 31 Aug 2026.",
 		"donate": "Donate",
 		"year1Report": "Year 1 report"
+	},
+	"impactBanner": {
+		"label": "Year 2 impact report",
+		"badge": "Year 2",
+		"title": "Impact report coming soon",
+		"description": "Be the first to read what a second year of mentoring did.",
+		"cta": "Get it first",
+		"dismiss": "Hide this banner"
 	}
 }

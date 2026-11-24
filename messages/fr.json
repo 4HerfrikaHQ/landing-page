@@ -790,5 +790,13 @@
 		"howWeCountBody": "« Encadrée » signifie au moins une séance terminée. Les chiffres des campus viennent des feuilles de présence des ambassadrices, et ceux des diplômées des registres des bootcamps Academy. L'année 2 couvre du 1er septembre 2025 au 31 août 2026.",
 		"donate": "Faire un don",
 		"year1Report": "Rapport Année 1"
+	},
+	"impactBanner": {
+		"label": "Rapport d’impact de la 2e année",
+		"badge": "Année 2",
+		"title": "Rapport d’impact bientôt disponible",
+		"description": "Soyez la première personne à découvrir ce qu’une deuxième année de mentorat a changé.",
+		"cta": "Le recevoir en premier",
+		"dismiss": "Masquer cette bannière"
 	}
 }

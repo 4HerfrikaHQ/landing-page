@@ -438,6 +438,26 @@ html {
 	}
 }
 
+.impact-banner {
+	animation: banner-in 300ms var(--ease-out-strong) both;
+}
+
+body:has(.impact-banner) footer {
+	padding-bottom: 3.5rem;
+}
+
+@keyframes banner-in {
+	from {
+		transform: translateY(100%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.impact-banner {
+		animation: none;
+	}
+}
+
 .roll {
 	display: inline-grid;
 	overflow: hidden;
