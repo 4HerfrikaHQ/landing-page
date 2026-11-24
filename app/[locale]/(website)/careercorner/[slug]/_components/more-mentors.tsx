@@ -43,7 +43,7 @@ export async function MoreMentors({
 							>
 								<Link
 									href={`/careercorner/${mentor.slug}` as Route}
-									className={`flex h-full flex-col rounded-2xl bg-white p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:no-underline lg:rounded-[32px] lg:p-3 ${FOCUS_RING}`}
+									className={`flex h-full flex-col rounded-2xl bg-white p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:no-underline lg:rounded-[20px] lg:p-3 ${FOCUS_RING}`}
 								>
 									<div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-surface-pink lg:rounded-[24px]">
 										{mentor.image ? (
