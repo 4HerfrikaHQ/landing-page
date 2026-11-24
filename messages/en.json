@@ -914,9 +914,9 @@
 	"impactBanner": {
 		"label": "Year 2 impact report",
 		"badge": "Year 2",
-		"title": "Impact report coming soon",
-		"description": "Be the first to read what a second year of mentoring did.",
-		"cta": "Get it first",
+		"title": "Our Year 2 impact report is out",
+		"description": "See what a second year of mentoring did.",
+		"cta": "Read the report",
 		"dismiss": "Hide this banner"
 	}
 }
