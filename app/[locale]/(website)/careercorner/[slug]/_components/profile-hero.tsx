@@ -43,7 +43,7 @@ export async function ProfileHero({
 				<ChevronLeft className="size-4" aria-hidden="true" />
 				{t("back")}
 			</Link>
-			<article className="mt-3 grid overflow-hidden rounded-[32px] bg-surface-pink shadow-[0_12px_24px_rgba(0,0,0,0.08)] lg:grid-cols-[1fr_480px] lg:rounded-[40px]">
+			<article className="mt-3 grid overflow-hidden rounded-[20px] bg-surface-pink shadow-[0_12px_24px_rgba(0,0,0,0.08)] lg:grid-cols-[1fr_480px] lg:rounded-[40px]">
 				<div className="relative aspect-square lg:order-2">
 					{image ? (
 						<MentorImage
