@@ -142,7 +142,8 @@
 		"faqs": "Maswali ya mara kwa mara",
 		"newsletterTitle": "Pata hadithi ya mwezi",
 		"subscribeSuccess": "Asante kwa kujiandikisha!",
-		"socialLabel": "Mitandao ya kijamii"
+		"socialLabel": "Mitandao ya kijamii",
+		"brandAssets": "Nyenzo za chapa"
 	},
 	"home": {
 		"academyDescription": "Jukwaa la kujifunza mtandaoni kwa ukuzaji wa ujuzi",
@@ -364,6 +365,10 @@
 		"attendance": {
 			"title": "Thibitisha Mahudhurio",
 			"description": "Thibitisha kama kipindi chako cha ushauri cha 4Herfrika kilifanyika."
+		},
+		"brand": {
+			"title": "Nyenzo za chapa",
+			"description": "Pakua nembo, rangi na fonti za 4HerFrika, na ujifunze jinsi ya kuzitumia."
 		}
 	},
 	"attendance": {
@@ -646,5 +651,141 @@
 		"aboutReauth": "Kuhusu kutoa ruhusa upya",
 		"reauthTooltip": "Inasasisha ruhusa ya akaunti hii ya Google iliyounganishwa; haiwezi kubadilisha akaunti.",
 		"updating": "Inasasisha muunganisho…"
+	},
+	"brand": {
+		"badge": "Nyenzo za chapa",
+		"titleFirst": "Beba hadithi yetu,",
+		"titleSecond": "kwa njia sahihi",
+		"intro": "Pakua nembo, rangi na fonti za 4HerFrika, na uone jinsi ya kuzitumia ili chapa yetu ionekane sawa kila mahali.",
+		"downloadAll": "Pakua vyote (.zip)",
+		"logos": {
+			"titleFirst": "Chagua",
+			"titleSecond": "nembo yako",
+			"intro": "Chagua toleo linalokaa vizuri zaidi kwenye mandhari yako. Kila nembo inapatikana kama SVG na PNG.",
+			"downloadAs": "Pakua {name} kama {format}",
+			"items": {
+				"colour": {
+					"name": "Nembo ya rangi",
+					"label": "nembo ya rangi",
+					"alt": "Nembo ya 4HerFrika, toleo la rangi",
+					"use": "Nembo yetu kuu. Itumie kwenye mandhari nyeupe au nyepesi sana."
+				},
+				"navy": {
+					"name": "Nembo ya bluu iliyokolea",
+					"label": "nembo ya bluu iliyokolea",
+					"alt": "Nembo ya 4HerFrika, toleo la bluu iliyokolea",
+					"use": "Toleo la rangi moja kwa nyaraka, fomu na uchapishaji ambapo rangi kamili haipatikani."
+				},
+				"onDark": {
+					"name": "Nembo ya mandhari nyeusi",
+					"label": "nembo ya mandhari nyeusi",
+					"alt": "Nembo ya 4HerFrika, alama ya waridi na jina jeupe",
+					"use": "Alama ya waridi na jina jeupe. Itumie kwenye bluu iliyokolea na mandhari nyingine nyeusi za chapa."
+				},
+				"white": {
+					"name": "Nembo nyeupe",
+					"label": "nembo nyeupe",
+					"alt": "Nembo ya 4HerFrika, toleo jeupe",
+					"use": "Nyeupe kabisa. Itumie kwenye picha nyeusi na mandhari za rangi."
+				},
+				"mark": {
+					"name": "Alama ya nembo",
+					"label": "alama ya nembo",
+					"alt": "Alama ya nembo ya 4HerFrika, ikoni ya waridi",
+					"use": "Ikoni peke yake. Itumie kwa picha za wasifu, favicon na nafasi ndogo."
+				},
+				"markWhite": {
+					"name": "Alama nyeupe ya nembo",
+					"label": "alama nyeupe ya nembo",
+					"alt": "Alama ya nembo ya 4HerFrika, ikoni nyeupe",
+					"use": "Ikoni nyeupe, kwa mandhari nyeusi na nafasi ndogo."
+				}
+			}
+		},
+		"colours": {
+			"titleFirst": "Rangi",
+			"titleSecond": "zetu",
+			"intro": "Chagua thamani ya HEX ili kuinakili. Kila rangi pia ina thamani yake ya RGB.",
+			"copyHex": "Nakili HEX {hex}",
+			"copied": "Imenakiliwa",
+			"rgb": "RGB",
+			"groups": {
+				"logo": {
+					"title": "Rangi za nembo",
+					"intro": "Rangi mbili zilizo ndani ya nembo. Zitumie unapohitaji kulingana na nembo kikamilifu, kwa mfano kwenye uchapishaji."
+				},
+				"website": {
+					"title": "Rangi za tovuti",
+					"intro": "Rangi zinazotumika kwenye 4herfrika.org. Zitumie kwa kurasa za wavuti, slaidi na machapisho ya mitandao ya kijamii. Waridi ya tovuti ni nzito kidogo kuliko waridi ya nembo."
+				}
+			},
+			"names": {
+				"logoNavy": "Bluu ya nembo",
+				"logoPink": "Waridi ya nembo",
+				"primary": "Waridi kuu",
+				"brightPink": "Waridi angavu",
+				"secondary": "Bluu ya pili",
+				"surfacePink": "Mandhari ya waridi",
+				"surfaceIndigo": "Mandhari ya indigo",
+				"surfaceTeal": "Mandhari ya kijani-buluu"
+			}
+		},
+		"typography": {
+			"titleFirst": "Fonti",
+			"titleSecond": "zetu",
+			"intro": "Fonti mbili za bure kutoka Google Fonts. Outfit hufanya kazi ya kila siku na Playfair Display huongeza joto kidogo.",
+			"googleFonts": "Google Fonts",
+			"viewOnGoogle": "Tazama {name} kwenye Google Fonts (inafunguka kwenye kichupo kipya)",
+			"outfit": {
+				"name": "Outfit",
+				"role": "Vichwa vya habari na maandishi ya kawaida",
+				"sample": "Wasichana wanaoongoza mabadiliko",
+				"note": "Tumia unene wa 300 hadi 700. Bold kwa vichwa, Regular kwa maandishi ya kawaida."
+			},
+			"playfair": {
+				"name": "Playfair Display Italic",
+				"role": "Maneno ya msisitizo",
+				"sample": "mabadiliko",
+				"note": "Itumie kwa neno moja au mawili kwenye kichwa, kamwe si kwa maandishi ya kawaida."
+			}
+		},
+		"usage": {
+			"titleFirst": "Kutumia",
+			"titleSecond": "nembo",
+			"intro": "Sheria chache rahisi huifanya nembo kuwa wazi na rahisi kutambulika.",
+			"doLabel": "Fanya",
+			"dontLabel": "Usifanye",
+			"items": {
+				"clearSpace": {
+					"title": "Ipe nafasi",
+					"text": "Acha nafasi tupu kuzunguka nembo sawa na urefu wa “4”."
+				},
+				"minSize": {
+					"title": "Iweze kusomeka",
+					"text": "Onyesha nembo kamili kwa upana wa angalau 120px. Chini ya hapo, tumia alama ya nembo."
+				},
+				"onDark": {
+					"title": "Ilinganishe na mandhari",
+					"text": "Kwenye bluu iliyokolea, picha nyeusi au zenye shughuli nyingi, tumia nembo ya mandhari nyeusi au nembo nyeupe."
+				},
+				"distort": {
+					"title": "Usibadilishe umbo lake",
+					"text": "Usibadilishe rangi, usivute, usibonyeze wala kuzungusha nembo."
+				},
+				"effects": {
+					"title": "Hakuna athari",
+					"text": "Usiongeze vivuli, mistari ya nje, mwanga au gradient."
+				},
+				"busy": {
+					"title": "Epuka mandhari zenye shughuli nyingi",
+					"text": "Usiweke nembo ya rangi kwenye picha zenye shughuli nyingi au kwenye bluu iliyokolea. Tumia nembo ya mandhari nyeusi au nembo nyeupe badala yake."
+				}
+			}
+		},
+		"contact": {
+			"titleFirst": "Unahitaji kitu",
+			"titleSecond": "kingine?",
+			"text": "Ukubwa maalum, chapa shirikishi au swali la vyombo vya habari? Tuandikie nasi tutakusaidia."
+		}
 	}
 }

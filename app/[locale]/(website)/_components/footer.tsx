@@ -52,6 +52,7 @@ export const Footer = async () => {
 		{ label: tc("becomeAmbassador"), href: JOIN_US_URL },
 		{ label: tc("volunteerAsMentor"), href: "/careercorner/apply" },
 		{ label: t("faqs"), href: "/faq" },
+		{ label: t("brandAssets"), href: "/brand" },
 	] as const;
 
 	const impactLinks = [
