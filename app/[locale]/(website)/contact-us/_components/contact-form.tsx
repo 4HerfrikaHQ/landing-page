@@ -186,7 +186,7 @@ export function ContactForm() {
 			ref={formRef}
 			onSubmit={handleSubmit}
 			noValidate
-			className="min-w-0 rounded-[28px] bg-white p-5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[40px] lg:p-10"
+			className="min-w-0 rounded-[20px] bg-white p-5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:rounded-[40px] lg:p-10"
 		>
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<h2 className="text-[28px] font-bold lg:text-[32px]">

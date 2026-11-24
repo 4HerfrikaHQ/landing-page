@@ -44,7 +44,7 @@ function TopicCard({ topic }: { topic: Topic }) {
 			onClick={() => chooseTopic(topic)}
 			aria-pressed={isSelected}
 			data-selected={isSelected || undefined}
-			className="group flex w-full cursor-pointer text-left min-h-20 items-center gap-4 rounded-2xl bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none ring-2 ring-transparent transition hover:no-underline focus-visible:ring-primary-500 data-selected:ring-primary-500 lg:flex-col lg:items-start lg:rounded-[32px] lg:p-7"
+			className="group flex w-full cursor-pointer text-left min-h-20 items-center gap-4 rounded-2xl bg-white p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none ring-2 ring-transparent transition hover:no-underline focus-visible:ring-primary-500 data-selected:ring-primary-500 lg:flex-col lg:items-start lg:rounded-[20px] lg:p-7"
 		>
 			<span className="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-surface-pink text-primary-500 transition-colors group-data-selected:bg-primary-500 group-data-selected:text-white">
 				<Icon className="size-6" aria-hidden="true" />
