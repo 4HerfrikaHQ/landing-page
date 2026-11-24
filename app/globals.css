@@ -27,6 +27,7 @@
 
 	/* ── Motion ── */
 	--ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+	--duration-roll: 300ms;
 	--ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
 	--duration-press: 160ms;
 	--duration-ui: 200ms;
@@ -388,6 +389,39 @@ html {
 
 .press:active {
 	transform: scale(0.97);
+}
+
+.roll {
+	display: inline-grid;
+	overflow: hidden;
+	gap: inherit;
+	padding-block: 0.2em;
+	margin-block: -0.2em;
+}
+
+.roll > span {
+	grid-area: 1 / 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: inherit;
+	transition: transform var(--duration-roll) var(--ease-out-strong);
+}
+
+.roll > span + span {
+	transform: translateY(115%);
+}
+
+@media (hover: hover) and (pointer: fine) and (
+		prefers-reduced-motion: no-preference
+	) {
+	:is(a, button):hover .roll > span:first-child {
+		transform: translateY(-115%);
+	}
+
+	:is(a, button):hover .roll > span + span {
+		transform: translateY(0);
+	}
 }
 
 .card-lift {

@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import { useTranslations } from "next-intl";
@@ -23,7 +24,7 @@ export function DonateLink({ className, onNavigate }: ActionLinkProps) {
 			onClick={onNavigate}
 			className={cn(DONATE_LINK_STYLES, NAV_FOCUS_RING, className)}
 		>
-			{t("donate")}
+			<RollLabel>{t("donate")}</RollLabel>
 		</Link>
 	);
 }
@@ -38,7 +39,7 @@ export function JoinUsLink({ className, onNavigate }: ActionLinkProps) {
 			onClick={onNavigate}
 			className={cn(JOIN_US_LINK_STYLES, NAV_FOCUS_RING, className)}
 		>
-			{t("joinUs")}
+			<RollLabel>{t("joinUs")}</RollLabel>
 		</a>
 	);
 }

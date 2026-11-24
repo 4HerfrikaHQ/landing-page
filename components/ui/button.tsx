@@ -1,12 +1,13 @@
 "use client";
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
-import { cva, type VariantProps } from "class-variance-authority";
-import Link from "next/link";
+import { type VariantProps, cva } from "class-variance-authority";
 import type { Route } from "next";
+import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/utils/cn";
+import { RollLabel } from "./roll-label";
 
 const buttonVariants = cva(
 	"inline-flex shrink-0 items-center justify-center font-normal whitespace-nowrap press outline-none select-none hover:no-underline! disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
@@ -55,6 +56,8 @@ function Button({
 	...props
 }: ButtonProps) {
 	const className = cn(buttonVariants({ variant, size }), _className);
+	const rolls = variant !== "link" && size !== "icon" && size !== "icon-sm";
+	const label = rolls ? <RollLabel>{children}</RollLabel> : children;
 
 	if (href) {
 		if (isExternal) {
@@ -65,21 +68,25 @@ function Button({
 					className={className}
 					rel="noreferrer"
 				>
-					{children}
+					{label}
 				</a>
 			);
 		}
 
 		return (
-			<Link href={href as Route} className={className} {...(props as Omit<ComponentProps<typeof Link>, "href" | "className">)}>
-				{children}
+			<Link
+				href={href as Route}
+				className={className}
+				{...(props as Omit<ComponentProps<typeof Link>, "href" | "className">)}
+			>
+				{label}
 			</Link>
 		);
 	}
 
 	return (
 		<ButtonPrimitive className={className} {...props}>
-			{children}
+			{label}
 		</ButtonPrimitive>
 	);
 }
