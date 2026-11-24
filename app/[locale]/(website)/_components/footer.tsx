@@ -145,7 +145,7 @@ export const Footer = async () => {
 									target="_blank"
 									rel="noreferrer"
 									aria-label={name}
-									className="inline-grid size-11 place-items-center rounded-pill border border-white/15 outline-none transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white"
+									className="inline-grid size-11 place-items-center rounded-pill border border-white/15 press outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white"
 								>
 									<Icon className="size-4" />
 								</a>

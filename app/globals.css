@@ -25,6 +25,15 @@
 
 	--radius-pill: 9999px;
 
+	/* ── Motion ── */
+	--ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+	--duration-press: 160ms;
+	--duration-ui: 200ms;
+	--duration-reveal: 500ms;
+	--reveal-distance: 12px;
+	--stagger-step: 50ms;
+
 	/* ── Layout ── */
 	--max-width-9xl: 72rem;
 
@@ -144,7 +153,7 @@ a:hover {
 @keyframes enter-up {
 	from {
 		opacity: 0;
-		transform: translateY(16px);
+		transform: translateY(var(--reveal-distance));
 	}
 	to {
 		opacity: 1;
@@ -155,7 +164,7 @@ a:hover {
 @keyframes enter-down {
 	from {
 		opacity: 0;
-		transform: translateY(-16px);
+		transform: translateY(calc(var(--reveal-distance) * -1));
 	}
 	to {
 		opacity: 1;
@@ -166,7 +175,7 @@ a:hover {
 @keyframes enter-left {
 	from {
 		opacity: 0;
-		transform: translateX(16px);
+		transform: translateX(var(--reveal-distance));
 	}
 	to {
 		opacity: 1;
@@ -177,7 +186,7 @@ a:hover {
 @keyframes enter-right {
 	from {
 		opacity: 0;
-		transform: translateX(-16px);
+		transform: translateX(calc(var(--reveal-distance) * -1));
 	}
 	to {
 		opacity: 1;
@@ -188,7 +197,7 @@ a:hover {
 @keyframes enter-scale {
 	from {
 		opacity: 0;
-		transform: scale(0.92);
+		transform: scale(0.96);
 	}
 	to {
 		opacity: 1;
@@ -197,7 +206,7 @@ a:hover {
 }
 
 .animate-enter {
-	animation: enter-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+	animation: enter-up var(--duration-reveal) var(--ease-out-strong) both;
 }
 
 @keyframes parallax-drift {
@@ -264,7 +273,7 @@ a:hover {
 	}
 
 	[data-reveal][data-revealed] {
-		animation: enter-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation: enter-up var(--duration-reveal) var(--ease-out-strong) both;
 	}
 
 	[data-reveal="down"][data-revealed] {
@@ -281,22 +290,28 @@ a:hover {
 	}
 
 	[data-stagger] > *:nth-child(2) {
-		animation-delay: 60ms;
+		animation-delay: calc(var(--stagger-step) * 1);
 	}
 	[data-stagger] > *:nth-child(3) {
-		animation-delay: 120ms;
+		animation-delay: calc(var(--stagger-step) * 2);
 	}
 	[data-stagger] > *:nth-child(4) {
-		animation-delay: 180ms;
+		animation-delay: calc(var(--stagger-step) * 3);
 	}
 	[data-stagger] > *:nth-child(5) {
-		animation-delay: 240ms;
+		animation-delay: calc(var(--stagger-step) * 4);
 	}
 	[data-stagger] > *:nth-child(6) {
-		animation-delay: 300ms;
+		animation-delay: calc(var(--stagger-step) * 5);
 	}
-	[data-stagger] > *:nth-child(n + 7) {
-		animation-delay: 360ms;
+	[data-stagger] > *:nth-child(7) {
+		animation-delay: calc(var(--stagger-step) * 6);
+	}
+	[data-stagger] > *:nth-child(8) {
+		animation-delay: calc(var(--stagger-step) * 7);
+	}
+	[data-stagger] > *:nth-child(n + 9) {
+		animation-delay: calc(var(--stagger-step) * 8);
 	}
 }
 
@@ -361,5 +376,63 @@ html {
 	body {
 		@apply bg-background text-foreground;
 		font-family: Arial, Helvetica, sans-serif;
+	}
+}
+
+.press {
+	transition-property: transform, color, background-color, border-color, opacity,
+		filter;
+	transition-duration: var(--duration-press);
+	transition-timing-function: ease-out;
+}
+
+.press:active {
+	transform: scale(0.97);
+}
+
+.card-lift {
+	position: relative;
+	isolation: isolate;
+	transition-property: transform;
+	transition-duration: var(--duration-ui);
+	transition-timing-function: var(--ease-out-strong);
+}
+
+.card-lift::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	border-radius: inherit;
+	box-shadow: 0 12px 28px -8px rgb(3 6 92 / 0.18);
+	opacity: 0;
+	pointer-events: none;
+	transition-property: opacity;
+	transition-duration: var(--duration-ui);
+	transition-timing-function: var(--ease-out-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.card-lift:hover {
+		transform: translateY(-2px);
+	}
+
+	.card-lift:hover::after {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-enter {
+		animation: none;
+	}
+
+	.press:active {
+		transform: none;
+	}
+
+	.card-lift,
+	.card-lift:hover {
+		transform: none;
 	}
 }

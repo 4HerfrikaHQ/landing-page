@@ -34,7 +34,7 @@ export function LocaleList({ onSelect }: LocaleListProps) {
 					aria-pressed={option.locale === locale}
 					onClick={() => switchLocale(option.locale)}
 					className={cn(
-						"min-h-11 flex-1 cursor-pointer rounded-pill border-2 border-border px-3 text-sm font-medium text-foreground transition-colors aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground",
+						"min-h-11 flex-1 cursor-pointer rounded-pill border-2 border-border px-3 text-sm font-medium text-foreground press aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground",
 						NAV_FOCUS_RING,
 					)}
 				>

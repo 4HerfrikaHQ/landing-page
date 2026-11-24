@@ -23,7 +23,7 @@ export function LocaleSwitcher() {
 		<Menu.Root>
 			<Menu.Trigger
 				aria-label={t("language")}
-				className={`inline-flex h-11 min-w-11 cursor-pointer items-center justify-center gap-1 rounded-pill px-3 text-sm text-muted-foreground transition-colors hover:text-foreground ${NAV_FOCUS_RING}`}
+				className={`inline-flex h-11 min-w-11 cursor-pointer items-center justify-center gap-1 rounded-pill px-3 text-sm text-muted-foreground press hover:text-foreground ${NAV_FOCUS_RING}`}
 			>
 				<span aria-hidden="true">{locale.toUpperCase()}</span>
 				<ChevronDown aria-hidden="true" className="size-4" />

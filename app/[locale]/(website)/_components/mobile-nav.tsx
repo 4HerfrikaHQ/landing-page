@@ -20,7 +20,7 @@ import { LocaleList } from "./locale-list";
 import { NAV_FOCUS_RING } from "./nav-styles";
 
 const ROUND_BUTTON_STYLES =
-	"inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-pill bg-secondary text-secondary-foreground";
+	"inline-flex size-11 shrink-0 press cursor-pointer items-center justify-center rounded-pill bg-secondary text-secondary-foreground";
 
 export function MobileNav() {
 	const t = useTranslations("nav");

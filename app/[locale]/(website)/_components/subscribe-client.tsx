@@ -59,7 +59,7 @@ export const SubscribeFormClient = ({
 				<Button
 					type="submit"
 					disabled={isPending}
-					className="h-11 shrink-0 cursor-pointer rounded-pill bg-primary-bright px-5 text-[15px] font-medium text-secondary outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary disabled:cursor-not-allowed disabled:opacity-50"
+					className="h-11 shrink-0 cursor-pointer rounded-pill bg-primary-bright px-5 text-[15px] font-medium text-secondary press outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					{submitLabel}
 				</Button>
