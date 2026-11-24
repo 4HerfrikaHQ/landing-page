@@ -59,7 +59,7 @@ export async function NotFoundView() {
 							height={875}
 							priority
 							sizes="(max-width: 1024px) 100vw, 520px"
-							className="aspect-[4/3] w-full rounded-[28px] object-cover shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:aspect-[5/4] lg:rounded-[40px]"
+							className="aspect-[4/3] w-full rounded-[20px] object-cover shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:aspect-[5/4] lg:rounded-[40px]"
 						/>
 						<span
 							aria-hidden="true"
@@ -112,7 +112,7 @@ export async function NotFoundView() {
 							<li key={key} className="flex">
 								<Link
 									href={href}
-									className="flex w-full flex-col rounded-[24px] bg-white p-5 shadow-[0_12px_24px_rgba(0,0,0,0.08)] outline-none ring-1 ring-border hover:no-underline focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-transform motion-safe:hover:-translate-y-0.5 lg:rounded-[32px] lg:p-6"
+									className="flex w-full flex-col rounded-[24px] bg-white p-5 shadow-[0_12px_24px_rgba(0,0,0,0.08)] outline-none ring-1 ring-border hover:no-underline focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-transform motion-safe:hover:-translate-y-0.5 lg:rounded-[20px] lg:p-6"
 								>
 									<span
 										className={`inline-flex size-12 items-center justify-center rounded-2xl ${iconClassName}`}

@@ -34,7 +34,7 @@ export async function UnsubscribeCard({
 			className="overflow-x-clip bg-[#fffaf5] px-4 pb-16 pt-28 lg:px-20 lg:pb-24 xl:pt-40"
 		>
 			<div className="mx-auto max-w-5xl">
-				<div className="grid overflow-hidden rounded-[28px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:grid-cols-[0.9fr_1.1fr] lg:rounded-[40px]">
+				<div className="grid overflow-hidden rounded-[20px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:grid-cols-[0.9fr_1.1fr] lg:rounded-[40px]">
 					<div className="relative hidden lg:block">
 						<Image
 							src="/assets/academy/impact-source.jpg"
