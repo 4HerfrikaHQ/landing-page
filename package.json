@@ -17,7 +17,8 @@
     "supabase:stop": "supabase stop",
     "test": "bun test",
     "translate": "bun scripts/translate.ts",
-    "course:import": "bun scripts/import-course/index.ts"
+    "course:import": "bun scripts/import-course/index.ts",
+    "course:videos": "bun scripts/course-videos/index.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
