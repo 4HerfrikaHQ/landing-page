@@ -372,7 +372,9 @@
 				"course_not_found": "We could not find this course.",
 				"generic": "Something went wrong. Please try again."
 			},
-			"metaFallback": "A free 4HerFrika Academy course with a certificate."
+			"metaFallback": "A free 4HerFrika Academy course with a certificate.",
+			"viewCertificate": "View your certificate",
+			"myLearning": "My learning"
 		},
 		"lesson": {
 			"close": "Back to course",
@@ -474,7 +476,8 @@
 			"finish": {
 				"title": "You've finished the course",
 				"body": "Every required lesson is done. Well done.",
-				"action": "Back to the course"
+				"action": "Back to the course",
+				"seeCertificate": "See your certificate"
 			},
 			"errors": {
 				"generic": "Something went wrong. Please try again.",
@@ -486,6 +489,43 @@
 				"already_submitted": "You have already sent this task. Wait for the review.",
 				"track_required": "Choose a track first."
 			}
+		},
+		"complete": {
+			"metaTitle": "Course complete",
+			"badge": "Course complete",
+			"titleLead": "You did it,",
+			"modules": "{count, plural, one {# module} other {# modules}}",
+			"quizzes": "{count, plural, one {# quiz} other {# quizzes}}",
+			"tasks": "{count, plural, one {# task} other {# tasks}}",
+			"oneCertificate": "One certificate that's yours for good.",
+			"completedOn": "Completed on {date}",
+			"certificateId": "ID",
+			"steps": {
+				"emailed": "Emailed to you, with a link anyone can check",
+				"linkedin": "Add it to LinkedIn under Licenses & certifications",
+				"mentor": "Next: book a free call with a mentor"
+			},
+			"navLabel": "After the course",
+			"myLearning": "My learning",
+			"backToCourse": "Back to the course",
+			"backToCourses": "All courses"
+		},
+		"me": {
+			"metaTitle": "My learning",
+			"title": "{name}'s learning",
+			"emptyTitle": "You haven't started a course yet",
+			"emptyBody": "Pick a course and it will show up here with your progress and your certificate.",
+			"browse": "Browse courses",
+			"inProgress": "In progress",
+			"moduleOf": "Module {current} of {total}",
+			"progress": "Progress in {course}",
+			"continueLesson": "Continue: {title}",
+			"review": "Review the course",
+			"certificates": "Certificates",
+			"firstCertificateTitle": "Your first certificate is close",
+			"firstCertificateBody": "Finish a course and your certificate appears here.",
+			"completedBadge": "Completed",
+			"viewCertificate": "View certificate"
 		}
 	},
 	"seo": {
@@ -922,5 +962,61 @@
 		"aboutReauth": "About reauthorization",
 		"reauthTooltip": "Refreshes consent for this linked Google account; it cannot switch accounts.",
 		"updating": "Updating connection…"
+	},
+	"certificates": {
+		"card": {
+			"label": "Certificate of completion",
+			"heading": "Certificate of completion",
+			"certifies": "This certifies that",
+			"completed": "has completed the course",
+			"issuedBy": "Issued by {issuer}"
+		},
+		"share": {
+			"linkedin": "Add to LinkedIn profile",
+			"whatsapp": "WhatsApp",
+			"copyLink": "Copy link",
+			"copied": "Link copied",
+			"copyFailed": "Could not copy the link",
+			"savePdf": "Save as PDF",
+			"opensNewTab": "(opens in a new tab)",
+			"whatsappMessage": "I just completed {course} on the 4HerFrika Academy. You can check my certificate here:"
+		},
+		"check": {
+			"metaTitle": "Certificate check",
+			"validTitle": "Valid certificate",
+			"issuedBy": "Issued by {issuer}",
+			"completedOn": "Completed on",
+			"status": "Status",
+			"valid": "Valid",
+			"proof": "This page is the proof. It comes straight from 4HerFrika's records and can't be edited by the holder.",
+			"about": "What is the 4HerFrika Academy?",
+			"notFoundTitle": "We couldn't find that certificate",
+			"notFoundBody": "Check the ID for typos. It has 8 letters and numbers, like K7P2-QX9M. If you still can't find it, email hello@4herfrika.org.",
+			"withdrawnTitle": "This certificate was withdrawn",
+			"withdrawnBody": "On {date}. It is no longer valid.",
+			"course": "Course",
+			"withdrawnOn": "Withdrawn on",
+			"withdrawn": "Withdrawn",
+			"withdrawnNote": "The holder's name and completion date are hidden once a certificate is withdrawn. Think this is a mistake? Email <email>hello@4herfrika.org</email> with the link to this page."
+		},
+		"print": {
+			"metaTitle": "Print certificate",
+			"title": "Print your certificate",
+			"hint": "Choose Save as PDF in the print window to keep a copy. It prints on one A4 page, landscape.",
+			"print": "Print or save as PDF",
+			"hasCompleted": "has completed the course",
+			"completedOn": "Completed on",
+			"certificateId": "Certificate ID",
+			"verifyAt": "Verify at {url}"
+		},
+		"email": {
+			"subject": "Your certificate is ready",
+			"greeting": "Hi {name},",
+			"body": "You finished {course}. Well done. Your certificate is ready:",
+			"share": "That page is your proof. Add it to your LinkedIn profile, send it on WhatsApp, or save it as a PDF. Anyone who opens it can see it's valid.",
+			"certificateId": "Certificate ID: {code}",
+			"signoff": "— 4HerFrika",
+			"footer": "You're getting this because you finished a course on 4herfrika.org/academy."
+		}
 	}
 }

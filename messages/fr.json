@@ -372,7 +372,9 @@
 				"course_not_found": "Nous n’avons pas trouvé ce cours.",
 				"generic": "Une erreur est survenue. Veuillez réessayer."
 			},
-			"metaFallback": "Un cours gratuit de la 4HerFrika Academy avec certificat."
+			"metaFallback": "Un cours gratuit de la 4HerFrika Academy avec certificat.",
+			"viewCertificate": "Voir votre certificat",
+			"myLearning": "Mon apprentissage"
 		},
 		"lesson": {
 			"close": "Retour au cours",
@@ -474,7 +476,8 @@
 			"finish": {
 				"title": "Vous avez terminé le cours",
 				"body": "Toutes les leçons obligatoires sont faites. Bravo.",
-				"action": "Retour au cours"
+				"action": "Retour au cours",
+				"seeCertificate": "Voir votre certificat"
 			},
 			"errors": {
 				"generic": "Une erreur est survenue. Veuillez réessayer.",
@@ -486,6 +489,43 @@
 				"already_submitted": "Vous avez déjà envoyé cet exercice. Attendez la correction.",
 				"track_required": "Choisissez d’abord un parcours."
 			}
+		},
+		"complete": {
+			"metaTitle": "Cours terminé",
+			"badge": "Cours terminé",
+			"titleLead": "Bravo,",
+			"modules": "{count, plural, one {# module} other {# modules}}",
+			"quizzes": "{count, plural, one {# quiz} other {# quiz}}",
+			"tasks": "{count, plural, one {# tâche} other {# tâches}}",
+			"oneCertificate": "Un certificat qui vous appartient pour toujours.",
+			"completedOn": "Terminé le {date}",
+			"certificateId": "ID",
+			"steps": {
+				"emailed": "Envoyé par e-mail, avec un lien que chacun peut vérifier",
+				"linkedin": "Ajoutez-le à LinkedIn, dans Licences et certifications",
+				"mentor": "Ensuite : réservez un appel gratuit avec une mentore"
+			},
+			"navLabel": "Après le cours",
+			"myLearning": "Mon apprentissage",
+			"backToCourse": "Retour au cours",
+			"backToCourses": "Tous les cours"
+		},
+		"me": {
+			"metaTitle": "Mon apprentissage",
+			"title": "L'apprentissage de {name}",
+			"emptyTitle": "Vous n'avez pas encore commencé de cours",
+			"emptyBody": "Choisissez un cours et il apparaîtra ici avec votre progression et votre certificat.",
+			"browse": "Voir les cours",
+			"inProgress": "En cours",
+			"moduleOf": "Module {current} sur {total}",
+			"progress": "Progression dans {course}",
+			"continueLesson": "Continuer : {title}",
+			"review": "Revoir le cours",
+			"certificates": "Certificats",
+			"firstCertificateTitle": "Votre premier certificat est proche",
+			"firstCertificateBody": "Terminez un cours et votre certificat apparaîtra ici.",
+			"completedBadge": "Terminé",
+			"viewCertificate": "Voir le certificat"
 		}
 	},
 	"seo": {
@@ -922,5 +962,61 @@
 		"aboutReauth": "À propos de la nouvelle autorisation",
 		"reauthTooltip": "Renouvelle le consentement pour ce compte Google associé ; cela ne permet pas de changer de compte.",
 		"updating": "Mise à jour de la connexion…"
+	},
+	"certificates": {
+		"card": {
+			"label": "Certificat de réussite",
+			"heading": "Certificat de réussite",
+			"certifies": "Ce document certifie que",
+			"completed": "a terminé le cours",
+			"issuedBy": "Délivré par {issuer}"
+		},
+		"share": {
+			"linkedin": "Ajouter à mon profil LinkedIn",
+			"whatsapp": "WhatsApp",
+			"copyLink": "Copier le lien",
+			"copied": "Lien copié",
+			"copyFailed": "Impossible de copier le lien",
+			"savePdf": "Enregistrer en PDF",
+			"opensNewTab": "(s'ouvre dans un nouvel onglet)",
+			"whatsappMessage": "Je viens de terminer {course} sur la 4HerFrika Academy. Vous pouvez vérifier mon certificat ici :"
+		},
+		"check": {
+			"metaTitle": "Vérification de certificat",
+			"validTitle": "Certificat valide",
+			"issuedBy": "Délivré par {issuer}",
+			"completedOn": "Terminé le",
+			"status": "Statut",
+			"valid": "Valide",
+			"proof": "Cette page fait foi. Elle provient directement des registres de 4HerFrika et ne peut pas être modifiée par sa titulaire.",
+			"about": "Qu'est-ce que la 4HerFrika Academy ?",
+			"notFoundTitle": "Nous n'avons pas trouvé ce certificat",
+			"notFoundBody": "Vérifiez l'ID. Il comporte 8 lettres et chiffres, comme K7P2-QX9M. Si vous ne le trouvez toujours pas, écrivez à hello@4herfrika.org.",
+			"withdrawnTitle": "Ce certificat a été retiré",
+			"withdrawnBody": "Le {date}. Il n'est plus valide.",
+			"course": "Cours",
+			"withdrawnOn": "Retiré le",
+			"withdrawn": "Retiré",
+			"withdrawnNote": "Le nom de la titulaire et la date de réussite sont masqués une fois un certificat retiré. Une erreur ? Écrivez à <email>hello@4herfrika.org</email> avec le lien de cette page."
+		},
+		"print": {
+			"metaTitle": "Imprimer le certificat",
+			"title": "Imprimer votre certificat",
+			"hint": "Choisissez Enregistrer en PDF dans la fenêtre d'impression pour en garder une copie. Il s'imprime sur une page A4 en paysage.",
+			"print": "Imprimer ou enregistrer en PDF",
+			"hasCompleted": "a terminé le cours",
+			"completedOn": "Terminé le",
+			"certificateId": "ID du certificat",
+			"verifyAt": "Vérifier sur {url}"
+		},
+		"email": {
+			"subject": "Votre certificat est prêt",
+			"greeting": "Bonjour {name},",
+			"body": "Vous avez terminé {course}. Bravo. Votre certificat est prêt :",
+			"share": "Cette page fait foi. Ajoutez-la à votre profil LinkedIn, envoyez-la sur WhatsApp ou enregistrez-la en PDF. Toute personne qui l'ouvre voit qu'il est valide.",
+			"certificateId": "ID du certificat : {code}",
+			"signoff": "— 4HerFrika",
+			"footer": "Vous recevez ce message parce que vous avez terminé un cours sur 4herfrika.org/academy."
+		}
 	}
 }

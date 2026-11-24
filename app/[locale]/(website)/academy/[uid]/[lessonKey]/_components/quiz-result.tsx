@@ -66,6 +66,16 @@ export function PassedView({
 }: PassedProps) {
 	const t = useTranslations("academy.lesson");
 	const q = useTranslations("academy.lesson.quiz");
+	const f = useTranslations("academy.lesson.finish");
+	const finished = result.finishedCourse;
+	const primaryHref = finished
+		? `${courseHref}/complete`
+		: (nextHref ?? courseHref);
+	const primaryLabel = finished
+		? f("seeCertificate")
+		: nextHref
+			? q("nextLesson")
+			: t("backToCourse");
 	return (
 		<section className="flex flex-col items-center gap-6 text-center">
 			<ScoreBadge
@@ -92,11 +102,8 @@ export function PassedView({
 			<FinishNote finished={result.finishedCourse} />
 			<Review quiz={quiz} review={result.review} />
 			<div className="flex w-full flex-col gap-3 lg:max-w-sm">
-				<Link
-					href={(nextHref ?? courseHref) as Route}
-					className={PRIMARY_ACTION}
-				>
-					{nextHref ? q("nextLesson") : t("backToCourse")}
+				<Link href={primaryHref as Route} className={PRIMARY_ACTION}>
+					{primaryLabel}
 					<ArrowRight className="size-4" aria-hidden />
 				</Link>
 				<BackLink nextHref={nextHref} courseHref={courseHref} />

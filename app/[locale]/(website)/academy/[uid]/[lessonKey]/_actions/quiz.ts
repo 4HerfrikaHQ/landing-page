@@ -19,7 +19,10 @@ export const submitQuiz = actionClient
 	.schema(SubmitQuizSchema)
 	.action(
 		async ({ parsedInput: { uid, lessonKey, expectedAttempt, answers } }) => {
-			const { course, enrolment, lesson } = await actionAccess(uid, lessonKey);
+			const { course, enrolment, lesson, learner } = await actionAccess(
+				uid,
+				lessonKey,
+			);
 			if (lesson.kind !== "quiz") throw new ActionError("not_a_quiz");
 			const policy = enrolment.completion_policy;
 
@@ -101,7 +104,7 @@ export const submitQuiz = actionClient
 
 			if (outcome.kind !== "graded") return outcome;
 			const finishedCourse = passed
-				? await concludeCourse(course, enrolment)
+				? await concludeCourse(course, enrolment, learner)
 				: false;
 			return {
 				kind: "graded" as const,
