@@ -21,7 +21,7 @@ export async function AboutValues() {
 						<StaggerItem
 							key={value.number}
 							className={cn(
-								"rounded-2xl p-5 lg:rounded-[32px] lg:p-8",
+								"rounded-2xl p-5 lg:rounded-[20px] lg:p-8",
 								value.surface,
 							)}
 						>
