@@ -134,21 +134,89 @@
 		"volunteerAsMentor": "Jitolee kama mlezi"
 	},
 	"contact": {
-		"altMap": "Ramani inayoonyesha eneo la ofisi ya 4Herfrika",
-		"email": "Anwani ya barua pepe",
-		"errorMessage": "Imeshindikana kutuma ujumbe. Tafadhali angalia maingizo yako na ujaribu tena.",
-		"getInTouch": "Wasiliana nasi",
+		"heroImageAlt": "Wasichana watatu wakipiga selfie pamoja kwenye tukio la 4HerFrika",
+		"heroBadge": "Wasiliana nasi",
+		"heroFirst": "Tungependa",
+		"heroSecond": "kusikia kutoka kwako.",
+		"heroDescription": "Tuambie unachohitaji nasi tutampelekea mtu sahihi.",
+		"chooseTopic": "Chagua mada ↓",
+		"topicsHeading": "Tunawezaje",
+		"topicsAccent": "kukusaidia?",
+		"topicsHint": "Chagua moja. Fomu itafunguka kwenye mada hiyo.",
+		"topics": {
+			"partner": {
+				"title": "Shirikiana nasi",
+				"description": "Kampuni, wafadhili na vyuo vikuu"
+			},
+			"press": {
+				"title": "Vyombo vya habari",
+				"description": "Mahojiano, hadithi na picha"
+			},
+			"mentorship": {
+				"title": "Msaada wa ushauri",
+				"description": "Kupata mshauri au simu iliyopangwa"
+			},
+			"academy": {
+				"title": "Akademia au cheti",
+				"description": "Kuingia, maswali ya majaribio, kiungo cha cheti chako"
+			},
+			"ambassador": {
+				"title": "Balozi wa chuo",
+				"description": "Lete 4HerFrika chuoni kwako"
+			},
+			"other": {
+				"title": "Jambo lingine",
+				"description": "Chochote kisichoendana na hapo juu"
+			}
+		},
 		"leaveMessage": "Tuachie ujumbe",
-		"location": "Mahali",
-		"message": "Ujumbe",
-		"messagePlaceholder": "Ujumbe wako",
-		"name": "Jina",
-		"phone": "Simu",
-		"send": "Tuma",
+		"requiredNote": "Sehemu zote ni za lazima isipokuwa zilizoandikwa hiari.",
+		"change": "Badilisha",
+		"fullName": "Jina kamili",
+		"emailLabel": "Anwani ya barua pepe",
+		"topicLabel": "Mada",
+		"topicPlaceholder": "Chagua mada",
+		"phoneLabel": "Simu / WhatsApp",
+		"optional": "(hiari)",
+		"phoneHint": "Tu ikiwa ungependa tukupigie simu au tukutumie ujumbe.",
+		"certificateCode": "Msimbo wa cheti",
+		"certificateHint": "Sehemu ya mwisho ya kiungo chako: 4herfrika.org/certificates/msimbo",
+		"yourMessage": "Ujumbe wako",
+		"send": "Tuma ujumbe",
 		"sending": "Inatumwa...",
+		"privacyNote": "Tutatumia taarifa zako kukujibu tu.",
+		"privacyLink": "Faragha",
+		"errors": {
+			"nameRequired": "Tafadhali weka jina lako.",
+			"emailInvalid": "Hii haionekani kama anwani ya barua pepe. Tafadhali iangalie.",
+			"topicRequired": "Tafadhali chagua mada.",
+			"messageRequired": "Tafadhali andika ujumbe."
+		},
+		"errorMessage": "Imeshindikana kutuma ujumbe. Tafadhali angalia maingizo yako na ujaribu tena.",
+		"directTitle": "Unapendelea kuwasiliana nasi moja kwa moja?",
+		"region": "Afrika",
+		"socialLabel": "4HerFrika kwenye mitandao ya kijamii",
+		"faqHeading": "Jibu lako huenda lipo hapa tayari",
+		"allFaqs": "Maswali yote",
+		"readAnswer": "Soma jibu",
+		"partnersBadge": "Washirika",
+		"partnersFirst": "Tusaidie kuwafikia",
+		"partnersSecond": "wasichana milioni 2.",
+		"partnersDescription": "Katika Mwaka wa 1 tuliwashauri wasichana zaidi ya 3,000 katika vyuo zaidi ya 25 kwenye nchi 5. Kampuni, wafadhili na vyuo vikuu hufanikisha hatua inayofuata, kama Ordina ilivyofanya kwa kozi yetu ya kwanza ya mtandaoni isiyo na malipo.",
+		"partnersCta": "Anzisha mazungumzo ya ushirikiano",
+		"partnersImageAlt": "Mwezeshaji akifundisha washiriki katika chumba cha kompyuta",
+		"successFirst": "Ujumbe umetumwa",
+		"successSecond": "kwa mafanikio!",
 		"successDescription": "Asante kwa kuwasiliana nasi. Tutakujibu hivi karibuni.",
-		"successMessage": "Ujumbe umetumwa kwa mafanikio!",
-		"title": "Wasiliana nasi"
+		"replyTo": "Jibu litatumwa kwa",
+		"spamNote": "Huoni jibu letu? Angalia folda yako ya barua taka au matangazo.",
+		"backHome": "Rudi nyumbani",
+		"browseFaq": "Tazama maswali yanayoulizwa mara nyingi",
+		"whileYouWait": "Wakati unasubiri",
+		"startCourse": "Anza kozi isiyo na malipo",
+		"courseDescription": "AI kwa Fursa Yako Inayofuata, pamoja na Ordina",
+		"bookMentor": "Weka miadi na mshauri",
+		"mentorDescription": "Simu za dakika 30 kupitia Google Meet"
 	},
 	"donate": {
 		"accountName": "Jina la Akaunti",

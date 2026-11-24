@@ -6,14 +6,14 @@ import { getLocale, getTranslations } from "next-intl/server";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
 import Logo from "../4herfrika-logo";
-import { JOIN_US_URL } from "../navigation";
+import { CONTACT_EMAIL, CONTACT_PHONE, JOIN_US_URL } from "../navigation";
 import { SubscribeForm } from "./subscribe";
 import { XLogo } from "./x-logo";
 
 const FOOTER_LINK_STYLES =
 	"inline-flex min-h-11 items-center rounded-md text-[15px] text-white/85 underline-offset-4 outline-none hover:text-white hover:underline focus-visible:ring-2 focus-visible:ring-white";
 
-const SOCIAL_LINKS = [
+export const SOCIAL_LINKS = [
 	{
 		name: "LinkedIn",
 		href: "https://www.linkedin.com/company/4herfrika",
@@ -95,16 +95,16 @@ export const Footer = async () => {
 
 					<FooterColumn title={t("contact")}>
 						<li>
-							<a href="tel:+2349082009908" className={FOOTER_LINK_STYLES}>
-								+234 (0)908 200 9908
+							<a href={CONTACT_PHONE.href} className={FOOTER_LINK_STYLES}>
+								{CONTACT_PHONE.display}
 							</a>
 						</li>
 						<li>
 							<a
-								href="mailto:hello@4herfrika.org"
+								href={`mailto:${CONTACT_EMAIL}`}
 								className={FOOTER_LINK_STYLES}
 							>
-								hello@4herfrika.org
+								{CONTACT_EMAIL}
 							</a>
 						</li>
 						<li className="flex flex-wrap items-center gap-x-3">
