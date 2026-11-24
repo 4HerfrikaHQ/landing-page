@@ -807,6 +807,108 @@
 		"goalDescription": "D’ici 2030, 4HerFrika imagine 2 millions de femmes et de filles autonomisées à travers l’Afrique, avec les compétences et les personnes pour mener.",
 		"ctaFirst": "Aidez-nous à atteindre",
 		"ctaSecond": "deux millions.",
-		"ctaDescription": "Chaque don et chaque bénévole aident davantage de filles à être accompagnées, formées et connectées."
+		"ctaDescription": "Chaque don et chaque bénévole aident davantage de filles à être accompagnées, formées et connectées.",
+		"year2": {
+			"coverAlt": "Participantes de 4HerFrika en t-shirts roses, couverture du rapport Année 2",
+			"label": "Année 2",
+			"title": "De nombreuses à un mouvement",
+			"summary": "La deuxième année de 4HerFrika, chiffrée à voix haute. Les chiffres sont encore en cours de collecte.",
+			"comingSoon": "Bientôt disponible",
+			"figuresPending": "Chiffres bientôt disponibles",
+			"preview": "Voir un aperçu de la page",
+			"figureGirls": "Filles encadrées",
+			"figureCampuses": "Campus atteints",
+			"figureGraduates": "Diplômées des bootcamps Academy",
+			"figureCountries": "Pays"
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Rapport d'impact Année 2 — 4HerFrika",
+			"description": "Le rapport d'impact de la deuxième année de 4HerFrika : filles encadrées, campus et pays atteints, et diplômées devenues mentores."
+		},
+		"comingSoon": "Bientôt disponible",
+		"heroEyebrow": "Rapport Année 2 · sept. 2025 – août 2026",
+		"heroFirst": "De nombreuses",
+		"heroSecond": "à un mouvement.",
+		"heroDescription": "La deuxième année de 4HerFrika, chiffrée à voix haute : les filles que nous avons encadrées, les campus et les pays atteints, et les diplômées devenues mentores.",
+		"heroAlt": "Participantes de 4HerFrika en t-shirts roses, réunies en plein air sur un campus",
+		"readReport": "Lire le rapport",
+		"downloadPdf": "Télécharger le PDF · {size} Mo",
+		"getFirst": "Recevoir le rapport en premier",
+		"allReports": "Tous les rapports",
+		"menuLabel": "Sections du rapport",
+		"menu": {
+			"numbers": "Chiffres",
+			"stories": "Témoignages",
+			"academy": "Academy",
+			"howWeCount": "Notre méthode"
+		},
+		"figures": {
+			"girlsMentored": {
+				"label": "filles encadrées",
+				"note": "depuis le début · Année 1 seule : 3 000+"
+			},
+			"campuses": {
+				"label": "campus",
+				"note": "Année 2 · Année 1 : 25+"
+			},
+			"countries": {
+				"label": "pays",
+				"note": "Année 2 · Année 1 : 5"
+			},
+			"graduatesMentoring": {
+				"label": "diplômées devenues mentores",
+				"note": "Année 2"
+			},
+			"academyGraduates": {
+				"label": "diplômées des bootcamps Academy",
+				"note": "Année 2"
+			}
+		},
+		"pendingValue": "Chiffre pas encore publié",
+		"pendingNote": "Chiffres bientôt disponibles",
+		"winsFirst": "Trois victoires",
+		"winsSecond": "dont nous sommes fières.",
+		"winsIntroMobile": "Faites défiler les moments qui ont marqué l'année 2.",
+		"winsIntro": "Voici les moments qui ont marqué l'année 2.",
+		"wins": {
+			"mentors": {
+				"title": "Des diplômées devenues mentores",
+				"body": "Des diplômées de l'année 1 encadrent désormais la promotion suivante.",
+				"alt": "Des diplômées tenant leur certificat lors d'un bootcamp 4HerFrika"
+			},
+			"campuses": {
+				"title": "Plus de campus",
+				"body": "Campus atteints en année 2. L'année 1 en avait atteint plus de 25.",
+				"alt": "Deux jeunes femmes codant ensemble lors d'un bootcamp sur un campus"
+			},
+			"countries": {
+				"title": "Plus de pays",
+				"body": "Pays atteints en année 2. L'année 1 en avait atteint cinq.",
+				"alt": "Des participantes assises dans un amphithéâtre lors d'une session sur un campus"
+			}
+		},
+		"academyPill": "Et ensuite · l'année 3 commence",
+		"academyFirst": "Ensuite, un apprentissage qui tient",
+		"academySecond": "dans la poche.",
+		"academyDescription": "Le {date}, l'Academy ouvre son premier cours en ligne, L'IA pour votre prochaine opportunité, conçu avec Ordina. Il fonctionne sur n'importe quel téléphone et se termine par un certificat qu'un employeur peut vérifier en un clic. Il sera comptabilisé dans le rapport de l'année 3.",
+		"academyAlt": "Une jeune femme apprenant sur un ordinateur portable en plein air",
+		"launches": "Lancement",
+		"free": "Gratuit",
+		"freeLabel": "cours en ligne, avec un certificat vérifiable",
+		"exploreAcademy": "Découvrir l'Academy",
+		"quotesFirst": "Leurs mots,",
+		"quotesSecond": "pas les nôtres.",
+		"quotesEmptyTitle": "Les témoignages arrivent",
+		"quotesEmptyBody": "Nous recueillons leurs mots auprès des mentorées, des ambassadrices et des diplômées. Chacun est partagé avec leur accord.",
+		"partnersLabel": "Avec le soutien de",
+		"newsletterFirst": "Soyez la première",
+		"newsletterSecond": "à le lire.",
+		"newsletterDescription": "Abonnez-vous à l'histoire mensuelle et nous vous enverrons le rapport de l'année 2 le jour de sa publication.",
+		"howWeCountTitle": "Notre méthode",
+		"howWeCountBody": "« Encadrée » signifie au moins une séance terminée. Les chiffres des campus viennent des feuilles de présence des ambassadrices, et ceux des diplômées des registres des bootcamps Academy. L'année 2 couvre du 1er septembre 2025 au 31 août 2026.",
+		"donate": "Faire un don",
+		"year1Report": "Rapport Année 1"
 	}
 }
