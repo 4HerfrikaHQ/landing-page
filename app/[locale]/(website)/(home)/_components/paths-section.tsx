@@ -9,7 +9,7 @@ import { PATHS } from "../_schema";
 import { SectionHeading } from "./section-heading";
 
 const CARD_CLASSES =
-	"group flex w-[78%] shrink-0 snap-start flex-col rounded-[28px] p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:w-auto lg:rounded-[32px]";
+	"group flex w-[78%] shrink-0 snap-start flex-col rounded-[20px] p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:w-auto lg:rounded-[20px]";
 
 type CardLinkProps = {
 	href: string;
