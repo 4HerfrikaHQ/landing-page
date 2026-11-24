@@ -11,7 +11,7 @@ import { NOTE_MAX_LENGTH } from "../_schema";
 type DetailsStep = Extract<GiveState, { status: "details" | "paying" }>;
 
 const FIELD =
-	"h-12 w-full rounded-xl border border-input bg-white px-4 text-base outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 aria-invalid:border-destructive";
+	"h-12 w-full rounded-xl border border-input bg-white px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 aria-invalid:border-destructive";
 
 export function DetailsStep({
 	state,
@@ -162,7 +162,7 @@ export function DetailsStep({
 							donor: { note: event.target.value },
 						})
 					}
-					className="mt-2 w-full rounded-xl border border-input bg-white px-4 py-3 text-base outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+					className="mt-2 w-full rounded-xl border border-input bg-white px-4 py-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
 				/>
 				<span className="mt-1 block text-right text-xs text-muted-foreground tabular-nums">
 					{t("noteCount", { count: donor.note.length, max: NOTE_MAX_LENGTH })}
