@@ -28,7 +28,7 @@ export default async function HomePage({
 	params,
 }: { params: Promise<{ locale: string }> }) {
 	await setLocaleFromParams(params);
-	const { mentors, posts, testimonials } = await getHomeContent();
+	const { mentors, stories, testimonials } = await getHomeContent();
 
 	return (
 		<main className="overflow-x-clip bg-background text-foreground">
@@ -37,7 +37,7 @@ export default async function HomePage({
 			<PathsSection />
 			<MentorsSection mentors={mentors} />
 			<CourseBand />
-			<StoriesSection posts={posts} />
+			<StoriesSection stories={stories} />
 			<TestimonialsSection testimonials={testimonials} />
 			<DonateBand />
 		</main>

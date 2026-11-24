@@ -149,7 +149,12 @@
 			"badge": "Nouveau · Cours gratuit d’IA avec Ordina",
 			"titleFirst": "Former des",
 			"titleSecond": "<word>femmes</word> de classe mondiale.",
-			"morphWords": ["femmes", "leaders", "fondatrices", "scientifiques"],
+			"morphWords": [
+				"femmes",
+				"leaders",
+				"fondatrices",
+				"scientifiques"
+			],
 			"description": "Votre étoile du Nord à travers l’Afrique. Nous accompagnons, formons et connectons de jeunes femmes pour des carrières dans la tech, les affaires, le climat et au-delà.",
 			"startCourse": "Commencer le cours gratuit",
 			"bookMentor": "Réserver une mentore",
@@ -216,7 +221,9 @@
 			"titleFirst": "Dernières",
 			"titleSecond": "histoires",
 			"read": "Lire l’histoire",
-			"viewAll": "Toutes les histoires"
+			"viewAll": "Toutes les histoires",
+			"project": "Projet",
+			"story": "Récit"
 		},
 		"testimonials": {
 			"titleFirst": "La parole est à",
