@@ -393,6 +393,40 @@ html {
 	transform: scale(0.97);
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+}
+
+::view-transition-old(page) {
+	animation: page-out 120ms ease-out both;
+}
+
+::view-transition-new(page) {
+	animation: page-in 240ms var(--ease-out-strong) both;
+}
+
+@keyframes page-out {
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes page-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}
+
 .roll {
 	display: inline-grid;
 	overflow: hidden;
