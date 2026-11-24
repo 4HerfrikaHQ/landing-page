@@ -145,25 +145,91 @@
 		"socialLabel": "Réseaux sociaux"
 	},
 	"home": {
-		"academyDescription": "Plateforme d’apprentissage en ligne pour développer ses compétences",
-		"africanCountries": "pays africains",
-		"becomeAmbassador": "Devenir ambassadeur",
-		"campusDescription": "Nous agissons à travers de petites communautés au sein des établissements d’enseignement supérieur",
-		"campuses": "campus",
-		"exploreAcademy": "4HerFrika Academy",
-		"exploreCampus": "4HerFrika Campuses",
-		"exploreCampuses": "Explorer les campus",
-		"exploreLearningTracks": "Explorer les parcours d'apprentissage",
-		"heroDescription": "4Herfrika est votre étoile polaire. Nous formons des leaders dans la technologie, la médecine, le droit, les affaires, l’agriculture, les sciences, et bien au-delà.",
-		"heroTitle": "Former des femmes <highlight>d’envergure mondiale</highlight>",
-		"members": "membres",
-		"ourAcademy": "Notre académie",
-		"ourAcademyDescription": "Apprentissage virtuel. Impact réel. Grâce à nos académies Tech, Business et Climat, les jeunes femmes acquièrent des compétences pratiques, du mentorat et la confiance nécessaire pour diriger avec audace dans le monde d’aujourd’hui.",
-		"ourCampuses": "Nos campus",
-		"ourCampusesDescription": "Campus après campus, nous faisons grandir une sororité. Dans plus de 20 universités africaines, les chapitres 4Herfrika organisent des événements, des ateliers et des séances de mentorat — pour renforcer le leadership, la communauté et les liens.",
-		"supportedBy": "Avec le soutien de :",
-		"wordsOnStreet": "Les <pink>mots</pink> de la <pink>rue</pink>",
-		"wordsOnStreetSub": "Découvrez ce que disent nos membres !"
+		"hero": {
+			"badge": "Nouveau · Cours gratuit d’IA avec Ordina",
+			"titleFirst": "Former des femmes",
+			"titleSecond": "de classe mondiale.",
+			"description": "Votre étoile du Nord à travers l’Afrique. Nous accompagnons, formons et connectons de jeunes femmes pour des carrières dans la tech, les affaires, le climat et au-delà.",
+			"startCourse": "Commencer le cours gratuit",
+			"bookMentor": "Réserver une mentore",
+			"imageAlt": "Trois jeunes femmes prenant un selfie lors d’un événement 4HerFrika"
+		},
+		"stats": {
+			"year": "Année 1",
+			"girlsMentored": "filles accompagnées",
+			"graduates": "diplômées de l’Académie",
+			"campuses": "campus",
+			"countries": "pays",
+			"label": "Notre impact en Année 1"
+		},
+		"paths": {
+			"eyebrow": "S’impliquer",
+			"titleFirst": "Quatre façons de nous rejoindre.",
+			"titleSecond": "Choisissez la vôtre.",
+			"learn": {
+				"title": "Apprendre gratuitement",
+				"description": "De courts cours sur votre téléphone, avec un certificat que les employeurs peuvent vérifier.",
+				"cta": "Aller à l’Académie",
+				"imageAlt": "Jeunes femmes programmant sur des ordinateurs portables"
+			},
+			"mentor": {
+				"title": "Réserver une mentore",
+				"description": "Un appel gratuit de 30 minutes avec quelqu’un qui a déjà parcouru votre chemin.",
+				"cta": "Trouver une mentore",
+				"imageAlt": "Une formatrice enseignant dans une salle informatique"
+			},
+			"ambassador": {
+				"title": "Diriger sur le campus",
+				"description": "Devenez ambassadrice ou bénévole et faites grandir la sororité là où vous êtes.",
+				"cta": "Devenir ambassadrice",
+				"imageAlt": "Ambassadrices de campus en t-shirts roses 4HerFrika"
+			},
+			"donate": {
+				"title": "Donner un départ à une fille",
+				"description": "Votre don finance les données mobiles, les ordinateurs et les bootcamps sur les campus.",
+				"cta": "Faire un don",
+				"imageAlt": "Diplômées tenant leurs certificats"
+			}
+		},
+		"mentors": {
+			"eyebrow": "Career Corner",
+			"titleFirst": "Des mentors qui",
+			"titleSecond": "sont passés par là.",
+			"description": "Choisissez-en un par domaine et réservez un appel gratuit de 30 minutes.",
+			"viewAll": "Voir tous les mentors"
+		},
+		"course": {
+			"eyebrow": "Cours en ligne gratuit",
+			"titleFirst": "L’IA pour votre",
+			"titleSecond": "prochaine opportunité.",
+			"description": "Conçu avec Ordina. De courtes leçons vidéo, un quiz après chacune et un certificat vérifiable à la fin. Fonctionne sur tous les téléphones.",
+			"point1": "4 modules de courtes vidéos, environ 4 à 5 heures",
+			"point2": "Gratuit, avec un certificat que les employeurs peuvent vérifier",
+			"point3": "Apprenez à votre rythme et reprenez là où vous vous êtes arrêtée",
+			"start": "Commencer gratuitement",
+			"seeAll": "Voir tous les cours",
+			"imageAlt": "Une jeune femme apprenant sur un ordinateur portable en plein air"
+		},
+		"stories": {
+			"eyebrow": "Depuis le blog",
+			"titleFirst": "Dernières",
+			"titleSecond": "histoires",
+			"read": "Lire l’histoire",
+			"viewAll": "Toutes les histoires"
+		},
+		"testimonials": {
+			"titleFirst": "La parole est à",
+			"titleSecond": "la rue",
+			"description": "Ce que disent nos mentorées.",
+			"credit": "{mentee}, mentorée de {mentor}"
+		},
+		"cta": {
+			"titleFirst": "Aidez-nous à atteindre",
+			"titleSecond": "2 millions de filles.",
+			"description": "Votre don finance les données mobiles, les ordinateurs et les bootcamps sur les campus.",
+			"donate": "Faire un don",
+			"volunteer": "Devenir bénévole"
+		}
 	},
 	"impact": {
 		"altYearReport": "Couverture du Rapport panoramique de la première année de 4Herfrika, « From One to Many »",
