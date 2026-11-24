@@ -7,7 +7,7 @@ export async function DonateBand() {
 
 	return (
 		<section className="px-4 py-16 lg:px-20 lg:py-24">
-			<FadeIn className="mx-auto flex max-w-6xl flex-col gap-6 rounded-[32px] bg-primary-500 p-8 text-white lg:flex-row lg:items-center lg:rounded-[40px] lg:p-14">
+			<FadeIn className="mx-auto flex max-w-6xl flex-col gap-6 rounded-[20px] bg-primary-500 p-8 text-white lg:flex-row lg:items-center lg:rounded-[40px] lg:p-14">
 				<div className="flex-1">
 					<h2 className="text-[32px] font-bold leading-tight lg:text-[44px]">
 						{t("titleFirst")}{" "}
