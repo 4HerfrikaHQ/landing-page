@@ -24,7 +24,7 @@ export function ImpactBanner() {
 			className="impact-banner fixed inset-x-0 bottom-0 z-40 bg-primary-bright text-secondary-500"
 		>
 			<div className="mx-auto flex h-14 max-w-6xl items-center gap-3 pr-1 pl-4 lg:gap-5 lg:px-6">
-				<span className="hidden rounded-md bg-secondary-500 px-2 py-1 text-xs font-bold tracking-[0.12em] text-primary-bright uppercase sm:inline">
+				<span className="hidden shrink-0 whitespace-nowrap rounded-md bg-secondary-500 px-2 py-1 text-xs font-bold tracking-[0.12em] text-primary-bright uppercase sm:inline">
 					{t("badge")}
 				</span>
 				<p className="min-w-0 flex-1 truncate text-sm font-semibold tracking-wide uppercase sm:flex-none lg:text-[15px]">
