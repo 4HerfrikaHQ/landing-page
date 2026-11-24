@@ -687,6 +687,108 @@
 		"goalDescription": "Kufikia 2030, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika, wenye ujuzi na watu wa kuongoza.",
 		"ctaFirst": "Tusaidie kufikia",
 		"ctaSecond": "milioni mbili.",
-		"ctaDescription": "Kila mchango na kila mjitolea husaidia wasichana wengi zaidi kupata malezi, mafunzo na uhusiano."
+		"ctaDescription": "Kila mchango na kila mjitolea husaidia wasichana wengi zaidi kupata malezi, mafunzo na uhusiano.",
+		"year2": {
+			"coverAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi, jalada la ripoti ya Mwaka wa 2",
+			"label": "Mwaka wa 2",
+			"title": "Kutoka wengi hadi harakati",
+			"summary": "Mwaka wa pili wa 4HerFrika, ukihesabiwa waziwazi. Takwimu bado zinakusanywa.",
+			"comingSoon": "Inakuja hivi karibuni",
+			"figuresPending": "Takwimu zinakuja hivi karibuni",
+			"preview": "Tazama onyesho la ukurasa",
+			"figureGirls": "Wasichana walioshauriwa",
+			"figureCampuses": "Vyuo vilivyofikiwa",
+			"figureGraduates": "Wahitimu wa bootcamp za Academy",
+			"figureCountries": "Nchi"
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Ripoti ya Athari ya Mwaka wa 2 — 4HerFrika",
+			"description": "Ripoti ya athari ya mwaka wa pili wa 4HerFrika: wasichana walioshauriwa, vyuo na nchi zilizofikiwa, na wahitimu waliorudi kuwa washauri."
+		},
+		"comingSoon": "Inakuja hivi karibuni",
+		"heroEyebrow": "Ripoti ya Mwaka wa 2 · Sep 2025 – Ago 2026",
+		"heroFirst": "Kutoka wengi",
+		"heroSecond": "hadi harakati.",
+		"heroDescription": "Mwaka wa pili wa 4HerFrika, ukihesabiwa waziwazi: wasichana tuliowashauri, vyuo na nchi tulizofikia, na wahitimu waliorudi kuwa washauri.",
+		"heroAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi wamesimama pamoja nje chuoni",
+		"readReport": "Soma ripoti",
+		"downloadPdf": "Pakua PDF · MB {size}",
+		"getFirst": "Pata ripoti kwanza",
+		"allReports": "Ripoti zote",
+		"menuLabel": "Sehemu za ripoti",
+		"menu": {
+			"numbers": "Takwimu",
+			"stories": "Hadithi",
+			"academy": "Academy",
+			"howWeCount": "Jinsi tunavyohesabu"
+		},
+		"figures": {
+			"girlsMentored": {
+				"label": "wasichana walioshauriwa",
+				"note": "tangu mwanzo · Mwaka wa 1 pekee: 3,000+"
+			},
+			"campuses": {
+				"label": "vyuo",
+				"note": "Mwaka wa 2 · Mwaka wa 1: 25+"
+			},
+			"countries": {
+				"label": "nchi",
+				"note": "Mwaka wa 2 · Mwaka wa 1: 5"
+			},
+			"graduatesMentoring": {
+				"label": "wahitimu wanaoshauri sasa",
+				"note": "Mwaka wa 2"
+			},
+			"academyGraduates": {
+				"label": "wahitimu wa bootcamp za Academy",
+				"note": "Mwaka wa 2"
+			}
+		},
+		"pendingValue": "Takwimu bado hazijachapishwa",
+		"pendingNote": "Takwimu zinakuja hivi karibuni",
+		"winsFirst": "Ushindi watatu",
+		"winsSecond": "tunaojivunia zaidi.",
+		"winsIntroMobile": "Telezesha kuona nyakati zilizobainisha Mwaka wa 2.",
+		"winsIntro": "Hizi ndizo nyakati zilizobainisha Mwaka wa 2.",
+		"wins": {
+			"mentors": {
+				"title": "Wahitimu wakawa washauri",
+				"body": "Wahitimu wa Mwaka wa 1 sasa wanashauri kundi linalofuata.",
+				"alt": "Wahitimu wakiwa wameshika vyeti vyao kwenye bootcamp ya 4HerFrika"
+			},
+			"campuses": {
+				"title": "Vyuo zaidi",
+				"body": "Vyuo vilivyofikiwa Mwaka wa 2. Mwaka wa 1 ulifikia zaidi ya 25.",
+				"alt": "Wanawake wawili vijana wakiandika msimbo pamoja kwenye bootcamp ya chuoni"
+			},
+			"countries": {
+				"title": "Nchi zaidi",
+				"body": "Nchi zilizofikiwa Mwaka wa 2. Mwaka wa 1 ulifikia tano.",
+				"alt": "Washiriki wameketi kwenye ukumbi wa mihadhara wakati wa kikao cha chuoni"
+			}
+		},
+		"academyPill": "Kinachofuata · Mwaka wa 3 unaanza",
+		"academyFirst": "Kisha, kujifunza kunakotoshea",
+		"academySecond": "mfukoni.",
+		"academyDescription": "Tarehe {date} Academy inafungua kozi yake ya kwanza mtandaoni, AI kwa Fursa Yako Ijayo, iliyotengenezwa pamoja na Ordina. Inafanya kazi kwenye simu yoyote na inaisha kwa cheti ambacho mwajiri anaweza kukihakiki kwa kubofya mara moja. Itahesabiwa kwenye ripoti ya Mwaka wa 3.",
+		"academyAlt": "Msichana akijifunza kwenye kompyuta mpakato nje",
+		"launches": "Inazinduliwa",
+		"free": "Bure",
+		"freeLabel": "kozi ya mtandaoni, yenye cheti kinachohakikiwa",
+		"exploreAcademy": "Gundua Academy",
+		"quotesFirst": "Maneno yao,",
+		"quotesSecond": "si yetu.",
+		"quotesEmptyTitle": "Hadithi zinakuja",
+		"quotesEmptyBody": "Tunakusanya maneno yao kutoka kwa wanaoshauriwa, mabalozi na wahitimu. Kila moja inashirikiwa kwa ruhusa yao.",
+		"partnersLabel": "Imewezekana kwa msaada wa",
+		"newsletterFirst": "Kuwa wa kwanza",
+		"newsletterSecond": "kuisoma.",
+		"newsletterDescription": "Jiandikishe kwa hadithi ya kila mwezi nasi tutakutumia ripoti ya Mwaka wa 2 siku itakapochapishwa.",
+		"howWeCountTitle": "Jinsi tunavyohesabu",
+		"howWeCountBody": "“Ameshauriwa” inamaanisha angalau kikao kimoja kilichokamilika. Takwimu za vyuo zinatoka kwenye karatasi za mahudhurio za mabalozi, na za wahitimu kutoka kwenye rekodi za bootcamp za Academy. Mwaka wa 2 unahusu 1 Sep 2025 hadi 31 Ago 2026.",
+		"donate": "Changia",
+		"year1Report": "Ripoti ya Mwaka wa 1"
 	}
 }

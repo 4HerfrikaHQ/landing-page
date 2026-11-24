@@ -19,7 +19,14 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 					className="aspect-4/3 w-full rounded-2xl object-cover lg:rounded-[20px]"
 				/>
 				<div className="pt-5 lg:pt-2">
-					<p className="text-sm text-muted-foreground">{t(`${key}.label`)}</p>
+					<div className="flex items-center gap-2">
+						<p className="text-sm text-muted-foreground">{t(`${key}.label`)}</p>
+						{report.pending ? (
+							<span className="rounded-full bg-primary-500 px-3 py-1 text-xs font-semibold text-white">
+								{t("year2.comingSoon")}
+							</span>
+						) : null}
+					</div>
 					<h3 className="mt-3 text-[28px] font-bold leading-tight lg:text-4xl">
 						{t(`${key}.title`)}
 					</h3>
@@ -33,7 +40,16 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 									{t(`${key}.${figure.labelKey}`)}
 								</dt>
 								<dd className="text-2xl font-semibold tabular-nums text-secondary-500">
-									{figure.value}
+									{figure.value ?? (
+										<>
+											<span aria-hidden="true" className="text-primary-500/40">
+												—
+											</span>
+											<span className="sr-only">
+												{t("year2.figuresPending")}
+											</span>
+										</>
+									)}
 								</dd>
 							</div>
 						))}
@@ -44,20 +60,24 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 							size="lg"
 							className="min-h-12 gap-2 px-6 font-medium"
 						>
-							{t("readOnline")} <ArrowRight className="size-5" />
+							{report.pending ? t("year2.preview") : t("readOnline")}{" "}
+							<ArrowRight aria-hidden="true" className="size-5" />
 						</Button>
-						<Button
-							href={report.pdfHref}
-							isExternal
-							variant="outline"
-							size="lg"
-							className="min-h-12 gap-2 px-6 font-medium"
-						>
-							<Download className="size-5" /> {t("downloadPdf")}
-						</Button>
+						{report.pdfHref ? (
+							<Button
+								href={report.pdfHref}
+								isExternal
+								variant="outline"
+								size="lg"
+								className="min-h-12 gap-2 px-6 font-medium"
+							>
+								<Download aria-hidden="true" className="size-5" />{" "}
+								{t("downloadPdf")}
+							</Button>
+						) : null}
 					</div>
 					<p className="mt-3 text-xs text-muted-foreground">
-						{t("largeFileNote")}
+						{report.pending ? t("year2.figuresPending") : t("largeFileNote")}
 					</p>
 				</div>
 			</article>

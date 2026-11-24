@@ -687,6 +687,108 @@
 		"goalDescription": "By 2030, 4HerFrika envisions 2 million women and girls empowered across Africa, with the skills and the people to lead.",
 		"ctaFirst": "Help us reach",
 		"ctaSecond": "two million.",
-		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected."
+		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected.",
+		"year2": {
+			"coverAlt": "4HerFrika participants in pink shirts, the cover of the Year 2 report",
+			"label": "Year 2",
+			"title": "From many to a movement",
+			"summary": "The second year of 4HerFrika, counted out loud. The figures are still being gathered.",
+			"comingSoon": "Coming soon",
+			"figuresPending": "Figures land soon",
+			"preview": "Preview the page",
+			"figureGirls": "Girls mentored",
+			"figureCampuses": "Campuses reached",
+			"figureGraduates": "Academy bootcamp graduates",
+			"figureCountries": "Countries"
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Year 2 Impact Report — 4HerFrika",
+			"description": "The 4HerFrika Year 2 impact report: girls mentored, campuses and countries reached, and the graduates who came back to mentor."
+		},
+		"comingSoon": "Coming soon",
+		"heroEyebrow": "Year 2 report · Sept 2025 – Aug 2026",
+		"heroFirst": "From many",
+		"heroSecond": "to a movement.",
+		"heroDescription": "Year 2 of 4HerFrika, counted out loud: the girls we mentored, the campuses and countries we reached, and the graduates who came back to mentor.",
+		"heroAlt": "4HerFrika participants in pink shirts standing together outdoors on campus",
+		"readReport": "Read the report",
+		"downloadPdf": "Download PDF · {size} MB",
+		"getFirst": "Get the report first",
+		"allReports": "All reports",
+		"menuLabel": "Report sections",
+		"menu": {
+			"numbers": "Numbers",
+			"stories": "Stories",
+			"academy": "Academy",
+			"howWeCount": "How we count"
+		},
+		"figures": {
+			"girlsMentored": {
+				"label": "girls mentored",
+				"note": "all-time · Year 1 alone: 3,000+"
+			},
+			"campuses": {
+				"label": "campuses",
+				"note": "Year 2 · Year 1: 25+"
+			},
+			"countries": {
+				"label": "countries",
+				"note": "Year 2 · Year 1: 5"
+			},
+			"graduatesMentoring": {
+				"label": "graduates now mentoring",
+				"note": "Year 2"
+			},
+			"academyGraduates": {
+				"label": "Academy bootcamp graduates",
+				"note": "Year 2"
+			}
+		},
+		"pendingValue": "Figure not published yet",
+		"pendingNote": "Figures land soon",
+		"winsFirst": "Three wins",
+		"winsSecond": "we're proudest of.",
+		"winsIntroMobile": "Swipe through the moments that defined Year 2.",
+		"winsIntro": "These are the moments that defined Year 2.",
+		"wins": {
+			"mentors": {
+				"title": "Graduates became mentors",
+				"body": "Year 1 graduates now mentoring the next cohort.",
+				"alt": "Graduates holding their certificates at a 4HerFrika bootcamp"
+			},
+			"campuses": {
+				"title": "More campuses",
+				"body": "Campuses reached in Year 2. Year 1 reached 25+.",
+				"alt": "Two young women coding together at a campus bootcamp"
+			},
+			"countries": {
+				"title": "More countries",
+				"body": "Countries reached in Year 2. Year 1 reached five.",
+				"alt": "Participants seated in a lecture hall during a campus session"
+			}
+		},
+		"academyPill": "What's next · Year 3 begins",
+		"academyFirst": "Next, learning that fits",
+		"academySecond": "in a pocket.",
+		"academyDescription": "On {date} the Academy opens its first online course, AI for Your Next Opportunity, made with Ordina. It runs on any phone and ends with a certificate an employer can check in one click. It will be counted in the Year 3 report.",
+		"academyAlt": "A young woman learning on a laptop outdoors",
+		"launches": "Launches",
+		"free": "Free",
+		"freeLabel": "online course, with a verifiable certificate",
+		"exploreAcademy": "Explore the Academy",
+		"quotesFirst": "Her words,",
+		"quotesSecond": "not ours.",
+		"quotesEmptyTitle": "Stories are on the way",
+		"quotesEmptyBody": "We are collecting her words from mentees, ambassadors and graduates. Each one is shared with her permission.",
+		"partnersLabel": "Made possible with",
+		"newsletterFirst": "Be the first",
+		"newsletterSecond": "to read it.",
+		"newsletterDescription": "Subscribe to the monthly story and we will send you the Year 2 report the day it is published.",
+		"howWeCountTitle": "How we count",
+		"howWeCountBody": "“Mentored” means at least one completed session. Campus numbers come from ambassador sign-in sheets, and graduate numbers from Academy bootcamp records. Year 2 covers 1 Sept 2025 to 31 Aug 2026.",
+		"donate": "Donate",
+		"year1Report": "Year 1 report"
 	}
 }
