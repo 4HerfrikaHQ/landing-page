@@ -2,7 +2,14 @@ import { db, schema } from "@/src/db";
 import { and, desc, eq, gte, isNotNull, sql } from "drizzle-orm";
 import { getBlogPosts } from "../blog/_actions";
 import { getHeroMentors } from "../careercorner/_actions";
-import { firstName, mentorCreditName } from "./_helpers";
+import { projects } from "../projects/_schema";
+import {
+	type HomeStory,
+	firstName,
+	mentorCreditName,
+	newestFirst,
+	plainExcerpt,
+} from "./_helpers";
 import { STORY_COUNT } from "./_schema";
 
 const TESTIMONIAL_LIMIT = 6;
@@ -67,12 +74,48 @@ async function orEmpty<T>(source: string, load: () => Promise<T[]>) {
 }
 
 export async function getHomeContent() {
-	const [mentors, posts, testimonials] = await Promise.all([
+	const [mentors, stories, testimonials] = await Promise.all([
 		orEmpty("mentors", getHeroMentors),
-		orEmpty("stories", async () =>
-			(await getBlogPosts()).slice(0, STORY_COUNT),
-		),
+		orEmpty("stories", getHomeStories),
 		orEmpty("testimonials", getHomeTestimonials),
 	]);
-	return { mentors, posts, testimonials };
+	return { mentors, stories, testimonials };
+}
+
+function projectStories(): HomeStory[] {
+	return Object.entries(projects).map(([slug, project]) => ({
+		id: `project-${slug}`,
+		href: `/projects/${slug}`,
+		title: project.title,
+		category: null,
+		isProject: true,
+		date: project.date,
+		imageUrl: project.cover,
+		imageAlt: project.title,
+		excerpt: plainExcerpt(project.content),
+	}));
+}
+
+async function postStories(): Promise<HomeStory[]> {
+	const posts = await getBlogPosts();
+	return posts.map((post) => ({
+		id: post.id,
+		href: `/blog/${post.uid}`,
+		title: post.data.title ?? "",
+		category:
+			(post.data.category as { data?: { name?: string } }).data?.name ?? null,
+		isProject: false,
+		date: post.first_publication_date,
+		imageUrl: post.data.cover_image?.url ?? null,
+		imageAlt: post.data.cover_image?.alt ?? post.data.title ?? "",
+		excerpt: post.data.description ?? "",
+	}));
+}
+
+async function getHomeStories() {
+	const posts = await postStories().catch((error: unknown) => {
+		console.error("[home] stories failed", error);
+		return [];
+	});
+	return newestFirst([...posts, ...projectStories()], STORY_COUNT);
 }

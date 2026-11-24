@@ -1,15 +1,13 @@
 import { FadeIn } from "@/components/motion";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
-import type { Content } from "@prismicio/client";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import Image from "next/image";
+import type { HomeStory } from "../_helpers";
 import { PillLink } from "./pill-link";
 import { SectionHeading } from "./section-heading";
-
-type Post = Content.BlogPostDocument;
 
 const CARD_CLASSES =
 	"group flex flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:rounded-[20px]";
@@ -38,27 +36,25 @@ function StoryImage({
 }
 
 async function StoryCard({
-	post,
+	story,
 	variant,
-}: { post: Post; variant: "featured" | "regular" | "desktopOnly" }) {
+}: { story: HomeStory; variant: "featured" | "regular" | "desktopOnly" }) {
 	const [t, format] = await Promise.all([
 		getTranslations("home.stories"),
 		getFormatter(),
 	]);
-	const category = (post.data.category as { data?: { name?: string } }).data
-		?.name;
-	const date = post.first_publication_date
-		? format.dateTime(new Date(post.first_publication_date), {
+	const label = story.isProject ? t("project") : (story.category ?? t("story"));
+	const date = story.date
+		? format.dateTime(new Date(story.date), {
 				dateStyle: "medium",
 			})
 		: "";
-	const meta = [category, date].filter(Boolean).join(" · ");
-	const title = post.data.title ?? "";
+	const meta = [label, date].filter(Boolean).join(" · ");
 	const isFeatured = variant === "featured";
 
 	return (
 		<Link
-			href={`/blog/${post.uid}` as Route}
+			href={story.href as Route}
 			className={cn(
 				CARD_CLASSES,
 				isFeatured && "lg:col-span-2 lg:grid lg:h-100 lg:grid-cols-[1.1fr_1fr]",
@@ -67,8 +63,8 @@ async function StoryCard({
 			)}
 		>
 			<StoryImage
-				url={post.data.cover_image?.url}
-				alt={post.data.cover_image?.alt ?? title}
+				url={story.imageUrl}
+				alt={story.imageAlt}
 				className={cn(
 					"aspect-3/2 w-full",
 					isFeatured ? "lg:aspect-auto lg:h-full" : "lg:aspect-auto lg:h-55",
@@ -84,7 +80,7 @@ async function StoryCard({
 						isFeatured ? "text-2xl" : "text-lg",
 					)}
 				>
-					{title}
+					{story.title}
 				</h3>
 				<p
 					className={cn(
@@ -92,7 +88,7 @@ async function StoryCard({
 						isFeatured ? "line-clamp-4" : "line-clamp-2",
 					)}
 				>
-					{post.data.description}
+					{story.excerpt}
 				</p>
 				<span className="mt-auto inline-flex items-center gap-1.5 pt-4 font-medium text-primary-500">
 					{t("read")}
@@ -112,8 +108,8 @@ function variantFor(index: number) {
 	return "desktopOnly";
 }
 
-export async function StoriesSection({ posts }: { posts: Post[] }) {
-	if (posts.length === 0) return null;
+export async function StoriesSection({ stories }: { stories: HomeStory[] }) {
+	if (stories.length === 0) return null;
 	const t = await getTranslations("home.stories");
 
 	return (
@@ -125,8 +121,12 @@ export async function StoriesSection({ posts }: { posts: Post[] }) {
 					second={t("titleSecond")}
 				/>
 				<div className="mt-8 grid gap-5 lg:grid-cols-3">
-					{posts.map((post, index) => (
-						<StoryCard key={post.id} post={post} variant={variantFor(index)} />
+					{stories.map((story, index) => (
+						<StoryCard
+							key={story.id}
+							story={story}
+							variant={variantFor(index)}
+						/>
 					))}
 				</div>
 				<div className="mt-10 text-center">
