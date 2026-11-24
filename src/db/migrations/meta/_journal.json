@@ -225,6 +225,13 @@
       "when": 1794080146318,
       "tag": "0031_mentor_image_crop",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1795531499917,
+      "tag": "0032_academy_learners",
+      "breakpoints": true
     }
   ]
 }

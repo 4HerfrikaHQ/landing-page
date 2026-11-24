@@ -83,3 +83,41 @@ export const testimonials: readonly Review[] = [
 		},
 	},
 ] as const;
+
+export const QuizAttemptLimit = z.discriminatedUnion("kind", [
+	z.object({ kind: z.literal("per_hour"), max: z.number().int().min(1) }),
+	z.object({ kind: z.literal("cooldown"), minutes: z.number().int().min(1) }),
+]);
+export type QuizAttemptLimit = z.infer<typeof QuizAttemptLimit>;
+
+export const FailFeedback = z.enum(["score", "score_and_topics"]);
+export type FailFeedback = z.infer<typeof FailFeedback>;
+
+export const CompletionPolicy = z.object({
+	passMarkPercent: z.number().int().min(1).max(100),
+	attemptLimit: QuizAttemptLimit,
+	failFeedback: FailFeedback,
+	revealAnswersOnPass: z.boolean(),
+	videoMustFinish: z.boolean(),
+	readingAck: z.boolean(),
+	sequentialUnlock: z.boolean(),
+	tasksRequired: z.boolean(),
+	minAge: z.number().int().min(13),
+});
+export type CompletionPolicy = z.infer<typeof CompletionPolicy>;
+
+export const LessonKind = z.enum(["video", "reading", "quiz", "task"]);
+export type LessonKind = z.infer<typeof LessonKind>;
+
+export const CourseLesson = z.object({
+	id: z.string(),
+	kind: LessonKind,
+	required: z.boolean(),
+});
+export type CourseLesson = z.infer<typeof CourseLesson>;
+
+export const CourseModule = z.object({
+	key: z.string(),
+	lessons: z.array(CourseLesson),
+});
+export type CourseModule = z.infer<typeof CourseModule>;

@@ -79,3 +79,35 @@ export type {
 	MentorGoogleReauthorizationState as MentorGoogleReauthorizationStateType,
 	MentorGoogleRevocationState as MentorGoogleRevocationStateType,
 } from "./mentor-google-connections";
+
+export { learners } from "./learners";
+export type { DbLearner, DbLearnerInsert } from "./learners";
+
+export { enrolments } from "./enrolments";
+export type { DbEnrolment, DbEnrolmentInsert } from "./enrolments";
+
+export { lessonProgress } from "./lesson-progress";
+export type {
+	DbLessonProgress,
+	DbLessonProgressInsert,
+} from "./lesson-progress";
+
+export { quizAttempts } from "./quiz-attempts";
+export type {
+	DbQuizAttempt,
+	DbQuizAttemptInsert,
+	QuizAnswers,
+} from "./quiz-attempts";
+
+export { taskSubmissions, TaskSubmissionStatus } from "./task-submissions";
+export type {
+	DbTaskSubmission,
+	DbTaskSubmissionInsert,
+} from "./task-submissions";
+
+export { certificates } from "./certificates";
+export type {
+	CertificatePartner,
+	DbCertificate,
+	DbCertificateInsert,
+} from "./certificates";
