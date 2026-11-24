@@ -3,8 +3,8 @@ import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import FourHerfrikaLogo from "../../4herfrika-logo";
 import { BecomeAMentorForm } from "../_components/become-a-mentor-form";
+import { MentorApplyAside } from "../_components/mentor-apply-aside";
 
 export async function generateMetadata({
 	params,
@@ -23,29 +23,31 @@ export default async function ApplyPage({
 }) {
 	const { locale } = await params;
 	setRequestLocale(locale as Locale);
+	const t = await getTranslations("mentorApply");
 
 	return (
-		<main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-surface-pink via-white to-white px-4 py-16">
-			<div
-				aria-hidden
-				className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-surface-pink to-transparent"
-			/>
-			<FadeIn className="relative mx-auto w-full max-w-2xl">
-				<div className="flex flex-col items-center text-center">
-					<FourHerfrikaLogo className="h-10 w-auto" />
-					<h1 className="mt-8 font-heading text-3xl font-semibold tracking-tight text-foreground">
-						Become a 4HerFrika mentor
+		<main className="overflow-x-clip bg-white text-foreground">
+			<div className="mx-auto max-w-6xl px-4 pt-6 pb-16 lg:px-20 lg:pt-12 lg:pb-24">
+				<header className="max-w-2xl">
+					<span className="inline-block rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
+						{t("badge")}
+					</span>
+					<h1 className="mt-4 text-[32px] font-bold leading-tight text-secondary-500 lg:text-5xl">
+						{t("titleFirst")}{" "}
+						<em className="font-playfair font-black text-primary-500">
+							{t("titleSecond")}
+						</em>
 					</h1>
-					<p className="mt-3 max-w-md text-muted-foreground">
-						Tell us a bit about you. Our team reviews every application and
-						reaches out within a few days.
+					<p className="mt-4 text-[15px] leading-relaxed text-muted-foreground lg:text-lg">
+						{t("intro")}
 					</p>
-				</div>
+				</header>
 
-				<div className="mt-10 rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8">
+				<FadeIn className="mt-8 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-8">
 					<BecomeAMentorForm />
-				</div>
-			</FadeIn>
+					<MentorApplyAside />
+				</FadeIn>
+			</div>
 		</main>
 	);
 }

@@ -700,7 +700,6 @@
 	},
 	"onboarding": {
 		"eyebrow": "Intégration mentor",
-		"welcome": "Bienvenue, {name}",
 		"intro": "Définissez vos disponibilités, complétez votre profil et connectez Google Agenda avant de passer en ligne. Vous pourrez tout modifier plus tard depuis votre tableau de bord.",
 		"stepsLabel": "Étapes d'intégration",
 		"step": "Étape {number}",
@@ -756,7 +755,8 @@
 			"calendar_disconnected": "Google Agenda n'est plus connecté. Reconnectez-le avant de passer en ligne.",
 			"bio_too_short": "La bio doit contenir au moins 20 caractères.",
 			"untrusted_image": "Envoyez votre image avec le bouton photo ci-dessus."
-		}
+		},
+		"welcomeFirst": "Bienvenue,"
 	},
 	"availabilityEditor": {
 		"timezone": "Fuseau horaire",
@@ -1173,5 +1173,73 @@
 		"description": "Découvrez ce qu’une deuxième année de mentorat a changé.",
 		"cta": "Lire le rapport",
 		"dismiss": "Masquer cette bannière"
+	},
+	"mentorApply": {
+		"badge": "Devenir mentor",
+		"titleFirst": "Parlez-nous de",
+		"titleSecond": "votre parcours.",
+		"intro": "Parlez-nous un peu de vous. Notre équipe examine chaque candidature et vous répond sous quelques jours.",
+		"formTitle": "Votre candidature",
+		"allRequired": "Tous les champs sont obligatoires.",
+		"aside": {
+			"badge": "Ce que le mentorat implique",
+			"title": "À quoi s'attendre",
+			"timeTitle": "30 minutes par appel",
+			"timeBody": "Chaque appel est un échange gratuit de 30 minutes avec une jeune femme qui est exactement là où vous étiez.",
+			"callsTitle": "Appels sur Google Meet",
+			"callsBody": "Les mentorées choisissent un créneau libre dans votre agenda et reçoivent un lien Google Meet par e-mail.",
+			"scheduleTitle": "Vous fixez votre emploi du temps",
+			"scheduleBody": "Une fois votre candidature acceptée, vous choisissez vos disponibilités hebdomadaires et connectez Google Agenda. Vous pourrez tout modifier plus tard depuis votre tableau de bord.",
+			"reviewTitle": "Nous lisons chaque candidature",
+			"reviewBody": "Notre équipe lit chaque candidature personnellement et vous répond sous quelques jours."
+		},
+		"fields": {
+			"name": "Nom complet",
+			"email": "Adresse e-mail",
+			"phone": "Téléphone / WhatsApp",
+			"country": "Pays",
+			"linkedin": "URL de votre profil LinkedIn",
+			"linkedinPlaceholder": "https://www.linkedin.com/in/votre-nom",
+			"industry": "Secteur principal",
+			"industryPlaceholder": "p. ex. Tech, Santé, Finance",
+			"bio": "À propos de vous",
+			"bioPlaceholder": "Parlez-nous de votre parcours, de ce que vous faites et de ce qui vous donne envie d'accompagner de jeunes Africaines.",
+			"bioCount": "{count} / 1000",
+			"cv": "CV"
+		},
+		"cv": {
+			"upload": "Téléverser votre CV",
+			"hint": "PDF, DOC ou DOCX, jusqu'à 10 Mo",
+			"remove": "Supprimer le fichier",
+			"uploading": "Téléversement…",
+			"fileType": "Seuls les documents PDF et Word sont acceptés.",
+			"fileSize": "Votre fichier doit faire moins de 10 Mo.",
+			"uploadFailed": "Nous n'avons pas pu téléverser votre CV. Veuillez réessayer."
+		},
+		"errors": {
+			"name": "Saisissez votre nom complet.",
+			"email": "Saisissez une adresse e-mail valide.",
+			"phone": "Saisissez votre numéro de téléphone ou WhatsApp.",
+			"country": "Saisissez votre pays.",
+			"linkedin_url": "Saisissez une URL LinkedIn valide.",
+			"industry": "Saisissez votre secteur principal.",
+			"bio": "Dites-nous-en un peu plus, au moins 10 caractères.",
+			"bioTooLong": "Restez sous 1000 caractères.",
+			"cv_path": "Veuillez téléverser votre CV.",
+			"tooLong": "C'est trop long. Veuillez raccourcir."
+		},
+		"submit": "Envoyer la candidature",
+		"uploadingCv": "Téléversement du CV…",
+		"submitting": "Envoi en cours…",
+		"serverError": "Nous n'avons pas pu envoyer votre candidature. Veuillez réessayer, ou écrivez-nous à hello@4herfrika.org.",
+		"success": {
+			"title": "Candidature reçue",
+			"description": "Merci de nous offrir votre temps. Voici la suite.",
+			"step1Title": "Nous examinons votre candidature",
+			"step1Body": "Notre équipe examine chaque candidature personnellement et vous répond sous quelques jours.",
+			"step2Title": "Vous recevez un lien de configuration",
+			"step2Body": "Si le profil correspond, nous vous envoyons un lien pour configurer votre profil de mentor et vos disponibilités.",
+			"back": "Retour aux mentors"
+		}
 	}
 }
