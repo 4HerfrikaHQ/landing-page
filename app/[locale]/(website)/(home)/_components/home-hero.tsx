@@ -1,9 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import { HeroMorphWord } from "./hero-morph-word";
 import { PillLink } from "./pill-link";
 
 export async function HomeHero() {
 	const t = await getTranslations("home.hero");
+	const morphWords = t.raw("morphWords") as string[];
 
 	return (
 		<section
@@ -24,11 +26,19 @@ export async function HomeHero() {
 					{t("badge")}
 				</span>
 				<h1 className="text-[44px] font-medium leading-[1.05] tracking-tight lg:text-[76px]">
-					{t("titleFirst")}
-					<br />
-					<em className="font-playfair font-black text-primary-bright">
-						{t("titleSecond")}
-					</em>
+					<span className="sr-only">
+						{t("titleFirst")}{" "}
+						{t.rich("titleSecond", { word: (chunks) => chunks })}
+					</span>
+					<span aria-hidden="true">
+						{t("titleFirst")}
+						<br />
+						<em className="font-playfair font-black text-primary-bright">
+							{t.rich("titleSecond", {
+								word: () => <HeroMorphWord words={morphWords} />,
+							})}
+						</em>
+					</span>
 				</h1>
 				<p className="max-w-2xl text-base leading-relaxed text-white/85 lg:text-xl">
 					{t("description")}
