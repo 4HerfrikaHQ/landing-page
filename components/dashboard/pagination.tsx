@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import type { TransitionStartFunction } from "react";
+import type { ReactNode, TransitionStartFunction } from "react";
 
 import { cn } from "@/utils/cn";
 
@@ -19,6 +19,26 @@ function pageItems(current: number, last: number): (number | "ellipsis")[] {
 	return items;
 }
 
+export interface PaginationLabels {
+	previous: string;
+	next: string;
+	goToPage: (page: number) => string;
+	range: (range: { start: number; end: number; total: number }) => ReactNode;
+}
+
+const DEFAULT_LABELS: PaginationLabels = {
+	previous: "Previous page",
+	next: "Next page",
+	goToPage: (page) => `Go to page ${page}`,
+	range: ({ start, end, total }) => (
+		<>
+			Showing <span className="font-medium text-foreground">{start}</span>–
+			<span className="font-medium text-foreground">{end}</span> of{" "}
+			<span className="font-medium text-foreground">{total}</span>
+		</>
+	),
+};
+
 /**
  * URL-driven pager. Writes the `page` param with `shallow: false` so the server
  * query refetches. Shows a result range, numbered pages (jump to any page), and
@@ -30,12 +50,14 @@ export function Pagination({
 	total,
 	startTransition,
 	className,
+	labels = DEFAULT_LABELS,
 }: {
 	page: number;
 	pageSize: number;
 	total: number;
 	startTransition?: TransitionStartFunction;
 	className?: string;
+	labels?: PaginationLabels;
 }) {
 	const [, setPage] = useQueryState(
 		"page",
@@ -62,15 +84,13 @@ export function Pagination({
 			)}
 		>
 			<p className="text-sm text-muted-foreground tabular-nums">
-				Showing <span className="font-medium text-foreground">{start}</span>–
-				<span className="font-medium text-foreground">{end}</span> of{" "}
-				<span className="font-medium text-foreground">{total}</span>
+				{labels.range({ start, end, total })}
 			</p>
 
 			<div className="flex items-center gap-1.5">
 				<button
 					type="button"
-					aria-label="Previous page"
+					aria-label={labels.previous}
 					onClick={() => goTo(page - 1)}
 					disabled={page <= 1}
 					className={arrowClass}
@@ -90,7 +110,7 @@ export function Pagination({
 						<button
 							key={item}
 							type="button"
-							aria-label={`Go to page ${item}`}
+							aria-label={labels.goToPage(item)}
 							aria-current={item === page ? "page" : undefined}
 							onClick={() => goTo(item)}
 							className={cn(
@@ -107,7 +127,7 @@ export function Pagination({
 
 				<button
 					type="button"
-					aria-label="Next page"
+					aria-label={labels.next}
 					onClick={() => goTo(page + 1)}
 					disabled={page >= lastPage}
 					className={arrowClass}
