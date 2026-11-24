@@ -28,7 +28,7 @@ function AccentedTitle({ title }: { title: string }) {
 function EmptyResults({ query }: { query: string }) {
 	const t = useTranslations("faq");
 	return (
-		<div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-[28px] bg-white px-6 py-12 text-center shadow-sm">
+		<div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-[20px] bg-white px-6 py-12 text-center shadow-sm">
 			<span
 				aria-hidden="true"
 				className="inline-flex size-12 items-center justify-center rounded-pill bg-surface-pink text-primary-500"

@@ -8,7 +8,7 @@ export async function StillStuck() {
 	const t = await getTranslations("faq");
 	return (
 		<section className="px-4 py-14 lg:px-20 lg:py-20">
-			<FadeIn className="mx-auto grid max-w-6xl items-center gap-8 overflow-hidden rounded-[28px] bg-surface-pink p-6 lg:grid-cols-[1fr_auto] lg:rounded-[40px] lg:p-12">
+			<FadeIn className="mx-auto grid max-w-6xl items-center gap-8 overflow-hidden rounded-[20px] bg-surface-pink p-6 lg:grid-cols-[1fr_auto] lg:rounded-[40px] lg:p-12">
 				<div>
 					<h2 className="text-[32px] font-bold leading-tight lg:text-5xl">
 						{t("stuckFirst")}{" "}
