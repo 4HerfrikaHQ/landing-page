@@ -43,7 +43,7 @@ export async function MentorsSection({ mentors }: { mentors: HeroMentor[] }) {
 						>
 							<Link
 								href={`/careercorner/${mentor.slug}` as Route}
-								className="group block rounded-[24px] outline-none hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
+								className="group block rounded-[24px] hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
 							>
 								<MentorImage
 									src={mentor.image}

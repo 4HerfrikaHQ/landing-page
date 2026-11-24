@@ -10,7 +10,7 @@ import { PillLink } from "./pill-link";
 import { SectionHeading } from "./section-heading";
 
 const CARD_CLASSES =
-	"group flex flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] outline-none hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:rounded-[20px]";
+	"group flex flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:rounded-[20px]";
 
 function StoryImage({
 	url,

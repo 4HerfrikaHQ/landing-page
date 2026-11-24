@@ -43,7 +43,7 @@ export async function TestimonialsSection({
 						<li key={item.id} className="contents">
 							<Link
 								href={`/careercorner/${item.mentorSlug}` as Route}
-								className="group flex flex-col rounded-[20px] bg-white p-6 shadow-sm outline-none hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
+								className="group flex flex-col rounded-[20px] bg-white p-6 shadow-sm hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
 							>
 								<figure className="flex h-full flex-col">
 									<blockquote className="line-clamp-6 text-lg leading-relaxed">

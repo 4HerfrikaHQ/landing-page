@@ -4,7 +4,7 @@ import type { Route } from "next";
 import type { ReactNode } from "react";
 
 const BASE =
-	"inline-flex h-12 items-center justify-center rounded-full px-6 font-medium whitespace-nowrap outline-none transition-[filter,background-color,color] duration-200 hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-2";
+	"inline-flex h-12 items-center justify-center rounded-full px-6 font-medium whitespace-nowrap transition-[filter,background-color,color] duration-200 hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-2";
 
 const VARIANTS = {
 	solid:
