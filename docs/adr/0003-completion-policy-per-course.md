@@ -20,7 +20,7 @@ amends: 0002
 | Reading counts as done | the Learner taps Continue | the Learner taps "I have read this" |
 | Modules unlock | all open | in order: video, reading and quiz done |
 | Tasks | none | required, marked Complete by a Facilitator |
-| Certificate issuer line | 4HerFrika with the Course's Partners | "Issued by 4HerFrika", one programme-lead signature, "Course content by Ordina" |
+| Certificate issuer line | 4HerFrika with the Course's Partners | "Issued by 4HerFrika", signed by 4HerFrika's founder and Hack Angel, "Course content by Ordina" |
 | Certificate verification | public page | public page and QR code; name, course, date and status only |
 | Partner reporting | none | anonymised Cohort report after each quarter, with small groups merged so no Learner can be identified |
 
@@ -30,11 +30,9 @@ amends: 0002
 - **Watch tracking is needed for policies that ask for it.** ADR 0002 rejected it as fakeable. It stays fakeable; we build it because the licence asks, and quizzes still carry integrity.
 - **The policy is stored on the Course** and fixed for a Learner when they enrol, so later edits never move someone's finish line mid-course.
 - **Licence constraints live beside the policy, not in it.** Ordina's licence doesn't allow its material anywhere people who aren't Learners can reach it. So partner videos are not on YouTube: they live in a private Supabase Storage bucket as 480p and 720p MP4s with VTT captions, and the server hands enrolled Learners short-lived signed URLs, played with Vidstack. Owning the player is also what makes "no skipping ahead on first viewing" and resume practical. Every Ordina Course page also carries a "for your own learning, don't share" notice, as the licence asks. This overrides ADR 0002's video decision and its "files on Supabase Storage are ruled out for data cost" reasoning: 480p copies keep a 2,000-Learner pilot inside the Supabase plan's included data, so the monthly cost estimate in ADR 0002 still holds.
-- **Certificates follow the policy.** ADR 0002 puts both logos and two signatories on every Certificate. Under Ordina's policy the Certificate is issued by 4HerFrika with one signature (the programme lead) and the line "Course content by Ordina"; Ordina's logo stays on the course page and card. When a policy requires Tasks, the Certificate is issued in the same transaction as whatever completes the last requirement, which may be a Facilitator marking the final Task Complete.
+- **Certificates follow the policy.** ADR 0002 puts both logos and two signatories on every Certificate. Signatories are set per Course and copied onto each Certificate when it is issued, so a later change never rewrites one already issued. Ordina's Course is co-hosted: its Certificate is issued by 4HerFrika, signed by 4HerFrika's founder and Hack Angel, with the line "Course content by Ordina"; Ordina's logo stays on the course page and card. When a policy requires Tasks, the Certificate is issued in the same transaction as whatever completes the last requirement, which may be a Facilitator marking the final Task Complete.
 - **Deleting an account keeps the learning record.** ADR 0002 said deleting an account deletes progress. Instead, Learner records are not tied to the auth account, so progress, quiz attempts and Certificates survive an account deletion and are removed by an admin on request. Quiz attempts are numbered per lesson with a unique constraint, so a double submit can't slip past the attempt limit.
 - **Revoked Certificates read "withdrawn"** to Learners and employers on the check page; admin screens and data keep "revoked".
+- **Learners must be 16 or older** on every Course, Ordina's included, even though some of the AI tools it teaches set their own 18+ minimum; the details step says so. 4HerFrika's safeguarding process covers Learners under 18.
 - **Launch on 27 Nov** needs only Module 1 under Ordina's policy. Task review can follow, because no Certificate can be issued before the course's final module anyway.
 
-## Open questions
-
-- Minimum age: some of the AI tools this Course teaches set an 18+ minimum. Keep 16+ (with 4HerFrika's safeguarding process for under-18s), or set 18+ for this Course?
