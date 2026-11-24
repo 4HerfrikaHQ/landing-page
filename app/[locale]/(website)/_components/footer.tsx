@@ -129,9 +129,9 @@ export const Footer = async () => {
 					<Link
 						href="/"
 						aria-label={tn("homeLabel")}
-						className="rounded-lg bg-white px-3 py-2 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+						className="rounded-lg p-1 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
 					>
-						<Logo alt="" className="h-9 w-auto" />
+						<Logo alt="" className="h-9 w-auto brightness-0 invert" />
 					</Link>
 					<p className="text-center text-[15px] text-white/85">
 						&copy; {new Date().getFullYear()} 4HerFrika.{" "}
