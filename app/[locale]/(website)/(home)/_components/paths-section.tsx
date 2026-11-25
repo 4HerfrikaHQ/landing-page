@@ -14,15 +14,23 @@ const CARD_CLASSES =
 type CardLinkProps = {
 	href: string;
 	external: boolean;
+	newTabLabel: string;
 	className: string;
 	children: ReactNode;
 };
 
-function CardLink({ href, external, className, children }: CardLinkProps) {
+function CardLink({
+	href,
+	external,
+	newTabLabel,
+	className,
+	children,
+}: CardLinkProps) {
 	if (external) {
 		return (
 			<a href={href} target="_blank" rel="noreferrer" className={className}>
 				{children}
+				<span className="sr-only">{newTabLabel}</span>
 			</a>
 		);
 	}
@@ -53,6 +61,7 @@ export async function PathsSection() {
 							<CardLink
 								href={path.href}
 								external={path.external}
+								newTabLabel={t("newTab")}
 								className={cn(CARD_CLASSES, path.surface)}
 							>
 								<span className="relative block aspect-4/3 w-full overflow-hidden rounded-2xl">

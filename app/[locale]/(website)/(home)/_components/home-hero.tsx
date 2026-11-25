@@ -26,7 +26,7 @@ export async function HomeHero() {
 			<div className="absolute inset-x-4 bottom-10 mx-auto flex max-w-4xl flex-col items-center gap-4 text-center lg:inset-x-0 lg:top-56 lg:bottom-auto">
 				<Link
 					href="/academy"
-					className="press group inline-flex min-h-9 items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground hover:bg-white hover:no-underline focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/60"
+					className="press group inline-flex min-h-11 items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground hover:bg-white hover:no-underline focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/60"
 				>
 					{t("badge")}
 					<ArrowRight

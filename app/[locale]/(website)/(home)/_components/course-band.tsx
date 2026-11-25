@@ -8,7 +8,7 @@ export async function CourseBand() {
 	const t = await getTranslations("home.course");
 
 	return (
-		<section className="flex flex-col overflow-hidden rounded-t-[40px] bg-white lg:h-160 lg:flex-row lg:rounded-t-[64px]">
+		<section className="flex flex-col overflow-hidden rounded-t-[40px] bg-white lg:min-h-160 lg:flex-row lg:rounded-t-[64px]">
 			<div className="bg-secondary-500 px-6 py-14 text-white lg:w-1/2 lg:px-20 lg:py-24">
 				<span className="inline-flex rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("eyebrow")}
