@@ -8,6 +8,7 @@ import {
 	generateCertificateCode,
 	linkedInAddUrl,
 	normaliseCertificateCode,
+	parseCertificateParam,
 	toPublicCertificate,
 	whatsappShareUrl,
 } from "./_helpers";
@@ -196,5 +197,15 @@ describe("toPublicCertificate", () => {
 			withdrawnAt: new Date("2027-01-14T00:00:00Z"),
 		});
 		expect(JSON.stringify(view)).not.toContain("Amara");
+	});
+});
+
+describe("parseCertificateParam", () => {
+	test("decodes an encoded, grouped code", () => {
+		expect(parseCertificateParam("abcd%2Defgh")).toBe("ABCDEFGH");
+	});
+
+	test("returns null for malformed percent-encoding instead of throwing", () => {
+		expect(parseCertificateParam("%E0%A4%A")).toBeNull();
 	});
 });

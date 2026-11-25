@@ -39,6 +39,9 @@ export default async function CompletePage({
 	if (!enrolment?.completed_at) redirect(courseHref);
 	const certificate = await findCertificateByEnrolment(enrolment.id);
 	if (!certificate) redirect(courseHref);
+	if (certificate.revoked_at) {
+		redirect(certificatePath(locale, certificate.code));
+	}
 
 	return (
 		<CompleteScreen

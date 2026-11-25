@@ -38,6 +38,14 @@ export function normaliseCertificateCode(input: string): string | null {
 	return CODE_PATTERN.test(code) ? code : null;
 }
 
+export function parseCertificateParam(raw: string): string | null {
+	try {
+		return normaliseCertificateCode(decodeURIComponent(raw));
+	} catch {
+		return null;
+	}
+}
+
 type SnapshotCourse = {
 	title: string;
 	partners: { name: string; logoUrl: string | null }[];
