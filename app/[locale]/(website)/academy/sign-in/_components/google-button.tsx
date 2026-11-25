@@ -6,26 +6,59 @@ import { useAction } from "next-safe-action/hooks";
 import { continueWithGoogle } from "../_actions";
 import { AuthError } from "./auth-error";
 
-export function GoogleButton({ next }: { next: string }) {
+export function GoogleSignIn({ next }: { next: string }) {
 	const t = useTranslations("academyAuth.signIn");
 	const google = useAction(continueWithGoogle);
 	const busy = google.isPending || google.hasSucceeded;
 	const label = busy ? t("googleOpening") : t("google");
 
 	return (
-		<div className="flex flex-col gap-3">
+		<>
+			<div className="flex flex-col gap-3">
+				<Button
+					type="button"
+					variant="outline"
+					size="lg"
+					disabled={busy}
+					onClick={() => google.execute({ next })}
+					className="h-12 w-full gap-3 border-input py-0 text-base text-foreground hover:bg-muted hover:text-foreground md:py-0 md:text-base"
+				>
+					<GoogleMark />
+					{label}
+				</Button>
+				<AuthError message={google.result.serverError} id="google-error" />
+			</div>
+			<Divider />
+		</>
+	);
+}
+
+export function GoogleSignInSoon() {
+	const t = useTranslations("academyAuth.signIn");
+	return (
+		<>
 			<Button
 				type="button"
 				variant="outline"
 				size="lg"
-				disabled={busy}
-				onClick={() => google.execute({ next })}
-				className="h-12 w-full gap-3 border-input py-0 text-base text-foreground hover:bg-muted hover:text-foreground md:py-0 md:text-base"
+				disabled
+				className="h-12 w-full gap-3 border-input py-0 text-base text-muted-foreground md:py-0 md:text-base"
 			>
 				<GoogleMark />
-				{label}
+				{t("googleSoon")}
 			</Button>
-			<AuthError message={google.result.serverError} id="google-error" />
+			<Divider />
+		</>
+	);
+}
+
+function Divider() {
+	const t = useTranslations("academyAuth.signIn");
+	return (
+		<div className="flex items-center gap-3 text-xs text-muted-foreground">
+			<span className="h-px flex-1 bg-border" />
+			{t("divider")}
+			<span className="h-px flex-1 bg-border" />
 		</div>
 	);
 }

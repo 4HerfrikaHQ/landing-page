@@ -481,7 +481,8 @@
 			"emailHint": "Nous vous enverrons un code à 6 chiffres. Pas de mot de passe.",
 			"sendCode": "Envoyer mon code",
 			"sending": "Envoi de votre code…",
-			"legal": "En continuant, vous acceptez notre <link>politique de confidentialité</link>."
+			"legal": "En continuant, vous acceptez notre <link>politique de confidentialité</link>.",
+			"googleSoon": "Continuer avec Google · bientôt disponible"
 		},
 		"code": {
 			"title": "Vérifiez vos e-mails",

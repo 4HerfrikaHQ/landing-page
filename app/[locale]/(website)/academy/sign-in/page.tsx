@@ -3,8 +3,10 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { AuthCard } from "../_components/auth-card";
 import { afterSignInPath, currentAuthUser } from "../_learner";
+import { GoogleSignIn, GoogleSignInSoon } from "./_components/google-button";
 import { SignInFlow } from "./_components/sign-in-flow";
 import { ACADEMY_HOME_PATH, localizedPath, resolveNext } from "./_helpers";
+import { isGoogleSignInEnabled } from "./_providers";
 
 const CALLBACK_FAILED = "callback_failed";
 
@@ -29,10 +31,11 @@ export default async function SignInPage({
 		error?: string | string[];
 	}>;
 }) {
-	const [params, locale, user] = await Promise.all([
+	const [params, locale, user, googleEnabled] = await Promise.all([
 		searchParams,
 		getLocale(),
 		currentAuthUser(),
+		isGoogleSignInEnabled(),
 	]);
 	const next = resolveNext(
 		firstParam(params.next),
@@ -45,6 +48,9 @@ export default async function SignInPage({
 			<SignInFlow
 				next={next}
 				callbackFailed={firstParam(params.error) === CALLBACK_FAILED}
+				google={
+					googleEnabled ? <GoogleSignIn next={next} /> : <GoogleSignInSoon />
+				}
 			/>
 		</AuthCard>
 	);
