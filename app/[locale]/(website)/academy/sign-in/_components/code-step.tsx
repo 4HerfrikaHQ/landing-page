@@ -80,7 +80,7 @@ export function CodeStep({
 					{t.rich("sentTo", {
 						email: sent.email,
 						strong: (chunks) => (
-							<span className="break-all font-semibold text-foreground">
+							<span className="break-words font-semibold text-foreground">
 								{chunks}
 							</span>
 						),
