@@ -5,6 +5,11 @@ import { Check, ClipboardCopy, Landmark } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+const VALUE_CLASS = {
+	big: "break-all text-[28px] font-semibold tracking-wider",
+	regular: "break-words text-[15px] font-medium leading-snug",
+} as const;
+
 function CopyRow({
 	label,
 	value,
@@ -21,38 +26,35 @@ function CopyRow({
 	copied: string;
 }) {
 	const t = useTranslations("donate");
+	const valueClass = big ? VALUE_CLASS.big : VALUE_CLASS.regular;
+	const isCopied = copied === field;
 	return (
 		<div>
 			<dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 				{label}
 			</dt>
 			<dd className="mt-1 flex items-center gap-3">
-				<span
-					className={`${
-						big
-							? "break-all text-[28px] font-semibold tracking-wider"
-							: "break-words text-[15px] font-medium leading-snug"
-					} font-mono tabular-nums`}
-				>
-					{value}
-				</span>
+				<span className={`${valueClass} font-mono tabular-nums`}>{value}</span>
 				<button
 					type="button"
 					onClick={() => onCopy(value, field)}
-					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-white px-4 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
+					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-4 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
-					<span aria-live="polite" className="inline-flex items-center gap-1.5">
-						{copied === field ? (
-							<>
-								<Check className="size-4 text-green-700" aria-hidden="true" />
-								{t("copied")}
-							</>
-						) : (
-							<>
-								<ClipboardCopy className="size-4" aria-hidden="true" />
-								{t("copy")}
-							</>
-						)}
+					<span aria-live="polite" className="grid">
+						<span
+							data-visible={!isCopied}
+							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
+						>
+							<ClipboardCopy className="size-4" aria-hidden="true" />
+							{t("copy")}
+						</span>
+						<span
+							data-visible={isCopied}
+							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
+						>
+							<Check className="size-4 text-green-700" aria-hidden="true" />
+							{t("copied")}
+						</span>
 					</span>
 					<span className="sr-only">{label}</span>
 				</button>
