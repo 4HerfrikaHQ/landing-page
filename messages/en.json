@@ -286,6 +286,137 @@
 		"subscribeSuccess": "Thanks for subscribing!",
 		"socialLabel": "Social media"
 	},
+	"mentorProfile": {
+		"back": "Back to mentors",
+		"inactivePreview": {
+			"title": "Inactive profile preview.",
+			"adminBody": "This mentor is not currently visible to the public. You can see this page because you are a super admin.",
+			"ownerBody": "This mentor is not currently visible to the public. You can see this page because you are the mentor who owns this profile."
+		},
+		"hero": {
+			"eyebrow": "Career Corner mentor",
+			"titleLead": "Book a call",
+			"titleWith": "with <em>{name}.</em>",
+			"freeThisWeek": "Free this week",
+			"duration": "30 minutes",
+			"meet": "Google Meet",
+			"free": "Free",
+			"bookCta": "Book a call",
+			"photoFallback": "{name}, 4HerFrika mentor",
+			"newTab": "(opens in a new tab)"
+		},
+		"about": {
+			"tag": "About",
+			"title": "Get to know <em>{name}</em>"
+		},
+		"testimonials": {
+			"tag": "Kind words",
+			"title": "What mentees <em>say</em>",
+			"rating": "{rating} out of 5 stars",
+			"from": "{name}, mentee"
+		},
+		"steps": {
+			"tag": "After you book",
+			"title": "What happens next",
+			"one": {
+				"title": "Check your inbox",
+				"body": "A calendar invite with your Google Meet link arrives within minutes. Use the link in your email to reschedule or cancel."
+			},
+			"two": {
+				"title": "{name} reads your notes",
+				"body": "Your notes go to {name} before the call, so the conversation starts where you need it."
+			},
+			"three": {
+				"title": "Meet for 30 minutes",
+				"body": "Join from your phone or laptop. Bring one or two questions."
+			}
+		},
+		"more": {
+			"title": "More mentors <em>like her</em>",
+			"all": "See all mentors",
+			"book": "Book a call"
+		},
+		"volunteer": {
+			"tag": "Give back",
+			"title": "Be the mentor <em>you needed.</em>",
+			"body": "Give 30 minutes to a young woman who's exactly where you once were.",
+			"imageAlt": "Young women in matching pink 4HerFrika t-shirts smiling together outdoors"
+		},
+		"booking": {
+			"title": "Book a 30-min call",
+			"previewTitle": "Booking availability",
+			"subtitle": "Free · Google Meet",
+			"previewOnly": "Preview only. Select a day to check your open times. Booking is disabled while this profile is inactive.",
+			"sheetTitle": "Book with {name}",
+			"close": "Close",
+			"summaryTitle": "30-min call with {name}",
+			"change": "Change time"
+		},
+		"slots": {
+			"previousWeek": "Previous week",
+			"nextWeek": "Next week",
+			"weekRange": "{start} – {end}",
+			"timezone": "Timezone",
+			"loadError": "Couldn't load availability. Try again.",
+			"unavailableTitle": "Bookings are currently unavailable",
+			"unavailableBody": "Please check back later.",
+			"emptyTitle": "No times open this week",
+			"emptyBody": "{name} has nothing open from {range}. Their next times may be a week away.",
+			"tryNextWeek": "Try next week",
+			"pickDay": "Pick a day",
+			"noTimesDay": "No times open on this day.",
+			"today": "today",
+			"allTimesIn": "All times shown in {timezone}."
+		},
+		"form": {
+			"name": "Name",
+			"namePlaceholder": "Your full name",
+			"email": "Email",
+			"emailPlaceholder": "you@example.com",
+			"gender": "Gender",
+			"female": "Female",
+			"male": "Male",
+			"nonBinary": "Non-binary",
+			"preferNotToSay": "Prefer not to say",
+			"select": "Select",
+			"discuss": "What do you want to discuss?",
+			"discussPlaceholder": "Share a few notes so your mentor can prepare.",
+			"discussHint": "At least 20 characters.",
+			"more": "More about you",
+			"optional": "Optional",
+			"country": "Country",
+			"careerStage": "Career stage",
+			"student": "Student",
+			"earlyCareer": "Early career",
+			"midCareer": "Mid career",
+			"founder": "Founder",
+			"other": "Other",
+			"phone": "Phone / WhatsApp",
+			"linkedin": "LinkedIn / portfolio URL",
+			"confirm": "Confirm booking",
+			"confirming": "Booking…",
+			"errorTitle": "We couldn't book that time",
+			"errorFallback": "Couldn't book. Please try again.",
+			"pickAnother": "Pick another time",
+			"errors": {
+				"name": "Enter your name (at least 2 characters).",
+				"email": "Enter a valid email address.",
+				"purpose": "Tell the mentor a bit more, at least 20 characters.",
+				"linkedin": "Enter a full link, starting with https://."
+			}
+		},
+		"confirmed": {
+			"title": "You're booked with <em>{name}.</em>",
+			"body": "Your invite and Google Meet link are on their way to {email}.",
+			"when": "When",
+			"where": "Where",
+			"whereValue": "Google Meet",
+			"whereNote": "link in your invite",
+			"manage": "Need to move it? Use “Manage booking” in your email to reschedule or cancel.",
+			"back": "Back to mentors",
+			"done": "Done"
+		}
+	},
 	"careers": {
 		"title": "Career Corner",
 		"heroText": "Find the Mentor Who Gets Your Path",

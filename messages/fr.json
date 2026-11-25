@@ -92,6 +92,137 @@
 		"searchPlaceholder": "Rechercher un article",
 		"welcome": "Bienvenue sur"
 	},
+	"mentorProfile": {
+		"back": "Retour aux mentors",
+		"inactivePreview": {
+			"title": "Aperçu d'un profil inactif.",
+			"adminBody": "Ce mentor n'est pas visible du public pour le moment. Vous voyez cette page parce que vous êtes super administrateur.",
+			"ownerBody": "Ce mentor n'est pas visible du public pour le moment. Vous voyez cette page parce que vous êtes le mentor propriétaire de ce profil."
+		},
+		"hero": {
+			"eyebrow": "Mentor Career Corner",
+			"titleLead": "Réservez un appel",
+			"titleWith": "avec <em>{name}.</em>",
+			"freeThisWeek": "Disponible cette semaine",
+			"duration": "30 minutes",
+			"meet": "Google Meet",
+			"free": "Gratuit",
+			"bookCta": "Prendre rendez-vous",
+			"photoFallback": "{name}, mentor 4HerFrika",
+			"newTab": "(s'ouvre dans un nouvel onglet)"
+		},
+		"about": {
+			"tag": "À propos",
+			"title": "Faites connaissance avec <em>{name}</em>"
+		},
+		"testimonials": {
+			"tag": "Témoignages",
+			"title": "Ce que <em>disent</em> les mentorées",
+			"rating": "{rating} étoiles sur 5",
+			"from": "{name}, mentorée"
+		},
+		"steps": {
+			"tag": "Après la réservation",
+			"title": "La suite des événements",
+			"one": {
+				"title": "Consultez votre boîte mail",
+				"body": "Une invitation avec votre lien Google Meet arrive en quelques minutes. Utilisez le lien de l'e-mail pour reporter ou annuler."
+			},
+			"two": {
+				"title": "{name} lit vos notes",
+				"body": "Vos notes sont transmises à {name} avant l'appel, pour que l'échange parte de ce dont vous avez besoin."
+			},
+			"three": {
+				"title": "Échangez pendant 30 minutes",
+				"body": "Rejoignez l'appel depuis votre téléphone ou votre ordinateur. Préparez une ou deux questions."
+			}
+		},
+		"more": {
+			"title": "D'autres mentors <em>comme elle</em>",
+			"all": "Voir tous les mentors",
+			"book": "Prendre rendez-vous"
+		},
+		"volunteer": {
+			"tag": "Redonner",
+			"title": "Soyez la mentor <em>dont vous aviez besoin.</em>",
+			"body": "Offrez 30 minutes à une jeune femme qui est exactement là où vous étiez.",
+			"imageAlt": "Jeunes femmes souriantes en t-shirts roses 4HerFrika assortis, en plein air"
+		},
+		"booking": {
+			"title": "Réserver un appel de 30 min",
+			"previewTitle": "Disponibilités de réservation",
+			"subtitle": "Gratuit · Google Meet",
+			"previewOnly": "Aperçu uniquement. Sélectionnez un jour pour voir les créneaux libres. La réservation est désactivée tant que ce profil est inactif.",
+			"sheetTitle": "Réserver avec {name}",
+			"close": "Fermer",
+			"summaryTitle": "Appel de 30 min avec {name}",
+			"change": "Changer d'horaire"
+		},
+		"slots": {
+			"previousWeek": "Semaine précédente",
+			"nextWeek": "Semaine suivante",
+			"weekRange": "{start} – {end}",
+			"timezone": "Fuseau horaire",
+			"loadError": "Impossible de charger les disponibilités. Réessayez.",
+			"unavailableTitle": "Les réservations sont momentanément indisponibles",
+			"unavailableBody": "Veuillez revenir plus tard.",
+			"emptyTitle": "Aucun créneau libre cette semaine",
+			"emptyBody": "{name} n'a rien de libre du {range}. Les prochains créneaux peuvent être dans une semaine.",
+			"tryNextWeek": "Essayer la semaine suivante",
+			"pickDay": "Choisissez un jour",
+			"noTimesDay": "Aucun créneau libre ce jour-là.",
+			"today": "aujourd'hui",
+			"allTimesIn": "Tous les horaires sont affichés en {timezone}."
+		},
+		"form": {
+			"name": "Nom",
+			"namePlaceholder": "Votre nom complet",
+			"email": "E-mail",
+			"emailPlaceholder": "vous@exemple.com",
+			"gender": "Genre",
+			"female": "Femme",
+			"male": "Homme",
+			"nonBinary": "Non binaire",
+			"preferNotToSay": "Je préfère ne pas répondre",
+			"select": "Sélectionner",
+			"discuss": "De quoi souhaitez-vous parler ?",
+			"discussPlaceholder": "Partagez quelques notes pour que votre mentor puisse se préparer.",
+			"discussHint": "Au moins 20 caractères.",
+			"more": "En savoir plus sur vous",
+			"optional": "Facultatif",
+			"country": "Pays",
+			"careerStage": "Étape de carrière",
+			"student": "Étudiante",
+			"earlyCareer": "Début de carrière",
+			"midCareer": "Milieu de carrière",
+			"founder": "Fondatrice",
+			"other": "Autre",
+			"phone": "Téléphone / WhatsApp",
+			"linkedin": "Lien LinkedIn / portfolio",
+			"confirm": "Confirmer la réservation",
+			"confirming": "Réservation…",
+			"errorTitle": "Nous n'avons pas pu réserver ce créneau",
+			"errorFallback": "Réservation impossible. Veuillez réessayer.",
+			"pickAnother": "Choisir un autre horaire",
+			"errors": {
+				"name": "Saisissez votre nom (au moins 2 caractères).",
+				"email": "Saisissez une adresse e-mail valide.",
+				"purpose": "Dites-en un peu plus à votre mentor, au moins 20 caractères.",
+				"linkedin": "Saisissez un lien complet, commençant par https://."
+			}
+		},
+		"confirmed": {
+			"title": "Votre appel avec <em>{name}</em> est réservé.",
+			"body": "Votre invitation et votre lien Google Meet sont en route vers {email}.",
+			"when": "Quand",
+			"where": "Où",
+			"whereValue": "Google Meet",
+			"whereNote": "lien dans votre invitation",
+			"manage": "Besoin de le déplacer ? Utilisez « Gérer la réservation » dans votre e-mail pour reporter ou annuler.",
+			"back": "Retour aux mentors",
+			"done": "Terminé"
+		}
+	},
 	"careers": {
 		"attachFile": "Joindre un fichier. La taille de vos documents ne doit pas dépasser 10MB",
 		"availableThisWeek": "Disponible cette semaine",
