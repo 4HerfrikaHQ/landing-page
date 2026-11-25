@@ -7,7 +7,7 @@ export async function PartnersBand() {
 
 	return (
 		<div className="bg-surface-indigo">
-			<section className="flex flex-col overflow-hidden rounded-t-[40px] lg:h-140 lg:flex-row lg:rounded-t-[64px]">
+			<section className="flex flex-col overflow-hidden rounded-t-[40px] lg:min-h-140 lg:flex-row lg:rounded-t-[64px]">
 				<div className="bg-secondary px-6 py-14 text-white lg:flex lg:w-1/2 lg:flex-col lg:justify-center lg:px-20 lg:py-20">
 					<span className="w-fit rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 						{t("partnersBadge")}
@@ -23,7 +23,7 @@ export async function PartnersBand() {
 					</p>
 					<PartnerButton>{t("partnersCta")}</PartnerButton>
 				</div>
-				<div className="relative aspect-4/3 w-full lg:aspect-auto lg:h-full lg:w-1/2">
+				<div className="relative aspect-4/3 w-full lg:aspect-auto lg:w-1/2">
 					<Image
 						src="/assets/contact/partners.jpg"
 						alt={t("partnersImageAlt")}

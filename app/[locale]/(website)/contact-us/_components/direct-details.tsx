@@ -12,7 +12,7 @@ export async function DirectDetails() {
 	const t = await getTranslations("contact");
 
 	return (
-		<aside className="rounded-[20px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)] ring-1 ring-border lg:sticky lg:top-28 lg:rounded-[20px] lg:p-8">
+		<aside className="rounded-[20px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)] ring-1 ring-border lg:sticky lg:top-28 lg:p-8">
 			<h2 className="text-xl font-semibold">{t("directTitle")}</h2>
 			<ul className="mt-5 flex flex-col gap-2">
 				<li>
@@ -48,7 +48,7 @@ export async function DirectDetails() {
 							href={href}
 							target="_blank"
 							rel="noreferrer"
-							aria-label={name}
+							aria-label={`${name} (${t("opensInNewTab")})`}
 							className="inline-flex size-12 items-center justify-center rounded-full bg-surface-pink text-primary-500 outline-none transition-colors hover:bg-primary-500 hover:text-white focus-visible:ring-2 focus-visible:ring-primary-500"
 						>
 							<Icon className="size-5" />
