@@ -37,16 +37,13 @@ export function GoogleSignInSoon() {
 	const t = useTranslations("academyAuth.signIn");
 	return (
 		<>
-			<Button
-				type="button"
-				variant="outline"
-				size="lg"
-				disabled
-				className="h-12 w-full gap-3 border-input py-0 text-base text-muted-foreground md:py-0 md:text-base"
-			>
+			<div className="flex h-12 w-full items-center justify-center gap-3 rounded-full border border-dashed border-input bg-muted/40 text-base text-foreground/70">
 				<GoogleMark />
-				{t("googleSoon")}
-			</Button>
+				{t("google")}
+				<span className="rounded-full bg-surface-pink px-2.5 py-0.5 text-xs font-semibold text-primary-700">
+					{t("googleSoon")}
+				</span>
+			</div>
 			<Divider />
 		</>
 	);
