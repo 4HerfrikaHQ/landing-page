@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { PendingLabel } from "@/components/ui/pending-label";
 import { type AcademyType, trackEvent } from "@/src/lib/analytics";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -160,7 +161,12 @@ export function WaitlistModal({
 						className="mt-2 h-15 w-full rounded-full text-lg"
 						disabled={action.isPending}
 					>
-						{action.isPending ? t("submitting") : t("submit")}
+						<PendingLabel
+							pending={action.isPending}
+							pendingLabel={t("submitting")}
+						>
+							{t("submit")}
+						</PendingLabel>
 					</Button>
 					<p className="text-center text-sm text-muted-foreground">
 						{t("consent")}

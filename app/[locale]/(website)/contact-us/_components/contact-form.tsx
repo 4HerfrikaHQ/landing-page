@@ -1,8 +1,9 @@
 "use client";
 
+import { PendingLabel } from "@/components/ui/pending-label";
 import { Link } from "@/i18n/navigation";
 import { useSubmit } from "@formspree/react";
-import { ArrowRight, ChevronDown, CircleAlert, Loader2 } from "lucide-react";
+import { ArrowRight, ChevronDown, CircleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { FormEvent } from "react";
 import { useReducer, useRef } from "react";
@@ -300,7 +301,10 @@ export function ContactForm() {
 				disabled={submitting}
 				className="mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary-500 px-6 text-base font-medium text-white outline-none transition hover:brightness-90 focus-visible:ring-4 focus-visible:ring-primary-500/30 disabled:cursor-not-allowed disabled:opacity-60 lg:w-auto lg:px-10"
 			>
-				<SubmitLabel submitting={submitting} />
+				<PendingLabel pending={submitting} pendingLabel={t("sending")}>
+					{t("send")}
+					<ArrowRight className="size-5" aria-hidden="true" />
+				</PendingLabel>
 			</button>
 			<p className="mt-3 text-sm text-muted-foreground">
 				{t("privacyNote")}{" "}
@@ -312,26 +316,5 @@ export function ContactForm() {
 				</Link>
 			</p>
 		</form>
-	);
-}
-
-function SubmitLabel({ submitting }: { submitting: boolean }) {
-	const t = useTranslations("contact");
-	if (submitting) {
-		return (
-			<>
-				<Loader2
-					className="size-5 animate-spin motion-reduce:animate-none"
-					aria-hidden="true"
-				/>
-				{t("sending")}
-			</>
-		);
-	}
-	return (
-		<>
-			{t("send")}
-			<ArrowRight className="size-5" aria-hidden="true" />
-		</>
 	);
 }

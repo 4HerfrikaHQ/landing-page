@@ -51,10 +51,10 @@ export function MobileNav() {
 			</nav>
 
 			<SheetContent
-				side="right"
+				side="top"
 				showCloseButton={false}
-				overlayClassName="z-70"
-				className="z-80 h-dvh gap-0 p-3 data-[side=right]:w-full data-[side=right]:sm:max-w-none"
+				overlayClassName="z-70 duration-250 ease-(--ease-drawer) data-ending-style:duration-200"
+				className="z-80 h-dvh gap-0 p-3 duration-250 ease-(--ease-drawer) data-ending-style:duration-200 data-[side=top]:data-ending-style:-translate-y-4 data-[side=top]:data-starting-style:-translate-y-4"
 			>
 				<div className="flex h-14 shrink-0 items-center justify-between pr-1.5 pl-4">
 					<Link

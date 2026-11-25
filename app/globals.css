@@ -441,3 +441,22 @@ body:has(.impact-banner) footer {
 		transform: none;
 	}
 }
+
+@supports selector(::details-content) {
+	.faq-item::details-content {
+		height: 0;
+		overflow: clip;
+		transition: height 200ms var(--ease-out-strong), content-visibility 200ms
+			allow-discrete;
+	}
+
+	.faq-item[open]::details-content {
+		height: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.faq-item::details-content {
+			transition: none;
+		}
+	}
+}
