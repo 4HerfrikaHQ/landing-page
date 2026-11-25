@@ -6,13 +6,23 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { usageItems } from "../_data/brand-assets";
 import {
+	LOGO_HEIGHT_PX,
+	LOGO_WIDTH_PX,
+	MIN_LOGO_WIDTH_PX,
+	type UsageId,
+	type UsageKind,
+	usageId,
+	usageKind,
+} from "../_schema";
+import {
 	CARD_CLASS,
 	CONTAINER_CLASS,
 	SECTION_CLASS,
 	SectionHeading,
 } from "./section-heading";
 
-type UsageId = (typeof usageItems)[number]["id"];
+const BUSY_BACKGROUND_CLASS =
+	"bg-[repeating-linear-gradient(45deg,#03065c_0_10px,#e20064_10px_20px,#ffffff_20px_30px)]";
 
 function Logo({
 	file = "4herfrika-logo",
@@ -23,8 +33,8 @@ function Logo({
 		<Image
 			src={`/brand/${file}.svg`}
 			alt=""
-			width={6000}
-			height={1696}
+			width={LOGO_WIDTH_PX}
+			height={LOGO_HEIGHT_PX}
 			unoptimized
 			className={className}
 			style={style}
@@ -33,7 +43,7 @@ function Logo({
 }
 
 const PREVIEWS: Record<UsageId, { dark: boolean; node: ReactNode }> = {
-	clearSpace: {
+	[usageId.enum.clearSpace]: {
 		dark: false,
 		node: (
 			<div className="border border-dashed border-primary-500 p-4">
@@ -41,21 +51,26 @@ const PREVIEWS: Record<UsageId, { dark: boolean; node: ReactNode }> = {
 			</div>
 		),
 	},
-	minSize: {
+	[usageId.enum.minSize]: {
 		dark: false,
 		node: (
 			<div className="flex flex-col items-center gap-2">
-				<Logo className="w-30" />
-				<span className="h-px w-30 bg-primary-500" />
-				<span className="text-xs font-medium text-primary-500">120px</span>
+				<Logo style={{ width: MIN_LOGO_WIDTH_PX }} />
+				<span
+					style={{ width: MIN_LOGO_WIDTH_PX }}
+					className="h-px bg-primary-500"
+				/>
+				<span className="text-xs font-medium text-primary-500">
+					{MIN_LOGO_WIDTH_PX}px
+				</span>
 			</div>
 		),
 	},
-	onDark: {
+	[usageId.enum.onDark]: {
 		dark: true,
 		node: <Logo file="4herfrika-logo-on-dark" className="h-8 w-auto" />,
 	},
-	distort: {
+	[usageId.enum.distort]: {
 		dark: false,
 		node: (
 			<Logo
@@ -64,7 +79,7 @@ const PREVIEWS: Record<UsageId, { dark: boolean; node: ReactNode }> = {
 			/>
 		),
 	},
-	effects: {
+	[usageId.enum.effects]: {
 		dark: false,
 		node: (
 			<Logo
@@ -73,16 +88,24 @@ const PREVIEWS: Record<UsageId, { dark: boolean; node: ReactNode }> = {
 			/>
 		),
 	},
-	busy: {
+	[usageId.enum.busy]: {
 		dark: true,
 		node: <Logo className="h-8 w-auto" />,
 	},
 };
 
-function UsageCard({ id, kind }: { id: UsageId; kind: "do" | "dont" }) {
+function UsageCard({ id, kind }: { id: UsageId; kind: UsageKind }) {
 	const t = useTranslations("brand.usage");
 	const preview = PREVIEWS[id];
-	const isDo = kind === "do";
+	const isDo = kind === usageKind.enum.do;
+	const KindIcon = isDo ? Check : X;
+	const badgeClass = isDo ? "bg-emerald-700" : "bg-primary-500";
+	const kindLabel = isDo ? t("doLabel") : t("dontLabel");
+	const surfaceClass = preview.dark
+		? "bg-secondary-500"
+		: "border border-black/10 bg-white";
+	const backgroundClass =
+		id === usageId.enum.busy ? BUSY_BACKGROUND_CLASS : surfaceClass;
 
 	return (
 		<li className={cn(CARD_CLASS, "flex flex-col p-3")}>
@@ -90,9 +113,7 @@ function UsageCard({ id, kind }: { id: UsageId; kind: "do" | "dont" }) {
 				aria-hidden="true"
 				className={cn(
 					"relative flex h-32 items-center justify-center overflow-hidden rounded-[14px]",
-					preview.dark ? "bg-secondary-500" : "border border-black/10 bg-white",
-					id === "busy" &&
-						"bg-[repeating-linear-gradient(45deg,#03065c_0_10px,#e20064_10px_20px,#ffffff_20px_30px)]",
+					backgroundClass,
 				)}
 			>
 				{preview.node}
@@ -101,20 +122,14 @@ function UsageCard({ id, kind }: { id: UsageId; kind: "do" | "dont" }) {
 				<span
 					className={cn(
 						"mt-0.5 grid size-7 shrink-0 place-items-center rounded-full text-white",
-						isDo ? "bg-emerald-700" : "bg-primary-500",
+						badgeClass,
 					)}
 				>
-					{isDo ? (
-						<Check aria-hidden="true" className="size-4" />
-					) : (
-						<X aria-hidden="true" className="size-4" />
-					)}
+					<KindIcon aria-hidden="true" className="size-4" />
 				</span>
 				<div>
 					<h3 className="text-lg font-bold text-secondary-500">
-						<span className="sr-only">
-							{isDo ? t("doLabel") : t("dontLabel")}:{" "}
-						</span>
+						<span className="sr-only">{kindLabel}: </span>
 						{t(`items.${id}.title`)}
 					</h3>
 					<p className="mt-1 text-[15px] leading-6 text-muted-foreground">

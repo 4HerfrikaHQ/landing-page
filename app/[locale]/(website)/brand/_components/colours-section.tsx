@@ -6,6 +6,7 @@ import {
 	logoColours,
 	websiteColours,
 } from "../_data/brand-assets";
+import { type SwatchGroupId, swatchInk } from "../_schema";
 import { CopyHexButton } from "./copy-hex-button";
 import {
 	CARD_CLASS,
@@ -16,6 +17,8 @@ import {
 
 function SwatchCard({ swatch }: { swatch: Swatch }) {
 	const t = useTranslations("brand.colours");
+	const inkClass =
+		swatch.ink === swatchInk.enum.light ? "text-white" : "text-secondary-500";
 
 	return (
 		<li className={cn(CARD_CLASS, "overflow-hidden")}>
@@ -23,7 +26,7 @@ function SwatchCard({ swatch }: { swatch: Swatch }) {
 				style={{ backgroundColor: swatch.hex }}
 				className={cn(
 					"h-24 border-b border-black/5 p-4 text-sm font-medium",
-					swatch.ink === "light" ? "text-white" : "text-secondary-500",
+					inkClass,
 				)}
 				aria-hidden="true"
 			>
@@ -48,7 +51,7 @@ function SwatchGroup({
 	id,
 	swatches,
 	columns,
-}: { id: "logo" | "website"; swatches: Swatch[]; columns: string }) {
+}: { id: SwatchGroupId; swatches: Swatch[]; columns: string }) {
 	const t = useTranslations("brand.colours");
 
 	return (
