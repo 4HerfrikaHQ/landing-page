@@ -35,10 +35,11 @@ export function CompleteScreen({
 	const locale = useLocale();
 	const counts = courseCounts(course);
 	const stats = [
-		counts.modules > 0 && t("modules", { count: counts.modules }),
-		counts.quizzes > 0 && t("quizzes", { count: counts.quizzes }),
-		counts.tasks > 0 && t("tasks", { count: counts.tasks }),
-	].filter(Boolean);
+		counts.modules > 0 ? t("modules", { count: counts.modules }) : null,
+		counts.quizzes > 0 ? t("quizzes", { count: counts.quizzes }) : null,
+		counts.tasks > 0 ? t("tasks", { count: counts.tasks }) : null,
+	].filter((stat) => stat !== null);
+	const statsLead = stats.length > 0 ? `${stats.join(", ")}. ` : "";
 
 	return (
 		<main className="relative overflow-hidden bg-linear-to-b from-surface-pink via-white to-white px-5 pb-16 pt-10 lg:px-8 lg:py-20">
@@ -59,8 +60,7 @@ export function CompleteScreen({
 						</em>
 					</h1>
 					<p className="max-w-xl text-lg leading-7 text-muted-foreground">
-						{stats.join(", ")}
-						{stats.length > 0 ? ". " : ""}
+						{statsLead}
 						{t("oneCertificate")}
 					</p>
 					<div className="max-lg:hidden">

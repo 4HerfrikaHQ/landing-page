@@ -29,10 +29,13 @@ export async function sendCertificateReadyEmail(input: CertificateEmail) {
 	const firstName = input.name.split(/\s+/)[0];
 	const link = certificateUrl(siteUrl(), input.locale, input.code);
 	const resend = new Resend(resendApiKey);
-	await resend.emails.send({
-		from: FROM,
-		to: input.to,
-		subject: t("subject"),
-		text: `${t("greeting", { name: firstName })}\n\n${t("body", { course: input.courseTitle })}\n\n${link}\n\n${t("share")}\n\n${t("certificateId", { code: formatCertificateCode(input.code) })}\n\n${t("signoff")}\n\n${t("footer")}`,
-	});
+	await resend.emails.send(
+		{
+			from: FROM,
+			to: input.to,
+			subject: t("subject"),
+			text: `${t("greeting", { name: firstName })}\n\n${t("body", { course: input.courseTitle })}\n\n${link}\n\n${t("share")}\n\n${t("certificateId", { code: formatCertificateCode(input.code) })}\n\n${t("signoff")}\n\n${t("footer")}`,
+		},
+		{ idempotencyKey: `certificate-ready/${input.code}` },
+	);
 }
