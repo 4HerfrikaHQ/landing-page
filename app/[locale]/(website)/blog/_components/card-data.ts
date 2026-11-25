@@ -21,6 +21,7 @@ export function toCardData(
 		excerpt: item.excerpt,
 		imageSrc: item.imageSrc,
 		imageAlt: item.imageAlt,
+		imageFit: item.imageFit,
 		chipLabel: item.categoryName,
 		tone: chipTone(item.categorySlug),
 		meta: [date, read].filter(Boolean).join(" · "),

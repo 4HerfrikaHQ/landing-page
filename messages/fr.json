@@ -701,6 +701,10 @@
 		"careerCta": "Réserver un appel",
 		"inboxTitle": "Recevez la prochaine histoire",
 		"inboxEm": "dans votre boîte mail.",
-		"inboxDescription": "Un e-mail par mois. Désabonnement à tout moment."
+		"inboxDescription": "Un e-mail par mois. Désabonnement à tout moment.",
+		"categoryHeroFirst": "Tout dans",
+		"categoryHeroDescription": "Toutes les histoires et actualités classées dans cette catégorie, racontées par celles qui les vivent.",
+		"opensInNewTab": "(s'ouvre dans un nouvel onglet)",
+		"downloadImage": "Télécharger l'image"
 	}
 }

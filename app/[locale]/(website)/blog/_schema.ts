@@ -1,3 +1,14 @@
+import { z } from "zod";
+
+export const feedItemKindSchema = z.enum(["post", "project"]);
+export type FeedItemKind = z.infer<typeof feedItemKindSchema>;
+
+export const chipToneSchema = z.enum(["navy", "pink", "indigo", "teal"]);
+export type ChipTone = z.infer<typeof chipToneSchema>;
+
+export const imageFitSchema = z.enum(["cover", "contain"]);
+export type ImageFit = z.infer<typeof imageFitSchema>;
+
 export const FEATURED_POSTS = {
 	"stop-the-violence-outreach": {
 		title: "StopTheViolence: Akoka High School Outreach",

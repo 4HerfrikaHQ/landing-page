@@ -8,10 +8,12 @@ import {
 	readingMinutes,
 	relatedItems,
 } from "@/app/[locale]/(website)/blog/_feed";
+import { imageFitSchema } from "@/app/[locale]/(website)/blog/_schema";
 import { formatFeedDate } from "@/app/[locale]/(website)/blog/_utils";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Streamdown } from "streamdown";
 import "streamdown/styles.css";
@@ -34,6 +36,24 @@ export async function generateMetadata({
 		title: project.title,
 		description: projectExcerpt(project.content),
 	};
+}
+
+function PosterCover({
+	src,
+	alt,
+	fit,
+}: { src: string; alt: string; fit: string }) {
+	if (fit !== imageFitSchema.enum.contain) return null;
+	return (
+		<Image
+			src={src}
+			alt={alt}
+			width={1280}
+			height={1280}
+			sizes="(min-width: 1024px) 680px, 100vw"
+			className="mb-8 h-auto w-full rounded-[20px]"
+		/>
+	);
 }
 
 export default async function ProjectPage({
@@ -69,13 +89,24 @@ export default async function ProjectPage({
 				labels.minRead(readingMinutes(project.content)),
 			].join(" · ")}
 			author=""
-			imageSrc={project.cover}
+			imageSrc={
+				project.coverFit === imageFitSchema.enum.cover ? project.cover : ""
+			}
 			imageAlt=""
 			url={absoluteUrl(siteUrl, locale, `/projects/${slug}`)}
 			related={related}
 		>
+			<PosterCover
+				src={project.cover}
+				alt={project.title}
+				fit={project.coverFit}
+			/>
 			<ProjectContent>
-				<Streamdown mode="static" animated>
+				<Streamdown
+					mode="static"
+					animated
+					translations={{ downloadImage: t("downloadImage") }}
+				>
 					{project.content}
 				</Streamdown>
 			</ProjectContent>
