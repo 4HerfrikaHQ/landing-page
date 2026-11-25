@@ -452,6 +452,7 @@
 				"submitting": "Sending…",
 				"reply": "A facilitator will review your work. You can keep learning meanwhile.",
 				"fileSoon": "File uploads are coming soon. For now, paste your work or a link.",
+				"tooShort": "Write at least {min} characters to submit ({remaining} to go).",
 				"noInstructions": "The instructions for this task are being prepared.",
 				"yourSubmission": "Your submission",
 				"sentOn": "Sent {date}",
