@@ -7,7 +7,7 @@ import { FaqHero } from "./_components/faq-hero";
 import { FaqResults } from "./_components/faq-results";
 import { FaqSearch } from "./_components/faq-search";
 import { StillStuck } from "./_components/still-stuck";
-import { buildFaqGroups } from "./_helpers/faq-groups";
+import { type FaqGroup, buildFaqGroups } from "./_helpers/faq-groups";
 import { buildFaqJsonLd } from "./_helpers/faq-json-ld";
 
 export async function generateMetadata({
@@ -35,6 +35,32 @@ async function loadFaq(fallbackTitle: string) {
 	}
 }
 
+function HeroSearch({ groups }: { groups: FaqGroup[] }) {
+	if (groups.length === 0) return null;
+	return <FaqSearch />;
+}
+
+async function FaqBody({ groups }: { groups: FaqGroup[] }) {
+	if (groups.length === 0) {
+		const t = await getTranslations("faq");
+		return (
+			<output className="mx-auto block max-w-xl px-4 py-20 text-center text-lg text-muted-foreground">
+				{t("loadError")}
+			</output>
+		);
+	}
+	return (
+		<>
+			<FaqResults groups={groups} />
+			<script
+				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD with escaped "<"
+				dangerouslySetInnerHTML={{ __html: buildFaqJsonLd(groups) }}
+			/>
+		</>
+	);
+}
+
 export default async function FAQPage({
 	params,
 }: { params: Promise<{ locale: string }> }) {
@@ -45,23 +71,10 @@ export default async function FAQPage({
 	return (
 		<main className="overflow-x-clip bg-white text-foreground">
 			<FaqHero imageUrl={image?.url ?? null} imageAlt={image?.alt ?? ""}>
-				{groups.length > 0 ? <FaqSearch /> : null}
+				<HeroSearch groups={groups} />
 			</FaqHero>
-			{groups.length > 0 ? (
-				<FaqResults groups={groups} />
-			) : (
-				<output className="mx-auto max-w-xl px-4 py-20 text-center text-lg text-muted-foreground">
-					{t("loadError")}
-				</output>
-			)}
+			<FaqBody groups={groups} />
 			<StillStuck />
-			{groups.length > 0 ? (
-				<script
-					type="application/ld+json"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD with escaped "<"
-					dangerouslySetInnerHTML={{ __html: buildFaqJsonLd(groups) }}
-				/>
-			) : null}
 		</main>
 	);
 }

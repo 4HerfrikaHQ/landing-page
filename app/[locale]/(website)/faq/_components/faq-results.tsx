@@ -25,8 +25,9 @@ function AccentedTitle({ title }: { title: string }) {
 	);
 }
 
-function EmptyResults({ query }: { query: string }) {
+function EmptyResults({ query, total }: { query: string; total: number }) {
 	const t = useTranslations("faq");
+	if (total > 0) return null;
 	return (
 		<div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-[20px] bg-white px-6 py-12 text-center shadow-sm">
 			<span
@@ -36,7 +37,7 @@ function EmptyResults({ query }: { query: string }) {
 				<SearchX className="size-6" />
 			</span>
 			<h2 className="text-2xl font-bold">{t("noResultsTitle")}</h2>
-			<p className="text-base text-muted-foreground">
+			<p className="break-words text-base text-muted-foreground [overflow-wrap:anywhere]">
 				{t("noResultsBody", { query })}
 			</p>
 			<button
@@ -78,6 +79,30 @@ function GroupSection({ group }: { group: FaqGroup }) {
 	);
 }
 
+function TopicNav({ groups }: { groups: FaqGroup[] }) {
+	const t = useTranslations("faq");
+	if (groups.length === 0) return null;
+	return (
+		<nav aria-label={t("topicsLabel")} className="border-b border-border">
+			<ul className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:px-20">
+				{groups.map((group) => (
+					<li key={group.id} className="shrink-0">
+						<a
+							href={`#${group.id}`}
+							className="inline-flex h-11 items-center gap-2 rounded-pill border border-border px-4 text-[15px] font-medium outline-none transition-colors hover:border-primary-500 hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500"
+						>
+							{group.title}
+							<span className="text-muted-foreground">
+								{group.items.length}
+							</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	);
+}
+
 export function FaqResults({ groups }: { groups: FaqGroup[] }) {
 	const t = useTranslations("faq");
 	const query = useSyncExternalStore(
@@ -91,23 +116,7 @@ export function FaqResults({ groups }: { groups: FaqGroup[] }) {
 
 	return (
 		<>
-			<nav aria-label={t("topicsLabel")} className="border-b border-border">
-				<ul className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:px-20">
-					{visible.map((group) => (
-						<li key={group.id} className="shrink-0">
-							<a
-								href={`#${group.id}`}
-								className="inline-flex h-11 items-center gap-2 rounded-pill border border-border px-4 text-[15px] font-medium outline-none transition-colors hover:border-primary-500 hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500"
-							>
-								{group.title}
-								<span className="text-muted-foreground">
-									{group.items.length}
-								</span>
-							</a>
-						</li>
-					))}
-				</ul>
-			</nav>
+			<TopicNav groups={visible} />
 			<div
 				id="faq-results"
 				className="scroll-mt-24 bg-primary-500/2 px-4 py-12 lg:px-20 lg:py-20"
@@ -116,7 +125,7 @@ export function FaqResults({ groups }: { groups: FaqGroup[] }) {
 					<output aria-live="polite" className="sr-only">
 						{searching ? t("resultsCount", { count: total }) : ""}
 					</output>
-					{total === 0 ? <EmptyResults query={query.trim()} /> : null}
+					<EmptyResults query={query.trim()} total={total} />
 					{visible.map((group) => (
 						<GroupSection key={group.id} group={group} />
 					))}
