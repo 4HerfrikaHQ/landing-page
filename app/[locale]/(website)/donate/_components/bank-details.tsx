@@ -1,10 +1,16 @@
 "use client";
 
-import { FadeIn } from "@/components/motion";
-import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { Check, ClipboardCopy, Landmark } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+
+const COPIED_RESET_MS = 1_600;
+
+const VALUE_CLASS = {
+	big: "break-all text-[28px] font-semibold tracking-wider",
+	regular: "break-words text-[15px] font-medium leading-snug",
+} as const;
 
 function CopyRow({
 	label,
@@ -13,8 +19,6 @@ function CopyRow({
 	big,
 	onCopy,
 	copied,
-	copyLabel,
-	copiedLabel,
 }: {
 	label: string;
 	value: string;
@@ -22,105 +26,116 @@ function CopyRow({
 	big?: boolean;
 	onCopy: (text: string, field: string) => void;
 	copied: string;
-	copyLabel: string;
-	copiedLabel: string;
 }) {
+	const t = useTranslations("donate");
+	const valueClass = big ? VALUE_CLASS.big : VALUE_CLASS.regular;
+	const isCopied = copied === field;
+	const announcement = isCopied ? t("copied") : "";
 	return (
-		<div className="group">
-			<p className="text-[11px] sm:text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">
+		<div>
+			<dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 				{label}
-			</p>
-			<div className="flex items-center gap-2">
-				<span
-					className={`${
-						big
-							? "text-xl sm:text-2xl font-semibold tracking-wider"
-							: "text-sm sm:text-base font-medium tracking-wide"
-					} text-foreground font-mono break-all`}
-				>
-					{value}
-				</span>
-
-				<Button
-					variant="outline"
-					size="sm"
-					className="ml-auto"
+			</dt>
+			<dd className="mt-1 flex items-center gap-3">
+				<span className={`${valueClass} font-mono tabular-nums`}>{value}</span>
+				<button
+					type="button"
 					onClick={() => onCopy(value, field)}
+					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-4 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
-					{copied === field ? (
-						<>
-							<Check className="h-3.5 w-3.5 text-green-600" />
-							{copiedLabel}
-						</>
-					) : (
-						<>
-							<ClipboardCopy className="h-3.5 w-3.5" />
-							{copyLabel}
-						</>
-					)}
-				</Button>
-			</div>
+					<span className="grid">
+						<span
+							data-visible={!isCopied}
+							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
+						>
+							<ClipboardCopy className="size-4" aria-hidden="true" />
+							{t("copy")}
+						</span>
+						<span
+							aria-hidden="true"
+							data-visible={isCopied}
+							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
+						>
+							<Check className="size-4 text-green-700" aria-hidden="true" />
+							{t("copied")}
+						</span>
+					</span>
+					<span className="sr-only">{label}</span>
+				</button>
+				<output className="sr-only">{announcement}</output>
+			</dd>
 		</div>
 	);
 }
 
-export default function BankDetails() {
+export default function BankDetails({ online }: { online: boolean }) {
 	const [copied, setCopied] = useState("");
 	const t = useTranslations("donate");
+	const title = t(online ? "bank.titleOnline" : "bank.titleOffline");
+	const monthlyText = t(online ? "bank.monthlyText" : "bank.monthlySoon");
 
 	const copy = async (text: string, field: string) => {
 		try {
 			await navigator.clipboard.writeText(text);
 			setCopied(field);
-			setTimeout(() => setCopied(""), 1600);
+			setTimeout(() => setCopied(""), COPIED_RESET_MS);
 		} catch {}
 	};
 
 	return (
-		<FadeIn>
-			<div className="rounded-2xl overflow-hidden border border-border shadow-sm">
-				<div className="px-6 py-5 border-b border-border bg-muted flex items-center gap-3">
-					<div className="inline-flex items-center justify-center w-10 h-10 bg-accent rounded-xl">
-						<Landmark className="h-5 w-5 text-muted-foreground" />
-					</div>
-					<div>
-						<h3 className="text-xl font-bold text-foreground">
-							{t("bankName")}
-						</h3>
-						<p className="text-muted-foreground text-xs sm:text-sm">
-							{t("bankTransferNote")}
-						</p>
-					</div>
+		<div id="bank-details" className="flex flex-col">
+			<h3 className="text-sm font-semibold">{title}</h3>
+			<div className="mt-4 flex items-center gap-3">
+				<span className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground">
+					<Landmark className="size-5" aria-hidden="true" />
+				</span>
+				<div>
+					<p className="text-lg font-bold">{t("bankName")}</p>
+					<p className="text-sm text-muted-foreground">
+						{t("bankTransferNote")}
+					</p>
 				</div>
-
-				<div className="bg-background px-6 py-8 space-y-6">
-					<CopyRow
-						label={t("accountNumber")}
-						value="1312053588"
-						field="account"
-						big
-						onCopy={copy}
-						copied={copied}
-						copyLabel={t("copy")}
-						copiedLabel={t("copied")}
-					/>
+			</div>
+			<dl className="mt-5 grid gap-4 rounded-[20px] bg-muted p-4">
+				<CopyRow
+					label={t("accountNumber")}
+					value="1312053588"
+					field="account"
+					big
+					onCopy={copy}
+					copied={copied}
+				/>
+				<div className="border-t border-border pt-4">
 					<CopyRow
 						label={t("accountName")}
 						value="4HERFRIKA YOUTH EMPOWERMENT INITIATIVE"
 						field="name"
 						onCopy={copy}
 						copied={copied}
-						copyLabel={t("copy")}
-						copiedLabel={t("copied")}
 					/>
 				</div>
-
-				<div className="bg-linear-to-r from-muted via-white to-muted px-6 py-4 border-t border-border">
-					<p className="text-xs sm:text-sm text-muted-foreground text-center">
-						{t("thankYou")}
-					</p>
-				</div>
-			</div>
-		</FadeIn>
+			</dl>
+			<p className="mt-4 text-[15px] leading-relaxed">
+				<b>{t("bank.monthlyLabel")}</b> {monthlyText}
+			</p>
+			<p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+				{t("bank.afterTransfer")}
+			</p>
+			<p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+				{t.rich("bank.abroad", {
+					link: (chunks) => (
+						<Link
+							href="/contact-us"
+							className="font-medium text-primary-500 underline underline-offset-4"
+						>
+							{chunks}
+						</Link>
+					),
+				})}
+			</p>
+			<p className="mt-auto pt-5 text-sm text-muted-foreground">
+				{t("thankYou")}
+			</p>
+		</div>
 	);
 }

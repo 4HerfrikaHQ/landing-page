@@ -412,23 +412,268 @@
 		"title": "Contactez-nous"
 	},
 	"donate": {
-		"accountName": "Nom du compte",
+		"title": "Soutenez notre mission",
+		"description": "Votre don nous aide à toucher plus de jeunes filles et à créer un changement durable dans les régions défavorisées.",
 		"accountNumber": "Numéro de compte",
-		"bankDetails": "Coordonnées bancaires",
+		"accountName": "Nom du compte",
+		"copy": "Copier",
+		"copied": "Copié",
+		"thankYou": "Merci de votre soutien. Chaque contribution nous aide à avoir plus d’impact.",
 		"bankName": "Zenith Bank",
 		"bankTransferNote": "Utilisez les coordonnées bancaires ci-dessous pour effectuer votre virement",
-		"copied": "Copié",
-		"copy": "Copier",
-		"description": "Votre don nous aide à toucher plus de jeunes filles et à créer un changement durable dans les régions défavorisées.",
-		"donateNow": "Donnez maintenant",
-		"donateToEmpower": "Faites un don pour autonomiser les femmes à travers l’Afrique",
-		"helpDescription": "Le leadership en Afrique ne se construit pas dans un seul domaine ni dans un seul secteur. Il se construit sur chaque campus, dans chaque secteur, chez chaque femme ambitieuse qui a la volonté de diriger. En soutenant 4Herfrika, vous investissez dans un réseau qui forme la prochaine génération de médecins, juristes, ingénieures, entrepreneures et actrices du changement. Vous ne soutenez pas un programme. Vous soutenez un mouvement.",
-		"helpEmpower": "Investissez dans le leadership à travers l’Afrique",
-		"heroOrg": "4HERFRIKA",
-		"heroTitle": "Faire un don à",
-		"heroVision": "D’ici 2050, nous voyons 4Herfrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain — donnant à 2 million de femmes les moyens de diriger avec impact dans tous les domaines qui façonnent notre avenir.",
-		"thankYou": "Merci pour votre soutien. Chaque contribution nous aide à avoir encore plus d’impact.",
-		"title": "Soutenez notre mission"
+		"hero": {
+			"badge": "Faire un don · 4HerFrika Youth Empowerment Initiative",
+			"titleFirst": "Soutenez la prochaine fille",
+			"titleSecond": "à diriger.",
+			"description": "Votre don finance des bootcamps, des appels de mentorat et des données mobiles sur les campus africains. Nous visons 2 millions de femmes et de filles d’ici 2030.",
+			"cta": "Donner maintenant",
+			"imageAlt": "Des diplômées de 4HerFrika brandissant leurs certificats"
+		},
+		"stats": {
+			"girlsMentored": "filles accompagnées",
+			"graduates": "diplômées de la Tech Academy",
+			"campuses": "campus",
+			"countries": "pays",
+			"period": "Année 1",
+			"source": "Tiré du rapport de l’année 1.",
+			"reportLink": "Lire nos rapports d’impact"
+		},
+		"give": {
+			"badge": "Donnez en deux minutes",
+			"titleFirst": "Choisissez votre don,",
+			"titleSecond": "puis envoyez-le.",
+			"descriptionOnline": "Choisissez un montant et une fréquence, puis payez sur l’écran sécurisé de Paystack. Les dons mensuels se règlent par carte.",
+			"descriptionOffline": "Choisissez un montant, puis virez-le sur notre compte Zenith Bank. Les dons mensuels arrivent bientôt."
+		},
+		"bank": {
+			"titleOnline": "Vous préférez un virement bancaire ?",
+			"titleOffline": "Donner par virement bancaire",
+			"monthlyLabel": "Don mensuel ?",
+			"monthlyText": "Configurez un ordre permanent dans votre application bancaire avec ces coordonnées.",
+			"monthlySoon": "Les dons mensuels arrivent bientôt.",
+			"afterTransfer": "Après votre virement, envoyez votre nom, le montant et la date du virement à hello@4herfrika.org et nous vous enverrons votre reçu.",
+			"abroad": "Hors du Nigeria ? <link>Écrivez-nous</link> pour obtenir les coordonnées de virement."
+		},
+		"flow": {
+			"choose": {
+				"formLabel": "Votre don",
+				"step": "Étape 1 sur 2 ·",
+				"stepName": "Votre don",
+				"frequencyLegend": "Fréquence",
+				"monthly": "Mensuel",
+				"once": "Une fois",
+				"currencyLegend": "Devise",
+				"ngn": "₦ NGN",
+				"usd": "$ USD",
+				"amountLegend": "Choisissez un montant",
+				"customLabel": "Autre montant",
+				"customPlaceholder": "Autre montant",
+				"amountHelp": "De {min} à {max}.",
+				"amountError": "Saisissez un montant entier de {min} à {max}.",
+				"coverFee": "Ajouter {fee} pour couvrir les frais Paystack",
+				"coverFeeHint": "Facultatif. Le montant complet parvient alors au programme.",
+				"coverFeeHintMonthly": "Facultatif, chaque mois. Le montant complet parvient alors au programme.",
+				"summaryMonthly": "Chaque mois, par carte",
+				"summaryOnce": "Une fois",
+				"continue": "Continuer",
+				"secure": "Paiement sécurisé par Paystack"
+			},
+			"details": {
+				"formLabel": "Vos informations",
+				"step": "Étape 2 sur 2 ·",
+				"stepName": "Vos informations",
+				"perMonth": "/ mois",
+				"summaryMonthly": "Mensuel · {currency}",
+				"summaryOnce": "Une fois · {currency}",
+				"change": "Modifier",
+				"name": "Nom complet",
+				"email": "E-mail",
+				"required": "(obligatoire)",
+				"optional": "(facultatif)",
+				"emailHelp": "Paystack envoie votre reçu de paiement à cette adresse, et nous vous envoyons un remerciement. Pas de newsletter sans votre accord.",
+				"emailError": "Saisissez une adresse e-mail valide.",
+				"anonymous": "Donner anonymement",
+				"anonymousHint": "Nous n’afficherons pas votre nom dans notre liste de soutiens. Paystack a tout de même besoin de votre e-mail.",
+				"note": "Un mot pour les filles",
+				"notePlaceholder": "On croit en vous !",
+				"noteCount": "{count} / {max}",
+				"pay": "Payer {amount} en toute sécurité",
+				"paying": "Ouverture de Paystack…",
+				"payNote": "La fenêtre sécurisée de Paystack s’ouvre sur cette page. Les dons mensuels se paient par carte.",
+				"payingNote": "La fenêtre sécurisée de Paystack s’ouvre. Terminez votre paiement dans cette fenêtre."
+			},
+			"verifying": {
+				"title": "Confirmation de votre don…",
+				"text": "Nous vous emmenons vers votre confirmation. Merci de ne pas payer une seconde fois."
+			},
+			"failed": {
+				"badge": "Paiement non finalisé",
+				"cancelledTitle": "Le paiement n’a pas abouti.",
+				"cancelledText": "La fenêtre Paystack s’est fermée avant la fin du paiement : rien n’a donc été débité. Nous avons gardé vos informations, il suffit d’un clic pour réessayer.",
+				"errorTitle": "Nous n’avons pas pu lancer le paiement.",
+				"errorText": "Rien n’a été débité. Veuillez réessayer, ou donner par virement bancaire.",
+				"retry": "Réessayer",
+				"changeGift": "Modifier mon don",
+				"bankHint": "Vous préférez votre banque ? Les coordonnées de Zenith Bank sont sur cette page. Copiez-les et envoyez votre don par virement."
+			}
+		},
+		"goal": {
+			"badge": "Notre objectif",
+			"titleFirst": "2 millions de femmes et de filles",
+			"titleSecond": "d’ici 2030.",
+			"body": "Le leadership en Afrique se construit sur chaque campus, dans chaque secteur, chez chaque femme ambitieuse qui a la volonté de diriger. Vous ne soutenez pas un programme. Vous soutenez un mouvement.",
+			"progressLeft": "3 000+ accompagnées, année 1",
+			"progressRight": "2 000 000",
+			"progressNote": "Barre tracée à sa largeur visible minimale ; 3 000 représente 0,15 % de l’objectif.",
+			"cta": "Donner maintenant",
+			"imageAlt": "Une formatrice enseignant à des filles dans une salle informatique"
+		},
+		"ways": {
+			"badge": "Autres façons de donner",
+			"titleFirst": "Pas d’argent ?",
+			"titleSecond": "Tout aussi précieux.",
+			"mentor": {
+				"title": "Devenez mentor bénévole",
+				"text": "Offrez 30 minutes au téléphone à une jeune fille qui débute dans votre domaine.",
+				"cta": "Rejoignez-nous →",
+				"alt": "Deux jeunes femmes en train de coder sur des ordinateurs portables"
+			},
+			"partner": {
+				"title": "Devenez partenaire",
+				"text": "Parrainez un bootcamp ou toute une promotion de campus en tant qu’entreprise.",
+				"cta": "Parlons-en →",
+				"alt": "Un grand groupe de participantes en t-shirts roses 4HerFrika en plein air"
+			},
+			"laptops": {
+				"title": "Donnez des ordinateurs ou des données",
+				"text": "Un ordinateur portable ou un forfait de données permet à une apprenante de rester dans la formation.",
+				"cta": "Organiser un don →",
+				"alt": "Une jeune femme travaillant sur un ordinateur portable sur un banc extérieur"
+			}
+		},
+		"faq": {
+			"titleFirst": "Questions",
+			"titleSecond": "avant de donner",
+			"ask": "Un doute ? <link>Écrivez à l’équipe</link>.",
+			"items": {
+				"receipt": {
+					"q": "Vais-je recevoir un reçu ?",
+					"a": "Oui. Un don par carte vous vaut un reçu de paiement de Paystack et un reçu de don de 4HerFrika, tous deux par e-mail en quelques minutes."
+				},
+				"monthly": {
+					"q": "Comment donner chaque mois ?",
+					"a": "Choisissez Mensuel, puis payez par carte. Paystack débite la carte chaque mois. Vous préférez votre banque ? Configurez un ordre permanent avec nos coordonnées Zenith Bank."
+				},
+				"stop": {
+					"q": "Puis-je arrêter un don mensuel ?",
+					"a": "Oui, à tout moment. Le lien de votre e-mail de reçu ouvre la page de Paystack, où vous pouvez mettre à jour votre carte ou annuler. L’annulation arrête tous les prélèvements futurs."
+				},
+				"abroad": {
+					"q": "Puis-je donner depuis l’étranger ?",
+					"a": "Oui. Toute carte Visa ou Mastercard fonctionne en ₦ ou en $, et votre banque effectue la conversion. Vous pouvez aussi nous écrire pour obtenir les coordonnées de virement."
+				},
+				"safe": {
+					"q": "Payer par carte est-il sûr ?",
+					"a": "Les données de votre carte vont à Paystack, jamais chez nous. La fenêtre sécurisée de Paystack s’ouvre sur cette page."
+				},
+				"receiptOffline": {
+					"q": "Vais-je recevoir un reçu ?",
+					"a": "Envoyez votre nom, le montant et la date du virement à hello@4herfrika.org et nous vous enverrons votre reçu."
+				},
+				"monthlyOffline": {
+					"q": "Comment donner chaque mois ?",
+					"a": "Les dons mensuels arrivent bientôt. En attendant, vous pouvez donner le montant de votre choix par virement bancaire."
+				},
+				"abroadOffline": {
+					"q": "Puis-je donner depuis l’étranger ?",
+					"a": "Oui. Écrivez-nous à hello@4herfrika.org et nous vous enverrons les coordonnées de virement."
+				}
+			}
+		},
+		"bar": {
+			"title": "Soutenir 4HerFrika",
+			"subtitle": "Zenith Bank · 1312053588",
+			"cta": "Donner maintenant"
+		},
+		"thanks": {
+			"metaTitle": "Merci pour votre don",
+			"success": {
+				"badge": "Don confirmé · {date}",
+				"title": "Merci.",
+				"titleNamed": "Merci, {name}.",
+				"titleSecond": "Elle a sa place dans la salle.",
+				"textMonthly": "Votre <strong>don mensuel de {amount}</strong> est en place, et le premier prélèvement de {amount} a bien été effectué.",
+				"textOnce": "Votre <strong>don de {amount}</strong> a bien été effectué. Merci.",
+				"emailsTitle": "Deux e-mails sont en route vers",
+				"emailPaystack": "Un reçu de paiement de Paystack",
+				"emailReceipt": "Votre reçu de don de 4HerFrika, à conserver",
+				"shareTitle": "Faites entrer une amie dans la salle",
+				"share": {
+					"whatsapp": "WhatsApp",
+					"linkedin": "LinkedIn",
+					"x": "Publier sur X"
+				},
+				"shareNote": "Nous partageons la page, jamais votre nom ni votre montant.",
+				"monthlyTitle": "Votre don mensuel",
+				"active": "Actif",
+				"perMonth": "/ mois",
+				"paidWith": "Payé avec",
+				"reference": "Référence",
+				"manageText": "L’e-mail de reçu que nous envoyons contient un lien pour changer de carte ou annuler, à tout moment. Sans appel, sans formulaire.",
+				"questions": "Des questions ?",
+				"onceTitle": "Votre don",
+				"onceText": "Un don mensuel nous permet de planifier des bootcamps et des appels de mentorat des mois à l’avance.",
+				"onceCta": "Le rendre mensuel"
+			},
+			"pending": {
+				"titleFirst": "Confirmation de",
+				"titleSecond": "votre don",
+				"text": "Paystack n’a pas encore confirmé votre paiement. Cela prend généralement quelques secondes.",
+				"reference": "Référence",
+				"checkAgain": "Vérifier à nouveau",
+				"dontPayAgain": "Merci de ne pas payer une seconde fois.",
+				"closeNote": "Vous pouvez fermer cette page : nous vous écrirons dès que Paystack confirmera.",
+				"help": "Quelque chose cloche ? Écrivez à"
+			},
+			"failed": {
+				"badge": "Paiement non finalisé",
+				"titleFirst": "Le paiement n’a pas abouti.",
+				"titleSecond": "Réessayons.",
+				"text": "Paystack n’a pas confirmé ce paiement : rien ne vous a donc été débité pour celui-ci.",
+				"retry": "Réessayer",
+				"helpTitle": "En cas de problème",
+				"declinedTitle": "Carte refusée ?",
+				"declinedText": "Beaucoup de cartes nigérianes bloquent les paiements en ligne par défaut. Demandez à votre banque de les autoriser, ou essayez une autre carte. Les dons mensuels nécessitent une carte.",
+				"debitedTitle": "De l’argent a quitté votre compte ?",
+				"debitedText": "Merci de ne pas payer deux fois. Écrivez à hello@4herfrika.org avec la référence"
+			}
+		},
+		"email": {
+			"badge": "Reçu de don",
+			"greeting": "Merci.",
+			"greetingNamed": "Merci, {name}.",
+			"headingOnce": "Votre don a bien été reçu.",
+			"headingMonthly": "Votre don mensuel a bien été reçu.",
+			"subjectOnce": "Merci pour votre don à 4HerFrika",
+			"subjectMonthly": "Merci pour votre don mensuel à 4HerFrika",
+			"perMonth": "/ mois",
+			"frequencyOnce": "Une fois",
+			"frequencyMonthly": "Mensuel",
+			"details": "Détails du reçu",
+			"rowDate": "Date",
+			"rowDonor": "Donateur",
+			"rowDonorAnonymous": "Anonyme",
+			"rowGift": "Don",
+			"rowPaidWith": "Payé avec",
+			"rowReference": "Référence Paystack",
+			"manageCta": "Gérer votre don mensuel",
+			"manageNote": "Changez de carte ou annulez, à tout moment. Ce lien vous est destiné : merci de ne pas transférer cet e-mail.",
+			"manageFallback": "Paystack vous envoie aussi un lien pour gérer votre don mensuel, où vous pouvez changer de carte ou annuler.",
+			"year1": "Durant l’année 1, des dons comme le vôtre ont aidé à accompagner plus de 3 000 filles sur plus de 25 campus dans 5 pays.",
+			"year1Link": "Voir le rapport d’impact",
+			"footerKeep": "Paystack vous a aussi envoyé un reçu de paiement. Conservez celui-ci pour vos justificatifs de don.",
+			"footerQuestions": "Des questions ? Répondez à cet e-mail ou écrivez à"
+		}
 	},
 	"faq": {
 		"title": "FAQ",

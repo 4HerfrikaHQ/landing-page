@@ -412,23 +412,268 @@
 		"title": "Wasiliana nasi"
 	},
 	"donate": {
-		"accountName": "Jina la Akaunti",
+		"title": "Unga Mkono Dhamira Yetu",
+		"description": "Mchango wako unatusaidia kuwafikia wasichana zaidi na kuleta mabadiliko endelevu katika maeneo yasiyohudumiwa vya kutosha.",
 		"accountNumber": "Nambari ya Akaunti",
-		"bankDetails": "Maelezo ya Benki",
+		"accountName": "Jina la Akaunti",
+		"copy": "Nakili",
+		"copied": "Imenakiliwa",
+		"thankYou": "Asante kwa msaada wako. Kila mchango unatusaidia kuleta athari kubwa zaidi.",
 		"bankName": "Zenith Bank",
 		"bankTransferNote": "Tumia maelezo ya akaunti hapa chini kufanya uhamisho wako",
-		"copied": "Imenakiliwa",
-		"copy": "Nakili",
-		"description": "Mchango wako unatusaidia kuwafikia wasichana zaidi na kuleta mabadiliko endelevu katika maeneo ambayo hayajahudumiwa vya kutosha.",
-		"donateNow": "Changia Sasa",
-		"donateToEmpower": "Changia kuwawezesha wanawake kote Afrika",
-		"helpDescription": "Uongozi barani Afrika haujengwi katika nyanja moja au sekta moja. Unajengwa katika kila kampasi, kila sekta, na kwa kila mwanamke mwenye ndoto kubwa aliye na nia ya kuongoza. Unapoiunga mkono 4HerFrika, unawekeza katika mtandao unaolea kizazi kijacho cha madaktari, wanasheria, wahandisi, wajasiriamali na waleta mabadiliko. Husaidii programu tu. Unaunga mkono harakati.",
-		"helpEmpower": "Wekeza katika Uongozi Barani Afrika",
-		"heroOrg": "4HERFRIKA",
-		"heroTitle": "Toa mchango kwa",
-		"heroVision": "Kufikia 2050, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika — kuwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika kila nyanja inayounda mustakabali wetu.",
-		"thankYou": "Asante kwa msaada wako. Kila mchango hutusaidia kuleta matokeo makubwa zaidi.",
-		"title": "Saidia Dhamira Yetu"
+		"hero": {
+			"badge": "Changia · 4HerFrika Youth Empowerment Initiative",
+			"titleFirst": "Msaidie msichana anayefuata",
+			"titleSecond": "kuongoza.",
+			"description": "Mchango wako unalipia kambi za mafunzo, simu za ushauri na data katika vyuo vya Afrika. Tunafanya kazi kufikia wanawake na wasichana milioni 2 ifikapo 2030.",
+			"cta": "Changia sasa",
+			"imageAlt": "Wahitimu wa 4HerFrika wakiwa wameshika vyeti vyao"
+		},
+		"stats": {
+			"girlsMentored": "wasichana walioshauriwa",
+			"graduates": "wahitimu wa Tech Academy",
+			"campuses": "vyuo",
+			"countries": "nchi",
+			"period": "Mwaka wa 1",
+			"source": "Kutoka ripoti ya Mwaka wa 1.",
+			"reportLink": "Soma ripoti zetu za athari"
+		},
+		"give": {
+			"badge": "Changia kwa dakika mbili",
+			"titleFirst": "Chagua mchango wako,",
+			"titleSecond": "kisha uutume.",
+			"descriptionOnline": "Chagua kiasi na mara ngapi, kisha lipa kwenye skrini salama ya Paystack. Michango ya kila mwezi hulipwa kwa kadi.",
+			"descriptionOffline": "Chagua kiasi, kisha kihamishe kwenye akaunti yetu ya Zenith Bank. Kuchangia kila mwezi kunakuja hivi karibuni."
+		},
+		"bank": {
+			"titleOnline": "Unapendelea uhamisho wa benki?",
+			"titleOffline": "Changia kwa uhamisho wa benki",
+			"monthlyLabel": "Kila mwezi?",
+			"monthlyText": "Weka agizo la kudumu kwenye programu ya benki yako ukitumia maelezo haya.",
+			"monthlySoon": "Kuchangia kila mwezi kunakuja hivi karibuni.",
+			"afterTransfer": "Baada ya uhamisho wako, tuma jina lako, kiasi na tarehe ya uhamisho kwa hello@4herfrika.org nasi tutakutumia risiti yako.",
+			"abroad": "Uko nje ya Nigeria? <link>Tuandikie</link> kupata maelezo ya uhamisho."
+		},
+		"flow": {
+			"choose": {
+				"formLabel": "Mchango wako",
+				"step": "Hatua ya 1 kati ya 2 ·",
+				"stepName": "Mchango wako",
+				"frequencyLegend": "Mara ngapi",
+				"monthly": "Kila mwezi",
+				"once": "Mara moja",
+				"currencyLegend": "Sarafu",
+				"ngn": "₦ NGN",
+				"usd": "$ USD",
+				"amountLegend": "Chagua kiasi",
+				"customLabel": "Kiasi kingine",
+				"customPlaceholder": "Kiasi kingine",
+				"amountHelp": "Kuanzia {min} hadi {max}.",
+				"amountError": "Weka kiasi kizima kuanzia {min} hadi {max}.",
+				"coverFee": "Ongeza {fee} kulipia ada ya Paystack",
+				"coverFeeHint": "Si lazima. Kiasi chote basi kinafika kwenye programu.",
+				"coverFeeHintMonthly": "Si lazima, kila mwezi. Kiasi chote basi kinafika kwenye programu.",
+				"summaryMonthly": "Kila mwezi, kwa kadi",
+				"summaryOnce": "Mara moja",
+				"continue": "Endelea",
+				"secure": "Malipo salama kupitia Paystack"
+			},
+			"details": {
+				"formLabel": "Taarifa zako",
+				"step": "Hatua ya 2 kati ya 2 ·",
+				"stepName": "Taarifa zako",
+				"perMonth": "/ mwezi",
+				"summaryMonthly": "Kila mwezi · {currency}",
+				"summaryOnce": "Mara moja · {currency}",
+				"change": "Badilisha",
+				"name": "Jina kamili",
+				"email": "Barua pepe",
+				"required": "(lazima)",
+				"optional": "(si lazima)",
+				"emailHelp": "Paystack hutuma risiti ya malipo yako hapa, nasi tunatuma shukrani. Hakuna majarida usipoyaomba.",
+				"emailError": "Weka barua pepe halali.",
+				"anonymous": "Changia bila kujulikana",
+				"anonymousHint": "Hatutaonyesha jina lako kwenye orodha yetu ya wafadhili. Paystack bado inahitaji barua pepe yako.",
+				"note": "Ujumbe kwa wasichana",
+				"notePlaceholder": "Tunawashangilia nyote!",
+				"noteCount": "{count} / {max}",
+				"pay": "Lipa {amount} kwa usalama",
+				"paying": "Inafungua Paystack…",
+				"payNote": "Dirisha salama la Paystack hufunguka juu ya ukurasa huu. Michango ya kila mwezi hulipwa kwa kadi.",
+				"payingNote": "Dirisha salama la Paystack linafunguka. Kamilisha malipo yako huko."
+			},
+			"verifying": {
+				"title": "Tunathibitisha mchango wako…",
+				"text": "Tunakupeleka kwenye uthibitisho wako. Tafadhali usilipe tena."
+			},
+			"failed": {
+				"badge": "Malipo hayajakamilika",
+				"cancelledTitle": "Malipo hayakukamilika.",
+				"cancelledText": "Dirisha la Paystack lilifungwa kabla malipo kukamilika, kwa hiyo hakuna kilichokatwa. Tumehifadhi taarifa zako, kwa hiyo ni mguso mmoja tu kujaribu tena.",
+				"errorTitle": "Hatukuweza kuanzisha malipo.",
+				"errorText": "Hakuna kilichokatwa. Tafadhali jaribu tena, au changia kwa uhamisho wa benki.",
+				"retry": "Jaribu tena",
+				"changeGift": "Badilisha mchango wangu",
+				"bankHint": "Unapendelea benki yako? Maelezo ya Zenith Bank yako kwenye ukurasa huu. Yanakili na utume mchango wako kwa uhamisho."
+			}
+		},
+		"goal": {
+			"badge": "Lengo letu",
+			"titleFirst": "Wanawake na wasichana milioni 2",
+			"titleSecond": "ifikapo 2030.",
+			"body": "Uongozi barani Afrika hujengwa katika kila chuo, kila sekta, kila mwanamke mwenye tamaa na nia ya kuongoza. Huungi mkono programu tu. Unaunga mkono harakati.",
+			"progressLeft": "3,000+ walioshauriwa, Mwaka wa 1",
+			"progressRight": "2,000,000",
+			"progressNote": "Upau umechorwa kwa upana wake mdogo unaoonekana; 3,000 ni 0.15% ya lengo.",
+			"cta": "Changia sasa",
+			"imageAlt": "Mwezeshaji akifundisha wasichana katika maabara ya kompyuta"
+		},
+		"ways": {
+			"badge": "Njia nyingine za kutoa",
+			"titleFirst": "Huna pesa?",
+			"titleSecond": "Bado una mchango mkubwa.",
+			"mentor": {
+				"title": "Jitolee kuwa mshauri",
+				"text": "Toa dakika 30 kwa simu kwa msichana anayeanza katika fani yako.",
+				"cta": "Jiunge nasi →",
+				"alt": "Wanawake wawili vijana wakiandika msimbo kwenye kompyuta mpakato"
+			},
+			"partner": {
+				"title": "Shirikiana nasi",
+				"text": "Dhamini kambi ya mafunzo au kundi zima la chuo kama kampuni.",
+				"cta": "Zungumza nasi →",
+				"alt": "Kundi kubwa la washiriki waliovaa fulana za pinki za 4HerFrika nje"
+			},
+			"laptops": {
+				"title": "Toa kompyuta mpakato au data",
+				"text": "Kompyuta mpakato inayofanya kazi au kifurushi cha data humweka mwanafunzi kwenye kozi.",
+				"cta": "Panga mchango →",
+				"alt": "Mwanamke kijana akifanya kazi kwenye kompyuta mpakato kwenye benchi la nje"
+			}
+		},
+		"faq": {
+			"titleFirst": "Maswali",
+			"titleSecond": "kabla ya kuchangia",
+			"ask": "Bado hujui? <link>Uliza timu yetu</link>.",
+			"items": {
+				"receipt": {
+					"q": "Je, nitapata risiti?",
+					"a": "Ndiyo. Mchango wa kadi huleta risiti ya malipo kutoka Paystack na risiti ya mchango kutoka 4HerFrika, zote kwa barua pepe ndani ya dakika chache."
+				},
+				"monthly": {
+					"q": "Nitachangiaje kila mwezi?",
+					"a": "Chagua Kila mwezi, kisha lipa kwa kadi. Paystack hukata kadi kila mwezi. Unapendelea benki yako? Weka agizo la kudumu ukitumia maelezo yetu ya Zenith Bank."
+				},
+				"stop": {
+					"q": "Je, naweza kusimamisha mchango wa kila mwezi?",
+					"a": "Ndiyo, wakati wowote. Kiungo kwenye barua pepe ya risiti yako hufungua ukurasa wa Paystack, ambapo unaweza kusasisha kadi yako au kughairi. Kughairi husimamisha makato yote yajayo."
+				},
+				"abroad": {
+					"q": "Je, naweza kuchangia nikiwa nje ya Nigeria?",
+					"a": "Ndiyo. Kadi yoyote ya Visa au Mastercard inafanya kazi kwa ₦ au $, na benki yako hubadilisha sarafu. Unaweza pia kutuandikia kupata maelezo ya uhamisho."
+				},
+				"safe": {
+					"q": "Je, kulipa kwa kadi ni salama?",
+					"a": "Taarifa za kadi yako huenda kwa Paystack, kamwe si kwetu. Dirisha salama la Paystack hufunguka juu ya ukurasa huu."
+				},
+				"receiptOffline": {
+					"q": "Je, nitapata risiti?",
+					"a": "Tuma jina lako, kiasi na tarehe ya uhamisho kwa hello@4herfrika.org nasi tutakutumia risiti yako."
+				},
+				"monthlyOffline": {
+					"q": "Nitachangiaje kila mwezi?",
+					"a": "Kuchangia kila mwezi kunakuja hivi karibuni. Kwa sasa, unaweza kuchangia kiasi chochote kwa uhamisho wa benki."
+				},
+				"abroadOffline": {
+					"q": "Je, naweza kuchangia nikiwa nje ya Nigeria?",
+					"a": "Ndiyo. Tuandikie kwa hello@4herfrika.org nasi tutakutumia maelezo ya uhamisho."
+				}
+			}
+		},
+		"bar": {
+			"title": "Unga mkono 4HerFrika",
+			"subtitle": "Zenith Bank · 1312053588",
+			"cta": "Changia sasa"
+		},
+		"thanks": {
+			"metaTitle": "Asante kwa kuchangia",
+			"success": {
+				"badge": "Mchango umethibitishwa · {date}",
+				"title": "Asante.",
+				"titleNamed": "Asante, {name}.",
+				"titleSecond": "Ana nafasi chumbani.",
+				"textMonthly": "<strong>Mchango wako wa kila mwezi wa {amount}</strong> umewekwa, na {amount} ya kwanza imekatwa.",
+				"textOnce": "<strong>Mchango wako wa {amount}</strong> umekamilika. Asante.",
+				"emailsTitle": "Barua pepe mbili ziko njiani kwenda",
+				"emailPaystack": "Risiti ya malipo kutoka Paystack",
+				"emailReceipt": "Risiti yako ya mchango kutoka 4HerFrika, ya kuhifadhi",
+				"shareTitle": "Mlete rafiki chumbani",
+				"share": {
+					"whatsapp": "WhatsApp",
+					"linkedin": "LinkedIn",
+					"x": "Chapisha kwenye X"
+				},
+				"shareNote": "Tunashiriki ukurasa, kamwe si jina lako wala kiasi chako.",
+				"monthlyTitle": "Mchango wako wa kila mwezi",
+				"active": "Unaendelea",
+				"perMonth": "/ mwezi",
+				"paidWith": "Umelipa kwa",
+				"reference": "Kumbukumbu",
+				"manageText": "Barua pepe ya risiti tunayotuma ina kiungo cha kubadilisha kadi yako au kughairi, wakati wowote. Bila simu, bila fomu.",
+				"questions": "Maswali?",
+				"onceTitle": "Mchango wako",
+				"onceText": "Mchango wa kila mwezi hutuwezesha kupanga kambi za mafunzo na simu za ushauri miezi kadhaa mapema.",
+				"onceCta": "Fanya uwe wa kila mwezi"
+			},
+			"pending": {
+				"titleFirst": "Tunathibitisha",
+				"titleSecond": "mchango wako",
+				"text": "Paystack haijathibitisha malipo yako bado. Kwa kawaida inachukua sekunde chache.",
+				"reference": "Kumbukumbu",
+				"checkAgain": "Angalia tena",
+				"dontPayAgain": "Tafadhali usilipe tena.",
+				"closeNote": "Unaweza kufunga ukurasa huu: tutakutumia barua pepe mara Paystack itakapothibitisha.",
+				"help": "Kuna kitu kinaonekana si sawa? Tuandikie kwa"
+			},
+			"failed": {
+				"badge": "Malipo hayajakamilika",
+				"titleFirst": "Malipo hayakukamilika.",
+				"titleSecond": "Tujaribu tena.",
+				"text": "Paystack haikuthibitisha malipo haya, kwa hiyo hakuna kilichokatwa kwako kwa ajili yake.",
+				"retry": "Jaribu tena",
+				"helpTitle": "Ikiwa kuna tatizo",
+				"declinedTitle": "Kadi imekataliwa?",
+				"declinedText": "Kadi nyingi za Nigeria huzuia malipo ya mtandaoni kwa chaguo-msingi. Muulize benki yako iruhusu, au jaribu kadi nyingine. Michango ya kila mwezi inahitaji kadi.",
+				"debitedTitle": "Pesa ziliondoka kwenye akaunti yako?",
+				"debitedText": "Tafadhali usilipe mara mbili. Tuandikie kwa hello@4herfrika.org ukitaja kumbukumbu"
+			}
+		},
+		"email": {
+			"badge": "Risiti ya mchango",
+			"greeting": "Asante.",
+			"greetingNamed": "Asante, {name}.",
+			"headingOnce": "Mchango wako umepokelewa.",
+			"headingMonthly": "Mchango wako wa kila mwezi umepokelewa.",
+			"subjectOnce": "Asante kwa mchango wako kwa 4HerFrika",
+			"subjectMonthly": "Asante kwa mchango wako wa kila mwezi kwa 4HerFrika",
+			"perMonth": "/ mwezi",
+			"frequencyOnce": "Mara moja",
+			"frequencyMonthly": "Kila mwezi",
+			"details": "Maelezo ya risiti",
+			"rowDate": "Tarehe",
+			"rowDonor": "Mchangiaji",
+			"rowDonorAnonymous": "Asiyejulikana",
+			"rowGift": "Mchango",
+			"rowPaidWith": "Umelipa kwa",
+			"rowReference": "Kumbukumbu ya Paystack",
+			"manageCta": "Dhibiti mchango wako wa kila mwezi",
+			"manageNote": "Badilisha kadi yako au ghairi, wakati wowote. Kiungo hiki ni chako tu, kwa hiyo tafadhali usitume barua pepe hii kwa wengine.",
+			"manageFallback": "Paystack pia hukutumia kiungo cha kudhibiti mchango wako wa kila mwezi, ambapo unaweza kubadilisha kadi yako au kughairi.",
+			"year1": "Katika Mwaka wa 1, michango kama yako ilisaidia kushauri wasichana zaidi ya 3,000 katika vyuo zaidi ya 25 katika nchi 5.",
+			"year1Link": "Tazama ripoti ya athari",
+			"footerKeep": "Paystack pia imekutumia risiti ya malipo. Hifadhi hii kwa kumbukumbu zako za michango.",
+			"footerQuestions": "Maswali? Jibu barua pepe hii au andika kwa"
+		}
 	},
 	"faq": {
 		"title": "Maswali Yanayoulizwa Mara kwa Mara",
