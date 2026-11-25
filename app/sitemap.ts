@@ -14,6 +14,7 @@ const staticRoutes = [
 	"/about",
 	"/academy",
 	"/blog",
+	"/blog/category/projects",
 	"/careercorner",
 	"/careercorner/apply",
 	"/contact-us",
@@ -23,7 +24,6 @@ const staticRoutes = [
 	"/impact/year-1",
 	...(hasPendingFigures(year2Report) ? [] : ["/impact/year-2"]),
 	"/privacy",
-	"/projects",
 	"/terms",
 ];
 

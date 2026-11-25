@@ -912,6 +912,10 @@
 		"impactReports": {
 			"title": "Rapports d’impact — Chaque année, comptée à voix haute",
 			"description": "Lisez en ligne les rapports d’impact annuels de 4Herfrika ou téléchargez le PDF, des plus de 3 000 filles accompagnées la première année à notre objectif de 2 millions de femmes et de filles d’ici 2030."
+		},
+		"blogCategory": {
+			"title": "{name} — Le Pink Blog",
+			"description": "Histoires et actualités « {name} » de 4HerFrika, le réseau de mentorat des jeunes Africaines."
 		}
 	},
 	"attendance": {
@@ -1536,5 +1540,61 @@
 			"step2Body": "Si le profil correspond, nous vous envoyons un lien pour configurer votre profil de mentor et vos disponibilités.",
 			"back": "Retour aux mentors"
 		}
+	},
+	"blogPage": {
+		"stories": "Histoires",
+		"projects": "Projets",
+		"all": "Tout",
+		"filterLabel": "Catégories du blog",
+		"heroBadge": "Le Pink Blog",
+		"heroFirst": "Les histoires des filles",
+		"heroSecond": "qui changent l'Afrique.",
+		"heroDescription": "Projets, événements sur les campus, actualités de l'Académie et conseils de carrière. Tout ce que nous faisons, raconté par les femmes qui le font.",
+		"heroAlt": "Trois femmes discutant autour d'un ordinateur portable lors d'une session 4HerFrika",
+		"freshFrom": "Les nouvelles de",
+		"freshEm": "la communauté",
+		"projectsLiveHere": "Les projets vivent désormais ici aussi.",
+		"minRead": "{minutes} min de lecture",
+		"readStory": "Lire l'histoire",
+		"readProject": "Lire le projet",
+		"loadMore": "Voir plus d'articles",
+		"showing": "{shown} articles sur {total}",
+		"empty": "Aucun article dans cette catégorie pour l'instant",
+		"emptyHint": "Revenez bientôt.",
+		"movedBadge": "Les projets ont déménagé",
+		"movedTitle": "Vous cherchez nos projets ?",
+		"movedEm": "Ils vivent ici maintenant.",
+		"movedDescription": "StopTheViolence, SkillUp avec 4Herfrika et le GirlsTech Bootcamp, avec ce que nous avons fait et avec qui.",
+		"movedCta": "Voir tous les projets",
+		"storyTitle": "Votre histoire pourrait être",
+		"storyEm": "la prochaine.",
+		"storyDescription": "Un premier appel avec une mentore, un bootcamp qui a changé votre regard, un emploi que vous n'imaginiez pas obtenir. Racontez-nous, nous vous aiderons à l'écrire.",
+		"newsletterBadge": "Newsletter",
+		"newsletterTitle": "Un e-mail par mois.",
+		"newsletterEm": "Que du bon.",
+		"newsletterDescription": "Nouvelles histoires, créneaux de mentorat ouverts et cours de l'Académie avant tout le monde. Désabonnement à tout moment.",
+		"newsletterAlt": "Une jeune femme souriante devant son ordinateur portable, assise sur un banc de campus",
+		"breadcrumb": "Fil d'Ariane",
+		"writtenBy": "Écrit par",
+		"shareHeading": "Partager cette histoire",
+		"shareWhatsapp": "WhatsApp",
+		"shareX": "X",
+		"shareLinkedin": "LinkedIn",
+		"copyLink": "Copier le lien",
+		"linkCopied": "Lien copié",
+		"keep": "Continuez à",
+		"reading": "lire",
+		"allIn": "Tout dans {category}",
+		"careerBadge": "Espace Carrière",
+		"careerTitle": "Envie d'en discuter avec quelqu'un qui est passé par là ?",
+		"careerBody": "Réservez un appel gratuit de 30 minutes avec une mentore de votre domaine.",
+		"careerCta": "Réserver un appel",
+		"inboxTitle": "Recevez la prochaine histoire",
+		"inboxEm": "dans votre boîte mail.",
+		"inboxDescription": "Un e-mail par mois. Désabonnement à tout moment.",
+		"categoryHeroFirst": "Tout dans",
+		"categoryHeroDescription": "Toutes les histoires et actualités classées dans cette catégorie, racontées par celles qui les vivent.",
+		"opensInNewTab": "(s'ouvre dans un nouvel onglet)",
+		"downloadImage": "Télécharger l'image"
 	}
 }

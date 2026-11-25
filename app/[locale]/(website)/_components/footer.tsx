@@ -56,7 +56,7 @@ export const Footer = async () => {
 
 	const impactLinks = [
 		{ label: t("impact"), href: "/impact" },
-		{ label: tn("projects"), href: "/projects" },
+		{ label: tn("projects"), href: "/blog/category/projects" },
 		{ label: tc("donate"), href: "/donate" },
 	] as const;
 

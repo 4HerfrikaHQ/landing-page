@@ -12,13 +12,13 @@ import {
 import { cn } from "@/utils/cn";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import { submitStory } from "../_actions";
-import type { BlogCategoryDocument } from "@/prismicio-types";
 
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024
 
 type Props = {
-	categories: BlogCategoryDocument[];
+	categories: { id: string; name: string }[];
 };
 
 const inputClass =
@@ -165,22 +165,22 @@ export function SubmitStoryModal({ categories }: Props) {
 					</div>
 
 					<div>
-						<Label className={labelClass}>
+						<Label htmlFor="story-category" className={labelClass}>
 							Category{required}
 						</Label>
-						<select
+						<NativeSelect
+							id="story-category"
 							name="categoryId"
-							className={cn(rawInputClass, "appearance-none cursor-pointer")}
 							required
 							defaultValue=""
 						>
 							<option value="" disabled>Select a category</option>
 							{categories.map((cat) => (
 								<option key={cat.id} value={cat.id}>
-									{cat.data.name}
+									{cat.name}
 								</option>
 							))}
-						</select>
+						</NativeSelect>
 					</div>
 
 					<div>

@@ -912,6 +912,10 @@
 		"impactReports": {
 			"title": "Ripoti za Athari — Kila Mwaka, Tunahesabu kwa Sauti",
 			"description": "Soma ripoti za athari za mwaka za 4Herfrika mtandaoni au pakua PDF, kuanzia wasichana zaidi ya 3,000 walioshauriwa mwaka wa kwanza hadi lengo letu la wanawake na wasichana milioni 2 kufikia 2030."
+		},
+		"blogCategory": {
+			"title": "{name} — Blogu ya Pink",
+			"description": "Hadithi na habari za {name} kutoka 4HerFrika, mtandao wa ushauri kwa wasichana wa Afrika."
 		}
 	},
 	"attendance": {
@@ -1536,5 +1540,61 @@
 			"step2Body": "Ikiwa unafaa, tunakutumia kiungo cha kuweka wasifu wako wa mlezi na muda wako.",
 			"back": "Rudi kwa walezi"
 		}
+	},
+	"blogPage": {
+		"stories": "Hadithi",
+		"projects": "Miradi",
+		"all": "Zote",
+		"filterLabel": "Kategoria za blogu",
+		"heroBadge": "Blogu ya Pink",
+		"heroFirst": "Hadithi za wasichana",
+		"heroSecond": "wanaobadilisha Afrika.",
+		"heroDescription": "Miradi, matukio ya vyuoni, habari za Academy na ushauri wa kazi. Kila tunachofanya, kikisimuliwa na wanawake wanaokifanya.",
+		"heroAlt": "Wanawake watatu wakizungumza kuzunguka kompyuta mpakato katika kikao cha 4HerFrika",
+		"freshFrom": "Mapya kutoka",
+		"freshEm": "kwa jamii",
+		"projectsLiveHere": "Miradi sasa inapatikana hapa pia.",
+		"minRead": "Dakika {minutes} za kusoma",
+		"readStory": "Soma hadithi",
+		"readProject": "Soma mradi",
+		"loadMore": "Pakia machapisho zaidi",
+		"showing": "Inaonyesha {shown} kati ya {total}",
+		"empty": "Hakuna machapisho katika kategoria hii bado",
+		"emptyHint": "Rudi hivi karibuni.",
+		"movedBadge": "Miradi imehamia",
+		"movedTitle": "Unatafuta miradi yetu?",
+		"movedEm": "Sasa iko hapa.",
+		"movedDescription": "StopTheViolence, SkillUp na 4Herfrika na GirlsTech Bootcamp, pamoja na tulichofanya na tulifanya na nani.",
+		"movedCta": "Tazama miradi yote",
+		"storyTitle": "Hadithi yako inaweza kuwa",
+		"storyEm": "inayofuata.",
+		"storyDescription": "Simu ya kwanza na mshauri, bootcamp iliyobadilisha mtazamo wako, kazi ambayo hukudhani ungeipata. Tuambie nasi tutakusaidia kuiandika.",
+		"newsletterBadge": "Jarida",
+		"newsletterTitle": "Barua pepe moja kwa mwezi.",
+		"newsletterEm": "Mazuri tu.",
+		"newsletterDescription": "Hadithi mpya, nafasi za ushauri zilizo wazi na kozi za Academy kabla ya wengine. Jiondoe wakati wowote.",
+		"newsletterAlt": "Msichana mdogo akitabasamu mbele ya kompyuta mpakato kwenye benchi ya chuo",
+		"breadcrumb": "Njia ya kurasa",
+		"writtenBy": "Imeandikwa na",
+		"shareHeading": "Shiriki hadithi hii",
+		"shareWhatsapp": "WhatsApp",
+		"shareX": "X",
+		"shareLinkedin": "LinkedIn",
+		"copyLink": "Nakili kiungo",
+		"linkCopied": "Kiungo kimenakiliwa",
+		"keep": "Endelea",
+		"reading": "kusoma",
+		"allIn": "Yote katika {category}",
+		"careerBadge": "Career Corner",
+		"careerTitle": "Unataka kulijadili na mtu aliyepitia hayo?",
+		"careerBody": "Weka simu ya bure ya dakika 30 na mshauri wa fani yako.",
+		"careerCta": "Weka simu",
+		"inboxTitle": "Pata hadithi inayofuata",
+		"inboxEm": "kwenye barua pepe yako.",
+		"inboxDescription": "Barua pepe moja kwa mwezi. Jiondoe wakati wowote.",
+		"categoryHeroFirst": "Yote katika",
+		"categoryHeroDescription": "Hadithi na habari zote zilizo katika kundi hili, zikisimuliwa na wanawake wanaoziishi.",
+		"opensInNewTab": "(hufunguka kwenye kichupo kipya)",
+		"downloadImage": "Pakua picha"
 	}
 }
