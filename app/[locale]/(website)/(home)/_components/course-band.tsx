@@ -43,7 +43,7 @@ export async function CourseBand() {
 					</PillLink>
 				</div>
 			</div>
-			<div className="relative aspect-square w-full lg:aspect-auto lg:h-full lg:w-1/2">
+			<div className="relative aspect-square w-full lg:aspect-auto lg:w-1/2 lg:self-stretch">
 				<Image
 					src="/assets/home/course.jpg"
 					alt={t("imageAlt")}
