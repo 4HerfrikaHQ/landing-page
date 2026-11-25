@@ -624,10 +624,41 @@
 		"couldntFind": "Nous n’avons pas trouvé la page que vous cherchiez, mais ne vous inquiétez pas !",
 		"description": "La page que vous recherchez n’existe pas ou a été déplacée.",
 		"everyDetour": "Chaque détour est une occasion de découvrir quelque chose de nouveau.",
-		"takeMeHome": "Retourner à l’accueil",
+		"takeMeHome": "Retourner à l'accueil",
 		"title": "Oups ! Page introuvable",
 		"tryAgain": "Réessayer",
-		"venturedOff": "On dirait que vous avez quitté les sentiers battus..."
+		"venturedOff": "On dirait que vous avez quitté les sentiers battus...",
+		"eyebrow": "Erreur 404 · Page introuvable",
+		"titleLead": "Cette page a pris",
+		"titleAccent": "un détour.",
+		"body": "Nous n'avons pas trouvé la page que vous cherchiez, mais ne vous inquiétez pas. Chaque détour est une occasion de découvrir quelque chose de nouveau.",
+		"photoAlt": "Un groupe de jeunes femmes en t-shirts roses 4HerFrika souriant ensemble",
+		"hereTitle": "Vous êtes ici",
+		"hereBody": "un peu hors de la carte",
+		"routesTitle": "Où souhaitez-vous aller ?",
+		"home": {
+			"title": "Accueil",
+			"body": "Repartez de la porte d'entrée.",
+			"cta": "Aller à l'accueil"
+		},
+		"academy": {
+			"title": "Académie",
+			"body": "Compétences pratiques, mentorat professionnel et projets concrets.",
+			"cta": "Découvrir l'Académie"
+		},
+		"mentors": {
+			"title": "Mentors",
+			"body": "Réservez un appel de 30 minutes avec quelqu'un qui a déjà parcouru votre chemin.",
+			"cta": "Trouver un mentor"
+		},
+		"blog": {
+			"title": "Blog",
+			"body": "Histoires, projets et actualités des jeunes filles et des campus.",
+			"cta": "Lire les histoires"
+		},
+		"reportLead": "Vous avez suivi un lien cassé sur notre site ? Dites-le-nous à",
+		"reportTail": "et nous le corrigerons.",
+		"reportSubject": "Lien cassé"
 	},
 	"projects": {
 		"campusBootcamp": "4HerFrika | Campus Bootcamp",
@@ -1727,5 +1758,99 @@
 		"categoryHeroDescription": "Toutes les histoires et actualités classées dans cette catégorie, racontées par celles qui les vivent.",
 		"opensInNewTab": "(s'ouvre dans un nouvel onglet)",
 		"downloadImage": "Télécharger l'image"
+	},
+	"legal": {
+		"breadcrumbHome": "Accueil",
+		"breadcrumbLabel": "Fil d'Ariane",
+		"onThisPage": "Sur cette page",
+		"sectionCount": "{count} sections",
+		"questionsTitle": "Des questions ?",
+		"questionsBody": "Écrivez-nous et nous nous en occupons.",
+		"backToTop": "Retour en haut",
+		"email": "hello@4herfrika.org",
+		"privacy": {
+			"breadcrumb": "Confidentialité",
+			"contactTitle": "Des questions sur votre vie privée ?",
+			"contactBody": "Écrivez-nous et nous nous en occupons, qu'il s'agisse d'une question, d'une copie de vos données ou d'une suppression.",
+			"otherLink": "Lire nos conditions générales"
+		},
+		"terms": {
+			"breadcrumb": "Conditions",
+			"contactTitle": "Des questions sur ces conditions ?",
+			"contactBody": "Un point n'est pas clair avant de vous inscrire ou de réserver une session ? Écrivez-nous et posez-nous la question.",
+			"otherLink": "Lire notre politique de confidentialité"
+		}
+	},
+	"unsubscribe": {
+		"metaTitle": "Se désabonner",
+		"photoAlt": "Une jeune femme travaillant sur un ordinateur portable sur un banc en extérieur",
+		"photoCaption": "Les appels que vous avez déjà réservés restent réservés, quel que soit votre choix ici.",
+		"dataNote": "Des questions sur vos données ? Lisez notre <link>politique de confidentialité</link>.",
+		"backToHome": "Retour à l'accueil",
+		"confirm": {
+			"eyebrow": "Préférences e-mail",
+			"titleLead": "Arrêter les rappels de",
+			"titleAccent": "nouvelle réservation ?",
+			"body": "Nous cesserons d'envoyer des rappels de nouvelle réservation à <b>{email}</b>.",
+			"stopsLabel": "Ce qui s'arrête",
+			"stopsItem": "Rappels de nouvelle réservation",
+			"stopsNote": "Le seul e-mail qui s'arrête.",
+			"keepsLabel": "Ce qui continue",
+			"keepsConfirmations": "Confirmations de réservation",
+			"keepsReminders": "Rappels pour les appels que vous réservez",
+			"submit": "Oui, me désabonner",
+			"submitting": "Désabonnement…",
+			"keep": "Garder mes rappels",
+			"error": "Impossible de vous désabonner. Veuillez réessayer."
+		},
+		"done": {
+			"eyebrow": "Terminé",
+			"titleLead": "Désabonnement",
+			"titleAccent": "effectué.",
+			"body": "Vous ne recevrez plus de rappels de nouvelle réservation de notre part. Les confirmations de réservation et les rappels des appels que vous planifiez continuent d'arriver.",
+			"oopsTitle": "Oups, ce n'était pas voulu ?",
+			"oopsBody": "Réactivez les rappels de nouvelle réservation en un geste.",
+			"resubscribe": "Me réabonner",
+			"resubscribing": "Réabonnement…",
+			"error": "Impossible de vous réabonner. Veuillez réessayer.",
+			"hereLabel": "Pendant que vous êtes là",
+			"findMentor": "Trouver un mentor",
+			"academy": "Découvrir l'Académie"
+		},
+		"resubscribed": {
+			"eyebrow": "Content de vous revoir",
+			"titleLead": "Les rappels sont",
+			"titleAccent": "réactivés.",
+			"body": "Nous enverrons de nouveau des rappels de nouvelle réservation à <b>{email}</b>. Chaque e-mail de rappel contient un lien de désabonnement si vous changez d'avis.",
+			"bookNext": "Réserver votre prochain appel"
+		},
+		"invalid": {
+			"eyebrow": "Problème de lien",
+			"titleLead": "Ce lien",
+			"titleAccent": "n'est pas valide.",
+			"body": "Le lien de désabonnement est peut-être incomplet. Réessayez avec le lien de votre e-mail, ou touchez-le au lieu de le copier.",
+			"stillTitle": "Ça ne marche toujours pas ?",
+			"stillBody": "Écrivez à <mail>{email}</mail> depuis l'adresse à retirer et nous nous en chargerons."
+		}
+	},
+	"unauthorized": {
+		"metaTitle": "Accès refusé",
+		"eyebrow": "Erreur 403",
+		"titleLead": "Cette connexion est",
+		"titleAccent": "réservée à notre équipe.",
+		"body": "Votre connexion a fonctionné, mais ce tableau de bord est réservé à l'équipe et aux mentors de 4HerFrika. Vous suivez le cours de l'Académie ? Il est à portée de main.",
+		"learnerBadge": "Ici pour le cours de l'Académie ?",
+		"learnerTitle": "Apprenants : connectez-vous sur l'Académie.",
+		"learnerBody": "Votre cours, votre progression et vos quiz s'y trouvent, et la même adresse e-mail fonctionne.",
+		"learnerCta": "Aller à la connexion de l'Académie",
+		"photoAlt": "Trois femmes qui collaborent à l'Académie 4HerFrika",
+		"staffLabel": "Équipe ou mentor ?",
+		"staffCta": "Se connecter avec un autre compte",
+		"backToSite": "Retour au site",
+		"needAccess": "Besoin d'un accès ? Demandez à un administrateur, ou écrivez à",
+		"logoAlt": "Accueil 4HerFrika",
+		"bodySignedOut": "Ce tableau de bord est réservé à l'équipe et aux mentors de 4HerFrika. Vous suivez le cours de l'Académie ? Il est à portée de main.",
+		"staffSignIn": "Connexion équipe",
+		"signedInAs": "Connecté en tant que <b>{email}</b>"
 	}
 }
