@@ -1,5 +1,6 @@
 "use client";
 
+import { FadeIn } from "@/components/motion/fade-in";
 import { SearchX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { FaqGroup } from "../_helpers/faq-groups";
@@ -54,7 +55,7 @@ function GroupSection({ group }: { group: FaqGroup }) {
 			aria-labelledby={`${group.id}-title`}
 			className="grid scroll-mt-28 gap-6 lg:grid-cols-[300px_1fr] lg:gap-12"
 		>
-			<div className="lg:sticky lg:top-28 lg:self-start">
+			<FadeIn className="lg:sticky lg:top-28 lg:self-start">
 				<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("questionCount", { count: group.items.length })}
 				</span>
@@ -64,7 +65,7 @@ function GroupSection({ group }: { group: FaqGroup }) {
 				>
 					<AccentedTitle title={group.title} />
 				</h2>
-			</div>
+			</FadeIn>
 			<div className="flex flex-col gap-3">
 				{group.items.map((item) => (
 					<FaqItem key={item.id} item={item} />

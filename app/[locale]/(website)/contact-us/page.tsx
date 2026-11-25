@@ -1,4 +1,4 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
@@ -36,8 +36,8 @@ export default async function Contact({
 					id="topics"
 					className="scroll-mt-24 bg-primary-500/2 px-4 py-14 lg:px-20 lg:py-24"
 				>
-					<FadeIn className="mx-auto max-w-6xl">
-						<div className="text-center">
+					<div className="mx-auto max-w-6xl">
+						<FadeIn className="text-center">
 							<h2 className="text-[32px] font-bold leading-tight lg:text-5xl">
 								{t("topicsHeading")}{" "}
 								<em className="font-playfair font-black text-primary-500">
@@ -47,9 +47,9 @@ export default async function Contact({
 							<p className="mt-3 text-[17px] text-muted-foreground">
 								{t("topicsHint")}
 							</p>
-						</div>
+						</FadeIn>
 						<TopicCards />
-					</FadeIn>
+					</div>
 				</section>
 
 				<section

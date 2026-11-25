@@ -1,5 +1,6 @@
 import { MentorImage } from "@/components/mentor-image";
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
@@ -14,8 +15,8 @@ export async function MentorsSection({ mentors }: { mentors: HeroMentor[] }) {
 
 	return (
 		<section className="px-4 pb-16 lg:px-20 lg:pb-24">
-			<FadeIn className="mx-auto max-w-6xl">
-				<div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+			<div className="mx-auto max-w-6xl">
+				<FadeIn className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
 					<div>
 						<SectionHeading
 							eyebrow={t("eyebrow")}
@@ -34,8 +35,11 @@ export async function MentorsSection({ mentors }: { mentors: HeroMentor[] }) {
 						{t("viewAll")}
 						<ArrowRight aria-hidden="true" className="size-4" />
 					</PillLink>
-				</div>
-				<ul className="-mx-4 mt-8 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-5 lg:overflow-visible lg:px-0">
+				</FadeIn>
+				<RevealGroup
+					as="ul"
+					className="-mx-4 mt-8 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-5 lg:overflow-visible lg:px-0"
+				>
 					{mentors.map((mentor) => (
 						<li
 							key={mentor.slug}
@@ -60,8 +64,8 @@ export async function MentorsSection({ mentors }: { mentors: HeroMentor[] }) {
 							</Link>
 						</li>
 					))}
-				</ul>
-			</FadeIn>
+				</RevealGroup>
+			</div>
 		</section>
 	);
 }

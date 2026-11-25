@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { cn } from "@/utils/cn";
 import { getTranslations } from "next-intl/server";
 import { timeline } from "../_schema";
@@ -24,7 +25,7 @@ export async function AboutTimeline() {
 					tabIndex={0}
 					className="-mx-4 mt-10 snap-x scroll-px-4 overflow-x-auto px-4 pb-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 lg:mx-0 lg:overflow-visible lg:px-0 [scrollbar-width:none]"
 				>
-					<ol className="flex gap-4 lg:grid lg:grid-cols-4">
+					<RevealGroup as="ol" className="flex gap-4 lg:grid lg:grid-cols-4">
 						{timeline.map((item) => (
 							<li
 								key={item.titleKey}
@@ -56,7 +57,7 @@ export async function AboutTimeline() {
 								</p>
 							</li>
 						))}
-					</ol>
+					</RevealGroup>
 				</section>
 			</div>
 		</section>

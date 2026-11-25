@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/motion";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import type { ReactNode } from "react";
@@ -29,7 +28,7 @@ export async function FaqHero({
 				className="object-cover"
 			/>
 			<div className="absolute inset-0 bg-black/60" />
-			<FadeIn className="relative mx-auto flex max-w-3xl flex-col items-center gap-4 px-4 pb-16 pt-40 text-center lg:pb-32 lg:pt-56">
+			<div className="relative mx-auto flex max-w-3xl flex-col items-center gap-4 px-4 pb-16 pt-40 text-center lg:pb-32 lg:pt-56">
 				<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("title")}
 				</span>
@@ -43,7 +42,7 @@ export async function FaqHero({
 					{t("description")}
 				</p>
 				{children}
-			</FadeIn>
+			</div>
 		</section>
 	);
 }

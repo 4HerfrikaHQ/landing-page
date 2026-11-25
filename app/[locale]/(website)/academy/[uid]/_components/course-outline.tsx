@@ -1,3 +1,4 @@
+import { RevealGroup } from "@/components/motion/reveal-group";
 import {
 	AlignLeft,
 	Check,
@@ -61,21 +62,22 @@ export function CourseOutline({
 			>
 				{t("modulesTitle")}
 			</h2>
-			<ol className="flex flex-col gap-3">
+			<RevealGroup as="ol" className="flex flex-col gap-3">
 				{course.modules.map((module, index) => (
-					<ModuleItem
-						key={module.key}
-						module={module}
-						number={index + 1}
-						state={states.get(module.key) ?? "open"}
-						defaultOpen={module.key === openKey}
-						enrolled={enrolled}
-						completed={completed}
-						nextLessonId={next?.id}
-						uid={course.uid}
-					/>
+					<li key={module.key}>
+						<ModuleItem
+							module={module}
+							number={index + 1}
+							state={states.get(module.key) ?? "open"}
+							defaultOpen={module.key === openKey}
+							enrolled={enrolled}
+							completed={completed}
+							nextLessonId={next?.id}
+							uid={course.uid}
+						/>
+					</li>
 				))}
-			</ol>
+			</RevealGroup>
 		</section>
 	);
 }
@@ -102,7 +104,7 @@ function ModuleItem({
 	const border =
 		state === "current" ? "border-primary-500 border-2" : "border-border";
 	return (
-		<li>
+		<div>
 			<details
 				open={defaultOpen}
 				className={`group rounded-2xl border bg-white ${border}`}
@@ -136,7 +138,7 @@ function ModuleItem({
 					))}
 				</ul>
 			</details>
-		</li>
+		</div>
 	);
 }
 

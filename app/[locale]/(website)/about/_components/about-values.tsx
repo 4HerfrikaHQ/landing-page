@@ -1,4 +1,5 @@
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { cn } from "@/utils/cn";
 import { getTranslations } from "next-intl/server";
 import { type ValueTone, values } from "../_schema";
@@ -23,9 +24,9 @@ export async function AboutValues() {
 						</em>
 					</h2>
 				</FadeIn>
-				<StaggerContainer className="mt-10 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+				<RevealGroup className="mt-10 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-6">
 					{values.map((value) => (
-						<StaggerItem
+						<div
 							key={value.number}
 							className={cn(
 								"rounded-2xl p-5 lg:rounded-[20px] lg:p-8",
@@ -46,9 +47,9 @@ export async function AboutValues() {
 							<p className="mt-1 text-[15px] text-muted-foreground">
 								{t(value.descriptionKey)}
 							</p>
-						</StaggerItem>
+						</div>
 					))}
-				</StaggerContainer>
+				</RevealGroup>
 			</div>
 		</section>
 	);

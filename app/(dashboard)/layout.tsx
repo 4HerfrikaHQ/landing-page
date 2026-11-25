@@ -1,3 +1,5 @@
+import { MotionProvider } from "@/components/motion/motion-provider";
+import { NoScriptReveal } from "@/components/motion/no-script-reveal";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
@@ -20,7 +22,10 @@ export default async function DashboardLayout({
 			}}
 		>
 			<NuqsAdapter>
-				<TooltipProvider>{children}</TooltipProvider>
+				<NoScriptReveal />
+				<MotionProvider>
+					<TooltipProvider>{children}</TooltipProvider>
+				</MotionProvider>
 			</NuqsAdapter>
 		</NextIntlClientProvider>
 	);

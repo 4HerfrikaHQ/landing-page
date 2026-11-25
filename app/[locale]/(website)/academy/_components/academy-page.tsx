@@ -1,5 +1,9 @@
 "use client";
 
+import { ClipReveal } from "@/components/motion/clip-reveal";
+import { CountUp } from "@/components/motion/count-up";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/src/lib/analytics";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -161,7 +165,7 @@ export function AcademyPage({
 
 			<section className="bg-primary-500/2 px-6 py-20 lg:px-12 xl:px-12 xl:py-26.75 2xl:px-20">
 				<div className="mx-auto max-w-7xl">
-					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+					<RevealGroup className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
 						{[
 							["3000+", t("girlsMentored")],
 							["1000+", t("graduates")],
@@ -174,7 +178,7 @@ export function AcademyPage({
 							>
 								<div className="min-w-0 text-center">
 									<p className="text-5xl font-semibold leading-15 text-secondary-500">
-										{value}
+										<CountUp value={value} />
 									</p>
 									<p className="mt-2.5 text-[15px] font-medium text-foreground">
 										{label}
@@ -185,7 +189,7 @@ export function AcademyPage({
 								)}
 							</div>
 						))}
-					</div>
+					</RevealGroup>
 
 					<div
 						ref={pathsRef}
@@ -193,13 +197,15 @@ export function AcademyPage({
 					>
 						<div className="flex min-w-0 flex-col justify-between gap-12">
 							<div>
-								<h2 className="text-5xl font-bold leading-none text-black">
-									{t("pathsFirst")}
-									<br />
-									<em className="font-playfair font-extrabold text-primary-500">
-										{t("pathsSecond")}
-									</em>
-								</h2>
+								<FadeIn>
+									<h2 className="text-5xl font-bold leading-none text-black">
+										{t("pathsFirst")}
+										<br />
+										<em className="font-playfair font-extrabold text-primary-500">
+											{t("pathsSecond")}
+										</em>
+									</h2>
+								</FadeIn>
 								<p className="mt-9 w-137 max-w-full text-xl leading-8 text-muted-foreground">
 									{t("pathsDescription")}
 								</p>
@@ -294,7 +300,7 @@ export function AcademyPage({
 
 			<section className="flex h-184.25 overflow-hidden rounded-t-[64px] bg-white text-white max-lg:h-auto max-lg:flex-col max-lg:rounded-t-[40px]">
 				<div className="relative h-full w-1/2 bg-secondary-500 max-lg:flex max-lg:h-auto max-lg:w-full max-lg:flex-col max-lg:gap-8 max-lg:px-8 max-lg:py-16 max-sm:px-6 max-sm:py-12">
-					<div className="absolute left-20.5 top-24 max-w-122.75 max-lg:static max-lg:max-w-none">
+					<FadeIn className="absolute left-20.5 top-24 max-w-122.75 max-lg:static max-lg:max-w-none">
 						<span className="inline-flex rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 							Our Impact
 						</span>
@@ -303,7 +309,7 @@ export function AcademyPage({
 							<em className="font-playfair font-extrabold">African women</em> in
 							tech, business, and climate.
 						</h2>
-					</div>
+					</FadeIn>
 					<Button
 						type="button"
 						onClick={() => openWaitlist("tech", "page_cta")}
@@ -315,13 +321,15 @@ export function AcademyPage({
 					</Button>
 				</div>
 				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-719/737 max-lg:h-auto max-lg:w-full">
-					<Image
-						src="/assets/academy/impact-source.jpg"
-						alt="4Herfrika participant working on a laptop"
-						fill
-						sizes="(max-width: 1024px) 100vw, 50vw"
-						className="object-cover object-center"
-					/>
+					<ClipReveal className="absolute inset-0">
+						<Image
+							src="/assets/academy/impact-source.jpg"
+							alt="4Herfrika participant working on a laptop"
+							fill
+							sizes="(max-width: 1024px) 100vw, 50vw"
+							className="object-cover object-center"
+						/>
+					</ClipReveal>
 				</div>
 			</section>
 

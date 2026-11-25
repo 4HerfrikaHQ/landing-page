@@ -1,4 +1,5 @@
 import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
+import { ClipReveal } from "@/components/motion/clip-reveal";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -40,7 +41,7 @@ export async function VolunteerBand() {
 					</a>
 				</div>
 			</div>
-			<div className="relative aspect-square w-full lg:aspect-auto lg:h-full lg:w-1/2">
+			<ClipReveal className="relative aspect-square w-full lg:aspect-auto lg:h-full lg:w-1/2">
 				<Image
 					src="/assets/careercorner/volunteer.jpg"
 					alt={t("volunteerImageAlt")}
@@ -48,7 +49,7 @@ export async function VolunteerBand() {
 					sizes="(max-width: 1024px) 100vw, 50vw"
 					className="object-cover"
 				/>
-			</div>
+			</ClipReveal>
 		</section>
 	);
 }

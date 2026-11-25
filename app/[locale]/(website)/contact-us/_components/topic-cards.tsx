@@ -1,5 +1,6 @@
 "use client";
 
+import { RevealGroup } from "@/components/motion/reveal-group";
 import {
 	ArrowRight,
 	Check,
@@ -64,10 +65,10 @@ function TopicCard({ topic }: { topic: Topic }) {
 
 export function TopicCards() {
 	return (
-		<div className="mt-10 grid gap-3 lg:grid-cols-3 lg:gap-6">
+		<RevealGroup className="mt-10 grid gap-3 lg:grid-cols-3 lg:gap-6">
 			{topics.map((topic) => (
 				<TopicCard key={topic} topic={topic} />
 			))}
-		</div>
+		</RevealGroup>
 	);
 }

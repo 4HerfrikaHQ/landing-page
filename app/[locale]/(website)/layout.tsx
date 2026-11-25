@@ -1,5 +1,7 @@
 import "@/app/globals.css";
 import { ScrollProgress } from "@/components/motion";
+import { MotionProvider } from "@/components/motion/motion-provider";
+import { NoScriptReveal } from "@/components/motion/no-script-reveal";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ViewTransition } from "react";
 import { Footer } from "./_components/footer";
@@ -13,11 +15,14 @@ export default function WebLayout({
 }>) {
 	return (
 		<NuqsAdapter>
+			<NoScriptReveal />
 			<ScrollProgress />
 			<Navbar />
-			<ViewTransition name="page">
-				<div className="site-page">{children}</div>
-			</ViewTransition>
+			<MotionProvider>
+				<ViewTransition name="page">
+					<div className="site-page">{children}</div>
+				</ViewTransition>
+			</MotionProvider>
 			<Footer />
 			<ImpactBanner />
 		</NuqsAdapter>

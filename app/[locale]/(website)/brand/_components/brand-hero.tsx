@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/motion";
 import { Download } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LOGO_DOWNLOAD_ZIP } from "../_data/brand-assets";
@@ -9,7 +8,7 @@ export function BrandHero() {
 
 	return (
 		<section className="bg-linear-to-b from-surface-pink to-white px-4 pb-12 pt-10 sm:px-6 md:pb-16 md:pt-14 lg:px-8">
-			<FadeIn className={CONTAINER_CLASS}>
+			<div className={CONTAINER_CLASS}>
 				<PinkBadge>{t("badge")}</PinkBadge>
 				<h1 className="mt-5 max-w-3xl text-4xl font-bold leading-[1.1] text-secondary-500 md:text-6xl lg:text-7xl">
 					{t("titleFirst")}{" "}
@@ -28,7 +27,7 @@ export function BrandHero() {
 					<Download aria-hidden="true" className="size-5" />
 					{t("downloadAll")}
 				</a>
-			</FadeIn>
+			</div>
 		</section>
 	);
 }
