@@ -27,10 +27,10 @@ export function ImpactBanner() {
 				<span className="hidden shrink-0 whitespace-nowrap rounded-md bg-secondary-500 px-2 py-1 text-xs font-bold tracking-[0.12em] text-primary-bright uppercase sm:inline">
 					{t("badge")}
 				</span>
-				<p className="min-w-0 flex-1 truncate text-sm font-semibold tracking-wide uppercase sm:flex-none lg:text-[15px]">
+				<p className="min-w-0 flex-1 truncate text-sm font-semibold tracking-wide uppercase lg:text-[15px]">
 					<span className="sm:hidden">{t("titleShort")}</span>
 					<span className="hidden sm:inline">{t("title")}</span>
-					<span className="ml-3 hidden font-medium normal-case tracking-normal text-secondary-500/80 md:inline">
+					<span className="ml-3 hidden font-medium normal-case tracking-normal text-secondary-500/80 xl:inline">
 						{t("description")}
 					</span>
 				</p>
