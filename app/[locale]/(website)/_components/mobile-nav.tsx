@@ -54,7 +54,7 @@ export function MobileNav() {
 				side="right"
 				showCloseButton={false}
 				overlayClassName="z-70"
-				className="z-80 h-dvh gap-0 p-3 data-[side=right]:w-full data-[side=right]:sm:max-w-none"
+				className="z-80 gap-0 p-3 data-[side=top]:h-dvh data-[side=right]:w-full data-[side=right]:sm:max-w-none"
 			>
 				<div className="flex h-14 shrink-0 items-center justify-between pr-1.5 pl-4">
 					<Link
