@@ -5,6 +5,10 @@ export const academyType = z.enum(["tech", "business", "climate"]);
 
 export type Academy = z.infer<typeof academyType>;
 
+export const catalogFilter = z.enum(["all", ...academyType.options]);
+
+export type CatalogFilter = z.infer<typeof catalogFilter>;
+
 export const AcademyWaitlistSchema = z.object({
 	name: z.string().trim().min(2).max(120),
 	email: z.string().trim().toLowerCase().email(),

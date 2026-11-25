@@ -80,12 +80,17 @@ function Signatories({
 				{signatories.map((person) => (
 					<li key={person.name}>
 						<span className="font-semibold">{person.name}</span>
-						{person.title ? `, ${person.title}` : ""}
+						<SignatoryTitle title={person.title} />
 					</li>
 				))}
 			</ul>
 		</div>
 	);
+}
+
+function SignatoryTitle({ title }: { title: string | null }) {
+	if (!title) return null;
+	return <>, {title}</>;
 }
 
 export function LicenceNotice({ notice }: { notice: string[] }) {

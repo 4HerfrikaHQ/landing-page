@@ -67,7 +67,7 @@ function PartnerStrip({ partners }: { partners: Course["partners"] }) {
 					</span>
 				</span>
 			))}
-			<span className="ml-auto whitespace-nowrap text-xs text-muted-foreground">
+			<span className="ml-auto text-xs text-muted-foreground">
 				{t("madeTogether")}
 			</span>
 		</div>
@@ -92,9 +92,9 @@ function Stats({ course }: { course: Course }) {
 			{stats.map((stat) => (
 				<div
 					key={stat.label}
-					className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-white px-2 py-4 text-center"
+					className="flex min-w-0 flex-col items-center gap-1 rounded-2xl border border-border bg-white px-2 py-4 text-center"
 				>
-					<dd className="order-first text-xl font-semibold text-secondary-500">
+					<dd className="order-first max-w-full break-words text-xl font-semibold text-secondary-500">
 						{stat.value}
 					</dd>
 					<dt className="text-xs text-muted-foreground">{stat.label}</dt>

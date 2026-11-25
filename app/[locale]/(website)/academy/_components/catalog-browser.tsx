@@ -6,17 +6,22 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { type ReactNode, useState } from "react";
-import { type Academy, academies, academyType } from "../_schema";
+import {
+	type Academy,
+	type CatalogFilter,
+	academies,
+	academyType,
+	catalogFilter,
+} from "../_schema";
 import { WaitlistModal } from "./waitlist-modal";
-
-type Filter = "all" | Academy;
 
 export type CatalogItem = { uid: string; track: Academy; card: ReactNode };
 
-const FILTERS: readonly Filter[] = ["all", ...academyType.options];
+const ALL_TRACKS = catalogFilter.def.entries.all;
+const DEFAULT_WAITLIST_TRACK = academyType.def.entries.tech;
 
-const trackParam = parseAsStringLiteral(FILTERS)
-	.withDefault("all")
+const trackParam = parseAsStringLiteral(catalogFilter.options)
+	.withDefault(ALL_TRACKS)
 	.withOptions({ history: "replace", scroll: false });
 
 const COMING_SOON_SURFACE: Record<Academy, string> = {
@@ -25,8 +30,8 @@ const COMING_SOON_SURFACE: Record<Academy, string> = {
 	climate: "bg-surface-teal",
 };
 
-function visibleItems(items: CatalogItem[], filter: Filter) {
-	return filter === "all"
+function visibleItems(items: CatalogItem[], filter: CatalogFilter) {
+	return filter === ALL_TRACKS
 		? items
 		: items.filter((item) => item.track === filter);
 }
@@ -37,10 +42,15 @@ function layoutClass(shownCount: number) {
 		: "grid gap-6";
 }
 
-function tracksWithoutCourse(items: CatalogItem[], filter: Filter) {
+function waitingListClass(shownCount: number) {
+	return shownCount > 0 ? "flex flex-col gap-4" : "grid gap-4 lg:grid-cols-3";
+}
+
+function tracksWithoutCourse(items: CatalogItem[], filter: CatalogFilter) {
 	const covered = new Set(items.map((item) => item.track));
 	return academyType.options.filter(
-		(track) => !covered.has(track) && (filter === "all" || filter === track),
+		(track) =>
+			!covered.has(track) && (filter === ALL_TRACKS || filter === track),
 	);
 }
 
@@ -49,7 +59,7 @@ export function CatalogBrowser({ items }: { items: CatalogItem[] }) {
 	const [filter, setFilter] = useQueryState("track", trackParam);
 	const [waitlist, setWaitlist] = useState<{ open: boolean; track: Academy }>({
 		open: false,
-		track: "tech",
+		track: DEFAULT_WAITLIST_TRACK,
 	});
 	const shown = visibleItems(items, filter);
 	const waiting = tracksWithoutCourse(items, filter);
@@ -66,7 +76,7 @@ export function CatalogBrowser({ items }: { items: CatalogItem[] }) {
 		<div className="mt-8 flex flex-col gap-8">
 			<fieldset className="flex min-w-0 flex-wrap gap-2 border-0 p-0">
 				<legend className="sr-only">{t("filterLabel")}</legend>
-				{FILTERS.map((option) => (
+				{catalogFilter.options.map((option) => (
 					<FilterChip
 						key={option}
 						label={t(`tracks.${option}`)}
@@ -80,15 +90,9 @@ export function CatalogBrowser({ items }: { items: CatalogItem[] }) {
 				<CourseColumn
 					items={shown}
 					empty={items.length === 0}
-					onJoin={() => openWaitlist("tech")}
+					onJoin={() => openWaitlist(DEFAULT_WAITLIST_TRACK)}
 				/>
-				<ul
-					className={
-						shown.length > 0
-							? "flex flex-col gap-4"
-							: "grid gap-4 lg:grid-cols-3"
-					}
-				>
+				<ul className={waitingListClass(shown.length)}>
 					{waiting.map((track) => (
 						<li key={track}>
 							<ComingSoon track={track} onNotify={() => openWaitlist(track)} />

@@ -8,7 +8,8 @@ import { coursePath, firstLesson, lessonPath, nextLesson } from "../_helpers";
 import type { Viewer } from "../_viewer";
 import { EnrolButton } from "./enrol-button";
 
-const ACTION_CLASS = "min-h-12 w-full gap-2 text-base md:py-3 md:text-base";
+const ACTION_CLASS =
+	"min-h-12 w-full gap-2 whitespace-normal text-center text-base md:py-3 md:text-base";
 
 export function CourseAction({
 	course,
@@ -47,13 +48,14 @@ export function CourseAction({
 
 	const next = nextLesson(course, viewer.policy, viewer.completed);
 	const lesson = next ?? firstLesson(course);
+	const label = next ? t("continue") : t("review");
 	const href = localizedPath(
 		locale,
 		lesson ? lessonPath(course.uid, lesson.key) : coursePath(course.uid),
 	);
 	return (
 		<Button href={href as Route} size="lg" className={ACTION_CLASS}>
-			{next ? t("continue") : t("review")} <ArrowRight className="size-4" />
+			{label} <ArrowRight className="size-4" />
 		</Button>
 	);
 }

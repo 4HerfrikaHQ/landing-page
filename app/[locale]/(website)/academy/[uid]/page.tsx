@@ -14,7 +14,7 @@ import { CourseOutline } from "./_components/course-outline";
 import { CourseUpdating } from "./_components/course-updating";
 import { FinishPanel } from "./_components/finish-panel";
 import { StickyStartBar } from "./_components/sticky-start-bar";
-import { isCourseOpenForEnrolment } from "./_helpers";
+import { activePolicy, isCourseOpenForEnrolment } from "./_helpers";
 import { loadViewer } from "./_viewer";
 
 const loadCourse = cache(getCourse);
@@ -46,7 +46,7 @@ export default async function CoursePage({
 	if (!course) notFound();
 	const viewer = await loadViewer(course);
 	const open = isCourseOpenForEnrolment(course);
-	const policy = viewer.kind === "enrolled" ? viewer.policy : course.policy;
+	const policy = activePolicy(course, viewer);
 
 	return (
 		<main className="bg-linear-to-b from-surface-pink via-white to-white px-5 pt-6 lg:px-8">
