@@ -20,7 +20,8 @@ const story = (id: string, date: string | null): HomeStory => ({
 
 describe("home stories", () => {
 	test("a project excerpt is its first plain paragraph", () => {
-		const markdown = `## Overview\n\n![Photo](https://x/y.jpg)\n\nThe **bootcamp** ran for [two weeks](https://x) on campus.\n\n- a list`;
+		const markdown =
+			"## Overview\n\n![Photo](https://x/y.jpg)\n\nThe **bootcamp** ran for [two weeks](https://x) on campus.\n\n- a list";
 		expect(plainExcerpt(markdown)).toBe(
 			"The bootcamp ran for two weeks on campus.",
 		);
