@@ -676,10 +676,12 @@
 			"label": "Mwaka wa 1",
 			"title": "Kutoka mmoja hadi wengi",
 			"summary": "Kilichoanza katika kampasi moja nchini Nigeria kilisambaa hadi kampasi 25 katika nchi tano ndani ya miezi kumi na miwili.",
-			"figureGirls": "Wasichana waliopata malezi",
-			"figureCampuses": "Kampasi zilizofikiwa",
-			"figureGraduates": "Wahitimu wa Tech Academy",
-			"figureCountries": "Nchi"
+			"figures": {
+				"girlsMentored": "Wasichana waliopata malezi",
+				"campuses": "Kampasi zilizofikiwa",
+				"academyGraduates": "Wahitimu wa Tech Academy",
+				"countries": "Nchi"
+			}
 		},
 		"goalPill": "Lengo la 2030",
 		"goalFirst": "Milioni mbili",
@@ -696,10 +698,12 @@
 			"comingSoon": "Inakuja hivi karibuni",
 			"figuresPending": "Takwimu zinakuja hivi karibuni",
 			"preview": "Tazama onyesho la ukurasa",
-			"figureGirls": "Wasichana walioshauriwa",
-			"figureCampuses": "Vyuo vilivyofikiwa",
-			"figureGraduates": "Wahitimu wa bootcamp za Academy",
-			"figureCountries": "Nchi"
+			"figures": {
+				"girlsMentored": "Wasichana walioshauriwa",
+				"campuses": "Vyuo vilivyofikiwa",
+				"academyGraduates": "Wahitimu wa bootcamp za Academy",
+				"countries": "Nchi"
+			}
 		}
 	},
 	"impactYear2": {
@@ -795,6 +799,7 @@
 		"label": "Ripoti ya athari ya Mwaka wa 2",
 		"badge": "Mwaka 2",
 		"title": "Ripoti yetu ya athari ya Mwaka wa 2 imetoka",
+		"titleShort": "Ripoti ya Mwaka 2",
 		"description": "Ona kile mwaka wa pili wa ushauri ulichobadilisha.",
 		"cta": "Soma ripoti",
 		"dismiss": "Ficha bango hili"

@@ -676,10 +676,12 @@
 			"label": "Année 1",
 			"title": "D’un seul à beaucoup",
 			"summary": "Ce qui a commencé sur un seul campus au Nigeria s’est étendu à 25 campus dans cinq pays en douze mois.",
-			"figureGirls": "Filles accompagnées",
-			"figureCampuses": "Campus touchés",
-			"figureGraduates": "Diplômées de la Tech Academy",
-			"figureCountries": "Pays"
+			"figures": {
+				"girlsMentored": "Filles accompagnées",
+				"campuses": "Campus touchés",
+				"academyGraduates": "Diplômées de la Tech Academy",
+				"countries": "Pays"
+			}
 		},
 		"goalPill": "L’objectif 2030",
 		"goalFirst": "Deux millions",
@@ -696,10 +698,12 @@
 			"comingSoon": "Bientôt disponible",
 			"figuresPending": "Chiffres bientôt disponibles",
 			"preview": "Voir un aperçu de la page",
-			"figureGirls": "Filles encadrées",
-			"figureCampuses": "Campus atteints",
-			"figureGraduates": "Diplômées des bootcamps Academy",
-			"figureCountries": "Pays"
+			"figures": {
+				"girlsMentored": "Filles encadrées",
+				"campuses": "Campus atteints",
+				"academyGraduates": "Diplômées des bootcamps Academy",
+				"countries": "Pays"
+			}
 		}
 	},
 	"impactYear2": {
@@ -795,6 +799,7 @@
 		"label": "Rapport d’impact de la 2e année",
 		"badge": "Année 2",
 		"title": "Notre rapport d’impact de la 2e année est disponible",
+		"titleShort": "Rapport 2e année",
 		"description": "Découvrez ce qu’une deuxième année de mentorat a changé.",
 		"cta": "Lire le rapport",
 		"dismiss": "Masquer cette bannière"

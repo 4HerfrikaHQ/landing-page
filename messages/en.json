@@ -676,10 +676,12 @@
 			"label": "Year 1",
 			"title": "From one to many",
 			"summary": "What started on a single campus in Nigeria spread to 25 campuses in five countries in twelve months.",
-			"figureGirls": "Girls mentored",
-			"figureCampuses": "Campuses reached",
-			"figureGraduates": "Tech Academy graduates",
-			"figureCountries": "Countries"
+			"figures": {
+				"girlsMentored": "Girls mentored",
+				"campuses": "Campuses reached",
+				"academyGraduates": "Tech Academy graduates",
+				"countries": "Countries"
+			}
 		},
 		"goalPill": "The 2030 goal",
 		"goalFirst": "Two million",
@@ -696,10 +698,12 @@
 			"comingSoon": "Coming soon",
 			"figuresPending": "Figures land soon",
 			"preview": "Preview the page",
-			"figureGirls": "Girls mentored",
-			"figureCampuses": "Campuses reached",
-			"figureGraduates": "Academy bootcamp graduates",
-			"figureCountries": "Countries"
+			"figures": {
+				"girlsMentored": "Girls mentored",
+				"campuses": "Campuses reached",
+				"academyGraduates": "Academy bootcamp graduates",
+				"countries": "Countries"
+			}
 		}
 	},
 	"impactYear2": {
@@ -795,6 +799,7 @@
 		"label": "Year 2 impact report",
 		"badge": "Year 2",
 		"title": "Our Year 2 impact report is out",
+		"titleShort": "Year 2 report is out",
 		"description": "See what a second year of mentoring did.",
 		"cta": "Read the report",
 		"dismiss": "Hide this banner"

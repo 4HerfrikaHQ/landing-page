@@ -38,7 +38,7 @@ export default async function YearTwoReportPage({
 			<SectionMenu />
 			<section
 				id="numbers"
-				className="scroll-mt-20 bg-primary-500/2 px-4 py-14 lg:px-20 lg:py-24"
+				className="scroll-mt-28 bg-primary-500/2 px-4 py-14 lg:px-20 lg:py-24"
 			>
 				<div className="mx-auto max-w-6xl">
 					<StatRow report={year2Report} />
