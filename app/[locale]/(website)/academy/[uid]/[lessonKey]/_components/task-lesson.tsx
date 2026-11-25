@@ -58,7 +58,15 @@ export async function TaskLesson({ view }: { view: LessonViewProps }) {
 				sentOn: format.dateTime(row.submitted_at, { dateStyle: "medium" }),
 			}
 		: null;
-	const hasNext = nav.nextEnabled && nav.nextHref !== null;
+	const nextHref = nav.nextEnabled ? nav.nextHref : null;
+	const tracks = content.tracks.map(({ key, title, instructions }) => ({
+		key,
+		title,
+		instructions: instructions ? <RichBody field={instructions} /> : null,
+	}));
+	const intro = content.instructions ? (
+		<RichBody field={content.instructions} />
+	) : null;
 
 	return (
 		<>
@@ -71,22 +79,14 @@ export async function TaskLesson({ view }: { view: LessonViewProps }) {
 				uid={access.course.uid}
 				lessonKey={lesson.key}
 				resubmit={status === "needs_work"}
-				intro={
-					content.instructions ? (
-						<RichBody field={content.instructions} />
-					) : null
-				}
+				intro={intro}
 				fallback={t("noInstructions")}
-				tracks={content.tracks.map(({ key, title, instructions }) => ({
-					key,
-					title,
-					instructions: instructions ? <RichBody field={instructions} /> : null,
-				}))}
+				tracks={tracks}
 			/>
 			<LessonFooter previousHref={nav.previousHref}>
 				<TaskContinue
-					href={hasNext ? (nav.nextHref as string) : nav.courseHref}
-					hasNext={hasNext}
+					href={nextHref ?? nav.courseHref}
+					hasNext={nextHref !== null}
 				/>
 			</LessonFooter>
 		</>

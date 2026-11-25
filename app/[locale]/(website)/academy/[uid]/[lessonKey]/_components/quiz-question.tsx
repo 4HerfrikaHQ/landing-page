@@ -13,7 +13,12 @@ type Props = {
 	onSelect: (option: number) => void;
 };
 
-function focusElement(shouldFocus: boolean) {
+function RadioDot({ checked }: { checked: boolean }) {
+	if (!checked) return null;
+	return <span className="size-3 rounded-full bg-primary-500" />;
+}
+
+export function focusElement(shouldFocus: boolean) {
 	return (element: HTMLElement | null) => {
 		if (shouldFocus) element?.focus();
 	};
@@ -56,9 +61,7 @@ export function QuizQuestion({
 								aria-hidden
 								className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground peer-checked:border-primary-500"
 							>
-								{selected === option.index ? (
-									<span className="size-3 rounded-full bg-primary-500" />
-								) : null}
+								<RadioDot checked={selected === option.index} />
 							</span>
 							{option.text}
 						</span>

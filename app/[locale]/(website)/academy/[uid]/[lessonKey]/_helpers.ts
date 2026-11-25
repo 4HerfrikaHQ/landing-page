@@ -9,8 +9,6 @@ import type { CourseLessonView } from "../_helpers";
 
 export const PROGRESS_ALLOWANCE_SECONDS = 15;
 export const PROGRESS_INTERVAL_MS = 10_000;
-export const MAX_TEXT_LENGTH = 5000;
-export const MAX_TRACK_LENGTH = 40;
 const MS_PER_SECOND = 1000;
 
 export type StoredProgress = {

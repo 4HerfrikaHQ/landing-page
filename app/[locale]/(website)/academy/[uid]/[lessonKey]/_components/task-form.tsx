@@ -43,6 +43,11 @@ export function TaskForm({ uid, lessonKey, resubmit, intro, tracks }: Props) {
 	);
 	const tooShort = charactersToGo > 0;
 	const active = tracks.find((track) => track.key === draft.track);
+	const submitLabel = busy
+		? t("submitting")
+		: resubmit
+			? t("resubmit")
+			: t("submit");
 
 	return (
 		<form
@@ -102,7 +107,7 @@ export function TaskForm({ uid, lessonKey, resubmit, intro, tracks }: Props) {
 				disabled={busy || needsTrack || tooShort}
 				className={`${PRIMARY_ACTION} lg:self-start`}
 			>
-				{busy ? t("submitting") : resubmit ? t("resubmit") : t("submit")}
+				{submitLabel}
 			</button>
 			<TooShortHint charactersToGo={charactersToGo} />
 			<p className="text-sm text-muted-foreground">{t("reply")}</p>
