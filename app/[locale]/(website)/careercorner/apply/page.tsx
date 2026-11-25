@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/motion/fade-in";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
@@ -43,10 +42,10 @@ export default async function ApplyPage({
 					</p>
 				</header>
 
-				<FadeIn className="mt-8 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-8">
+				<div className="mt-8 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-8">
 					<BecomeAMentorForm />
 					<MentorApplyAside />
-				</FadeIn>
+				</div>
 			</div>
 		</main>
 	);

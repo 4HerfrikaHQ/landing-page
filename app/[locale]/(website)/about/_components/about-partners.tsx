@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -18,27 +19,30 @@ export async function AboutPartners() {
 				<h2 className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
 					{t("partnersTitle")}
 				</h2>
-				<ul className="mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
-					{sponsors.map((sponsor) => (
-						<li key={sponsor.name}>
-							<PartnerTile
-								logo={sponsor.logo}
-								url={sponsor.url}
-								logoAlt={t("partnerLogoAlt", { name: sponsor.name })}
-								linkLabel={t("partnerLinkLabel", { name: sponsor.name })}
-							/>
-						</li>
-					))}
-					<li>
-						<Link
-							href={"/contact-us" as Route}
-							className="grid h-20 place-items-center rounded-2xl border-2 border-dashed border-primary-500/40 px-3 text-center font-semibold text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 lg:h-24"
-						>
-							{t("partnerWithUs")}
-						</Link>
-					</li>
-				</ul>
 			</FadeIn>
+			<RevealGroup
+				as="ul"
+				className="mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4"
+			>
+				{sponsors.map((sponsor) => (
+					<li key={sponsor.name}>
+						<PartnerTile
+							logo={sponsor.logo}
+							url={sponsor.url}
+							logoAlt={t("partnerLogoAlt", { name: sponsor.name })}
+							linkLabel={t("partnerLinkLabel", { name: sponsor.name })}
+						/>
+					</li>
+				))}
+				<li>
+					<Link
+						href={"/contact-us" as Route}
+						className="grid h-20 place-items-center rounded-2xl border-2 border-dashed border-primary-500/40 px-3 text-center font-semibold text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 lg:h-24"
+					>
+						{t("partnerWithUs")}
+					</Link>
+				</li>
+			</RevealGroup>
 		</section>
 	);
 }

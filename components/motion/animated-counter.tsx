@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReveal } from "./use-reveal";
+import { useRevealed } from "./use-revealed";
 
 interface AnimatedCounterProps {
 	target: number;
@@ -14,7 +14,7 @@ export function AnimatedCounter({
 	duration = 1.5,
 	className,
 }: AnimatedCounterProps) {
-	const { ref, revealed } = useReveal<HTMLSpanElement>();
+	const { ref, revealed } = useRevealed<HTMLSpanElement>();
 	const [value, setValue] = useState(0);
 	const frame = useRef<number>(undefined);
 

@@ -5,6 +5,8 @@ import {
 	Pagination,
 	type PaginationLabels,
 } from "@/components/dashboard/pagination";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Button } from "@/components/ui/button";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { trackEvent } from "@/src/lib/analytics";
@@ -82,11 +84,11 @@ function MentorResults({
 
 	return (
 		<>
-			<div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-6">
+			<RevealGroup className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-6">
 				{mentors.map((mentor) => (
 					<MentorCard key={mentor.id} mentor={mentor} />
 				))}
-			</div>
+			</RevealGroup>
 			<Pagination
 				page={page}
 				pageSize={MENTOR_PAGE_SIZE}
@@ -155,7 +157,7 @@ export function MentorDirectory({
 	return (
 		<section id="mentors" className="scroll-mt-24 px-4 py-14 lg:px-20 lg:py-20">
 			<div className="mx-auto max-w-6xl">
-				<div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+				<FadeIn className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
 					<h2 className="text-[32px] font-bold leading-tight lg:text-5xl">
 						{t("allFirst")}{" "}
 						<em className="font-playfair font-black text-primary-500">
@@ -165,7 +167,7 @@ export function MentorDirectory({
 					<output className="text-[15px] text-muted-foreground tabular-nums">
 						{t("mentorCount", { total })}
 					</output>
-				</div>
+				</FadeIn>
 				<fieldset className="m-0 mt-6 flex min-w-0 flex-wrap gap-2 border-0 p-0">
 					<legend className="sr-only">{t("filterLabel")}</legend>
 					<button

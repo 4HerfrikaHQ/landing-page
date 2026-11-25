@@ -1,5 +1,6 @@
 "use client";
 
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { useState } from "react";
 import { type CardData, FeedCard } from "./feed-card";
 
@@ -51,13 +52,16 @@ export function FeedGrid({ cards, loadMoreLabel, showingTemplate }: Props) {
 
 	return (
 		<>
-			<ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 sm:max-lg:[&>li:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>li:last-child:nth-child(odd)]:w-[calc(50%-0.75rem)] sm:max-lg:[&>li:last-child:nth-child(odd)]:justify-self-center">
+			<RevealGroup
+				as="ul"
+				className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 sm:max-lg:[&>li:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>li:last-child:nth-child(odd)]:w-[calc(50%-0.75rem)] sm:max-lg:[&>li:last-child:nth-child(odd)]:justify-self-center"
+			>
 				{cards.slice(0, shown).map((card) => (
 					<li key={card.href}>
 						<FeedCard card={card} />
 					</li>
 				))}
-			</ul>
+			</RevealGroup>
 			<LoadMore
 				shown={shown}
 				total={cards.length}

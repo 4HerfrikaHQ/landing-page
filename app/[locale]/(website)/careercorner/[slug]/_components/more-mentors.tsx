@@ -1,4 +1,6 @@
 import { MentorImage } from "@/components/mentor-image";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Link } from "@/i18n/navigation";
 import { UserRound } from "lucide-react";
 import type { Route } from "next";
@@ -17,7 +19,7 @@ export async function MoreMentors({
 	return (
 		<section className="bg-surface-pink/40 px-4 py-14 lg:px-20 lg:py-20">
 			<div className="mx-auto max-w-6xl">
-				<div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+				<FadeIn className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
 					<h2 className="text-[28px] font-bold leading-tight lg:text-4xl">
 						{t.rich("title", {
 							em: (chunks) => (
@@ -33,8 +35,11 @@ export async function MoreMentors({
 					>
 						{t("all")} →
 					</Link>
-				</div>
-				<ul className="-mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0">
+				</FadeIn>
+				<RevealGroup
+					as="ul"
+					className="-mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0"
+				>
 					{mentors.map((mentor) => {
 						const displayName = mentor.nickname || mentor.name;
 						return (
@@ -77,7 +82,7 @@ export async function MoreMentors({
 							</li>
 						);
 					})}
-				</ul>
+				</RevealGroup>
 			</div>
 		</section>
 	);

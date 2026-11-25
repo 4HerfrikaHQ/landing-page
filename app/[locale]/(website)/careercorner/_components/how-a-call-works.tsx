@@ -1,3 +1,5 @@
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { getTranslations } from "next-intl/server";
 
 const STEPS = [
@@ -12,16 +14,21 @@ export async function HowACallWorks() {
 	return (
 		<section className="bg-muted px-4 py-16 lg:px-20 lg:py-24">
 			<div className="mx-auto max-w-6xl">
-				<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
-					{t("stepsBadge")}
-				</span>
-				<h2 className="mt-4 text-[32px] font-bold leading-tight lg:text-5xl">
-					{t("stepsFirst")}{" "}
-					<em className="font-playfair font-black text-primary-500">
-						{t("stepsSecond")}
-					</em>
-				</h2>
-				<ol className="mt-10 grid gap-4 lg:grid-cols-3 lg:gap-6">
+				<FadeIn>
+					<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
+						{t("stepsBadge")}
+					</span>
+					<h2 className="mt-4 text-[32px] font-bold leading-tight lg:text-5xl">
+						{t("stepsFirst")}{" "}
+						<em className="font-playfair font-black text-primary-500">
+							{t("stepsSecond")}
+						</em>
+					</h2>
+				</FadeIn>
+				<RevealGroup
+					as="ol"
+					className="mt-10 grid gap-4 lg:grid-cols-3 lg:gap-6"
+				>
 					{STEPS.map((step, index) => (
 						<li
 							key={step.title}
@@ -39,7 +46,7 @@ export async function HowACallWorks() {
 							</p>
 						</li>
 					))}
-				</ol>
+				</RevealGroup>
 			</div>
 		</section>
 	);

@@ -1,3 +1,5 @@
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Star } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { MentorTestimonial } from "../_testimonials";
@@ -10,17 +12,21 @@ export async function Testimonials({
 
 	return (
 		<div>
-			<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary">
-				{t("tag")}
-			</span>
-			<h2 className="mt-4 text-[28px] font-bold leading-tight lg:text-4xl">
-				{t.rich("title", {
-					em: (chunks) => (
-						<em className="font-playfair font-black text-primary">{chunks}</em>
-					),
-				})}
-			</h2>
-			<ul className="mt-6 space-y-3">
+			<FadeIn>
+				<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary">
+					{t("tag")}
+				</span>
+				<h2 className="mt-4 text-[28px] font-bold leading-tight lg:text-4xl">
+					{t.rich("title", {
+						em: (chunks) => (
+							<em className="font-playfair font-black text-primary">
+								{chunks}
+							</em>
+						),
+					})}
+				</h2>
+			</FadeIn>
+			<RevealGroup as="ul" className="mt-6 space-y-3">
 				{testimonials.map((testimonial) => (
 					<li
 						key={testimonial.bookingId}
@@ -48,7 +54,7 @@ export async function Testimonials({
 						</p>
 					</li>
 				))}
-			</ul>
+			</RevealGroup>
 		</div>
 	);
 }

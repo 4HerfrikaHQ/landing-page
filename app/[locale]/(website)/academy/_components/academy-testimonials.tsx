@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { createClient } from "@/prismicio";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -33,17 +34,22 @@ export async function AcademyTestimonials() {
 				height={251}
 				className="pointer-events-none absolute -right-8 bottom-6 w-40 -rotate-12 opacity-15 lg:top-10 lg:bottom-auto lg:w-56"
 			/>
-			<FadeIn className="relative mx-auto max-w-6xl">
-				<h2 className="text-center font-heading text-[32px] leading-[1.1] font-medium tracking-tight text-secondary-500 lg:text-5xl">
-					{t("titleFirst")}{" "}
-					<span className="font-playfair text-primary-500 italic">
-						{t("titleSecond")}
-					</span>
-				</h2>
-				<p className="mt-3 text-center text-lg text-muted-foreground">
-					{t("description")}
-				</p>
-				<ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+			<div className="relative mx-auto max-w-6xl">
+				<FadeIn>
+					<h2 className="text-center font-heading text-[32px] leading-[1.1] font-medium tracking-tight text-secondary-500 lg:text-5xl">
+						{t("titleFirst")}{" "}
+						<span className="font-playfair text-primary-500 italic">
+							{t("titleSecond")}
+						</span>
+					</h2>
+					<p className="mt-3 text-center text-lg text-muted-foreground">
+						{t("description")}
+					</p>
+				</FadeIn>
+				<RevealGroup
+					as="ul"
+					className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+				>
 					{testimonials.map((item) => (
 						<li
 							key={item.name}
@@ -73,8 +79,8 @@ export async function AcademyTestimonials() {
 							</figure>
 						</li>
 					))}
-				</ul>
-			</FadeIn>
+				</RevealGroup>
+			</div>
 		</section>
 	);
 }

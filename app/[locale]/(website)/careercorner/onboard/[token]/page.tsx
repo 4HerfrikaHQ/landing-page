@@ -2,7 +2,6 @@ import type {
 	MentorCalendarCallbackOutcome,
 	MentorCalendarCallbackReason,
 } from "@/app/(dashboard)/dashboard/mentor/profile/_components/mentor-calendar-connection";
-import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { saveOnboardingAvailability } from "@/src/db/actions/availability";
 import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
@@ -188,7 +187,7 @@ export default async function OnboardingPage({
 
 	return (
 		<OnboardShell>
-			<FadeIn>
+			<div>
 				<header>
 					<span className="inline-block rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 						{tOnboarding("eyebrow")}
@@ -230,7 +229,7 @@ export default async function OnboardingPage({
 						profileComplete={Boolean(mentor.bio)}
 					/>
 				</div>
-			</FadeIn>
+			</div>
 		</OnboardShell>
 	);
 }
