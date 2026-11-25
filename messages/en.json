@@ -1048,6 +1048,7 @@
 				"progressLabel": "Quiz progress",
 				"choose": "Choose one answer",
 				"nextQuestion": "Next question",
+				"chooseToContinue": "Choose an answer to continue",
 				"previousQuestion": "Previous question",
 				"submit": "See my result",
 				"submitting": "Checking your answers…",

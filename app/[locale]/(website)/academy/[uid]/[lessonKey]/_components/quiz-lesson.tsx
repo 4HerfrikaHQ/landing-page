@@ -3,6 +3,7 @@ import { quizAttempts } from "@/src/db/schema/tables";
 import { and, asc, eq } from "drizzle-orm";
 import { getLearnerQuiz, getQuizAnswerKey } from "../../../_content";
 import { gradeQuiz, nextQuizAttempt } from "../../../_helpers";
+import { nextAttemptNumber } from "../_helpers";
 import type { QuizState } from "../_hooks/use-quiz";
 import { correctNeeded, toReview, toTopics } from "../_quiz";
 import type { LessonViewProps } from "../_view";
@@ -98,25 +99,24 @@ export async function QuizLesson({ view }: { view: LessonViewProps }) {
 		attempts,
 		policy,
 	);
-	const expectedAttempt =
-		Math.max(0, ...attempts.map((a) => a.attempt_number)) + 1;
+	const expectedAttempt = nextAttemptNumber(
+		attempts.map((attempt) => attempt.attempt_number),
+	);
 	return (
-		<>
-			<QuizPlayer
-				key={`${expectedAttempt}-${state.kind}`}
-				uid={access.course.uid}
-				lessonKey={lesson.key}
-				moduleNumber={nav.position.moduleNumber}
-				quiz={quiz}
-				expectedAttempt={expectedAttempt}
-				needed={correctNeeded(policy, quiz.questions.length)}
-				initial={state}
-				failedScore={failedScore}
-				failedTopics={failedTopics}
-				nextHref={nav.continueHref}
-				courseHref={nav.courseHref}
-				reviewHref={nav.previousHref ?? nav.courseHref}
-			/>
-		</>
+		<QuizPlayer
+			key={`${expectedAttempt}-${state.kind}`}
+			uid={access.course.uid}
+			lessonKey={lesson.key}
+			moduleNumber={nav.position.moduleNumber}
+			quiz={quiz}
+			expectedAttempt={expectedAttempt}
+			needed={correctNeeded(policy, quiz.questions.length)}
+			initial={state}
+			failedScore={failedScore}
+			failedTopics={failedTopics}
+			nextHref={nav.continueHref}
+			courseHref={nav.courseHref}
+			reviewHref={nav.previousHref ?? nav.courseHref}
+		/>
 	);
 }
