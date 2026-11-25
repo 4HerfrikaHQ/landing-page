@@ -40,25 +40,95 @@
 		"language": "Language"
 	},
 	"home": {
-		"heroTitle": "Raising <highlight>World-Class</highlight> Women",
-		"heroDescription": "4Herfrika is your Northstar. We are raising leaders across technology, medicine, law, business, agriculture, science, and beyond.",
-		"becomeAmbassador": "Become an ambassador",
-		"wordsOnStreet": "<pink>Words</pink> on The <pink>Street</pink>",
-		"wordsOnStreetSub": "Take a look at what our members say!",
-		"supportedBy": "Supported By:",
-		"exploreCampus": "4HerFrika Campuses",
-		"campusDescription": "We operate through bite-sized communities in tertiary institutions",
-		"exploreAcademy": "4HerFrika Academy",
-		"academyDescription": "Online learning platform for skill development",
-		"ourCampuses": "Our Campuses",
-		"ourCampusesDescription": "One campus at a time, we're growing a sisterhood. Across 20+ African universities, 4Herfrika chapters host events, workshops, and mentorship sessions — building leadership, community, and connection.",
-		"exploreCampuses": "Explore Campuses",
-		"ourAcademy": "Our Academy",
-		"ourAcademyDescription": "Virtual learning. Real impact. Through our Tech, Business, and Climate Academies, young women gain practical skills, mentorship, and confidence to lead boldly in today's world.",
-		"exploreLearningTracks": "Explore Learning Tracks",
-		"members": "members",
-		"campuses": "campuses",
-		"africanCountries": "african countries"
+		"hero": {
+			"badge": "New · Free AI course with Ordina",
+			"titleFirst": "Raising",
+			"titleSecond": "world-class <word>women.</word>",
+			"morphWords": ["women.", "leaders.", "founders.", "scientists."],
+			"description": "Your Northstar across Africa. We mentor, train and connect young women for careers in tech, business, climate and beyond.",
+			"startCourse": "Start the free course",
+			"bookMentor": "Book a mentor",
+			"imageAlt": "Three young women taking a selfie at a 4HerFrika event"
+		},
+		"stats": {
+			"year": "Year 1",
+			"girlsMentored": "girls mentored",
+			"graduates": "Academy graduates",
+			"campuses": "campuses",
+			"countries": "countries",
+			"label": "Our impact in Year 1"
+		},
+		"paths": {
+			"eyebrow": "Get involved",
+			"titleFirst": "Four ways in.",
+			"titleSecond": "Pick yours.",
+			"newTab": "(opens in a new tab)",
+			"learn": {
+				"title": "Learn for free",
+				"description": "Short courses on your phone, ending in a certificate employers can check.",
+				"cta": "Go to the Academy",
+				"imageAlt": "Young women coding on laptops"
+			},
+			"mentor": {
+				"title": "Book a mentor",
+				"description": "A free 30-minute call with someone who has walked your road.",
+				"cta": "Find a mentor",
+				"imageAlt": "A facilitator teaching in a computer lab"
+			},
+			"ambassador": {
+				"title": "Lead on campus",
+				"description": "Become an ambassador or volunteer and grow the sisterhood where you are.",
+				"cta": "Become an ambassador",
+				"imageAlt": "Campus ambassadors in pink 4HerFrika shirts"
+			},
+			"donate": {
+				"title": "Give a girl a start",
+				"description": "Your gift pays for data, laptops and bootcamps on campus.",
+				"cta": "Donate",
+				"imageAlt": "Graduates holding their certificates"
+			}
+		},
+		"mentors": {
+			"eyebrow": "Career Corner",
+			"titleFirst": "Mentors who've",
+			"titleSecond": "been there.",
+			"description": "Pick one by field and book a free 30-minute call.",
+			"viewAll": "Meet all mentors"
+		},
+		"course": {
+			"eyebrow": "Free online course",
+			"titleFirst": "AI for your",
+			"titleSecond": "next opportunity.",
+			"description": "Made with Ordina. Short video lessons, a quiz after each one, and a verifiable certificate at the end. Works on any phone.",
+			"point1": "4 modules of short videos, about 4–5 hours",
+			"point2": "Free, with a certificate employers can check",
+			"point3": "Learn at your pace, pick up where you stopped",
+			"start": "Start for free",
+			"seeAll": "See all courses",
+			"imageAlt": "A young woman learning on a laptop outdoors"
+		},
+		"stories": {
+			"eyebrow": "From the blog",
+			"titleFirst": "Latest",
+			"titleSecond": "stories",
+			"read": "Read the story",
+			"viewAll": "All stories",
+			"project": "Project",
+			"story": "Story"
+		},
+		"testimonials": {
+			"titleFirst": "Words on",
+			"titleSecond": "the street",
+			"description": "What our mentees say.",
+			"credit": "{mentee}, mentee of {mentor}"
+		},
+		"cta": {
+			"titleFirst": "Help us reach",
+			"titleSecond": "2 million girls.",
+			"description": "Your gift pays for data, laptops and bootcamps on campus.",
+			"donate": "Donate",
+			"volunteer": "Volunteer"
+		}
 	},
 	"about": {
 		"whoWeAre": "Who We Are",
