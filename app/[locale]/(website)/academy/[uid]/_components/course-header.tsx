@@ -77,7 +77,10 @@ function PartnerStrip({ partners }: { partners: Course["partners"] }) {
 function Stats({ course }: { course: Course }) {
 	const t = useTranslations("academy.course");
 	const stats = [
-		{ value: String(course.modules.length), label: t("statModules") },
+		{
+			value: String(course.modules.length),
+			label: t("statModules", { count: course.modules.length }),
+		},
 		{
 			value: course.hoursLabel ?? t("statHoursFallback"),
 			label: t("statHours"),
