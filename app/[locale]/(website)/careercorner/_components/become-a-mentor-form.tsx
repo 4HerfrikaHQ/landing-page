@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PendingLabel } from "@/components/ui/pending-label";
 import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { cn } from "@/utils/cn";
@@ -82,10 +83,9 @@ export function BecomeAMentorForm() {
 		return t(`errors.${field}`);
 	}
 
-	function resolveSubmitLabel() {
+	function resolvePendingLabel() {
 		if (isUploading) return t("uploadingCv");
-		if (action.isPending) return t("submitting");
-		return t("submit");
+		return t("submitting");
 	}
 
 	function handleFileSelect(file: File | null) {
@@ -129,7 +129,7 @@ export function BecomeAMentorForm() {
 		await handleSubmitWithAction();
 	}
 
-	const submitLabel = resolveSubmitLabel();
+	const pendingLabel = resolvePendingLabel();
 
 	if (action.hasSucceeded) {
 		return (
@@ -338,8 +338,9 @@ export function BecomeAMentorForm() {
 				size="lg"
 				className="mt-6 h-12 w-full gap-2 px-6 py-0 text-base font-semibold focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 md:py-0 md:text-base"
 			>
-				<Spinner visible={isSubmitting} />
-				{submitLabel}
+				<PendingLabel pending={isSubmitting} pendingLabel={pendingLabel}>
+					{t("submit")}
+				</PendingLabel>
 			</Button>
 		</form>
 	);
@@ -407,17 +408,6 @@ function ServerError({
 			<CircleAlertIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
 			<p>{message}</p>
 		</div>
-	);
-}
-
-function Spinner({ visible }: { visible: boolean }) {
-	if (!visible) return null;
-
-	return (
-		<Loader2Icon
-			aria-hidden="true"
-			className="size-4 animate-spin motion-reduce:animate-none"
-		/>
 	);
 }
 

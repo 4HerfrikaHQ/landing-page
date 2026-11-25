@@ -1,7 +1,13 @@
 "use client";
 
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
+import { EASE_OUT } from "@/components/motion/tokens";
 import { Button } from "@/components/ui/button";
+import { LayoutMotion } from "@/components/ui/layout-motion";
+import { SelectedHighlight } from "@/components/ui/selected-highlight";
 import { trackEvent } from "@/src/lib/analytics";
+import { AnimatePresence, m } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
@@ -19,6 +25,12 @@ export type CatalogItem = { uid: string; track: Academy; card: ReactNode };
 
 const ALL_TRACKS = catalogFilter.def.entries.all;
 const DEFAULT_WAITLIST_TRACK = academyType.def.entries.tech;
+
+const CHIP_RADIUS = 9999;
+
+const COURSE_SCALE = 0.98;
+
+const COURSE_TRANSITION = { duration: 0.2, ease: EASE_OUT };
 
 const trackParam = parseAsStringLiteral(catalogFilter.options)
 	.withDefault(ALL_TRACKS)
@@ -73,42 +85,47 @@ export function CatalogBrowser({ items }: { items: CatalogItem[] }) {
 	};
 
 	return (
-		<div className="mt-8 flex flex-col gap-8">
-			<fieldset className="flex min-w-0 flex-wrap gap-2 border-0 p-0">
-				<legend className="sr-only">{t("filterLabel")}</legend>
-				{catalogFilter.options.map((option) => (
-					<FilterChip
-						key={option}
-						label={t(`tracks.${option}`)}
-						pressed={filter === option}
-						onPress={() => setFilter(option)}
-					/>
-				))}
-			</fieldset>
-
-			<div className={layoutClass(shown.length)}>
-				<CourseColumn
-					items={shown}
-					empty={items.length === 0}
-					onJoin={() => openWaitlist(DEFAULT_WAITLIST_TRACK)}
-				/>
-				<ul className={waitingListClass(shown.length)}>
-					{waiting.map((track) => (
-						<li key={track}>
-							<ComingSoon track={track} onNotify={() => openWaitlist(track)} />
-						</li>
+		<LayoutMotion>
+			<div className="mt-8 flex flex-col gap-8">
+				<fieldset className="flex min-w-0 flex-wrap gap-2 border-0 p-0">
+					<legend className="sr-only">{t("filterLabel")}</legend>
+					{catalogFilter.options.map((option) => (
+						<FilterChip
+							key={option}
+							label={t(`tracks.${option}`)}
+							pressed={filter === option}
+							onPress={() => setFilter(option)}
+						/>
 					))}
-				</ul>
-			</div>
+				</fieldset>
 
-			<WaitlistModal
-				open={waitlist.open}
-				onOpenChange={(open) =>
-					setWaitlist((current) => ({ ...current, open }))
-				}
-				academy={waitlist.track}
-			/>
-		</div>
+				<div className={layoutClass(shown.length)}>
+					<CourseColumn
+						items={shown}
+						empty={items.length === 0}
+						onJoin={() => openWaitlist(DEFAULT_WAITLIST_TRACK)}
+					/>
+					<RevealGroup as="ul" className={waitingListClass(shown.length)}>
+						{waiting.map((track) => (
+							<li key={track}>
+								<ComingSoon
+									track={track}
+									onNotify={() => openWaitlist(track)}
+								/>
+							</li>
+						))}
+					</RevealGroup>
+				</div>
+
+				<WaitlistModal
+					open={waitlist.open}
+					onOpenChange={(open) =>
+						setWaitlist((current) => ({ ...current, open }))
+					}
+					academy={waitlist.track}
+				/>
+			</div>
+		</LayoutMotion>
 	);
 }
 
@@ -122,17 +139,29 @@ function FilterChip({
 	onPress: () => void;
 }) {
 	const tone = pressed
-		? "border-secondary-500 bg-secondary-500 text-white"
+		? "border-transparent text-white"
 		: "border-border bg-white text-foreground hover:border-primary-500";
 	return (
 		<button
 			type="button"
 			aria-pressed={pressed}
 			onClick={onPress}
-			className={`min-h-11 cursor-pointer rounded-full border px-5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 ${tone}`}
+			className={`relative isolate min-h-11 cursor-pointer rounded-full border px-5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 ${tone}`}
 		>
+			<ChipHighlight pressed={pressed} />
 			{label}
 		</button>
+	);
+}
+
+function ChipHighlight({ pressed }: { pressed: boolean }) {
+	if (!pressed) return null;
+	return (
+		<SelectedHighlight
+			layoutId="academy-track-highlight"
+			radius={CHIP_RADIUS}
+			className="bg-secondary-500"
+		/>
 	);
 }
 
@@ -194,11 +223,27 @@ function CourseColumn({
 	if (empty) return <EmptyCatalog onJoin={onJoin} />;
 	if (items.length === 0) return null;
 	return (
-		<ul className="flex flex-col gap-6" aria-label={t("coursesLabel")}>
-			{items.map((item) => (
-				<li key={item.uid}>{item.card}</li>
-			))}
-		</ul>
+		<FadeIn>
+			<ul
+				className="relative flex flex-col gap-6"
+				aria-label={t("coursesLabel")}
+			>
+				<AnimatePresence mode="popLayout" initial={false}>
+					{items.map((item) => (
+						<m.li
+							key={item.uid}
+							layout="position"
+							initial={{ opacity: 0, scale: COURSE_SCALE }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: COURSE_SCALE }}
+							transition={COURSE_TRANSITION}
+						>
+							{item.card}
+						</m.li>
+					))}
+				</AnimatePresence>
+			</ul>
+		</FadeIn>
 	);
 }
 
