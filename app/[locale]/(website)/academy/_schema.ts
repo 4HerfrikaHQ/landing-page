@@ -237,3 +237,5 @@ export const QuizSubmission = z.record(
 		.max(QUIZ_OPTION_COUNT - 1),
 );
 export type QuizSubmission = z.infer<typeof QuizSubmission>;
+
+export const COURSE_CONTENT_LOCALE = "en";

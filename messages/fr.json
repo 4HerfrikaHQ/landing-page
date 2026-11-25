@@ -1006,7 +1006,8 @@
 			"emptyTitle": "Notre premier cours arrive bientôt",
 			"emptyBody": "Rejoignez la liste d’attente et nous vous préviendrons dès son ouverture.",
 			"emptyAction": "Rejoindre la liste d’attente",
-			"coursesLabel": "Cours"
+			"coursesLabel": "Cours",
+			"inEnglish": "Cours en anglais"
 		},
 		"course": {
 			"backToCourses": "Tous les cours",

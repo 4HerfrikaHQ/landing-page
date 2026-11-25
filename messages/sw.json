@@ -1006,7 +1006,8 @@
 			"emptyTitle": "Kozi yetu ya kwanza inakuja hivi karibuni",
 			"emptyBody": "Jiunge na orodha ya kusubiri nasi tutakujulisha mara itakapofunguliwa.",
 			"emptyAction": "Jiunge na orodha ya kusubiri",
-			"coursesLabel": "Kozi"
+			"coursesLabel": "Kozi",
+			"inEnglish": "Kozi kwa Kiingereza"
 		},
 		"course": {
 			"backToCourses": "Kozi zote",

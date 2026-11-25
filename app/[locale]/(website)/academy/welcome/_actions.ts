@@ -4,9 +4,14 @@ import { createClient } from "@/src/auth";
 import { db } from "@/src/db";
 import { learners } from "@/src/db/schema/tables";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
+import type { Route } from "next";
+import type { Locale } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
+import { courseUidFromPath } from "../[uid]/_helpers";
+import { startCourse } from "../[uid]/_start";
 import { DEFAULT_COMPLETION_POLICY } from "../_helpers";
+import { currentLearner } from "../_learner";
 import {
 	ACADEMY_HOME_PATH,
 	localizedPath,
@@ -37,6 +42,22 @@ export const createLearner = actionClient
 				.onConflictDoNothing({ target: learners.auth_user_id });
 
 			const locale = await getLocale();
-			redirect(resolveNext(next, localizedPath(locale, ACADEMY_HOME_PATH)));
+			const target = resolveNext(
+				next,
+				localizedPath(locale, ACADEMY_HOME_PATH),
+			);
+			redirect(await firstStop(locale, target));
 		},
 	);
+
+async function firstStop(locale: Locale, target: Route): Promise<Route> {
+	const uid = courseUidFromPath(target);
+	const learner = uid ? await currentLearner() : null;
+	if (!uid || !learner) return target;
+	try {
+		return localizedPath(locale, await startCourse(learner.id, uid));
+	} catch (error) {
+		if (error instanceof ActionError) return target;
+		throw error;
+	}
+}

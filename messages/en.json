@@ -1006,7 +1006,8 @@
 			"emptyTitle": "Our first course is coming soon",
 			"emptyBody": "Join the waitlist and we will tell you the moment it opens.",
 			"emptyAction": "Join the waitlist",
-			"coursesLabel": "Courses"
+			"coursesLabel": "Courses",
+			"inEnglish": "Course in English"
 		},
 		"course": {
 			"backToCourses": "All courses",
