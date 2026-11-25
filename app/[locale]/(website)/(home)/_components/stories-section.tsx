@@ -6,6 +6,7 @@ import type { Route } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import type { HomeStory } from "../_helpers";
+import { FEATURED_COUNT, REGULAR_END_INDEX, StoryVariant } from "../_schema";
 import { PillLink } from "./pill-link";
 import { SectionHeading } from "./section-heading";
 
@@ -35,10 +36,42 @@ function StoryImage({
 	);
 }
 
+type VariantStyle = {
+	card: string;
+	image: string;
+	body: string;
+	title: string;
+	excerpt: string;
+};
+
+const VARIANT_STYLES: Record<StoryVariant, VariantStyle> = {
+	featured: {
+		card: "lg:col-span-2 lg:grid lg:h-100 lg:grid-cols-[1.1fr_1fr]",
+		image: "lg:aspect-auto lg:h-full",
+		body: "lg:p-8",
+		title: "text-2xl",
+		excerpt: "line-clamp-4",
+	},
+	regular: {
+		card: "lg:h-100",
+		image: "lg:aspect-auto lg:h-55",
+		body: "",
+		title: "text-lg",
+		excerpt: "line-clamp-2",
+	},
+	desktopOnly: {
+		card: "max-lg:hidden lg:h-100",
+		image: "lg:aspect-auto lg:h-55",
+		body: "",
+		title: "text-lg",
+		excerpt: "line-clamp-2",
+	},
+};
+
 async function StoryCard({
 	story,
 	variant,
-}: { story: HomeStory; variant: "featured" | "regular" | "desktopOnly" }) {
+}: { story: HomeStory; variant: StoryVariant }) {
 	const [t, format] = await Promise.all([
 		getTranslations("home.stories"),
 		getFormatter(),
@@ -50,42 +83,26 @@ async function StoryCard({
 			})
 		: "";
 	const meta = [label, date].filter(Boolean).join(" · ");
-	const isFeatured = variant === "featured";
+	const style = VARIANT_STYLES[variant];
 
 	return (
-		<Link
-			href={story.href as Route}
-			className={cn(
-				CARD_CLASSES,
-				isFeatured && "lg:col-span-2 lg:grid lg:h-100 lg:grid-cols-[1.1fr_1fr]",
-				variant === "regular" && "lg:h-100",
-				variant === "desktopOnly" && "max-lg:hidden lg:h-100",
-			)}
-		>
+		<Link href={story.href as Route} className={cn(CARD_CLASSES, style.card)}>
 			<StoryImage
 				url={story.imageUrl}
 				alt={story.imageAlt}
-				className={cn(
-					"aspect-3/2 w-full",
-					isFeatured ? "lg:aspect-auto lg:h-full" : "lg:aspect-auto lg:h-55",
-				)}
+				className={cn("aspect-3/2 w-full", style.image)}
 			/>
-			<div className={cn("flex flex-1 flex-col p-5", isFeatured && "lg:p-8")}>
+			<div className={cn("flex flex-1 flex-col p-5", style.body)}>
 				<p className="text-xs font-semibold uppercase tracking-wider text-primary-500">
 					{meta}
 				</p>
-				<h3
-					className={cn(
-						"mt-2 font-semibold leading-snug",
-						isFeatured ? "text-2xl" : "text-lg",
-					)}
-				>
+				<h3 className={cn("mt-2 font-semibold leading-snug", style.title)}>
 					{story.title}
 				</h3>
 				<p
 					className={cn(
 						"mt-2 text-[15px] text-muted-foreground",
-						isFeatured ? "line-clamp-4" : "line-clamp-2",
+						style.excerpt,
 					)}
 				>
 					{story.excerpt}
@@ -102,10 +119,10 @@ async function StoryCard({
 	);
 }
 
-function variantFor(index: number) {
-	if (index === 0) return "featured";
-	if (index < 3) return "regular";
-	return "desktopOnly";
+function variantFor(index: number): StoryVariant {
+	if (index < FEATURED_COUNT) return StoryVariant.enum.featured;
+	if (index < REGULAR_END_INDEX) return StoryVariant.enum.regular;
+	return StoryVariant.enum.desktopOnly;
 }
 
 export async function StoriesSection({ stories }: { stories: HomeStory[] }) {

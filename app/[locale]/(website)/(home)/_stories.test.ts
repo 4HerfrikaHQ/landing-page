@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { type HomeStory, newestFirst, plainExcerpt } from "./_helpers";
+import {
+	type HomeStory,
+	hasStoryIdentity,
+	newestFirst,
+	plainExcerpt,
+} from "./_helpers";
 
 const story = (id: string, date: string | null): HomeStory => ({
 	id,
@@ -32,5 +37,13 @@ describe("home stories", () => {
 			3,
 		);
 		expect(mixed.map((s) => s.id)).toEqual(["new", "mid", "old"]);
+	});
+
+	test("posts without a uid or title are dropped", () => {
+		expect(hasStoryIdentity({ uid: "a", data: { title: "A" } })).toBe(true);
+		expect(hasStoryIdentity({ uid: null, data: { title: "A" } })).toBe(false);
+		expect(hasStoryIdentity({ uid: "", data: { title: "A" } })).toBe(false);
+		expect(hasStoryIdentity({ uid: "a", data: { title: "  " } })).toBe(false);
+		expect(hasStoryIdentity({ uid: "a", data: { title: null } })).toBe(false);
 	});
 });

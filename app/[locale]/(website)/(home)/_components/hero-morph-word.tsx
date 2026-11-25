@@ -8,9 +8,9 @@ import {
 	useSyncExternalStore,
 } from "react";
 import { useTextMorph } from "torph/react";
+import { CYCLE_INTERVAL_MS } from "../_schema";
 import { useOnScreen } from "./use-on-screen";
 
-const CYCLE_INTERVAL_MS = 2800;
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const HTML_ESCAPES: Record<string, string> = {
 	"&": "&amp;",

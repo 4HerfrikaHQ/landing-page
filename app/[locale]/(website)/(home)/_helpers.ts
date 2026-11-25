@@ -44,3 +44,10 @@ export function newestFirst(stories: HomeStory[], limit: number) {
 		.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""))
 		.slice(0, limit);
 }
+
+export function hasStoryIdentity(post: {
+	uid?: string | null;
+	data: { title?: string | null };
+}) {
+	return Boolean(post.uid) && Boolean(post.data.title?.trim());
+}

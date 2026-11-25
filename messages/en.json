@@ -44,12 +44,7 @@
 			"badge": "New · Free AI course with Ordina",
 			"titleFirst": "Raising",
 			"titleSecond": "world-class <word>women.</word>",
-			"morphWords": [
-				"women.",
-				"leaders.",
-				"founders.",
-				"scientists."
-			],
+			"morphWords": ["women.", "leaders.", "founders.", "scientists."],
 			"description": "Your Northstar across Africa. We mentor, train and connect young women for careers in tech, business, climate and beyond.",
 			"startCourse": "Start the free course",
 			"bookMentor": "Book a mentor",
@@ -67,6 +62,7 @@
 			"eyebrow": "Get involved",
 			"titleFirst": "Four ways in.",
 			"titleSecond": "Pick yours.",
+			"newTab": "(opens in a new tab)",
 			"learn": {
 				"title": "Learn for free",
 				"description": "Short courses on your phone, ending in a certificate employers can check.",

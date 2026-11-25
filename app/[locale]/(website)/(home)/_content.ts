@@ -6,14 +6,16 @@ import { projects } from "../projects/_schema";
 import {
 	type HomeStory,
 	firstName,
+	hasStoryIdentity,
 	mentorCreditName,
 	newestFirst,
 	plainExcerpt,
 } from "./_helpers";
-import { STORY_COUNT } from "./_schema";
-
-const TESTIMONIAL_LIMIT = 6;
-const MIN_TESTIMONIAL_RATING = 4;
+import {
+	MIN_TESTIMONIAL_RATING,
+	STORY_COUNT,
+	TESTIMONIAL_LIMIT,
+} from "./_schema";
 
 export type HomeTestimonial = {
 	id: string;
@@ -98,7 +100,7 @@ function projectStories(): HomeStory[] {
 
 async function postStories(): Promise<HomeStory[]> {
 	const posts = await getBlogPosts();
-	return posts.map((post) => ({
+	return posts.filter(hasStoryIdentity).map((post) => ({
 		id: post.id,
 		href: `/blog/${post.uid}`,
 		title: post.data.title ?? "",

@@ -47,7 +47,7 @@ export async function MentorsSection({ mentors }: { mentors: HeroMentor[] }) {
 							>
 								<MentorImage
 									src={mentor.image}
-									alt={mentor.displayName}
+									alt=""
 									crop={mentor.crop}
 									aspectRatio={1}
 									sizes="(max-width: 1024px) 40vw, 16vw"
