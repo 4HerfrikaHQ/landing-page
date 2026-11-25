@@ -5,6 +5,7 @@ import type { MentorTestimonial } from "../_testimonials";
 export async function Testimonials({
 	testimonials,
 }: { testimonials: MentorTestimonial[] }) {
+	if (testimonials.length === 0) return null;
 	const t = await getTranslations("mentorProfile.testimonials");
 
 	return (

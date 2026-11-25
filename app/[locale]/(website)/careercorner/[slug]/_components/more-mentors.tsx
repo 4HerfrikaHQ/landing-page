@@ -11,6 +11,7 @@ const FOCUS_RING =
 export async function MoreMentors({
 	mentors,
 }: { mentors: Awaited<ReturnType<typeof getSimilarMentors>> }) {
+	if (mentors.length === 0) return null;
 	const t = await getTranslations("mentorProfile.more");
 
 	return (
@@ -62,13 +63,13 @@ export async function MoreMentors({
 										)}
 									</div>
 									<div className="flex flex-1 flex-col p-1.5 pt-3 lg:p-3">
-										<h3 className="font-semibold leading-snug">
+										<h3 className="break-words font-semibold leading-snug">
 											{displayName}
 										</h3>
-										<p className="mb-4 flex-1 text-[15px] capitalize text-muted-foreground">
+										<p className="mb-4 flex-1 break-words text-[15px] capitalize text-muted-foreground">
 											{mentor.position}
 										</p>
-										<span className="inline-flex h-11 items-center justify-center rounded-pill bg-primary text-[15px] font-medium text-primary-foreground">
+										<span className="inline-flex min-h-11 items-center justify-center rounded-pill bg-primary px-3 text-center text-[15px] font-medium text-primary-foreground">
 											{t("book")}
 										</span>
 									</div>

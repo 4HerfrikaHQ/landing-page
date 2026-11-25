@@ -133,7 +133,8 @@
 			"meet": "Google Meet",
 			"free": "Free",
 			"bookCta": "Book a call",
-			"photoFallback": "{name}, 4HerFrika mentor"
+			"photoFallback": "{name}, 4HerFrika mentor",
+			"newTab": "(opens in a new tab)"
 		},
 		"about": {
 			"tag": "About",

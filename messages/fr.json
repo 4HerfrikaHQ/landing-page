@@ -47,7 +47,8 @@
 			"meet": "Google Meet",
 			"free": "Gratuit",
 			"bookCta": "Prendre rendez-vous",
-			"photoFallback": "{name}, mentor 4HerFrika"
+			"photoFallback": "{name}, mentor 4HerFrika",
+			"newTab": "(s'ouvre dans un nouvel onglet)"
 		},
 		"about": {
 			"tag": "À propos",

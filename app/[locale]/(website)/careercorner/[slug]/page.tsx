@@ -5,7 +5,7 @@ import {
 	localizedCareerCornerPath,
 } from "@/src/lib/careercorner-seo";
 import { startOfWeek } from "date-fns";
-import { Clock, Eye } from "lucide-react";
+import { Clock } from "lucide-react";
 import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -16,7 +16,9 @@ import {
 	getMentorByPreviousSlug,
 	getMentorBySlug,
 } from "./_actions";
+import { AboutMentor } from "./_components/about-mentor";
 import { BookingSection } from "./_components/booking-section";
+import { InactivePreviewBanner } from "./_components/inactive-preview-banner";
 import { MoreMentors } from "./_components/more-mentors";
 import { NextSteps } from "./_components/next-steps";
 import { ProfileHero } from "./_components/profile-hero";
@@ -86,6 +88,9 @@ export default async function MentorDetailPage({
 		new Date(initialWeekStart).getTime() ===
 			startOfWeek(new Date(), { weekStartsOn: 1 }).getTime();
 	const displayName = mentor.nickname || mentor.name;
+	const bookingTitle = canCreateBooking
+		? t("booking.title")
+		: t("booking.previewTitle");
 	const pageUrl = absoluteSiteUrl(
 		localizedCareerCornerPath(locale, `/${mentor.slug}`),
 	);
@@ -130,26 +135,13 @@ export default async function MentorDetailPage({
 
 	return (
 		<main className="overflow-x-clip bg-background text-foreground">
-			{isInactivePreview && (
-				<div className="border-b border-amber-500/20 bg-amber-50 text-amber-950">
-					<div className="mx-auto flex max-w-6xl items-start gap-3 px-4 py-3 sm:px-6 lg:px-8">
-						<Eye
-							className="mt-0.5 size-5 shrink-0 text-amber-700"
-							aria-hidden="true"
-						/>
-						<p className="text-sm leading-6">
-							<span className="font-semibold">
-								{t("inactivePreview.title")}
-							</span>{" "}
-							{isAdminPreview
-								? t("inactivePreview.adminBody")
-								: t("inactivePreview.ownerBody")}
-						</p>
-					</div>
-				</div>
-			)}
+			<InactivePreviewBanner
+				isInactivePreview={isInactivePreview}
+				isAdminPreview={isAdminPreview}
+			/>
 			<script
 				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD with "<" escaped
 				dangerouslySetInnerHTML={{
 					__html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
 				}}
@@ -179,11 +171,7 @@ export default async function MentorDetailPage({
 									<Clock className="size-5" aria-hidden="true" />
 								</span>
 								<div>
-									<h2 className="text-xl font-semibold">
-										{canCreateBooking
-											? t("booking.title")
-											: t("booking.previewTitle")}
-									</h2>
+									<h2 className="text-xl font-semibold">{bookingTitle}</h2>
 									<p className="text-sm text-muted-foreground">
 										{t("booking.subtitle")}
 									</p>
@@ -204,35 +192,14 @@ export default async function MentorDetailPage({
 					</aside>
 
 					<div className="flex flex-col gap-12 lg:col-start-1 lg:row-start-1 lg:gap-16">
-						{mentor.bio && (
-							<div>
-								<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary">
-									{t("about.tag")}
-								</span>
-								<h2 className="mt-4 text-[28px] font-bold leading-tight lg:text-4xl">
-									{t.rich("about.title", {
-										name: displayName,
-										em: (chunks) => (
-											<em className="font-playfair font-black text-primary">
-												{chunks}
-											</em>
-										),
-									})}
-								</h2>
-								<p className="mt-5 max-w-[62ch] whitespace-pre-wrap text-[16px] leading-relaxed text-foreground/80 lg:text-[17px]">
-									{mentor.bio}
-								</p>
-							</div>
-						)}
-						{testimonials.length > 0 && (
-							<Testimonials testimonials={testimonials} />
-						)}
+						<AboutMentor displayName={displayName} bio={mentor.bio} />
+						<Testimonials testimonials={testimonials} />
 						<NextSteps displayName={displayName} />
 					</div>
 				</div>
 			</section>
 
-			{similarMentors.length > 0 && <MoreMentors mentors={similarMentors} />}
+			<MoreMentors mentors={similarMentors} />
 			<VolunteerBand />
 		</main>
 	);
