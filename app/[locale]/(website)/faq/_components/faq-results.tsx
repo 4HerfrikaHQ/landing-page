@@ -2,15 +2,9 @@
 
 import { SearchX } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useSyncExternalStore } from "react";
 import type { FaqGroup } from "../_helpers/faq-groups";
-import {
-	getFaqQuery,
-	getServerFaqQuery,
-	setFaqQuery,
-	subscribeToFaqQuery,
-} from "../_helpers/faq-query-store";
 import { countFaqItems, filterFaqGroups } from "../_helpers/filter-faq";
+import { useFaqQuery } from "../_hooks/use-faq-query";
 import { FaqItem } from "./faq-item";
 
 function AccentedTitle({ title }: { title: string }) {
@@ -26,6 +20,7 @@ function AccentedTitle({ title }: { title: string }) {
 }
 
 function EmptyResults({ query, total }: { query: string; total: number }) {
+	const [, setQuery] = useFaqQuery();
 	const t = useTranslations("faq");
 	if (total > 0) return null;
 	return (
@@ -42,7 +37,7 @@ function EmptyResults({ query, total }: { query: string; total: number }) {
 			</p>
 			<button
 				type="button"
-				onClick={() => setFaqQuery("")}
+				onClick={() => setQuery("")}
 				className="inline-flex h-11 items-center rounded-pill border-2 border-primary-500 px-5 font-medium text-primary-500 outline-none transition-colors hover:bg-primary-500 hover:text-white focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
 			>
 				{t("clearSearch")}
@@ -105,11 +100,7 @@ function TopicNav({ groups }: { groups: FaqGroup[] }) {
 
 export function FaqResults({ groups }: { groups: FaqGroup[] }) {
 	const t = useTranslations("faq");
-	const query = useSyncExternalStore(
-		subscribeToFaqQuery,
-		getFaqQuery,
-		getServerFaqQuery,
-	);
+	const [query] = useFaqQuery();
 	const visible = filterFaqGroups(groups, query);
 	const total = countFaqItems(visible);
 	const searching = query.trim().length > 0;
