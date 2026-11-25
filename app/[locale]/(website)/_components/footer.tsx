@@ -120,7 +120,9 @@ export const Footer = async () => {
 						</li>
 					</FooterColumn>
 
-					<SubscribeForm />
+					<div id="newsletter" className="min-w-0 scroll-mt-32">
+						<SubscribeForm />
+					</div>
 				</div>
 
 				<div className="mt-12 h-px bg-white/10" />
