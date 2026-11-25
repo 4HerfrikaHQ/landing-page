@@ -1165,6 +1165,7 @@
 			"callback_failed": "Hatukuweza kukamilisha kukuingiza. Tafadhali jaribu tena.",
 			"session_expired": "Kipindi chako kimeisha. Tafadhali ingia tena.",
 			"name_required": "Weka jina lako kama linavyopaswa kuonekana kwenye cheti chako.",
+			"name_too_short": "Andika jina lako kamili, kama linavyopaswa kuonekana kwenye cheti chako.",
 			"name_too_long": "Jina lako lisizidi herufi 120.",
 			"country_required": "Chagua nchi yako.",
 			"campus_too_long": "Jina la chuo chako lisizidi herufi 120.",

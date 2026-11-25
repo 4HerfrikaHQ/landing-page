@@ -1165,6 +1165,7 @@
 			"callback_failed": "Nous n'avons pas pu terminer votre connexion. Veuillez réessayer.",
 			"session_expired": "Votre session a expiré. Veuillez vous reconnecter.",
 			"name_required": "Saisissez votre nom tel qu'il doit apparaître sur votre certificat.",
+			"name_too_short": "Indiquez votre nom complet, tel qu’il doit figurer sur votre certificat.",
 			"name_too_long": "Votre nom ne peut pas dépasser 120 caractères.",
 			"country_required": "Choisissez votre pays.",
 			"campus_too_long": "Le nom de votre campus ne peut pas dépasser 120 caractères.",
