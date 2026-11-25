@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { CONTACT_EMAIL } from "@/src/lib/contact";
 import {
 	ArrowLeft,
 	BookOpen,
@@ -11,8 +12,6 @@ import {
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { ReportBrokenLink } from "./report-broken-link";
-
-const CONTACT_EMAIL = "hello@4herfrika.org";
 
 const ROUTES = [
 	{
@@ -45,7 +44,7 @@ export async function NotFoundView() {
 	const t = await getTranslations("notFound");
 
 	return (
-		<>
+		<main>
 			<section
 				data-hero="full-bleed"
 				className="bg-surface-pink px-4 pb-14 pt-28 lg:px-20 lg:pb-24 xl:pt-40"
@@ -81,7 +80,7 @@ export async function NotFoundView() {
 						<span className="inline-flex rounded-pill bg-white px-3 py-1.5 text-xs font-medium text-primary">
 							{t("eyebrow")}
 						</span>
-						<h1 className="mt-4 text-[44px] font-medium leading-[1.05] tracking-tight lg:text-[72px]">
+						<h1 className="mt-4 break-words text-[40px] font-medium leading-[1.05] tracking-tight sm:text-[44px] lg:text-[72px]">
 							{t("titleLead")}
 							<br />
 							<em className="font-playfair font-black text-primary-500">
@@ -143,6 +142,6 @@ export async function NotFoundView() {
 					</p>
 				</div>
 			</section>
-		</>
+		</main>
 	);
 }

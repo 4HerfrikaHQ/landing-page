@@ -36,6 +36,35 @@ function createActiveStore(ids: string[]) {
 	};
 }
 
+const LINK_CURRENT =
+	"border-primary font-medium text-primary hover:text-primary";
+const LINK_IDLE = "border-transparent text-muted-foreground";
+
+function SidebarLink({
+	heading,
+	index,
+	current,
+}: {
+	heading: LegalHeading;
+	index: number;
+	current: boolean;
+}) {
+	const state = current ? LINK_CURRENT : LINK_IDLE;
+
+	return (
+		<a
+			href={`#${heading.id}`}
+			aria-current={current ? "location" : undefined}
+			className={`-ml-px flex min-h-11 items-center gap-3 border-l-2 py-2 pl-4 outline-none hover:text-foreground hover:no-underline focus-visible:ring-2 focus-visible:ring-ring ${state}`}
+		>
+			<span className="w-5 shrink-0 tabular-nums">
+				{String(index + 1).padStart(2, "0")}
+			</span>
+			{heading.text}
+		</a>
+	);
+}
+
 export function LegalSidebar({
 	headings,
 	label,
@@ -56,23 +85,15 @@ export function LegalSidebar({
 				{label}
 			</p>
 			<ol className="mt-4 border-l border-border text-[15px]">
-				{headings.map((heading, index) => {
-					const current = heading.id === active;
-					return (
-						<li key={heading.id}>
-							<a
-								href={`#${heading.id}`}
-								aria-current={current ? "location" : undefined}
-								className={`-ml-px flex min-h-11 items-center gap-3 border-l-2 py-2 pl-4 outline-none hover:text-foreground hover:no-underline focus-visible:ring-2 focus-visible:ring-ring ${current ? "border-primary font-medium text-primary hover:text-primary" : "border-transparent text-muted-foreground"}`}
-							>
-								<span className="w-5 shrink-0 tabular-nums">
-									{String(index + 1).padStart(2, "0")}
-								</span>
-								{heading.text}
-							</a>
-						</li>
-					);
-				})}
+				{headings.map((heading, index) => (
+					<li key={heading.id}>
+						<SidebarLink
+							heading={heading}
+							index={index}
+							current={heading.id === active}
+						/>
+					</li>
+				))}
 			</ol>
 		</nav>
 	);

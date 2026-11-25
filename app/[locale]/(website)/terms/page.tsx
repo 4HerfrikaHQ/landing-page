@@ -3,6 +3,7 @@ import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { legalKind } from "../_components/legal/_schema";
 import { LegalPage } from "../_components/legal/legal-page";
 
 export function generateStaticParams() {
@@ -25,5 +26,5 @@ export default async function TermsPage({
 	params: Promise<{ locale: Locale }>;
 }) {
 	const locale = await setLocaleFromParams(params);
-	return <LegalPage kind="terms" locale={locale} />;
+	return <LegalPage kind={legalKind.enum.terms} locale={locale} />;
 }

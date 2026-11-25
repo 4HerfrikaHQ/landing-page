@@ -1,8 +1,10 @@
 import { Link } from "@/i18n/navigation";
+import { CONTACT_EMAIL } from "@/src/lib/contact";
 import { verifyUnsubscribeToken } from "@/src/lib/email-unsubscribe";
 import { Bell, Check, LinkIcon, MailX, X } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { ResubscribeButton } from "./_components/resubscribe-button";
@@ -12,8 +14,6 @@ import {
 	PILL_PRIMARY,
 	UnsubscribeCard,
 } from "./_components/unsubscribe-card";
-
-const CONTACT_EMAIL = "hello@4herfrika.org";
 
 export async function generateMetadata({
 	params,
@@ -34,6 +34,27 @@ export async function generateMetadata({
 const boldEmail = (chunks: ReactNode) => (
 	<b className="font-semibold text-foreground">{chunks}</b>
 );
+
+function ResubscribePrompt({
+	link,
+}: {
+	link: { e: string; t: string } | null;
+}) {
+	const t = useTranslations("unsubscribe.done");
+	if (!link) return null;
+
+	return (
+		<div className="mt-6 flex flex-col gap-4 rounded-2xl bg-surface-pink p-5 sm:flex-row sm:items-center">
+			<div className="flex-1">
+				<p className="font-semibold">{t("oopsTitle")}</p>
+				<p className="mt-0.5 text-[15px] text-muted-foreground">
+					{t("oopsBody")}
+				</p>
+			</div>
+			<ResubscribeButton e={link.e} t={link.t} />
+		</div>
+	);
+}
 
 const BODY =
 	"mt-4 text-[16px] leading-relaxed text-muted-foreground lg:text-[17px]";
@@ -58,8 +79,10 @@ export default async function UnsubscribePage({
 		getTranslations("unsubscribe"),
 	]);
 
-	const { e, t: token } = sp;
-	const valid = e && token ? verifyUnsubscribeToken(e, token) : false;
+	const link =
+		sp.e && sp.t && verifyUnsubscribeToken(sp.e, sp.t)
+			? { e: sp.e, t: sp.t }
+			: null;
 
 	if (sp.done) {
 		return (
@@ -72,17 +95,7 @@ export default async function UnsubscribePage({
 				titleAccent={t("done.titleAccent")}
 			>
 				<p className={BODY}>{t("done.body")}</p>
-				{valid && e && token ? (
-					<div className="mt-6 flex flex-col gap-4 rounded-2xl bg-surface-pink p-5 sm:flex-row sm:items-center">
-						<div className="flex-1">
-							<p className="font-semibold">{t("done.oopsTitle")}</p>
-							<p className="mt-0.5 text-[15px] text-muted-foreground">
-								{t("done.oopsBody")}
-							</p>
-						</div>
-						<ResubscribeButton e={e} t={token} />
-					</div>
-				) : null}
+				<ResubscribePrompt link={link} />
 				<p className="mt-8 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
 					{t("done.hereLabel")}
 				</p>
@@ -110,7 +123,7 @@ export default async function UnsubscribePage({
 		);
 	}
 
-	if (!valid || !e || !token || sp.error) {
+	if (!link || sp.error) {
 		return (
 			<UnsubscribeCard
 				icon={<LinkIcon className="size-7" aria-hidden="true" />}
@@ -157,7 +170,7 @@ export default async function UnsubscribePage({
 				titleAccent={t("resubscribed.titleAccent")}
 			>
 				<p className={BODY}>
-					{t.rich("resubscribed.body", { email: e, b: boldEmail })}
+					{t.rich("resubscribed.body", { email: link.e, b: boldEmail })}
 				</p>
 				<div className="mt-8 flex flex-col gap-3 sm:flex-row">
 					<Link href="/careercorner" className={PILL_PRIMARY}>
@@ -181,7 +194,7 @@ export default async function UnsubscribePage({
 			titleAccent={t("confirm.titleAccent")}
 		>
 			<p className={BODY}>
-				{t.rich("confirm.body", { email: e, b: boldEmail })}
+				{t.rich("confirm.body", { email: link.e, b: boldEmail })}
 			</p>
 			<div className="mt-6 grid gap-3 sm:grid-cols-2">
 				<div className="rounded-2xl border border-border p-4">
@@ -220,7 +233,7 @@ export default async function UnsubscribePage({
 				</div>
 			</div>
 			<div className="mt-8 flex flex-col gap-3 sm:flex-row">
-				<UnsubscribeButton e={e} t={token} />
+				<UnsubscribeButton e={link.e} t={link.t} />
 				<Link href="/" className={PILL_OUTLINE}>
 					{t("confirm.keep")}
 				</Link>

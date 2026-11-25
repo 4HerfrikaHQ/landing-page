@@ -1,12 +1,11 @@
 import FourHerfrikaLogo from "@/app/[locale]/(website)/4herfrika-logo";
 import { createClient, logout } from "@/src/auth";
+import { CONTACT_EMAIL } from "@/src/lib/contact";
 import { ArrowLeft, ArrowRight, ShieldAlert } from "lucide-react";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-
-const CONTACT_EMAIL = "hello@4herfrika.org";
 
 const PILL =
 	"inline-flex h-12 items-center justify-center gap-2 rounded-pill bg-white px-6 font-medium ring-1 ring-border outline-none hover:ring-primary hover:no-underline focus-visible:ring-2 focus-visible:ring-primary";
@@ -38,11 +37,58 @@ async function SignedInChip({ email }: { email: string }) {
 	);
 }
 
+async function BackToSite() {
+	const t = await getTranslations("unauthorized");
+
+	return (
+		<Link href={"/" as Route} className={PILL}>
+			<ArrowLeft className="size-4" aria-hidden="true" />
+			{t("backToSite")}
+		</Link>
+	);
+}
+
+async function StaffActions({ email }: { email: string | null }) {
+	const t = await getTranslations("unauthorized");
+
+	if (!email) {
+		return (
+			<>
+				<Link href={"/dashboard/login" as Route} className={PILL}>
+					{t("staffSignIn")}
+				</Link>
+				<BackToSite />
+			</>
+		);
+	}
+
+	return (
+		<>
+			<form action={logout}>
+				<button
+					type="submit"
+					className={`${PILL} w-full cursor-pointer sm:w-auto`}
+				>
+					{t("staffCta")}
+				</button>
+			</form>
+			<BackToSite />
+		</>
+	);
+}
+
+async function SignedInStatus({ email }: { email: string | null }) {
+	if (!email) return null;
+	return <SignedInChip email={email} />;
+}
+
 export default async function UnauthorizedPage() {
 	const [t, email] = await Promise.all([
 		getTranslations("unauthorized"),
 		signedInEmail(),
 	]);
+
+	const body = email ? t("body") : t("bodySignedOut");
 
 	return (
 		<main className="min-h-screen overflow-x-clip bg-muted text-foreground">
@@ -66,7 +112,7 @@ export default async function UnauthorizedPage() {
 						<p className="mt-5 text-xs font-semibold uppercase tracking-[0.25em] text-primary lg:mt-6">
 							{t("eyebrow")}
 						</p>
-						<h1 className="mt-3 text-[38px] font-semibold leading-[1.08] tracking-tight lg:text-[60px]">
+						<h1 className="mt-3 break-words text-[36px] font-semibold leading-[1.08] tracking-tight sm:text-[38px] lg:text-[60px]">
 							{t("titleLead")}
 							<br />
 							<em className="font-playfair font-black text-primary-500">
@@ -74,7 +120,7 @@ export default async function UnauthorizedPage() {
 							</em>
 						</h1>
 						<p className="mt-4 max-w-[46ch] text-[16px] leading-relaxed text-muted-foreground lg:text-lg">
-							{email ? t("body") : t("bodySignedOut")}
+							{body}
 						</p>
 					</div>
 
@@ -118,26 +164,9 @@ export default async function UnauthorizedPage() {
 						<p className="text-sm font-semibold text-muted-foreground">
 							{t("staffLabel")}
 						</p>
-						{email ? <SignedInChip email={email} /> : null}
+						<SignedInStatus email={email} />
 						<div className="mt-3 flex flex-col gap-3 sm:flex-row">
-							{email ? (
-								<form action={logout}>
-									<button
-										type="submit"
-										className={`${PILL} w-full cursor-pointer sm:w-auto`}
-									>
-										{t("staffCta")}
-									</button>
-								</form>
-							) : (
-								<Link href={"/dashboard/login" as Route} className={PILL}>
-									{t("staffSignIn")}
-								</Link>
-							)}
-							<Link href={"/" as Route} className={PILL}>
-								<ArrowLeft className="size-4" aria-hidden="true" />
-								{t("backToSite")}
-							</Link>
+							<StaffActions email={email} />
 						</div>
 						<p className="mt-5 text-sm text-muted-foreground">
 							{t("needAccess")}{" "}

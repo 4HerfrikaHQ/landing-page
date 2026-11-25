@@ -2,8 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { routing } from "@/i18n/routing";
 import { hasLocale } from "next-intl";
-
-export type LegalKind = "privacy" | "terms";
+import type { LegalKind } from "./_schema";
 
 export type LegalHeading = { id: string; text: string };
 
