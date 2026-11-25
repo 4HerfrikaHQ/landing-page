@@ -6,10 +6,10 @@ import { Link } from "@/i18n/navigation";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { sendLearnerCode } from "../_actions";
 import { SendLearnerCodeSchema } from "../_schema";
 import { AuthError } from "./auth-error";
-import { GoogleButton } from "./google-button";
 
 const MS_PER_SECOND = 1000;
 
@@ -18,10 +18,12 @@ export type SentCode = { email: string; resendAt: number };
 export function EmailStep({
 	next,
 	callbackFailed,
+	google,
 	onSent,
 }: {
 	next: string;
 	callbackFailed: boolean;
+	google: ReactNode;
 	onSent: (sent: SentCode) => void;
 }) {
 	const t = useTranslations("academyAuth.signIn");
@@ -71,12 +73,7 @@ export function EmailStep({
 				onSubmit={send.handleSubmitWithAction}
 				className="flex flex-col gap-4"
 			>
-				<GoogleButton next={next} />
-				<div className="flex items-center gap-3 text-xs text-muted-foreground">
-					<span className="h-px flex-1 bg-border" />
-					{t("divider")}
-					<span className="h-px flex-1 bg-border" />
-				</div>
+				{google}
 
 				<div className="flex flex-col gap-2">
 					<label
