@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useId } from "react";
 import type { Course } from "../../_helpers";
 import type { CompletionPolicy } from "../../_schema";
 import { policyRules } from "../_helpers";
@@ -14,15 +15,13 @@ export function FinishPanel({
 	className?: string;
 }) {
 	const t = useTranslations("academy.course");
+	const titleId = useId();
 	return (
 		<section
-			aria-labelledby="finish-title"
+			aria-labelledby={titleId}
 			className={`rounded-3xl bg-surface-indigo p-5 ${className ?? ""}`}
 		>
-			<h2
-				id="finish-title"
-				className="text-base font-semibold text-secondary-500"
-			>
+			<h2 id={titleId} className="text-base font-semibold text-secondary-500">
 				{t("finishTitle")}
 			</h2>
 			<ul className="mt-3 flex flex-col gap-2.5">

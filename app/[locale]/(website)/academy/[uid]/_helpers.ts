@@ -6,6 +6,7 @@ import {
 	toPolicyModules,
 } from "../_helpers";
 import type { CompletionPolicy } from "../_schema";
+import type { Viewer } from "./_viewer";
 
 export const PERCENT = 100;
 export const ACCENT_WORD_COUNT = 1;
@@ -35,6 +36,10 @@ export function isCourseOpenForEnrolment(course: Course): boolean {
 		course.missingRequiredLessons === 0 &&
 		course.modules.some((module) => module.lessons.length > 0)
 	);
+}
+
+export function activePolicy(course: Course, viewer: Viewer): CompletionPolicy {
+	return viewer.kind === "enrolled" ? viewer.policy : course.policy;
 }
 
 export function firstLesson(course: Course): CourseLessonView | null {

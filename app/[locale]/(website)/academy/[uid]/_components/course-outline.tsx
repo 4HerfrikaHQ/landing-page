@@ -12,12 +12,13 @@ import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import type { Course } from "../../_helpers";
-import type { CompletionPolicy, LessonKind } from "../../_schema";
+import type { LessonKind } from "../../_schema";
 import { formatCountdown, localizedPath } from "../../sign-in/_helpers";
 import {
 	type CourseLessonView,
 	type LessonState,
 	type ModuleState,
+	activePolicy,
 	lessonPath,
 	lessonState,
 	moduleProgress,
@@ -44,7 +45,7 @@ export function CourseOutline({
 }) {
 	const t = useTranslations("academy.course");
 	const enrolled = viewer.kind === "enrolled";
-	const policy: CompletionPolicy = enrolled ? viewer.policy : course.policy;
+	const policy = activePolicy(course, viewer);
 	const completed = enrolled ? viewer.completed : NO_PROGRESS;
 	const states = moduleStates(course, policy, completed);
 	const next = enrolled ? nextLesson(course, policy, completed) : null;

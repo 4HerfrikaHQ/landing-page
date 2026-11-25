@@ -17,6 +17,7 @@ export function EnrolButton({ uid }: { uid: string }) {
 	const enrol = useAction(enrolInCourse);
 	const busy = enrol.isPending || enrol.hasSucceeded;
 	const serverError = enrol.result.serverError;
+	const label = busy ? t("enrolling") : t("startFree");
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -25,9 +26,9 @@ export function EnrolButton({ uid }: { uid: string }) {
 				size="lg"
 				disabled={busy}
 				onClick={() => enrol.execute({ uid })}
-				className="min-h-12 w-full text-base md:py-3 md:text-base"
+				className="min-h-12 w-full whitespace-normal text-center text-base md:py-3 md:text-base"
 			>
-				{busy ? t("enrolling") : t("startFree")}
+				{label}
 			</Button>
 			<EnrolError message={serverError} />
 		</div>

@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { PartnerLogo } from "../../_components/course-card";
 import type { Course } from "../../_helpers";
-import { courseProgressPercent, nextLesson } from "../_helpers";
+import { activePolicy, courseProgressPercent, nextLesson } from "../_helpers";
 import type { Viewer } from "../_viewer";
 import { CourseAction } from "./course-action";
 import { FinishPanel } from "./finish-panel";
@@ -32,7 +32,7 @@ export function CourseAside({
 			<AsideFacts course={course} />
 			<FinishPanel
 				course={course}
-				policy={viewer.kind === "enrolled" ? viewer.policy : course.policy}
+				policy={activePolicy(course, viewer)}
 				className="max-lg:hidden"
 			/>
 		</aside>
