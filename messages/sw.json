@@ -307,7 +307,7 @@
 		"course": {
 			"backToCourses": "Kozi zote",
 			"free": "Bure",
-			"statModules": "moduli",
+			"statModules": "{count, plural, one {moduli} other {moduli}}",
 			"statHours": "kwa kasi yako",
 			"statHoursFallback": "Kwa kasi yako",
 			"statCertificate": "cheti",
@@ -351,7 +351,7 @@
 			"factCertificateValue": "Bure",
 			"startFree": "Anza kozi ya bure",
 			"startFreeNote": "Bure kwa kila mtu",
-			"startFreeHint": "Jisajili kwa barua pepe au Google",
+			"startFreeHint": "Bure · jisajili kwa barua pepe yako",
 			"detailsHint": "Hatua fupi kukuhusu kwanza",
 			"enrolHint": "Maendeleo yako yanahifadhiwa kwenye kifaa chochote",
 			"enrolling": "Tunakuandaa kuanza…",

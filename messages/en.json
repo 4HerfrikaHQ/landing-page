@@ -307,7 +307,7 @@
 		"course": {
 			"backToCourses": "All courses",
 			"free": "Free",
-			"statModules": "modules",
+			"statModules": "{count, plural, one {module} other {modules}}",
 			"statHours": "at your own pace",
 			"statHoursFallback": "Self-paced",
 			"statCertificate": "certificate",
@@ -351,7 +351,7 @@
 			"factCertificateValue": "Free",
 			"startFree": "Start the free course",
 			"startFreeNote": "Free for everyone",
-			"startFreeHint": "Sign up with email or Google",
+			"startFreeHint": "Free · sign up with your email",
 			"detailsHint": "One short step about you first",
 			"enrolHint": "Your progress saves on any device",
 			"enrolling": "Getting you started…",

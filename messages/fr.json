@@ -307,7 +307,7 @@
 		"course": {
 			"backToCourses": "Tous les cours",
 			"free": "Gratuit",
-			"statModules": "modules",
+			"statModules": "{count, plural, one {module} other {modules}}",
 			"statHours": "à votre rythme",
 			"statHoursFallback": "À votre rythme",
 			"statCertificate": "certificat",
@@ -351,7 +351,7 @@
 			"factCertificateValue": "Gratuit",
 			"startFree": "Commencer le cours gratuit",
 			"startFreeNote": "Gratuit pour toutes",
-			"startFreeHint": "Inscrivez-vous avec un e-mail ou Google",
+			"startFreeHint": "Gratuit · inscrivez-vous avec votre e-mail",
 			"detailsHint": "Une courte étape sur vous d’abord",
 			"enrolHint": "Votre progression est enregistrée sur tous vos appareils",
 			"enrolling": "Nous préparons votre départ…",
