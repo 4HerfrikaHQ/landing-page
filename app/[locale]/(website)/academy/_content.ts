@@ -46,14 +46,31 @@ function isMissingCourseError(error: unknown) {
 	);
 }
 
+async function toCourseWithLessons(document: unknown) {
+	const lessons = await getLessonSummaries(lessonIdsInCourse(document));
+	return toCourse(document, lessons);
+}
+
 export async function getCourse(uid: string) {
 	try {
 		const document = await createClient().getByUID("course", uid, {
 			lang: CONTENT_LANG,
 			fetchLinks: partnerFields,
 		});
-		const lessons = await getLessonSummaries(lessonIdsInCourse(document));
-		return toCourse(document, lessons);
+		return await toCourseWithLessons(document);
+	} catch (error) {
+		if (isMissingCourseError(error)) return null;
+		throw error;
+	}
+}
+
+export async function getCourseById(id: string) {
+	try {
+		const document = await createClient().getByID(id, {
+			lang: CONTENT_LANG,
+			fetchLinks: partnerFields,
+		});
+		return await toCourseWithLessons(document);
 	} catch (error) {
 		if (isMissingCourseError(error)) return null;
 		throw error;

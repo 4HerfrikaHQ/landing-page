@@ -1,16 +1,18 @@
 import "server-only";
 import { db } from "@/src/db";
-import { enrolments, lessonProgress } from "@/src/db/schema/tables";
+import { lessonProgress } from "@/src/db/schema/tables";
 import { ActionError } from "@/src/lib/safe-action";
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { getLocale } from "next-intl/server";
 import { cache } from "react";
-import { issueCertificate } from "../../../certificates/_certificate";
-import { sendCertificateReadyEmail } from "../../../certificates/_email";
-import { buildCertificateSnapshot } from "../../../certificates/_helpers";
+import {
+	type Conclusion,
+	concludeEnrolment,
+	notifyCertificateIssued,
+} from "../../_conclusion";
 import { getCourse } from "../../_content";
 import { completedLessonIds, findEnrolment } from "../../_enrolment";
-import { type Course, isCourseComplete, toPolicyModules } from "../../_helpers";
+import type { Course } from "../../_helpers";
 import { currentAuthUser, currentLearner } from "../../_learner";
 import { canOpenLesson, findLesson } from "./_helpers";
 
@@ -100,23 +102,18 @@ export async function markLessonComplete(
 
 type Learner = NonNullable<Awaited<ReturnType<typeof currentLearner>>>;
 
-async function notifyCertificateIssued(
-	certificate: { code: string; course_title: string },
+async function notifyLearner(
+	certificate: NonNullable<Conclusion["certificate"]>,
 	learner: Learner,
 ) {
-	try {
-		const user = await currentAuthUser();
-		if (!user?.email) return;
-		await sendCertificateReadyEmail({
-			to: user.email,
-			name: learner.certificate_name,
-			courseTitle: certificate.course_title,
-			code: certificate.code,
-			locale: await getLocale(),
-		});
-	} catch (error) {
-		console.error("[certificate-ready] email failed", error);
-	}
+	const user = await currentAuthUser();
+	if (!user?.email) return;
+	await notifyCertificateIssued({
+		certificate,
+		email: user.email,
+		name: learner.certificate_name,
+		locale: await getLocale(),
+	});
 }
 
 export async function concludeCourse(
@@ -124,35 +121,12 @@ export async function concludeCourse(
 	enrolment: NonNullable<Awaited<ReturnType<typeof findEnrolment>>>,
 	learner: Learner,
 ) {
-	if (enrolment.completed_at) return false;
-	const completed = await completedLessonIds(enrolment.id);
-	const finished = isCourseComplete(
-		enrolment.completion_policy,
-		toPolicyModules(course),
-		completed,
+	const conclusion = await db.transaction((tx) =>
+		concludeEnrolment(tx, course, enrolment, learner),
 	);
-	if (!finished) return false;
-	const completedAt = new Date();
-	const snapshot = buildCertificateSnapshot({
-		learnerName: learner.certificate_name,
-		course,
-		completedAt,
-	});
-	const outcome = await db.transaction(async (tx) => {
-		const [concluded] = await tx
-			.update(enrolments)
-			.set({ completed_at: completedAt })
-			.where(
-				and(eq(enrolments.id, enrolment.id), isNull(enrolments.completed_at)),
-			)
-			.returning({ id: enrolments.id });
-		if (!concluded) return null;
-		return { certificate: await issueCertificate(tx, enrolment.id, snapshot) };
-	});
-	if (!outcome) return false;
-	if (outcome.certificate) {
-		await notifyCertificateIssued(outcome.certificate, learner);
-	}
+	if (!conclusion) return false;
+	if (conclusion.certificate)
+		await notifyLearner(conclusion.certificate, learner);
 	return true;
 }
 
