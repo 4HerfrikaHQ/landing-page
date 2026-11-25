@@ -7,7 +7,7 @@
 		"heroImageAlt": "Washiriki wa 4HerFrika wakiwa na fulana za pinki wamesimama pamoja nje katika kampasi",
 		"joinCta": "Jiunge na 4HerFrika",
 		"donateCta": "Changia",
-		"weHaveReached": "<pink>Tumefikia</pink>",
+		"weHaveReached": "<pink>T</pink>u<pink>m</pink>e<pink>f</pink>ikia",
 		"statGirls": "wasichana waliolelewa",
 		"statCampuses": "kampasi",
 		"statGraduates": "wahitimu wa Tech Academy",
@@ -16,14 +16,14 @@
 		"whyEyebrow": "Kwa nini tupo",
 		"whyFirst": "Ndoto kubwa ziko kila mahali.",
 		"whySecond": "Fursa hazipo.",
-		"missionTitle": "Dhamira yetu",
+		"missionTitle": "Tamko la Dhamira",
 		"missionDescription": "Kuwaunganisha wanawake wenye ndoto kubwa katika vyuo vikuu na kampasi za Afrika na umlezi, mitandao na rasilimali zinazowageuza kuwa viongozi katika nyanja walizochagua.",
 		"missionImageAlt": "Wanawake vijana watatu wakitabasamu na kupiga selfie pamoja katika tukio la 4HerFrika",
 		"tagMentorship": "Umlezi",
 		"tagNetworks": "Mitandao",
 		"tagResources": "Rasilimali",
-		"visionTitle": "Maono yetu",
-		"visionDescription": "Kufikia 2030, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika, ukiwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika teknolojia, biashara, tiba, sheria, kilimo, sayansi na kila nyanja inayounda mustakabali wetu.",
+		"visionTitle": "Tamko la Maono",
+		"visionDescription": "Kufikia 2050, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika — kuwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa; katika teknolojia, biashara, tiba, sheria, kilimo, sayansi na kila nyanja inayounda mustakabali wetu.",
 		"visionImageAlt": "Wanawake vijana wakiwa wameshika vyeti vyao katika mahafali ya bootcamp ya 4HerFrika",
 		"storyEyebrow": "Hadithi yetu",
 		"storyFirst": "Kutoka mmoja",
@@ -43,7 +43,7 @@
 		"valuesSecond": "ya msingi",
 		"empowerment": "Uwezeshaji",
 		"empowermentDescription": "Ujuzi na kujiamini atakavyovibeba maisha yote.",
-		"communityDevelopment": "Maendeleo ya jamii",
+		"communityDevelopment": "Maendeleo ya Jamii",
 		"communityDevelopmentDescription": "Mwinue msichana mmoja, utainua jamii yake.",
 		"leadership": "Uongozi",
 		"leadershipDescription": "Viongozi kampasini, kisha kila mahali.",
@@ -54,8 +54,8 @@
 		"giveSecond": "inua jamii.",
 		"giveDescription": "Kila mchango hutusaidia kuwafikia wasichana zaidi na kuleta mabadiliko ya kudumu katika maeneo yasiyohudumiwa vya kutosha, katika elimu, afya na teknolojia.",
 		"giveImageAlt": "Mwanamke kijana aliyevaa hijabu akifanya kazi kwenye kompyuta wakati wa bootcamp ya LAUTECH",
-		"donateNow": "Changia sasa",
-		"viewProjects": "Tazama miradi",
+		"donateNow": "Changia Sasa",
+		"viewProjects": "Tazama Miradi",
 		"partnersTitle": "Washirika na wafadhili wetu",
 		"partnerWithUs": "Shirikiana nasi →",
 		"joinFirst": "Pata nafasi yako",
@@ -72,7 +72,18 @@
 		"partnerLogoAlt": "Nembo ya {name}",
 		"partnerLinkLabel": "Tembelea tovuti ya {name} (inafunguka kwenye kichupo kipya)",
 		"newTabHint": "(inafunguka kwenye kichupo kipya)",
-		"storyScrollLabel": "Hadithi yetu, sogeza kuona zaidi"
+		"storyScrollLabel": "Hadithi yetu, sogeza kuona zaidi",
+		"aboutDescription": "Katika 4HerFrika, tunajitahidi kuwafundisha, kuwalea na kuwawezesha wanawake kuwa viongozi wa mabadiliko barani Afrika.",
+		"africanCountries": "nchi za Afrika",
+		"callForActionDescription": "Kila mchango unaotoa hutusaidia kuwafikia wasichana zaidi na kuleta mabadiliko endelevu katika maeneo ambayo hayajahudumiwa vya kutosha. Pamoja, tunavunja vikwazo katika elimu, afya na teknolojia.",
+		"callForActionTitle": "<pink>Unapomwezesha msichana mmoja</pink>, unainua jamii nzima.",
+		"campuses": "kampasi",
+		"coreValues": "Maadili ya Msingi",
+		"faq": "Maswali Yanayoulizwa Mara kwa Mara",
+		"faqDescription": "Katika sehemu hii unaweza kupata majibu yote ambayo huenda unayatafuta. Ikiwa bado unapata ugumu wa kupata jibu, usisite kuwasiliana nasi moja kwa moja.",
+		"members": "wanachama",
+		"seeAllFaqs": "Tazama Maswali Yote Yanayoulizwa Mara kwa Mara",
+		"whereEveryGirl": "Mahali Ambapo Kila Msichana Anafikia Lengo Lake"
 	},
 	"blog": {
 		"blogName": "'The Pink Blog'",
@@ -165,7 +176,7 @@
 		"helpEmpower": "Wekeza katika Uongozi Barani Afrika",
 		"heroOrg": "4HERFRIKA",
 		"heroTitle": "Toa mchango kwa",
-		"heroVision": "Kufikia 2030, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika — kuwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika kila nyanja inayounda mustakabali wetu.",
+		"heroVision": "Kufikia 2050, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika — kuwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika kila nyanja inayounda mustakabali wetu.",
 		"thankYou": "Asante kwa msaada wako. Kila mchango hutusaidia kuleta matokeo makubwa zaidi.",
 		"title": "Saidia Dhamira Yetu"
 	},
@@ -199,7 +210,12 @@
 			"badge": "Mpya · Kozi ya bure ya AI na Ordina",
 			"titleFirst": "Tunalea",
 			"titleSecond": "<word>wanawake</word> wa kiwango cha dunia.",
-			"morphWords": ["wanawake", "viongozi", "waanzilishi", "wanasayansi"],
+			"morphWords": [
+				"wanawake",
+				"viongozi",
+				"waanzilishi",
+				"wanasayansi"
+			],
 			"description": "Nyota yako ya Kaskazini kote Afrika. Tunawaongoza, kuwafunza na kuwaunganisha wanawake vijana kwa kazi za teknolojia, biashara, tabianchi na zaidi.",
 			"startCourse": "Anza kozi ya bure",
 			"bookMentor": "Weka miadi na mshauri",
@@ -283,7 +299,26 @@
 			"description": "Mchango wako unalipia data, kompyuta na kambi za mafunzo vyuoni.",
 			"donate": "Changia",
 			"volunteer": "Jitolee"
-		}
+		},
+		"academyDescription": "Jukwaa la kujifunza mtandaoni kwa ukuzaji wa ujuzi",
+		"africanCountries": "nchi za Afrika",
+		"becomeAmbassador": "Kuwa balozi",
+		"campusDescription": "Tunafanya kazi kupitia jumuiya ndogo ndogo katika taasisi za elimu ya juu",
+		"campuses": "kampasi",
+		"exploreAcademy": "4HerFrika Academy",
+		"exploreCampus": "4HerFrika Campuses",
+		"exploreCampuses": "Chunguza kampasi",
+		"exploreLearningTracks": "Chunguza njia za masomo",
+		"heroDescription": "4HerFrika ndiyo nyota yako ya mwongozo. Tunalea viongozi katika teknolojia, tiba, sheria, biashara, kilimo, sayansi na zaidi.",
+		"heroTitle": "Tukiwaandaa Wanawake wa <highlight>Kiwango cha Kimataifa</highlight>",
+		"members": "wanachama",
+		"ourAcademy": "Akademia yetu",
+		"ourAcademyDescription": "Masomo ya mtandaoni. Matokeo halisi. Kupitia Akademia zetu za Teknolojia, Biashara na Tabianchi, wanawake vijana hupata ujuzi wa vitendo, umlezi na kujiamini ili waongoze kwa uthubutu katika dunia ya leo.",
+		"ourCampuses": "Kampasi zetu",
+		"ourCampusesDescription": "Kampasi moja baada ya nyingine, tunajenga udugu wa dada. Katika zaidi ya vyuo vikuu 20 vya Afrika, matawi ya 4HerFrika huandaa matukio, warsha na vipindi vya umlezi — yakijenga uongozi, jumuiya na mahusiano.",
+		"supportedBy": "Imeungwa mkono na:",
+		"wordsOnStreet": "<pink>Maneno</pink> ya <pink>Mtaani</pink>",
+		"wordsOnStreetSub": "Tazama wanachama wetu wanasema nini!"
 	},
 	"impact": {
 		"altYearReport": "Jalada la Ripoti ya Mwaka wa Kwanza ya 4Herfrika, ‘From One to Many’",
@@ -740,6 +775,10 @@
 		"attendance": {
 			"title": "Thibitisha Mahudhurio",
 			"description": "Thibitisha kama kipindi chako cha ushauri cha 4Herfrika kilifanyika."
+		},
+		"impactReports": {
+			"title": "Ripoti za Athari — Kila Mwaka, Tunahesabu kwa Sauti",
+			"description": "Soma ripoti za athari za mwaka za 4Herfrika mtandaoni au pakua PDF, kuanzia wasichana zaidi ya 3,000 walioshauriwa mwaka wa kwanza hadi lengo letu la wanawake na wasichana milioni 2 kufikia 2030."
 		}
 	},
 	"attendance": {
@@ -1142,5 +1181,158 @@
 			"signoff": "— 4HerFrika",
 			"footer": "Unapata ujumbe huu kwa sababu umemaliza kozi kwenye 4herfrika.org/academy."
 		}
+	},
+	"impactIndex": {
+		"allReports": "Ripoti zote",
+		"heroEyebrow": "Ripoti za mwaka",
+		"heroFirst": "Kila mwaka,",
+		"heroSecond": "tunahesabu kwa sauti.",
+		"heroDescription": "Hizi ndizo ripoti zote tulizochapisha, pamoja na takwimu za kazi yetu.",
+		"seeReports": "Tazama ripoti",
+		"donate": "Changia",
+		"join": "Jiunge Nasi",
+		"statsCaption": "Mwaka wa kwanza kwa takwimu",
+		"statGirls": "wasichana waliopata malezi",
+		"statCampuses": "kampasi zilizofikiwa",
+		"statCountries": "nchi",
+		"statGraduates": "wahitimu wa Tech Academy",
+		"reportsPill": "Ripoti za mwaka",
+		"reportsFirst": "Ripoti zote,",
+		"reportsSecond": "mahali pamoja.",
+		"readOnline": "Soma mtandaoni",
+		"downloadPdf": "Pakua PDF · MB 25.6",
+		"largeFileNote": "Faili kubwa. Ukitumia data ya simu, kusoma mtandaoni hutumia kidogo zaidi.",
+		"year1": {
+			"coverAlt": "Jalada la ripoti ya Mwaka wa Kwanza, From One to Many",
+			"label": "Mwaka wa 1",
+			"title": "Kutoka mmoja hadi wengi",
+			"summary": "Kilichoanza katika kampasi moja nchini Nigeria kilisambaa hadi kampasi 25 katika nchi tano ndani ya miezi kumi na miwili.",
+			"figures": {
+				"girlsMentored": "Wasichana waliopata malezi",
+				"campuses": "Kampasi zilizofikiwa",
+				"academyGraduates": "Wahitimu wa Tech Academy",
+				"countries": "Nchi"
+			}
+		},
+		"goalPill": "Lengo la 2030",
+		"goalFirst": "Milioni mbili",
+		"goalSecond": "kufikia 2030.",
+		"goalDescription": "Kufikia 2030, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika, wenye ujuzi na watu wa kuongoza.",
+		"ctaFirst": "Tusaidie kufikia",
+		"ctaSecond": "milioni mbili.",
+		"ctaDescription": "Kila mchango na kila mjitolea husaidia wasichana wengi zaidi kupata malezi, mafunzo na uhusiano.",
+		"year2": {
+			"coverAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi, jalada la ripoti ya Mwaka wa 2",
+			"label": "Mwaka wa 2",
+			"title": "Kutoka wengi hadi harakati",
+			"summary": "Mwaka wa pili wa 4HerFrika, ukihesabiwa waziwazi. Takwimu bado zinakusanywa.",
+			"comingSoon": "Inakuja hivi karibuni",
+			"figuresPending": "Takwimu zinakuja hivi karibuni",
+			"preview": "Tazama onyesho la ukurasa",
+			"figures": {
+				"girlsMentored": "Wasichana walioshauriwa",
+				"campuses": "Vyuo vilivyofikiwa",
+				"academyGraduates": "Wahitimu wa bootcamp za Academy",
+				"countries": "Nchi"
+			}
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Ripoti ya Athari ya Mwaka wa 2 — 4HerFrika",
+			"description": "Ripoti ya athari ya mwaka wa pili wa 4HerFrika: wasichana walioshauriwa, vyuo na nchi zilizofikiwa, na wahitimu waliorudi kuwa washauri."
+		},
+		"comingSoon": "Inakuja hivi karibuni",
+		"heroEyebrow": "Ripoti ya Mwaka wa 2 · Sep 2025 – Ago 2026",
+		"heroFirst": "Kutoka wengi",
+		"heroSecond": "hadi harakati.",
+		"heroDescription": "Mwaka wa pili wa 4HerFrika, ukihesabiwa waziwazi: wasichana tuliowashauri, vyuo na nchi tulizofikia, na wahitimu waliorudi kuwa washauri.",
+		"heroAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi wamesimama pamoja nje chuoni",
+		"readReport": "Soma ripoti",
+		"downloadPdf": "Pakua PDF · MB {size}",
+		"getFirst": "Pata ripoti kwanza",
+		"allReports": "Ripoti zote",
+		"menuLabel": "Sehemu za ripoti",
+		"menu": {
+			"numbers": "Takwimu",
+			"stories": "Hadithi",
+			"academy": "Academy",
+			"howWeCount": "Jinsi tunavyohesabu"
+		},
+		"figures": {
+			"girlsMentored": {
+				"label": "wasichana walioshauriwa",
+				"note": "tangu mwanzo · Mwaka wa 1 pekee: 3,000+"
+			},
+			"campuses": {
+				"label": "vyuo",
+				"note": "Mwaka wa 2 · Mwaka wa 1: 25+"
+			},
+			"countries": {
+				"label": "nchi",
+				"note": "Mwaka wa 2 · Mwaka wa 1: 5"
+			},
+			"graduatesMentoring": {
+				"label": "wahitimu wanaoshauri sasa",
+				"note": "Mwaka wa 2"
+			},
+			"academyGraduates": {
+				"label": "wahitimu wa bootcamp za Academy",
+				"note": "Mwaka wa 2"
+			}
+		},
+		"pendingValue": "Takwimu bado hazijachapishwa",
+		"pendingNote": "Takwimu zinakuja hivi karibuni",
+		"winsFirst": "Ushindi watatu",
+		"winsSecond": "tunaojivunia zaidi.",
+		"winsIntroMobile": "Telezesha kuona nyakati zilizobainisha Mwaka wa 2.",
+		"winsIntro": "Hizi ndizo nyakati zilizobainisha Mwaka wa 2.",
+		"wins": {
+			"mentors": {
+				"title": "Wahitimu wakawa washauri",
+				"body": "Wahitimu wa Mwaka wa 1 sasa wanashauri kundi linalofuata.",
+				"alt": "Wahitimu wakiwa wameshika vyeti vyao kwenye bootcamp ya 4HerFrika"
+			},
+			"campuses": {
+				"title": "Vyuo zaidi",
+				"body": "Vyuo vilivyofikiwa Mwaka wa 2. Mwaka wa 1 ulifikia zaidi ya 25.",
+				"alt": "Wanawake wawili vijana wakiandika msimbo pamoja kwenye bootcamp ya chuoni"
+			},
+			"countries": {
+				"title": "Nchi zaidi",
+				"body": "Nchi zilizofikiwa Mwaka wa 2. Mwaka wa 1 ulifikia tano.",
+				"alt": "Washiriki wameketi kwenye ukumbi wa mihadhara wakati wa kikao cha chuoni"
+			}
+		},
+		"academyPill": "Kinachofuata · Mwaka wa 3 unaanza",
+		"academyFirst": "Kisha, kujifunza kunakotoshea",
+		"academySecond": "mfukoni.",
+		"academyDescription": "Tarehe {date} Academy inafungua kozi yake ya kwanza mtandaoni, AI kwa Fursa Yako Ijayo, iliyotengenezwa pamoja na Ordina. Inafanya kazi kwenye simu yoyote na inaisha kwa cheti ambacho mwajiri anaweza kukihakiki kwa kubofya mara moja. Itahesabiwa kwenye ripoti ya Mwaka wa 3.",
+		"academyAlt": "Msichana akijifunza kwenye kompyuta mpakato nje",
+		"launches": "Inazinduliwa",
+		"free": "Bure",
+		"freeLabel": "kozi ya mtandaoni, yenye cheti kinachohakikiwa",
+		"exploreAcademy": "Gundua Academy",
+		"quotesFirst": "Maneno yao,",
+		"quotesSecond": "si yetu.",
+		"quotesEmptyTitle": "Hadithi zinakuja",
+		"quotesEmptyBody": "Tunakusanya maneno yao kutoka kwa wanaoshauriwa, mabalozi na wahitimu. Kila moja inashirikiwa kwa ruhusa yao.",
+		"partnersLabel": "Imewezekana kwa msaada wa",
+		"newsletterFirst": "Kuwa wa kwanza",
+		"newsletterSecond": "kuisoma.",
+		"newsletterDescription": "Jiandikishe kwa hadithi ya kila mwezi nasi tutakutumia ripoti ya Mwaka wa 2 siku itakapochapishwa.",
+		"howWeCountTitle": "Jinsi tunavyohesabu",
+		"howWeCountBody": "“Ameshauriwa” inamaanisha angalau kikao kimoja kilichokamilika. Takwimu za vyuo zinatoka kwenye karatasi za mahudhurio za mabalozi, na za wahitimu kutoka kwenye rekodi za bootcamp za Academy. Mwaka wa 2 unahusu 1 Sep 2025 hadi 31 Ago 2026.",
+		"donate": "Changia",
+		"year1Report": "Ripoti ya Mwaka wa 1"
+	},
+	"impactBanner": {
+		"label": "Ripoti ya athari ya Mwaka wa 2",
+		"badge": "Mwaka 2",
+		"title": "Ripoti yetu ya athari ya Mwaka wa 2 imetoka",
+		"titleShort": "Ripoti ya Mwaka 2",
+		"description": "Ona kile mwaka wa pili wa ushauri ulichobadilisha.",
+		"cta": "Soma ripoti",
+		"dismiss": "Ficha bango hili"
 	}
 }

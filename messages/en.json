@@ -44,7 +44,12 @@
 			"badge": "New · Free AI course with Ordina",
 			"titleFirst": "Raising",
 			"titleSecond": "world-class <word>women.</word>",
-			"morphWords": ["women.", "leaders.", "founders.", "scientists."],
+			"morphWords": [
+				"women.",
+				"leaders.",
+				"founders.",
+				"scientists."
+			],
 			"description": "Your Northstar across Africa. We mentor, train and connect young women for careers in tech, business, climate and beyond.",
 			"startCourse": "Start the free course",
 			"bookMentor": "Book a mentor",
@@ -128,10 +133,29 @@
 			"description": "Your gift pays for data, laptops and bootcamps on campus.",
 			"donate": "Donate",
 			"volunteer": "Volunteer"
-		}
+		},
+		"heroTitle": "Raising <highlight>World-Class</highlight> Women",
+		"heroDescription": "4Herfrika is your Northstar. We are raising leaders across technology, medicine, law, business, agriculture, science, and beyond.",
+		"becomeAmbassador": "Become an ambassador",
+		"wordsOnStreet": "<pink>Words</pink> on The <pink>Street</pink>",
+		"wordsOnStreetSub": "Take a look at what our members say!",
+		"supportedBy": "Supported By:",
+		"exploreCampus": "4HerFrika Campuses",
+		"campusDescription": "We operate through bite-sized communities in tertiary institutions",
+		"exploreAcademy": "4HerFrika Academy",
+		"academyDescription": "Online learning platform for skill development",
+		"ourCampuses": "Our Campuses",
+		"ourCampusesDescription": "One campus at a time, we're growing a sisterhood. Across 20+ African universities, 4Herfrika chapters host events, workshops, and mentorship sessions — building leadership, community, and connection.",
+		"exploreCampuses": "Explore Campuses",
+		"ourAcademy": "Our Academy",
+		"ourAcademyDescription": "Virtual learning. Real impact. Through our Tech, Business, and Climate Academies, young women gain practical skills, mentorship, and confidence to lead boldly in today's world.",
+		"exploreLearningTracks": "Explore Learning Tracks",
+		"members": "members",
+		"campuses": "campuses",
+		"africanCountries": "african countries"
 	},
 	"about": {
-		"whoWeAre": "Who we are",
+		"whoWeAre": "Who We Are",
 		"heroFirst": "Where every girl",
 		"heroSecond": "achieves her goal.",
 		"heroDescription": "We train, mentor and empower women to become transformative leaders across Africa.",
@@ -147,14 +171,14 @@
 		"whyEyebrow": "Why we exist",
 		"whyFirst": "Ambition is everywhere.",
 		"whySecond": "Access isn't.",
-		"missionTitle": "Our mission",
+		"missionTitle": "Mission Statement",
 		"missionDescription": "To connect ambitious women across African universities and campuses with mentorship, networks, and resources that transform them into leaders in their chosen fields.",
 		"missionImageAlt": "Three young women smiling and taking a selfie together at a 4HerFrika event",
 		"tagMentorship": "Mentorship",
 		"tagNetworks": "Networks",
 		"tagResources": "Resources",
-		"visionTitle": "Our vision",
-		"visionDescription": "By 2030, we envision 4HerFrika as the trusted mentorship and leadership network across every African campus, empowering 2 million women to lead with impact in technology, business, medicine, law, agriculture, science, and every field that shapes our future.",
+		"visionTitle": "Vision Statement",
+		"visionDescription": "By 2050, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact; in technology, business, medicine, law, agriculture, science, and every field that shapes our future.",
 		"visionImageAlt": "Young women holding their certificates at a 4HerFrika bootcamp graduation",
 		"storyEyebrow": "Our story",
 		"storyFirst": "From one",
@@ -174,7 +198,7 @@
 		"valuesSecond": "core values",
 		"empowerment": "Empowerment",
 		"empowermentDescription": "Skills and confidence she keeps for life.",
-		"communityDevelopment": "Community development",
+		"communityDevelopment": "Community Development",
 		"communityDevelopmentDescription": "Lift one girl, lift her community.",
 		"leadership": "Leadership",
 		"leadershipDescription": "Leaders on campus, then everywhere.",
@@ -185,8 +209,8 @@
 		"giveSecond": "uplift a community.",
 		"giveDescription": "Every donation helps us reach more girls and create lasting change across underserved regions, in education, health and technology.",
 		"giveImageAlt": "A young woman in a hijab working at a computer during a bootcamp at LAUTECH",
-		"donateNow": "Donate now",
-		"viewProjects": "View projects",
+		"donateNow": "Donate Now",
+		"viewProjects": "View Projects",
 		"partnersTitle": "Our partners and sponsors",
 		"partnerWithUs": "Partner with us →",
 		"joinFirst": "Find your place",
@@ -203,7 +227,18 @@
 		"partnerLogoAlt": "{name} logo",
 		"partnerLinkLabel": "Visit the {name} website (opens in a new tab)",
 		"newTabHint": "(opens in a new tab)",
-		"storyScrollLabel": "Our story, scroll for more"
+		"storyScrollLabel": "Our story, scroll for more",
+		"aboutDescription": "At 4HerFrika, we strive to train, mentor, and empower women to become transformative leaders across Africa.",
+		"whereEveryGirl": "Where Every Girl Achieves Their Goal",
+		"coreValues": "Core Values",
+		"faq": "Frequently Asked Questions",
+		"faqDescription": "In this section you can find all the answers you are probably looking for. If you still struggle with finding one - don't hesitate to contact us directly.",
+		"seeAllFaqs": "See All FAQs",
+		"members": "members",
+		"campuses": "campuses",
+		"africanCountries": "african countries",
+		"callForActionTitle": "<pink>When you empower one girl</pink>, you uplift an entire community.",
+		"callForActionDescription": "Every donation you make helps us reach more girls and create sustainable change across underserved regions. Together, we're breaking barriers in education, health, and technology."
 	},
 	"blog": {
 		"greeting": "Hi Divas,",
@@ -275,7 +310,7 @@
 		"thankYou": "Thank you for your support. Every contribution helps us make a bigger impact.",
 		"heroTitle": "Make a Donation to",
 		"heroOrg": "4HERFRIKA",
-		"heroVision": "By 2030, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact in every field that shapes our future.",
+		"heroVision": "By 2050, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact in every field that shapes our future.",
 		"donateToEmpower": "Donate to Empower Women Across Africa",
 		"donateNow": "Donate Now",
 		"helpEmpower": "Invest in Leadership Across Africa",
@@ -740,6 +775,10 @@
 		"attendance": {
 			"title": "Confirm Attendance",
 			"description": "Confirm whether your 4Herfrika mentorship session took place."
+		},
+		"impactReports": {
+			"title": "Impact Reports — Every Year, Counted Out Loud",
+			"description": "Read 4Herfrika's annual impact reports online or download the PDF, from 3,000+ girls mentored in year one to our goal of 2 million women and girls by 2030."
 		}
 	},
 	"attendance": {
@@ -1142,5 +1181,158 @@
 			"signoff": "— 4HerFrika",
 			"footer": "You're getting this because you finished a course on 4herfrika.org/academy."
 		}
+	},
+	"impactIndex": {
+		"allReports": "All reports",
+		"heroEyebrow": "Annual reports",
+		"heroFirst": "Every year,",
+		"heroSecond": "counted out loud.",
+		"heroDescription": "Here is every report we have published, with the numbers behind the work.",
+		"seeReports": "See the reports",
+		"donate": "Donate",
+		"join": "Join us",
+		"statsCaption": "Year 1 in numbers",
+		"statGirls": "girls mentored",
+		"statCampuses": "campuses reached",
+		"statCountries": "countries",
+		"statGraduates": "Tech Academy graduates",
+		"reportsPill": "Annual reports",
+		"reportsFirst": "Every report,",
+		"reportsSecond": "in one place.",
+		"readOnline": "Read online",
+		"downloadPdf": "Download PDF · 25.6 MB",
+		"largeFileNote": "Large file. On mobile data, reading online uses far less.",
+		"year1": {
+			"coverAlt": "Cover of the Year 1 report, From One to Many",
+			"label": "Year 1",
+			"title": "From one to many",
+			"summary": "What started on a single campus in Nigeria spread to 25 campuses in five countries in twelve months.",
+			"figures": {
+				"girlsMentored": "Girls mentored",
+				"campuses": "Campuses reached",
+				"academyGraduates": "Tech Academy graduates",
+				"countries": "Countries"
+			}
+		},
+		"goalPill": "The 2030 goal",
+		"goalFirst": "Two million",
+		"goalSecond": "by 2030.",
+		"goalDescription": "By 2030, 4HerFrika envisions 2 million women and girls empowered across Africa, with the skills and the people to lead.",
+		"ctaFirst": "Help us reach",
+		"ctaSecond": "two million.",
+		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected.",
+		"year2": {
+			"coverAlt": "4HerFrika participants in pink shirts, the cover of the Year 2 report",
+			"label": "Year 2",
+			"title": "From many to a movement",
+			"summary": "The second year of 4HerFrika, counted out loud. The figures are still being gathered.",
+			"comingSoon": "Coming soon",
+			"figuresPending": "Figures land soon",
+			"preview": "Preview the page",
+			"figures": {
+				"girlsMentored": "Girls mentored",
+				"campuses": "Campuses reached",
+				"academyGraduates": "Academy bootcamp graduates",
+				"countries": "Countries"
+			}
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Year 2 Impact Report — 4HerFrika",
+			"description": "The 4HerFrika Year 2 impact report: girls mentored, campuses and countries reached, and the graduates who came back to mentor."
+		},
+		"comingSoon": "Coming soon",
+		"heroEyebrow": "Year 2 report · Sept 2025 – Aug 2026",
+		"heroFirst": "From many",
+		"heroSecond": "to a movement.",
+		"heroDescription": "Year 2 of 4HerFrika, counted out loud: the girls we mentored, the campuses and countries we reached, and the graduates who came back to mentor.",
+		"heroAlt": "4HerFrika participants in pink shirts standing together outdoors on campus",
+		"readReport": "Read the report",
+		"downloadPdf": "Download PDF · {size} MB",
+		"getFirst": "Get the report first",
+		"allReports": "All reports",
+		"menuLabel": "Report sections",
+		"menu": {
+			"numbers": "Numbers",
+			"stories": "Stories",
+			"academy": "Academy",
+			"howWeCount": "How we count"
+		},
+		"figures": {
+			"girlsMentored": {
+				"label": "girls mentored",
+				"note": "all-time · Year 1 alone: 3,000+"
+			},
+			"campuses": {
+				"label": "campuses",
+				"note": "Year 2 · Year 1: 25+"
+			},
+			"countries": {
+				"label": "countries",
+				"note": "Year 2 · Year 1: 5"
+			},
+			"graduatesMentoring": {
+				"label": "graduates now mentoring",
+				"note": "Year 2"
+			},
+			"academyGraduates": {
+				"label": "Academy bootcamp graduates",
+				"note": "Year 2"
+			}
+		},
+		"pendingValue": "Figure not published yet",
+		"pendingNote": "Figures land soon",
+		"winsFirst": "Three wins",
+		"winsSecond": "we're proudest of.",
+		"winsIntroMobile": "Swipe through the moments that defined Year 2.",
+		"winsIntro": "These are the moments that defined Year 2.",
+		"wins": {
+			"mentors": {
+				"title": "Graduates became mentors",
+				"body": "Year 1 graduates now mentoring the next cohort.",
+				"alt": "Graduates holding their certificates at a 4HerFrika bootcamp"
+			},
+			"campuses": {
+				"title": "More campuses",
+				"body": "Campuses reached in Year 2. Year 1 reached 25+.",
+				"alt": "Two young women coding together at a campus bootcamp"
+			},
+			"countries": {
+				"title": "More countries",
+				"body": "Countries reached in Year 2. Year 1 reached five.",
+				"alt": "Participants seated in a lecture hall during a campus session"
+			}
+		},
+		"academyPill": "What's next · Year 3 begins",
+		"academyFirst": "Next, learning that fits",
+		"academySecond": "in a pocket.",
+		"academyDescription": "On {date} the Academy opens its first online course, AI for Your Next Opportunity, made with Ordina. It runs on any phone and ends with a certificate an employer can check in one click. It will be counted in the Year 3 report.",
+		"academyAlt": "A young woman learning on a laptop outdoors",
+		"launches": "Launches",
+		"free": "Free",
+		"freeLabel": "online course, with a verifiable certificate",
+		"exploreAcademy": "Explore the Academy",
+		"quotesFirst": "Her words,",
+		"quotesSecond": "not ours.",
+		"quotesEmptyTitle": "Stories are on the way",
+		"quotesEmptyBody": "We are collecting her words from mentees, ambassadors and graduates. Each one is shared with her permission.",
+		"partnersLabel": "Made possible with",
+		"newsletterFirst": "Be the first",
+		"newsletterSecond": "to read it.",
+		"newsletterDescription": "Subscribe to the monthly story and we will send you the Year 2 report the day it is published.",
+		"howWeCountTitle": "How we count",
+		"howWeCountBody": "“Mentored” means at least one completed session. Campus numbers come from ambassador sign-in sheets, and graduate numbers from Academy bootcamp records. Year 2 covers 1 Sept 2025 to 31 Aug 2026.",
+		"donate": "Donate",
+		"year1Report": "Year 1 report"
+	},
+	"impactBanner": {
+		"label": "Year 2 impact report",
+		"badge": "Year 2",
+		"title": "Our Year 2 impact report is out",
+		"titleShort": "Year 2 report",
+		"description": "See what a second year of mentoring did.",
+		"cta": "Read the report",
+		"dismiss": "Hide this banner"
 	}
 }

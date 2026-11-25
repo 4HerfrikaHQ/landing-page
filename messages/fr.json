@@ -7,7 +7,7 @@
 		"heroImageAlt": "Des participantes de 4HerFrika en t-shirts roses réunies en plein air sur un campus",
 		"joinCta": "Rejoindre 4HerFrika",
 		"donateCta": "Faire un don",
-		"weHaveReached": "Nous avons <pink>touché</pink>",
+		"weHaveReached": "<pink>N</pink>ous <pink>A</pink>vons <pink>T</pink>ouché",
 		"statGirls": "filles accompagnées",
 		"statCampuses": "campus",
 		"statGraduates": "diplômées de la Tech Academy",
@@ -22,8 +22,8 @@
 		"tagMentorship": "Mentorat",
 		"tagNetworks": "Réseaux",
 		"tagResources": "Ressources",
-		"visionTitle": "Notre vision",
-		"visionDescription": "D’ici 2030, nous voyons 4HerFrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain, donnant à 2 millions de femmes les moyens de diriger avec impact dans la technologie, les affaires, la médecine, le droit, l’agriculture, les sciences et tous les domaines qui façonnent notre avenir.",
+		"visionTitle": "Déclaration de vision",
+		"visionDescription": "D’ici 2050, nous voyons 4Herfrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain — donnant à 2 million de femmes les moyens de diriger avec impact dans la technologie, les affaires, la médecine, le droit, l’agriculture, les sciences, et tous les domaines qui façonnent notre avenir.",
 		"visionImageAlt": "De jeunes femmes tenant leurs certificats lors d’une remise de diplômes d’un bootcamp 4HerFrika",
 		"storyEyebrow": "Notre histoire",
 		"storyFirst": "D’une seule",
@@ -54,7 +54,7 @@
 		"giveSecond": "élevez une communauté.",
 		"giveDescription": "Chaque don nous aide à toucher plus de filles et à créer un changement durable dans les régions défavorisées, en éducation, en santé et en technologie.",
 		"giveImageAlt": "Une jeune femme portant un hijab travaillant sur un ordinateur pendant un bootcamp à LAUTECH",
-		"donateNow": "Faire un don",
+		"donateNow": "Faites un don maintenant",
 		"viewProjects": "Voir les projets",
 		"partnersTitle": "Nos partenaires et sponsors",
 		"partnerWithUs": "Devenir partenaire →",
@@ -72,7 +72,18 @@
 		"partnerLogoAlt": "Logo de {name}",
 		"partnerLinkLabel": "Visiter le site de {name} (s’ouvre dans un nouvel onglet)",
 		"newTabHint": "(s’ouvre dans un nouvel onglet)",
-		"storyScrollLabel": "Notre histoire, faites défiler pour en voir plus"
+		"storyScrollLabel": "Notre histoire, faites défiler pour en voir plus",
+		"aboutDescription": "Chez 4HerFrika, nous nous engageons à former, accompagner et donner aux femmes les moyens de devenir des leaders du changement à travers l’Afrique.",
+		"africanCountries": "pays africains",
+		"callForActionDescription": "Chaque don nous aide à toucher plus de filles et à créer un changement durable dans les régions les plus défavorisées. Ensemble, nous faisons tomber les barrières dans l’éducation, la santé et la technologie.",
+		"callForActionTitle": "<pink>Quand vous donnez à une fille les moyens d’agir</pink>, vous élevez toute une communauté.",
+		"campuses": "campus",
+		"coreValues": "Valeurs fondamentales",
+		"faq": "Questions fréquemment posées",
+		"faqDescription": "Dans cette section, vous trouverez toutes les réponses que vous cherchez probablement. Si vous ne trouvez toujours pas la vôtre, n’hésitez pas à nous contacter directement.",
+		"members": "membres",
+		"seeAllFaqs": "Voir toutes les FAQ",
+		"whereEveryGirl": "Là où chaque fille atteint ses objectifs"
 	},
 	"blog": {
 		"blogName": "'The Pink Blog'",
@@ -165,7 +176,7 @@
 		"helpEmpower": "Investissez dans le leadership à travers l’Afrique",
 		"heroOrg": "4HERFRIKA",
 		"heroTitle": "Faire un don à",
-		"heroVision": "D’ici 2030, nous voyons 4Herfrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain — donnant à 2 million de femmes les moyens de diriger avec impact dans tous les domaines qui façonnent notre avenir.",
+		"heroVision": "D’ici 2050, nous voyons 4Herfrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain — donnant à 2 million de femmes les moyens de diriger avec impact dans tous les domaines qui façonnent notre avenir.",
 		"thankYou": "Merci pour votre soutien. Chaque contribution nous aide à avoir encore plus d’impact.",
 		"title": "Soutenez notre mission"
 	},
@@ -199,7 +210,12 @@
 			"badge": "Nouveau · Cours gratuit d’IA avec Ordina",
 			"titleFirst": "Former des",
 			"titleSecond": "<word>femmes</word> de classe mondiale.",
-			"morphWords": ["femmes", "leaders", "fondatrices", "scientifiques"],
+			"morphWords": [
+				"femmes",
+				"leaders",
+				"fondatrices",
+				"scientifiques"
+			],
 			"description": "Votre étoile du Nord à travers l’Afrique. Nous accompagnons, formons et connectons de jeunes femmes pour des carrières dans la tech, les affaires, le climat et au-delà.",
 			"startCourse": "Commencer le cours gratuit",
 			"bookMentor": "Réserver une mentore",
@@ -283,7 +299,26 @@
 			"description": "Votre don finance les données mobiles, les ordinateurs et les bootcamps sur les campus.",
 			"donate": "Faire un don",
 			"volunteer": "Devenir bénévole"
-		}
+		},
+		"academyDescription": "Plateforme d’apprentissage en ligne pour développer ses compétences",
+		"africanCountries": "pays africains",
+		"becomeAmbassador": "Devenir ambassadeur",
+		"campusDescription": "Nous agissons à travers de petites communautés au sein des établissements d’enseignement supérieur",
+		"campuses": "campus",
+		"exploreAcademy": "4HerFrika Academy",
+		"exploreCampus": "4HerFrika Campuses",
+		"exploreCampuses": "Explorer les campus",
+		"exploreLearningTracks": "Explorer les parcours d'apprentissage",
+		"heroDescription": "4Herfrika est votre étoile polaire. Nous formons des leaders dans la technologie, la médecine, le droit, les affaires, l’agriculture, les sciences, et bien au-delà.",
+		"heroTitle": "Former des femmes <highlight>d’envergure mondiale</highlight>",
+		"members": "membres",
+		"ourAcademy": "Notre académie",
+		"ourAcademyDescription": "Apprentissage virtuel. Impact réel. Grâce à nos académies Tech, Business et Climat, les jeunes femmes acquièrent des compétences pratiques, du mentorat et la confiance nécessaire pour diriger avec audace dans le monde d’aujourd’hui.",
+		"ourCampuses": "Nos campus",
+		"ourCampusesDescription": "Campus après campus, nous faisons grandir une sororité. Dans plus de 20 universités africaines, les chapitres 4Herfrika organisent des événements, des ateliers et des séances de mentorat — pour renforcer le leadership, la communauté et les liens.",
+		"supportedBy": "Avec le soutien de :",
+		"wordsOnStreet": "Les <pink>mots</pink> de la <pink>rue</pink>",
+		"wordsOnStreetSub": "Découvrez ce que disent nos membres !"
 	},
 	"impact": {
 		"altYearReport": "Couverture du Rapport panoramique de la première année de 4Herfrika, « From One to Many »",
@@ -740,6 +775,10 @@
 		"attendance": {
 			"title": "Confirmer la présence",
 			"description": "Confirmez si votre session de mentorat 4Herfrika a eu lieu."
+		},
+		"impactReports": {
+			"title": "Rapports d’impact — Chaque année, comptée à voix haute",
+			"description": "Lisez en ligne les rapports d’impact annuels de 4Herfrika ou téléchargez le PDF, des plus de 3 000 filles accompagnées la première année à notre objectif de 2 millions de femmes et de filles d’ici 2030."
 		}
 	},
 	"attendance": {
@@ -1142,5 +1181,158 @@
 			"signoff": "— 4HerFrika",
 			"footer": "Vous recevez ce message parce que vous avez terminé un cours sur 4herfrika.org/academy."
 		}
+	},
+	"impactIndex": {
+		"allReports": "Tous les rapports",
+		"heroEyebrow": "Rapports annuels",
+		"heroFirst": "Chaque année,",
+		"heroSecond": "comptée à voix haute.",
+		"heroDescription": "Voici tous les rapports que nous avons publiés, avec les chiffres derrière notre travail.",
+		"seeReports": "Voir les rapports",
+		"donate": "Faire un don",
+		"join": "Rejoignez-nous",
+		"statsCaption": "La première année en chiffres",
+		"statGirls": "filles accompagnées",
+		"statCampuses": "campus touchés",
+		"statCountries": "pays",
+		"statGraduates": "diplômées de la Tech Academy",
+		"reportsPill": "Rapports annuels",
+		"reportsFirst": "Tous les rapports,",
+		"reportsSecond": "au même endroit.",
+		"readOnline": "Lire en ligne",
+		"downloadPdf": "Télécharger le PDF · 25,6 Mo",
+		"largeFileNote": "Fichier volumineux. Avec des données mobiles, la lecture en ligne consomme bien moins.",
+		"year1": {
+			"coverAlt": "Couverture du rapport de la première année, From One to Many",
+			"label": "Année 1",
+			"title": "D’un seul à beaucoup",
+			"summary": "Ce qui a commencé sur un seul campus au Nigeria s’est étendu à 25 campus dans cinq pays en douze mois.",
+			"figures": {
+				"girlsMentored": "Filles accompagnées",
+				"campuses": "Campus touchés",
+				"academyGraduates": "Diplômées de la Tech Academy",
+				"countries": "Pays"
+			}
+		},
+		"goalPill": "L’objectif 2030",
+		"goalFirst": "Deux millions",
+		"goalSecond": "d’ici 2030.",
+		"goalDescription": "D’ici 2030, 4HerFrika imagine 2 millions de femmes et de filles autonomisées à travers l’Afrique, avec les compétences et les personnes pour mener.",
+		"ctaFirst": "Aidez-nous à atteindre",
+		"ctaSecond": "deux millions.",
+		"ctaDescription": "Chaque don et chaque bénévole aident davantage de filles à être accompagnées, formées et connectées.",
+		"year2": {
+			"coverAlt": "Participantes de 4HerFrika en t-shirts roses, couverture du rapport Année 2",
+			"label": "Année 2",
+			"title": "De nombreuses à un mouvement",
+			"summary": "La deuxième année de 4HerFrika, chiffrée à voix haute. Les chiffres sont encore en cours de collecte.",
+			"comingSoon": "Bientôt disponible",
+			"figuresPending": "Chiffres bientôt disponibles",
+			"preview": "Voir un aperçu de la page",
+			"figures": {
+				"girlsMentored": "Filles encadrées",
+				"campuses": "Campus atteints",
+				"academyGraduates": "Diplômées des bootcamps Academy",
+				"countries": "Pays"
+			}
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Rapport d'impact Année 2 — 4HerFrika",
+			"description": "Le rapport d'impact de la deuxième année de 4HerFrika : filles encadrées, campus et pays atteints, et diplômées devenues mentores."
+		},
+		"comingSoon": "Bientôt disponible",
+		"heroEyebrow": "Rapport Année 2 · sept. 2025 – août 2026",
+		"heroFirst": "De nombreuses",
+		"heroSecond": "à un mouvement.",
+		"heroDescription": "La deuxième année de 4HerFrika, chiffrée à voix haute : les filles que nous avons encadrées, les campus et les pays atteints, et les diplômées devenues mentores.",
+		"heroAlt": "Participantes de 4HerFrika en t-shirts roses, réunies en plein air sur un campus",
+		"readReport": "Lire le rapport",
+		"downloadPdf": "Télécharger le PDF · {size} Mo",
+		"getFirst": "Recevoir le rapport en premier",
+		"allReports": "Tous les rapports",
+		"menuLabel": "Sections du rapport",
+		"menu": {
+			"numbers": "Chiffres",
+			"stories": "Témoignages",
+			"academy": "Academy",
+			"howWeCount": "Notre méthode"
+		},
+		"figures": {
+			"girlsMentored": {
+				"label": "filles encadrées",
+				"note": "depuis le début · Année 1 seule : 3 000+"
+			},
+			"campuses": {
+				"label": "campus",
+				"note": "Année 2 · Année 1 : 25+"
+			},
+			"countries": {
+				"label": "pays",
+				"note": "Année 2 · Année 1 : 5"
+			},
+			"graduatesMentoring": {
+				"label": "diplômées devenues mentores",
+				"note": "Année 2"
+			},
+			"academyGraduates": {
+				"label": "diplômées des bootcamps Academy",
+				"note": "Année 2"
+			}
+		},
+		"pendingValue": "Chiffre pas encore publié",
+		"pendingNote": "Chiffres bientôt disponibles",
+		"winsFirst": "Trois victoires",
+		"winsSecond": "dont nous sommes fières.",
+		"winsIntroMobile": "Faites défiler les moments qui ont marqué l'année 2.",
+		"winsIntro": "Voici les moments qui ont marqué l'année 2.",
+		"wins": {
+			"mentors": {
+				"title": "Des diplômées devenues mentores",
+				"body": "Des diplômées de l'année 1 encadrent désormais la promotion suivante.",
+				"alt": "Des diplômées tenant leur certificat lors d'un bootcamp 4HerFrika"
+			},
+			"campuses": {
+				"title": "Plus de campus",
+				"body": "Campus atteints en année 2. L'année 1 en avait atteint plus de 25.",
+				"alt": "Deux jeunes femmes codant ensemble lors d'un bootcamp sur un campus"
+			},
+			"countries": {
+				"title": "Plus de pays",
+				"body": "Pays atteints en année 2. L'année 1 en avait atteint cinq.",
+				"alt": "Des participantes assises dans un amphithéâtre lors d'une session sur un campus"
+			}
+		},
+		"academyPill": "Et ensuite · l'année 3 commence",
+		"academyFirst": "Ensuite, un apprentissage qui tient",
+		"academySecond": "dans la poche.",
+		"academyDescription": "Le {date}, l'Academy ouvre son premier cours en ligne, L'IA pour votre prochaine opportunité, conçu avec Ordina. Il fonctionne sur n'importe quel téléphone et se termine par un certificat qu'un employeur peut vérifier en un clic. Il sera comptabilisé dans le rapport de l'année 3.",
+		"academyAlt": "Une jeune femme apprenant sur un ordinateur portable en plein air",
+		"launches": "Lancement",
+		"free": "Gratuit",
+		"freeLabel": "cours en ligne, avec un certificat vérifiable",
+		"exploreAcademy": "Découvrir l'Academy",
+		"quotesFirst": "Leurs mots,",
+		"quotesSecond": "pas les nôtres.",
+		"quotesEmptyTitle": "Les témoignages arrivent",
+		"quotesEmptyBody": "Nous recueillons leurs mots auprès des mentorées, des ambassadrices et des diplômées. Chacun est partagé avec leur accord.",
+		"partnersLabel": "Avec le soutien de",
+		"newsletterFirst": "Soyez la première",
+		"newsletterSecond": "à le lire.",
+		"newsletterDescription": "Abonnez-vous à l'histoire mensuelle et nous vous enverrons le rapport de l'année 2 le jour de sa publication.",
+		"howWeCountTitle": "Notre méthode",
+		"howWeCountBody": "« Encadrée » signifie au moins une séance terminée. Les chiffres des campus viennent des feuilles de présence des ambassadrices, et ceux des diplômées des registres des bootcamps Academy. L'année 2 couvre du 1er septembre 2025 au 31 août 2026.",
+		"donate": "Faire un don",
+		"year1Report": "Rapport Année 1"
+	},
+	"impactBanner": {
+		"label": "Rapport d’impact de la 2e année",
+		"badge": "Année 2",
+		"title": "Notre rapport d’impact de la 2e année est disponible",
+		"titleShort": "Rapport 2e année",
+		"description": "Découvrez ce qu’une deuxième année de mentorat a changé.",
+		"cta": "Lire le rapport",
+		"dismiss": "Masquer cette bannière"
 	}
 }
