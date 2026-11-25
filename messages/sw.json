@@ -97,7 +97,8 @@
 			"meet": "Google Meet",
 			"free": "Bure",
 			"bookCta": "Panga simu",
-			"photoFallback": "{name}, mlezi wa 4HerFrika"
+			"photoFallback": "{name}, mlezi wa 4HerFrika",
+			"newTab": "(inafunguka kwenye kichupo kipya)"
 		},
 		"about": {
 			"tag": "Kuhusu",

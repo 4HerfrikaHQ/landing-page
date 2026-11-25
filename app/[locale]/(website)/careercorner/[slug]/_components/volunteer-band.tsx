@@ -7,7 +7,7 @@ export async function VolunteerBand() {
 	const tc = await getTranslations("common");
 
 	return (
-		<section className="flex flex-col overflow-hidden rounded-t-[40px] lg:h-[520px] lg:flex-row lg:rounded-t-[64px]">
+		<section className="flex flex-col overflow-hidden rounded-t-[40px] lg:min-h-[520px] lg:flex-row lg:rounded-t-[64px]">
 			<div className="bg-secondary px-6 py-14 text-white lg:flex lg:w-1/2 lg:flex-col lg:justify-center lg:px-20">
 				<span className="w-fit rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary">
 					{t("tag")}
@@ -33,7 +33,7 @@ export async function VolunteerBand() {
 					</Link>
 				</div>
 			</div>
-			<div className="relative aspect-[4/3] w-full lg:aspect-auto lg:h-full lg:w-1/2">
+			<div className="relative aspect-[4/3] w-full lg:aspect-auto lg:w-1/2">
 				<Image
 					src="/assets/academy/tech-source.jpg"
 					alt={t("imageAlt")}

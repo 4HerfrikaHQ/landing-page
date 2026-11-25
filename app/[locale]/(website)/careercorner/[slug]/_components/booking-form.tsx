@@ -21,22 +21,11 @@ import { ChevronDown, CircleAlert, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useId, useRef } from "react";
 import { createBooking } from "../_actions";
-import { CreateBookingSchema } from "../_schema";
-
-const GENDER_OPTIONS = [
-	{ value: "female", labelKey: "female" },
-	{ value: "male", labelKey: "male" },
-	{ value: "non_binary", labelKey: "nonBinary" },
-	{ value: "prefer_not_to_say", labelKey: "preferNotToSay" },
-] as const;
-
-const CAREER_STAGE_OPTIONS = [
-	{ value: "student", labelKey: "student" },
-	{ value: "early_career", labelKey: "earlyCareer" },
-	{ value: "mid_career", labelKey: "midCareer" },
-	{ value: "founder", labelKey: "founder" },
-	{ value: "other", labelKey: "other" },
-] as const;
+import {
+	CAREER_STAGE_OPTIONS,
+	CreateBookingSchema,
+	GENDER_OPTIONS,
+} from "../_schema";
 
 const FIELD_CLASS =
 	"h-12 rounded-full border-border bg-white px-4 text-base md:text-base focus-visible:border-primary focus-visible:ring-primary/30";
@@ -125,6 +114,10 @@ export function BookingForm({
 		trackEvent("booking_form_started", { mentor_slug: mentorSlug });
 	}
 
+	const submitLabel = action.isPending
+		? t("form.confirming")
+		: t("form.confirm");
+
 	return (
 		<form
 			onFocusCapture={markStarted}
@@ -140,45 +133,15 @@ export function BookingForm({
 			<input type="hidden" {...form.register("menteeTimezone")} />
 
 			<div className="flex-1 space-y-5 overflow-y-auto px-4 pb-6 sm:px-6">
-				{failed && (
-					<div
-						key={serverError ?? "failed"}
-						role="alert"
-						tabIndex={-1}
-						ref={focusOnMount}
-						className="rounded-[20px] border border-[#e8a595] bg-[#fdf0ec] p-4 text-[#8f1d0b] outline-none focus-visible:ring-2 focus-visible:ring-[#8f1d0b]"
-					>
-						<p className="flex items-center gap-2 font-semibold">
-							<CircleAlert className="size-5 shrink-0" aria-hidden="true" />
-							{t("form.errorTitle")}
-						</p>
-						<p className="mt-1 text-[15px] leading-relaxed">
-							{serverError ?? t("form.errorFallback")}
-						</p>
-						<button
-							type="button"
-							onClick={onChangeTime}
-							className="mt-2 inline-flex h-11 items-center font-semibold underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#8f1d0b]"
-						>
-							{t("form.pickAnother")}
-						</button>
-					</div>
-				)}
+				<FailureAlert
+					failed={failed}
+					message={serverError ?? t("form.errorFallback")}
+					onChangeTime={onChangeTime}
+				/>
 
 				<div className="flex items-center gap-3 rounded-[24px] border border-primary/20 bg-surface-pink p-3">
 					<span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-pill bg-white text-primary">
-						{mentorImage ? (
-							<MentorImage
-								src={mentorImage}
-								alt=""
-								crop={mentorImageCrop}
-								aspectRatio={1}
-								sizes="48px"
-								className="size-full"
-							/>
-						) : (
-							<UserRound className="size-6" aria-hidden="true" />
-						)}
+						<MentorAvatar image={mentorImage} crop={mentorImageCrop} />
 					</span>
 					<div className="min-w-0 flex-1">
 						<p className="text-[15px] font-semibold leading-tight">
@@ -366,13 +329,13 @@ export function BookingForm({
 				</details>
 			</div>
 
-			<div className="border-t border-border bg-white px-4 py-4 sm:px-6">
+			<div className="border-t border-border bg-white px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-6">
 				<button
 					type="submit"
 					disabled={action.isPending}
 					className="inline-flex h-12 w-full items-center justify-center rounded-pill bg-primary px-6 font-medium text-primary-foreground outline-none transition-colors hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60"
 				>
-					{action.isPending ? t("form.confirming") : t("form.confirm")}
+					{submitLabel}
 				</button>
 			</div>
 		</form>
@@ -384,6 +347,90 @@ type FieldControlProps = {
 	"aria-invalid": boolean;
 	"aria-describedby": string | undefined;
 };
+
+function FailureAlert({
+	failed,
+	message,
+	onChangeTime,
+}: {
+	failed: boolean;
+	message: string;
+	onChangeTime: () => void;
+}) {
+	const t = useTranslations("mentorProfile");
+	if (!failed) return null;
+	return (
+		<div
+			key={message}
+			role="alert"
+			tabIndex={-1}
+			ref={focusOnMount}
+			className="rounded-[20px] border border-[#e8a595] bg-[#fdf0ec] p-4 text-[#8f1d0b] outline-none focus-visible:ring-2 focus-visible:ring-[#8f1d0b]"
+		>
+			<p className="flex items-center gap-2 font-semibold">
+				<CircleAlert className="size-5 shrink-0" aria-hidden="true" />
+				{t("form.errorTitle")}
+			</p>
+			<p className="mt-1 text-[15px] leading-relaxed">{message}</p>
+			<button
+				type="button"
+				onClick={onChangeTime}
+				className="mt-2 inline-flex min-h-11 items-center py-2 font-semibold underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#8f1d0b]"
+			>
+				{t("form.pickAnother")}
+			</button>
+		</div>
+	);
+}
+
+function MentorAvatar({
+	image,
+	crop,
+}: {
+	image: string | null;
+	crop: MentorImageCrop | null;
+}) {
+	if (!image) return <UserRound className="size-6" aria-hidden="true" />;
+	return (
+		<MentorImage
+			src={image}
+			alt=""
+			crop={crop}
+			aspectRatio={1}
+			sizes="48px"
+			className="size-full"
+		/>
+	);
+}
+
+function OptionalMark({ optional }: { optional: boolean }) {
+	const t = useTranslations("mentorProfile.form");
+	if (!optional) return null;
+	return (
+		<span className="font-normal text-muted-foreground">
+			({t("optional").toLowerCase()})
+		</span>
+	);
+}
+
+function FieldText({
+	id,
+	tone,
+	role,
+	children,
+}: {
+	id: string;
+	tone: string;
+	role?: "alert";
+	children: string | undefined;
+}) {
+	if (!children) return null;
+	return (
+		<p id={id} role={role} className={cn("text-sm", tone)}>
+			{children}
+		</p>
+	);
+}
 
 function Field({
 	label,
@@ -398,7 +445,6 @@ function Field({
 	message?: string;
 	children: (props: FieldControlProps) => ReactNode;
 }) {
-	const t = useTranslations("mentorProfile.form");
 	const id = useId();
 	const describedBy = [
 		hint ? `${id}-hint` : null,
@@ -410,27 +456,19 @@ function Field({
 		<div className="space-y-1.5">
 			<Label htmlFor={id} className="text-base font-medium leading-snug">
 				{label}
-				{optional && (
-					<span className="font-normal text-muted-foreground">
-						({t("optional").toLowerCase()})
-					</span>
-				)}
+				<OptionalMark optional={optional} />
 			</Label>
 			{children({
 				id,
 				"aria-invalid": message !== undefined,
 				"aria-describedby": describedBy || undefined,
 			})}
-			{hint && (
-				<p id={`${id}-hint`} className={cn("text-sm", "text-muted-foreground")}>
-					{hint}
-				</p>
-			)}
-			{message && (
-				<p id={`${id}-error`} role="alert" className="text-sm text-destructive">
-					{message}
-				</p>
-			)}
+			<FieldText id={`${id}-hint`} tone="text-muted-foreground">
+				{hint}
+			</FieldText>
+			<FieldText id={`${id}-error`} tone="text-destructive" role="alert">
+				{message}
+			</FieldText>
 		</div>
 	);
 }
