@@ -44,7 +44,7 @@ export async function getTaskQueue(input: {
 			.innerJoin(learners, eq(enrolments.learner_id, learners.id))
 			.leftJoin(users, eq(taskSubmissions.reviewed_by, users.id))
 			.where(where)
-			.orderBy(order)
+			.orderBy(order, asc(taskSubmissions.id))
 			.limit(input.pageSize)
 			.offset((input.page - 1) * input.pageSize),
 		db.select({ total: count() }).from(taskSubmissions).where(where),

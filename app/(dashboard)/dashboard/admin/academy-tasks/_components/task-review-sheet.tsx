@@ -46,69 +46,98 @@ export function TaskReviewSheet({
 						<Field label="Task">{row.lessonTitle}</Field>
 						<Field label="Country">{countryName(row.country)}</Field>
 						<Field label="Attempt">{attemptLabel(row.attempt)}</Field>
-						{row.track ? (
-							<Field label="Track">
-								<span className="capitalize">{row.track}</span>
-							</Field>
-						) : null}
+						<TrackField track={row.track} />
 					</dl>
 
 					<Section title="Submission">
 						<LinkedText text={row.body} />
 					</Section>
 
-					{row.status === "submitted" ? null : (
-						<Section title="Your review">
-							<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-muted-foreground">
-								{row.note ?? "No note was left."}
-							</p>
-							<p className="text-xs text-muted-foreground">
-								{row.reviewerName ?? "A reviewer"}
-								{row.reviewedAt
-									? `, ${format(row.reviewedAt, "MMM d, yyyy")}`
-									: ""}
-							</p>
-						</Section>
-					)}
-
-					{row.previous.length === 0 ? null : (
-						<Section title="Earlier attempts">
-							<ul className="space-y-3">
-								{row.previous.map((item) => (
-									<li
-										key={item.id}
-										className="space-y-2 rounded-xl border border-border/60 p-3"
-									>
-										<div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-											<span className="font-medium text-foreground">
-												{attemptLabel(item.attempt)}
-											</span>
-											<span>{format(item.submittedAt, "MMM d, yyyy")}</span>
-											<StatusBadge status={item.status} />
-										</div>
-										<LinkedText text={item.body} />
-										{item.note ? (
-											<p className="whitespace-pre-wrap break-words border-l-2 border-border pl-3 text-sm text-muted-foreground">
-												{item.note}
-											</p>
-										) : null}
-									</li>
-								))}
-							</ul>
-						</Section>
-					)}
+					<ReviewOutcome row={row} />
+					<EarlierAttempts previous={row.previous} />
 				</div>
 
-				{row.status === "submitted" ? (
-					<div className="sticky bottom-0 -mx-4 border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
-						<ReviewActions
-							submissionId={row.id}
-							onDone={() => onOpenChange(false)}
-						/>
-					</div>
-				) : null}
+				<ActionsBar row={row} onDone={() => onOpenChange(false)} />
 			</SheetContent>
 		</Sheet>
+	);
+}
+
+function TrackField({ track }: { track: TaskQueueRow["track"] }) {
+	if (!track) return null;
+	return (
+		<Field label="Track">
+			<span className="capitalize">{track}</span>
+		</Field>
+	);
+}
+
+function ReviewOutcome({ row }: { row: TaskQueueRow }) {
+	if (row.status === "submitted") return null;
+	const reviewer = row.reviewerName ?? "A reviewer";
+	const reviewedOn = row.reviewedAt
+		? `, ${format(row.reviewedAt, "MMM d, yyyy")}`
+		: "";
+	return (
+		<Section title="Your review">
+			<p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-muted-foreground">
+				{row.note ?? "No note was left."}
+			</p>
+			<p className="text-xs text-muted-foreground">
+				{reviewer}
+				{reviewedOn}
+			</p>
+		</Section>
+	);
+}
+
+function EarlierAttempts({ previous }: { previous: TaskQueueRow["previous"] }) {
+	if (previous.length === 0) return null;
+	return (
+		<Section title="Earlier attempts">
+			<ul className="space-y-3">
+				{previous.map((item) => (
+					<li
+						key={item.id}
+						className="space-y-2 rounded-xl border border-border/60 p-3"
+					>
+						<div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+							<span className="font-medium text-foreground">
+								{attemptLabel(item.attempt)}
+							</span>
+							<span>{format(item.submittedAt, "MMM d, yyyy")}</span>
+							<StatusBadge status={item.status} />
+						</div>
+						<LinkedText text={item.body} />
+						<AttemptNote note={item.note} />
+					</li>
+				))}
+			</ul>
+		</Section>
+	);
+}
+
+function AttemptNote({ note }: { note: string | null }) {
+	if (!note) return null;
+	return (
+		<p className="whitespace-pre-wrap break-words border-l-2 border-border pl-3 text-sm text-muted-foreground">
+			{note}
+		</p>
+	);
+}
+
+function ActionsBar({
+	row,
+	onDone,
+}: {
+	row: TaskQueueRow;
+	onDone: () => void;
+}) {
+	if (row.status !== "submitted") return null;
+	return (
+		<div className="sticky bottom-0 -mx-4 border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
+			<ReviewActions submissionId={row.id} onDone={onDone} />
+		</div>
 	);
 }
 
