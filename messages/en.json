@@ -286,6 +286,7 @@
 				"business": "Business",
 				"climate": "Climate"
 			},
+			"inEnglish": "Course in English",
 			"levels": {
 				"beginner": "Beginner",
 				"intermediate": "Intermediate",
