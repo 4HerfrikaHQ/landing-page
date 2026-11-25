@@ -1,15 +1,26 @@
 import { Link } from "@/i18n/navigation";
+import { CONTACT_EMAIL } from "@/src/lib/contact";
 import { CalendarDays, Mail } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import type { LegalKind } from "./_schema";
 import { legalMdxComponents } from "./legal-mdx-components";
 import { LegalSidebar } from "./legal-sidebar";
-import { type LegalKind, legalLocale, readLegalSource } from "./legal-source";
+import { legalLocale, readLegalSource } from "./legal-source";
 
 const OTHER_KIND = { privacy: "/terms", terms: "/privacy" } as const;
 
-const CONTACT_EMAIL = "hello@4herfrika.org";
+function UpdatedBadge({ updated }: { updated: string | null }) {
+	if (!updated) return null;
+
+	return (
+		<p className="mt-7 inline-flex min-h-9 items-center gap-2 rounded-pill bg-white px-4 text-sm shadow-xs ring-1 ring-border">
+			<CalendarDays className="size-4 text-primary" aria-hidden="true" />
+			{updated}
+		</p>
+	);
+}
 
 const ARTICLE_STYLES = [
 	"prose prose-gray max-w-[620px] text-foreground prose-p:leading-[1.75] prose-li:leading-[1.7] prose-li:marker:text-primary",
@@ -40,7 +51,7 @@ export async function LegalPage({
 	const lead = words.join(" ");
 
 	return (
-		<>
+		<main>
 			<section
 				data-hero="full-bleed"
 				className="relative overflow-hidden bg-[#fffaf5] px-4 pb-10 pt-28 lg:px-20 lg:pb-16 xl:pt-40"
@@ -57,31 +68,26 @@ export async function LegalPage({
 						aria-label={t("breadcrumbLabel")}
 						className="text-sm text-muted-foreground"
 					>
-						<Link href="/" className="hover:text-primary">
+						<Link
+							href="/"
+							className="inline-flex min-h-11 items-center hover:text-primary"
+						>
 							{t("breadcrumbHome")}
 						</Link>
-						<span className="mx-2" aria-hidden="true">
+						<span className="mx-1" aria-hidden="true">
 							/
 						</span>
 						<span aria-current="page" className="text-foreground">
 							{t(`${kind}.breadcrumb`)}
 						</span>
 					</nav>
-					<h1 className="mt-5 text-[44px] font-medium leading-[1.05] tracking-tight lg:text-[72px]">
+					<h1 className="mt-2 break-words text-[40px] font-medium leading-[1.05] tracking-tight sm:text-[44px] lg:text-[72px]">
 						{lead}{" "}
 						<em className="font-playfair font-black text-primary-500">
 							{accent}
 						</em>
 					</h1>
-					{source.updated ? (
-						<p className="mt-7 inline-flex min-h-9 items-center gap-2 rounded-pill bg-white px-4 text-sm shadow-xs ring-1 ring-border">
-							<CalendarDays
-								className="size-4 text-primary"
-								aria-hidden="true"
-							/>
-							{source.updated}
-						</p>
-					) : null}
+					<UpdatedBadge updated={source.updated} />
 				</div>
 			</section>
 
@@ -182,6 +188,6 @@ export async function LegalPage({
 					</div>
 				</div>
 			</section>
-		</>
+		</main>
 	);
 }

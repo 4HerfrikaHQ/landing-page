@@ -59,7 +59,7 @@ export async function UnsubscribeCard({
 						>
 							{eyebrow}
 						</p>
-						<h1 className="mt-2 text-[34px] font-semibold leading-[1.1] tracking-tight lg:text-[44px]">
+						<h1 className="mt-2 break-words text-[32px] font-semibold leading-[1.1] tracking-tight lg:text-[44px]">
 							{titleLead}{" "}
 							<em className="font-playfair font-black text-primary-500">
 								{titleAccent}
