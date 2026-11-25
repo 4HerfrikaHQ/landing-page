@@ -1,14 +1,25 @@
+import {
+	LOGO_HEIGHT_PX,
+	LOGO_WIDTH_PX,
+	type LogoSurface,
+	type LogoVariantId,
+	type SwatchId,
+	type SwatchInk,
+	type UsageId,
+	type UsageKind,
+} from "../_schema";
+
 export const LOGO_DOWNLOAD_ZIP = "/brand/4herfrika-brand-assets.zip";
 
 export type LogoVariant = {
-	id: "colour" | "navy" | "onDark" | "white" | "mark" | "markWhite";
+	id: LogoVariantId;
 	file: string;
 	width: number;
 	height: number;
-	surface: "light" | "dark";
+	surface: LogoSurface;
 };
 
-const LOGO_SIZE = { width: 6000, height: 1696 } as const;
+const LOGO_SIZE = { width: LOGO_WIDTH_PX, height: LOGO_HEIGHT_PX } as const;
 const MARK_SIZE = { width: 3040, height: 4388 } as const;
 
 export const logoVariants: LogoVariant[] = [
@@ -30,21 +41,11 @@ export const logoVariants: LogoVariant[] = [
 	},
 ];
 
-export type SwatchId =
-	| "logoNavy"
-	| "logoPink"
-	| "primary"
-	| "brightPink"
-	| "secondary"
-	| "surfacePink"
-	| "surfaceIndigo"
-	| "surfaceTeal";
-
 export type Swatch = {
 	id: SwatchId;
 	hex: string;
 	rgb: string;
-	ink: "light" | "dark";
+	ink: SwatchInk;
 };
 
 export const logoColours: Swatch[] = [
@@ -61,11 +62,11 @@ export const websiteColours: Swatch[] = [
 	{ id: "surfaceTeal", hex: "#D4EAEA", rgb: "212, 234, 234", ink: "dark" },
 ];
 
-export const usageItems = [
+export const usageItems: { id: UsageId; kind: UsageKind }[] = [
 	{ id: "clearSpace", kind: "do" },
 	{ id: "minSize", kind: "do" },
 	{ id: "onDark", kind: "do" },
 	{ id: "distort", kind: "dont" },
 	{ id: "effects", kind: "dont" },
 	{ id: "busy", kind: "dont" },
-] as const;
+];

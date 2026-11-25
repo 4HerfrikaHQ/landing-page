@@ -1,6 +1,7 @@
 import { FadeIn } from "@/components/motion";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { type FontId, fontId } from "../_schema";
 import {
 	CARD_CLASS,
 	CONTAINER_CLASS,
@@ -9,14 +10,23 @@ import {
 	SectionHeading,
 } from "./section-heading";
 
-const FONT_LINKS = {
+const FONT_LINKS: Record<FontId, string> = {
 	outfit: "https://fonts.google.com/specimen/Outfit",
 	playfair: "https://fonts.google.com/specimen/Playfair+Display",
-} as const;
+};
 
-function FontCard({ id }: { id: keyof typeof FONT_LINKS }) {
+function FontCard({ id }: { id: FontId }) {
 	const t = useTranslations("brand.typography");
-	const isPlayfair = id === "playfair";
+	const isPlayfair = id === fontId.enum.playfair;
+	const glyphClass = isPlayfair
+		? "mt-6 font-playfair text-7xl font-medium italic leading-none text-primary-500"
+		: "mt-6 text-7xl font-bold leading-none text-secondary-500";
+	const sampleClass = isPlayfair
+		? "mt-6 font-playfair text-3xl font-medium italic leading-tight text-primary-500"
+		: "mt-6 text-3xl font-bold leading-tight text-secondary-500";
+	const alphabetClass = isPlayfair
+		? "mt-4 font-playfair text-lg italic text-muted-foreground"
+		: "mt-4 text-lg text-muted-foreground";
 
 	return (
 		<li className={`${CARD_CLASS} flex flex-col p-6 md:p-8`}>
@@ -24,33 +34,11 @@ function FontCard({ id }: { id: keyof typeof FONT_LINKS }) {
 			<h3 className="mt-1 text-2xl font-bold text-secondary-500">
 				{t(`${id}.name`)}
 			</h3>
-			<p
-				aria-hidden="true"
-				className={
-					isPlayfair
-						? "mt-6 font-playfair text-7xl font-medium italic leading-none text-primary-500"
-						: "mt-6 text-7xl font-bold leading-none text-secondary-500"
-				}
-			>
+			<p aria-hidden="true" className={glyphClass}>
 				Aa
 			</p>
-			<p
-				className={
-					isPlayfair
-						? "mt-6 font-playfair text-3xl font-medium italic leading-tight text-primary-500"
-						: "mt-6 text-3xl font-bold leading-tight text-secondary-500"
-				}
-			>
-				{t(`${id}.sample`)}
-			</p>
-			<p
-				aria-hidden="true"
-				className={
-					isPlayfair
-						? "mt-4 font-playfair text-lg italic text-muted-foreground"
-						: "mt-4 text-lg text-muted-foreground"
-				}
-			>
+			<p className={sampleClass}>{t(`${id}.sample`)}</p>
+			<p aria-hidden="true" className={alphabetClass}>
 				ABCDEFGHIJKLM abcdefghijklm 0123456789
 			</p>
 			<p className="mt-4 text-[15px] leading-6 text-muted-foreground">
@@ -86,8 +74,8 @@ export function TypographySection() {
 				</FadeIn>
 				<FadeIn>
 					<ul className="mt-10 grid gap-6 md:grid-cols-2">
-						<FontCard id="outfit" />
-						<FontCard id="playfair" />
+						<FontCard id={fontId.enum.outfit} />
+						<FontCard id={fontId.enum.playfair} />
 					</ul>
 				</FadeIn>
 			</div>

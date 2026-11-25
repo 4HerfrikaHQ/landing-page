@@ -4,6 +4,7 @@ import { Download } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { type LogoVariant, logoVariants } from "../_data/brand-assets";
+import { logoSurface, logoVariantId } from "../_schema";
 import {
 	CARD_CLASS,
 	CONTAINER_CLASS,
@@ -16,16 +17,21 @@ const FORMATS = ["svg", "png"] as const;
 
 function LogoCard({ variant }: { variant: LogoVariant }) {
 	const t = useTranslations("brand.logos");
-	const isMark = variant.id === "mark" || variant.id === "markWhite";
+	const isMark =
+		variant.id === logoVariantId.enum.mark ||
+		variant.id === logoVariantId.enum.markWhite;
+	const tileClass =
+		variant.surface === logoSurface.enum.dark
+			? "bg-secondary-500"
+			: "border border-black/10 bg-white";
+	const imageClass = isMark ? "h-full" : "max-h-full";
 
 	return (
 		<li className={cn(CARD_CLASS, "flex flex-col p-3")}>
 			<div
 				className={cn(
 					"flex h-48 items-center justify-center rounded-[14px] p-8 md:h-56",
-					variant.surface === "dark"
-						? "bg-secondary-500"
-						: "border border-black/10 bg-white",
+					tileClass,
 				)}
 			>
 				<Image
@@ -34,7 +40,7 @@ function LogoCard({ variant }: { variant: LogoVariant }) {
 					width={variant.width}
 					height={variant.height}
 					unoptimized
-					className={cn("w-auto max-w-full", isMark ? "h-full" : "max-h-full")}
+					className={cn("w-auto max-w-full", imageClass)}
 				/>
 			</div>
 			<div className="flex flex-1 flex-col gap-4 p-3 pt-5">
