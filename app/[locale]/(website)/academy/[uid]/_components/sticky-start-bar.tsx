@@ -22,7 +22,7 @@ export function StickyStartBar({
 						{t("startFreeHint")}
 					</span>
 				</p>
-				<div className="w-44 shrink-0">
+				<div className="shrink-0">
 					<CourseAction course={course} viewer={viewer} />
 				</div>
 			</div>
