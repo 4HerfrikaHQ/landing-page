@@ -52,3 +52,7 @@ export const SaveOnboardingAvailabilitySchema = z.object({
 export type OnboardingAvailabilitySlot = z.infer<
 	typeof OnboardingAvailabilitySlotSchema
 >;
+
+export const onboardingStep = z.enum(["availability", "profile", "calendar"]);
+
+export type OnboardingStep = z.infer<typeof onboardingStep>;
