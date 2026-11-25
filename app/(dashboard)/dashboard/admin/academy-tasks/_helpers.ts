@@ -1,10 +1,5 @@
 import type { TaskSubmissionStatus } from "@/src/db/schema/tables";
-
-export const NOTE_MAX_LENGTH = 1500;
-export const QUEUE_PAGE_SIZE = 20;
-export const DEFAULT_QUEUE_STATUS = "submitted";
-
-export type ReviewDecision = "complete" | "needs_work";
+import type { ReviewDecision } from "./_schema";
 
 export type ReviewTransition =
 	| { kind: "apply"; status: ReviewDecision }

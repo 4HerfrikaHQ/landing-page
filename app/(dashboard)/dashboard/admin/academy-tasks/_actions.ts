@@ -13,8 +13,12 @@ import { enrolments, learners, taskSubmissions } from "@/src/db/schema/tables";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { type ReviewDecision, reviewTransition } from "./_helpers";
-import { ReviewTaskSchema } from "./_schema";
+import { reviewTransition } from "./_helpers";
+import {
+	type ReviewDecision,
+	ReviewTaskSchema,
+	reviewDecision,
+} from "./_schema";
 
 async function findReviewTarget(submissionId: string) {
 	const [target] = await db
@@ -32,7 +36,7 @@ async function courseToConclude(
 	decision: ReviewDecision,
 	courseId: string,
 ): Promise<Course | null> {
-	if (decision !== "complete") return null;
+	if (decision !== reviewDecision.enum.complete) return null;
 	const course = await getCourseById(courseId);
 	if (!course) {
 		throw new ActionError(
@@ -43,9 +47,14 @@ async function courseToConclude(
 }
 
 async function learnerEmail(authUserId: string) {
-	const admin = await createAdminClient();
-	const { data } = await admin.auth.admin.getUserById(authUserId);
-	return data.user?.email ?? null;
+	try {
+		const admin = await createAdminClient();
+		const { data } = await admin.auth.admin.getUserById(authUserId);
+		return data.user?.email ?? null;
+	} catch (error) {
+		console.error("[certificate-ready] email lookup failed", error);
+		return null;
+	}
 }
 
 export const reviewTaskSubmission = adminAction
@@ -56,6 +65,14 @@ export const reviewTaskSubmission = adminAction
 		const course = await courseToConclude(decision, enrolment.course_id);
 
 		const conclusion = await db.transaction(async (tx) => {
+			const [lockedEnrolment] = await tx
+				.select()
+				.from(enrolments)
+				.where(eq(enrolments.id, enrolment.id))
+				.for("update");
+			if (!lockedEnrolment) {
+				throw new ActionError("This submission no longer exists.");
+			}
 			const [locked] = await tx
 				.select({ status: taskSubmissions.status })
 				.from(taskSubmissions)
@@ -77,10 +94,18 @@ export const reviewTaskSubmission = adminAction
 					reviewed_at: new Date(),
 				})
 				.where(eq(taskSubmissions.id, submissionId));
-			return course ? concludeEnrolment(tx, course, enrolment, learner) : null;
+			return course
+				? concludeEnrolment(tx, course, lockedEnrolment, learner)
+				: null;
 		});
 
 		const certificate = conclusion?.certificate ?? null;
+
+		revalidatePath("/dashboard/admin/academy-tasks");
+		revalidatePath("/[locale]/academy/me", "page");
+		revalidatePath("/[locale]/academy/[uid]", "page");
+		revalidatePath("/[locale]/academy/[uid]/[lessonKey]", "page");
+
 		if (certificate) {
 			const email = await learnerEmail(learner.auth_user_id);
 			if (email) {
@@ -92,11 +117,6 @@ export const reviewTaskSubmission = adminAction
 				});
 			}
 		}
-
-		revalidatePath("/dashboard/admin/academy-tasks");
-		revalidatePath("/[locale]/academy/me", "page");
-		revalidatePath("/[locale]/academy/[uid]", "page");
-		revalidatePath("/[locale]/academy/[uid]/[lessonKey]", "page");
 
 		return {
 			decision,
