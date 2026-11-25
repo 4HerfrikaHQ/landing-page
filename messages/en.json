@@ -284,7 +284,8 @@
 		"faqs": "FAQs",
 		"newsletterTitle": "Get the monthly story",
 		"subscribeSuccess": "Thanks for subscribing!",
-		"socialLabel": "Social media"
+		"socialLabel": "Social media",
+		"brandAssets": "Brand assets"
 	},
 	"mentorProfile": {
 		"back": "Back to mentors",
@@ -746,7 +747,15 @@
 			"year1Link": "See the impact report",
 			"footerKeep": "Paystack has also emailed you a payment receipt. Keep this one for your donation records.",
 			"footerQuestions": "Questions? Reply to this email or write to"
-		}
+		},
+		"bankDetails": "Bank Details",
+		"heroTitle": "Make a Donation to",
+		"heroOrg": "4HERFRIKA",
+		"heroVision": "By 2050, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact in every field that shapes our future.",
+		"donateToEmpower": "Donate to Empower Women Across Africa",
+		"donateNow": "Donate Now",
+		"helpEmpower": "Invest in Leadership Across Africa",
+		"helpDescription": "Leadership in Africa isn't built in one field or one industry. It's built across every campus, every sector, every ambitious woman who has the will to lead. When you support 4Herfrika, you're investing in a network that's raising the next generation of doctors, lawyers, engineers, entrepreneurs, and changemakers. You're not supporting a program. You're supporting a movement."
 	},
 	"contact": {
 		"heroImageAlt": "Three young women taking a selfie together at a 4HerFrika event",
@@ -1323,6 +1332,10 @@
 		"blogCategory": {
 			"title": "{name} — The Pink Blog",
 			"description": "Stories and updates in {name} from 4HerFrika, the mentorship network for young African women."
+		},
+		"brand": {
+			"title": "Brand assets",
+			"description": "Download the 4HerFrika logo, colours and fonts, and learn how to use them."
 		}
 	},
 	"attendance": {
@@ -2097,5 +2110,141 @@
 		"bodySignedOut": "This dashboard is only for 4HerFrika staff and mentors. Taking the Academy course? You're one tap away from it.",
 		"staffSignIn": "Staff sign-in",
 		"signedInAs": "Signed in as <b>{email}</b>"
+	},
+	"brand": {
+		"badge": "Brand assets",
+		"titleFirst": "Carry our story,",
+		"titleSecond": "the right way",
+		"intro": "Download the 4HerFrika logo, colours and fonts, and see how to use them so our brand looks the same everywhere.",
+		"downloadAll": "Download everything (.zip)",
+		"logos": {
+			"titleFirst": "Pick your",
+			"titleSecond": "logo",
+			"intro": "Choose the version that sits best on your background. Every logo is available as SVG and PNG.",
+			"downloadAs": "Download {name} as {format}",
+			"items": {
+				"colour": {
+					"name": "Colour logo",
+					"label": "colour logo",
+					"alt": "4HerFrika logo, colour version",
+					"use": "Our main logo. Use it on white or very light backgrounds."
+				},
+				"navy": {
+					"name": "Navy logo",
+					"label": "navy logo",
+					"alt": "4HerFrika logo, navy version",
+					"use": "One-colour version for documents, forms and print where full colour is not available."
+				},
+				"onDark": {
+					"name": "On-dark logo",
+					"label": "on-dark logo",
+					"alt": "4HerFrika logo, pink mark with white wordmark",
+					"use": "Pink mark with a white wordmark. Use it on navy and other dark brand backgrounds."
+				},
+				"white": {
+					"name": "White logo",
+					"label": "white logo",
+					"alt": "4HerFrika logo, white version",
+					"use": "All white. Use it on dark photos and on coloured backgrounds."
+				},
+				"mark": {
+					"name": "Logo mark",
+					"label": "logo mark",
+					"alt": "4HerFrika logo mark, pink icon",
+					"use": "The icon on its own. Use it for avatars, favicons and other small spaces."
+				},
+				"markWhite": {
+					"name": "White logo mark",
+					"label": "white logo mark",
+					"alt": "4HerFrika logo mark, white icon",
+					"use": "The icon in white, for dark backgrounds and small spaces."
+				}
+			}
+		},
+		"colours": {
+			"titleFirst": "Our",
+			"titleSecond": "colours",
+			"intro": "Select a HEX value to copy it. Each colour also lists its RGB value.",
+			"copyHex": "Copy HEX {hex}",
+			"copied": "Copied",
+			"rgb": "RGB",
+			"groups": {
+				"logo": {
+					"title": "Logo colours",
+					"intro": "The two colours inside the logo. Use them when you need to match the logo exactly, for example in print."
+				},
+				"website": {
+					"title": "Website palette",
+					"intro": "The colours used across 4herfrika.org. Use them for web pages, slides and social posts. The website pink is a little deeper than the logo pink."
+				}
+			},
+			"names": {
+				"logoNavy": "Logo navy",
+				"logoPink": "Logo pink",
+				"primary": "Primary pink",
+				"brightPink": "Bright pink",
+				"secondary": "Secondary navy",
+				"surfacePink": "Pink surface",
+				"surfaceIndigo": "Indigo surface",
+				"surfaceTeal": "Teal surface"
+			}
+		},
+		"typography": {
+			"titleFirst": "Our",
+			"titleSecond": "typefaces",
+			"intro": "Two free typefaces from Google Fonts. Outfit does the everyday work and Playfair Display adds a touch of warmth.",
+			"googleFonts": "Google Fonts",
+			"viewOnGoogle": "View {name} on Google Fonts (opens in a new tab)",
+			"outfit": {
+				"name": "Outfit",
+				"role": "Headings and body text",
+				"sample": "Girls who lead change",
+				"note": "Use weights 300 to 700. Bold for headings, Regular for body text."
+			},
+			"playfair": {
+				"name": "Playfair Display Italic",
+				"role": "Accent words",
+				"sample": "change",
+				"note": "Use it for one or two words in a heading, never for body text."
+			}
+		},
+		"usage": {
+			"titleFirst": "Using the",
+			"titleSecond": "logo",
+			"intro": "A few simple rules keep the logo clear and recognisable.",
+			"doLabel": "Do",
+			"dontLabel": "Don't",
+			"items": {
+				"clearSpace": {
+					"title": "Give it room",
+					"text": "Keep clear space around the logo equal to the height of the “4”."
+				},
+				"minSize": {
+					"title": "Keep it readable",
+					"text": "Show the full logo at least 120px wide. Below that, use the logo mark."
+				},
+				"onDark": {
+					"title": "Match the background",
+					"text": "On navy, dark photos or busy images, use the on-dark or white logo."
+				},
+				"distort": {
+					"title": "Don't change its shape",
+					"text": "Do not recolour, stretch, squash or rotate the logo."
+				},
+				"effects": {
+					"title": "No effects",
+					"text": "Do not add shadows, outlines, glows or gradients."
+				},
+				"busy": {
+					"title": "Avoid busy backgrounds",
+					"text": "Do not place the colour logo on busy photos or on navy. Use the on-dark or white logo instead."
+				}
+			}
+		},
+		"contact": {
+			"titleFirst": "Need something",
+			"titleSecond": "else?",
+			"text": "Custom sizes, co-branding or a press question? Write to us and we will help."
+		}
 	}
 }
