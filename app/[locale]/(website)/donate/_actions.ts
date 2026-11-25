@@ -8,9 +8,14 @@ import {
 	isOnlineGivingConfigured,
 } from "@/src/lib/paystack/client";
 import { chargeFor } from "@/src/lib/paystack/fee";
+import { REFERENCE_PREFIX } from "@/src/lib/paystack/transaction";
 import { getLocale } from "next-intl/server";
 import { headers } from "next/headers";
-import { type StartGivingResult, giveInputSchema } from "./_schema";
+import {
+	type StartGivingResult,
+	giveInputSchema,
+	startGivingErrorCode,
+} from "./_schema";
 
 async function callbackUrlFor(locale: string): Promise<string> {
 	const requestHeaders = await headers();
@@ -25,11 +30,15 @@ async function callbackUrlFor(locale: string): Promise<string> {
 
 export async function startGiving(input: unknown): Promise<StartGivingResult> {
 	if (!isOnlineGivingConfigured()) {
-		return { status: "error", code: "unavailable" };
+		return {
+			status: "error",
+			code: startGivingErrorCode.def.entries.unavailable,
+		};
 	}
 
 	const parsed = giveInputSchema.safeParse(input);
-	if (!parsed.success) return { status: "error", code: "invalid" };
+	if (!parsed.success)
+		return { status: "error", code: startGivingErrorCode.def.entries.invalid };
 	const gift = parsed.data;
 
 	try {
@@ -43,7 +52,7 @@ export async function startGiving(input: unknown): Promise<StartGivingResult> {
 			gift.frequency === "monthly"
 				? await findOrCreateMonthlyPlan(chargeMinor, gift.currency)
 				: undefined;
-		const reference = `4HF-${randomUUID().replaceAll("-", "").slice(0, 16).toUpperCase()}`;
+		const reference = `${REFERENCE_PREFIX}${randomUUID().replaceAll("-", "").slice(0, 16).toUpperCase()}`;
 
 		const transaction = await initializeTransaction({
 			email: gift.email,
@@ -69,6 +78,6 @@ export async function startGiving(input: unknown): Promise<StartGivingResult> {
 		};
 	} catch (error) {
 		console.error("[donate] could not start giving", error);
-		return { status: "error", code: "failed" };
+		return { status: "error", code: startGivingErrorCode.def.entries.failed };
 	}
 }

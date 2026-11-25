@@ -27,12 +27,19 @@ const CARD =
 export async function SuccessView({ gift }: { gift: GiftSummary }) {
 	const t = await getTranslations("donate.thanks.success");
 	const locale = await getLocale();
-	const amount = formatAmount(gift.amount, gift.currency);
+	const amount = formatAmount(gift.amount, gift.currency, locale);
 	const date = new Intl.DateTimeFormat(locale, {
 		dateStyle: "medium",
 		timeZone: "Africa/Lagos",
 	}).format(gift.paidAt ? new Date(gift.paidAt) : new Date());
 	const Aside = gift.monthly ? MonthlyAside : OnceAside;
+	const title = t(gift.name ? "titleNamed" : "title", { name: gift.name });
+	const text = t.rich(gift.monthly ? "textMonthly" : "textOnce", {
+		amount,
+		strong: (chunks) => (
+			<strong className="font-semibold text-foreground">{chunks}</strong>
+		),
+	});
 
 	return (
 		<div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-14">
@@ -42,22 +49,13 @@ export async function SuccessView({ gift }: { gift: GiftSummary }) {
 					{t("badge", { date })}
 				</span>
 				<h1 className="mt-4 text-[38px] font-semibold leading-[1.05] tracking-tight lg:text-[64px]">
-					{t(gift.name ? "titleNamed" : "title", { name: gift.name })}
+					{title}
 					<br />{" "}
 					<em className="font-playfair font-black text-primary-500">
 						{t("titleSecond")}
 					</em>
 				</h1>
-				<p className="mt-4 max-w-xl text-lg text-muted-foreground">
-					{t.rich(gift.monthly ? "textMonthly" : "textOnce", {
-						amount,
-						strong: (chunks) => (
-							<strong className="font-semibold text-foreground">
-								{chunks}
-							</strong>
-						),
-					})}
-				</p>
+				<p className="mt-4 max-w-xl text-lg text-muted-foreground">{text}</p>
 				<div className={`mt-8 flex items-start gap-4 ${CARD}`}>
 					<span className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-surface-pink text-primary-500">
 						<Mail className="size-5" aria-hidden="true" />

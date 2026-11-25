@@ -4,7 +4,7 @@ import Image from "next/image";
 export async function GoalBand() {
 	const t = await getTranslations("donate.goal");
 	return (
-		<section className="flex flex-col overflow-hidden rounded-t-[40px] lg:h-[620px] lg:flex-row lg:rounded-t-[64px]">
+		<section className="flex flex-col overflow-hidden rounded-t-[40px] lg:min-h-[620px] lg:flex-row lg:rounded-t-[64px]">
 			<div className="bg-secondary-500 px-6 py-14 text-white lg:flex lg:w-1/2 lg:flex-col lg:justify-center lg:px-20 lg:py-20">
 				<span className="w-fit rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("badge")}
@@ -38,7 +38,7 @@ export async function GoalBand() {
 					{t("cta")}
 				</a>
 			</div>
-			<div className="relative aspect-square w-full lg:aspect-auto lg:h-full lg:w-1/2">
+			<div className="relative aspect-square w-full lg:aspect-auto lg:min-h-full lg:w-1/2">
 				<Image
 					src="/assets/donate/goal.jpg"
 					alt={t("imageAlt")}

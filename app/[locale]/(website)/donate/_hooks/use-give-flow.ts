@@ -11,6 +11,9 @@ import {
 	resolveAmount,
 } from "../_lib/give-state";
 import { openPaystackPopup } from "../_lib/paystack-popup";
+import { failureReason } from "../_schema";
+
+const FAILURE = failureReason.def.entries;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -51,7 +54,7 @@ export function useGiveFlow() {
 		});
 
 		if (result.status === "error") {
-			dispatch({ type: "payment-failed", reason: "error" });
+			dispatch({ type: "payment-failed", reason: FAILURE.error });
 			return;
 		}
 
@@ -67,11 +70,12 @@ export function useGiveFlow() {
 					);
 				},
 				onCancel: () =>
-					dispatch({ type: "payment-failed", reason: "cancelled" }),
-				onError: () => dispatch({ type: "payment-failed", reason: "error" }),
+					dispatch({ type: "payment-failed", reason: FAILURE.cancelled }),
+				onError: () =>
+					dispatch({ type: "payment-failed", reason: FAILURE.error }),
 			});
 		} catch {
-			dispatch({ type: "payment-failed", reason: "error" });
+			dispatch({ type: "payment-failed", reason: FAILURE.error });
 		}
 	}
 

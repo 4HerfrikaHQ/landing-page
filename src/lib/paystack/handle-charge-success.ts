@@ -86,6 +86,7 @@ export async function handleChargeSuccess(
 	const message = buildReceiptEmail({
 		t,
 		siteUrl,
+		locale,
 		donorName: metadata?.name || tx.customer?.first_name || "",
 		amount,
 		currency: tx.currency,
@@ -114,7 +115,7 @@ export async function handleChargeSuccess(
 	if (error) throw new Error(`Receipt email failed: ${error.message}`);
 
 	console.info(
-		`[paystack] receipt sent ${tx.reference} ${formatAmount(amount, tx.currency)}`,
+		`[paystack] receipt sent ${tx.reference} ${formatAmount(amount, tx.currency, locale)}`,
 	);
 	return "sent";
 }

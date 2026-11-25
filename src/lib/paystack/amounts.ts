@@ -14,10 +14,19 @@ export const PRESET_AMOUNTS: Record<Currency, readonly number[]> = {
 	USD: [10, 25, 50, 100],
 };
 
+export const DEFAULT_AMOUNTS: Record<Currency, number> = {
+	NGN: 10_000,
+	USD: 25,
+};
+
 export const CURRENCY_SYMBOLS: Record<Currency, string> = {
 	NGN: "₦",
 	USD: "$",
 };
+
+export function isFrequency(value: string): value is Frequency {
+	return (FREQUENCIES as readonly string[]).includes(value);
+}
 
 const WHOLE_AMOUNT = /^\d{1,9}(\.0{1,2})?$/;
 
@@ -43,10 +52,18 @@ export function fromMinorUnits(minor: number): number {
 	return minor / 100;
 }
 
-export function formatAmount(amount: number, currency: Currency): string {
-	return `${CURRENCY_SYMBOLS[currency]}${amount.toLocaleString("en-US", {
+export function formatAmount(
+	amount: number,
+	currency: Currency,
+	locale: string,
+): string {
+	return new Intl.NumberFormat(locale, {
+		style: "currency",
+		currency,
+		currencyDisplay: "narrowSymbol",
+		minimumFractionDigits: 0,
 		maximumFractionDigits: 2,
-	})}`;
+	}).format(amount);
 }
 
 export function isCurrency(value: string): value is Currency {

@@ -7,6 +7,7 @@ const t = (key: string, values?: Record<string, string | number>) =>
 const base = {
 	t,
 	siteUrl: "https://4herfrika.org",
+	locale: "en",
 	donorName: "Amara <b>",
 	amount: 25000,
 	currency: "NGN" as const,

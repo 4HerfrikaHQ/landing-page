@@ -18,6 +18,8 @@ export async function generateMetadata({
 	return { title: t("metaTitle"), robots: { index: false, follow: false } };
 }
 
+const REFERENCE_MAX_LENGTH = 100;
+
 function firstValue(value: string | string[] | undefined): string | undefined {
 	return Array.isArray(value) ? value[0] : value;
 }
@@ -45,7 +47,9 @@ export default async function ThankYouPage({
 	const reference = firstValue(query.reference) ?? firstValue(query.trxref);
 	if (!reference) return redirect({ href: "/donate", locale });
 
-	const outcome = await resolveOutcome(reference.slice(0, 100));
+	const outcome = await resolveOutcome(
+		reference.slice(0, REFERENCE_MAX_LENGTH),
+	);
 
 	return (
 		<main className="min-h-[70vh] overflow-x-clip bg-[#fffaf5] px-4 pb-16 pt-12 text-foreground lg:px-20 lg:pb-24 lg:pt-20">

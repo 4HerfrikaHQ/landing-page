@@ -1,11 +1,12 @@
 import {
 	type Currency,
+	DEFAULT_AMOUNTS,
 	type Frequency,
-	PRESET_AMOUNTS,
 	isAmountWithinLimits,
 	parseAmount,
 } from "@/src/lib/paystack/amounts";
 import { canCoverFee } from "@/src/lib/paystack/fee";
+import type { FailureReason } from "../_schema";
 
 export type AmountChoice =
 	| { kind: "preset"; amount: number }
@@ -24,8 +25,6 @@ export type Donor = {
 	anonymous: boolean;
 	note: string;
 };
-
-export type FailureReason = "cancelled" | "error";
 
 export type GiveState = {
 	gift: Gift;
@@ -49,13 +48,8 @@ export type GiveAction =
 	| { type: "payment-succeeded"; reference: string }
 	| { type: "payment-failed"; reason: FailureReason };
 
-const DEFAULT_PRESET_INDEX = 1;
-
 export function defaultChoice(currency: Currency): AmountChoice {
-	return {
-		kind: "preset",
-		amount: PRESET_AMOUNTS[currency][DEFAULT_PRESET_INDEX] ?? 0,
-	};
+	return { kind: "preset", amount: DEFAULT_AMOUNTS[currency] };
 }
 
 export function initialGiveState(): GiveState {

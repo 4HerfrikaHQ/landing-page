@@ -3,10 +3,10 @@
 import { formatAmount, fromMinorUnits } from "@/src/lib/paystack/amounts";
 import type { ChargeBreakdown } from "@/src/lib/paystack/fee";
 import { Lock } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { Dispatch } from "react";
 import type { GiveAction, GiveState } from "../_lib/give-state";
-import { NOTE_MAX_LENGTH } from "../_schema";
+import { NAME_MAX_LENGTH, NOTE_MAX_LENGTH } from "../_schema";
 
 type DetailsStep = Extract<GiveState, { status: "details" | "paying" }>;
 
@@ -25,11 +25,23 @@ export function DetailsStep({
 	onPay: () => void;
 }) {
 	const t = useTranslations("donate.flow.details");
+	const locale = useLocale();
 	const { gift, donor } = state;
 	const paying = state.status === "paying";
 	const emailInvalid = state.status === "details" && state.emailInvalid;
-	const total = formatAmount(fromMinorUnits(charge.chargeMinor), gift.currency);
+	const total = formatAmount(
+		fromMinorUnits(charge.chargeMinor),
+		gift.currency,
+		locale,
+	);
 	const monthly = gift.frequency === "monthly";
+	const perMonth = monthly ? t("perMonth") : "";
+	const summary = t(monthly ? "summaryMonthly" : "summaryOnce", {
+		currency: gift.currency,
+	});
+	const emailMessage = t(emailInvalid ? "emailError" : "emailHelp");
+	const payLabel = paying ? t("paying") : t("pay", { amount: total });
+	const payNote = t(paying ? "payingNote" : "payNote");
 
 	return (
 		<form
@@ -50,14 +62,10 @@ export function DetailsStep({
 					<p className="text-xl font-semibold tabular-nums text-primary-500">
 						{total}
 						<span className="ml-1 text-sm font-normal text-muted-foreground">
-							{monthly ? t("perMonth") : ""}
+							{perMonth}
 						</span>
 					</p>
-					<p className="text-xs text-muted-foreground">
-						{t(monthly ? "summaryMonthly" : "summaryOnce", {
-							currency: gift.currency,
-						})}
-					</p>
+					<p className="text-xs text-muted-foreground">{summary}</p>
 				</div>
 				<button
 					type="button"
@@ -76,7 +84,7 @@ export function DetailsStep({
 					autoComplete="name"
 					value={donor.name}
 					disabled={paying}
-					maxLength={120}
+					maxLength={NAME_MAX_LENGTH}
 					onChange={(event) =>
 						dispatch({
 							type: "donor-changed",
@@ -117,7 +125,7 @@ export function DetailsStep({
 					data-invalid={emailInvalid}
 					className="mt-2 block text-xs text-muted-foreground data-[invalid=true]:font-medium data-[invalid=true]:text-destructive"
 				>
-					{t(emailInvalid ? "emailError" : "emailHelp")}
+					{emailMessage}
 				</span>
 			</label>
 
@@ -175,10 +183,10 @@ export function DetailsStep({
 				className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500 disabled:opacity-60"
 			>
 				<Lock className="size-5" aria-hidden="true" />
-				{paying ? t("paying") : t("pay", { amount: total })}
+				{payLabel}
 			</button>
 			<output className="block text-center text-xs text-muted-foreground">
-				{paying ? t("payingNote") : t("payNote")}
+				{payNote}
 			</output>
 		</form>
 	);

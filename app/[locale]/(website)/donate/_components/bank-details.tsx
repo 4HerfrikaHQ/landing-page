@@ -5,6 +5,8 @@ import { Check, ClipboardCopy, Landmark } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+const COPIED_RESET_MS = 1_600;
+
 const VALUE_CLASS = {
 	big: "break-all text-[28px] font-semibold tracking-wider",
 	regular: "break-words text-[15px] font-medium leading-snug",
@@ -28,6 +30,7 @@ function CopyRow({
 	const t = useTranslations("donate");
 	const valueClass = big ? VALUE_CLASS.big : VALUE_CLASS.regular;
 	const isCopied = copied === field;
+	const announcement = isCopied ? t("copied") : "";
 	return (
 		<div>
 			<dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -40,7 +43,7 @@ function CopyRow({
 					onClick={() => onCopy(value, field)}
 					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-4 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
-					<span aria-live="polite" className="grid">
+					<span className="grid">
 						<span
 							data-visible={!isCopied}
 							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
@@ -49,6 +52,7 @@ function CopyRow({
 							{t("copy")}
 						</span>
 						<span
+							aria-hidden="true"
 							data-visible={isCopied}
 							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
 						>
@@ -58,6 +62,7 @@ function CopyRow({
 					</span>
 					<span className="sr-only">{label}</span>
 				</button>
+				<output className="sr-only">{announcement}</output>
 			</dd>
 		</div>
 	);
@@ -66,20 +71,20 @@ function CopyRow({
 export default function BankDetails({ online }: { online: boolean }) {
 	const [copied, setCopied] = useState("");
 	const t = useTranslations("donate");
+	const title = t(online ? "bank.titleOnline" : "bank.titleOffline");
+	const monthlyText = t(online ? "bank.monthlyText" : "bank.monthlySoon");
 
 	const copy = async (text: string, field: string) => {
 		try {
 			await navigator.clipboard.writeText(text);
 			setCopied(field);
-			setTimeout(() => setCopied(""), 1600);
+			setTimeout(() => setCopied(""), COPIED_RESET_MS);
 		} catch {}
 	};
 
 	return (
 		<div id="bank-details" className="flex flex-col">
-			<h3 className="text-sm font-semibold">
-				{t(online ? "bank.titleOnline" : "bank.titleOffline")}
-			</h3>
+			<h3 className="text-sm font-semibold">{title}</h3>
 			<div className="mt-4 flex items-center gap-3">
 				<span className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground">
 					<Landmark className="size-5" aria-hidden="true" />
@@ -111,8 +116,7 @@ export default function BankDetails({ online }: { online: boolean }) {
 				</div>
 			</dl>
 			<p className="mt-4 text-[15px] leading-relaxed">
-				<b>{t("bank.monthlyLabel")}</b>{" "}
-				{t(online ? "bank.monthlyText" : "bank.monthlySoon")}
+				<b>{t("bank.monthlyLabel")}</b> {monthlyText}
 			</p>
 			<p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
 				{t("bank.afterTransfer")}

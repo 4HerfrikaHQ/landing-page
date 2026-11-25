@@ -4,6 +4,7 @@ import { GivingCard } from "./giving-card";
 
 export async function GiveSection({ online }: { online: boolean }) {
 	const t = await getTranslations("donate.give");
+	const description = t(online ? "descriptionOnline" : "descriptionOffline");
 
 	return (
 		<section id="give" className="px-4 py-14 lg:px-20 lg:py-24">
@@ -20,7 +21,7 @@ export async function GiveSection({ online }: { online: boolean }) {
 						</em>
 					</h2>
 					<p className="mx-auto mt-3 max-w-xl text-[17px] text-muted-foreground">
-						{t(online ? "descriptionOnline" : "descriptionOffline")}
+						{description}
 					</p>
 				</div>
 				<OnlineLayout online={online} />
