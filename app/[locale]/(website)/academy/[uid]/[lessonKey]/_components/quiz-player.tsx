@@ -29,11 +29,12 @@ export function QuizPlayer(props: Props) {
 		uid: props.uid,
 		lessonKey: props.lessonKey,
 		expectedAttempt: props.expectedAttempt,
-		questionCount: total,
 		initial: props.initial,
 	});
 	const { state } = quiz;
+	const focusResult = props.initial.kind !== state.kind;
 	const common = {
+		focusOnMount: focusResult,
 		needed: props.needed,
 		total,
 		nextHref: props.nextHref,
@@ -201,6 +202,21 @@ function BackButton({
 	);
 }
 
+function nextLabel(isLast: boolean, busy: boolean) {
+	if (!isLast) return "nextQuestion";
+	return busy ? "submitting" : "submit";
+}
+
+function ChooseHint({ visible }: { visible: boolean }) {
+	const t = useTranslations("academy.lesson.quiz");
+	if (!visible) return null;
+	return (
+		<p id="choose-hint" className="text-sm text-muted-foreground">
+			{t("chooseToContinue")}
+		</p>
+	);
+}
+
 function NextButton({
 	isLast,
 	busy,
@@ -215,19 +231,19 @@ function NextButton({
 	onSubmit: () => void;
 }) {
 	const t = useTranslations("academy.lesson.quiz");
-	const label = isLast
-		? busy
-			? t("submitting")
-			: t("submit")
-		: t("nextQuestion");
+	const label = nextLabel(isLast, busy);
 	return (
-		<button
-			type="button"
-			disabled={disabled || busy}
-			onClick={isLast ? onSubmit : onNext}
-			className={`${PRIMARY_ACTION} lg:ml-auto`}
-		>
-			{label}
-		</button>
+		<div className="flex flex-col items-stretch gap-2 lg:ml-auto lg:items-end">
+			<button
+				type="button"
+				disabled={disabled || busy}
+				aria-describedby={disabled ? "choose-hint" : undefined}
+				onClick={isLast ? onSubmit : onNext}
+				className={PRIMARY_ACTION}
+			>
+				{t(label)}
+			</button>
+			<ChooseHint visible={disabled} />
+		</div>
 	);
 }

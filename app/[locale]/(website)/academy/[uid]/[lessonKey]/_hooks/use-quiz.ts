@@ -68,7 +68,6 @@ type Input = {
 	uid: string;
 	lessonKey: string;
 	expectedAttempt: number;
-	questionCount: number;
 	initial: QuizState;
 };
 

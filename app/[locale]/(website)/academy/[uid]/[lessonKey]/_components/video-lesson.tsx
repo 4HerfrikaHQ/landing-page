@@ -29,6 +29,9 @@ export async function VideoLesson({ view }: { view: LessonViewProps }) {
 	const video = await getLessonVideo(content.assetKey, content.captionsKey);
 	const policy = enrolment.completion_policy;
 	const completed = progress?.completed_at != null;
+	const transcript = content.transcript ? (
+		<RichBody field={content.transcript} />
+	) : null;
 	const stored = {
 		furthestSeconds: progress?.furthest_position_seconds ?? 0,
 		lastSeconds: progress?.last_position_seconds ?? 0,
@@ -52,9 +55,7 @@ export async function VideoLesson({ view }: { view: LessonViewProps }) {
 			previousHref={nav.previousHref}
 			nextHref={nav.continueHref}
 			courseHref={nav.courseHref}
-			transcript={
-				content.transcript ? <RichBody field={content.transcript} /> : null
-			}
+			transcript={transcript}
 		/>
 	);
 }

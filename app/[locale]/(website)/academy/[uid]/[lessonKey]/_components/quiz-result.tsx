@@ -9,8 +9,10 @@ import { formatCountdown } from "../../../sign-in/_helpers";
 import { useSecondsUntil } from "../../../sign-in/_hooks/use-seconds-until";
 import type { QuizResult, ReviewItem } from "../_quiz";
 import { PRIMARY_ACTION, SECONDARY_ACTION } from "./lesson-footer";
+import { focusElement } from "./quiz-question";
 
 type Common = {
+	focusOnMount: boolean;
 	needed: number;
 	total: number;
 	nextHref: string | null;
@@ -60,6 +62,7 @@ export function PassedView({
 	total,
 	nextHref,
 	courseHref,
+	focusOnMount,
 }: PassedProps) {
 	const t = useTranslations("academy.lesson");
 	const q = useTranslations("academy.lesson.quiz");
@@ -76,7 +79,11 @@ export function PassedView({
 			<p className="rounded-full bg-[#e6f4ec] px-4 py-1 text-sm font-semibold text-[#1f7a4d]">
 				{q("passedBadge")}
 			</p>
-			<h1 className="text-3xl font-semibold text-secondary-500 lg:text-4xl">
+			<h1
+				ref={focusElement(focusOnMount)}
+				tabIndex={-1}
+				className="text-3xl font-semibold text-secondary-500 outline-none lg:text-4xl"
+			>
 				{q("passedTitle")}
 			</h1>
 			<p className="text-lg text-muted-foreground">
@@ -253,12 +260,17 @@ export function FailedView({
 	retryAtMs,
 	onRetry,
 	reviewHref,
+	focusOnMount,
 }: FailedProps) {
 	const q = useTranslations("academy.lesson.quiz");
 	return (
 		<section className="flex flex-col items-center gap-6 text-center">
 			<FailedScore correct={correct} total={total} needed={needed} />
-			<h1 className="text-3xl font-semibold text-secondary-500 lg:text-4xl">
+			<h1
+				ref={focusElement(focusOnMount)}
+				tabIndex={-1}
+				className="text-3xl font-semibold text-secondary-500 outline-none lg:text-4xl"
+			>
 				{q("failedTitle")}
 			</h1>
 			<p className="text-lg text-muted-foreground">
