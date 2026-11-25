@@ -7,7 +7,7 @@
 		"heroImageAlt": "Des participantes de 4HerFrika en t-shirts roses réunies en plein air sur un campus",
 		"joinCta": "Rejoindre 4HerFrika",
 		"donateCta": "Faire un don",
-		"weHaveReached": "<pink>N</pink>ous <pink>A</pink>vons <pink>T</pink>ouché",
+		"weHaveReached": "Nous avons <pink>touché</pink>",
 		"statGirls": "filles accompagnées",
 		"statCampuses": "campus",
 		"statGraduates": "diplômées de la Tech Academy",
@@ -70,7 +70,9 @@
 		"joinAcademyDescription": "Un apprentissage pratique en Tech, Business et Climat, avec du mentorat et de vrais projets.",
 		"joinAcademyLink": "Découvrir l’Academy",
 		"partnerLogoAlt": "Logo de {name}",
-		"partnerLinkLabel": "Visiter le site de {name} (s’ouvre dans un nouvel onglet)"
+		"partnerLinkLabel": "Visiter le site de {name} (s’ouvre dans un nouvel onglet)",
+		"newTabHint": "(s’ouvre dans un nouvel onglet)",
+		"storyScrollLabel": "Notre histoire, faites défiler pour en voir plus"
 	},
 	"blog": {
 		"blogName": "'The Pink Blog'",

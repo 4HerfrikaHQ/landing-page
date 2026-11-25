@@ -1,5 +1,17 @@
-import type { Route } from "next";
+import { z } from "zod";
 import { JOIN_US_URL } from "../navigation";
+
+export const ValueTone = z.enum(["pink", "teal", "indigo", "muted"]);
+export type ValueTone = z.infer<typeof ValueTone>;
+
+export const JoinLink = z.discriminatedUnion("kind", [
+	z.object({
+		kind: z.literal("internal"),
+		href: z.enum(["/careercorner", "/academy"]),
+	}),
+	z.object({ kind: z.literal("external"), href: z.string() }),
+]);
+export type JoinLink = z.infer<typeof JoinLink>;
 
 export const stats = [
 	{ value: "3,000+", labelKey: "statGirls" },
@@ -40,29 +52,25 @@ export const values = [
 		number: "01",
 		titleKey: "empowerment",
 		descriptionKey: "empowermentDescription",
-		surface: "bg-surface-pink",
-		accent: "text-primary-500",
+		tone: ValueTone.enum.pink,
 	},
 	{
 		number: "02",
 		titleKey: "communityDevelopment",
 		descriptionKey: "communityDevelopmentDescription",
-		surface: "bg-surface-teal",
-		accent: "text-secondary-500",
+		tone: ValueTone.enum.teal,
 	},
 	{
 		number: "03",
 		titleKey: "leadership",
 		descriptionKey: "leadershipDescription",
-		surface: "bg-surface-indigo",
-		accent: "text-secondary-500",
+		tone: ValueTone.enum.indigo,
 	},
 	{
 		number: "04",
 		titleKey: "mentorship",
 		descriptionKey: "mentorshipDescription",
-		surface: "bg-muted",
-		accent: "text-primary-500",
+		tone: ValueTone.enum.muted,
 	},
 ] as const;
 
@@ -71,22 +79,19 @@ export const joinOptions = [
 		titleKey: "joinMentorTitle",
 		descriptionKey: "joinMentorDescription",
 		linkKey: "joinMentorLink",
-		href: "/careercorner" as Route,
-		isExternal: false,
+		link: { kind: "internal", href: "/careercorner" },
 	},
 	{
 		titleKey: "joinAmbassadorTitle",
 		descriptionKey: "joinAmbassadorDescription",
 		linkKey: "joinAmbassadorLink",
-		href: JOIN_US_URL,
-		isExternal: true,
+		link: { kind: "external", href: JOIN_US_URL },
 	},
 	{
 		titleKey: "joinAcademyTitle",
 		descriptionKey: "joinAcademyDescription",
 		linkKey: "joinAcademyLink",
-		href: "/academy" as Route,
-		isExternal: false,
+		link: { kind: "internal", href: "/academy" },
 	},
 ] as const;
 
