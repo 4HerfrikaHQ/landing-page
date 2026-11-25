@@ -1084,6 +1084,7 @@
 				"submitting": "Inatuma…",
 				"reply": "Msimamizi atakagua kazi yako. Unaweza kuendelea kujifunza wakati huo.",
 				"fileSoon": "Kupakia faili kunakuja hivi karibuni. Kwa sasa, bandika kazi yako au kiungo.",
+				"tooShort": "Andika angalau herufi {min} ili kutuma (zimebaki {remaining}).",
 				"noInstructions": "Maelekezo ya kazi hii yanaandaliwa.",
 				"yourSubmission": "Ulichotuma",
 				"sentOn": "Imetumwa {date}",

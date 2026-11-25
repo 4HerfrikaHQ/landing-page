@@ -5,7 +5,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useReducer } from "react";
 import { submitTask } from "../_actions/task";
-import { MAX_TASK_TEXT_LENGTH } from "../_schema";
+import { MAX_TASK_TEXT_LENGTH, MIN_TASK_TEXT_LENGTH } from "../_schema";
 import { ActionErrorText } from "./action-error-text";
 import { PRIMARY_ACTION } from "./lesson-footer";
 
@@ -37,7 +37,11 @@ export function TaskForm({ uid, lessonKey, resubmit, intro, tracks }: Props) {
 	const action = useAction(submitTask, { onSuccess: () => router.refresh() });
 	const busy = action.isPending || action.hasSucceeded;
 	const needsTrack = tracks.length > 0 && draft.track === null;
-	const empty = draft.body.trim().length === 0;
+	const charactersToGo = Math.max(
+		0,
+		MIN_TASK_TEXT_LENGTH - draft.body.trim().length,
+	);
+	const tooShort = charactersToGo > 0;
 	const active = tracks.find((track) => track.key === draft.track);
 
 	return (
@@ -45,7 +49,7 @@ export function TaskForm({ uid, lessonKey, resubmit, intro, tracks }: Props) {
 			className="flex flex-col gap-5"
 			onSubmit={(event) => {
 				event.preventDefault();
-				if (busy || needsTrack || empty) return;
+				if (busy || needsTrack || tooShort) return;
 				action.execute({
 					uid,
 					lessonKey,
@@ -95,14 +99,25 @@ export function TaskForm({ uid, lessonKey, resubmit, intro, tracks }: Props) {
 			</div>
 			<button
 				type="submit"
-				disabled={busy || needsTrack || empty}
+				disabled={busy || needsTrack || tooShort}
 				className={`${PRIMARY_ACTION} lg:self-start`}
 			>
 				{busy ? t("submitting") : resubmit ? t("resubmit") : t("submit")}
 			</button>
+			<TooShortHint charactersToGo={charactersToGo} />
 			<p className="text-sm text-muted-foreground">{t("reply")}</p>
 			<ActionErrorText code={action.result.serverError} />
 		</form>
+	);
+}
+
+function TooShortHint({ charactersToGo }: { charactersToGo: number }) {
+	const t = useTranslations("academy.lesson.task");
+	if (charactersToGo === 0) return null;
+	return (
+		<p className="text-sm text-muted-foreground">
+			{t("tooShort", { min: MIN_TASK_TEXT_LENGTH, remaining: charactersToGo })}
+		</p>
 	);
 }
 

@@ -1084,6 +1084,7 @@
 				"submitting": "Envoi…",
 				"reply": "Une animatrice relira votre travail. Vous pouvez continuer à apprendre en attendant.",
 				"fileSoon": "L’envoi de fichiers arrive bientôt. Pour l’instant, collez votre travail ou un lien.",
+				"tooShort": "Écrivez au moins {min} caractères pour envoyer (encore {remaining}).",
 				"noInstructions": "Les consignes de cet exercice sont en préparation.",
 				"yourSubmission": "Votre envoi",
 				"sentOn": "Envoyé le {date}",
