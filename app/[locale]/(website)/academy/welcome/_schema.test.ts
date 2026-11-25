@@ -27,6 +27,19 @@ describe("CreateLearnerSchema", () => {
 		expect(result.certificateName).toBe("Amara Okafor");
 	});
 
+	test("rejects names shorter than three characters", () => {
+		expect(issues({ ...valid, certificateName: "A" })).toContain(
+			"name_too_short",
+		);
+		expect(issues({ ...valid, certificateName: " Ab " })).toContain(
+			"name_too_short",
+		);
+		expect(
+			CreateLearnerSchema.safeParse({ ...valid, certificateName: "Ada" })
+				.success,
+		).toBe(true);
+	});
+
 	test("rejects empty and whitespace-only names", () => {
 		expect(issues({ ...valid, certificateName: "" })).toContain(
 			"name_required",

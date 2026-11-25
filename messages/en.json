@@ -522,6 +522,7 @@
 			"callback_failed": "We couldn't finish signing you in. Please try again.",
 			"session_expired": "Your session has expired. Please sign in again.",
 			"name_required": "Enter your name as it should appear on your certificate.",
+			"name_too_short": "Use your full name, as it should appear on your certificate.",
 			"name_too_long": "Your name can be at most 120 characters.",
 			"country_required": "Choose your country.",
 			"campus_too_long": "Your campus name can be at most 120 characters.",
