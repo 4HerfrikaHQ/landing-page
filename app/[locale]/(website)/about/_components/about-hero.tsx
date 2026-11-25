@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -11,7 +10,7 @@ export async function AboutHero() {
 	return (
 		<section
 			data-hero="full-bleed"
-			className="relative h-160 overflow-hidden text-white lg:h-190"
+			className="relative flex min-h-160 flex-col justify-end overflow-hidden px-4 pb-12 pt-32 text-white lg:min-h-190 lg:justify-start lg:px-0 lg:pb-12 lg:pt-60"
 		>
 			<Image
 				src={heroImage}
@@ -22,10 +21,7 @@ export async function AboutHero() {
 				className="object-cover"
 			/>
 			<div className="absolute inset-0 bg-black/60" />
-			<FadeIn
-				delay={0.1}
-				className="absolute inset-x-4 bottom-12 mx-auto flex max-w-4xl flex-col items-center gap-5 text-center lg:inset-x-0 lg:bottom-auto lg:top-60"
-			>
+			<div className="relative mx-auto flex w-full max-w-4xl flex-col items-center gap-5 text-center">
 				<SectionEyebrow>{t("whoWeAre")}</SectionEyebrow>
 				<h1 className="text-[44px] font-medium leading-[1.1] tracking-tight lg:text-7xl">
 					{t("heroFirst")}
@@ -43,6 +39,7 @@ export async function AboutHero() {
 						className="h-12 px-6 text-base font-medium lg:text-base lg:py-0 lg:px-6"
 					>
 						{t("joinCta")}
+						<span className="sr-only"> {t("newTabHint")}</span>
 					</Button>
 					<Button
 						href="/donate"
@@ -52,7 +49,7 @@ export async function AboutHero() {
 						{t("donateCta")}
 					</Button>
 				</div>
-			</FadeIn>
+			</div>
 		</section>
 	);
 }

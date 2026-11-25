@@ -7,7 +7,7 @@
 		"heroImageAlt": "Washiriki wa 4HerFrika wakiwa na fulana za pinki wamesimama pamoja nje katika kampasi",
 		"joinCta": "Jiunge na 4HerFrika",
 		"donateCta": "Changia",
-		"weHaveReached": "<pink>T</pink>u<pink>m</pink>e<pink>f</pink>ikia",
+		"weHaveReached": "<pink>Tumefikia</pink>",
 		"statGirls": "wasichana waliolelewa",
 		"statCampuses": "kampasi",
 		"statGraduates": "wahitimu wa Tech Academy",
@@ -70,7 +70,9 @@
 		"joinAcademyDescription": "Mafunzo ya vitendo katika Teknolojia, Biashara na Tabianchi, pamoja na umlezi na miradi halisi.",
 		"joinAcademyLink": "Gundua Academy",
 		"partnerLogoAlt": "Nembo ya {name}",
-		"partnerLinkLabel": "Tembelea tovuti ya {name} (inafunguka kwenye kichupo kipya)"
+		"partnerLinkLabel": "Tembelea tovuti ya {name} (inafunguka kwenye kichupo kipya)",
+		"newTabHint": "(inafunguka kwenye kichupo kipya)",
+		"storyScrollLabel": "Hadithi yetu, sogeza kuona zaidi"
 	},
 	"blog": {
 		"blogName": "'The Pink Blog'",

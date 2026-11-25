@@ -1,7 +1,14 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { cn } from "@/utils/cn";
 import { getTranslations } from "next-intl/server";
-import { values } from "../_schema";
+import { type ValueTone, values } from "../_schema";
+
+const toneClasses: Record<ValueTone, { surface: string; accent: string }> = {
+	pink: { surface: "bg-surface-pink", accent: "text-primary-500" },
+	teal: { surface: "bg-surface-teal", accent: "text-secondary-500" },
+	indigo: { surface: "bg-surface-indigo", accent: "text-secondary-500" },
+	muted: { surface: "bg-muted", accent: "text-primary-500" },
+};
 
 export async function AboutValues() {
 	const t = await getTranslations("about");
@@ -22,10 +29,15 @@ export async function AboutValues() {
 							key={value.number}
 							className={cn(
 								"rounded-2xl p-5 lg:rounded-[20px] lg:p-8",
-								value.surface,
+								toneClasses[value.tone].surface,
 							)}
 						>
-							<p className={cn("text-3xl font-semibold", value.accent)}>
+							<p
+								className={cn(
+									"text-3xl font-semibold",
+									toneClasses[value.tone].accent,
+								)}
+							>
 								{value.number}
 							</p>
 							<h3 className="mt-6 text-lg font-semibold">

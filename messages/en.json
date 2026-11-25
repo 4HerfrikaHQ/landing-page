@@ -201,7 +201,9 @@
 		"joinAcademyDescription": "Practical learning in Tech, Business and Climate, with mentorship and real projects.",
 		"joinAcademyLink": "Explore the Academy",
 		"partnerLogoAlt": "{name} logo",
-		"partnerLinkLabel": "Visit the {name} website (opens in a new tab)"
+		"partnerLinkLabel": "Visit the {name} website (opens in a new tab)",
+		"newTabHint": "(opens in a new tab)",
+		"storyScrollLabel": "Our story, scroll for more"
 	},
 	"blog": {
 		"greeting": "Hi Divas,",
