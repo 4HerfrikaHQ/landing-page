@@ -1,8 +1,10 @@
 import { redirect } from "@/i18n/navigation";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import { isOnlineGivingConfigured } from "@/src/lib/paystack/client";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 import { FailedView } from "./_components/failed-view";
 import { PendingView } from "./_components/pending-view";
 import { SuccessView } from "./_components/success-view";
@@ -42,6 +44,7 @@ export default async function ThankYouPage({
 	params: Promise<{ locale: string }>;
 	searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+	if (!isOnlineGivingConfigured()) notFound();
 	const locale = await setLocaleFromParams(params);
 	const query = await searchParams;
 	const reference = firstValue(query.reference) ?? firstValue(query.trxref);
