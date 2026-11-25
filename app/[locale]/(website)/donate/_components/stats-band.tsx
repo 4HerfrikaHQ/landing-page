@@ -15,12 +15,19 @@ export async function StatsBand() {
 			<div className="mx-auto max-w-6xl">
 				<dl className="grid grid-cols-2 gap-y-8 lg:grid-cols-4 lg:divide-x lg:divide-primary-500">
 					{STATS.map((stat) => (
-						<div key={stat.key} className="text-center">
+						<div
+							key={stat.key}
+							className="flex flex-col-reverse px-2 text-center"
+						>
+							<dt className="mt-1 text-[15px] font-medium">
+								{t(stat.key)}
+								<span className="block text-xs font-normal text-muted-foreground">
+									{t("period")}
+								</span>
+							</dt>
 							<dd className="text-[40px] font-semibold tabular-nums text-secondary-500 lg:text-5xl">
 								{stat.value}
 							</dd>
-							<dt className="mt-1 text-[15px] font-medium">{t(stat.key)}</dt>
-							<p className="text-xs text-muted-foreground">{t("period")}</p>
 						</div>
 					))}
 				</dl>

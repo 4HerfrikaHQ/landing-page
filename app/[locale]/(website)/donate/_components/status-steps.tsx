@@ -3,7 +3,8 @@
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Dispatch } from "react";
-import type { FailureReason, GiveAction } from "../_lib/give-state";
+import type { GiveAction } from "../_lib/give-state";
+import { type FailureReason, failureReason } from "../_schema";
 import { BankTransferHint } from "./bank-transfer-hint";
 
 export function VerifyingStep() {
@@ -20,6 +21,17 @@ export function VerifyingStep() {
 	);
 }
 
+const FAILURE_COPY = {
+	[failureReason.def.entries.cancelled]: {
+		title: "cancelledTitle",
+		text: "cancelledText",
+	},
+	[failureReason.def.entries.error]: {
+		title: "errorTitle",
+		text: "errorText",
+	},
+} as const satisfies Record<FailureReason, { title: string; text: string }>;
+
 export function FailedStep({
 	reason,
 	dispatch,
@@ -30,17 +42,14 @@ export function FailedStep({
 	onRetry: () => void;
 }) {
 	const t = useTranslations("donate.flow.failed");
+	const copy = FAILURE_COPY[reason];
 	return (
 		<div role="alert" className="flex flex-col gap-4">
 			<span className="w-fit rounded-full bg-surface-pink px-3 py-1.5 text-xs font-medium text-primary-500">
 				{t("badge")}
 			</span>
-			<h3 className="text-2xl font-bold leading-tight">
-				{t(reason === "cancelled" ? "cancelledTitle" : "errorTitle")}
-			</h3>
-			<p className="text-[15px] text-muted-foreground">
-				{t(reason === "cancelled" ? "cancelledText" : "errorText")}
-			</p>
+			<h3 className="text-2xl font-bold leading-tight">{t(copy.title)}</h3>
+			<p className="text-[15px] text-muted-foreground">{t(copy.text)}</p>
 			<button
 				type="button"
 				onClick={onRetry}

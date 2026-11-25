@@ -32,7 +32,7 @@ export default async function DonationPage({
 		<main className="overflow-x-clip bg-background text-foreground">
 			<section
 				data-hero="full-bleed"
-				className="relative h-[680px] overflow-hidden text-white lg:h-[760px]"
+				className="relative flex min-h-[680px] items-end overflow-hidden text-white lg:min-h-[760px] lg:items-start"
 			>
 				<Image
 					src="/assets/donate/hero.jpg"
@@ -43,7 +43,7 @@ export default async function DonationPage({
 					className="object-cover"
 				/>
 				<div className="absolute inset-0 bg-black/60" />
-				<div className="absolute inset-x-4 bottom-10 mx-auto flex max-w-4xl flex-col items-center gap-5 text-center lg:inset-x-0 lg:bottom-auto lg:top-60">
+				<div className="relative mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 pb-10 pt-32 text-center lg:pb-20 lg:pt-60">
 					<span className="rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 						{t("badge")}
 					</span>

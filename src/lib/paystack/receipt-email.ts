@@ -8,6 +8,7 @@ export type ReceiptTranslator = (
 export type ReceiptInput = {
 	t: ReceiptTranslator;
 	siteUrl: string;
+	locale: string;
 	donorName: string;
 	amount: number;
 	currency: Currency;
@@ -44,8 +45,8 @@ function manageBlock(input: ReceiptInput): string {
 }
 
 export function buildReceiptEmail(input: ReceiptInput) {
-	const { t, donorName, amount, currency, monthly } = input;
-	const formatted = formatAmount(amount, currency);
+	const { t, donorName, amount, currency, monthly, locale } = input;
+	const formatted = formatAmount(amount, currency, locale);
 	const greeting = donorName
 		? t("greetingNamed", { name: donorName })
 		: t("greeting");

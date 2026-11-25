@@ -1,7 +1,9 @@
+import { fromMinorUnits } from "@/src/lib/paystack/amounts";
 import { PaystackError, verifyTransaction } from "@/src/lib/paystack/client";
 import {
 	type DonationMetadata,
 	type PaystackTransaction,
+	REFERENCE_PATTERN,
 	cardBrandLabel,
 	isDonationTransaction,
 	isMonthlyTransaction,
@@ -48,7 +50,7 @@ function summarize(
 ): GiftSummary {
 	return {
 		reference: tx.reference,
-		amount: tx.amount / 100,
+		amount: fromMinorUnits(tx.amount),
 		currency: tx.currency,
 		monthly: isMonthlyTransaction(tx) || metadata?.frequency === "monthly",
 		name: metadata?.name.trim().split(/\s+/)[0] ?? "",
@@ -59,10 +61,14 @@ function summarize(
 }
 
 export async function resolveOutcome(reference: string): Promise<GiveOutcome> {
+	if (!REFERENCE_PATTERN.test(reference)) {
+		return { status: "failed", reference };
+	}
 	try {
 		const tx = await verifyTransaction(reference);
-		if (!tx || !isDonationTransaction(tx))
+		if (!tx || tx.reference !== reference || !isDonationTransaction(tx)) {
 			return { status: "failed", reference };
+		}
 		if (tx.status === "success") {
 			return {
 				status: "success",

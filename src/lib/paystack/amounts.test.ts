@@ -58,8 +58,13 @@ describe("minor units", () => {
 });
 
 describe("formatAmount", () => {
-	test("prefixes the currency symbol and groups thousands", () => {
-		expect(formatAmount(25000, "NGN")).toBe("₦25,000");
-		expect(formatAmount(50, "USD")).toBe("$50");
+	test("prefixes the currency symbol and groups thousands in English", () => {
+		expect(formatAmount(25000, "NGN", "en")).toBe("₦25,000");
+		expect(formatAmount(50, "USD", "en")).toBe("$50");
+	});
+
+	test("follows the locale's grouping and symbol placement", () => {
+		const french = formatAmount(25000, "NGN", "fr").replace(/\s/g, " ");
+		expect(french).toBe("25 000 ₦");
 	});
 });

@@ -4,20 +4,33 @@ import {
 	AMOUNT_LIMITS,
 	CURRENCIES,
 	CURRENCY_SYMBOLS,
+	type Currency,
 	FREQUENCIES,
+	type Frequency,
 	PRESET_AMOUNTS,
 	formatAmount,
 	fromMinorUnits,
 	isCurrency,
+	isFrequency,
 } from "@/src/lib/paystack/amounts";
 import { type ChargeBreakdown, canCoverFee } from "@/src/lib/paystack/fee";
 import { ArrowRight, Lock } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { Dispatch } from "react";
 import type { GiveAction, GiveState } from "../_lib/give-state";
 import { OptionTile, SegmentedRadio } from "./give-controls";
 
 const DISPLAY_FREQUENCIES = [...FREQUENCIES].reverse();
+
+const CURRENCY_LABEL_KEYS = {
+	NGN: "ngn",
+	USD: "usd",
+} as const satisfies Record<Currency, string>;
+
+const SUMMARY_KEYS = {
+	monthly: "summaryMonthly",
+	once: "summaryOnce",
+} as const satisfies Record<Frequency, string>;
 
 type ChooseState = Extract<GiveState, { status: "choose" }>;
 
@@ -33,14 +46,18 @@ export function ChooseStep({
 	feeEstimateMinor: number | null;
 }) {
 	const t = useTranslations("donate.flow.choose");
+	const locale = useLocale();
 	const { gift, amountInvalid } = state;
+	const money = (amount: number) => formatAmount(amount, gift.currency, locale);
 	const limits = AMOUNT_LIMITS[gift.currency];
 	const symbol = CURRENCY_SYMBOLS[gift.currency];
 	const customText = gift.choice.kind === "custom" ? gift.choice.text : "";
 	const total =
-		charge === null
-			? "—"
-			: formatAmount(fromMinorUnits(charge.chargeMinor), gift.currency);
+		charge === null ? "—" : money(fromMinorUnits(charge.chargeMinor));
+	const amountMessage = t(amountInvalid ? "amountError" : "amountHelp", {
+		min: money(limits.min),
+		max: money(limits.max),
+	});
 
 	return (
 		<form
@@ -62,14 +79,13 @@ export function ChooseStep({
 				value={gift.frequency}
 				options={DISPLAY_FREQUENCIES.map((value) => ({
 					value,
-					label: t(value === "monthly" ? "monthly" : "once"),
+					label: t(value),
 				}))}
-				onChange={(value) =>
-					dispatch({
-						type: "gift-changed",
-						gift: { frequency: value === "monthly" ? "monthly" : "once" },
-					})
-				}
+				onChange={(value) => {
+					if (isFrequency(value)) {
+						dispatch({ type: "gift-changed", gift: { frequency: value } });
+					}
+				}}
 			/>
 
 			<SegmentedRadio
@@ -78,7 +94,7 @@ export function ChooseStep({
 				value={gift.currency}
 				options={CURRENCIES.map((value) => ({
 					value,
-					label: t(value === "NGN" ? "ngn" : "usd"),
+					label: t(CURRENCY_LABEL_KEYS[value]),
 				}))}
 				onChange={(value) => {
 					if (isCurrency(value)) {
@@ -104,7 +120,7 @@ export function ChooseStep({
 								})
 							}
 						>
-							{formatAmount(amount, gift.currency)}
+							{money(amount)}
 						</OptionTile>
 					))}
 				</div>
@@ -138,10 +154,7 @@ export function ChooseStep({
 					data-invalid={amountInvalid}
 					className="mt-2 text-xs text-muted-foreground data-[invalid=true]:font-medium data-[invalid=true]:text-destructive"
 				>
-					{t(amountInvalid ? "amountError" : "amountHelp", {
-						min: formatAmount(limits.min, gift.currency),
-						max: formatAmount(limits.max, gift.currency),
-					})}
+					{amountMessage}
 				</p>
 			</fieldset>
 
@@ -155,7 +168,7 @@ export function ChooseStep({
 
 			<div className="flex items-center justify-between rounded-xl bg-surface-pink px-4 py-3">
 				<span className="text-sm text-muted-foreground">
-					{t(gift.frequency === "monthly" ? "summaryMonthly" : "summaryOnce")}
+					{t(SUMMARY_KEYS[gift.frequency])}
 				</span>
 				<span className="text-xl font-semibold tabular-nums text-primary-500">
 					{total}
@@ -187,7 +200,15 @@ function FeeCover({
 	onChange: (coverFee: boolean) => void;
 }) {
 	const t = useTranslations("donate.flow.choose");
+	const locale = useLocale();
 	if (!canCoverFee(gift.currency) || feeEstimateMinor === null) return null;
+	const fee = formatAmount(
+		fromMinorUnits(feeEstimateMinor),
+		gift.currency,
+		locale,
+	);
+	const hintKey =
+		gift.frequency === "monthly" ? "coverFeeHintMonthly" : "coverFeeHint";
 	return (
 		<label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary-500">
 			<input
@@ -198,16 +219,10 @@ function FeeCover({
 			/>
 			<span>
 				<span className="block text-sm font-medium">
-					{t("coverFee", {
-						fee: formatAmount(fromMinorUnits(feeEstimateMinor), gift.currency),
-					})}
+					{t("coverFee", { fee })}
 				</span>
 				<span className="mt-1 block text-xs text-muted-foreground">
-					{t(
-						gift.frequency === "monthly"
-							? "coverFeeHintMonthly"
-							: "coverFeeHint",
-					)}
+					{t(hintKey)}
 				</span>
 			</span>
 		</label>

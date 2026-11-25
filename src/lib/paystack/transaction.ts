@@ -2,6 +2,8 @@ import { z } from "zod";
 import { CURRENCIES, FREQUENCIES } from "./amounts";
 
 export const DONATION_SOURCE = "4herfrika-donate";
+export const REFERENCE_PREFIX = "4HF-";
+export const REFERENCE_PATTERN = /^4HF-[0-9A-F]{16}$/;
 export const PLAN_NAME_PREFIX = "4HerFrika monthly";
 
 export const donationMetadataSchema = z.object({
