@@ -14,19 +14,7 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 	return (
 		<article className="flex h-full flex-col rounded-2xl bg-white p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:-translate-y-1 lg:rounded-[20px] lg:p-3">
 			<div className="relative aspect-4/5 w-full overflow-hidden rounded-xl lg:rounded-3xl">
-				{mentor.image ? (
-					<MentorImage
-						src={mentor.image}
-						alt=""
-						crop={mentor.image_crop}
-						sizes="(max-width: 1024px) 50vw, 25vw"
-						className="absolute inset-0"
-					/>
-				) : (
-					<div className="absolute inset-0 flex items-center justify-center bg-surface-pink">
-						<UserRound className="size-20 text-primary-500/60" />
-					</div>
-				)}
+				<CardPhoto mentor={mentor} />
 			</div>
 			<div className="flex flex-1 flex-col p-1.5 pt-3 lg:p-3">
 				<h3 className="font-semibold leading-snug text-foreground">
@@ -45,5 +33,25 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 				</BookCallLink>
 			</div>
 		</article>
+	);
+}
+
+function CardPhoto({ mentor }: { mentor: DbMentorWithAvailability }) {
+	if (!mentor.image) {
+		return (
+			<div className="absolute inset-0 flex items-center justify-center bg-surface-pink">
+				<UserRound className="size-20 text-primary-500/60" />
+			</div>
+		);
+	}
+
+	return (
+		<MentorImage
+			src={mentor.image}
+			alt=""
+			crop={mentor.image_crop}
+			sizes="(max-width: 1024px) 50vw, 25vw"
+			className="absolute inset-0"
+		/>
 	);
 }

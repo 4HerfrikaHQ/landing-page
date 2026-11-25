@@ -36,6 +36,7 @@ export async function VolunteerBand() {
 						className="inline-flex h-12 items-center justify-center rounded-pill border-2 border-white/70 px-6 font-medium transition-colors hover:bg-white/10 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
 					>
 						{t("ambassadorCta")}
+						<span className="sr-only"> {t("opensInNewTab")}</span>
 					</a>
 				</div>
 			</div>

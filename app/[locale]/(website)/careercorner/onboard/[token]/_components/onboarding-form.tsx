@@ -57,6 +57,9 @@ export function OnboardingForm({
 	);
 
 	const errors = form.formState.errors;
+	const imageError = errors.image
+		? errorMessage(errors.image.message, errors.image.message)
+		: undefined;
 	const photoLabelId = "onboarding-photo-label";
 
 	return (
@@ -83,11 +86,7 @@ export function OnboardingForm({
 						form.setValue("image", url, { shouldValidate: true })
 					}
 				/>
-				{errors.image ? (
-					<p role="alert" className="text-sm font-medium text-destructive">
-						{errorMessage(errors.image.message, errors.image.message)}
-					</p>
-				) : null}
+				<ImageError message={imageError} />
 			</div>
 
 			<MentorFormField
@@ -124,11 +123,30 @@ export function OnboardingForm({
 				size="lg"
 				className="h-12 w-full gap-2 px-6 py-0 text-base font-semibold focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 md:py-0 md:text-base"
 			>
-				{action.isPending ? (
-					<Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
-				) : null}
+				<SavingSpinner pending={action.isPending} />
 				{action.isPending ? t("saving") : t("save")}
 			</Button>
 		</form>
+	);
+}
+
+function ImageError({ message }: { message: string | undefined }) {
+	if (!message) return null;
+
+	return (
+		<p role="alert" className="text-sm font-medium text-destructive">
+			{message}
+		</p>
+	);
+}
+
+function SavingSpinner({ pending }: { pending: boolean }) {
+	if (!pending) return null;
+
+	return (
+		<Loader2Icon
+			aria-hidden="true"
+			className="size-4 animate-spin motion-reduce:animate-none"
+		/>
 	);
 }

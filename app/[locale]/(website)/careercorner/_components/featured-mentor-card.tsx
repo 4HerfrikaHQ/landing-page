@@ -28,28 +28,11 @@ export async function FeaturedMentorCard({
 			<div className="mx-auto max-w-6xl">
 				<article className="relative grid overflow-hidden rounded-[20px] bg-surface-pink shadow-[0_12px_24px_rgba(0,0,0,0.08)] lg:grid-cols-[1.15fr_1fr] lg:rounded-[40px]">
 					<div className="relative h-95 bg-white lg:order-2 lg:h-120">
-						{mentor.image ? (
-							<MentorImage
-								src={mentor.image}
-								alt={displayName}
-								crop={mentor.image_crop}
-								sizes="(max-width: 1024px) 100vw, 45vw"
-								className="absolute inset-0"
-							/>
-						) : (
-							<div className="absolute inset-0 flex items-center justify-center bg-surface-pink">
-								<UserRound className="size-28 text-primary-500/60" />
-							</div>
-						)}
-						{isAvailable ? (
-							<span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-pill bg-white px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm">
-								<span
-									aria-hidden="true"
-									className="size-2 rounded-pill bg-emerald-600"
-								/>
-								{t("availableThisWeek")}
-							</span>
-						) : null}
+						<FeaturedPhoto mentor={mentor} name={displayName} />
+						<AvailableBadge
+							isAvailable={isAvailable}
+							label={t("availableThisWeek")}
+						/>
 					</div>
 					<div className="relative z-10 flex flex-col justify-center gap-3 p-6 lg:order-1 lg:p-14">
 						<span className="w-fit rounded-pill bg-primary-500 px-4 py-1.5 text-xs font-medium text-white">
@@ -93,5 +76,48 @@ export async function FeaturedMentorCard({
 				</article>
 			</div>
 		</section>
+	);
+}
+
+function FeaturedPhoto({
+	mentor,
+	name,
+}: {
+	mentor: DbMentorWithAvailability;
+	name: string;
+}) {
+	if (!mentor.image) {
+		return (
+			<div className="absolute inset-0 flex items-center justify-center bg-surface-pink">
+				<UserRound className="size-28 text-primary-500/60" />
+			</div>
+		);
+	}
+
+	return (
+		<MentorImage
+			src={mentor.image}
+			alt={name}
+			crop={mentor.image_crop}
+			sizes="(max-width: 1024px) 100vw, 45vw"
+			className="absolute inset-0"
+		/>
+	);
+}
+
+function AvailableBadge({
+	isAvailable,
+	label,
+}: {
+	isAvailable: boolean;
+	label: string;
+}) {
+	if (!isAvailable) return null;
+
+	return (
+		<span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-pill bg-white px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm">
+			<span aria-hidden="true" className="size-2 rounded-pill bg-emerald-600" />
+			{label}
+		</span>
 	);
 }

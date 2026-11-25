@@ -8,7 +8,7 @@ export async function CareersHero() {
 	return (
 		<section
 			data-hero="full-bleed"
-			className="relative h-150 overflow-hidden text-white lg:h-160"
+			className="relative flex min-h-150 flex-col justify-end overflow-hidden px-4 pt-32 pb-10 text-white lg:min-h-160 lg:justify-start lg:px-0 lg:pt-48 lg:pb-16"
 		>
 			<Image
 				src="/assets/academy/hero-source.jpg"
@@ -19,7 +19,7 @@ export async function CareersHero() {
 				className="object-cover"
 			/>
 			<div className="absolute inset-0 bg-black/60" />
-			<div className="absolute inset-x-4 bottom-10 mx-auto flex max-w-3xl flex-col items-center gap-5 text-center lg:inset-x-0 lg:bottom-auto lg:top-48">
+			<div className="relative mx-auto flex w-full max-w-3xl flex-col items-center gap-5 text-center">
 				<span className="rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("title")}
 				</span>

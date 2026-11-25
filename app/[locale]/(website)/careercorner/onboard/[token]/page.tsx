@@ -73,8 +73,6 @@ function OnboardShell({ children }: { children: React.ReactNode }) {
 	);
 }
 
-// Token-gated private page — keep it out of search results, but still give it
-// a proper localized title/OG for the browser tab and link previews.
 export async function generateMetadata({
 	params,
 }: {
@@ -117,6 +115,17 @@ export default async function OnboardingPage({
 			result.reason === "used" || result.reason === "expired"
 				? LINK_PROBLEM[result.reason]
 				: LINK_PROBLEM.malformed;
+		const supportAction =
+			result.reason === "used" ? null : (
+				<Button
+					href={SUPPORT_MAILTO}
+					variant="outline"
+					size="lg"
+					className={SECONDARY_ACTION}
+				>
+					{t("emailTeam")}
+				</Button>
+			);
 		return (
 			<OnboardShell>
 				<OnboardingNotice
@@ -133,16 +142,7 @@ export default async function OnboardingPage({
 							>
 								{t("signIn")}
 							</Button>
-							{result.reason !== "used" ? (
-								<Button
-									href={SUPPORT_MAILTO}
-									variant="outline"
-									size="lg"
-									className={SECONDARY_ACTION}
-								>
-									{t("emailTeam")}
-								</Button>
-							) : null}
+							{supportAction}
 						</>
 					}
 				/>

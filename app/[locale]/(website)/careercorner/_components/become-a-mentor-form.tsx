@@ -82,6 +82,12 @@ export function BecomeAMentorForm() {
 		return t(`errors.${field}`);
 	}
 
+	function resolveSubmitLabel() {
+		if (isUploading) return t("uploadingCv");
+		if (action.isPending) return t("submitting");
+		return t("submit");
+	}
+
 	function handleFileSelect(file: File | null) {
 		if (!file) {
 			setSelectedFile(null);
@@ -122,6 +128,8 @@ export function BecomeAMentorForm() {
 		form.setValue("cv_path", result.path as string, { shouldValidate: false });
 		await handleSubmitWithAction();
 	}
+
+	const submitLabel = resolveSubmitLabel();
 
 	if (action.hasSucceeded) {
 		return (
@@ -322,15 +330,7 @@ export function BecomeAMentorForm() {
 				</div>
 			</div>
 
-			{action.hasErrored ? (
-				<div
-					role="alert"
-					className="mt-6 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
-				>
-					<CircleAlertIcon className="mt-0.5 size-4 shrink-0" />
-					<p>{t("serverError")}</p>
-				</div>
-			) : null}
+			<ServerError hasErrored={action.hasErrored} message={t("serverError")} />
 
 			<Button
 				type="submit"
@@ -338,14 +338,8 @@ export function BecomeAMentorForm() {
 				size="lg"
 				className="mt-6 h-12 w-full gap-2 px-6 py-0 text-base font-semibold focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 md:py-0 md:text-base"
 			>
-				{isSubmitting ? (
-					<Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
-				) : null}
-				{isUploading
-					? t("uploadingCv")
-					: action.isPending
-						? t("submitting")
-						: t("submit")}
+				<Spinner visible={isSubmitting} />
+				{submitLabel}
 			</Button>
 		</form>
 	);
@@ -358,16 +352,12 @@ function CvUpload({
 	isUploading,
 	hasError,
 }: {
-	control: {
-		id: string;
-		"aria-describedby": string | undefined;
-	};
+	control: CvControl;
 	selectedFile: File | null;
 	onFileSelect: (file: File | null) => void;
 	isUploading: boolean;
 	hasError: boolean;
 }) {
-	const t = useTranslations("mentorApply.cv");
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -388,53 +378,157 @@ function CvUpload({
 				disabled={isUploading}
 			/>
 
-			{selectedFile ? (
-				<div className="flex min-h-14 items-center gap-3 rounded-xl border border-primary-500/30 bg-surface-pink px-4 py-2">
-					{isUploading ? (
-						<Loader2Icon className="size-5 shrink-0 animate-spin text-primary-500 motion-reduce:animate-none" />
-					) : (
-						<FileIcon className="size-5 shrink-0 text-primary-500" />
-					)}
-					<span
-						id={control.id}
-						className="min-w-0 flex-1 truncate text-sm font-medium text-secondary-500"
-					>
-						{selectedFile.name}
-					</span>
-					{isUploading ? (
-						<span className="text-xs text-muted-foreground">
-							{t("uploading")}
-						</span>
-					) : (
-						<button
-							type="button"
-							onClick={() => onFileSelect(null)}
-							className="-mr-2 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:text-destructive focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:outline-none"
-							aria-label={t("remove")}
-						>
-							<XIcon className="size-4" />
-						</button>
-					)}
-				</div>
-			) : (
-				<button
-					id={control.id}
-					type="button"
-					aria-describedby={control["aria-describedby"]}
-					onClick={() => inputRef.current?.click()}
-					disabled={isUploading}
-					className={cn(
-						"flex min-h-28 w-full flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-input bg-surface-pink/40 px-6 py-6 text-center transition-[border-color,background-color,box-shadow] duration-200 hover:border-primary-500 hover:bg-surface-pink focus-visible:border-primary-500 focus-visible:ring-3 focus-visible:ring-primary-500/20 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none",
-						hasError && "border-destructive bg-destructive/5",
-					)}
-				>
-					<UploadCloudIcon className="size-6 text-primary-500" />
-					<span className="text-sm font-semibold text-secondary-500">
-						{t("upload")}
-					</span>
-					<span className="text-xs text-muted-foreground">{t("hint")}</span>
-				</button>
-			)}
+			<CvSlot
+				control={control}
+				selectedFile={selectedFile}
+				onPick={() => inputRef.current?.click()}
+				onRemove={() => onFileSelect(null)}
+				isUploading={isUploading}
+				hasError={hasError}
+			/>
 		</div>
+	);
+}
+
+function ServerError({
+	hasErrored,
+	message,
+}: {
+	hasErrored: boolean;
+	message: string;
+}) {
+	if (!hasErrored) return null;
+
+	return (
+		<div
+			role="alert"
+			className="mt-6 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+		>
+			<CircleAlertIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+			<p>{message}</p>
+		</div>
+	);
+}
+
+function Spinner({ visible }: { visible: boolean }) {
+	if (!visible) return null;
+
+	return (
+		<Loader2Icon
+			aria-hidden="true"
+			className="size-4 animate-spin motion-reduce:animate-none"
+		/>
+	);
+}
+
+type CvControl = {
+	id: string;
+	"aria-invalid": true | undefined;
+	"aria-describedby": string | undefined;
+};
+
+function CvSlot({
+	control,
+	selectedFile,
+	onPick,
+	onRemove,
+	isUploading,
+	hasError,
+}: {
+	control: CvControl;
+	selectedFile: File | null;
+	onPick: () => void;
+	onRemove: () => void;
+	isUploading: boolean;
+	hasError: boolean;
+}) {
+	const t = useTranslations("mentorApply.cv");
+
+	if (!selectedFile) {
+		return (
+			<button
+				id={control.id}
+				type="button"
+				aria-invalid={control["aria-invalid"]}
+				aria-describedby={control["aria-describedby"]}
+				onClick={onPick}
+				disabled={isUploading}
+				className={cn(
+					"flex min-h-28 w-full flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-input bg-surface-pink/40 px-6 py-6 text-center transition-[border-color,background-color,box-shadow] duration-200 hover:border-primary-500 hover:bg-surface-pink focus-visible:border-primary-500 focus-visible:ring-3 focus-visible:ring-primary-500/20 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none",
+					hasError && "border-destructive bg-destructive/5",
+				)}
+			>
+				<UploadCloudIcon
+					aria-hidden="true"
+					className="size-6 text-primary-500"
+				/>
+				<span className="text-sm font-semibold text-secondary-500">
+					{t("upload")}
+				</span>
+				<span className="text-xs text-muted-foreground">{t("hint")}</span>
+			</button>
+		);
+	}
+
+	return (
+		<div className="flex min-h-14 items-center gap-3 rounded-xl border border-primary-500/30 bg-surface-pink px-4 py-2">
+			<FileStatusIcon isUploading={isUploading} />
+			<span
+				id={control.id}
+				className="min-w-0 flex-1 truncate text-sm font-medium text-secondary-500"
+			>
+				{selectedFile.name}
+			</span>
+			<FileTrailing
+				isUploading={isUploading}
+				onRemove={onRemove}
+				uploadingLabel={t("uploading")}
+				removeLabel={t("remove")}
+			/>
+		</div>
+	);
+}
+
+function FileStatusIcon({ isUploading }: { isUploading: boolean }) {
+	if (isUploading) {
+		return (
+			<Loader2Icon
+				aria-hidden="true"
+				className="size-5 shrink-0 animate-spin text-primary-500 motion-reduce:animate-none"
+			/>
+		);
+	}
+
+	return (
+		<FileIcon aria-hidden="true" className="size-5 shrink-0 text-primary-500" />
+	);
+}
+
+function FileTrailing({
+	isUploading,
+	onRemove,
+	uploadingLabel,
+	removeLabel,
+}: {
+	isUploading: boolean;
+	onRemove: () => void;
+	uploadingLabel: string;
+	removeLabel: string;
+}) {
+	if (isUploading) {
+		return (
+			<span className="text-xs text-muted-foreground">{uploadingLabel}</span>
+		);
+	}
+
+	return (
+		<button
+			type="button"
+			onClick={onRemove}
+			className="-mr-2 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:text-destructive focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:outline-none"
+			aria-label={removeLabel}
+		>
+			<XIcon aria-hidden="true" className="size-4" />
+		</button>
 	);
 }
