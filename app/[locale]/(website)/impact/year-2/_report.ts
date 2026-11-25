@@ -2,18 +2,12 @@ import type { StaticImageData } from "next/image";
 import milestone1 from "../year-1/milestone-1.jpg";
 import milestone2 from "../year-1/milestone-2.jpg";
 import milestone3 from "../year-1/milestone-3.jpg";
-
-export type FigureKey =
-	| "girlsMentored"
-	| "campuses"
-	| "countries"
-	| "graduatesMentoring"
-	| "academyGraduates";
+import type { FigureKey, WinKey } from "./_schema";
 
 export type Figure = { key: FigureKey; value: string | null };
 
 export type Win = {
-	key: "mentors" | "campuses" | "countries";
+	key: WinKey;
 	figureKey: FigureKey;
 	photo: StaticImageData;
 };

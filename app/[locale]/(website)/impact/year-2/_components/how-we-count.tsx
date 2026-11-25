@@ -7,7 +7,7 @@ export async function HowWeCount() {
 	return (
 		<section
 			id="howWeCount"
-			className="scroll-mt-20 border-t border-foreground/10 px-4 py-14 lg:px-20 lg:py-20"
+			className="scroll-mt-28 border-t border-foreground/10 px-4 py-14 lg:px-20 lg:py-20"
 		>
 			<div className="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row lg:items-center lg:gap-16">
 				<div className="flex-1">

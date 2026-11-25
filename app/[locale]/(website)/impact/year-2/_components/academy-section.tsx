@@ -19,7 +19,7 @@ export async function AcademySection({
 	}).format(new Date(report.academyLaunchDate));
 
 	return (
-		<section id="academy" className="scroll-mt-20 px-4 py-16 lg:px-20 lg:py-24">
+		<section id="academy" className="scroll-mt-28 px-4 py-16 lg:px-20 lg:py-24">
 			<FadeIn className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-2 lg:items-center lg:gap-16">
 				<div className="relative mx-auto w-full max-w-md lg:max-w-none">
 					<Image

@@ -6,7 +6,7 @@ export async function ReportsSection() {
 	const t = await getTranslations("impactIndex");
 
 	return (
-		<section id="reports" className="scroll-mt-24 px-4 py-14 lg:px-20 lg:py-24">
+		<section id="reports" className="scroll-mt-28 px-4 py-14 lg:px-20 lg:py-24">
 			<div className="mx-auto max-w-6xl">
 				<span className="inline-flex rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("reportsPill")}
