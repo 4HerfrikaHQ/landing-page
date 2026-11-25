@@ -28,6 +28,7 @@ function item(overrides: Partial<FeedItem>): FeedItem {
 		categoryName: "Stories",
 		imageSrc: "",
 		imageAlt: "",
+		imageFit: "cover",
 		...overrides,
 	};
 }

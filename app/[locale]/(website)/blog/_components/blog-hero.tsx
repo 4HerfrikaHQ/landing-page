@@ -12,7 +12,19 @@ const LAYOUT = {
 	},
 } as const;
 
-export async function BlogHero({ withFeatured }: { withFeatured: boolean }) {
+type Props = {
+	withFeatured: boolean;
+	first: string;
+	second: string;
+	description: string;
+};
+
+export async function BlogHero({
+	withFeatured,
+	first,
+	second,
+	description,
+}: Props) {
 	const t = await getTranslations("blogPage");
 	const layout = LAYOUT[withFeatured ? "withFeatured" : "plain"];
 
@@ -37,14 +49,14 @@ export async function BlogHero({ withFeatured }: { withFeatured: boolean }) {
 					{t("heroBadge")}
 				</span>
 				<h1 className="text-[40px] font-medium leading-[1.08] tracking-tight text-balance lg:text-[72px]">
-					{t("heroFirst")}
+					{first}
 					<br />
-					<em className="font-playfair font-black text-primary-bright">
-						{t("heroSecond")}
+					<em className="font-playfair font-black text-primary-bright break-words">
+						{second}
 					</em>
 				</h1>
 				<p className="max-w-2xl text-base leading-relaxed text-white/85 lg:text-xl">
-					{t("heroDescription")}
+					{description}
 				</p>
 			</div>
 		</section>

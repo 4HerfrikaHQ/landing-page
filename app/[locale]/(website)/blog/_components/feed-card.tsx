@@ -1,7 +1,8 @@
 import { Link } from "@/i18n/navigation";
 import type { Route } from "next";
 import Image from "next/image";
-import type { ChipTone } from "../_feed";
+
+import type { ChipTone, ImageFit } from "../_schema";
 
 export type CardData = {
 	href: string;
@@ -9,6 +10,7 @@ export type CardData = {
 	excerpt: string;
 	imageSrc: string;
 	imageAlt: string;
+	imageFit: ImageFit;
 	chipLabel: string;
 	tone: ChipTone;
 	meta: string;
@@ -22,14 +24,21 @@ export const CHIP_CLASSES: Record<ChipTone, string> = {
 	teal: "bg-surface-teal text-foreground",
 };
 
+const FIT_CLASSES: Record<ImageFit, string> = {
+	cover: "object-cover",
+	contain: "object-contain",
+};
+
 export function FeedImage({
 	src,
 	alt,
+	fit,
 	sizes,
 	className,
 }: {
 	src: string;
 	alt: string;
+	fit: ImageFit;
 	sizes: string;
 	className: string;
 }) {
@@ -40,7 +49,13 @@ export function FeedImage({
 	}
 	return (
 		<div className={`relative overflow-hidden bg-surface-pink ${className}`}>
-			<Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
+			<Image
+				src={src}
+				alt={alt}
+				fill
+				sizes={sizes}
+				className={FIT_CLASSES[fit]}
+			/>
 		</div>
 	);
 }
@@ -54,6 +69,7 @@ export function FeedCard({ card }: { card: CardData }) {
 			<FeedImage
 				src={card.imageSrc}
 				alt={card.imageAlt}
+				fit={card.imageFit}
 				sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw"
 				className="aspect-3/2 w-full shrink-0"
 			/>

@@ -1,7 +1,12 @@
+import {
+	type ChipTone,
+	type FeedItemKind,
+	type ImageFit,
+	chipToneSchema,
+} from "./_schema";
+
 export const PROJECTS_CATEGORY = "projects";
 export const STORIES_CATEGORY = "stories";
-
-export type FeedItemKind = "post" | "project";
 
 export type FeedItem = {
 	kind: FeedItemKind;
@@ -15,15 +20,21 @@ export type FeedItem = {
 	categoryName: string;
 	imageSrc: string;
 	imageAlt: string;
+	imageFit: ImageFit;
 };
 
 export type FeedCategory = { slug: string; name: string; id?: string };
 
-export type ChipTone = "navy" | "pink" | "indigo" | "teal";
-
 const WORDS_PER_MINUTE = 200;
 const EXCERPT_LENGTH = 150;
-const CHIP_TONES: readonly ChipTone[] = ["pink", "indigo", "teal"];
+const RELATED_LIMIT = 3;
+const HASH_MODULUS = 997;
+const HASH_MULTIPLIER = 31;
+const CHIP_TONES: readonly ChipTone[] = [
+	chipToneSchema.enum.pink,
+	chipToneSchema.enum.indigo,
+	chipToneSchema.enum.teal,
+];
 
 function timestamp(item: FeedItem) {
 	const value = new Date(item.date).getTime();
@@ -69,10 +80,11 @@ export function readingMinutes(text: string) {
 }
 
 export function chipTone(slug: string): ChipTone {
-	if (slug === PROJECTS_CATEGORY) return "navy";
-	if (slug === STORIES_CATEGORY) return "pink";
+	if (slug === PROJECTS_CATEGORY) return chipToneSchema.enum.navy;
+	if (slug === STORIES_CATEGORY) return chipToneSchema.enum.pink;
 	let hash = 0;
-	for (const char of slug) hash = (hash * 31 + char.charCodeAt(0)) % 997;
+	for (const char of slug)
+		hash = (hash * HASH_MULTIPLIER + char.charCodeAt(0)) % HASH_MODULUS;
 	return CHIP_TONES[hash % CHIP_TONES.length];
 }
 
@@ -106,7 +118,7 @@ export function splitTitle(title: string) {
 export function relatedItems(
 	items: FeedItem[],
 	current: Pick<FeedItem, "href" | "categorySlug">,
-	limit = 3,
+	limit = RELATED_LIMIT,
 ) {
 	return items
 		.filter(

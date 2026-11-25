@@ -14,6 +14,7 @@ type Props = {
 		linkedin: string;
 		copy: string;
 		copied: string;
+		newTab: string;
 	};
 };
 
@@ -59,6 +60,30 @@ function XIcon() {
 	);
 }
 
+function CopyContent({
+	copied,
+	labels,
+}: { copied: boolean; labels: Props["labels"] }) {
+	if (copied) {
+		return (
+			<>
+				<Check className="size-[18px] shrink-0" aria-hidden="true" />
+				<output>{labels.copied}</output>
+			</>
+		);
+	}
+	return (
+		<>
+			<Link2 className="size-[18px] shrink-0" aria-hidden="true" />
+			<output>{labels.copy}</output>
+		</>
+	);
+}
+
+function NewTab({ label }: { label: string }) {
+	return <span className="sr-only">{label}</span>;
+}
+
 export function ShareButtons({ url, links, labels }: Props) {
 	const [copied, setCopied] = useState(false);
 
@@ -84,6 +109,7 @@ export function ShareButtons({ url, links, labels }: Props) {
 				>
 					<WhatsAppIcon />
 					{labels.whatsapp}
+					<NewTab label={labels.newTab} />
 				</a>
 				<a
 					href={links.x}
@@ -93,6 +119,7 @@ export function ShareButtons({ url, links, labels }: Props) {
 				>
 					<XIcon />
 					{labels.x}
+					<NewTab label={labels.newTab} />
 				</a>
 				<a
 					href={links.linkedin}
@@ -102,18 +129,14 @@ export function ShareButtons({ url, links, labels }: Props) {
 				>
 					<LinkedInIcon />
 					{labels.linkedin}
+					<NewTab label={labels.newTab} />
 				</a>
 				<button
 					type="button"
 					onClick={copyLink}
 					className={`${BUTTON} cursor-pointer border-border text-foreground`}
 				>
-					{copied ? (
-						<Check className="size-[18px] shrink-0" aria-hidden="true" />
-					) : (
-						<Link2 className="size-[18px] shrink-0" aria-hidden="true" />
-					)}
-					<output>{copied ? labels.copied : labels.copy}</output>
+					<CopyContent copied={copied} labels={labels} />
 				</button>
 			</div>
 		</div>

@@ -1297,6 +1297,10 @@
 		"careerCta": "Weka simu",
 		"inboxTitle": "Pata hadithi inayofuata",
 		"inboxEm": "kwenye barua pepe yako.",
-		"inboxDescription": "Barua pepe moja kwa mwezi. Jiondoe wakati wowote."
+		"inboxDescription": "Barua pepe moja kwa mwezi. Jiondoe wakati wowote.",
+		"categoryHeroFirst": "Yote katika",
+		"categoryHeroDescription": "Hadithi na habari zote zilizo katika kundi hili, zikisimuliwa na wanawake wanaoziishi.",
+		"opensInNewTab": "(hufunguka kwenye kichupo kipya)",
+		"downloadImage": "Pakua picha"
 	}
 }

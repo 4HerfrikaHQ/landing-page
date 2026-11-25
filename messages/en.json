@@ -1297,6 +1297,10 @@
 		"careerCta": "Book a call",
 		"inboxTitle": "Get the next story",
 		"inboxEm": "in your inbox.",
-		"inboxDescription": "One email a month. Unsubscribe anytime."
+		"inboxDescription": "One email a month. Unsubscribe anytime.",
+		"categoryHeroFirst": "Everything in",
+		"categoryHeroDescription": "Every story and update filed under this category, told by the women who live it.",
+		"opensInNewTab": "(opens in a new tab)",
+		"downloadImage": "Download image"
 	}
 }

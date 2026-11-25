@@ -13,6 +13,7 @@ export function FeaturedCard({ card }: { card: CardData }) {
 					<FeedImage
 						src={card.imageSrc}
 						alt={card.imageAlt}
+						fit={card.imageFit}
 						sizes="(min-width: 1152px) 576px, 100vw"
 						className="aspect-3/2 w-full lg:aspect-auto lg:min-h-[360px]"
 					/>

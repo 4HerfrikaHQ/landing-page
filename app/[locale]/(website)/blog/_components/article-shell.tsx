@@ -24,6 +24,41 @@ type Props = {
 	children: ReactNode;
 };
 
+function HeroImage({ src, alt }: { src: string; alt: string }) {
+	if (!src) return null;
+	return (
+		<>
+			<Image
+				src={src}
+				alt={alt}
+				fill
+				priority
+				sizes="100vw"
+				className="object-cover object-[center_15%]"
+			/>
+			<div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/45" />
+		</>
+	);
+}
+
+function Byline({ author, label }: { author: string; label: string }) {
+	if (!author) return null;
+	return (
+		<p className="mt-6 flex items-center gap-3 text-sm">
+			<span
+				className="grid size-11 place-items-center rounded-pill bg-white/20 ring-2 ring-white/60"
+				aria-hidden="true"
+			>
+				<User className="size-6" />
+			</span>
+			<span>
+				<span className="block text-white/90">{label}</span>
+				<b className="font-semibold">{author}</b>
+			</span>
+		</p>
+	);
+}
+
 export async function ArticleShell({
 	title,
 	categorySlug,
@@ -48,19 +83,7 @@ export async function ArticleShell({
 				data-hero="full-bleed"
 				className="relative flex min-h-[560px] items-end overflow-hidden bg-secondary-500 text-white lg:min-h-[620px]"
 			>
-				{imageSrc ? (
-					<>
-						<Image
-							src={imageSrc}
-							alt={imageAlt}
-							fill
-							priority
-							sizes="100vw"
-							className="object-cover object-[center_15%]"
-						/>
-						<div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/45" />
-					</>
-				) : null}
+				<HeroImage src={imageSrc} alt={imageAlt} />
 				<div className="relative w-full px-4 pb-10 pt-36 lg:px-20 lg:pb-16">
 					<div className="mx-auto max-w-6xl">
 						<nav aria-label={t("breadcrumb")} className="text-sm text-white/90">
@@ -90,20 +113,7 @@ export async function ArticleShell({
 								{accent}
 							</em>
 						</h1>
-						{author ? (
-							<p className="mt-6 flex items-center gap-3 text-sm">
-								<span
-									className="grid size-11 place-items-center rounded-pill bg-white/20 ring-2 ring-white/60"
-									aria-hidden="true"
-								>
-									<User className="size-6" />
-								</span>
-								<span>
-									<span className="block text-white/90">{t("writtenBy")}</span>
-									<b className="font-semibold">{author}</b>
-								</span>
-							</p>
-						) : null}
+						<Byline author={author} label={t("writtenBy")} />
 					</div>
 				</div>
 			</header>
@@ -122,6 +132,7 @@ export async function ArticleShell({
 								linkedin: t("shareLinkedin"),
 								copy: t("copyLink"),
 								copied: t("linkCopied"),
+								newTab: t("opensInNewTab"),
 							}}
 						/>
 					</article>

@@ -13,6 +13,7 @@ import {
 	projectExcerpt,
 	readingMinutes,
 } from "./_feed";
+import { feedItemKindSchema, imageFitSchema } from "./_schema";
 import { postText } from "./_utils";
 
 type LinkedCategory = { name?: string };
@@ -21,15 +22,15 @@ function toPostItem(
 	post: Content.BlogPostDocument,
 	storiesName: string,
 ): FeedItem | null {
-	if (!post.uid) return null;
+	if (!post.uid || !post.data.title) return null;
 	const link = post.data.category;
 	const linked = prismic.isFilled.contentRelationship(link) ? link : null;
 	const cover = post.data.cover_image;
 	return {
-		kind: "post",
+		kind: feedItemKindSchema.enum.post,
 		slug: post.uid,
 		href: `/blog/${post.uid}`,
-		title: post.data.title ?? "",
+		title: post.data.title,
 		excerpt: post.data.description ?? "",
 		date: post.first_publication_date ?? "",
 		minutes: readingMinutes(postText(post)),
@@ -38,12 +39,13 @@ function toPostItem(
 			(linked?.data as LinkedCategory | undefined)?.name ?? storiesName,
 		imageSrc: cover?.url ?? "",
 		imageAlt: cover?.alt ?? "",
+		imageFit: imageFitSchema.enum.cover,
 	};
 }
 
 function projectItems(projectsName: string): FeedItem[] {
 	return Object.entries(projects).map(([slug, project]) => ({
-		kind: "project" as const,
+		kind: feedItemKindSchema.enum.project,
 		slug,
 		href: `/projects/${slug}`,
 		title: project.title,
@@ -54,6 +56,7 @@ function projectItems(projectsName: string): FeedItem[] {
 		categoryName: projectsName,
 		imageSrc: project.cover,
 		imageAlt: "",
+		imageFit: project.coverFit,
 	}));
 }
 
