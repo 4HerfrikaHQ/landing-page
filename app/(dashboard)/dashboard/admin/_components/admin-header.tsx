@@ -11,6 +11,7 @@ import { logout } from "@/src/auth";
 import { cn } from "@/utils/cn";
 import {
 	CalendarDays,
+	ClipboardCheck,
 	FileText,
 	LogOut,
 	type LucideIcon,
@@ -33,6 +34,7 @@ const SEGMENT_LABELS: Record<string, string> = {
 	admins: "Admins",
 	applications: "Applications",
 	"academy-waitlist": "Academy waitlist",
+	"academy-tasks": "Academy tasks",
 	bookings: "Bookings",
 	feedback: "Feedback",
 };
@@ -72,6 +74,12 @@ const NAV_ITEMS: {
 		label: "Academy waitlist",
 		href: "/dashboard/admin/academy-waitlist" as Route,
 		icon: FileText,
+	},
+	{
+		key: "academy-tasks",
+		label: "Academy tasks",
+		href: "/dashboard/admin/academy-tasks" as Route,
+		icon: ClipboardCheck,
 	},
 	{
 		key: "admins",
