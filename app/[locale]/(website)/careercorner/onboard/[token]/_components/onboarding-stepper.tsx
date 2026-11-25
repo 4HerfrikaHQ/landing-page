@@ -11,13 +11,12 @@ import {
 	UserRoundIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
-import type { ReactNode } from "react";
+import { parseAsBoolean, parseAsStringEnum, useQueryState } from "nuqs";
+import type { ComponentProps, ReactNode } from "react";
+import { type OnboardingStep, onboardingStep } from "../_schema";
 import { OnboardingForm } from "./onboarding-form";
 
-type StepId = "availability" | "profile" | "calendar";
-
-const steps: { id: StepId; icon: typeof CalendarClockIcon }[] = [
+const steps: { id: OnboardingStep; icon: typeof CalendarClockIcon }[] = [
 	{ id: "availability", icon: CalendarClockIcon },
 	{ id: "profile", icon: UserRoundIcon },
 	{ id: "calendar", icon: CalendarDaysIcon },
@@ -52,16 +51,12 @@ export function OnboardingStepper({
 	profileComplete: boolean;
 }) {
 	const t = useTranslations("onboarding");
-	// Step state lives in the URL so it survives refresh and is shareable.
 	const [active, setActive] = useQueryState(
 		"step",
-		parseAsStringLiteral([
-			"availability",
-			"profile",
-			"calendar",
-		] as const).withDefault("availability"),
+		parseAsStringEnum(onboardingStep.options).withDefault(
+			onboardingStep.def.entries.availability,
+		),
 	);
-	// "availability" is marked done once the mentor advances past it.
 	const [availabilityDone, setAvailabilityDone] = useQueryState(
 		"ready",
 		parseAsBoolean.withDefault(false),
@@ -146,47 +141,20 @@ export function OnboardingStepper({
 				</ol>
 			</nav>
 
-			{visibleActive === "availability" ? (
-				<div className="space-y-6">
-					<StepHeader
-						title={t("availabilityStep.title")}
-						description={t("availabilityStep.description")}
-					/>
-					<AvailabilityEditor
-						mentorId={availability.mentorId}
-						initialSlots={availability.initialSlots}
-						onSave={availability.saveAvailabilityAction}
-						requireAtLeastOneSlot
-						saveLabel={t("availabilityStep.save")}
-						onSaved={() => {
-							setAvailabilityDone(true);
-							setActive("profile");
-						}}
-					/>
-				</div>
-			) : visibleActive === "profile" ? (
-				<div className="space-y-6">
-					<StepHeader
-						title={t("profileStep.title")}
-						description={t("profileStep.description")}
-					/>
-					<OnboardingForm
-						{...profile}
-						onSaved={() => {
-							setProfileDone(true);
-							setActive("calendar");
-						}}
-					/>
-				</div>
-			) : (
-				<div className="space-y-6">
-					<StepHeader
-						title={t("calendarStep.title")}
-						description={t("calendarStep.description")}
-					/>
-					{calendarSlot}
-				</div>
-			)}
+			<StepPanel
+				step={visibleActive}
+				availability={availability}
+				profile={profile}
+				calendarSlot={calendarSlot}
+				onAvailabilitySaved={() => {
+					setAvailabilityDone(true);
+					setActive("profile");
+				}}
+				onProfileSaved={() => {
+					setProfileDone(true);
+					setActive("calendar");
+				}}
+			/>
 		</div>
 	);
 }
@@ -206,6 +174,67 @@ function StepHeader({
 			<p className="text-[15px] leading-relaxed text-muted-foreground">
 				{description}
 			</p>
+		</div>
+	);
+}
+
+type StepPanelProps = {
+	step: OnboardingStep;
+	availability: ComponentProps<typeof OnboardingStepper>["availability"];
+	profile: ComponentProps<typeof OnboardingStepper>["profile"];
+	calendarSlot: ReactNode;
+	onAvailabilitySaved: () => void;
+	onProfileSaved: () => void;
+};
+
+function StepPanel({
+	step,
+	availability,
+	profile,
+	calendarSlot,
+	onAvailabilitySaved,
+	onProfileSaved,
+}: StepPanelProps) {
+	const t = useTranslations("onboarding");
+
+	if (step === "availability") {
+		return (
+			<div className="space-y-6">
+				<StepHeader
+					title={t("availabilityStep.title")}
+					description={t("availabilityStep.description")}
+				/>
+				<AvailabilityEditor
+					mentorId={availability.mentorId}
+					initialSlots={availability.initialSlots}
+					onSave={availability.saveAvailabilityAction}
+					requireAtLeastOneSlot
+					saveLabel={t("availabilityStep.save")}
+					onSaved={onAvailabilitySaved}
+				/>
+			</div>
+		);
+	}
+
+	if (step === "profile") {
+		return (
+			<div className="space-y-6">
+				<StepHeader
+					title={t("profileStep.title")}
+					description={t("profileStep.description")}
+				/>
+				<OnboardingForm {...profile} onSaved={onProfileSaved} />
+			</div>
+		);
+	}
+
+	return (
+		<div className="space-y-6">
+			<StepHeader
+				title={t("calendarStep.title")}
+				description={t("calendarStep.description")}
+			/>
+			{calendarSlot}
 		</div>
 	);
 }

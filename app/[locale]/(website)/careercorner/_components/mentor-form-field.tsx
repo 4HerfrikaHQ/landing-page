@@ -43,16 +43,28 @@ export function MentorFormField({
 				"aria-invalid": error ? true : undefined,
 				"aria-describedby": describedBy,
 			})}
-			{hint ? (
-				<p id={hintId} className="text-xs text-muted-foreground">
-					{hint}
-				</p>
-			) : null}
-			{error ? (
-				<p id={errorId} className="text-sm font-medium text-destructive">
-					{error}
-				</p>
-			) : null}
+			<FieldHint id={hintId} text={hint} />
+			<FieldError id={errorId} text={error} />
 		</div>
+	);
+}
+
+function FieldHint({ id, text }: { id: string; text: string | undefined }) {
+	if (!text) return null;
+
+	return (
+		<p id={id} className="text-xs text-muted-foreground">
+			{text}
+		</p>
+	);
+}
+
+function FieldError({ id, text }: { id: string; text: string | undefined }) {
+	if (!text) return null;
+
+	return (
+		<p id={id} className="text-sm font-medium text-destructive">
+			{text}
+		</p>
 	);
 }
