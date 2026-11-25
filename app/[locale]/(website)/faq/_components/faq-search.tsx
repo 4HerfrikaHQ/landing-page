@@ -2,22 +2,12 @@
 
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useSyncExternalStore } from "react";
 import type { FormEvent } from "react";
-import {
-	getFaqQuery,
-	getServerFaqQuery,
-	setFaqQuery,
-	subscribeToFaqQuery,
-} from "../_helpers/faq-query-store";
+import { useFaqQuery } from "../_hooks/use-faq-query";
 
 export function FaqSearch() {
 	const t = useTranslations("faq");
-	const query = useSyncExternalStore(
-		subscribeToFaqQuery,
-		getFaqQuery,
-		getServerFaqQuery,
-	);
+	const [query, setQuery] = useFaqQuery();
 
 	const jumpToResults = (event: FormEvent) => {
 		event.preventDefault();
@@ -43,7 +33,7 @@ export function FaqSearch() {
 					id="faq-search"
 					type="search"
 					value={query}
-					onChange={(event) => setFaqQuery(event.target.value)}
+					onChange={(event) => setQuery(event.target.value)}
 					placeholder={t("searchPlaceholder")}
 					autoComplete="off"
 					className="h-11 min-w-0 flex-1 bg-transparent text-base placeholder:text-muted-foreground focus:outline-none"
