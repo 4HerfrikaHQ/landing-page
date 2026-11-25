@@ -1,3 +1,5 @@
+import { Link } from "@/i18n/navigation";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { HeroMorphWord } from "./hero-morph-word";
@@ -22,9 +24,16 @@ export async function HomeHero() {
 			/>
 			<div className="absolute inset-0 bg-black/60" />
 			<div className="absolute inset-x-4 bottom-10 mx-auto flex max-w-4xl flex-col items-center gap-4 text-center lg:inset-x-0 lg:top-56 lg:bottom-auto">
-				<span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+				<Link
+					href="/academy"
+					className="press group inline-flex min-h-9 items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground hover:bg-white hover:no-underline focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/60"
+				>
 					{t("badge")}
-				</span>
+					<ArrowRight
+						aria-hidden="true"
+						className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+					/>
+				</Link>
 				<h1 className="text-[44px] font-medium leading-[1.05] tracking-tight lg:text-[76px]">
 					<span className="sr-only">
 						{t("titleFirst")}{" "}
