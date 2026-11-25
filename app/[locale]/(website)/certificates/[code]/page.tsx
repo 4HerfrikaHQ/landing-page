@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { findCertificateByCode } from "../_certificate";
-import { normaliseCertificateCode, toPublicCertificate } from "../_helpers";
+import { parseCertificateParam, toPublicCertificate } from "../_helpers";
 import { CheckView } from "./_components/check-view";
 
 type Params = { code: string };
 
 async function loadPublicCertificate(rawCode: string) {
-	const code = normaliseCertificateCode(decodeURIComponent(rawCode));
+	const code = parseCertificateParam(rawCode);
 	if (!code) return null;
 	const row = await findCertificateByCode(code);
 	return row ? toPublicCertificate(row) : null;

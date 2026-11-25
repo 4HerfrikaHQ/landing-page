@@ -6,7 +6,7 @@ import {
 	certificatePath,
 	certificateUrl,
 	formatCertificateDate,
-	normaliseCertificateCode,
+	parseCertificateParam,
 	siteUrl,
 } from "../../_helpers";
 import { PrintSheet } from "./_components/print-sheet";
@@ -24,7 +24,7 @@ export default async function PrintCertificatePage({
 	params: Promise<Params>;
 }) {
 	const { code: rawCode } = await params;
-	const code = normaliseCertificateCode(decodeURIComponent(rawCode));
+	const code = parseCertificateParam(rawCode);
 	if (!code) notFound();
 	const certificate = await findCertificateByCode(code);
 	if (!certificate) notFound();
