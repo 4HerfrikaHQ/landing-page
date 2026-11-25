@@ -10,7 +10,7 @@ import { cn } from "@/utils/cn";
 import { RollLabel } from "./roll-label";
 
 const buttonVariants = cva(
-	"inline-flex shrink-0 items-center justify-center font-normal whitespace-nowrap press outline-none select-none hover:no-underline! disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
+	"inline-flex shrink-0 items-center justify-center font-normal whitespace-nowrap press outline-none select-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 hover:no-underline! disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
 	{
 		variants: {
 			variant: {
@@ -56,7 +56,11 @@ function Button({
 	...props
 }: ButtonProps) {
 	const className = cn(buttonVariants({ variant, size }), _className);
-	const rolls = variant !== "link" && size !== "icon" && size !== "icon-sm";
+	const rolls =
+		typeof children === "string" &&
+		variant !== "link" &&
+		size !== "icon" &&
+		size !== "icon-sm";
 	const label = rolls ? <RollLabel>{children}</RollLabel> : children;
 
 	if (href) {
