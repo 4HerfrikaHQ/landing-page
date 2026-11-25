@@ -10,6 +10,7 @@ import { TaskReviewSheet } from "./task-review-sheet";
 
 export function TaskRow({ row }: { row: TaskQueueRow }) {
 	const [open, setOpen] = useState(false);
+	const track = row.track ?? "—";
 
 	return (
 		<>
@@ -25,7 +26,7 @@ export function TaskRow({ row }: { row: TaskQueueRow }) {
 					<div className="text-xs text-muted-foreground">{row.courseTitle}</div>
 				</TableCell>
 				<TableCell className="capitalize text-muted-foreground">
-					{row.track ?? "—"}
+					{track}
 				</TableCell>
 				<TableCell className="whitespace-nowrap text-sm text-muted-foreground">
 					{format(row.submittedAt, "MMM d, yyyy")}

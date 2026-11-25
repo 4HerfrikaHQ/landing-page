@@ -8,7 +8,7 @@ import {
 	reviewTransition,
 	withAttemptNumbers,
 } from "./_helpers";
-import { ReviewTaskSchema } from "./_schema";
+import { NOTE_MAX_LENGTH, ReviewTaskSchema } from "./_schema";
 
 describe("reviewTransition", () => {
 	test("applies a decision only to a submitted task", () => {
@@ -158,5 +158,26 @@ describe("withAttemptNumbers", () => {
 		expect(
 			Object.fromEntries(numbered.map((item) => [item.id, item.attempt])),
 		).toEqual({ a: 1, c: 2, x: 1, y: 1 });
+	});
+});
+
+describe("review note cap", () => {
+	const submissionId = "6f1c1a4e-0b0f-4a52-9d6e-3f1f6f0f2a11";
+
+	test("accepts a note at the limit and rejects one past it", () => {
+		for (const decision of ["complete", "needs_work"] as const) {
+			const atLimit = ReviewTaskSchema.safeParse({
+				submissionId,
+				decision,
+				note: "a".repeat(NOTE_MAX_LENGTH),
+			});
+			const past = ReviewTaskSchema.safeParse({
+				submissionId,
+				decision,
+				note: "a".repeat(NOTE_MAX_LENGTH + 1),
+			});
+			expect(atLimit.success).toBe(true);
+			expect(past.success).toBe(false);
+		}
 	});
 });

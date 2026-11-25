@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/table";
 import type { TaskSubmissionStatus } from "@/src/db/schema/tables";
 import { ClipboardCheck } from "lucide-react";
-import { DEFAULT_QUEUE_STATUS } from "../_helpers";
 import type { TaskQueueRow } from "../_queries";
+import { DEFAULT_QUEUE_STATUS } from "../_schema";
 import { TaskRow } from "./task-row";
 
 const EMPTY_COPY: Record<
@@ -33,6 +33,15 @@ const EMPTY_COPY: Record<
 		description: "Submissions you mark complete will be listed here.",
 	},
 };
+
+const COLUMNS = [
+	"Learner",
+	"Course and task",
+	"Track",
+	"Submitted",
+	"Attempt",
+	"Status",
+];
 
 export function TasksTable({
 	rows,
@@ -70,47 +79,50 @@ export function TasksTable({
 				</FilterBar>
 			</div>
 
-			{rows.length === 0 ? (
-				<EmptyState
-					icon={ClipboardCheck}
-					title={EMPTY_COPY[status].title}
-					description={EMPTY_COPY[status].description}
-				/>
-			) : (
-				<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-					<Table>
-						<TableHeader>
-							<TableRow className="bg-muted">
-								<TableHead className="font-medium text-muted-foreground">
-									Learner
-								</TableHead>
-								<TableHead className="font-medium text-muted-foreground">
-									Course and task
-								</TableHead>
-								<TableHead className="font-medium text-muted-foreground">
-									Track
-								</TableHead>
-								<TableHead className="font-medium text-muted-foreground">
-									Submitted
-								</TableHead>
-								<TableHead className="font-medium text-muted-foreground">
-									Attempt
-								</TableHead>
-								<TableHead className="font-medium text-muted-foreground">
-									Status
-								</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{rows.map((row) => (
-								<TaskRow key={row.id} row={row} />
-							))}
-						</TableBody>
-					</Table>
-				</div>
-			)}
+			<QueueRows rows={rows} status={status} />
 
 			<Pagination page={page} pageSize={pageSize} total={total} />
+		</div>
+	);
+}
+
+function QueueRows({
+	rows,
+	status,
+}: {
+	rows: TaskQueueRow[];
+	status: TaskSubmissionStatus;
+}) {
+	if (rows.length === 0) {
+		return (
+			<EmptyState
+				icon={ClipboardCheck}
+				title={EMPTY_COPY[status].title}
+				description={EMPTY_COPY[status].description}
+			/>
+		);
+	}
+	return (
+		<div className="overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+			<Table>
+				<TableHeader>
+					<TableRow className="bg-muted">
+						{COLUMNS.map((column) => (
+							<TableHead
+								key={column}
+								className="font-medium text-muted-foreground"
+							>
+								{column}
+							</TableHead>
+						))}
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{rows.map((row) => (
+						<TaskRow key={row.id} row={row} />
+					))}
+				</TableBody>
+			</Table>
 		</div>
 	);
 }

@@ -4,8 +4,8 @@ import { TaskSubmissionStatus } from "@/src/db/schema/tables";
 import { unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { TasksTable } from "./_components/tasks-table";
-import { DEFAULT_QUEUE_STATUS, QUEUE_PAGE_SIZE } from "./_helpers";
 import { getTaskQueue } from "./_queries";
+import { DEFAULT_QUEUE_STATUS, QUEUE_PAGE_SIZE } from "./_schema";
 
 export default async function AcademyTasksPage({
 	searchParams,
