@@ -4,6 +4,7 @@ import { QuizSubmission } from "../../_schema";
 
 const MAX_KEY_LENGTH = 200;
 const MAX_QUIZ_QUESTIONS = 200;
+export const MIN_TASK_TEXT_LENGTH = 100;
 export const MAX_TASK_TEXT_LENGTH = 5000;
 export const MAX_TRACK_KEY_LENGTH = 40;
 
@@ -29,7 +30,7 @@ export const SubmitQuizSchema = LessonRef.extend({
 
 export const SubmitTaskSchema = LessonRef.extend({
 	track: z.string().trim().min(1).max(MAX_TRACK_KEY_LENGTH).optional(),
-	body: z.string().trim().min(1).max(MAX_TASK_TEXT_LENGTH),
+	body: z.string().trim().min(MIN_TASK_TEXT_LENGTH).max(MAX_TASK_TEXT_LENGTH),
 });
 
 const richText = z.custom<RichTextField>((value) => Array.isArray(value));
