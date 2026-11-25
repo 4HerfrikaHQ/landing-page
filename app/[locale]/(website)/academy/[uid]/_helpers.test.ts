@@ -2,6 +2,7 @@ import { type Course, DEFAULT_COMPLETION_POLICY } from "../_helpers";
 import type { CompletionPolicy } from "../_schema";
 import {
 	courseProgressPercent,
+	courseUidFromPath,
 	firstLesson,
 	isCourseOpenForEnrolment,
 	lessonPath,
@@ -255,5 +256,23 @@ describe("splitTitle", () => {
 			lead: "",
 			accent: "Opportunity",
 		});
+	});
+});
+
+describe("courseUidFromPath", () => {
+	test("reads the course uid from a course page path", () => {
+		expect(courseUidFromPath("/academy/ai-for-your-next-opportunity")).toBe(
+			"ai-for-your-next-opportunity",
+		);
+		expect(courseUidFromPath("/fr/academy/ai-course/")).toBe("ai-course");
+	});
+
+	test("ignores lessons, Academy pages and other paths", () => {
+		expect(courseUidFromPath("/academy/ai-course/M1-VIDEO")).toBeNull();
+		expect(courseUidFromPath("/academy/sign-in")).toBeNull();
+		expect(courseUidFromPath("/sw/academy/me")).toBeNull();
+		expect(courseUidFromPath("/academy")).toBeNull();
+		expect(courseUidFromPath("/academy/ai-course?x=1")).toBeNull();
+		expect(courseUidFromPath("/blog/post")).toBeNull();
 	});
 });

@@ -1,3 +1,4 @@
+import { routing } from "@/i18n/routing";
 import {
 	type Course,
 	isModuleUnlocked,
@@ -171,4 +172,16 @@ export function splitTitle(title: string) {
 		lead: words.slice(0, -ACCENT_WORD_COUNT).join(" "),
 		accent: words.slice(-ACCENT_WORD_COUNT).join(" "),
 	};
+}
+
+const ACADEMY_PAGES = new Set(["sign-in", "welcome", "me"]);
+
+const coursePathPattern = new RegExp(
+	`^(?:/(?:${routing.locales.join("|")}))?/academy/([^/?#]+)/?$`,
+);
+
+export function courseUidFromPath(path: string): string | null {
+	const uid = coursePathPattern.exec(path)?.[1];
+	if (!uid || ACADEMY_PAGES.has(uid)) return null;
+	return uid;
 }
