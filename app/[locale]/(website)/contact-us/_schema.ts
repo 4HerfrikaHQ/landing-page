@@ -31,30 +31,26 @@ export const QUICK_ANSWER_QUESTIONS = [
 	"How should I prepare for my career coaching call?",
 ];
 
-export const fieldNames = ["name", "email", "topic", "message"] as const;
+export const fieldNameSchema = z.enum(["name", "email", "topic", "message"]);
 
-export type FieldName = (typeof fieldNames)[number];
+export type FieldName = z.infer<typeof fieldNameSchema>;
 
-export type ErrorKey =
-	| "nameRequired"
-	| "emailInvalid"
-	| "topicRequired"
-	| "messageRequired";
+export const fieldNames = fieldNameSchema.options;
+
+export const errorKeySchema = z.enum([
+	"nameRequired",
+	"emailInvalid",
+	"topicRequired",
+	"messageRequired",
+]);
+
+export type ErrorKey = z.infer<typeof errorKeySchema>;
 
 export type FieldErrors = Partial<Record<FieldName, ErrorKey>>;
 
 export const contactFieldsSchema = z.object({
-	name: z
-		.string()
-		.trim()
-		.min(1, "nameRequired" satisfies ErrorKey),
-	email: z
-		.string()
-		.trim()
-		.pipe(z.email("emailInvalid" satisfies ErrorKey)),
-	topic: z.enum(topicSchema.options, "topicRequired" satisfies ErrorKey),
-	message: z
-		.string()
-		.trim()
-		.min(1, "messageRequired" satisfies ErrorKey),
+	name: z.string().trim().min(1, errorKeySchema.enum.nameRequired),
+	email: z.string().trim().pipe(z.email(errorKeySchema.enum.emailInvalid)),
+	topic: z.enum(topicSchema.options, errorKeySchema.enum.topicRequired),
+	message: z.string().trim().min(1, errorKeySchema.enum.messageRequired),
 });

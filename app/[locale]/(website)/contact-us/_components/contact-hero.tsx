@@ -7,7 +7,7 @@ export async function ContactHero() {
 	return (
 		<section
 			data-hero="full-bleed"
-			className="relative h-150 overflow-hidden text-white lg:h-160"
+			className="relative flex min-h-150 flex-col justify-end overflow-hidden px-4 pb-12 pt-32 text-white lg:min-h-160 lg:justify-start lg:px-20 lg:pb-16 lg:pt-56"
 		>
 			<Image
 				src="/assets/contact/hero.jpg"
@@ -18,7 +18,7 @@ export async function ContactHero() {
 				className="object-cover object-[center_25%]"
 			/>
 			<div className="absolute inset-0 bg-black/60" />
-			<div className="absolute inset-x-4 bottom-12 mx-auto flex max-w-3xl flex-col items-center gap-4 text-center lg:inset-x-0 lg:bottom-auto lg:top-56">
+			<div className="relative mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
 				<span className="rounded-full bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 					{t("heroBadge")}
 				</span>

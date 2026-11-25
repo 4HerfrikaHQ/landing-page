@@ -9,12 +9,14 @@ import { useReducer, useRef } from "react";
 import { markSent, selectTopic } from "../_lib/contact-session";
 import { useContactSession } from "../_lib/use-contact-session";
 import {
-	type ErrorKey,
 	FORMSPREE_FORM_KEY,
 	type FieldErrors,
+	type FieldName,
 	MESSAGE_MAX_LENGTH,
 	type Topic,
 	contactFieldsSchema,
+	errorKeySchema,
+	fieldNameSchema,
 	fieldNames,
 	topicSchema,
 	topicSubjects,
@@ -54,11 +56,9 @@ function validate(data: FormData): FieldErrors {
 	if (result.success) return {};
 	const errors: FieldErrors = {};
 	for (const issue of result.error.issues) {
-		const field = issue.path[0];
-		if (fieldNames.includes(field as (typeof fieldNames)[number])) {
-			errors[field as (typeof fieldNames)[number]] ??=
-				issue.message as ErrorKey;
-		}
+		const field = fieldNameSchema.safeParse(issue.path[0]);
+		const key = errorKeySchema.safeParse(issue.message);
+		if (field.success && key.success) errors[field.data] ??= key.data;
 	}
 	return errors;
 }
@@ -176,7 +176,7 @@ export function ContactForm() {
 		}
 	};
 
-	const errorText = (field: keyof FieldErrors) => {
+	const errorText = (field: FieldName) => {
 		const key = fieldErrors[field];
 		return key ? t(`errors.${key}`) : undefined;
 	};
