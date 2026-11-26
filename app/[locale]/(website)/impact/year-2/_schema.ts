@@ -2,11 +2,11 @@ import { z } from "zod";
 
 export const FigureKey = z.enum([
 	"girlsReached",
+	"campuses",
 	"mentees",
+	"socialReach",
 	"sessions",
-	"mentors",
-	"unilagMembers",
-	"partners",
+	"makoko",
 ]);
 export type FigureKey = z.infer<typeof FigureKey>;
 

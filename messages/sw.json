@@ -814,17 +814,17 @@
 			"coverAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi, jalada la ripoti ya Mwaka wa 2",
 			"label": "Mwaka wa 2",
 			"title": "Hatua mbili mbele",
-			"summary": "Usajili na CAC, akademia tatu, uhamasishaji wa afya ya hedhi na ushauri ulio wazi kwa kila mwanachama. Hesabu kamili ya vyuo inakuja.",
+			"summary": "Zaidi ya wasichana 4,000 waliofikiwa na kupata ushauri katika vyuo 25+, usajili na CAC, akademia tatu, na ushauri ulio wazi kwa kila mwanachama.",
 			"comingSoon": "Hesabu kamili inakuja",
 			"figuresPending": "Takwimu zilizothibitishwa hadi sasa. Hesabu kamili inakuja.",
 			"preview": "Soma mtandaoni",
 			"figures": {
 				"girlsReached": "Wasichana waliofikiwa",
+				"campuses": "Vyuo",
 				"mentees": "Wanafunzi",
+				"socialReach": "Waliofikiwa mitandaoni",
 				"sessions": "Vikao vilivyokamilika",
-				"mentors": "Washauri",
-				"unilagMembers": "Wanachama UNILAG",
-				"partners": "Washirika"
+				"makoko": "Wasichana Makoko"
 			}
 		}
 	},
@@ -874,7 +874,7 @@
 			"second": "kujenga.",
 			"items": {
 				"registered": {
-					"when": "Oktoba",
+					"when": "Oktoba 2025",
 					"title": "Tumesajiliwa na CAC",
 					"body": "Tukawa shirika lililosajiliwa, hivyo washirika wanaweza kusaini mikataba halisi nasi badala ya ahadi za mdomo."
 				},
@@ -906,7 +906,7 @@
 				"makoko": {
 					"when": "Makoko",
 					"title": "Vuguvugu la Uhamasishaji wa Afya ya Hedhi",
-					"body": "Pamoja na Sanitary Aid NG, Civic Hive, Skygirls na The GirlsComm, tuligawa pedi na kuvunja hadithi potofu kuhusu hedhi mbele ya wasichana ambao hawakuwahi kuziona zikipingwa."
+					"body": "Pamoja na Sanitary Aid NG, Civic Hive, Skygirls na The GirlsComm, zaidi ya wasichana 300 walihudhuria, pedi 300 zilitolewa, na hadithi potofu kuhusu hedhi zilivunjwa mbele ya wasichana ambao hawakuwahi kuziona zikipingwa."
 				},
 				"giveToGain": {
 					"when": "Machi",
@@ -944,7 +944,7 @@
 					"body": "Rhythms of Connection iliwakutanisha wanachama na wabunifu wa eneo hilo. Aprili, Women Techmakers Ogbomoso ilitoa mafunzo ya teknolojia bure. Mei, kampeni ya Siku ya Usafi wa Hedhi ilivunja hadithi potofu za mabweni, na nukuu za kila wiki ziliwaweka wote wakizungumza mwaka mzima."
 				}
 			},
-			"closing": "Kila chuo huendesha uhamasishaji wake, na washirika wake, kwa ratiba yake. Mwaka huu, kwa mara ya kwanza, kitu kimoja kilikuwa wazi kwa kila mwanachama popote anaposoma."
+			"closing": "Tulibaki na vyuo 25+ katika nchi tano mwaka huu na tukaweka nguvu katika kukuza kila kimoja. Kila chuo huendesha uhamasishaji wake, na washirika wake, kwa ratiba yake, na kwa mara ya kwanza kitu kimoja kilikuwa wazi kwa kila mwanachama popote anaposoma."
 		},
 		"mentorship": {
 			"pill": "Ushauri, umefunguliwa",
@@ -967,28 +967,28 @@
 			"second": "si kusimuliwa tu.",
 			"figures": {
 				"girlsReached": {
-					"label": "wasichana waliofikiwa",
-					"note": "Pad a Girl na Give to Gain"
+					"label": "wasichana waliofikiwa na kupata ushauri",
+					"note": "katika kila chuo"
+				},
+				"campuses": {
+					"label": "vyuo",
+					"note": "katika nchi tano"
 				},
 				"mentees": {
 					"label": "wanafunzi waliomwekea mshauri miadi",
 					"note": "Career Corner, tangu 31 Ago"
 				},
+				"socialReach": {
+					"label": "waliofikiwa mitandaoni",
+					"note": "watu waliofikiwa mtandaoni"
+				},
 				"sessions": {
 					"label": "vikao vya ushauri vilivyokamilika",
 					"note": "Career Corner, tangu 31 Ago"
 				},
-				"mentors": {
-					"label": "washauri walio hai",
-					"note": "kwenye Career Corner"
-				},
-				"unilagMembers": {
-					"label": "wanachama UNILAG",
-					"note": "kutoka 300"
-				},
-				"partners": {
-					"label": "washirika mwaka huu",
-					"note": "waliothibitishwa"
+				"makoko": {
+					"label": "wasichana kwenye uhamasishaji wa Makoko",
+					"note": "pedi 300 zilitolewa"
 				}
 			},
 			"pendingNote": "Hizi ni takwimu zilizothibitishwa hadi sasa. Hesabu kamili ya vyuo vyote inakuja, na ukurasa huu utasasishwa itakapofika."

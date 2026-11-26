@@ -814,17 +814,17 @@
 			"coverAlt": "4HerFrika participants in pink shirts, the cover of the Year 2 report",
 			"label": "Year 2",
 			"title": "Two steps forward",
-			"summary": "Registered with the CAC, three academies, menstrual health outreach and mentorship opened to every member. The full count across campuses is on its way.",
+			"summary": "Over 4,000 girls reached and mentored across 25+ campuses, a CAC registration, three academies, and mentorship opened to every member.",
 			"comingSoon": "Full count coming",
 			"figuresPending": "Verified figures so far. The full count is on its way.",
 			"preview": "Read online",
 			"figures": {
-				"girlsReached": "Girls reached",
+				"girlsReached": "Girls reached and mentored",
+				"campuses": "Campuses",
 				"mentees": "Mentees",
+				"socialReach": "Social media reach",
 				"sessions": "Sessions completed",
-				"mentors": "Mentors",
-				"unilagMembers": "UNILAG members",
-				"partners": "Partners"
+				"makoko": "Girls at Makoko"
 			}
 		}
 	},
@@ -874,7 +874,7 @@
 			"second": "built.",
 			"items": {
 				"registered": {
-					"when": "October",
+					"when": "October 2025",
 					"title": "Registered with the CAC",
 					"body": "We became a registered organisation, so partners can sign real agreements with us instead of handshake promises."
 				},
@@ -906,7 +906,7 @@
 				"makoko": {
 					"when": "Makoko",
 					"title": "Menstrual Health Awareness Movement",
-					"body": "With Sanitary Aid NG, Civic Hive, Skygirls and The GirlsComm, we handed out pads and took apart period myths in front of girls who had never heard them challenged."
+					"body": "With Sanitary Aid NG, Civic Hive, Skygirls and The GirlsComm, more than 300 girls came, 300 pads were given out, and period myths were taken apart in front of girls who had never heard them challenged."
 				},
 				"giveToGain": {
 					"when": "March",
@@ -944,7 +944,7 @@
 					"body": "Rhythms of Connection put members in rooms with local creatives. In April, Women Techmakers Ogbomoso opened free tech learning. In May, a World Menstrual Hygiene Day campaign broke hostel-room myths, and a weekly quote series kept everyone talking all year."
 				}
 			},
-			"closing": "Every campus runs its own outreach, with its own partners, on its own calendar. This year, for the first time, one thing was open to every member wherever she studies."
+			"closing": "We stayed at 25+ campuses in five countries this year and put the work into growing each one. Every campus runs its own outreach, with its own partners, on its own calendar, and for the first time one thing was open to every member wherever she studies."
 		},
 		"mentorship": {
 			"pill": "Mentorship, opened",
@@ -967,28 +967,28 @@
 			"second": "not just told.",
 			"figures": {
 				"girlsReached": {
-					"label": "girls reached",
-					"note": "Pad a Girl and Give to Gain"
+					"label": "girls reached and mentored",
+					"note": "across every campus"
+				},
+				"campuses": {
+					"label": "campuses",
+					"note": "in five countries"
 				},
 				"mentees": {
 					"label": "mentees booked a mentor",
 					"note": "Career Corner, since 31 Aug"
 				},
+				"socialReach": {
+					"label": "social media reach",
+					"note": "people reached online"
+				},
 				"sessions": {
 					"label": "mentoring sessions completed",
 					"note": "Career Corner, since 31 Aug"
 				},
-				"mentors": {
-					"label": "mentors live",
-					"note": "on Career Corner"
-				},
-				"unilagMembers": {
-					"label": "UNILAG members",
-					"note": "up from 300"
-				},
-				"partners": {
-					"label": "partners this year",
-					"note": "confirmed"
+				"makoko": {
+					"label": "girls at the Makoko outreach",
+					"note": "300 pads given out"
 				}
 			},
 			"pendingNote": "These are the figures verified so far. The full count across every campus is on its way, and this page will be updated when it lands."

@@ -814,17 +814,17 @@
 			"coverAlt": "Participantes de 4HerFrika en t-shirts roses, couverture du rapport Année 2",
 			"label": "Année 2",
 			"title": "Deux pas en avant",
-			"summary": "Enregistrement à la CAC, trois académies, actions sur la santé menstruelle et mentorat ouvert à chaque membre. Le décompte complet des campus arrive.",
+			"summary": "Plus de 4 000 filles touchées et accompagnées sur plus de 25 campus, un enregistrement à la CAC, trois académies et un mentorat ouvert à chaque membre.",
 			"comingSoon": "Décompte complet à venir",
 			"figuresPending": "Chiffres vérifiés à ce jour. Le décompte complet arrive.",
 			"preview": "Lire en ligne",
 			"figures": {
-				"girlsReached": "Filles touchées",
+				"girlsReached": "Filles touchées et accompagnées",
+				"campuses": "Campus",
 				"mentees": "Mentorées",
+				"socialReach": "Portée sur les réseaux",
 				"sessions": "Séances réalisées",
-				"mentors": "Mentores",
-				"unilagMembers": "Membres à UNILAG",
-				"partners": "Partenaires"
+				"makoko": "Filles à Makoko"
 			}
 		}
 	},
@@ -874,7 +874,7 @@
 			"second": "bâti.",
 			"items": {
 				"registered": {
-					"when": "Octobre",
+					"when": "Octobre 2025",
 					"title": "Enregistrées à la CAC",
 					"body": "Nous sommes devenues une organisation enregistrée : nos partenaires peuvent signer de vrais accords avec nous, et non plus de simples promesses."
 				},
@@ -906,7 +906,7 @@
 				"makoko": {
 					"when": "Makoko",
 					"title": "Mouvement de sensibilisation à la santé menstruelle",
-					"body": "Avec Sanitary Aid NG, Civic Hive, Skygirls et The GirlsComm, nous avons distribué des serviettes et démonté les mythes sur les règles devant des filles qui ne les avaient jamais vus remis en question."
+					"body": "Avec Sanitary Aid NG, Civic Hive, Skygirls et The GirlsComm, plus de 300 filles sont venues, 300 serviettes ont été distribuées et les mythes sur les règles ont été démontés devant des filles qui ne les avaient jamais vus remis en question."
 				},
 				"giveToGain": {
 					"when": "Mars",
@@ -944,7 +944,7 @@
 					"body": "Rhythms of Connection a réuni les membres avec des créatifs locaux. En avril, Women Techmakers Ogbomoso a offert une formation tech gratuite. En mai, une campagne pour la Journée de l'hygiène menstruelle a brisé les mythes des résidences, et une citation hebdomadaire a fait vivre la communauté toute l'année."
 				}
 			},
-			"closing": "Chaque campus mène ses propres actions, avec ses partenaires, selon son calendrier. Cette année, pour la première fois, une chose était ouverte à chaque membre, où qu'elle étudie."
+			"closing": "Nous sommes restées à plus de 25 campus dans cinq pays cette année et avons consacré nos efforts à faire grandir chacun d’eux. Chaque campus mène ses propres actions, avec ses partenaires, selon son calendrier, et pour la première fois une chose était ouverte à chaque membre, où qu’elle étudie."
 		},
 		"mentorship": {
 			"pill": "Mentorat, ouvert",
@@ -967,28 +967,28 @@
 			"second": "pas seulement racontés.",
 			"figures": {
 				"girlsReached": {
-					"label": "filles touchées",
-					"note": "Pad a Girl et Give to Gain"
+					"label": "filles touchées et accompagnées",
+					"note": "sur tous les campus"
+				},
+				"campuses": {
+					"label": "campus",
+					"note": "dans cinq pays"
 				},
 				"mentees": {
 					"label": "mentorées ayant réservé",
 					"note": "Career Corner, depuis le 31 août"
 				},
+				"socialReach": {
+					"label": "portée sur les réseaux sociaux",
+					"note": "personnes touchées en ligne"
+				},
 				"sessions": {
 					"label": "séances de mentorat réalisées",
 					"note": "Career Corner, depuis le 31 août"
 				},
-				"mentors": {
-					"label": "mentores en ligne",
-					"note": "sur Career Corner"
-				},
-				"unilagMembers": {
-					"label": "membres à UNILAG",
-					"note": "contre 300"
-				},
-				"partners": {
-					"label": "partenaires cette année",
-					"note": "confirmés"
+				"makoko": {
+					"label": "filles à l’action de Makoko",
+					"note": "300 serviettes distribuées"
 				}
 			},
 			"pendingNote": "Voici les chiffres vérifiés à ce jour. Le décompte complet de tous les campus arrive, et cette page sera mise à jour dès sa publication."

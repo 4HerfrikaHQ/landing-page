@@ -10,13 +10,13 @@ export type ImpactYear2Report = {
 
 export const year2Report: ImpactYear2Report = {
 	pdf: null,
-	fullCountPublished: false,
+	fullCountPublished: true,
 	figures: [
-		{ key: "girlsReached", value: "200+" },
+		{ key: "girlsReached", value: "4,000+" },
+		{ key: "campuses", value: "25+" },
 		{ key: "mentees", value: "40" },
+		{ key: "socialReach", value: "45,000" },
 		{ key: "sessions", value: "35" },
-		{ key: "mentors", value: "17" },
-		{ key: "unilagMembers", value: "347" },
-		{ key: "partners", value: "9" },
+		{ key: "makoko", value: "300+" },
 	],
 };

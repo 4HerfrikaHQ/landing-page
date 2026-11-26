@@ -33,11 +33,26 @@ async function PdfAction({ href }: { href: string | null }) {
 	);
 }
 
+async function ReportNote({ report }: { report: ImpactReport }) {
+	const t = await getTranslations("impactIndex");
+	if (report.pending) {
+		return (
+			<p className="mt-3 text-xs text-muted-foreground">
+				{t("year2.figuresPending")}
+			</p>
+		);
+	}
+	if (report.pdfHref === null) return null;
+
+	return (
+		<p className="mt-3 text-xs text-muted-foreground">{t("largeFileNote")}</p>
+	);
+}
+
 export async function ReportCard({ report }: { report: ImpactReport }) {
 	const t = await getTranslations("impactIndex");
 	const key = report.key;
 	const readLabel = report.pending ? t("year2.preview") : t("readOnline");
-	const note = report.pending ? t("year2.figuresPending") : t("largeFileNote");
 
 	return (
 		<FadeIn>
@@ -81,7 +96,7 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 						</Button>
 						<PdfAction href={report.pdfHref} />
 					</div>
-					<p className="mt-3 text-xs text-muted-foreground">{note}</p>
+					<ReportNote report={report} />
 				</div>
 			</article>
 		</FadeIn>
