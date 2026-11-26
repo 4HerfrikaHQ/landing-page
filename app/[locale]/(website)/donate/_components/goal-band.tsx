@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
@@ -33,9 +34,9 @@ export async function GoalBand() {
 				</div>
 				<a
 					href="#give"
-					className="mt-8 inline-flex h-12 w-fit items-center rounded-full bg-white px-6 font-medium text-secondary-500 outline-offset-2 focus-visible:outline-2 focus-visible:outline-white"
+					className="press mt-8 inline-flex h-12 w-fit items-center rounded-full bg-white px-6 font-medium text-secondary-500 outline-offset-2 focus-visible:outline-2 focus-visible:outline-white"
 				>
-					{t("cta")}
+					<RollLabel>{t("cta")}</RollLabel>
 				</a>
 			</div>
 			<div className="relative aspect-square w-full lg:aspect-auto lg:min-h-full lg:w-1/2">

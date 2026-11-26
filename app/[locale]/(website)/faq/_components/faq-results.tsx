@@ -1,6 +1,7 @@
 "use client";
 
 import { FadeIn } from "@/components/motion/fade-in";
+import { RollLabel } from "@/components/ui/roll-label";
 import { SearchX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { FaqGroup } from "../_helpers/faq-groups";
@@ -39,9 +40,9 @@ function EmptyResults({ query, total }: { query: string; total: number }) {
 			<button
 				type="button"
 				onClick={() => setQuery("")}
-				className="inline-flex h-11 items-center rounded-pill border-2 border-primary-500 px-5 font-medium text-primary-500 outline-none transition-colors hover:bg-primary-500 hover:text-white focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+				className="press inline-flex h-11 items-center rounded-pill border-2 border-primary-500 px-5 font-medium text-primary-500 outline-none transition-colors hover:bg-primary-500 hover:text-white focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
 			>
-				{t("clearSearch")}
+				<RollLabel>{t("clearSearch")}</RollLabel>
 			</button>
 		</div>
 	);
@@ -85,7 +86,7 @@ function TopicNav({ groups }: { groups: FaqGroup[] }) {
 					<li key={group.id} className="shrink-0">
 						<a
 							href={`#${group.id}`}
-							className="inline-flex h-11 items-center gap-2 rounded-pill border border-border px-4 text-[15px] font-medium outline-none transition-colors hover:border-primary-500 hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500"
+							className="press inline-flex h-11 items-center gap-2 rounded-pill border border-border px-4 text-[15px] font-medium outline-none transition-colors hover:border-primary-500 hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500"
 						>
 							{group.title}
 							<span className="text-muted-foreground">

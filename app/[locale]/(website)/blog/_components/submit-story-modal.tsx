@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { useActionState, useRef, useState } from "react";
 import { Upload, ArrowRight, X } from "lucide-react";
 import {
@@ -257,9 +258,9 @@ export function SubmitStoryModal({ categories }: Props) {
 					<button
 						type="submit"
 						disabled={isPending || !!imageSizeError}
-						className="w-full h-14 rounded-full bg-primary-500 text-white text-base font-medium hover:brightness-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+						className="press w-full h-14 rounded-full bg-primary-500 text-white text-base font-medium hover:brightness-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 					>
-						{isPending ? "Submitting…" : "Submit Story"}
+						<RollLabel>{isPending ? "Submitting…" : "Submit Story"}</RollLabel>
 					</button>
 				</form>
 			</DialogContent>

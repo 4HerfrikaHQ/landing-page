@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -27,9 +28,9 @@ export async function VolunteerBand() {
 				<div className="mt-8 flex flex-col gap-3 sm:flex-row">
 					<Link
 						href="/careercorner/apply"
-						className="inline-flex h-12 items-center justify-center rounded-pill bg-primary-bright px-6 font-semibold text-secondary outline-none transition-colors hover:bg-white hover:no-underline focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+						className="press inline-flex h-12 items-center justify-center rounded-pill bg-primary-bright px-6 font-semibold text-secondary outline-none transition-colors hover:bg-white hover:no-underline focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
 					>
-						{tc("volunteerAsMentor")}
+						<RollLabel>{tc("volunteerAsMentor")}</RollLabel>
 					</Link>
 				</div>
 			</div>

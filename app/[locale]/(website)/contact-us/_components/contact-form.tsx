@@ -299,7 +299,7 @@ export function ContactForm() {
 			<button
 				type="submit"
 				disabled={submitting}
-				className="mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary-500 px-6 text-base font-medium text-white outline-none transition hover:brightness-90 focus-visible:ring-4 focus-visible:ring-primary-500/30 disabled:cursor-not-allowed disabled:opacity-60 lg:w-auto lg:px-10"
+				className="press mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary-500 px-6 text-base font-medium text-white outline-none transition hover:brightness-90 focus-visible:ring-4 focus-visible:ring-primary-500/30 disabled:cursor-not-allowed disabled:opacity-60 lg:w-auto lg:px-10"
 			>
 				<PendingLabel pending={submitting} pendingLabel={t("sending")}>
 					{t("send")}

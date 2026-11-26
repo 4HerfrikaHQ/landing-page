@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { SearchX } from "lucide-react";
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
@@ -19,9 +20,9 @@ export default function CertificateNotFound() {
 				<p className="text-base text-muted-foreground">{t("notFoundBody")}</p>
 				<Link
 					href={localizedPath(locale, "/academy") as Route}
-					className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-primary-700 px-6 py-3 text-base font-semibold text-primary-700 outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-secondary-500"
+					className="press inline-flex min-h-12 items-center justify-center rounded-full border-2 border-primary-700 px-6 py-3 text-base font-semibold text-primary-700 outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-secondary-500"
 				>
-					{t("about")}
+					<RollLabel>{t("about")}</RollLabel>
 				</Link>
 			</div>
 		</main>

@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { isOnlineGivingConfigured } from "@/src/lib/paystack/client";
 import type { Metadata } from "next";
@@ -59,9 +60,9 @@ export default async function DonationPage({
 					</p>
 					<a
 						href="#give"
-						className="mt-1 inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-white"
+						className="press mt-1 inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-white"
 					>
-						{t("cta")}
+						<RollLabel>{t("cta")}</RollLabel>
 					</a>
 				</div>
 			</section>

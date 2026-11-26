@@ -41,7 +41,7 @@ function CopyRow({
 				<button
 					type="button"
 					onClick={() => onCopy(value, field)}
-					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-3 text-sm min-[380px]:px-4 font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
+					className="press ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-3 text-sm min-[380px]:px-4 font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
 					<span className="grid">
 						<span

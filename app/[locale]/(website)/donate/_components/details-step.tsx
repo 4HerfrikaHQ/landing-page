@@ -180,7 +180,7 @@ export function DetailsStep({
 			<button
 				type="submit"
 				disabled={paying}
-				className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500 disabled:opacity-60"
+				className="press inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500 disabled:opacity-60"
 			>
 				<Lock className="size-5" aria-hidden="true" />
 				{payLabel}

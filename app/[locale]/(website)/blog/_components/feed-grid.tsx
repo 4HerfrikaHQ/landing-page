@@ -1,6 +1,7 @@
 "use client";
 
 import { RevealGroup } from "@/components/motion/reveal-group";
+import { RollLabel } from "@/components/ui/roll-label";
 import { useState } from "react";
 import { type CardData, FeedCard } from "./feed-card";
 
@@ -33,9 +34,9 @@ function LoadMore({
 			<button
 				type="button"
 				onClick={onMore}
-				className="inline-flex h-12 cursor-pointer items-center rounded-pill border-2 border-primary-500 px-8 font-medium text-primary-500 outline-none hover:bg-primary-500 hover:text-white focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+				className="press inline-flex h-12 cursor-pointer items-center rounded-pill border-2 border-primary-500 px-8 font-medium text-primary-500 outline-none hover:bg-primary-500 hover:text-white focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
 			>
-				{loadMoreLabel}
+				<RollLabel>{loadMoreLabel}</RollLabel>
 			</button>
 			<output className="text-sm text-muted-foreground">
 				{showingTemplate

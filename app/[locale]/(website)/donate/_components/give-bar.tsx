@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { useTranslations } from "next-intl";
 import { useElementInView } from "../_hooks/use-element-in-view";
 
@@ -23,9 +24,9 @@ export function GiveBar() {
 				<a
 					href="#give"
 					tabIndex={bankDetailsInView ? -1 : 0}
-					className="inline-flex h-12 shrink-0 items-center rounded-full bg-primary-500 px-6 font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
+					className="press inline-flex h-12 shrink-0 items-center rounded-full bg-primary-500 px-6 font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
-					{t("cta")}
+					<RollLabel>{t("cta")}</RollLabel>
 				</a>
 			</div>
 		</div>

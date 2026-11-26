@@ -10,6 +10,8 @@ const COUNT_DURATION = 1.2;
 
 const COUNT_DELAY = REVEAL_DURATION * 0.6;
 
+const COUNT_INSET = 0.2;
+
 type CountUpProps = {
 	value: string;
 	className?: string;
@@ -18,7 +20,9 @@ type CountUpProps = {
 export function CountUp({ value, className }: CountUpProps) {
 	const textRef = useRef<HTMLSpanElement>(null);
 	const reduced = useReducedMotion();
-	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>();
+	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>({
+		bottomInset: COUNT_INSET,
+	});
 	const setRef = useCallback(
 		(el: HTMLSpanElement | null) => {
 			textRef.current = el;

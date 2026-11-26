@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
@@ -33,9 +34,9 @@ export async function ContactHero() {
 				</p>
 				<a
 					href="#topics"
-					className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-6 font-medium text-white outline-none transition hover:no-underline hover:brightness-90 focus-visible:ring-4 focus-visible:ring-white/60"
+					className="press mt-2 inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-6 font-medium text-white outline-none transition hover:no-underline hover:brightness-90 focus-visible:ring-4 focus-visible:ring-white/60"
 				>
-					{t("chooseTopic")}
+					<RollLabel>{t("chooseTopic")}</RollLabel>
 				</a>
 			</div>
 		</section>

@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -58,15 +59,15 @@ export function ContactSuccess({ sent }: { sent: SentMessage }) {
 				<div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
 					<Link
 						href="/"
-						className="inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-6 font-medium text-white outline-none transition hover:no-underline hover:brightness-90 focus-visible:ring-4 focus-visible:ring-primary-500/30"
+						className="press inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-6 font-medium text-white outline-none transition hover:no-underline hover:brightness-90 focus-visible:ring-4 focus-visible:ring-primary-500/30"
 					>
-						{t("backHome")}
+						<RollLabel>{t("backHome")}</RollLabel>
 					</Link>
 					<Link
 						href="/faq"
-						className="inline-flex h-12 items-center justify-center rounded-full border-2 border-primary-500 px-6 font-medium text-primary-500 outline-none transition hover:no-underline hover:bg-primary-500 hover:text-white focus-visible:ring-4 focus-visible:ring-primary-500/30"
+						className="press inline-flex h-12 items-center justify-center rounded-full border-2 border-primary-500 px-6 font-medium text-primary-500 outline-none transition hover:no-underline hover:bg-primary-500 hover:text-white focus-visible:ring-4 focus-visible:ring-primary-500/30"
 					>
-						{t("browseFaq")}
+						<RollLabel>{t("browseFaq")}</RollLabel>
 					</Link>
 				</div>
 			</output>
