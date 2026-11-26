@@ -1,190 +1,181 @@
-import { SubscribeForm } from "@/app/[locale]/(website)/_components/subscribe";
-import { StaggerContainer, StaggerItem } from "@/components/motion";
+import { Link } from "@/i18n/navigation";
 import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
-import { Instagram, Linkedin, Twitter } from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 import type { Route } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import Link from "next/link";
+import NextLink from "next/link";
+import type { ReactNode } from "react";
 import Logo from "../4herfrika-logo";
+import { JOIN_US_URL } from "../navigation";
+import { SubscribeForm } from "./subscribe";
+import { XLogo } from "./x-logo";
+
+const FOOTER_LINK_STYLES =
+	"inline-flex min-h-11 items-center rounded-md text-[15px] text-white/85 underline-offset-4 outline-none hover:text-white hover:underline focus-visible:ring-2 focus-visible:ring-white";
+
+const SOCIAL_LINKS = [
+	{
+		name: "LinkedIn",
+		href: "https://www.linkedin.com/company/4herfrika",
+		Icon: Linkedin,
+	},
+	{
+		name: "Instagram",
+		href: "https://www.instagram.com/4herfrika",
+		Icon: Instagram,
+	},
+	{ name: "X", href: "https://x.com/4herfrika", Icon: XLogo },
+];
+
+function FooterColumn({
+	title,
+	children,
+}: { title: string; children: ReactNode }) {
+	return (
+		<div>
+			<h2 className="text-[15px] font-bold">{title}</h2>
+			<ul className="mt-4">{children}</ul>
+		</div>
+	);
+}
 
 export const Footer = async () => {
-	const [t, locale] = await Promise.all([
+	const [t, tn, tc, locale] = await Promise.all([
 		getTranslations("footer"),
+		getTranslations("nav"),
+		getTranslations("common"),
 		getLocale(),
 	]);
+
+	const quickLinks = [
+		{ label: tn("academy"), href: "/academy" },
+		{ label: tc("becomeAmbassador"), href: JOIN_US_URL },
+		{ label: tc("volunteerAsMentor"), href: "/careercorner/apply" },
+		{ label: t("faqs"), href: "/faq" },
+	] as const;
+
+	const impactLinks = [
+		{ label: t("impact"), href: "/impact" },
+		{ label: tn("projects"), href: "/projects" },
+		{ label: tc("donate"), href: "/donate" },
+	] as const;
+
 	return (
-		<footer className="bg-secondary-500" data-site-footer>
-			<div className="mx-auto container px-4 pb-6 lg:pt-16 sm:px-6 lg:px-8">
-				<StaggerContainer className="flex flex-col-reverse gap-8 pt-16 md:grid md:grid-cols-3 lg:grid-cols-5">
-					<StaggerItem className="text-center sm:text-left">
-						<p className="font-bold text-primary-500 text-xl">
-							{t("quickLinks")}
-						</p>
-						<ul className="mt-8 space-y-4 text-base">
-							<li>
-								<Link
-									href={"/blog" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									Projects
-								</Link>
+		<footer
+			data-site-footer
+			className="bg-secondary px-6 py-14 text-secondary-foreground lg:px-20 lg:py-20"
+		>
+			<div className="mx-auto max-w-6xl">
+				<div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1.6fr]">
+					<FooterColumn title={t("quickLinks")}>
+						{quickLinks.map((link) => (
+							<li key={link.label}>
+								<FooterLink href={link.href} label={link.label} />
 							</li>
-							<li>
-								<Link
-									href={"/careercorner" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									Become an Ambassador
-								</Link>
-							</li>
-							<li>
-								<Link
-									href={"/careercorner" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									Volunteer as a Mentor
-								</Link>
-							</li>
-							<li>
-								<Link
-									href={mentorLoginUrl({ locale }) as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									{t("mentorLogin")}
-								</Link>
-							</li>
-							<li>
-								<Link
-									href={"/donate" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									Donate
-								</Link>
-							</li>
-							<li>
-								<Link
-									href={"/faq" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									FAQs
-								</Link>
-							</li>
-						</ul>
-					</StaggerItem>
+						))}
+						<li>
+							<NextLink
+								href={mentorLoginUrl({ locale }) as Route}
+								className={FOOTER_LINK_STYLES}
+							>
+								{t("mentorLogin")}
+							</NextLink>
+						</li>
+					</FooterColumn>
 
-					<StaggerItem className="text-center sm:text-left">
-						<p className="font-bold text-primary-500 text-xl">{t("legal")}</p>
-						<ul className="mt-8 space-y-4 text-base">
-							<li>
-								<Link
-									href={"/terms" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									{t("terms")}
+					<FooterColumn title={t("impact")}>
+						{impactLinks.map((link) => (
+							<li key={link.href}>
+								<Link href={link.href} className={FOOTER_LINK_STYLES}>
+									{link.label}
 								</Link>
 							</li>
-							<li>
-								<Link
-									href={"/privacy" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									{t("privacy")}
-								</Link>
-							</li>
-						</ul>
-					</StaggerItem>
+						))}
+					</FooterColumn>
 
-					<StaggerItem className="text-center sm:text-left">
-						<p className="font-bold text-primary-500 text-xl">
-							{t("contactUs")}
-						</p>
-						<ul className="mt-8 space-y-4 text-base">
-							<li>
-								<a
-									href="tel:+2349082009908"
-									className="text-white transition hover:text-white/75"
-								>
-									+234(0)9082009908
-								</a>
-							</li>
-							<li>
-								<a
-									href="mailto:4herfrika@gmail.com"
-									className="text-white transition hover:text-white/75"
-								>
-									4herfrika@gmail.com
-								</a>
-							</li>
-							<li>
-								<Link
-									href={"/contact-us" as Route}
-									className="text-white transition hover:text-white/75"
-								>
-									{t("support")}
-								</Link>
-							</li>
-						</ul>
-					</StaggerItem>
+					<FooterColumn title={t("contact")}>
+						<li>
+							<a href="tel:+2349082009908" className={FOOTER_LINK_STYLES}>
+								+234 (0)908 200 9908
+							</a>
+						</li>
+						<li>
+							<a
+								href="mailto:hello@4herfrika.org"
+								className={FOOTER_LINK_STYLES}
+							>
+								hello@4herfrika.org
+							</a>
+						</li>
+						<li className="flex flex-wrap items-center gap-x-3">
+							<Link href="/terms" className={FOOTER_LINK_STYLES}>
+								{t("terms")}
+							</Link>
+							<span aria-hidden="true" className="text-white/85">
+								·
+							</span>
+							<Link href="/privacy" className={FOOTER_LINK_STYLES}>
+								{t("privacy")}
+							</Link>
+						</li>
+					</FooterColumn>
 
-					<StaggerItem className="text-center sm:text-left md:col-span-4 lg:col-span-2">
+					<div id="newsletter" className="min-w-0 scroll-mt-32">
 						<SubscribeForm />
-					</StaggerItem>
-				</StaggerContainer>
+					</div>
+				</div>
 
-				<hr className="w-full bg-white opacity-25 mt-9 mb-6" />
+				<div className="mt-12 h-px bg-white/10" />
 
-				<div className="pt-3 flex flex-col justify-center items-center gap-4 sm:flex-row sm:justify-between">
-					<p className="flex flex-row items-center gap-4 text-center text-sm text-white/60 sm:text-left">
-						<Link
-							href={"/" as Route}
-							className="bg-background hover:bg-background/90 rounded-md px-2 py-1 w-32"
-						>
-							<Logo className="w-full md:h-fit" />
-						</Link>
-					</p>
-
-					<p className="text-sm text-white text-center">
+				<div className="mt-7 flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
+					<Link
+						href="/"
+						aria-label={tn("homeLabel")}
+						className="rounded-lg p-1 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+					>
+						<Logo alt="" tone="white" className="h-9 w-auto" />
+					</Link>
+					<p className="text-center text-[15px] text-white/85">
 						&copy; {new Date().getFullYear()} 4HerFrika.{" "}
 						{t("allRightsReserved")}
 					</p>
-
-					<StaggerContainer className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
-						<StaggerItem>
-							<a
-								href="https://www.linkedin.com/company/4herfrika"
-								rel="noreferrer"
-								target="_blank"
-								className="text-white transition hover:text-muted/75 block p-4 border-[1.5px] border-muted/30 rounded-full"
-							>
-								<span className="sr-only">LinkedIn</span>
-								<Linkedin className="h-3 w-3" />
-							</a>
-						</StaggerItem>
-						<StaggerItem>
-							<a
-								href="https://www.instagram.com/4herfrika"
-								rel="noreferrer"
-								target="_blank"
-								className="text-white transition hover:text-muted/75 block p-4 border-[1.5px] border-muted/30 rounded-full"
-							>
-								<span className="sr-only">Instagram</span>
-								<Instagram className="h-3 w-3" />
-							</a>
-						</StaggerItem>
-						<StaggerItem>
-							<a
-								href="https://twitter.com/4herfrika"
-								rel="noreferrer"
-								target="_blank"
-								className="text-white transition hover:text-muted/75 block p-4 border-[1.5px] border-muted/30 rounded-full"
-							>
-								<span className="sr-only">X</span>
-								<Twitter className="h-3 w-3" />
-							</a>
-						</StaggerItem>
-					</StaggerContainer>
+					<ul aria-label={t("socialLabel")} className="flex gap-3">
+						{SOCIAL_LINKS.map(({ name, href, Icon }) => (
+							<li key={name}>
+								<a
+									href={href}
+									target="_blank"
+									rel="noreferrer"
+									aria-label={name}
+									className="inline-grid size-11 place-items-center rounded-pill border border-white/15 press outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white"
+								>
+									<Icon className="size-4" />
+								</a>
+							</li>
+						))}
+					</ul>
 				</div>
 			</div>
 		</footer>
 	);
 };
+
+function FooterLink({ href, label }: { href: string; label: string }) {
+	if (href.startsWith("http")) {
+		return (
+			<a
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				className={FOOTER_LINK_STYLES}
+			>
+				{label}
+			</a>
+		);
+	}
+	return (
+		<Link href={href as Route} className={FOOTER_LINK_STYLES}>
+			{label}
+		</Link>
+	);
+}

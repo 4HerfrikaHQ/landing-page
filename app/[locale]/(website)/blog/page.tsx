@@ -43,10 +43,11 @@ export default async function BlogPage({
 	return (
 		<>
 			<section
-				className="-mt-16 lg:-mt-[90px] pt-16 lg:pt-[90px] flex flex-col items-center justify-center text-center px-4 min-h-[580px]"
+				data-hero="full-bleed"
+				className="pt-16 lg:pt-[90px] flex flex-col items-center justify-center text-center px-4 min-h-[580px]"
 				style={{
 					background:
-						"linear-gradient(180deg, rgba(236,0,140,0.18) 0%, rgba(236,0,140,0.08) 45%, rgba(255,255,255,1) 85%)",
+						"linear-gradient(180deg, rgba(200,0,122,0.18) 0%, rgba(200,0,122,0.08) 45%, rgba(255,255,255,1) 85%)",
 				}}
 			>
 				<div className="max-w-3xl mx-auto flex flex-col items-center gap-6 mt-16">

@@ -1,26 +1,11 @@
 export const NAV_LINKS = [
-	{ name: "About Us", href: "/about" },
-	{
-		name: "Impact Hub",
-		href: "/projects",
-		dropdownItems: [
-			{ name: "Projects", href: "/projects" },
-			{ name: "Blog", href: "/blog" },
-		],
-	},
-	{ name: "Academy", href: "/academy" },
-	{ name: "Career Corner", href: "/careercorner" },
-	{ name: "Contact Us", href: "/contact-us" },
-];
+	{ labelKey: "about", href: "/about" },
+	{ labelKey: "academy", href: "/academy" },
+	{ labelKey: "impact", href: "/impact" },
+	{ labelKey: "careerCorner", href: "/careercorner" },
+	{ labelKey: "blog", href: "/blog" },
+	{ labelKey: "contact", href: "/contact-us" },
+] as const;
 
 export const JOIN_US_URL =
 	"https://docs.google.com/forms/d/e/1FAIpQLSdAc4tbTbcdh1CIjO0C8eoSL7bNWzBlT1aykd8Vcm67PDnprw/viewform";
-
-export const ACTION_BUTTONS = [
-	{ name: "Donate", href: "/donate", isPrimary: false, isExternal: false },
-	{ name: "Join Us", href: JOIN_US_URL, isPrimary: true, isExternal: true },
-];
-
-export type Navlink = (typeof NAV_LINKS)[number] & {
-	dropdownItems?: { name: string; href: string }[];
-};

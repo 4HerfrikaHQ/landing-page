@@ -3,13 +3,7 @@
 import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/src/lib/analytics";
-import {
-	ArrowLeft,
-	ArrowRight,
-	Instagram,
-	Linkedin,
-	Twitter,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -21,14 +15,10 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import { LocaleSwitcher } from "../../_components/locale-switcher";
-import { SubscribeFormClient } from "../../_components/subscribe-client";
-import { JOIN_US_URL } from "../../navigation";
 import {
 	type Academy,
 	academies,
 	academyTranslationKeys,
-	navLinks,
 	testimonials,
 } from "../_schema";
 import {
@@ -56,57 +46,6 @@ function usePrefersReducedMotion() {
 		subscribeToReducedMotion,
 		() => window.matchMedia(REDUCED_MOTION_QUERY).matches,
 		() => false,
-	);
-}
-
-function AcademyNav() {
-	return (
-		<>
-			<nav className="fixed left-1/2 top-6 z-50 hidden h-16 w-[calc(100%-206px)] max-w-314.5 -translate-x-1/2 items-center rounded-full bg-white px-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)] xl:flex">
-				<Link href={"/" as Route} className="shrink-0">
-					<Image
-						src="/assets/academy/academy-logo.png"
-						alt="4Herfrika"
-						width={127}
-						height={36}
-						className="h-9 w-31.75 object-contain"
-					/>
-				</Link>
-				<div className="ml-auto flex h-full items-center gap-5 whitespace-nowrap text-[17px] text-foreground min-[1400px]:gap-7.5">
-					{navLinks.map(([label, href]) => (
-						<Link
-							key={label}
-							href={href}
-							className={
-								label === "Academy" ? "text-primary-500 underline" : ""
-							}
-						>
-							{label}
-						</Link>
-					))}
-				</div>
-				<div className="ml-6">
-					<LocaleSwitcher />
-				</div>
-				<div className="ml-8 flex items-center gap-2 whitespace-nowrap text-[19px] min-[1400px]:ml-26">
-					<Link
-						href="/donate"
-						className="rounded-full border border-primary-500 px-7.5 py-2.5 text-primary-500"
-					>
-						Donate
-					</Link>
-					<Button
-						href={JOIN_US_URL}
-						isExternal
-						variant="solid"
-						size="sm"
-						className="bg-primary-500 px-7.5 py-2.5 text-[19px] text-white"
-					>
-						Join Us
-					</Button>
-				</div>
-			</nav>
-		</>
 	);
 }
 
@@ -175,7 +114,10 @@ export function AcademyPage() {
 
 	return (
 		<main className="academy-exact-page overflow-x-clip bg-white text-foreground">
-			<section className="relative h-211.25 overflow-hidden text-white max-lg:h-180">
+			<section
+				data-hero="full-bleed"
+				className="relative h-211.25 overflow-hidden text-white max-lg:h-180"
+			>
 				<Image
 					src="/assets/academy/hero-source.jpg"
 					alt="Three women collaborating at 4Herfrika Academy"
@@ -185,7 +127,6 @@ export function AcademyPage() {
 					className="object-cover"
 				/>
 				<div className="absolute inset-0 bg-black/60" />
-				<AcademyNav />
 
 				<div className="absolute left-1/2 top-65 z-10 w-243.25 max-w-[calc(100%-48px)] -translate-x-1/2 text-center max-lg:top-44">
 					<h1 className="text-[64px] font-medium leading-[1.265] tracking-[-1px] max-sm:text-5xl">
@@ -218,7 +159,7 @@ export function AcademyPage() {
 				</div>
 			</section>
 
-			<section className="bg-[rgba(236,0,140,0.02)] px-6 py-20 lg:px-12 xl:px-12 xl:py-26.75 2xl:px-20">
+			<section className="bg-primary-500/2 px-6 py-20 lg:px-12 xl:px-12 xl:py-26.75 2xl:px-20">
 				<div className="mx-auto max-w-7xl">
 					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
 						{[
@@ -413,7 +354,6 @@ export function AcademyPage() {
 				}
 			/>
 
-			<AcademyFooter />
 			<WaitlistModal
 				open={waitlist.open}
 				onOpenChange={(open) =>
@@ -422,106 +362,5 @@ export function AcademyPage() {
 				academy={waitlist.academy}
 			/>
 		</main>
-	);
-}
-
-function AcademyFooter() {
-	const t = useTranslations("footer");
-
-	return (
-		<footer className="relative h-138.75 bg-secondary-500 text-white max-lg:h-auto max-lg:px-6 max-lg:py-16">
-			<div className="absolute left-1/2 top-23.5 w-272 -translate-x-1/2 max-lg:static max-lg:w-full max-lg:translate-x-0">
-				<div className="grid grid-cols-[166px_112px_176px_338px] justify-between gap-10 max-lg:grid-cols-2 max-sm:grid-cols-1">
-					<div>
-						<h2 className="text-[15px] font-bold">Quick Links</h2>
-						<ul className="mt-6 space-y-2.5 text-[15px] opacity-90">
-							<li>
-								<Link href="/projects">Projects</Link>
-							</li>
-							<li>
-								<Link href="/careercorner">Become an Ambassador</Link>
-							</li>
-							<li>
-								<Link href="/careercorner">Volunteer as a Mentor</Link>
-							</li>
-							<li>
-								<Link href="/donate">Donate</Link>
-							</li>
-							<li>
-								<Link href="/faq">FAQs</Link>
-							</li>
-						</ul>
-					</div>
-					<div>
-						<h2 className="text-[15px] font-bold">Legal</h2>
-						<ul className="mt-6 space-y-2.5 text-[15px] opacity-90">
-							<li>
-								<Link href="/terms">Terms</Link>
-							</li>
-							<li>
-								<Link href="/privacy">Privacy</Link>
-							</li>
-						</ul>
-					</div>
-					<div>
-						<h2 className="text-[15px] font-bold">Contact Us</h2>
-						<ul className="mt-6 space-y-2.5 text-[15px]">
-							<li>
-								<a href="tel:+2349082009908">+234(0)9082009908</a>
-							</li>
-							<li>
-								<a href="mailto:4herfrika@gmail.com">4herfrika@gmail.com</a>
-							</li>
-							<li>
-								<Link href="/contact-us">Support</Link>
-							</li>
-						</ul>
-					</div>
-					<SubscribeFormClient
-						label={t("subscribe")}
-						placeholder={t("emailPlaceholder")}
-						description={t("subscribeDescription")}
-					/>
-				</div>
-				<div className="mt-12.75 h-px bg-white/10" />
-				<div className="mt-7 flex items-center justify-between max-sm:flex-col max-sm:gap-6">
-					<div className="rounded bg-white px-2 py-1">
-						<Image
-							src="/assets/academy/footer-logo.png"
-							alt="4Herfrika"
-							width={145}
-							height={41}
-							className="h-10.25 w-36.25 object-contain"
-						/>
-					</div>
-					<p className="text-[13px] font-medium">
-						© 2024 4HerFrika. All Rights Reserved
-					</p>
-					<div className="flex gap-4">
-						<a
-							href="https://www.linkedin.com/company/4herfrika"
-							aria-label="LinkedIn"
-							className="grid size-8.75 place-items-center rounded-full border border-white/10"
-						>
-							<Linkedin className="size-3" />
-						</a>
-						<a
-							href="https://www.instagram.com/4herfrika"
-							aria-label="Instagram"
-							className="grid size-8.75 place-items-center rounded-full border border-white/10"
-						>
-							<Instagram className="size-3" />
-						</a>
-						<a
-							href="https://x.com/4herfrika"
-							aria-label="X"
-							className="grid size-8.75 place-items-center rounded-full border border-white/10"
-						>
-							<Twitter className="size-3" />
-						</a>
-					</div>
-				</div>
-			</div>
-		</footer>
 	);
 }
