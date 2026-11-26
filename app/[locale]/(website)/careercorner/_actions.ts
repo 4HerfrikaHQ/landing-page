@@ -28,7 +28,10 @@ export type MentorWithAvailability = DbMentor & {
 
 export type HeroMentor = {
 	image: string;
+	crop: DbMentor["image_crop"];
 	name: string;
+	displayName: string;
+	position: string | null;
 	slug: string;
 };
 
@@ -155,7 +158,13 @@ export async function getHeroMentors(): Promise<HeroMentor[]> {
 			isNotNull(schema.mentors.image),
 			ne(schema.mentors.image, ""),
 		),
-		columns: { image: true, slug: true },
+		columns: {
+			image: true,
+			image_crop: true,
+			nickname: true,
+			position: true,
+			slug: true,
+		},
 		with: { user: { columns: { name: true } } },
 		orderBy: sql`random()`,
 		limit: 6,
@@ -165,7 +174,10 @@ export async function getHeroMentors(): Promise<HeroMentor[]> {
 		.filter((row) => row.image !== null && row.image !== "")
 		.map((row) => ({
 			image: row.image as string,
+			crop: row.image_crop,
 			name: row.user.name,
+			displayName: row.nickname || row.user.name,
+			position: row.position,
 			slug: row.slug,
 		}));
 }
