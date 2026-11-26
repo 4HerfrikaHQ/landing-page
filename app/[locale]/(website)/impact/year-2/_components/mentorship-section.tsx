@@ -48,6 +48,9 @@ export async function MentorshipSection() {
 					<p className="mt-2 text-[15px] text-white/90">
 						{t("anniversary.partners")}
 					</p>
+					<p className="mt-6 rounded-xl bg-white/10 p-4 text-[15px] leading-relaxed text-white/90">
+						{t("anniversary.stride")}
+					</p>
 				</div>
 			</FadeIn>
 		</section>
