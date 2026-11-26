@@ -3,6 +3,7 @@
 import {
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useRef,
 	useState,
 	useSyncExternalStore,
@@ -49,8 +50,31 @@ function usePageActive() {
 	return tabVisible && !reducedMotion;
 }
 
+function useWordWidths(count: number) {
+	const sizers = useRef<Array<HTMLSpanElement | null>>([]);
+	const [widths, setWidths] = useState<number[]>([]);
+
+	useLayoutEffect(() => {
+		const measure = () =>
+			setWidths(
+				sizers.current
+					.slice(0, count)
+					.map((node) => node?.getBoundingClientRect().width ?? 0),
+			);
+		measure();
+		const observer = new ResizeObserver(measure);
+		for (const node of sizers.current) if (node) observer.observe(node);
+		document.fonts?.ready.then(measure);
+		return () => observer.disconnect();
+	}, [count]);
+
+	return { sizers, widths };
+}
+
 export function HeroMorphWord({ words }: { words: string[] }) {
 	const [index, setIndex] = useState(0);
+	const { sizers, widths } = useWordWidths(words.length);
+	const width = widths[index];
 	const { element, onScreen } = useOnScreen<HTMLSpanElement>();
 	const pageActive = usePageActive();
 	const morph = useTextMorph({ disabled: !onScreen });
@@ -80,20 +104,30 @@ export function HeroMorphWord({ words }: { words: string[] }) {
 	}, [index, words, update]);
 
 	return (
-		<span className="inline-grid justify-items-center">
-			{words.map((word) => (
-				<span
-					key={word}
-					aria-hidden="true"
-					className="invisible col-start-1 row-start-1 motion-reduce:hidden"
-				>
-					{word}
-				</span>
-			))}
+		<span
+			className="relative inline-block text-left align-bottom transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
+			style={width ? { width: `${width}px` } : undefined}
+		>
+			<span
+				aria-hidden="true"
+				className="pointer-events-none invisible absolute top-0 left-0 whitespace-nowrap"
+			>
+				{words.map((word, i) => (
+					<span
+						key={word}
+						ref={(node) => {
+							sizers.current[i] = node;
+						}}
+						className="absolute top-0 left-0"
+					>
+						{word}
+					</span>
+				))}
+			</span>
 			<span
 				ref={attach}
 				aria-hidden="true"
-				className="col-start-1 row-start-1 whitespace-nowrap"
+				className="whitespace-nowrap"
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: torph owns this node; the initial text is escaped
 				dangerouslySetInnerHTML={initial.current}
 			/>
