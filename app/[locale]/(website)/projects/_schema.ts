@@ -7,6 +7,7 @@ export const projects = {
 		title: "SkillUp with 4Herfrika",
 		cover:
 			"https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=80",
+		coverFit: "cover",
 		date: "2024-11-01",
 		content: `SkillUp with 4Herfrika is a series of physical bootcamps hosted in partnership with digital innovation hubs located around African universities. These bootcamps will offer hands-on training in various digital and tech-related fields, targeting women in local communities. By focusing on practical, in-demand skills, the initiative seeks to enhance employability, foster entrepreneurship, and bridge the digital divide.
 
@@ -58,6 +59,7 @@ Each bootcamp will be a 12-week immersive experience, featuring:
 		title: "GirlsTech Bootcamp (LAUTECH)",
 		cover:
 			"https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1600&q=80",
+		coverFit: "cover",
 		date: "2024-10-11",
 		content: `In many low-income communities, girls face significant barriers to accessing technology and acquiring digital skills. Recognizing this, 4Herfrika's LAUTECH campus community organized a one-day Girls Tech Bootcamp on the International Day of the Girl Child 2024. Held in Ogbomoso, Oyo State, the event empowered 50 secondary school girls with essential digital skills.
 
@@ -95,6 +97,7 @@ The EmpowerHER bootcamp was more than a training program—it was a platform to 
 	"stop-the-violence": {
 		title: "The 'StopTheViolence' Project",
 		cover: "/assets/projects/stop-the-violence.jpg",
+		coverFit: "contain",
 		date: "2024-09-12",
 		content: `Violence has become an all-too-familiar reality for students in Nigeria, with incidents ranging from bullying and sexual harassment to kidnapping and even shootings frequently reported in schools. In the context of this project, however, violence refers to actions often initiated by groups of angry students seeking recognition or an outlet for their frustrations.
 
@@ -139,44 +142,3 @@ As part of our outreach efforts, we visited Akoka High School in Lagos, where we
 } as const;
 
 export type ProjectSlug = keyof typeof projects;
-
-/* ================================================================== */
-/*  RELATED PROJECTS                                                  */
-/* ================================================================== */
-
-export const relatedProjects = [
-	{
-		slug: "girls-tech-bootcamp" as ProjectSlug,
-		excerpt:
-			"In many low-income communities, girls face barriers to accessing technology and acquiring digital skills.",
-	},
-	{
-		slug: "skill-up-with-4herfrika" as ProjectSlug,
-		excerpt:
-			"SkillUp with 4Herfrika is a series of physical bootcamps hosted in partnership with digital innovation hubs located around African universities...",
-	},
-	{
-		slug: "stop-the-violence" as ProjectSlug,
-		excerpt:
-			"Workshops and a short-film project helping students practice non-violent conflict resolution.",
-	},
-] as const;
-
-/* ================================================================== */
-/*  Helpers                                                           */
-/* ================================================================== */
-
-/** ~200 words per minute */
-export function readTime(content: string) {
-	const words = content.split(/\s+/).length;
-	const minutes = Math.max(1, Math.ceil(words / 200));
-	return `${minutes} min read`;
-}
-
-export function formatProjectDate(iso: string) {
-	return new Intl.DateTimeFormat("en-US", {
-		month: "short",
-		day: "numeric",
-		year: "numeric",
-	}).format(new Date(iso));
-}
