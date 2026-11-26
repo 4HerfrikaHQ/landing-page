@@ -819,10 +819,12 @@
 			"figuresPending": "Chiffres vérifiés à ce jour. Le décompte complet arrive.",
 			"preview": "Lire en ligne",
 			"figures": {
-				"partners": "Partenaires",
-				"unilagMembers": "Membres à UNILAG",
 				"girlsReached": "Filles touchées",
-				"campusesReporting": "Campus ayant rendu compte"
+				"mentees": "Mentorées",
+				"sessions": "Séances réalisées",
+				"mentors": "Mentores",
+				"unilagMembers": "Membres à UNILAG",
+				"partners": "Partenaires"
 			}
 		}
 	},
@@ -831,7 +833,7 @@
 			"title": "Rapport d'impact Année 2 : Deux pas en avant — 4HerFrika",
 			"description": "La deuxième année de 4HerFrika : enregistrement à la CAC, trois académies, sensibilisation à la santé menstruelle de Makoko à Ogbomoso, et un programme de mentorat ouvert à chaque membre."
 		},
-		"heroEyebrow": "Rapport Année 2 · sept. 2025 – août 2026",
+		"heroEyebrow": "Rapport Année 2",
 		"heroFirst": "Deux pas",
 		"heroSecond": "en avant.",
 		"heroDescription": "Former des femmes à l'impact mondial. Cette année, nous nous sommes enregistrées, avons ouvert trois académies, porté la sensibilisation à la santé menstruelle de Makoko à Ogbomoso et ouvert le mentorat à chaque membre.",
@@ -963,21 +965,29 @@
 			"first": "Comptés,",
 			"second": "pas seulement racontés.",
 			"figures": {
-				"partners": {
-					"label": "partenaires cette année",
-					"note": "confirmés"
+				"girlsReached": {
+					"label": "filles touchées",
+					"note": "Pad a Girl et Give to Gain"
+				},
+				"mentees": {
+					"label": "mentorées ayant réservé",
+					"note": "Career Corner, depuis le 31 août"
+				},
+				"sessions": {
+					"label": "séances de mentorat réalisées",
+					"note": "Career Corner, depuis le 31 août"
+				},
+				"mentors": {
+					"label": "mentores en ligne",
+					"note": "sur Career Corner"
 				},
 				"unilagMembers": {
 					"label": "membres à UNILAG",
 					"note": "contre 300"
 				},
-				"girlsReached": {
-					"label": "filles touchées",
-					"note": "Pad a Girl et Give to Gain"
-				},
-				"campusesReporting": {
-					"label": "campus ayant rendu compte",
-					"note": "à ce jour"
+				"partners": {
+					"label": "partenaires cette année",
+					"note": "confirmés"
 				}
 			},
 			"pendingNote": "Voici les chiffres vérifiés à ce jour. Le décompte complet de tous les campus arrive, et cette page sera mise à jour dès sa publication."

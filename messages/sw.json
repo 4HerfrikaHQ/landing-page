@@ -819,10 +819,12 @@
 			"figuresPending": "Takwimu zilizothibitishwa hadi sasa. Hesabu kamili inakuja.",
 			"preview": "Soma mtandaoni",
 			"figures": {
-				"partners": "Washirika",
-				"unilagMembers": "Wanachama UNILAG",
 				"girlsReached": "Wasichana waliofikiwa",
-				"campusesReporting": "Vyuo vilivyoripoti"
+				"mentees": "Wanafunzi",
+				"sessions": "Vikao vilivyokamilika",
+				"mentors": "Washauri",
+				"unilagMembers": "Wanachama UNILAG",
+				"partners": "Washirika"
 			}
 		}
 	},
@@ -831,7 +833,7 @@
 			"title": "Ripoti ya Athari Mwaka wa 2: Hatua Mbili Mbele — 4HerFrika",
 			"description": "Mwaka wa pili wa 4HerFrika: usajili na CAC, akademia tatu, uhamasishaji wa afya ya hedhi kutoka Makoko hadi Ogbomoso, na programu ya ushauri iliyo wazi kwa kila mwanachama."
 		},
-		"heroEyebrow": "Ripoti ya Mwaka wa 2 · Sep 2025 – Ago 2026",
+		"heroEyebrow": "Ripoti ya Mwaka wa 2",
 		"heroFirst": "Hatua mbili",
 		"heroSecond": "mbele.",
 		"heroDescription": "Kujenga wanawake wenye athari duniani. Mwaka huu tulijisajili, tukafungua akademia tatu, tukapeleka uhamasishaji wa afya ya hedhi kutoka Makoko hadi Ogbomoso, na tukafungua ushauri kwa kila mwanachama.",
@@ -963,21 +965,29 @@
 			"first": "Zimehesabiwa,",
 			"second": "si kusimuliwa tu.",
 			"figures": {
-				"partners": {
-					"label": "washirika mwaka huu",
-					"note": "waliothibitishwa"
+				"girlsReached": {
+					"label": "wasichana waliofikiwa",
+					"note": "Pad a Girl na Give to Gain"
+				},
+				"mentees": {
+					"label": "wanafunzi waliomwekea mshauri miadi",
+					"note": "Career Corner, tangu 31 Ago"
+				},
+				"sessions": {
+					"label": "vikao vya ushauri vilivyokamilika",
+					"note": "Career Corner, tangu 31 Ago"
+				},
+				"mentors": {
+					"label": "washauri walio hai",
+					"note": "kwenye Career Corner"
 				},
 				"unilagMembers": {
 					"label": "wanachama UNILAG",
 					"note": "kutoka 300"
 				},
-				"girlsReached": {
-					"label": "wasichana waliofikiwa",
-					"note": "Pad a Girl na Give to Gain"
-				},
-				"campusesReporting": {
-					"label": "vyuo vilivyoripoti",
-					"note": "hadi sasa"
+				"partners": {
+					"label": "washirika mwaka huu",
+					"note": "waliothibitishwa"
 				}
 			},
 			"pendingNote": "Hizi ni takwimu zilizothibitishwa hadi sasa. Hesabu kamili ya vyuo vyote inakuja, na ukurasa huu utasasishwa itakapofika."

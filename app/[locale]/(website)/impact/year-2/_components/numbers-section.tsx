@@ -33,7 +33,7 @@ export async function NumbersSection({
 					className="text-center"
 				/>
 				<FadeIn>
-					<ul className="mt-12 grid grid-cols-2 gap-y-10 lg:grid-cols-4 lg:divide-x lg:divide-primary-500">
+					<ul className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-3 lg:gap-y-14">
 						{report.figures.map((figure) => (
 							<li key={figure.key} className="px-2 text-center">
 								<p className="text-[44px] font-semibold leading-none tabular-nums text-secondary-500 lg:text-5xl">

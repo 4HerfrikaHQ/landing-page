@@ -12,9 +12,11 @@ export const year2Report: ImpactYear2Report = {
 	pdf: null,
 	fullCountPublished: false,
 	figures: [
-		{ key: "partners", value: "9" },
-		{ key: "unilagMembers", value: "347" },
 		{ key: "girlsReached", value: "200+" },
-		{ key: "campusesReporting", value: "3" },
+		{ key: "mentees", value: "40" },
+		{ key: "sessions", value: "35" },
+		{ key: "mentors", value: "17" },
+		{ key: "unilagMembers", value: "347" },
+		{ key: "partners", value: "9" },
 	],
 };

@@ -46,7 +46,7 @@ export const impactReports: ReadonlyArray<ImpactReport> = [
 		onlineHref: "/impact/year-2",
 		pdfHref: year2Report.pdf?.url ?? null,
 		pending: !year2Report.fullCountPublished,
-		figures: year2Report.figures.map((figure) => ({
+		figures: year2Report.figures.slice(0, 4).map((figure) => ({
 			value: figure.value,
 			labelKey: `year2.figures.${figure.key}` as const,
 		})),

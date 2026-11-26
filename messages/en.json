@@ -819,10 +819,12 @@
 			"figuresPending": "Verified figures so far. The full count is on its way.",
 			"preview": "Read online",
 			"figures": {
-				"partners": "Partners",
-				"unilagMembers": "UNILAG members",
 				"girlsReached": "Girls reached",
-				"campusesReporting": "Campuses reporting"
+				"mentees": "Mentees",
+				"sessions": "Sessions completed",
+				"mentors": "Mentors",
+				"unilagMembers": "UNILAG members",
+				"partners": "Partners"
 			}
 		}
 	},
@@ -831,7 +833,7 @@
 			"title": "Year 2 Impact Report: Two Steps Forward — 4HerFrika",
 			"description": "4HerFrika's second year: registered with the CAC, three academies, menstrual health outreach from Makoko to Ogbomoso, and a mentorship programme open to every member."
 		},
-		"heroEyebrow": "Year 2 report · Sept 2025 – Aug 2026",
+		"heroEyebrow": "Year 2 report",
 		"heroFirst": "Two steps",
 		"heroSecond": "forward.",
 		"heroDescription": "Building women of global impact. This year we registered, opened three academies, took menstrual health outreach from Makoko to Ogbomoso, and opened mentorship to every member.",
@@ -963,21 +965,29 @@
 			"first": "Counted,",
 			"second": "not just told.",
 			"figures": {
-				"partners": {
-					"label": "partners this year",
-					"note": "confirmed"
+				"girlsReached": {
+					"label": "girls reached",
+					"note": "Pad a Girl and Give to Gain"
+				},
+				"mentees": {
+					"label": "mentees booked a mentor",
+					"note": "Career Corner, since 31 Aug"
+				},
+				"sessions": {
+					"label": "mentoring sessions completed",
+					"note": "Career Corner, since 31 Aug"
+				},
+				"mentors": {
+					"label": "mentors live",
+					"note": "on Career Corner"
 				},
 				"unilagMembers": {
 					"label": "UNILAG members",
 					"note": "up from 300"
 				},
-				"girlsReached": {
-					"label": "girls reached",
-					"note": "Pad a Girl and Give to Gain"
-				},
-				"campusesReporting": {
-					"label": "campuses reporting",
-					"note": "so far this cycle"
+				"partners": {
+					"label": "partners this year",
+					"note": "confirmed"
 				}
 			},
 			"pendingNote": "These are the figures verified so far. The full count across every campus is on its way, and this page will be updated when it lands."
