@@ -12,6 +12,7 @@ const staticRoutes = [
 	"/academy",
 	"/blog",
 	"/blog/category/projects",
+	"/brand",
 	"/careercorner",
 	"/careercorner/apply",
 	"/contact-us",

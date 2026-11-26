@@ -432,7 +432,8 @@
 		"faqs": "FAQ",
 		"newsletterTitle": "Recevez l’histoire du mois",
 		"subscribeSuccess": "Merci pour votre abonnement !",
-		"socialLabel": "Réseaux sociaux"
+		"socialLabel": "Réseaux sociaux",
+		"brandAssets": "Ressources de marque"
 	},
 	"home": {
 		"hero": {
@@ -756,6 +757,10 @@
 		"blogCategory": {
 			"title": "{name} — Le Pink Blog",
 			"description": "Histoires et actualités « {name} » de 4HerFrika, le réseau de mentorat des jeunes Africaines."
+		},
+		"brand": {
+			"title": "Ressources de marque",
+			"description": "Téléchargez le logo, les couleurs et les polices de 4HerFrika, et découvrez comment les utiliser."
 		}
 	},
 	"attendance": {
@@ -1551,5 +1556,141 @@
 		"bodySignedOut": "Ce tableau de bord est réservé à l'équipe et aux mentors de 4HerFrika. Vous suivez le cours de l'Académie ? Il est à portée de main.",
 		"staffSignIn": "Connexion équipe",
 		"signedInAs": "Connecté en tant que <b>{email}</b>"
+	},
+	"brand": {
+		"badge": "Ressources de marque",
+		"titleFirst": "Portez notre histoire,",
+		"titleSecond": "comme il se doit",
+		"intro": "Téléchargez le logo, les couleurs et les polices de 4HerFrika, et voyez comment les utiliser pour que notre marque reste cohérente partout.",
+		"downloadAll": "Tout télécharger (.zip)",
+		"logos": {
+			"titleFirst": "Choisissez votre",
+			"titleSecond": "logo",
+			"intro": "Choisissez la version qui s’accorde le mieux à votre fond. Chaque logo est disponible en SVG et en PNG.",
+			"downloadAs": "Télécharger le {name} en {format}",
+			"items": {
+				"colour": {
+					"name": "Logo couleur",
+					"label": "logo couleur",
+					"alt": "Logo 4HerFrika, version couleur",
+					"use": "Notre logo principal. À utiliser sur fond blanc ou très clair."
+				},
+				"navy": {
+					"name": "Logo bleu marine",
+					"label": "logo bleu marine",
+					"alt": "Logo 4HerFrika, version bleu marine",
+					"use": "Version monochrome pour les documents, formulaires et impressions sans couleur complète."
+				},
+				"onDark": {
+					"name": "Logo pour fond sombre",
+					"label": "logo pour fond sombre",
+					"alt": "Logo 4HerFrika, symbole rose et texte blanc",
+					"use": "Symbole rose et texte blanc. À utiliser sur le bleu marine et les autres fonds sombres de la marque."
+				},
+				"white": {
+					"name": "Logo blanc",
+					"label": "logo blanc",
+					"alt": "Logo 4HerFrika, version blanche",
+					"use": "Entièrement blanc. À utiliser sur des photos sombres et des fonds colorés."
+				},
+				"mark": {
+					"name": "Symbole du logo",
+					"label": "symbole du logo",
+					"alt": "Symbole du logo 4HerFrika, icône rose",
+					"use": "L’icône seule. À utiliser pour les avatars, favicons et autres petits espaces."
+				},
+				"markWhite": {
+					"name": "Symbole blanc",
+					"label": "symbole blanc",
+					"alt": "Symbole du logo 4HerFrika, icône blanche",
+					"use": "L’icône en blanc, pour les fonds sombres et les petits espaces."
+				}
+			}
+		},
+		"colours": {
+			"titleFirst": "Nos",
+			"titleSecond": "couleurs",
+			"intro": "Sélectionnez une valeur HEX pour la copier. Chaque couleur indique aussi sa valeur RVB.",
+			"copyHex": "Copier le HEX {hex}",
+			"copied": "Copié",
+			"rgb": "RVB",
+			"groups": {
+				"logo": {
+					"title": "Couleurs du logo",
+					"intro": "Les deux couleurs du logo. À utiliser pour reproduire fidèlement le logo, par exemple à l’impression."
+				},
+				"website": {
+					"title": "Palette du site web",
+					"intro": "Les couleurs utilisées sur 4herfrika.org. À utiliser pour les pages web, les présentations et les publications sur les réseaux. Le rose du site est un peu plus profond que celui du logo."
+				}
+			},
+			"names": {
+				"logoNavy": "Bleu marine du logo",
+				"logoPink": "Rose du logo",
+				"primary": "Rose principal",
+				"brightPink": "Rose vif",
+				"secondary": "Bleu marine secondaire",
+				"surfacePink": "Fond rose",
+				"surfaceIndigo": "Fond indigo",
+				"surfaceTeal": "Fond turquoise"
+			}
+		},
+		"typography": {
+			"titleFirst": "Nos",
+			"titleSecond": "polices",
+			"intro": "Deux polices gratuites de Google Fonts. Outfit fait le travail au quotidien et Playfair Display apporte une touche de chaleur.",
+			"googleFonts": "Google Fonts",
+			"viewOnGoogle": "Voir {name} sur Google Fonts (s’ouvre dans un nouvel onglet)",
+			"outfit": {
+				"name": "Outfit",
+				"role": "Titres et texte courant",
+				"sample": "Des filles qui mènent le changement",
+				"note": "Utilisez les graisses de 300 à 700. Bold pour les titres, Regular pour le texte courant."
+			},
+			"playfair": {
+				"name": "Playfair Display Italic",
+				"role": "Mots d’accent",
+				"sample": "changement",
+				"note": "À utiliser pour un ou deux mots d’un titre, jamais pour le texte courant."
+			}
+		},
+		"usage": {
+			"titleFirst": "Bien utiliser le",
+			"titleSecond": "logo",
+			"intro": "Quelques règles simples gardent le logo net et reconnaissable.",
+			"doLabel": "À faire",
+			"dontLabel": "À éviter",
+			"items": {
+				"clearSpace": {
+					"title": "Laissez-lui de l’espace",
+					"text": "Gardez autour du logo un espace libre égal à la hauteur du « 4 »."
+				},
+				"minSize": {
+					"title": "Gardez-le lisible",
+					"text": "Affichez le logo complet sur au moins 120 px de large. En dessous, utilisez le symbole."
+				},
+				"onDark": {
+					"title": "Adaptez-le au fond",
+					"text": "Sur le bleu marine, les photos sombres ou chargées, utilisez le logo pour fond sombre ou le logo blanc."
+				},
+				"distort": {
+					"title": "Ne changez pas sa forme",
+					"text": "Ne recolorez pas, n’étirez pas, n’écrasez pas et ne faites pas pivoter le logo."
+				},
+				"effects": {
+					"title": "Pas d’effets",
+					"text": "N’ajoutez pas d’ombres, de contours, de halos ou de dégradés."
+				},
+				"busy": {
+					"title": "Évitez les fonds chargés",
+					"text": "Ne placez pas le logo couleur sur des photos chargées ni sur du bleu marine. Utilisez plutôt le logo pour fond sombre ou le logo blanc."
+				}
+			}
+		},
+		"contact": {
+			"titleFirst": "Besoin d’autre",
+			"titleSecond": "chose ?",
+			"text": "Tailles sur mesure, co-branding ou question de presse ? Écrivez-nous, nous vous aiderons."
+		}
 	}
 }
