@@ -1652,7 +1652,7 @@
 		"ctaSecond": "two million.",
 		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected.",
 		"year2": {
-			"coverAlt": "4HerFrika participants in pink shirts, the cover of the Year 2 report",
+			"coverAlt": "Schoolgirls holding 4HerFrika placards, the cover of the Year 2 report",
 			"label": "Year 2",
 			"title": "Two steps forward",
 			"summary": "A registered organisation, The Career Corner, and 3,500+ members across 25+ campuses in five countries.",
@@ -1677,7 +1677,7 @@
 		"heroFirst": "Two steps",
 		"heroSecond": "forward.",
 		"heroDescription": "Building women of global impact. Our second year was about strengthening our foundations and taking the work further into our communities.",
-		"heroAlt": "4HerFrika participants in pink shirts standing together outdoors on campus",
+		"heroAlt": "Schoolgirls holding 4HerFrika placards at a Day of the Girl Child event",
 		"readReport": "See the highlights",
 		"downloadPdf": "Download the report · {size} MB",
 		"donate": "Donate",
@@ -1734,6 +1734,24 @@
 			"first": "Two million women and girls",
 			"second": "by 2050.",
 			"body": "That's the destination. Every girl reached and every opportunity created brings us closer."
+		},
+		"moments": {
+			"first": "Moments from",
+			"second": "year two.",
+			"items": {
+				"girlChildDay": {
+					"caption": "Day of the Girl Child with 4HerFrika LAUTECH",
+					"alt": "Schoolgirls in red uniforms holding placards that read I am a world class woman"
+				},
+				"techfiesta": {
+					"caption": "Techfiesta with Google Developer Groups at Kwara State University",
+					"alt": "A group of young women smiling in front of a Google Developer Groups backdrop"
+				},
+				"devfest": {
+					"caption": "DevFest Ogbomoso, where 4HerFrika LAUTECH was a partner",
+					"alt": "Four women from 4HerFrika standing in front of the DevFest speakers wall"
+				}
+			}
 		}
 	},
 	"impactBanner": {

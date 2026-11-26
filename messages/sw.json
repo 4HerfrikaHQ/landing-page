@@ -1652,7 +1652,7 @@
 		"ctaSecond": "milioni mbili.",
 		"ctaDescription": "Kila mchango na kila mjitolea husaidia wasichana wengi zaidi kupata malezi, mafunzo na uhusiano.",
 		"year2": {
-			"coverAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi, jalada la ripoti ya Mwaka wa 2",
+			"coverAlt": "Wasichana wa shule wakishikilia mabango ya 4HerFrika, jalada la ripoti ya Mwaka wa 2",
 			"label": "Mwaka wa 2",
 			"title": "Hatua mbili mbele",
 			"summary": "Shirika lililosajiliwa, The Career Corner, na wanachama 3,500+ katika vyuo 25+ katika nchi tano.",
@@ -1677,7 +1677,7 @@
 		"heroFirst": "Hatua mbili",
 		"heroSecond": "mbele.",
 		"heroDescription": "Kujenga wanawake wenye athari duniani. Mwaka wetu wa pili ulihusu kuimarisha misingi yetu na kupeleka kazi yetu mbali zaidi katika jamii zetu.",
-		"heroAlt": "Washiriki wa 4HerFrika waliovaa fulana za waridi wakiwa pamoja nje kwenye chuo",
+		"heroAlt": "Wasichana wa shule wakishikilia mabango ya 4HerFrika katika Siku ya Mtoto wa Kike",
 		"readReport": "Tazama mambo muhimu",
 		"downloadPdf": "Pakua ripoti · MB {size}",
 		"donate": "Changia",
@@ -1734,6 +1734,24 @@
 			"first": "Wanawake na wasichana milioni mbili",
 			"second": "ifikapo 2050.",
 			"body": "Hilo ndilo lengo letu. Kila msichana anayefikiwa na kila fursa inayoundwa inatukaribia zaidi."
+		},
+		"moments": {
+			"first": "Matukio ya",
+			"second": "mwaka wa pili.",
+			"items": {
+				"girlChildDay": {
+					"caption": "Siku ya Mtoto wa Kike pamoja na 4HerFrika LAUTECH",
+					"alt": "Wasichana wa shule waliovaa sare nyekundu wakishikilia mabango yanayosema mimi ni mwanamke wa kiwango cha dunia"
+				},
+				"techfiesta": {
+					"caption": "Techfiesta pamoja na Google Developer Groups katika Kwara State University",
+					"alt": "Kundi la wanawake vijana wakitabasamu mbele ya bango la Google Developer Groups"
+				},
+				"devfest": {
+					"caption": "DevFest Ogbomoso, ambapo 4HerFrika LAUTECH ilikuwa mshirika",
+					"alt": "Wanawake wanne wa 4HerFrika wakisimama mbele ya ukuta wa wazungumzaji wa DevFest"
+				}
+			}
 		}
 	},
 	"impactBanner": {

@@ -7,6 +7,7 @@ import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { ClosingSection } from "./_components/closing-section";
 import { HighlightsSection } from "./_components/highlights-section";
+import { MomentsSection } from "./_components/moments-section";
 import { NumbersSection } from "./_components/numbers-section";
 import { ReportBand } from "./_components/report-band";
 import { Year2Hero } from "./_components/year-2-hero";
@@ -47,6 +48,7 @@ export default async function YearTwoReportPage({
 			</FadeIn>
 			<NumbersSection report={year2Report} />
 			<HighlightsSection />
+			<MomentsSection />
 			<ReportBand report={year2Report} />
 			<ClosingSection />
 		</main>

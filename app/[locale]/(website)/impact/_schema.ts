@@ -1,8 +1,8 @@
 import type { StaticImageData } from "next/image";
 import { z } from "zod";
-import beginning from "./beginning.jpg";
 import { year2Report } from "./two-steps-forward/_report";
 import type { FigureKey } from "./two-steps-forward/_schema";
+import year2Cover from "./two-steps-forward/hero.jpg";
 import yearReport from "./year-report.jpg";
 
 export const REPORT_PDF_URL =
@@ -41,7 +41,7 @@ export type ImpactReport = {
 export const impactReports: ReadonlyArray<ImpactReport> = [
 	{
 		key: ReportKey.enum.year2,
-		cover: beginning,
+		cover: year2Cover,
 		onlineHref: "/impact/two-steps-forward",
 		pdfHref: year2Report.pdf?.url ?? null,
 		figures: year2Report.figures.slice(0, 4).map((figure) => ({

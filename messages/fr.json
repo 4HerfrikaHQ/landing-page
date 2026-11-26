@@ -1652,7 +1652,7 @@
 		"ctaSecond": "deux millions.",
 		"ctaDescription": "Chaque don et chaque bénévole aident davantage de filles à être accompagnées, formées et connectées.",
 		"year2": {
-			"coverAlt": "Participantes de 4HerFrika en t-shirts roses, couverture du rapport Année 2",
+			"coverAlt": "Des écolières tenant des pancartes 4HerFrika, couverture du rapport Année 2",
 			"label": "Année 2",
 			"title": "Deux pas en avant",
 			"summary": "Une organisation enregistrée, The Career Corner et plus de 3 500 membres sur plus de 25 campus dans cinq pays.",
@@ -1677,7 +1677,7 @@
 		"heroFirst": "Deux pas",
 		"heroSecond": "en avant.",
 		"heroDescription": "Former des femmes à l'impact mondial. Notre deuxième année a consisté à consolider nos fondations et à porter notre travail plus loin dans nos communautés.",
-		"heroAlt": "Participantes de 4HerFrika en t-shirts roses réunies en plein air sur un campus",
+		"heroAlt": "Des écolières tenant des pancartes 4HerFrika lors de la Journée de la fille",
 		"readReport": "Voir les temps forts",
 		"downloadPdf": "Télécharger le rapport · {size} Mo",
 		"donate": "Faire un don",
@@ -1734,6 +1734,24 @@
 			"first": "Deux millions de femmes et de filles",
 			"second": "d'ici 2050.",
 			"body": "C'est notre destination. Chaque fille touchée et chaque opportunité créée nous en rapproche."
+		},
+		"moments": {
+			"first": "Moments de",
+			"second": "l’année deux.",
+			"items": {
+				"girlChildDay": {
+					"caption": "Journée internationale de la fille avec 4HerFrika LAUTECH",
+					"alt": "Des écolières en uniforme rouge tenant des pancartes « Je suis une femme de classe mondiale »"
+				},
+				"techfiesta": {
+					"caption": "Techfiesta avec Google Developer Groups à la Kwara State University",
+					"alt": "Un groupe de jeunes femmes souriantes devant un fond Google Developer Groups"
+				},
+				"devfest": {
+					"caption": "DevFest Ogbomoso, dont 4HerFrika LAUTECH était partenaire",
+					"alt": "Quatre femmes de 4HerFrika devant le mur des intervenants du DevFest"
+				}
+			}
 		}
 	},
 	"impactBanner": {
