@@ -35,7 +35,7 @@ export function ImpactBanner() {
 					</span>
 				</p>
 				<Link
-					href="/impact/year-2"
+					href="/impact/two-steps-forward"
 					className="press ml-auto inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-secondary-500 px-4 text-sm font-semibold text-white outline-none hover:bg-white hover:text-secondary-500 hover:no-underline focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-bright lg:px-5"
 				>
 					<RollLabel>{t("cta")} →</RollLabel>

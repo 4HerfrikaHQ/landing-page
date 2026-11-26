@@ -18,7 +18,11 @@ export async function ClosingSection() {
 					{t("goal.body")}
 				</p>
 				<div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-					<Button href="/donate" size="lg" className="min-h-12 px-8 font-medium">
+					<Button
+						href="/donate"
+						size="lg"
+						className="min-h-12 px-8 font-medium"
+					>
 						{t("donate")}
 					</Button>
 					<Button

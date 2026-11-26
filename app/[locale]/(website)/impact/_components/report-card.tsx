@@ -72,7 +72,8 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 							size="lg"
 							className="min-h-12 gap-2 px-6 font-medium"
 						>
-							{t("readOnline")} <ArrowRight aria-hidden="true" className="size-5" />
+							{t("readOnline")}{" "}
+							<ArrowRight aria-hidden="true" className="size-5" />
 						</Button>
 						<PdfAction href={report.pdfHref} />
 					</div>

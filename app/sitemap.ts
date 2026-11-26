@@ -18,8 +18,8 @@ const staticRoutes = [
 	"/donate",
 	"/faq",
 	"/impact",
-	"/impact/year-1",
-	"/impact/year-2",
+	"/impact/from-one-to-many",
+	"/impact/two-steps-forward",
 	"/privacy",
 	"/terms",
 ];
