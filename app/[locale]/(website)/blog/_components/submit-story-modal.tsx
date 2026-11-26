@@ -62,10 +62,10 @@ export function SubmitStoryModal({ categories }: Props) {
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogTrigger
 					render={
-						<button className="inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:brightness-90 transition-all" />
+						<button className="press inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:brightness-90 transition-all" />
 					}
 				>
-					Submit a Story
+					<RollLabel>Submit a Story</RollLabel>
 					<ArrowRight className="size-5" />
 				</DialogTrigger>
 				<DialogContent className="w-[92vw] sm:w-[70vw] rounded-3xl p-8">
@@ -95,10 +95,10 @@ export function SubmitStoryModal({ categories }: Props) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger
 				render={
-					<button className="inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:brightness-90 transition-all" />
+					<button className="press inline-flex items-center gap-2 bg-primary-500 text-white rounded-full px-8 py-4 text-lg font-medium hover:brightness-90 transition-all" />
 				}
 			>
-				Submit a Story
+				<RollLabel>Submit a Story</RollLabel>
 				<ArrowRight className="size-5" />
 			</DialogTrigger>
 
