@@ -439,21 +439,267 @@
 	"donate": {
 		"title": "Support Our Mission",
 		"description": "Your donation helps us reach more girls and create sustainable change across underserved regions.",
-		"bankDetails": "Bank Details",
 		"accountNumber": "Account Number",
 		"accountName": "Account Name",
 		"copy": "Copy",
 		"copied": "Copied",
 		"thankYou": "Thank you for your support. Every contribution helps us make a bigger impact.",
-		"heroTitle": "Make a Donation to",
-		"heroOrg": "4HERFRIKA",
 		"heroVision": "By 2030, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact in every field that shapes our future.",
-		"donateToEmpower": "Donate to Empower Women Across Africa",
-		"donateNow": "Donate Now",
-		"helpEmpower": "Invest in Leadership Across Africa",
-		"helpDescription": "Leadership in Africa isn't built in one field or one industry. It's built across every campus, every sector, every ambitious woman who has the will to lead. When you support 4Herfrika, you're investing in a network that's raising the next generation of doctors, lawyers, engineers, entrepreneurs, and changemakers. You're not supporting a program. You're supporting a movement.",
 		"bankName": "Zenith Bank",
-		"bankTransferNote": "Use the account details below to make your transfer"
+		"bankTransferNote": "Use the account details below to make your transfer",
+		"hero": {
+			"badge": "Donate · 4HerFrika Youth Empowerment Initiative",
+			"titleFirst": "Back the next girl",
+			"titleSecond": "to lead.",
+			"description": "Your gift pays for bootcamps, mentor calls and data on African campuses. We are working towards 2 million women and girls by 2030.",
+			"cta": "Give now",
+			"imageAlt": "4HerFrika graduates holding up their certificates"
+		},
+		"stats": {
+			"girlsMentored": "girls mentored",
+			"graduates": "Tech Academy graduates",
+			"campuses": "campuses",
+			"countries": "countries",
+			"period": "Year 1",
+			"source": "From the Year 1 report.",
+			"reportLink": "Read our impact reports"
+		},
+		"give": {
+			"badge": "Give in two minutes",
+			"titleFirst": "Choose your gift,",
+			"titleSecond": "then send it.",
+			"descriptionOnline": "Pick an amount and how often, then pay on Paystack's secure screen. Monthly gifts go on a card.",
+			"descriptionOffline": "Pick an amount, then transfer it to our Zenith Bank account. Monthly giving is coming soon."
+		},
+		"bank": {
+			"titleOnline": "Prefer a bank transfer?",
+			"titleOffline": "Give by bank transfer",
+			"monthlyLabel": "Monthly?",
+			"monthlyText": "Set up a standing order in your banking app with these details.",
+			"monthlySoon": "Becoming a monthly donor is coming soon.",
+			"afterTransfer": "After your transfer, email your name, amount and transfer date to hello@4herfrika.org and we'll send your receipt.",
+			"abroad": "Outside Nigeria? <link>Write to us</link> for transfer details."
+		},
+		"flow": {
+			"choose": {
+				"formLabel": "Your gift",
+				"step": "Step 1 of 2 ·",
+				"stepName": "Your gift",
+				"frequencyLegend": "How often",
+				"monthly": "Monthly",
+				"once": "One time",
+				"currencyLegend": "Currency",
+				"ngn": "₦ NGN",
+				"usd": "$ USD",
+				"amountLegend": "Choose an amount",
+				"customLabel": "Another amount",
+				"customPlaceholder": "Another amount",
+				"amountHelp": "From {min} to {max}.",
+				"amountError": "Enter a whole amount from {min} to {max}.",
+				"coverFee": "Add {fee} to cover the Paystack fee",
+				"coverFeeHint": "Optional. The full amount then reaches the programme.",
+				"coverFeeHintMonthly": "Optional, each month. The full amount then reaches the programme.",
+				"summaryMonthly": "Each month, by card",
+				"summaryOnce": "One time",
+				"continue": "Continue",
+				"secure": "Secure payment by Paystack"
+			},
+			"details": {
+				"formLabel": "Your details",
+				"step": "Step 2 of 2 ·",
+				"stepName": "Your details",
+				"perMonth": "/ month",
+				"summaryMonthly": "Monthly · {currency}",
+				"summaryOnce": "One time · {currency}",
+				"change": "Change",
+				"name": "Full name",
+				"email": "Email",
+				"required": "(required)",
+				"optional": "(optional)",
+				"emailHelp": "Paystack sends your payment receipt here, and we send a thank-you. No newsletters unless you ask.",
+				"emailError": "Enter a valid email address.",
+				"anonymous": "Give anonymously",
+				"anonymousHint": "We won't show your name on our supporters list. Paystack still needs your email.",
+				"note": "A note for the girls",
+				"notePlaceholder": "Rooting for you all!",
+				"noteCount": "{count} / {max}",
+				"pay": "Pay {amount} securely",
+				"paying": "Opening Paystack…",
+				"payNote": "Paystack's secure window opens over this page. Monthly gifts are paid by card.",
+				"payingNote": "Paystack's secure window is opening. Complete your payment there."
+			},
+			"verifying": {
+				"title": "Confirming your gift…",
+				"text": "Taking you to your confirmation. Please don't pay again."
+			},
+			"failed": {
+				"badge": "Payment not completed",
+				"cancelledTitle": "That didn't go through.",
+				"cancelledText": "The Paystack window closed before the payment finished, so nothing was charged. We kept your details, so it's one tap from here.",
+				"errorTitle": "We couldn't start the payment.",
+				"errorText": "Nothing was charged. Please try again, or give by bank transfer.",
+				"retry": "Try again",
+				"changeGift": "Change my gift",
+				"bankHint": "Prefer your bank? The Zenith Bank details are on this page. Copy them and send your gift by transfer."
+			}
+		},
+		"goal": {
+			"badge": "Our goal",
+			"titleFirst": "2 million women and girls",
+			"titleSecond": "by 2030.",
+			"body": "Leadership in Africa is built across every campus, every sector, every ambitious woman with the will to lead. You are not supporting a programme. You are supporting a movement.",
+			"progressLeft": "3,000+ mentored, Year 1",
+			"progressRight": "2,000,000",
+			"progressNote": "Bar drawn at its smallest visible width; 3,000 is 0.15% of the goal.",
+			"cta": "Give now",
+			"imageAlt": "A facilitator teaching girls in a computer lab"
+		},
+		"ways": {
+			"badge": "Other ways to give",
+			"titleFirst": "Not money?",
+			"titleSecond": "Still huge.",
+			"mentor": {
+				"title": "Volunteer as a mentor",
+				"text": "Give 30 minutes on a call to a girl starting out in your field.",
+				"cta": "Join us →",
+				"alt": "Two young women coding on laptops"
+			},
+			"partner": {
+				"title": "Partner with us",
+				"text": "Sponsor a bootcamp or a whole campus cohort as a company.",
+				"cta": "Talk to us →",
+				"alt": "A large group of participants in pink 4HerFrika shirts outdoors"
+			},
+			"laptops": {
+				"title": "Give laptops or data",
+				"text": "A working laptop or a data bundle keeps a learner in the course.",
+				"cta": "Arrange a gift →",
+				"alt": "A young woman working on a laptop on an outdoor bench"
+			}
+		},
+		"faq": {
+			"titleFirst": "Questions",
+			"titleSecond": "before you give",
+			"ask": "Still unsure? <link>Ask the team</link>.",
+			"items": {
+				"receipt": {
+					"q": "Will I get a receipt?",
+					"a": "Yes. A card gift brings a payment receipt from Paystack and a donation receipt from 4HerFrika, both by email within minutes."
+				},
+				"monthly": {
+					"q": "How do I give monthly?",
+					"a": "Choose Monthly, then pay by card. Paystack charges the card each month. Prefer your bank? Set up a standing order with our Zenith Bank details."
+				},
+				"stop": {
+					"q": "Can I stop a monthly gift?",
+					"a": "Yes, any time. The link in your receipt email opens Paystack's page, where you can update your card or cancel. Cancelling stops every future charge."
+				},
+				"abroad": {
+					"q": "Can I give from outside Nigeria?",
+					"a": "Yes. Any Visa or Mastercard works in ₦ or $, and your bank converts it. You can also write to us for transfer details."
+				},
+				"safe": {
+					"q": "Is paying by card safe?",
+					"a": "Your card details go to Paystack, never to us. Paystack's secure window opens over this page."
+				},
+				"receiptOffline": {
+					"q": "Will I get a receipt?",
+					"a": "Email your name, amount and transfer date to hello@4herfrika.org and we'll send your receipt."
+				},
+				"monthlyOffline": {
+					"q": "How do I give monthly?",
+					"a": "Becoming a monthly donor is coming soon. For now, you can give any amount by bank transfer."
+				},
+				"abroadOffline": {
+					"q": "Can I give from outside Nigeria?",
+					"a": "Yes. Write to us at hello@4herfrika.org and we will send you transfer details."
+				}
+			}
+		},
+		"bar": {
+			"title": "Support 4HerFrika",
+			"subtitle": "Zenith Bank · 1312053588",
+			"cta": "Give now"
+		},
+		"thanks": {
+			"metaTitle": "Thank you for giving",
+			"success": {
+				"badge": "Gift confirmed · {date}",
+				"title": "Thank you.",
+				"titleNamed": "Thank you, {name}.",
+				"titleSecond": "She's in the room.",
+				"textMonthly": "Your <strong>{amount} monthly gift</strong> is set up, and the first {amount} went through.",
+				"textOnce": "Your <strong>{amount} gift</strong> went through. Thank you.",
+				"emailsTitle": "Two emails are on the way to",
+				"emailPaystack": "A payment receipt from Paystack",
+				"emailReceipt": "Your donation receipt from 4HerFrika, to keep",
+				"shareTitle": "Bring a friend into the room",
+				"share": {
+					"whatsapp": "WhatsApp",
+					"linkedin": "LinkedIn",
+					"x": "Post on X"
+				},
+				"shareNote": "We share the page, never your name or amount.",
+				"monthlyTitle": "Your monthly gift",
+				"active": "Active",
+				"perMonth": "/ month",
+				"paidWith": "Paid with",
+				"reference": "Reference",
+				"manageText": "The receipt email we send has a link to change your card or cancel, any time. No calls, no forms.",
+				"questions": "Questions?",
+				"onceTitle": "Your gift",
+				"onceText": "A monthly gift lets us plan bootcamps and mentor calls months ahead.",
+				"onceCta": "Make it monthly"
+			},
+			"pending": {
+				"titleFirst": "Confirming",
+				"titleSecond": "your gift",
+				"text": "Paystack has not confirmed your payment yet. This usually takes a few seconds.",
+				"reference": "Reference",
+				"checkAgain": "Check again",
+				"dontPayAgain": "Please don't pay again.",
+				"closeNote": "You can close this page: we'll email you as soon as Paystack confirms.",
+				"help": "Something look wrong? Email"
+			},
+			"failed": {
+				"badge": "Payment not completed",
+				"titleFirst": "That didn't go through.",
+				"titleSecond": "Let's try again.",
+				"text": "Paystack did not confirm this payment, so nothing was charged to you for it.",
+				"retry": "Try again",
+				"helpTitle": "If something went wrong",
+				"declinedTitle": "Card declined?",
+				"declinedText": "Many Nigerian cards block online payments by default. Ask your bank to allow them, or try another card. Monthly gifts need a card.",
+				"debitedTitle": "Money left your account?",
+				"debitedText": "Please don't pay twice. Email hello@4herfrika.org with reference"
+			}
+		},
+		"email": {
+			"badge": "Donation receipt",
+			"greeting": "Thank you.",
+			"greetingNamed": "Thank you, {name}.",
+			"headingOnce": "Your gift has been received.",
+			"headingMonthly": "Your monthly gift has been received.",
+			"subjectOnce": "Thank you for your gift to 4HerFrika",
+			"subjectMonthly": "Thank you for your monthly gift to 4HerFrika",
+			"perMonth": "/ month",
+			"frequencyOnce": "One time",
+			"frequencyMonthly": "Monthly",
+			"details": "Receipt details",
+			"rowDate": "Date",
+			"rowDonor": "Donor",
+			"rowDonorAnonymous": "Anonymous",
+			"rowGift": "Gift",
+			"rowPaidWith": "Paid with",
+			"rowReference": "Paystack reference",
+			"manageCta": "Manage your monthly gift",
+			"manageNote": "Change your card or cancel, any time. The link is just for you, so please don't forward this email.",
+			"manageFallback": "Paystack also emails you a link to manage your monthly gift, where you can change your card or cancel.",
+			"year1": "In Year 1, gifts like yours helped mentor 3,000+ girls across 25+ campuses in 5 countries.",
+			"year1Link": "See the impact report",
+			"footerKeep": "Paystack has also emailed you a payment receipt. Keep this one for your donation records.",
+			"footerQuestions": "Questions? Reply to this email or write to"
+		}
 	},
 	"contact": {
 		"heroImageAlt": "Three young women taking a selfie together at a 4HerFrika event",
