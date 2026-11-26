@@ -16,22 +16,6 @@ async function PendingBadge({ pending }: { pending: boolean }) {
 	);
 }
 
-async function FigureValue({ value }: { value: string | null }) {
-	if (value === null) {
-		const t = await getTranslations("impactIndex");
-		return (
-			<>
-				<span aria-hidden="true" className="text-primary-500/40">
-					—
-				</span>
-				<span className="sr-only">{t("year2.figuresPending")}</span>
-			</>
-		);
-	}
-
-	return <>{value}</>;
-}
-
 async function PdfAction({ href }: { href: string | null }) {
 	if (href === null) return null;
 	const t = await getTranslations("impactIndex");
@@ -77,12 +61,12 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 					</p>
 					<dl className="mt-5 grid grid-cols-2 gap-3">
 						{report.figures.map((figure) => (
-							<div key={figure.key} className="rounded-xl bg-muted p-3">
+							<div key={figure.labelKey} className="rounded-xl bg-muted p-3">
 								<dt className="text-xs text-muted-foreground">
-									{t(`${key}.figures.${figure.key}`)}
+									{t(figure.labelKey)}
 								</dt>
 								<dd className="text-2xl font-semibold tabular-nums text-secondary-500">
-									<FigureValue value={figure.value} />
+									{figure.value}
 								</dd>
 							</div>
 						))}

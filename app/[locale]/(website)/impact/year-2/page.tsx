@@ -2,16 +2,17 @@ import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { AcademySection } from "./_components/academy-section";
-import { HowWeCount } from "./_components/how-we-count";
-import { NewsletterCta } from "./_components/newsletter-cta";
-import { PartnersSection } from "./_components/partners-section";
-import { QuotesSection } from "./_components/quotes-section";
+import { BuiltSection } from "./_components/built-section";
+import { CampusesSection } from "./_components/campuses-section";
+import { ClosingSection } from "./_components/closing-section";
+import { FounderNote } from "./_components/founder-note";
+import { GiveSection } from "./_components/give-section";
+import { MentorshipSection } from "./_components/mentorship-section";
+import { NumbersSection } from "./_components/numbers-section";
+import { OutreachSection } from "./_components/outreach-section";
 import { SectionMenu } from "./_components/section-menu";
-import { StatRow } from "./_components/stat-row";
-import { Wins } from "./_components/wins";
 import { Year2Hero } from "./_components/year-2-hero";
-import { hasPendingFigures, year2Report } from "./_report";
+import { year2Report } from "./_report";
 
 export async function generateMetadata({
 	params,
@@ -23,7 +24,7 @@ export async function generateMetadata({
 	return {
 		title: t("title"),
 		description: t("description"),
-		robots: hasPendingFigures(year2Report) ? { index: false } : undefined,
+		robots: year2Report.fullCountPublished ? undefined : { index: false },
 	};
 }
 
@@ -36,20 +37,14 @@ export default async function YearTwoReportPage({
 		<main className="overflow-x-clip bg-white text-foreground">
 			<Year2Hero report={year2Report} />
 			<SectionMenu />
-			<section
-				id="numbers"
-				className="scroll-mt-28 bg-primary-500/2 px-4 py-14 lg:px-20 lg:py-24"
-			>
-				<div className="mx-auto max-w-6xl">
-					<StatRow report={year2Report} />
-					<Wins report={year2Report} />
-				</div>
-			</section>
-			<AcademySection report={year2Report} />
-			<QuotesSection report={year2Report} />
-			<PartnersSection report={year2Report} />
-			<NewsletterCta report={year2Report} />
-			<HowWeCount />
+			<FounderNote />
+			<BuiltSection />
+			<OutreachSection />
+			<CampusesSection />
+			<MentorshipSection />
+			<NumbersSection report={year2Report} />
+			<GiveSection />
+			<ClosingSection />
 		</main>
 	);
 }

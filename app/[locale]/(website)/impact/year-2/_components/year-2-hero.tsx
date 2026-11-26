@@ -3,18 +3,7 @@ import { ArrowDown } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import beginning from "../../beginning.jpg";
-import { type ImpactYear2Report, hasPendingFigures } from "../_report";
-
-async function PendingBadge({ pending }: { pending: boolean }) {
-	if (!pending) return null;
-	const t = await getTranslations("impactYear2");
-
-	return (
-		<span className="rounded-full bg-primary-500 px-3 py-1.5 text-xs font-semibold">
-			{t("comingSoon")}
-		</span>
-	);
-}
+import type { ImpactYear2Report } from "../_report";
 
 async function ReportAction({ report }: { report: ImpactYear2Report }) {
 	const t = await getTranslations("impactYear2");
@@ -35,12 +24,12 @@ async function ReportAction({ report }: { report: ImpactYear2Report }) {
 
 	return (
 		<Button
-			href="#newsletter"
+			href="/donate"
 			variant="outline-white"
 			size="lg"
 			className="min-h-12 px-6 font-medium"
 		>
-			{t("getFirst")}
+			{t("donate")}
 		</Button>
 	);
 }
@@ -64,7 +53,6 @@ export async function Year2Hero({ report }: { report: ImpactYear2Report }) {
 			<div className="absolute inset-0 bg-black/60" />
 			<div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
 				<div className="flex flex-wrap items-center justify-center gap-2">
-					<PendingBadge pending={hasPendingFigures(report)} />
 					<span className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur">
 						{t("heroEyebrow")}
 					</span>
@@ -80,7 +68,7 @@ export async function Year2Hero({ report }: { report: ImpactYear2Report }) {
 				</p>
 				<div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
 					<Button
-						href="#numbers"
+						href="#note"
 						size="lg"
 						className="min-h-12 gap-2 px-6 font-medium"
 					>

@@ -1,13 +1,8 @@
 import type { StaticImageData } from "next/image";
 import { z } from "zod";
 import beginning from "./beginning.jpg";
-import {
-	type ImpactYear2Report,
-	figureValue,
-	hasPendingFigures,
-	year2Report,
-} from "./year-2/_report";
-import { FigureKey } from "./year-2/_schema";
+import { year2Report } from "./year-2/_report";
+import type { FigureKey } from "./year-2/_schema";
 import yearReport from "./year-report.jpg";
 
 export const REPORT_PDF_URL =
@@ -23,13 +18,17 @@ export const impactStats = [
 export const ReportKey = z.enum(["year1", "year2"]);
 export type ReportKey = z.infer<typeof ReportKey>;
 
-export const ReportFigureKey = FigureKey.extract([
+export const Year1FigureKey = z.enum([
 	"girlsMentored",
 	"campuses",
 	"academyGraduates",
 	"countries",
 ]);
-export type ReportFigureKey = z.infer<typeof ReportFigureKey>;
+export type Year1FigureKey = z.infer<typeof Year1FigureKey>;
+
+type FigureLabelKey =
+	| `year1.figures.${Year1FigureKey}`
+	| `year2.figures.${FigureKey}`;
 
 export type ImpactReport = {
 	key: ReportKey;
@@ -37,17 +36,8 @@ export type ImpactReport = {
 	onlineHref: string;
 	pdfHref: string | null;
 	pending: boolean;
-	figures: ReadonlyArray<{ value: string | null; key: ReportFigureKey }>;
+	figures: ReadonlyArray<{ value: string; labelKey: FigureLabelKey }>;
 };
-
-function year2Figures(report: ImpactYear2Report): ImpactReport["figures"] {
-	return [
-		{ value: figureValue(report, "girlsMentored"), key: "girlsMentored" },
-		{ value: figureValue(report, "campuses"), key: "campuses" },
-		{ value: figureValue(report, "academyGraduates"), key: "academyGraduates" },
-		{ value: figureValue(report, "countries"), key: "countries" },
-	];
-}
 
 export const impactReports: ReadonlyArray<ImpactReport> = [
 	{
@@ -55,8 +45,11 @@ export const impactReports: ReadonlyArray<ImpactReport> = [
 		cover: beginning,
 		onlineHref: "/impact/year-2",
 		pdfHref: year2Report.pdf?.url ?? null,
-		pending: hasPendingFigures(year2Report),
-		figures: year2Figures(year2Report),
+		pending: !year2Report.fullCountPublished,
+		figures: year2Report.figures.map((figure) => ({
+			value: figure.value,
+			labelKey: `year2.figures.${figure.key}` as const,
+		})),
 	},
 	{
 		key: ReportKey.enum.year1,
@@ -65,10 +58,10 @@ export const impactReports: ReadonlyArray<ImpactReport> = [
 		pdfHref: REPORT_PDF_URL,
 		pending: false,
 		figures: [
-			{ value: "3,000+", key: "girlsMentored" },
-			{ value: "25+", key: "campuses" },
-			{ value: "1,000+", key: "academyGraduates" },
-			{ value: "5", key: "countries" },
+			{ value: "3,000+", labelKey: "year1.figures.girlsMentored" },
+			{ value: "25+", labelKey: "year1.figures.campuses" },
+			{ value: "1,000+", labelKey: "year1.figures.academyGraduates" },
+			{ value: "5", labelKey: "year1.figures.countries" },
 		],
 	},
 ];

@@ -1,32 +1,37 @@
 import { z } from "zod";
 
 export const FigureKey = z.enum([
-	"girlsMentored",
-	"campuses",
-	"countries",
-	"graduatesMentoring",
-	"academyGraduates",
+	"partners",
+	"unilagMembers",
+	"girlsReached",
+	"campusesReporting",
 ]);
 export type FigureKey = z.infer<typeof FigureKey>;
 
-export const StatKey = FigureKey.extract([
-	"girlsMentored",
-	"campuses",
-	"countries",
-	"graduatesMentoring",
+export const BuiltKey = z.enum([
+	"registered",
+	"academies",
+	"partnerships",
+	"mentorship",
 ]);
-export type StatKey = z.infer<typeof StatKey>;
-
-export const WinKey = z.enum(["mentors", "campuses", "countries"]);
-export type WinKey = z.infer<typeof WinKey>;
+export const OutreachKey = z.enum(["makoko", "giveToGain", "rhythm"]);
+export const CampusKey = z.enum(["unilag", "kwasu", "lautech"]);
+export const LessonKey = z.enum(["hard", "worked", "next"]);
+export const GiveKey = z.enum(["donations", "pads", "inKind"]);
 
 export const SectionId = z.enum([
+	"note",
+	"built",
+	"outreach",
+	"campuses",
 	"numbers",
-	"stories",
-	"academy",
-	"howWeCount",
+	"give",
 ]);
 export type SectionId = z.infer<typeof SectionId>;
 
-export const STAT_KEYS = StatKey.options;
 export const SECTION_IDS = SectionId.options;
+export const BUILT_KEYS = BuiltKey.options;
+export const OUTREACH_KEYS = OutreachKey.options;
+export const CAMPUS_KEYS = CampusKey.options;
+export const LESSON_KEYS = LessonKey.options;
+export const GIVE_KEYS = GiveKey.options;
