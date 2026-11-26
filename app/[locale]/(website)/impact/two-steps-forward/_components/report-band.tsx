@@ -32,7 +32,10 @@ export async function ReportBand({ report }: { report: ImpactYear2Report }) {
 
 	return (
 		<section className="px-4 py-16 lg:px-20 lg:py-24">
-			<FadeIn className="mx-auto flex max-w-6xl flex-col items-center rounded-[20px] bg-surface-pink px-6 py-12 text-center lg:rounded-[40px] lg:py-16">
+			<FadeIn
+				direction="scale"
+				className="mx-auto flex max-w-6xl flex-col items-center rounded-[20px] bg-surface-pink px-6 py-12 text-center lg:rounded-[40px] lg:py-16"
+			>
 				<h2 className="text-[32px] font-bold leading-tight text-secondary-500 lg:text-5xl">
 					{t("report.first")}{" "}
 					<em className="font-playfair font-black text-primary-500">

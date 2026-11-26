@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { HoverCard } from "@/components/motion";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { getTranslations } from "next-intl/server";
 import { HIGHLIGHT_KEYS } from "../_schema";
 
@@ -14,10 +15,13 @@ export async function HighlightsSection() {
 						{t("highlights.second")}
 					</em>
 				</h2>
-				<ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-					{HIGHLIGHT_KEYS.map((key, index) => (
+				<RevealGroup
+					as="ul"
+					className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6"
+				>
+					{HIGHLIGHT_KEYS.map((key) => (
 						<li key={key}>
-							<FadeIn delay={index * 0.08} className="h-full">
+							<HoverCard className="h-full rounded-[20px]">
 								<article className="h-full rounded-[20px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)]">
 									<p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary-500">
 										{t(`highlights.items.${key}.tag`)}
@@ -29,10 +33,10 @@ export async function HighlightsSection() {
 										{t(`highlights.items.${key}.body`)}
 									</p>
 								</article>
-							</FadeIn>
+							</HoverCard>
 						</li>
 					))}
-				</ul>
+				</RevealGroup>
 			</div>
 		</section>
 	);

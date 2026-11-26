@@ -17,8 +17,9 @@ const SHOWN = {
 
 export function ClipReveal({
 	children,
+	delay = 0,
 	...props
-}: HTMLAttributes<HTMLDivElement>) {
+}: HTMLAttributes<HTMLDivElement> & { delay?: number }) {
 	const { ref, revealed } = useRevealed<HTMLDivElement>();
 
 	return (
@@ -28,7 +29,7 @@ export function ClipReveal({
 				className="relative h-full w-full"
 				initial={{ clipPath: "inset(0 0 100% 0)" }}
 				animate={revealed ? SHOWN : HIDDEN}
-				transition={{ duration: 0.7, ease: EASE_IN_OUT }}
+				transition={{ duration: 0.7, ease: EASE_IN_OUT, delay }}
 			>
 				{children}
 			</m.div>

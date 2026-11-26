@@ -186,6 +186,22 @@ a[data-active="true"] {
 	}
 }
 
+@keyframes hero-settle {
+	from {
+		transform: scale(1.08);
+	}
+}
+
+.animate-hero-settle {
+	animation: hero-settle 1.6s var(--ease-out-strong) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-hero-settle {
+		animation: none;
+	}
+}
+
 @keyframes hero-float {
 	0% {
 		transform: translateY(0) rotate(0deg);
@@ -319,9 +335,8 @@ html {
 }
 
 ::view-transition-new(.page-enter) {
-	animation:
-		240ms var(--ease-out-strong) 100ms both page-fade,
-		380ms var(--ease-out-strong) both page-in;
+	animation: 240ms var(--ease-out-strong) 100ms both page-fade, 380ms
+		var(--ease-out-strong) both page-in;
 }
 
 @media (prefers-reduced-motion: reduce) {
