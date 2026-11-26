@@ -5,6 +5,10 @@ export const academyType = z.enum(["tech", "business", "climate"]);
 
 export type Academy = z.infer<typeof academyType>;
 
+export const catalogFilter = z.enum(["all", ...academyType.options]);
+
+export type CatalogFilter = z.infer<typeof catalogFilter>;
+
 export const AcademyWaitlistSchema = z.object({
 	name: z.string().trim().min(2).max(120),
 	email: z.string().trim().toLowerCase().email(),
@@ -208,6 +212,7 @@ export const CourseDocument = z.object({
 		hours_label: nullableText,
 		outcomes: z.array(z.object({ outcome: nullableText })).nullish(),
 		partners: z.array(z.object({ partner: z.unknown() })).nullish(),
+		notice: z.array(z.object({ text: z.string().nullish() }).loose()).nullish(),
 		certificate_issuer: nullableText,
 		certificate_attribution: nullableText,
 		certificate_signatories: z
@@ -263,3 +268,5 @@ export const QuizSubmission = z.record(
 		.max(QUIZ_OPTION_COUNT - 1),
 );
 export type QuizSubmission = z.infer<typeof QuizSubmission>;
+
+export const COURSE_CONTENT_LOCALE = "en";

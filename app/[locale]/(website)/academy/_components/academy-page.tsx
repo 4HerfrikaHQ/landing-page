@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import {
+	type ReactNode,
 	useEffect,
 	useReducer,
 	useRef,
@@ -49,7 +50,7 @@ function usePrefersReducedMotion() {
 	);
 }
 
-export function AcademyPage() {
+export function AcademyPage({ catalog }: { catalog: ReactNode }) {
 	const t = useTranslations("academy");
 	const [waitlist, setWaitlist] = useState<{ open: boolean; academy: Academy }>(
 		{
@@ -158,6 +159,8 @@ export function AcademyPage() {
 					</div>
 				</div>
 			</section>
+
+			{catalog}
 
 			<section className="bg-primary-500/2 px-6 py-20 lg:px-12 xl:px-12 xl:py-26.75 2xl:px-20">
 				<div className="mx-auto max-w-7xl">
