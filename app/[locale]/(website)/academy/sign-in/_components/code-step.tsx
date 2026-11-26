@@ -104,15 +104,15 @@ export function CodeStep({
 							disabled={verifying}
 							aria-label={t("codeLabel")}
 							aria-invalid={Boolean(error)}
-							containerClassName="justify-start"
+							containerClassName="w-full justify-start"
 						>
-							<InputOTPGroup className="gap-2">
+							<InputOTPGroup className="min-w-0 flex-1 gap-1.5 sm:flex-none sm:gap-2">
 								{SLOT_INDEXES.slice(0, GROUP_SIZE).map((index) => (
 									<CodeSlot key={index} index={index} />
 								))}
 							</InputOTPGroup>
-							<InputOTPSeparator className="px-2 text-muted-foreground" />
-							<InputOTPGroup className="gap-2">
+							<InputOTPSeparator className="shrink-0 px-1 text-muted-foreground sm:px-2" />
+							<InputOTPGroup className="min-w-0 flex-1 gap-1.5 sm:flex-none sm:gap-2">
 								{SLOT_INDEXES.slice(GROUP_SIZE).map((index) => (
 									<CodeSlot key={index} index={index} />
 								))}
@@ -163,7 +163,7 @@ function CodeSlot({ index }: { index: number }) {
 	return (
 		<InputOTPSlot
 			index={index}
-			className="size-11 rounded-lg border text-xl font-medium first:rounded-lg last:rounded-lg sm:size-12"
+			className="h-12 w-auto min-w-0 flex-1 rounded-lg border text-xl font-medium first:rounded-lg last:rounded-lg sm:size-12 sm:flex-none"
 		/>
 	);
 }
