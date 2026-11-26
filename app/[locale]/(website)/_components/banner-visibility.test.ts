@@ -7,7 +7,7 @@ describe("isBannerHidden", () => {
 	});
 
 	test("hides on the Year 2 report", () => {
-		expect(isBannerHidden("/impact/year-2")).toBe(true);
+		expect(isBannerHidden("/impact/two-steps-forward")).toBe(true);
 	});
 
 	test("shows on the career corner directory", () => {

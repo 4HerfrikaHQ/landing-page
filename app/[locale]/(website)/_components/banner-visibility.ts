@@ -1,4 +1,4 @@
-const HIDDEN_PAGES = ["/donate", "/impact/year-2"];
+const HIDDEN_PAGES = ["/donate", "/impact/two-steps-forward"];
 const HIDDEN_SECTIONS = ["/careercorner/", "/academy/"];
 
 export function isBannerHidden(pathname: string) {

@@ -1,8 +1,8 @@
 import type { StaticImageData } from "next/image";
 import { z } from "zod";
-import beginning from "./beginning.jpg";
-import { year2Report } from "./year-2/_report";
-import type { FigureKey } from "./year-2/_schema";
+import { year2Report } from "./two-steps-forward/_report";
+import type { FigureKey } from "./two-steps-forward/_schema";
+import year2Cover from "./two-steps-forward/hero.jpg";
 import yearReport from "./year-report.jpg";
 
 export const REPORT_PDF_URL =
@@ -35,17 +35,15 @@ export type ImpactReport = {
 	cover: StaticImageData;
 	onlineHref: string;
 	pdfHref: string | null;
-	pending: boolean;
 	figures: ReadonlyArray<{ value: string; labelKey: FigureLabelKey }>;
 };
 
 export const impactReports: ReadonlyArray<ImpactReport> = [
 	{
 		key: ReportKey.enum.year2,
-		cover: beginning,
-		onlineHref: "/impact/year-2",
+		cover: year2Cover,
+		onlineHref: "/impact/two-steps-forward",
 		pdfHref: year2Report.pdf?.url ?? null,
-		pending: !year2Report.fullCountPublished,
 		figures: year2Report.figures.slice(0, 4).map((figure) => ({
 			value: figure.value,
 			labelKey: `year2.figures.${figure.key}` as const,
@@ -54,9 +52,8 @@ export const impactReports: ReadonlyArray<ImpactReport> = [
 	{
 		key: ReportKey.enum.year1,
 		cover: yearReport,
-		onlineHref: "/impact/year-1",
+		onlineHref: "/impact/from-one-to-many",
 		pdfHref: REPORT_PDF_URL,
-		pending: false,
 		figures: [
 			{ value: "3,000+", labelKey: "year1.figures.girlsMentored" },
 			{ value: "25+", labelKey: "year1.figures.campuses" },

@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import beginning from "../../beginning.jpg";
 import type { ImpactYear2Report } from "../_report";
+import hero from "../hero.jpg";
 
 async function ReportAction({ report }: { report: ImpactYear2Report }) {
 	const t = await getTranslations("impactYear2");
@@ -43,12 +43,12 @@ export async function Year2Hero({ report }: { report: ImpactYear2Report }) {
 			className="relative flex min-h-160 items-center justify-center overflow-hidden px-6 pb-16 pt-32 text-white lg:min-h-190"
 		>
 			<Image
-				src={beginning}
+				src={hero}
 				alt={t("heroAlt")}
 				fill
 				priority
 				sizes="100vw"
-				className="object-cover object-[50%_22%]"
+				className="object-cover object-[50%_80%]"
 			/>
 			<div className="absolute inset-0 bg-black/60" />
 			<div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
@@ -68,7 +68,7 @@ export async function Year2Hero({ report }: { report: ImpactYear2Report }) {
 				</p>
 				<div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
 					<Button
-						href="#note"
+						href="#numbers"
 						size="lg"
 						className="min-h-12 gap-2 px-6 font-medium"
 					>

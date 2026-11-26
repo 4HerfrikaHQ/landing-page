@@ -5,6 +5,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 const withMDX = createMDX();
 
+const IMPACT_REPORT_SLUGS = {
+	"year-1": "from-one-to-many",
+	"year-2": "two-steps-forward",
+};
+
 const nextConfig: NextConfig = {
 	typedRoutes: true,
 	productionBrowserSourceMaps: false,
@@ -20,6 +25,13 @@ const nextConfig: NextConfig = {
 				destination: `${canonicalPrefix(prefix)}/careercorner/:path*`,
 				permanent: true,
 			})),
+			...prefixes.flatMap((prefix) =>
+				Object.entries(IMPACT_REPORT_SLUGS).map(([year, slug]) => ({
+					source: `${prefix}/impact/${year}`,
+					destination: `${canonicalPrefix(prefix)}/impact/${slug}`,
+					permanent: true,
+				})),
+			),
 			...prefixes.map((prefix) => ({
 				source: `${prefix}/projects`,
 				destination: `${canonicalPrefix(prefix)}/blog/category/projects`,

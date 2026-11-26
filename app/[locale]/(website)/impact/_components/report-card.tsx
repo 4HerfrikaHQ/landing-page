@@ -5,17 +5,6 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import type { ImpactReport } from "../_schema";
 
-async function PendingBadge({ pending }: { pending: boolean }) {
-	if (!pending) return null;
-	const t = await getTranslations("impactIndex");
-
-	return (
-		<span className="rounded-full bg-primary-500 px-3 py-1 text-xs font-semibold text-white">
-			{t("year2.comingSoon")}
-		</span>
-	);
-}
-
 async function PdfAction({ href }: { href: string | null }) {
 	if (href === null) return null;
 	const t = await getTranslations("impactIndex");
@@ -35,13 +24,6 @@ async function PdfAction({ href }: { href: string | null }) {
 
 async function ReportNote({ report }: { report: ImpactReport }) {
 	const t = await getTranslations("impactIndex");
-	if (report.pending) {
-		return (
-			<p className="mt-3 text-xs text-muted-foreground">
-				{t("year2.figuresPending")}
-			</p>
-		);
-	}
 	if (report.pdfHref === null) return null;
 
 	return (
@@ -52,7 +34,6 @@ async function ReportNote({ report }: { report: ImpactReport }) {
 export async function ReportCard({ report }: { report: ImpactReport }) {
 	const t = await getTranslations("impactIndex");
 	const key = report.key;
-	const readLabel = report.pending ? t("year2.preview") : t("readOnline");
 
 	return (
 		<FadeIn>
@@ -66,7 +47,6 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 				<div className="pt-5 lg:pt-2">
 					<div className="flex items-center gap-2">
 						<p className="text-sm text-muted-foreground">{t(`${key}.label`)}</p>
-						<PendingBadge pending={report.pending} />
 					</div>
 					<h3 className="mt-3 text-[28px] font-bold leading-tight lg:text-4xl">
 						{t(`${key}.title`)}
@@ -92,7 +72,8 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 							size="lg"
 							className="min-h-12 gap-2 px-6 font-medium"
 						>
-							{readLabel} <ArrowRight aria-hidden="true" className="size-5" />
+							{t("readOnline")}{" "}
+							<ArrowRight aria-hidden="true" className="size-5" />
 						</Button>
 						<PdfAction href={report.pdfHref} />
 					</div>
