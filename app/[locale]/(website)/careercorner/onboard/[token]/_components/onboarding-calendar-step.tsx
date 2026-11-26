@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2Icon } from "lucide-react";
 import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -80,9 +81,13 @@ export function OnboardingCalendarStep({
 				<input type="hidden" {...form.register("token")} />
 				<Button
 					type="submit"
-					className="w-full"
+					size="lg"
+					className="h-12 w-full gap-2 px-6 py-0 text-base font-semibold focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 md:py-0 md:text-base"
 					disabled={!isConnected || action.isPending}
 				>
+					{action.isPending ? (
+						<Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
+					) : null}
 					{action.isPending ? tGoLive("pending") : tGoLive("button")}
 				</Button>
 			</form>

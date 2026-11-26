@@ -2,7 +2,6 @@ import type {
 	MentorCalendarCallbackOutcome,
 	MentorCalendarCallbackReason,
 } from "@/app/(dashboard)/dashboard/mentor/profile/_components/mentor-calendar-connection";
-import { EmptyState } from "@/components/dashboard/empty-state";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { saveOnboardingAvailability } from "@/src/db/actions/availability";
@@ -10,9 +9,9 @@ import { mentorLoginUrl } from "@/src/lib/mentor-login-url";
 import { CircleAlertIcon, ClockIcon, SparklesIcon } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import FourHerfrikaLogo from "../../../4herfrika-logo";
 import { loadMentorFromToken } from "./_actions";
 import { OnboardingCalendarStep } from "./_components/onboarding-calendar-step";
+import { OnboardingNotice } from "./_components/onboarding-notice";
 import { OnboardingStepper } from "./_components/onboarding-stepper";
 
 const ALLOWED_CALLBACK_REASONS: readonly MentorCalendarCallbackReason[] = [
@@ -52,6 +51,12 @@ function getCallbackOutcome(
 const SUPPORT_MAILTO =
 	"mailto:4herfrika@gmail.com?subject=My%20mentor%20onboarding%20link";
 
+const PRIMARY_ACTION =
+	"h-12 px-6 py-0 text-base font-semibold focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 md:py-0 md:text-base";
+
+const SECONDARY_ACTION =
+	"h-12 px-6 py-0 text-base focus-visible:ring-3 focus-visible:ring-primary-500/30 md:py-0 md:text-base";
+
 const LINK_PROBLEM = {
 	used: { icon: SparklesIcon, key: "linkUsed" },
 	expired: { icon: ClockIcon, key: "linkExpired" },
@@ -60,18 +65,14 @@ const LINK_PROBLEM = {
 
 function OnboardShell({ children }: { children: React.ReactNode }) {
 	return (
-		<main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-surface-pink via-white to-white px-4 py-16">
-			<div
-				aria-hidden
-				className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-surface-pink to-transparent"
-			/>
-			<div className="relative mx-auto w-full max-w-2xl">{children}</div>
+		<main className="overflow-x-clip bg-white text-foreground">
+			<div className="mx-auto max-w-3xl px-4 pt-6 pb-16 lg:pt-12 lg:pb-24">
+				{children}
+			</div>
 		</main>
 	);
 }
 
-// Token-gated private page — keep it out of search results, but still give it
-// a proper localized title/OG for the browser tab and link previews.
 export async function generateMetadata({
 	params,
 }: {
@@ -114,32 +115,37 @@ export default async function OnboardingPage({
 			result.reason === "used" || result.reason === "expired"
 				? LINK_PROBLEM[result.reason]
 				: LINK_PROBLEM.malformed;
+		const supportAction =
+			result.reason === "used" ? null : (
+				<Button
+					href={SUPPORT_MAILTO}
+					variant="outline"
+					size="lg"
+					className={SECONDARY_ACTION}
+				>
+					{t("emailTeam")}
+				</Button>
+			);
 		return (
 			<OnboardShell>
-				<div className="flex flex-col items-center">
-					<FourHerfrikaLogo className="h-10 w-auto" />
-					<EmptyState
-						className="mt-10 w-full border-solid bg-white"
-						icon={problem.icon}
-						title={t(`${problem.key}.title`)}
-						description={t(`${problem.key}.description`)}
-						action={
-							<div className="flex flex-wrap items-center justify-center gap-3">
-								<Button
-									href={mentorLoginUrl({ email: result.email, locale })}
-									size="sm"
-								>
-									{t("signIn")}
-								</Button>
-								{result.reason !== "used" ? (
-									<Button href={SUPPORT_MAILTO} variant="outline" size="sm">
-										{t("emailTeam")}
-									</Button>
-								) : null}
-							</div>
-						}
-					/>
-				</div>
+				<OnboardingNotice
+					tone="neutral"
+					icon={problem.icon}
+					title={t(`${problem.key}.title`)}
+					description={t(`${problem.key}.description`)}
+					actions={
+						<>
+							<Button
+								href={mentorLoginUrl({ email: result.email, locale })}
+								size="lg"
+								className={PRIMARY_ACTION}
+							>
+								{t("signIn")}
+							</Button>
+							{supportAction}
+						</>
+					}
+				/>
 			</OnboardShell>
 		);
 	}
@@ -151,29 +157,31 @@ export default async function OnboardingPage({
 	if (mentor.active) {
 		return (
 			<OnboardShell>
-				<FadeIn className="flex flex-col items-center">
-					<FourHerfrikaLogo className="h-10 w-auto" />
-					<EmptyState
-						className="mt-10 w-full border-solid bg-surface-pink/40"
-						icon={SparklesIcon}
-						title={t("alreadyLive.title")}
-						description={t("alreadyLive.description")}
-						action={
-							<div className="flex flex-wrap items-center justify-center gap-3">
-								<Button href={`/careercorner/${mentor.slug}`} size="sm">
-									{t("alreadyLive.viewProfile")}
-								</Button>
-								<Button
-									href={mentorLoginUrl({ email: mentor.email, locale })}
-									variant="outline"
-									size="sm"
-								>
-									{t("signIn")}
-								</Button>
-							</div>
-						}
-					/>
-				</FadeIn>
+				<OnboardingNotice
+					tone="success"
+					icon={SparklesIcon}
+					title={t("alreadyLive.title")}
+					description={t("alreadyLive.description")}
+					actions={
+						<>
+							<Button
+								href={`/careercorner/${mentor.slug}`}
+								size="lg"
+								className={PRIMARY_ACTION}
+							>
+								{t("alreadyLive.viewProfile")}
+							</Button>
+							<Button
+								href={mentorLoginUrl({ email: mentor.email, locale })}
+								variant="outline"
+								size="lg"
+								className={SECONDARY_ACTION}
+							>
+								{t("signIn")}
+							</Button>
+						</>
+					}
+				/>
 			</OnboardShell>
 		);
 	}
@@ -181,20 +189,22 @@ export default async function OnboardingPage({
 	return (
 		<OnboardShell>
 			<FadeIn>
-				<header className="flex flex-col items-center text-center">
-					<FourHerfrikaLogo className="h-10 w-auto" />
-					<p className="mt-8 text-xs uppercase tracking-wide text-primary-500">
+				<header>
+					<span className="inline-block rounded-pill bg-surface-pink px-3 py-1.5 text-xs text-primary-500">
 						{tOnboarding("eyebrow")}
-					</p>
-					<h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight text-foreground">
-						{tOnboarding("welcome", { name: mentor.name })}
+					</span>
+					<h1 className="mt-4 text-[32px] font-bold leading-tight text-secondary-500 lg:text-5xl">
+						{tOnboarding("welcomeFirst")}{" "}
+						<em className="font-playfair font-black text-primary-500">
+							{mentor.name}
+						</em>
 					</h1>
-					<p className="mt-2 max-w-md text-muted-foreground">
+					<p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground lg:text-lg">
 						{tOnboarding("intro")}
 					</p>
 				</header>
 
-				<div className="mt-10 rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8">
+				<div className="mt-8 rounded-[20px] bg-white p-5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] sm:p-8 lg:mt-10">
 					<OnboardingStepper
 						availability={{
 							mentorId: mentor.id,

@@ -1,27 +1,47 @@
 "use client";
 
-import { EmptyState } from "@/components/dashboard/empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
 import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	CheckCircle2Icon,
+	CircleAlertIcon,
 	FileIcon,
 	Loader2Icon,
 	UploadCloudIcon,
 	XIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
-import { toast } from "sonner";
-import { uploadMentorCv } from "../apply/_upload-cv";
+import type { FieldError } from "react-hook-form";
 import { submitMentorApplication } from "../apply/_actions";
 import { SubmitApplicationSchema } from "../apply/_schema";
+import { uploadMentorCv } from "../apply/_upload-cv";
+import {
+	MENTOR_INPUT_CLASS,
+	MENTOR_TEXTAREA_CLASS,
+	MentorFormField,
+} from "./mentor-form-field";
+
+const CV_MIME_TYPES = new Set([
+	"application/pdf",
+	"application/msword",
+	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]);
+const CV_MAX_BYTES = 10 * 1024 * 1024;
+
+const SUCCESS_STEPS = [
+	{ title: "step1Title", body: "step1Body" },
+	{ title: "step2Title", body: "step2Body" },
+] as const;
+
+type FieldName = keyof typeof SubmitApplicationSchema.shape;
 
 export function BecomeAMentorForm() {
+	const t = useTranslations("mentorApply");
 	const { form, handleSubmitWithAction, action } = useHookFormAction(
 		submitMentorApplication,
 		zodResolver(SubmitApplicationSchema),
@@ -38,10 +58,6 @@ export function BecomeAMentorForm() {
 					cv_path: "",
 				},
 			},
-			actionProps: {
-				onError: ({ error }) =>
-					toast.error(error.serverError ?? "Something went wrong. Try again."),
-			},
 		},
 	);
 
@@ -50,13 +66,50 @@ export function BecomeAMentorForm() {
 
 	const errors = form.formState.errors;
 	const isSubmitting = isUploading || action.isPending;
+	const bioLength = form.watch("bio").length;
+
+	function errorMessage(field: FieldName, error: FieldError | undefined) {
+		if (!error) return undefined;
+		if (field === "cv_path") {
+			if (error.type === "fileType") return t("cv.fileType");
+			if (error.type === "fileSize") return t("cv.fileSize");
+			if (error.type === "uploadFailed") return t("cv.uploadFailed");
+			return t("errors.cv_path");
+		}
+		if (error.type === "too_big") {
+			return field === "bio" ? t("errors.bioTooLong") : t("errors.tooLong");
+		}
+		return t(`errors.${field}`);
+	}
+
+	function resolveSubmitLabel() {
+		if (isUploading) return t("uploadingCv");
+		if (action.isPending) return t("submitting");
+		return t("submit");
+	}
+
+	function handleFileSelect(file: File | null) {
+		if (!file) {
+			setSelectedFile(null);
+			return;
+		}
+		if (!CV_MIME_TYPES.has(file.type)) {
+			form.setError("cv_path", { type: "fileType" });
+			return;
+		}
+		if (file.size > CV_MAX_BYTES) {
+			form.setError("cv_path", { type: "fileSize" });
+			return;
+		}
+		setSelectedFile(file);
+		form.clearErrors("cv_path");
+	}
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
 
 		if (!selectedFile) {
-			form.setError("cv_path", { message: "Please upload your CV." });
-			// Still let handleSubmitWithAction run so other field errors surface too
+			form.setError("cv_path", { type: "required" });
 			await handleSubmitWithAction();
 			return;
 		}
@@ -68,195 +121,414 @@ export function BecomeAMentorForm() {
 		setIsUploading(false);
 
 		if (result.error) {
-			form.setError("cv_path", { message: result.error });
+			form.setError("cv_path", { type: "uploadFailed" });
 			return;
 		}
 
-		form.setValue("cv_path", result.path!, { shouldValidate: false });
+		form.setValue("cv_path", result.path as string, { shouldValidate: false });
 		await handleSubmitWithAction();
 	}
 
+	const submitLabel = resolveSubmitLabel();
+
 	if (action.hasSucceeded) {
 		return (
-			<EmptyState
-				className="border-solid bg-surface-pink/40"
-				icon={CheckCircle2Icon}
-				title="Application received — here's what happens next"
-				description="Our team reviews each application personally and gets back to you within a few days. If it's a match, we'll send you a link to set up your mentor profile and availability."
-				action={
-					<Button href="/careercorner" variant="outline" size="sm">
-						Back to mentors
-					</Button>
-				}
-			/>
+			<section
+				aria-labelledby="mentor-apply-success-title"
+				className="rounded-[20px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:p-8"
+			>
+				<span
+					aria-hidden="true"
+					className="grid size-14 place-items-center rounded-full bg-surface-pink text-primary-500"
+				>
+					<CheckCircle2Icon className="size-7" strokeWidth={1.75} />
+				</span>
+				<h2
+					id="mentor-apply-success-title"
+					tabIndex={-1}
+					ref={(node) => node?.focus()}
+					className="mt-5 text-2xl font-bold leading-tight text-secondary-500 outline-none lg:text-3xl"
+				>
+					{t("success.title")}
+				</h2>
+				<p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
+					{t("success.description")}
+				</p>
+				<ol className="mt-6 space-y-4">
+					{SUCCESS_STEPS.map((step, index) => (
+						<li key={step.title} className="flex gap-4">
+							<span
+								aria-hidden="true"
+								className="grid size-9 shrink-0 place-items-center rounded-full bg-primary-500 text-sm font-semibold text-white"
+							>
+								{index + 1}
+							</span>
+							<div>
+								<h3 className="font-semibold text-secondary-500">
+									{t(`success.${step.title}`)}
+								</h3>
+								<p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">
+									{t(`success.${step.body}`)}
+								</p>
+							</div>
+						</li>
+					))}
+				</ol>
+				<Button
+					href="/careercorner"
+					variant="outline"
+					size="lg"
+					className="mt-8 h-12 px-6 py-0 text-base focus-visible:ring-3 focus-visible:ring-primary-500/30 md:py-0 md:text-base"
+				>
+					{t("success.back")}
+				</Button>
+			</section>
 		);
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-5">
-			<FormField label="Full name" error={errors.name?.message}>
-				<Input {...form.register("name")} />
-			</FormField>
+		<form
+			onSubmit={handleSubmit}
+			noValidate
+			aria-busy={isSubmitting}
+			className="rounded-[20px] bg-white p-6 shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:p-8"
+		>
+			<div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+				<h2 className="text-2xl font-bold text-secondary-500">
+					{t("formTitle")}
+				</h2>
+				<p className="text-xs text-muted-foreground">{t("allRequired")}</p>
+			</div>
 
-			<FormField label="Email address" error={errors.email?.message}>
-				<Input type="email" {...form.register("email")} />
-			</FormField>
+			<div className="mt-6 grid gap-5 sm:grid-cols-2">
+				<MentorFormField
+					label={t("fields.name")}
+					error={errorMessage("name", errors.name)}
+				>
+					{(control) => (
+						<Input
+							autoComplete="name"
+							className={MENTOR_INPUT_CLASS}
+							{...control}
+							{...form.register("name")}
+						/>
+					)}
+				</MentorFormField>
 
-			<FormField label="Phone / WhatsApp" error={errors.phone?.message}>
-				<Input {...form.register("phone")} />
-			</FormField>
+				<MentorFormField
+					label={t("fields.email")}
+					error={errorMessage("email", errors.email)}
+				>
+					{(control) => (
+						<Input
+							type="email"
+							autoComplete="email"
+							className={MENTOR_INPUT_CLASS}
+							{...control}
+							{...form.register("email")}
+						/>
+					)}
+				</MentorFormField>
 
-			<FormField label="Country" error={errors.country?.message}>
-				<Input {...form.register("country")} />
-			</FormField>
+				<MentorFormField
+					label={t("fields.phone")}
+					error={errorMessage("phone", errors.phone)}
+				>
+					{(control) => (
+						<Input
+							type="tel"
+							autoComplete="tel"
+							className={MENTOR_INPUT_CLASS}
+							{...control}
+							{...form.register("phone")}
+						/>
+					)}
+				</MentorFormField>
 
-			<FormField label="LinkedIn Profile URL" error={errors.linkedin_url?.message}>
-				<Input type="url" {...form.register("linkedin_url")} />
-			</FormField>
+				<MentorFormField
+					label={t("fields.country")}
+					error={errorMessage("country", errors.country)}
+				>
+					{(control) => (
+						<Input
+							autoComplete="country-name"
+							className={MENTOR_INPUT_CLASS}
+							{...control}
+							{...form.register("country")}
+						/>
+					)}
+				</MentorFormField>
 
-			<FormField label="About you" error={errors.bio?.message}>
-				<Textarea
-					rows={6}
-					className="min-h-[120px] resize-none"
-					placeholder="Tell us a bit about your background, what you do, and why you want to mentor young African women."
-					{...form.register("bio")}
-				/>
-			</FormField>
+				<div className="sm:col-span-2">
+					<MentorFormField
+						label={t("fields.linkedin")}
+						error={errorMessage("linkedin_url", errors.linkedin_url)}
+					>
+						{(control) => (
+							<Input
+								type="url"
+								inputMode="url"
+								autoComplete="url"
+								placeholder={t("fields.linkedinPlaceholder")}
+								className={MENTOR_INPUT_CLASS}
+								{...control}
+								{...form.register("linkedin_url")}
+							/>
+						)}
+					</MentorFormField>
+				</div>
 
-			<FormField label="Primary Industry" error={errors.industry?.message}>
-				<Input placeholder="e.g. Tech, Healthcare, Finance…" {...form.register("industry")} />
-			</FormField>
+				<div className="sm:col-span-2">
+					<MentorFormField
+						label={t("fields.industry")}
+						error={errorMessage("industry", errors.industry)}
+					>
+						{(control) => (
+							<Input
+								placeholder={t("fields.industryPlaceholder")}
+								className={MENTOR_INPUT_CLASS}
+								{...control}
+								{...form.register("industry")}
+							/>
+						)}
+					</MentorFormField>
+				</div>
 
-			<FormField label="CV" error={errors.cv_path?.message}>
-				<CvUpload
-					selectedFile={selectedFile}
-					onFileSelect={(file) => {
-						setSelectedFile(file);
-						if (file) form.clearErrors("cv_path");
-					}}
-					isUploading={isUploading}
-					error={errors.cv_path?.message}
-				/>
-			</FormField>
+				<div className="sm:col-span-2">
+					<MentorFormField
+						label={t("fields.bio")}
+						error={errorMessage("bio", errors.bio)}
+						hint={t("fields.bioCount", { count: bioLength })}
+					>
+						{(control) => (
+							<Textarea
+								rows={6}
+								placeholder={t("fields.bioPlaceholder")}
+								className={MENTOR_TEXTAREA_CLASS}
+								{...control}
+								{...form.register("bio")}
+							/>
+						)}
+					</MentorFormField>
+				</div>
+
+				<div className="sm:col-span-2">
+					<MentorFormField
+						label={t("fields.cv")}
+						error={errorMessage("cv_path", errors.cv_path)}
+					>
+						{(control) => (
+							<CvUpload
+								control={control}
+								selectedFile={selectedFile}
+								onFileSelect={handleFileSelect}
+								isUploading={isUploading}
+								hasError={Boolean(errors.cv_path)}
+							/>
+						)}
+					</MentorFormField>
+				</div>
+			</div>
+
+			<ServerError hasErrored={action.hasErrored} message={t("serverError")} />
 
 			<Button
 				type="submit"
 				disabled={isSubmitting}
-				className="w-full"
 				size="lg"
+				className="mt-6 h-12 w-full gap-2 px-6 py-0 text-base font-semibold focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 md:py-0 md:text-base"
 			>
-				{isUploading
-					? "Uploading CV…"
-					: action.isPending
-						? "Submitting…"
-						: "Submit application"}
+				<Spinner visible={isSubmitting} />
+				{submitLabel}
 			</Button>
 		</form>
 	);
 }
 
 function CvUpload({
+	control,
 	selectedFile,
 	onFileSelect,
 	isUploading,
-	error,
+	hasError,
 }: {
+	control: CvControl;
 	selectedFile: File | null;
 	onFileSelect: (file: File | null) => void;
 	isUploading: boolean;
-	error?: string;
+	hasError: boolean;
 }) {
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-		const file = e.target.files?.[0] ?? null;
-		onFileSelect(file);
-	}
-
-	function handleRemove() {
-		onFileSelect(null);
-		if (inputRef.current) inputRef.current.value = "";
+		onFileSelect(e.target.files?.[0] ?? null);
+		e.target.value = "";
 	}
 
 	return (
-		<div className="space-y-1.5">
+		<div>
 			<input
 				ref={inputRef}
 				type="file"
 				accept=".pdf,.doc,.docx"
 				className="sr-only"
+				tabIndex={-1}
+				aria-hidden="true"
 				onChange={handleFileChange}
 				disabled={isUploading}
 			/>
 
-			{selectedFile ? (
-				<div className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 px-4 py-3">
-					{isUploading ? (
-						<Loader2Icon className="size-4 shrink-0 animate-spin text-primary-500" />
-					) : (
-						<FileIcon className="size-4 shrink-0 text-muted-foreground" />
-					)}
-					<span className="min-w-0 flex-1 truncate text-sm text-foreground">
-						{selectedFile.name}
-					</span>
-					{!isUploading && (
-						<button
-							type="button"
-							onClick={handleRemove}
-							className="shrink-0 text-muted-foreground transition-colors hover:text-destructive"
-							aria-label="Remove file"
-						>
-							<XIcon className="size-4" />
-						</button>
-					)}
-				</div>
-			) : (
-				<button
-					type="button"
-					onClick={() => inputRef.current?.click()}
-					disabled={isUploading}
-					className={cn(
-						"flex w-full flex-col items-center gap-2 rounded-lg border border-dashed border-border px-6 py-8 text-center transition-colors hover:border-primary-500 hover:bg-surface-pink/30 disabled:pointer-events-none disabled:opacity-60",
-						error && "border-destructive",
-					)}
-				>
-					<UploadCloudIcon className="size-6 text-muted-foreground" />
-					<span className="text-sm font-medium text-foreground">Upload CV</span>
-					<span className="text-xs text-muted-foreground">
-						PDF, DOC, DOCX · max 10 MB
-					</span>
-				</button>
-			)}
+			<CvSlot
+				control={control}
+				selectedFile={selectedFile}
+				onPick={() => inputRef.current?.click()}
+				onRemove={() => onFileSelect(null)}
+				isUploading={isUploading}
+				hasError={hasError}
+			/>
 		</div>
 	);
 }
 
-function FormField({
-	label,
-	hint,
-	helper,
-	error,
-	children,
+function ServerError({
+	hasErrored,
+	message,
 }: {
-	label: string;
-	hint?: string;
-	helper?: string;
-	error?: string;
-	children: React.ReactNode;
+	hasErrored: boolean;
+	message: string;
 }) {
+	if (!hasErrored) return null;
+
 	return (
-		<div className="space-y-1.5">
-			<div className="flex items-baseline justify-between gap-2">
-				<Label>{label}</Label>
-				{hint ? (
-					<span className="text-xs text-muted-foreground">{hint}</span>
-				) : null}
-			</div>
-			{children}
-			{helper && !error ? (
-				<p className="text-xs text-muted-foreground">{helper}</p>
-			) : null}
-			{error ? <p className="text-sm text-destructive">{error}</p> : null}
+		<div
+			role="alert"
+			className="mt-6 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+		>
+			<CircleAlertIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+			<p>{message}</p>
 		</div>
+	);
+}
+
+function Spinner({ visible }: { visible: boolean }) {
+	if (!visible) return null;
+
+	return (
+		<Loader2Icon
+			aria-hidden="true"
+			className="size-4 animate-spin motion-reduce:animate-none"
+		/>
+	);
+}
+
+type CvControl = {
+	id: string;
+	"aria-invalid": true | undefined;
+	"aria-describedby": string | undefined;
+};
+
+function CvSlot({
+	control,
+	selectedFile,
+	onPick,
+	onRemove,
+	isUploading,
+	hasError,
+}: {
+	control: CvControl;
+	selectedFile: File | null;
+	onPick: () => void;
+	onRemove: () => void;
+	isUploading: boolean;
+	hasError: boolean;
+}) {
+	const t = useTranslations("mentorApply.cv");
+
+	if (!selectedFile) {
+		return (
+			<button
+				id={control.id}
+				type="button"
+				aria-invalid={control["aria-invalid"]}
+				aria-describedby={control["aria-describedby"]}
+				onClick={onPick}
+				disabled={isUploading}
+				className={cn(
+					"flex min-h-28 w-full flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-input bg-surface-pink/40 px-6 py-6 text-center transition-[border-color,background-color,box-shadow] duration-200 hover:border-primary-500 hover:bg-surface-pink focus-visible:border-primary-500 focus-visible:ring-3 focus-visible:ring-primary-500/20 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none",
+					hasError && "border-destructive bg-destructive/5",
+				)}
+			>
+				<UploadCloudIcon
+					aria-hidden="true"
+					className="size-6 text-primary-500"
+				/>
+				<span className="text-sm font-semibold text-secondary-500">
+					{t("upload")}
+				</span>
+				<span className="text-xs text-muted-foreground">{t("hint")}</span>
+			</button>
+		);
+	}
+
+	return (
+		<div className="flex min-h-14 items-center gap-3 rounded-xl border border-primary-500/30 bg-surface-pink px-4 py-2">
+			<FileStatusIcon isUploading={isUploading} />
+			<span
+				id={control.id}
+				className="min-w-0 flex-1 truncate text-sm font-medium text-secondary-500"
+			>
+				{selectedFile.name}
+			</span>
+			<FileTrailing
+				isUploading={isUploading}
+				onRemove={onRemove}
+				uploadingLabel={t("uploading")}
+				removeLabel={t("remove")}
+			/>
+		</div>
+	);
+}
+
+function FileStatusIcon({ isUploading }: { isUploading: boolean }) {
+	if (isUploading) {
+		return (
+			<Loader2Icon
+				aria-hidden="true"
+				className="size-5 shrink-0 animate-spin text-primary-500 motion-reduce:animate-none"
+			/>
+		);
+	}
+
+	return (
+		<FileIcon aria-hidden="true" className="size-5 shrink-0 text-primary-500" />
+	);
+}
+
+function FileTrailing({
+	isUploading,
+	onRemove,
+	uploadingLabel,
+	removeLabel,
+}: {
+	isUploading: boolean;
+	onRemove: () => void;
+	uploadingLabel: string;
+	removeLabel: string;
+}) {
+	if (isUploading) {
+		return (
+			<span className="text-xs text-muted-foreground">{uploadingLabel}</span>
+		);
+	}
+
+	return (
+		<button
+			type="button"
+			onClick={onRemove}
+			className="-mr-2 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:text-destructive focus-visible:ring-3 focus-visible:ring-primary-500/40 focus-visible:outline-none"
+			aria-label={removeLabel}
+		>
+			<XIcon aria-hidden="true" className="size-4" />
+		</button>
 	);
 }
