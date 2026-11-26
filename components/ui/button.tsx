@@ -4,10 +4,20 @@ import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { type VariantProps, cva } from "class-variance-authority";
 import type { Route } from "next";
 import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import { Children, type ComponentProps, type ReactNode } from "react";
 
 import { cn } from "@/utils/cn";
 import { RollLabel } from "./roll-label";
+
+function rollText(children: ReactNode): ReactNode {
+	return Children.map(children, (child) =>
+		typeof child === "string" && child.trim() ? (
+			<RollLabel>{child}</RollLabel>
+		) : (
+			child
+		),
+	);
+}
 
 const buttonVariants = cva(
 	"inline-flex shrink-0 items-center justify-center font-normal whitespace-nowrap press outline-none select-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 hover:no-underline! disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
@@ -56,12 +66,8 @@ function Button({
 	...props
 }: ButtonProps) {
 	const className = cn(buttonVariants({ variant, size }), _className);
-	const rolls =
-		typeof children === "string" &&
-		variant !== "link" &&
-		size !== "icon" &&
-		size !== "icon-sm";
-	const label = rolls ? <RollLabel>{children}</RollLabel> : children;
+	const rolls = variant !== "link" && size !== "icon" && size !== "icon-sm";
+	const label = rolls ? rollText(children) : children;
 
 	if (href) {
 		if (isExternal) {
