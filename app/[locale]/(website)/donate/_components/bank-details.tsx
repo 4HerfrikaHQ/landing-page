@@ -8,7 +8,7 @@ import { useState } from "react";
 const COPIED_RESET_MS = 1_600;
 
 const VALUE_CLASS = {
-	big: "break-all text-[28px] font-semibold tracking-wider",
+	big: "whitespace-nowrap text-2xl font-semibold tracking-wide sm:text-[28px] sm:tracking-wider",
 	regular: "break-words text-[15px] font-medium leading-snug",
 } as const;
 
@@ -41,7 +41,7 @@ function CopyRow({
 				<button
 					type="button"
 					onClick={() => onCopy(value, field)}
-					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-4 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
+					className="ml-auto inline-flex h-11 shrink-0 cursor-pointer items-center rounded-full border border-border bg-white px-3 text-sm min-[380px]:px-4 font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
 					<span className="grid">
 						<span
@@ -49,7 +49,7 @@ function CopyRow({
 							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
 						>
 							<ClipboardCopy className="size-4" aria-hidden="true" />
-							{t("copy")}
+							<span className="max-[379px]:sr-only">{t("copy")}</span>
 						</span>
 						<span
 							aria-hidden="true"
@@ -57,7 +57,7 @@ function CopyRow({
 							className="col-start-1 row-start-1 inline-flex items-center gap-1.5 data-[visible=false]:invisible"
 						>
 							<Check className="size-4 text-green-700" aria-hidden="true" />
-							{t("copied")}
+							<span className="max-[379px]:sr-only">{t("copied")}</span>
 						</span>
 					</span>
 					<span className="sr-only">{label}</span>
