@@ -32,8 +32,9 @@ export function CompleteButton({
 	const t = useTranslations("academy.lesson");
 	const router = useRouter();
 	const action = useAction(completeLesson, {
-		onSuccess: () => {
-			if (nextHref) router.push(nextHref as Route);
+		onSuccess: ({ data }) => {
+			if (data?.finishedCourse) router.push(`${courseHref}/complete` as Route);
+			else if (nextHref) router.push(nextHref as Route);
 			else router.refresh();
 		},
 	});

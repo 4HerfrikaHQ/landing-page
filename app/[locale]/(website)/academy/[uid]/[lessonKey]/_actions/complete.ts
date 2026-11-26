@@ -14,10 +14,8 @@ import { CompleteLessonSchema } from "../_schema";
 export const completeLesson = actionClient
 	.schema(CompleteLessonSchema)
 	.action(async ({ parsedInput: { uid, lessonKey } }) => {
-		const { course, enrolment, completed, lesson } = await actionAccess(
-			uid,
-			lessonKey,
-		);
+		const { course, enrolment, completed, lesson, learner } =
+			await actionAccess(uid, lessonKey);
 		if (lesson.kind === "quiz" || lesson.kind === "task") {
 			throw new ActionError("not_completable");
 		}
@@ -44,7 +42,10 @@ export const completeLesson = actionClient
 		if (transition.kind === "blocked") throw new ActionError("not_finished");
 		if (transition.kind === "complete") {
 			await markLessonComplete(enrolment.id, lesson.id, new Date());
-			if (transition.finishesCourse) await concludeCourse(course, enrolment);
+			const finishedCourse = transition.finishesCourse
+				? await concludeCourse(course, enrolment, learner)
+				: false;
+			return { completed: true, finishedCourse };
 		}
-		return { completed: true };
+		return { completed: true, finishedCourse: false };
 	});

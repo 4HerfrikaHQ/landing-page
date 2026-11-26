@@ -58,6 +58,12 @@ export function coursePath(uid: string): string {
 	return `/academy/${uid}`;
 }
 
+export function completePath(uid: string): string {
+	return `/academy/${uid}/complete`;
+}
+
+export const MY_LEARNING_PATH = "/academy/me";
+
 export function nextLesson(
 	course: Course,
 	policy: CompletionPolicy,
