@@ -5,6 +5,7 @@ import {
 	type MediaPlayerInstance,
 	MediaProvider,
 	Poster,
+	SeekButton,
 	Track,
 } from "@vidstack/react";
 import {
@@ -40,6 +41,8 @@ type Props = {
 	courseHref: string;
 	transcript: ReactNode;
 };
+
+const REWIND_SECONDS = 10;
 
 const QUALITY_LABEL: Record<VideoQuality, "q480" | "q720"> = {
 	480: "q480",
@@ -138,8 +141,28 @@ function PlayerArea({
 				<PosterImage url={props.posterUrl} title={props.title} />
 				<CaptionTrack url={source.captions} />
 			</MediaProvider>
-			<DefaultVideoLayout icons={defaultLayoutIcons} />
+			<DefaultVideoLayout
+				icons={defaultLayoutIcons}
+				seekStep={REWIND_SECONDS}
+				slots={{
+					largeLayout: { beforePlayButton: <RewindButton /> },
+					smallLayout: { beforeFullscreenButton: <RewindButton /> },
+				}}
+			/>
 		</MediaPlayer>
+	);
+}
+
+function RewindButton() {
+	const t = useTranslations("academy.lesson.video");
+	return (
+		<SeekButton
+			seconds={-REWIND_SECONDS}
+			aria-label={t("rewind", { seconds: REWIND_SECONDS })}
+			className="vds-button"
+		>
+			<defaultLayoutIcons.SeekButton.Backward />
+		</SeekButton>
 	);
 }
 

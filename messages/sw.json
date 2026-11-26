@@ -728,12 +728,7 @@
 			"badge": "Mpya · Kozi ya bure ya AI na Ordina",
 			"titleFirst": "Tunalea",
 			"titleSecond": "<word>wanawake</word> wa kiwango cha dunia.",
-			"morphWords": [
-				"wanawake",
-				"viongozi",
-				"waanzilishi",
-				"wanasayansi"
-			],
+			"morphWords": ["wanawake", "viongozi", "waanzilishi", "wanasayansi"],
 			"description": "Nyota yako ya Kaskazini kote Afrika. Tunawaongoza, kuwafunza na kuwaunganisha wanawake vijana kwa kazi za teknolojia, biashara, tabianchi na zaidi.",
 			"startCourse": "Anza kozi ya bure",
 			"bookMentor": "Weka miadi na mshauri",
@@ -1109,7 +1104,8 @@
 				"failed": "Video imeacha kupakia.",
 				"retry": "Pakia video upya",
 				"watchToContinue": "Tazama hadi mwisho ili kuendelea.",
-				"captionsLabel": "Kiingereza"
+				"captionsLabel": "Kiingereza",
+				"rewind": "Rudi nyuma sekunde {seconds}"
 			},
 			"reading": {
 				"badge": "Kusoma · takriban dakika {minutes}",
