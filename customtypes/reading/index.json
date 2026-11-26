@@ -1,0 +1,49 @@
+{
+  "format": "custom",
+  "id": "reading",
+  "label": "Course \u00b7 Reading",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "lesson_key": {
+        "type": "Text",
+        "config": {
+          "label": "Lesson key (e.g. M1-V, never change after publishing)",
+          "placeholder": ""
+        }
+      },
+      "title": {
+        "type": "Text",
+        "config": {
+          "label": "Title",
+          "placeholder": ""
+        }
+      },
+      "minutes": {
+        "type": "Number",
+        "config": {
+          "label": "Reading time (minutes)",
+          "placeholder": ""
+        }
+      },
+      "body": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Body",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong,em,hyperlink,image,list-item,o-list-item,heading2,heading3,preformatted"
+        }
+      },
+      "pdf": {
+        "type": "Link",
+        "config": {
+          "label": "PDF for offline reading",
+          "select": "media",
+          "allowTargetBlank": true
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,9 @@ export async function GET(request: NextRequest) {
 			if (doc.type === "blog_post") {
 				return `${prefix}/blog/${doc.uid}`;
 			}
+			if (doc.type === "course") {
+				return `${prefix}/academy/${doc.uid}`;
+			}
 			return `${prefix}/`;
 		},
 	});

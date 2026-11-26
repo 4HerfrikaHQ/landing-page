@@ -1,0 +1,104 @@
+{
+  "format": "custom",
+  "id": "quiz",
+  "label": "Course \u00b7 Quiz",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "lesson_key": {
+        "type": "Text",
+        "config": {
+          "label": "Lesson key (e.g. M1-V, never change after publishing)",
+          "placeholder": ""
+        }
+      },
+      "title": {
+        "type": "Text",
+        "config": {
+          "label": "Title",
+          "placeholder": ""
+        }
+      },
+      "questions": {
+        "type": "Group",
+        "config": {
+          "label": "Questions",
+          "repeat": true,
+          "fields": {
+            "question_key": {
+              "type": "Text",
+              "config": {
+                "label": "Question key (e.g. M1-01, never change after publishing)",
+                "placeholder": ""
+              }
+            },
+            "prompt": {
+              "type": "Text",
+              "config": {
+                "label": "Question",
+                "placeholder": ""
+              }
+            },
+            "option_a": {
+              "type": "Text",
+              "config": {
+                "label": "Option A",
+                "placeholder": ""
+              }
+            },
+            "option_b": {
+              "type": "Text",
+              "config": {
+                "label": "Option B",
+                "placeholder": ""
+              }
+            },
+            "option_c": {
+              "type": "Text",
+              "config": {
+                "label": "Option C",
+                "placeholder": ""
+              }
+            },
+            "option_d": {
+              "type": "Text",
+              "config": {
+                "label": "Option D",
+                "placeholder": ""
+              }
+            },
+            "correct": {
+              "type": "Select",
+              "config": {
+                "label": "Correct option",
+                "placeholder": "",
+                "options": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "default_value": "A"
+              }
+            },
+            "why": {
+              "type": "Text",
+              "config": {
+                "label": "Why (shown only after passing)",
+                "placeholder": ""
+              }
+            },
+            "topic": {
+              "type": "Text",
+              "config": {
+                "label": "Topic to review if missed",
+                "placeholder": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
