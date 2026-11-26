@@ -1,11 +1,14 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import laptopsImage from "@/public/assets/donate/laptops.jpg";
+import mentorImage from "@/public/assets/donate/mentor.jpg";
+import partnerImage from "@/public/assets/donate/partner.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 
 const WAYS = [
-	{ key: "mentor", href: "/join-us", image: "/assets/donate/mentor.jpg" },
-	{ key: "partner", href: "/contact-us", image: "/assets/donate/partner.jpg" },
-	{ key: "laptops", href: "/contact-us", image: "/assets/donate/laptops.jpg" },
+	{ key: "mentor", href: "/join-us", image: mentorImage },
+	{ key: "partner", href: "/contact-us", image: partnerImage },
+	{ key: "laptops", href: "/contact-us", image: laptopsImage },
 ] as const;
 
 export async function WaysToGive() {

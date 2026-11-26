@@ -1,6 +1,7 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
+import academyLogoImage from "@/public/assets/academy/academy-logo.png";
 import type { CertificatePartner } from "@/src/db/schema/tables/certificates";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import type { ReactNode } from "react";
 
 type CardProps = {
@@ -26,7 +27,7 @@ export function CertificateCard({
 		>
 			<header className="flex items-center justify-between gap-4">
 				<Image
-					src="/assets/academy/academy-logo.png"
+					src={academyLogoImage}
 					alt="4HerFrika"
 					width={128}
 					height={36}

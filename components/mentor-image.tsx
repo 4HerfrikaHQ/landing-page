@@ -1,3 +1,4 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import {
 	MENTOR_IMAGE_CROP_EPSILON,
@@ -5,7 +6,6 @@ import {
 	cropMentorImageToAspectRatio,
 } from "@/src/lib/mentor-image";
 import { cn } from "@/utils/cn";
-import Image from "next/image";
 
 type MentorImageProps = {
 	src: string;

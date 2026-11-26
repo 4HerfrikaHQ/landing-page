@@ -1,5 +1,6 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
+import heroSourceImage from "@/public/assets/academy/hero-source.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 
 const LAYOUT = {
 	withFeatured: {
@@ -34,7 +35,7 @@ export async function BlogHero({
 			className={`relative overflow-hidden text-white ${layout.section}`}
 		>
 			<Image
-				src="/assets/academy/hero-source.jpg"
+				src={heroSourceImage}
 				alt={t("heroAlt")}
 				fill
 				priority

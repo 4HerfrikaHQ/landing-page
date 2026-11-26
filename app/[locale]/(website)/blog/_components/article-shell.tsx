@@ -1,8 +1,8 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
 import { User } from "lucide-react";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { ReactNode } from "react";
 import { categoryHref, shareLinks, splitTitle } from "../_feed";
 import { CareerCard } from "./career-card";

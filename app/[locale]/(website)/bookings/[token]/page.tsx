@@ -1,12 +1,12 @@
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { isLocalImageUrl } from "@/src/lib/image-url";
 import { formatInTimeZone } from "date-fns-tz";
 import { CalendarClock, LinkIcon, UserRound, Video } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import { getInitialWeekStart } from "../../careercorner/[slug]/_actions";
 import { loadBookingFromToken } from "./_actions";
 import { ManageActions } from "./_components/manage-actions";

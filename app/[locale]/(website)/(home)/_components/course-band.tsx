@@ -1,7 +1,8 @@
 import { ClipReveal } from "@/components/motion/clip-reveal";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import courseImage from "@/public/assets/home/course.jpg";
 import { ArrowRight, Check } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { COURSE_POINT_KEYS } from "../_schema";
 import { PillLink } from "./pill-link";
 
@@ -46,7 +47,7 @@ export async function CourseBand() {
 			</div>
 			<ClipReveal className="relative aspect-square w-full lg:aspect-auto lg:w-1/2 lg:self-stretch">
 				<Image
-					src="/assets/home/course.jpg"
+					src={courseImage}
 					alt={t("imageAlt")}
 					fill
 					sizes="(max-width: 1024px) 100vw, 50vw"

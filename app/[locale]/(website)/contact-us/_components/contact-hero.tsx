@@ -1,6 +1,7 @@
 import { RollLabel } from "@/components/ui/roll-label";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import heroImage from "@/public/assets/contact/hero.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 
 export async function ContactHero() {
 	const t = await getTranslations("contact");
@@ -11,7 +12,7 @@ export async function ContactHero() {
 			className="relative flex min-h-150 flex-col justify-end overflow-hidden px-4 pb-12 pt-32 text-white lg:min-h-160 lg:justify-start lg:px-20 lg:pb-16 lg:pt-56"
 		>
 			<Image
-				src="/assets/contact/hero.jpg"
+				src={heroImage}
 				alt={t("heroImageAlt")}
 				fill
 				priority

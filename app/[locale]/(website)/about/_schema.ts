@@ -1,3 +1,13 @@
+import beepoImage from "@/public/assets/sponsors/beepo.png";
+import enactusImage from "@/public/assets/sponsors/enactus.png";
+import fateFoundationImage from "@/public/assets/sponsors/fate-foundation.jpg";
+import googleDeveloperStudentClubsImage from "@/public/assets/sponsors/google-developer-student-clubs.png";
+import lagosSdgsYouthAllianceImage from "@/public/assets/sponsors/lagos-sdgs-youth-alliance.png";
+import postmanImage from "@/public/assets/sponsors/postman.png";
+import syncthesisImage from "@/public/assets/sponsors/syncthesis.jpg";
+import techaffImage from "@/public/assets/sponsors/techaff.jpg";
+import theGrowthHubImage from "@/public/assets/sponsors/the-growth-hub.jpg";
+import trybebyFuseImage from "@/public/assets/sponsors/trybeby-fuse.jpg";
 import { z } from "zod";
 import { JOIN_US_URL } from "../navigation";
 
@@ -98,40 +108,40 @@ export const joinOptions = [
 export const sponsors = [
 	{
 		name: "Postman",
-		logo: "/assets/sponsors/postman.png",
+		logo: postmanImage,
 		url: "https://postman.com",
 	},
 	{
 		name: "Google Developer Student Clubs",
-		logo: "/assets/sponsors/google-developer-student-clubs.png",
+		logo: googleDeveloperStudentClubsImage,
 		url: "https://gdsc.community.dev",
 	},
 	{
 		name: "Enactus",
-		logo: "/assets/sponsors/enactus.png",
+		logo: enactusImage,
 		url: "https://enactus.org",
 	},
 	{
 		name: "FATE Foundation",
-		logo: "/assets/sponsors/fate-foundation.jpg",
+		logo: fateFoundationImage,
 		url: "https://fatefoundation.org",
 	},
-	{ name: "Beepo", logo: "/assets/sponsors/beepo.png", url: null },
-	{ name: "Syncthesis", logo: "/assets/sponsors/syncthesis.jpg", url: null },
-	{ name: "TechAff", logo: "/assets/sponsors/techaff.jpg", url: null },
+	{ name: "Beepo", logo: beepoImage, url: null },
+	{ name: "Syncthesis", logo: syncthesisImage, url: null },
+	{ name: "TechAff", logo: techaffImage, url: null },
 	{
 		name: "Trybeby FUSE",
-		logo: "/assets/sponsors/trybeby-fuse.jpg",
+		logo: trybebyFuseImage,
 		url: null,
 	},
 	{
 		name: "Lagos SDGs Youth Alliance",
-		logo: "/assets/sponsors/lagos-sdgs-youth-alliance.png",
+		logo: lagosSdgsYouthAllianceImage,
 		url: null,
 	},
 	{
 		name: "The Growth Hub",
-		logo: "/assets/sponsors/the-growth-hub.jpg",
+		logo: theGrowthHubImage,
 		url: null,
 	},
 ] as const;

@@ -1,5 +1,6 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
+import impactSourceImage from "@/public/assets/academy/impact-source.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { SubscribeForm } from "../../_components/subscribe";
 
 export async function NewsletterBand() {
@@ -26,7 +27,7 @@ export async function NewsletterBand() {
 			</div>
 			<div className="relative aspect-square w-full lg:aspect-auto lg:w-1/2">
 				<Image
-					src="/assets/academy/impact-source.jpg"
+					src={impactSourceImage}
 					alt={t("newsletterAlt")}
 					fill
 					sizes="(min-width: 1024px) 50vw, 100vw"

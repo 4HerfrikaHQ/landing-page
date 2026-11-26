@@ -1,22 +1,24 @@
 "use client";
 
 import { RollLabel } from "@/components/ui/roll-label";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import impactSourceImage from "@/public/assets/academy/impact-source.jpg";
+import mentorImage from "@/public/assets/contact/mentor.jpg";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import type { SentMessage } from "../_lib/contact-session";
 
 const WAIT_LINKS = [
 	{
 		href: "/academy",
-		image: "/assets/academy/impact-source.jpg",
+		image: impactSourceImage,
 		titleKey: "startCourse",
 		descriptionKey: "courseDescription",
 	},
 	{
 		href: "/careercorner",
-		image: "/assets/contact/mentor.jpg",
+		image: mentorImage,
 		titleKey: "bookMentor",
 		descriptionKey: "mentorDescription",
 	},

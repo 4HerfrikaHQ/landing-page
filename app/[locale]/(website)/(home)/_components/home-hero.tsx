@@ -1,7 +1,8 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import heroImage from "@/public/assets/home/hero.jpg";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { HeroMorphWord } from "./hero-morph-word";
 import { PillLink } from "./pill-link";
 
@@ -15,7 +16,7 @@ export async function HomeHero() {
 			className="relative h-170 overflow-hidden text-white lg:h-180"
 		>
 			<Image
-				src="/assets/home/hero.jpg"
+				src={heroImage}
 				alt={t("imageAlt")}
 				fill
 				priority

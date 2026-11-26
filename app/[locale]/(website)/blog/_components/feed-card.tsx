@@ -1,6 +1,6 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
 import type { Route } from "next";
-import Image from "next/image";
 
 import type { ChipTone, ImageFit } from "../_schema";
 

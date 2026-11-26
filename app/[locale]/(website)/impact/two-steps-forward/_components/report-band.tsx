@@ -1,8 +1,8 @@
 import { FadeIn } from "@/components/motion";
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Download } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { ImpactYear2Report } from "../_report";
 
 async function CoverPreview({ report }: { report: ImpactYear2Report }) {

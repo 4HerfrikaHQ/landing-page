@@ -1,8 +1,9 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import { RevealGroup } from "@/components/motion/reveal-group";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { createClient } from "@/prismicio";
+import decorativeLogoImage from "@/public/assets/academy/decorative-logo.png";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { CommunityTestimonial } from "../_schema";
 
 const MIN_TESTIMONIALS = 2;
@@ -28,7 +29,7 @@ export async function AcademyTestimonials() {
 	return (
 		<section className="relative overflow-hidden bg-surface-indigo px-4 py-16 lg:px-20 lg:py-24">
 			<Image
-				src="/assets/academy/decorative-logo.png"
+				src={decorativeLogoImage}
 				alt=""
 				width={173}
 				height={251}

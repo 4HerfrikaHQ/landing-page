@@ -1,6 +1,7 @@
 import { FadeIn } from "@/components/motion";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { getTranslations } from "next-intl/server";
-import Image, { type StaticImageData } from "next/image";
+import type { StaticImageData } from "next/image";
 import missionImage from "../assets/mission.jpg";
 import visionImage from "../assets/vision.jpg";
 import { SectionEyebrow } from "./section-eyebrow";

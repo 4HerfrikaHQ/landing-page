@@ -1,9 +1,9 @@
 import { FadeIn } from "@/components/motion";
 import { CountUp } from "@/components/motion/count-up";
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { ArrowRight, Download } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { ImpactReport } from "../_schema";
 
 async function PdfAction({ href }: { href: string | null }) {

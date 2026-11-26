@@ -1,6 +1,7 @@
 import { RollLabel } from "@/components/ui/roll-label";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import goalImage from "@/public/assets/donate/goal.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 
 export async function GoalBand() {
 	const t = await getTranslations("donate.goal");
@@ -41,7 +42,7 @@ export async function GoalBand() {
 			</div>
 			<div className="relative aspect-square w-full lg:aspect-auto lg:min-h-full lg:w-1/2">
 				<Image
-					src="/assets/donate/goal.jpg"
+					src={goalImage}
 					alt={t("imageAlt")}
 					fill
 					sizes="(min-width: 1024px) 50vw, 100vw"

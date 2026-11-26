@@ -6,10 +6,10 @@ import { EASE_OUT } from "@/components/motion/tokens";
 import { Button } from "@/components/ui/button";
 import { LayoutMotion } from "@/components/ui/layout-motion";
 import { SelectedHighlight } from "@/components/ui/selected-highlight";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { trackEvent } from "@/src/lib/analytics";
 import { AnimatePresence, m } from "motion/react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { type ReactNode, useState } from "react";
 import {

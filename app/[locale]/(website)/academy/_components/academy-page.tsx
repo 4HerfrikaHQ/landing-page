@@ -5,11 +5,13 @@ import { CountUp } from "@/components/motion/count-up";
 import { FadeIn } from "@/components/motion/fade-in";
 import { RevealGroup } from "@/components/motion/reveal-group";
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import heroSourceImage from "@/public/assets/academy/hero-source.jpg";
+import impactSourceImage from "@/public/assets/academy/impact-source.jpg";
 import { trackEvent } from "@/src/lib/analytics";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import {
 	type ReactNode,
@@ -121,7 +123,7 @@ export function AcademyPage({
 				className="relative h-211.25 overflow-hidden text-white max-lg:h-180"
 			>
 				<Image
-					src="/assets/academy/hero-source.jpg"
+					src={heroSourceImage}
 					alt="Three women collaborating at 4Herfrika Academy"
 					fill
 					priority
@@ -323,7 +325,7 @@ export function AcademyPage({
 				<div className="relative h-full w-1/2 overflow-hidden max-lg:aspect-719/737 max-lg:h-auto max-lg:w-full">
 					<ClipReveal className="absolute inset-0">
 						<Image
-							src="/assets/academy/impact-source.jpg"
+							src={impactSourceImage}
 							alt="4Herfrika participant working on a laptop"
 							fill
 							sizes="(max-width: 1024px) 100vw, 50vw"

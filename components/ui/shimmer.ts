@@ -1,0 +1,3 @@
+const SHIMMER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fdf2f8"/><stop offset="0.5" stop-color="#fbe4f1"/><stop offset="1" stop-color="#fdf2f8"/></linearGradient></defs><rect width="400" height="300" fill="#fdf2f8"/><rect width="400" height="300" fill="url(#g)"><animate attributeName="x" from="-400" to="400" dur="1.4s" repeatCount="indefinite"/></rect></svg>`;
+
+export const SHIMMER_PLACEHOLDER: `data:image/${string}` = `data:image/svg+xml;base64,${btoa(SHIMMER_SVG)}`;

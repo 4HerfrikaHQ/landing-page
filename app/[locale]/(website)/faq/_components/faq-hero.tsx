@@ -1,5 +1,5 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { ReactNode } from "react";
 
 const FALLBACK_IMAGE = "/assets/academy/hero-source.jpg";

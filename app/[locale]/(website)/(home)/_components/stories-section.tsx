@@ -1,11 +1,11 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import { RevealGroup } from "@/components/motion/reveal-group";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { HomeStory } from "../_helpers";
 import { FEATURED_COUNT, REGULAR_END_INDEX, StoryVariant } from "../_schema";
 import { PillLink } from "./pill-link";

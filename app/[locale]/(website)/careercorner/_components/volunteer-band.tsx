@@ -1,9 +1,10 @@
 import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { RollLabel } from "@/components/ui/roll-label";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import volunteerImage from "@/public/assets/careercorner/volunteer.jpg";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import Link from "next/link";
 
 export async function VolunteerBand() {
@@ -44,7 +45,7 @@ export async function VolunteerBand() {
 			</div>
 			<ClipReveal className="relative aspect-square w-full overflow-hidden rounded-b-[40px] lg:aspect-auto lg:h-full lg:w-1/2 lg:rounded-b-none lg:rounded-bl-[64px]">
 				<Image
-					src="/assets/careercorner/volunteer.jpg"
+					src={volunteerImage}
 					alt={t("volunteerImageAlt")}
 					fill
 					sizes="(max-width: 1024px) 100vw, 50vw"

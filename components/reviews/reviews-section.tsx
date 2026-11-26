@@ -8,9 +8,9 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { cn } from "@/utils/cn";
 import { Star } from "lucide-react";
-import Image from "next/image";
 import type { ReactNode } from "react";
 
 export type Review = {

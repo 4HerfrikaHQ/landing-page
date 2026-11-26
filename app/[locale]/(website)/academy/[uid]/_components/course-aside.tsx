@@ -1,5 +1,5 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { PartnerLogo } from "../../_components/course-card";
 import type { Course } from "../../_helpers";
 import { activePolicy, courseProgressPercent, nextLesson } from "../_helpers";

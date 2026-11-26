@@ -1,7 +1,7 @@
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import giveImage from "../assets/give.jpg";
 import { SectionEyebrow } from "./section-eyebrow";
 

@@ -1,5 +1,6 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
+import heroSourceImage from "@/public/assets/academy/hero-source.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { HeroSearch } from "./hero-search";
 
 export async function CareersHero() {
@@ -11,7 +12,7 @@ export async function CareersHero() {
 			className="relative flex min-h-150 flex-col justify-end overflow-hidden px-4 pt-32 pb-10 text-white lg:min-h-160 lg:justify-start lg:px-0 lg:pt-48 lg:pb-16"
 		>
 			<Image
-				src="/assets/academy/hero-source.jpg"
+				src={heroSourceImage}
 				alt={t("heroImageAlt")}
 				fill
 				priority
