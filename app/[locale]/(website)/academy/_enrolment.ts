@@ -1,6 +1,10 @@
 import "server-only";
 import { db } from "@/src/db";
-import { enrolments, lessonProgress } from "@/src/db/schema/tables";
+import {
+	enrolments,
+	lessonProgress,
+	taskSubmissions,
+} from "@/src/db/schema/tables";
 import { and, eq, isNotNull } from "drizzle-orm";
 
 export async function findEnrolment(learnerId: string, courseId: string) {
@@ -27,5 +31,14 @@ export async function completedLessonIds(enrolmentId: string) {
 				isNotNull(lessonProgress.completed_at),
 			),
 		);
-	return new Set(rows.map((row) => row.lessonId));
+	const reviewed = await db
+		.selectDistinct({ lessonId: taskSubmissions.lesson_id })
+		.from(taskSubmissions)
+		.where(
+			and(
+				eq(taskSubmissions.enrolment_id, enrolmentId),
+				eq(taskSubmissions.status, "complete"),
+			),
+		);
+	return new Set([...rows, ...reviewed].map((row) => row.lessonId));
 }
