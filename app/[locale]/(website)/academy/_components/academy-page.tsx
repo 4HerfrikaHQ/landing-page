@@ -1,6 +1,5 @@
 "use client";
 
-import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/src/lib/analytics";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -16,12 +15,7 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import {
-	type Academy,
-	academies,
-	academyTranslationKeys,
-	testimonials,
-} from "../_schema";
+import { type Academy, academies, academyTranslationKeys } from "../_schema";
 import {
 	type CarouselDirection,
 	carouselReducer,
@@ -50,7 +44,10 @@ function usePrefersReducedMotion() {
 	);
 }
 
-export function AcademyPage({ catalog }: { catalog: ReactNode }) {
+export function AcademyPage({
+	catalog,
+	testimonials,
+}: { catalog: ReactNode; testimonials: ReactNode }) {
 	const t = useTranslations("academy");
 	const [waitlist, setWaitlist] = useState<{ open: boolean; academy: Academy }>(
 		{
@@ -328,34 +325,7 @@ export function AcademyPage({ catalog }: { catalog: ReactNode }) {
 				</div>
 			</section>
 
-			<ReviewsSection
-				heading={
-					<>
-						<span className="text-primary-500">Don’t</span> Take our{" "}
-						<span className="text-primary-500">Words</span> for it!
-					</>
-				}
-				subheading="Take a look at what our learners say!"
-				reviews={testimonials}
-				decorations={
-					<>
-						<Image
-							src="/assets/academy/decorative-logo.png"
-							alt=""
-							width={173}
-							height={251}
-							className="pointer-events-none absolute -right-2 top-16 h-62.75 w-43.25 -rotate-24 opacity-15"
-						/>
-						<Image
-							src="/assets/academy/decorative-logo.png"
-							alt=""
-							width={173}
-							height={251}
-							className="pointer-events-none absolute -left-26.5 -bottom-10 h-62.75 w-43.25 -rotate-40 opacity-15"
-						/>
-					</>
-				}
-			/>
+			{testimonials}
 
 			<WaitlistModal
 				open={waitlist.open}
