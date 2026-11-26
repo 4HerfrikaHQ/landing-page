@@ -51,11 +51,6 @@
 			"imageAlt": "Three young women taking a selfie at a 4HerFrika event"
 		},
 		"stats": {
-			"year": "Year 1",
-			"girlsMentored": "girls mentored",
-			"graduates": "Academy graduates",
-			"campuses": "campuses",
-			"countries": "countries",
 			"label": "Our impact in Year 1"
 		},
 		"paths": {
@@ -139,11 +134,6 @@
 		"joinCta": "Join 4HerFrika",
 		"donateCta": "Donate",
 		"weHaveReached": "<pink>W</pink>e <pink>H</pink>ave <pink>R</pink>eached",
-		"statGirls": "girls mentored",
-		"statCampuses": "campuses",
-		"statGraduates": "Tech Academy graduates",
-		"statCountries": "African countries",
-		"statPeriod": "Year 1",
 		"whyEyebrow": "Why we exist",
 		"whyFirst": "Ambition is everywhere.",
 		"whySecond": "Access isn't.",
@@ -1616,11 +1606,7 @@
 		"seeReports": "See the reports",
 		"donate": "Donate",
 		"join": "Join us",
-		"statsCaption": "Year 1 in numbers",
-		"statGirls": "girls mentored",
-		"statCampuses": "campuses reached",
-		"statCountries": "countries",
-		"statGraduates": "Tech Academy graduates",
+		"statsCaption": "Year 2 in numbers",
 		"reportsPill": "Annual reports",
 		"reportsFirst": "Every report,",
 		"reportsSecond": "in one place.",

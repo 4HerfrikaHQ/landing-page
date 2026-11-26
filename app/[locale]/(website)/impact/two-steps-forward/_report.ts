@@ -21,3 +21,14 @@ export const year2Report: ImpactYear2Report = {
 		{ key: "partners", value: "12" },
 	],
 };
+
+const HEADLINE_FIGURE_KEYS: ReadonlyArray<FigureKey> = [
+	"members",
+	"campuses",
+	"countries",
+	"menstrualHealth",
+];
+
+export const headlineFigures = year2Report.figures.filter((figure) =>
+	HEADLINE_FIGURE_KEYS.includes(figure.key),
+);

@@ -6,13 +6,6 @@ import type { Route } from "next";
 import { z } from "zod";
 import { JOIN_US_URL } from "../navigation";
 
-export const STATS = [
-	{ value: "3,000+", labelKey: "girlsMentored" },
-	{ value: "1,000+", labelKey: "graduates" },
-	{ value: "25+", labelKey: "campuses" },
-	{ value: "5", labelKey: "countries" },
-] as const;
-
 export const PATHS = [
 	{
 		key: "learn",

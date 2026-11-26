@@ -23,13 +23,6 @@ export const JoinLink = z.discriminatedUnion("kind", [
 ]);
 export type JoinLink = z.infer<typeof JoinLink>;
 
-export const stats = [
-	{ value: "3,000+", labelKey: "statGirls" },
-	{ value: "25+", labelKey: "statCampuses" },
-	{ value: "1,000+", labelKey: "statGraduates" },
-	{ value: "5", labelKey: "statCountries" },
-] as const;
-
 export const timeline = [
 	{
 		periodKey: "timelineStartPeriod",

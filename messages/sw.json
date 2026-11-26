@@ -8,11 +8,6 @@
 		"joinCta": "Jiunge na 4HerFrika",
 		"donateCta": "Changia",
 		"weHaveReached": "<pink>Tumefikia</pink>",
-		"statGirls": "wasichana waliolelewa",
-		"statCampuses": "kampasi",
-		"statGraduates": "wahitimu wa Tech Academy",
-		"statCountries": "nchi za Afrika",
-		"statPeriod": "Mwaka wa 1",
 		"whyEyebrow": "Kwa nini tupo",
 		"whyFirst": "Ndoto kubwa ziko kila mahali.",
 		"whySecond": "Fursa hazipo.",
@@ -688,11 +683,6 @@
 			"imageAlt": "Wanawake vijana watatu wakipiga selfie kwenye tukio la 4HerFrika"
 		},
 		"stats": {
-			"year": "Mwaka wa 1",
-			"girlsMentored": "wasichana walioongozwa",
-			"graduates": "wahitimu wa Academy",
-			"campuses": "vyuo",
-			"countries": "nchi",
 			"label": "Athari yetu katika Mwaka wa 1"
 		},
 		"paths": {
@@ -1616,11 +1606,7 @@
 		"seeReports": "Tazama ripoti",
 		"donate": "Changia",
 		"join": "Jiunge Nasi",
-		"statsCaption": "Mwaka wa kwanza kwa takwimu",
-		"statGirls": "wasichana waliopata malezi",
-		"statCampuses": "kampasi zilizofikiwa",
-		"statCountries": "nchi",
-		"statGraduates": "wahitimu wa Tech Academy",
+		"statsCaption": "Mwaka wa 2 kwa takwimu",
 		"reportsPill": "Ripoti za mwaka",
 		"reportsFirst": "Ripoti zote,",
 		"reportsSecond": "mahali pamoja.",
