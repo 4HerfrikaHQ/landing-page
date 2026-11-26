@@ -1,16 +1,14 @@
-import { MentorImage } from "@/components/mentor-image";
-import { FadeIn } from "@/components/motion";
 import { optionalUserCapabilities } from "@/src/auth";
 import { careerCornerMetadata } from "@/src/lib/careercorner-seo";
 import {
 	absoluteSiteUrl,
 	localizedCareerCornerPath,
 } from "@/src/lib/careercorner-seo";
-import { ChevronLeft, Clock, Eye, Linkedin, UserRound } from "lucide-react";
+import { startOfWeek } from "date-fns";
+import { Clock } from "lucide-react";
 import type { Metadata, Route } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import {
 	getInactiveMentorBySlug,
@@ -18,7 +16,16 @@ import {
 	getMentorByPreviousSlug,
 	getMentorBySlug,
 } from "./_actions";
+import { AboutMentor } from "./_components/about-mentor";
 import { BookingSection } from "./_components/booking-section";
+import { InactivePreviewBanner } from "./_components/inactive-preview-banner";
+import { MoreMentors } from "./_components/more-mentors";
+import { NextSteps } from "./_components/next-steps";
+import { ProfileHero } from "./_components/profile-hero";
+import { Testimonials } from "./_components/testimonials";
+import { VolunteerBand } from "./_components/volunteer-band";
+import { getSimilarMentors } from "./_similar-mentors";
+import { getMentorTestimonials } from "./_testimonials";
 
 export async function generateMetadata({
 	params,
@@ -68,11 +75,22 @@ export default async function MentorDetailPage({
 			`${localePrefix}/careercorner/${movedMentor.slug}` as Route,
 		);
 	}
-	const tc = await getTranslations("common");
+	const t = await getTranslations("mentorProfile");
 
 	const canCreateBooking = !isInactivePreview || isAdminPreview;
-	const initialWeekStart = await getInitialWeekStart(mentor.slug);
+	const [initialWeekStart, testimonials, similarMentors] = await Promise.all([
+		getInitialWeekStart(mentor.slug),
+		getMentorTestimonials(mentor.id),
+		getSimilarMentors(mentor.slug),
+	]);
+	const freeThisWeek =
+		initialWeekStart !== null &&
+		new Date(initialWeekStart).getTime() ===
+			startOfWeek(new Date(), { weekStartsOn: 1 }).getTime();
 	const displayName = mentor.nickname || mentor.name;
+	const bookingTitle = canCreateBooking
+		? t("booking.title")
+		: t("booking.previewTitle");
 	const pageUrl = absoluteSiteUrl(
 		localizedCareerCornerPath(locale, `/${mentor.slug}`),
 	);
@@ -116,138 +134,73 @@ export default async function MentorDetailPage({
 	};
 
 	return (
-		<main className="bg-muted">
-			{isInactivePreview && (
-				<div className="border-b border-amber-500/20 bg-amber-50 text-amber-950">
-					<div className="container mx-auto flex max-w-6xl items-start gap-3 px-4 py-3 sm:px-6 lg:px-8">
-						<Eye className="mt-0.5 size-5 shrink-0 text-amber-700" />
-						<p className="text-sm leading-6">
-							<span className="font-semibold">Inactive profile preview.</span>{" "}
-							This mentor is not currently visible to the public. You can see
-							this page because you are{" "}
-							{isAdminPreview
-								? "a super admin"
-								: "the mentor who owns this profile"}
-							.
-						</p>
-					</div>
-				</div>
-			)}
+		<main className="overflow-x-clip bg-background text-foreground">
+			<InactivePreviewBanner
+				isInactivePreview={isInactivePreview}
+				isAdminPreview={isAdminPreview}
+			/>
 			<script
 				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD with "<" escaped
 				dangerouslySetInnerHTML={{
 					__html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
 				}}
 			/>
-			<div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-				<FadeIn>
-					<Link
-						href="/careercorner"
-						className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary-500 hover:no-underline!"
+			<section className="px-4 lg:px-20">
+				<ProfileHero
+					displayName={displayName}
+					position={mentor.position}
+					image={mentor.image}
+					imageCrop={mentor.image_crop}
+					linkedinUrl={mentor.linkedin_url}
+					freeThisWeek={freeThisWeek}
+					canBook={canCreateBooking}
+				/>
+			</section>
+
+			<section className="px-4 py-12 lg:px-20 lg:py-20">
+				<div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_420px] lg:items-start lg:gap-14">
+					<aside
+						id="book"
+						aria-label={t("booking.title")}
+						className="scroll-mt-28 lg:sticky lg:top-28 lg:col-start-2 lg:row-start-1"
 					>
-						<ChevronLeft className="size-4" />
-						Back to mentors
-					</Link>
-				</FadeIn>
-
-				<div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-					{/* Left: profile */}
-					<FadeIn direction="left">
-						<div className="rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)] sm:p-8">
-							<div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-								<div className="relative shrink-0">
-									<div className="absolute -inset-2 rounded-full bg-surface-pink" />
-									<div className="relative size-28 overflow-hidden rounded-full ring-4 ring-primary-500/15 sm:size-32">
-										{mentor.image ? (
-											<MentorImage
-												src={mentor.image}
-												alt={mentor.name}
-												crop={mentor.image_crop}
-												aspectRatio={1}
-												sizes="128px"
-												className="size-full"
-											/>
-										) : (
-											<div className="flex h-full w-full items-center justify-center bg-secondary-500/30">
-												<UserRound className="size-12 text-secondary-500/70" />
-											</div>
-										)}
-									</div>
-								</div>
-								<div className="min-w-0">
-									<h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
-										{displayName}
-									</h1>
-									<p className="mt-1 capitalize text-muted-foreground">
-										{mentor.position}
+						<div className="rounded-[20px] bg-white p-5 shadow-[0_12px_24px_rgba(0,0,0,0.10)] ring-1 ring-border lg:p-7">
+							<div className="flex items-center gap-3">
+								<span className="grid size-11 shrink-0 place-items-center rounded-pill bg-surface-pink text-primary">
+									<Clock className="size-5" aria-hidden="true" />
+								</span>
+								<div>
+									<h2 className="text-xl font-semibold">{bookingTitle}</h2>
+									<p className="text-sm text-muted-foreground">
+										{t("booking.subtitle")}
 									</p>
-									{mentor.linkedin_url && (
-										<a
-											href={mentor.linkedin_url}
-											target="_blank"
-											rel="noreferrer"
-											className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-white px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary-500 hover:text-primary-500 hover:no-underline!"
-										>
-											<Linkedin className="size-4" />
-											{tc("messageOnLinkedin")}
-										</a>
-									)}
 								</div>
 							</div>
-
-							{mentor.bio && (
-								<>
-									<div className="my-7 h-px bg-border/60" />
-									<p className="max-w-[65ch] whitespace-pre-wrap leading-relaxed text-foreground/80">
-										{mentor.bio}
-									</p>
-								</>
-							)}
-						</div>
-					</FadeIn>
-
-					{/* Right: sticky booking card */}
-					<FadeIn direction="right">
-						<div className="lg:sticky lg:top-24">
-							<div className="rounded-2xl border border-border/60 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-								<div className="flex items-center gap-2">
-									<span className="flex size-9 items-center justify-center rounded-full bg-surface-pink text-primary-500">
-										<Clock className="size-5" />
-									</span>
-									<h2 className="text-lg font-semibold text-foreground">
-										{canCreateBooking
-											? "Book a 30-min call"
-											: "Booking availability"}
-									</h2>
-								</div>
-								{canCreateBooking ? (
-									<>
-										<p className="mt-2 text-sm text-muted-foreground">
-											Pick a time that works for you. Times are shown in your
-											local timezone.
-										</p>
-										<div className="mt-6">
-											<BookingSection
-												mentorSlug={mentor.slug}
-												mentorName={mentor.name}
-												initialWeekStart={initialWeekStart}
-												readOnly={isInactivePreview && !isAdminPreview}
-											/>
-										</div>
-									</>
-								) : (
-									<BookingSection
-										mentorSlug={mentor.slug}
-										mentorName={mentor.name}
-										initialWeekStart={initialWeekStart}
-										readOnly
-									/>
-								)}
+							<div className="mt-6">
+								<BookingSection
+									mentorSlug={mentor.slug}
+									mentorName={mentor.name}
+									displayName={displayName}
+									mentorImage={mentor.image}
+									mentorImageCrop={mentor.image_crop}
+									initialWeekStart={initialWeekStart}
+									readOnly={!canCreateBooking}
+								/>
 							</div>
 						</div>
-					</FadeIn>
+					</aside>
+
+					<div className="flex flex-col gap-12 lg:col-start-1 lg:row-start-1 lg:gap-16">
+						<AboutMentor displayName={displayName} bio={mentor.bio} />
+						<Testimonials testimonials={testimonials} />
+						<NextSteps displayName={displayName} />
+					</div>
 				</div>
-			</div>
+			</section>
+
+			<MoreMentors mentors={similarMentors} />
+			<VolunteerBand />
 		</main>
 	);
 }

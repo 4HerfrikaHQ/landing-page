@@ -28,3 +28,48 @@ export const CreateBookingSchema = z.object({
 	mentee_career_stage: CareerStage.optional(),
 });
 export type CreateBookingInput = z.infer<typeof CreateBookingSchema>;
+
+export const bookingStatus = z.enum(["browsing", "form", "confirmed"]);
+export type BookingStatus = z.infer<typeof bookingStatus>;
+
+export const pickerStatus = z.enum([
+	"error",
+	"loading",
+	"unavailable",
+	"empty",
+	"ready",
+]);
+export type PickerStatus = z.infer<typeof pickerStatus>;
+
+export const DAYS_IN_WEEK = 7;
+export const SLOTS_STALE_MS = 30_000;
+export const SKELETON_SLOT_COUNT = 6;
+
+export const COMMON_TIMEZONES = [
+	"Africa/Lagos",
+	"Africa/Nairobi",
+	"Africa/Johannesburg",
+	"Africa/Cairo",
+	"Africa/Accra",
+	"Europe/London",
+	"Europe/Paris",
+	"America/New_York",
+	"America/Los_Angeles",
+	"Asia/Dubai",
+	"UTC",
+] as const;
+
+export const GENDER_OPTIONS = [
+	{ value: "female", labelKey: "female" },
+	{ value: "male", labelKey: "male" },
+	{ value: "non_binary", labelKey: "nonBinary" },
+	{ value: "prefer_not_to_say", labelKey: "preferNotToSay" },
+] as const;
+
+export const CAREER_STAGE_OPTIONS = [
+	{ value: "student", labelKey: "student" },
+	{ value: "early_career", labelKey: "earlyCareer" },
+	{ value: "mid_career", labelKey: "midCareer" },
+	{ value: "founder", labelKey: "founder" },
+	{ value: "other", labelKey: "other" },
+] as const;

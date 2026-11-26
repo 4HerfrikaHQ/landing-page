@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { MentorImage } from "@/components/mentor-image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,55 +12,52 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { trackEvent } from "@/src/lib/analytics";
+import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import { useHookFormAction } from "@/src/lib/use-hook-form-action";
+import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { CalendarClock } from "lucide-react";
-import { useEffect, useRef } from "react";
-
-/** Loose RHF field-error shape (covers FieldError and nested Merge variants). */
-type RhfError = { message?: unknown } | string | undefined;
-
-function errorMessage(error: RhfError): string | undefined {
-	if (!error) return undefined;
-	if (typeof error === "string") return error;
-	return typeof error.message === "string" ? error.message : undefined;
-}
-import type { ReactNode } from "react";
-import { toast } from "sonner";
+import { ChevronDown, CircleAlert, UserRound } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { type ReactNode, useEffect, useId, useRef } from "react";
 import { createBooking } from "../_actions";
-import { CreateBookingSchema } from "../_schema";
+import {
+	CAREER_STAGE_OPTIONS,
+	CreateBookingSchema,
+	GENDER_OPTIONS,
+} from "../_schema";
 
-const GENDER_OPTIONS = [
-	{ value: "female", label: "Female" },
-	{ value: "male", label: "Male" },
-	{ value: "non_binary", label: "Non-binary" },
-	{ value: "prefer_not_to_say", label: "Prefer not to say" },
-] as const;
+const FIELD_CLASS =
+	"h-12 rounded-full border-border bg-white px-4 text-base md:text-base focus-visible:border-primary focus-visible:ring-primary/30";
+const SELECT_CLASS =
+	"h-12 w-full rounded-full border-border data-[size=default]:h-12 bg-white px-4 text-base focus-visible:border-primary focus-visible:ring-primary/30";
 
-const CAREER_STAGE_OPTIONS = [
-	{ value: "student", label: "Student" },
-	{ value: "early_career", label: "Early career" },
-	{ value: "mid_career", label: "Mid career" },
-	{ value: "founder", label: "Founder" },
-	{ value: "other", label: "Other" },
-] as const;
+function focusOnMount(element: HTMLElement | null) {
+	element?.focus();
+}
 
 export function BookingForm({
 	mentorSlug,
-	mentorName,
+	displayName,
+	mentorImage,
+	mentorImageCrop,
 	whenLabel,
 	startAtUtc,
 	menteeTimezone,
+	onChangeTime,
 	onSuccess,
 }: {
 	mentorSlug: string;
-	mentorName?: string;
-	whenLabel?: string;
+	displayName: string;
+	mentorImage: string | null;
+	mentorImageCrop: MentorImageCrop | null;
+	whenLabel: string;
 	startAtUtc: string;
 	menteeTimezone: string;
-	onSuccess: () => void;
+	onChangeTime: () => void;
+	onSuccess: (email: string) => void;
 }) {
+	const t = useTranslations("mentorProfile");
 	const queryClient = useQueryClient();
 	const startedRef = useRef(false);
 	const completedRef = useRef(false);
@@ -87,19 +84,20 @@ export function BookingForm({
 				onSuccess: () => {
 					completedRef.current = true;
 					trackEvent("booking_completed", { mentor_slug: mentorSlug });
-					toast.success("Booked. Check your email for the calendar invite.");
 					queryClient.invalidateQueries({ queryKey: ["slots", mentorSlug] });
-					onSuccess();
+					onSuccess(form.getValues("mentee_email"));
 				},
-				onError: ({ error }) => {
+				onError: () => {
 					trackEvent("booking_failed", { mentor_slug: mentorSlug });
-					toast.error(error.serverError ?? "Couldn't book. Please try again.");
+					queryClient.invalidateQueries({ queryKey: ["slots", mentorSlug] });
 				},
 			},
 		},
 	);
 
 	const errors = form.formState.errors;
+	const serverError = action.result?.serverError;
+	const failed = action.hasErrored;
 
 	useEffect(
 		() => () => {
@@ -116,6 +114,10 @@ export function BookingForm({
 		trackEvent("booking_form_started", { mentor_slug: mentorSlug });
 	}
 
+	const submitLabel = action.isPending
+		? t("form.confirming")
+		: t("form.confirm");
+
 	return (
 		<form
 			onFocusCapture={markStarted}
@@ -123,159 +125,350 @@ export function BookingForm({
 				trackEvent("booking_submitted", { mentor_slug: mentorSlug });
 				handleSubmitWithAction(event);
 			}}
-			className="flex h-full flex-col"
+			noValidate
+			className="flex min-h-0 flex-1 flex-col"
 		>
 			<input type="hidden" {...form.register("mentorSlug")} />
 			<input type="hidden" {...form.register("startAtUtc")} />
 			<input type="hidden" {...form.register("menteeTimezone")} />
 
-			<div className="flex-1 space-y-7 pb-4">
-				{(mentorName || whenLabel) && (
-					<div className="flex items-start gap-3 rounded-2xl border border-primary-500/20 bg-surface-pink px-4 py-3">
-						<span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-500/10 text-primary-500">
-							<CalendarClock className="size-5" />
-						</span>
-						<div className="text-sm">
-							{mentorName && (
-								<p className="font-semibold text-foreground">
-									30-min call with {mentorName}
-								</p>
-							)}
-							{whenLabel && (
-								<p className="text-muted-foreground">{whenLabel}</p>
-							)}
-						</div>
-					</div>
-				)}
+			<div className="flex-1 space-y-5 overflow-y-auto px-4 pb-6 sm:px-6">
+				<FailureAlert
+					failed={failed}
+					message={serverError ?? t("form.errorFallback")}
+					onChangeTime={onChangeTime}
+				/>
 
-				<Section title="About you">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Field label="Name" error={errors.mentee_name}>
-							<Input {...form.register("mentee_name")} />
-						</Field>
-						<Field label="Email" error={errors.mentee_email}>
-							<Input type="email" {...form.register("mentee_email")} />
-						</Field>
-						<Field label="Gender">
-							<Select
-								value={form.watch("mentee_gender")}
-								onValueChange={(v) =>
-									v &&
-									form.setValue(
-										"mentee_gender",
-										v as (typeof GENDER_OPTIONS)[number]["value"],
-										{ shouldDirty: true },
-									)
-								}
-							>
-								<SelectTrigger className="h-10 w-full rounded-lg bg-white">
-									<SelectValue placeholder="Select" />
-								</SelectTrigger>
-								<SelectContent>
-									{GENDER_OPTIONS.map((o) => (
-										<SelectItem key={o.value} value={o.value}>
-											{o.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</Field>
-						<Field label="Country (optional)">
-							<Input {...form.register("mentee_country")} />
-						</Field>
+				<div className="flex items-center gap-3 rounded-[24px] border border-primary/20 bg-surface-pink p-3">
+					<span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-pill bg-white text-primary">
+						<MentorAvatar image={mentorImage} crop={mentorImageCrop} />
+					</span>
+					<div className="min-w-0 flex-1">
+						<p className="text-[15px] font-semibold leading-tight">
+							{t("booking.summaryTitle", { name: displayName })}
+						</p>
+						<p className="mt-0.5 text-sm text-muted-foreground">
+							{whenLabel} · {t("hero.meet")}
+						</p>
 					</div>
-				</Section>
+					<button
+						type="button"
+						onClick={onChangeTime}
+						className="inline-flex h-11 shrink-0 items-center rounded-pill px-3 text-[15px] font-semibold text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+					>
+						{t("booking.change")}
+					</button>
+				</div>
 
-				<Section title="Your context">
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Field label="Career stage (optional)">
-							<Select
-								value={form.watch("mentee_career_stage") ?? ""}
-								onValueChange={(v) =>
-									form.setValue(
-										"mentee_career_stage",
-										(v || undefined) as
-											| (typeof CAREER_STAGE_OPTIONS)[number]["value"]
-											| undefined,
-										{ shouldDirty: true },
-									)
-								}
-							>
-								<SelectTrigger className="h-10 w-full rounded-lg bg-white">
-									<SelectValue placeholder="Select" />
-								</SelectTrigger>
-								<SelectContent>
-									{CAREER_STAGE_OPTIONS.map((o) => (
-										<SelectItem key={o.value} value={o.value}>
-											{o.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</Field>
-						<Field label="Phone / WhatsApp (optional)">
-							<Input {...form.register("mentee_phone")} />
-						</Field>
-						<div className="md:col-span-2">
-							<Field label="LinkedIn / portfolio URL (optional)">
-								<Input type="url" {...form.register("mentee_linkedin")} />
-							</Field>
-						</div>
-					</div>
-				</Section>
-
-				<Section title="What to discuss">
-					<Field label="What do you want to discuss?" error={errors.purpose}>
+				<Field
+					label={t("form.name")}
+					message={errors.mentee_name ? t("form.errors.name") : undefined}
+				>
+					{(props) => (
+						<Input
+							{...props}
+							autoComplete="name"
+							placeholder={t("form.namePlaceholder")}
+							className={FIELD_CLASS}
+							{...form.register("mentee_name")}
+						/>
+					)}
+				</Field>
+				<Field
+					label={t("form.email")}
+					message={errors.mentee_email ? t("form.errors.email") : undefined}
+				>
+					{(props) => (
+						<Input
+							{...props}
+							type="email"
+							autoComplete="email"
+							placeholder={t("form.emailPlaceholder")}
+							className={FIELD_CLASS}
+							{...form.register("mentee_email")}
+						/>
+					)}
+				</Field>
+				<Field label={t("form.gender")}>
+					{(props) => (
+						<Select
+							value={form.watch("mentee_gender")}
+							onValueChange={(v) =>
+								v &&
+								form.setValue(
+									"mentee_gender",
+									v as (typeof GENDER_OPTIONS)[number]["value"],
+									{ shouldDirty: true },
+								)
+							}
+						>
+							<SelectTrigger id={props.id} className={SELECT_CLASS}>
+								<SelectValue placeholder={t("form.select")}>
+									{(value: string) => {
+										const option = GENDER_OPTIONS.find(
+											(o) => o.value === value,
+										);
+										return option ? t(`form.${option.labelKey}`) : value;
+									}}
+								</SelectValue>
+							</SelectTrigger>
+							<SelectContent>
+								{GENDER_OPTIONS.map((o) => (
+									<SelectItem key={o.value} value={o.value} className="py-2.5">
+										{t(`form.${o.labelKey}`)}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
+				</Field>
+				<Field
+					label={t("form.discuss")}
+					hint={t("form.discussHint")}
+					message={errors.purpose ? t("form.errors.purpose") : undefined}
+				>
+					{(props) => (
 						<Textarea
+							{...props}
 							rows={4}
-							placeholder="Share a few notes so your mentor can prepare."
+							placeholder={t("form.discussPlaceholder")}
+							className="min-h-28 rounded-[20px] border-border bg-white px-4 py-3 text-base md:text-base focus-visible:border-primary focus-visible:ring-primary/30"
 							{...form.register("purpose")}
 						/>
-					</Field>
-				</Section>
+					)}
+				</Field>
+
+				<details className="group rounded-[24px] border border-border bg-white">
+					<summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-[24px] px-4 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
+						{t("form.more")}
+						<span className="flex items-center gap-1 text-sm font-normal text-muted-foreground">
+							{t("form.optional")}
+							<ChevronDown
+								className="size-4 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+								aria-hidden="true"
+							/>
+						</span>
+					</summary>
+					<div className="space-y-5 px-4 pb-5 pt-2">
+						<Field label={t("form.country")} optional>
+							{(props) => (
+								<Input
+									{...props}
+									autoComplete="country-name"
+									className={FIELD_CLASS}
+									{...form.register("mentee_country")}
+								/>
+							)}
+						</Field>
+						<Field label={t("form.careerStage")} optional>
+							{(props) => (
+								<Select
+									value={form.watch("mentee_career_stage") ?? ""}
+									onValueChange={(v) =>
+										form.setValue(
+											"mentee_career_stage",
+											(v || undefined) as
+												| (typeof CAREER_STAGE_OPTIONS)[number]["value"]
+												| undefined,
+											{ shouldDirty: true },
+										)
+									}
+								>
+									<SelectTrigger id={props.id} className={SELECT_CLASS}>
+										<SelectValue placeholder={t("form.select")}>
+											{(value: string) => {
+												const option = CAREER_STAGE_OPTIONS.find(
+													(o) => o.value === value,
+												);
+												return option ? t(`form.${option.labelKey}`) : value;
+											}}
+										</SelectValue>
+									</SelectTrigger>
+									<SelectContent>
+										{CAREER_STAGE_OPTIONS.map((o) => (
+											<SelectItem
+												key={o.value}
+												value={o.value}
+												className="py-2.5"
+											>
+												{t(`form.${o.labelKey}`)}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						</Field>
+						<Field label={t("form.phone")} optional>
+							{(props) => (
+								<Input
+									{...props}
+									type="tel"
+									autoComplete="tel"
+									className={FIELD_CLASS}
+									{...form.register("mentee_phone")}
+								/>
+							)}
+						</Field>
+						<Field
+							label={t("form.linkedin")}
+							optional
+							message={
+								errors.mentee_linkedin ? t("form.errors.linkedin") : undefined
+							}
+						>
+							{(props) => (
+								<Input
+									{...props}
+									type="url"
+									className={FIELD_CLASS}
+									{...form.register("mentee_linkedin")}
+								/>
+							)}
+						</Field>
+					</div>
+				</details>
 			</div>
 
-			<div className="sticky bottom-0 -mx-4 border-t border-border/60 bg-white/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6">
-				<Button type="submit" disabled={action.isPending} className="w-full">
-					{action.isPending ? "Booking…" : "Confirm booking"}
-				</Button>
+			<div className="border-t border-border bg-white px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-6">
+				<button
+					type="submit"
+					disabled={action.isPending}
+					className="inline-flex h-12 w-full items-center justify-center rounded-pill bg-primary px-6 font-medium text-primary-foreground outline-none transition-colors hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60"
+				>
+					{submitLabel}
+				</button>
 			</div>
 		</form>
 	);
 }
 
-function Section({
-	title,
+type FieldControlProps = {
+	id: string;
+	"aria-invalid": boolean;
+	"aria-describedby": string | undefined;
+};
+
+function FailureAlert({
+	failed,
+	message,
+	onChangeTime,
+}: {
+	failed: boolean;
+	message: string;
+	onChangeTime: () => void;
+}) {
+	const t = useTranslations("mentorProfile");
+	if (!failed) return null;
+	return (
+		<div
+			key={message}
+			role="alert"
+			tabIndex={-1}
+			ref={focusOnMount}
+			className="rounded-[20px] border border-[#e8a595] bg-[#fdf0ec] p-4 text-[#8f1d0b] outline-none focus-visible:ring-2 focus-visible:ring-[#8f1d0b]"
+		>
+			<p className="flex items-center gap-2 font-semibold">
+				<CircleAlert className="size-5 shrink-0" aria-hidden="true" />
+				{t("form.errorTitle")}
+			</p>
+			<p className="mt-1 text-[15px] leading-relaxed">{message}</p>
+			<button
+				type="button"
+				onClick={onChangeTime}
+				className="mt-2 inline-flex min-h-11 items-center py-2 font-semibold underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#8f1d0b]"
+			>
+				{t("form.pickAnother")}
+			</button>
+		</div>
+	);
+}
+
+function MentorAvatar({
+	image,
+	crop,
+}: {
+	image: string | null;
+	crop: MentorImageCrop | null;
+}) {
+	if (!image) return <UserRound className="size-6" aria-hidden="true" />;
+	return (
+		<MentorImage
+			src={image}
+			alt=""
+			crop={crop}
+			aspectRatio={1}
+			sizes="48px"
+			className="size-full"
+		/>
+	);
+}
+
+function OptionalMark({ optional }: { optional: boolean }) {
+	const t = useTranslations("mentorProfile.form");
+	if (!optional) return null;
+	return (
+		<span className="font-normal text-muted-foreground">
+			({t("optional").toLowerCase()})
+		</span>
+	);
+}
+
+function FieldText({
+	id,
+	tone,
+	role,
 	children,
 }: {
-	title: string;
-	children: ReactNode;
+	id: string;
+	tone: string;
+	role?: "alert";
+	children: string | undefined;
 }) {
+	if (!children) return null;
 	return (
-		<div className="space-y-3">
-			<h3 className="text-xs font-semibold uppercase tracking-wide text-primary-500">
-				{title}
-			</h3>
+		<p id={id} role={role} className={cn("text-sm", tone)}>
 			{children}
-		</div>
+		</p>
 	);
 }
 
 function Field({
 	label,
-	error,
+	optional = false,
+	hint,
+	message,
 	children,
 }: {
 	label: string;
-	error?: RhfError;
-	children: ReactNode;
+	optional?: boolean;
+	hint?: string;
+	message?: string;
+	children: (props: FieldControlProps) => ReactNode;
 }) {
-	const message = errorMessage(error);
+	const id = useId();
+	const describedBy = [
+		hint ? `${id}-hint` : null,
+		message ? `${id}-error` : null,
+	]
+		.filter(Boolean)
+		.join(" ");
 	return (
 		<div className="space-y-1.5">
-			<Label>{label}</Label>
-			{children}
-			{message && <p className="text-xs text-destructive">{message}</p>}
+			<Label htmlFor={id} className="text-base font-medium leading-snug">
+				{label}
+				<OptionalMark optional={optional} />
+			</Label>
+			{children({
+				id,
+				"aria-invalid": message !== undefined,
+				"aria-describedby": describedBy || undefined,
+			})}
+			<FieldText id={`${id}-hint`} tone="text-muted-foreground">
+				{hint}
+			</FieldText>
+			<FieldText id={`${id}-error`} tone="text-destructive" role="alert">
+				{message}
+			</FieldText>
 		</div>
 	);
 }
