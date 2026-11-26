@@ -134,21 +134,90 @@
 		"volunteerAsMentor": "Devenir mentor bénévole"
 	},
 	"contact": {
-		"altMap": "Carte indiquant l'emplacement du bureau de 4Herfrika",
-		"email": "Adresse e-mail",
-		"errorMessage": "Échec de l’envoi du message. Veuillez vérifier vos informations et réessayer.",
-		"getInTouch": "Entrer en contact",
+		"heroImageAlt": "Trois jeunes femmes prenant un selfie ensemble lors d'un événement 4HerFrika",
+		"heroBadge": "Contactez-nous",
+		"heroFirst": "Nous aimerions",
+		"heroSecond": "avoir de vos nouvelles.",
+		"heroDescription": "Dites-nous ce dont vous avez besoin et nous transmettrons votre message à la bonne personne.",
+		"chooseTopic": "Choisir un sujet ↓",
+		"topicsHeading": "Comment pouvons-nous",
+		"topicsAccent": "vous aider ?",
+		"topicsHint": "Choisissez un sujet. Le formulaire s'ouvre dessus.",
+		"topics": {
+			"partner": {
+				"title": "Devenir partenaire",
+				"description": "Entreprises, bailleurs de fonds et universités"
+			},
+			"press": {
+				"title": "Presse et médias",
+				"description": "Interviews, témoignages et photos"
+			},
+			"mentorship": {
+				"title": "Aide au mentorat",
+				"description": "Trouver un mentor ou un appel réservé"
+			},
+			"academy": {
+				"title": "Académie ou certificat",
+				"description": "Connexion, quiz, lien de votre certificat"
+			},
+			"ambassador": {
+				"title": "Ambassadrice de campus",
+				"description": "Apportez 4HerFrika sur votre campus"
+			},
+			"other": {
+				"title": "Autre chose",
+				"description": "Tout ce qui ne rentre pas dans les cases ci-dessus"
+			}
+		},
 		"leaveMessage": "Laissez-nous un message",
-		"location": "Localisation",
-		"message": "Message",
-		"messagePlaceholder": "Votre message",
-		"name": "Nom",
-		"phone": "Téléphone",
-		"send": "Envoyer",
+		"requiredNote": "Tous les champs sont obligatoires, sauf mention « facultatif ».",
+		"change": "Modifier",
+		"fullName": "Nom complet",
+		"emailLabel": "Adresse e-mail",
+		"topicLabel": "Sujet",
+		"topicPlaceholder": "Choisir un sujet",
+		"phoneLabel": "Téléphone / WhatsApp",
+		"optional": "(facultatif)",
+		"phoneHint": "Uniquement si vous souhaitez que nous vous rappelions ou vous écrivions.",
+		"certificateCode": "Code du certificat",
+		"certificateHint": "La fin de votre lien : 4herfrika.org/certificates/code",
+		"yourMessage": "Votre message",
+		"send": "Envoyer le message",
 		"sending": "Envoi en cours...",
+		"privacyNote": "Nous utilisons vos coordonnées uniquement pour vous répondre.",
+		"privacyLink": "Confidentialité",
+		"errors": {
+			"nameRequired": "Veuillez saisir votre nom.",
+			"emailInvalid": "Cette adresse e-mail semble invalide. Veuillez la vérifier.",
+			"topicRequired": "Veuillez choisir un sujet.",
+			"messageRequired": "Veuillez écrire un message."
+		},
+		"errorMessage": "Échec de l’envoi du message. Veuillez vérifier vos informations et réessayer.",
+		"directTitle": "Vous préférez nous joindre directement ?",
+		"region": "Afrique",
+		"socialLabel": "4HerFrika sur les réseaux sociaux",
+		"opensInNewTab": "s’ouvre dans un nouvel onglet",
+		"faqHeading": "Vous trouverez peut-être déjà votre réponse ici",
+		"allFaqs": "Toutes les FAQ",
+		"readAnswer": "Lire la réponse",
+		"partnersBadge": "Partenaires",
+		"partnersFirst": "Aidez-nous à atteindre",
+		"partnersSecond": "2 millions de filles.",
+		"partnersDescription": "Lors de la première année, nous avons accompagné plus de 3 000 filles sur plus de 25 campus dans 5 pays. Les entreprises, bailleurs de fonds et universités rendent la prochaine étape possible, comme Ordina l'a fait pour notre premier cours en ligne gratuit.",
+		"partnersCta": "Démarrer une conversation de partenariat",
+		"partnersImageAlt": "Une formatrice enseignant à des participantes dans une salle informatique",
+		"successFirst": "Message envoyé",
+		"successSecond": "avec succès !",
 		"successDescription": "Merci de nous avoir contactés. Nous vous répondrons bientôt.",
-		"successMessage": "Message envoyé avec succès !",
-		"title": "Contactez-nous"
+		"replyTo": "Réponse à",
+		"spamNote": "Vous ne voyez pas notre réponse ? Vérifiez vos courriers indésirables ou vos promotions.",
+		"backHome": "Retour à l'accueil",
+		"browseFaq": "Consulter la FAQ",
+		"whileYouWait": "En attendant",
+		"startCourse": "Commencer le cours gratuit",
+		"courseDescription": "L'IA pour votre prochaine opportunité, avec Ordina",
+		"bookMentor": "Réserver un mentor",
+		"mentorDescription": "Appels de 30 minutes sur Google Meet"
 	},
 	"donate": {
 		"accountName": "Nom du compte",
