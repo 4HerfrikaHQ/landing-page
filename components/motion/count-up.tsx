@@ -17,8 +17,6 @@ type CountUpProps = {
 
 export function CountUp({ value, className }: CountUpProps) {
 	const textRef = useRef<HTMLSpanElement>(null);
-	const started = useRef(false);
-	const controls = useRef<ReturnType<typeof animate>>(undefined);
 	const reduced = useReducedMotion();
 	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>();
 	const setRef = useCallback(
@@ -33,15 +31,12 @@ export function CountUp({ value, className }: CountUpProps) {
 
 	useEffect(() => {
 		const node = textRef.current?.firstChild;
-		if (!node || !countable || started.current) return;
-		node.nodeValue = formatCount(0, grouped);
-	}, [countable, grouped]);
-
-	useEffect(() => {
-		const node = textRef.current?.firstChild;
-		if (!node || !countable || !revealed || started.current) return;
-		started.current = true;
-		controls.current = animate(0, target, {
+		if (!node || !countable) return;
+		if (!revealed) {
+			node.nodeValue = formatCount(0, grouped);
+			return;
+		}
+		const controls = animate(0, target, {
 			delay: COUNT_DELAY,
 			duration: COUNT_DURATION,
 			ease: EASE_OUT_CUBIC,
@@ -52,15 +47,8 @@ export function CountUp({ value, className }: CountUpProps) {
 				node.nodeValue = digits;
 			},
 		});
+		return () => controls.stop();
 	}, [countable, revealed, target, digits, grouped]);
-
-	useEffect(
-		() => () => {
-			controls.current?.stop();
-			started.current = false;
-		},
-		[],
-	);
 
 	return (
 		<>
