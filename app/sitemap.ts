@@ -2,7 +2,6 @@ import { db } from "@/src/db";
 import { schema } from "@/src/db";
 import { and, eq } from "drizzle-orm";
 import type { MetadataRoute } from "next";
-import { year2Report } from "./[locale]/(website)/impact/year-2/_report";
 
 const BASE_URL = "https://4herfrika.org";
 
@@ -20,7 +19,7 @@ const staticRoutes = [
 	"/faq",
 	"/impact",
 	"/impact/year-1",
-	...(year2Report.fullCountPublished ? ["/impact/year-2"] : []),
+	"/impact/year-2",
 	"/privacy",
 	"/terms",
 ];

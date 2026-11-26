@@ -4,19 +4,19 @@ export type Figure = { key: FigureKey; value: string };
 
 export type ImpactYear2Report = {
 	pdf: { url: string; sizeMb: string } | null;
-	fullCountPublished: boolean;
 	figures: ReadonlyArray<Figure>;
 };
 
 export const year2Report: ImpactYear2Report = {
 	pdf: null,
-	fullCountPublished: true,
 	figures: [
-		{ key: "girlsReached", value: "4,000+" },
+		{ key: "members", value: "3,500+" },
 		{ key: "campuses", value: "25+" },
-		{ key: "mentees", value: "40" },
-		{ key: "socialReach", value: "45,000" },
-		{ key: "sessions", value: "35" },
-		{ key: "makoko", value: "300+" },
+		{ key: "countries", value: "5" },
+		{ key: "mentored", value: "40" },
+		{ key: "menstrualHealth", value: "700" },
+		{ key: "bootcampGraduates", value: "500" },
+		{ key: "academies", value: "3" },
+		{ key: "partners", value: "12" },
 	],
 };

@@ -1655,247 +1655,85 @@
 			"coverAlt": "Washiriki wa 4HerFrika wakiwa wamevaa fulana za waridi, jalada la ripoti ya Mwaka wa 2",
 			"label": "Mwaka wa 2",
 			"title": "Hatua mbili mbele",
-			"summary": "Zaidi ya wasichana 4,000 waliofikiwa na kupata ushauri katika vyuo 25+, usajili na CAC, akademia tatu, na ushauri ulio wazi kwa kila mwanachama.",
-			"comingSoon": "Hesabu kamili inakuja",
-			"figuresPending": "Takwimu zilizothibitishwa hadi sasa. Hesabu kamili inakuja.",
-			"preview": "Soma mtandaoni",
+			"summary": "Shirika lililosajiliwa, The Career Corner, na wanachama 3,500+ katika vyuo 25+ katika nchi tano.",
 			"figures": {
-				"girlsReached": "Wasichana waliofikiwa",
+				"members": "Wanachama wa jumuiya",
 				"campuses": "Vyuo",
-				"mentees": "Wanafunzi",
-				"socialReach": "Waliofikiwa mitandaoni",
-				"sessions": "Vikao vilivyokamilika",
-				"makoko": "Wasichana Makoko"
+				"countries": "Nchi",
+				"mentored": "Waliopata ushauri Career Corner",
+				"menstrualHealth": "Wasichana (afya ya hedhi)",
+				"bootcampGraduates": "Wahitimu wa bootcamp za teknolojia",
+				"academies": "Akademia",
+				"partners": "Washirika"
 			}
 		}
 	},
 	"impactYear2": {
 		"seo": {
 			"title": "Ripoti ya Athari Mwaka wa 2: Hatua Mbili Mbele — 4HerFrika",
-			"description": "Mwaka wa pili wa 4HerFrika: usajili na CAC, akademia tatu, uhamasishaji wa afya ya hedhi kutoka Makoko hadi Ogbomoso, na programu ya ushauri iliyo wazi kwa kila mwanachama."
+			"description": "Mwaka wa pili wa 4HerFrika kwa takwimu: wanachama 3,500+ katika vyuo 25+ katika nchi tano za Afrika, usajili na CAC, The Career Corner na akademia tatu."
 		},
 		"heroEyebrow": "Ripoti ya Mwaka wa 2",
 		"heroFirst": "Hatua mbili",
 		"heroSecond": "mbele.",
-		"heroDescription": "Kujenga wanawake wenye athari duniani. Mwaka huu tulijisajili, tukafungua akademia tatu, tukapeleka uhamasishaji wa afya ya hedhi kutoka Makoko hadi Ogbomoso, na tukafungua ushauri kwa kila mwanachama.",
+		"heroDescription": "Kujenga wanawake wenye athari duniani. Mwaka wetu wa pili ulihusu kuimarisha misingi yetu na kupeleka kazi yetu mbali zaidi katika jamii zetu.",
 		"heroAlt": "Washiriki wa 4HerFrika waliovaa fulana za waridi wakiwa pamoja nje kwenye chuo",
-		"readReport": "Soma ripoti",
-		"downloadPdf": "Pakua PDF · MB {size}",
+		"readReport": "Tazama mambo muhimu",
+		"downloadPdf": "Pakua ripoti · MB {size}",
 		"donate": "Changia",
 		"join": "Jiunge nasi",
-		"menuLabel": "Sehemu za ripoti",
-		"menu": {
-			"note": "Ujumbe wa mwanzilishi",
-			"built": "Tulichojenga",
-			"outreach": "Uhamasishaji",
-			"campuses": "Vyuo",
-			"numbers": "Takwimu",
-			"give": "Changia"
+		"allReports": "Ripoti zote",
+		"intro": "Katika mwaka wetu wa pili tulijisajili na Corporate Affairs Commission, tukafungua The Career Corner kwa kila mwanachama, na tukakua hadi zaidi ya wanawake vijana 3,500 katika vyuo 25+ nchini Nigeria, Ghana, Sierra Leone, Kenya na Cameroon.",
+		"numbers": {
+			"first": "Mwaka wa pili",
+			"second": "kwa takwimu.",
+			"figures": {
+				"members": "wanachama wa jumuiya",
+				"campuses": "vyuo",
+				"countries": "nchi za Afrika",
+				"mentored": "wanafunzi waliopata ushauri kwenye The Career Corner",
+				"menstrualHealth": "wasichana waliofikiwa kupitia kazi ya afya ya hedhi",
+				"bootcampGraduates": "wahitimu wa bootcamp za teknolojia",
+				"academies": "akademia: Teknolojia, Biashara, Tabianchi",
+				"partners": "washirika"
+			}
 		},
-		"note": {
-			"pill": "Ujumbe wa mwanzilishi",
-			"first": "Mwaka jana tulitaja tulichohitaji.",
-			"second": "Mwaka huu tumekijenga.",
-			"p1": "Mwaka jana tulizungumza kuhusu tulichohitaji: njia ya kupima kazi yetu zaidi ya jinsi tulivyohisi, njia ya kuifadhili zaidi ya rasilimali zetu wenyewe, na mwongozo ili chuo cha Bamenda kiendeshwe sawa na chuo cha Lagos, bila timu kuwa kwenye kila simu.",
-			"p2": "Oktoba tulijisajili na Corporate Affairs Commission. 4HerFrika iliacha kuwa wazo zuri kwenye tovuti na ikawa kitu kinachotambuliwa kisheria, kinachowajibika zaidi ya dhamiri yetu wenyewe.",
-			"p3": "Januari tulijaribu kimya kimya programu ya ushauri, kwa sababu tulitaka kupima ardhi kabla ya kumwomba mtu yeyote kuegemea juu yake. Ardhi ilistahimili, kwa hivyo tukaifungua kwa wote.",
-			"p4": "Pia tulifika mbali zaidi ya tulichojenga. Huko Makoko wasichana walibeba masanduku ya pedi juu ya vichwa vyao kama vikombe vya ushindi. Huko Lagos msichana mmoja hatimaye alimuuliza daktari swali kuhusu mwili wake alilobeba peke yake kwa miaka. Huko Ogbomoso chuo kimoja kilivunja ukimya kuhusu afya ya hedhi uliodumu kuliko umri wetu sote.",
-			"p5": "Hatujamaliza, na hatukuwa tukijaribu kumaliza mwaka huu. Tulikuwa tukijaribu kuchukua hatua inayofuata kwa uaminifu, kisha inayofuata baada yake. Pamoja, tunapiga hatua mbili mbele.",
-			"name": "Ademide Ademola",
-			"role": "Mwanzilishi, 4HerFrika"
-		},
-		"previously": {
-			"label": "Hapo awali, Mwaka wa 1",
-			"body": "Chuo kimoja nchini Nigeria kikawa vyuo 25 katika nchi tano, na zaidi ya wasichana 3,000 walipata ushauri. “Huu ni mwanzo tu,” tulisema. Tulimaanisha.",
-			"cta": "Soma ripoti ya Mwaka wa 1"
-		},
-		"built": {
-			"pill": "Hatua ya kwanza",
-			"first": "Tulichoweza",
-			"second": "kujenga.",
+		"highlights": {
+			"first": "Hatua muhimu za",
+			"second": "mwaka wa pili.",
 			"items": {
 				"registered": {
-					"when": "Oktoba 2025",
+					"tag": "Shirika",
 					"title": "Tumesajiliwa na CAC",
-					"body": "Tukawa shirika lililosajiliwa, hivyo washirika wanaweza kusaini mikataba halisi nasi badala ya ahadi za mdomo."
+					"body": "Oktoba 2025, 4HerFrika ikawa shirika lililosajiliwa, tayari kwa ushirikiano halisi."
+				},
+				"careerCorner": {
+					"tag": "Ushauri",
+					"title": "The Career Corner",
+					"body": "Ilijaribiwa Januari na Februari, kisha ikafunguliwa kwa kila mwanachama."
+				},
+				"menstrualHealth": {
+					"tag": "Uhamasishaji",
+					"title": "Afya ya hedhi",
+					"body": "Pedi na elimu kutoka Makoko hadi Ede, zikiwafikia wasichana 700."
 				},
 				"academies": {
-					"when": "Mwaka mzima",
-					"title": "Akademia tatu, paa moja",
-					"body": "Teknolojia, Biashara na Tabianchi, zikiwapa wanaojitolea mahali pa kurudi kati ya siku za uhamasishaji."
-				},
-				"partnerships": {
-					"when": "Katika mwaka",
-					"title": "Washirika waliosimama nasi",
-					"body": "TEDx Ajegunle ilitupa jukwaa, FUSE iliunda Tech Academy, Google Developer Group ilisimama nasi kwenye TechFiesta, na Hult Prize ilitufungulia mlango wa ujasiriamali."
-				},
-				"mentorship": {
-					"when": "Januari – Februari",
-					"title": "Becoming Her, kwa majaribio",
-					"body": "Programu ya ushauri iliyojaribiwa kimya kimya kwa misimu miwili kabla ya kumwomba yeyote aiamini hadharani."
-				}
-			},
-			"closing": "Hakuna kati ya haya kilichobaki kabatini. Tulichojenga hakikubaki pale. Kilitoka nje kufanya kazi."
-		},
-		"outreach": {
-			"pill": "Uhamasishaji wa jamii",
-			"first": "Pale kazi",
-			"second": "ilipofanya kazi.",
-			"quote": "Hakuna msichana au mwanamke anayepaswa kukosa fursa, au kujiona mdogo kuliko alivyo, kwa sababu ya hedhi yake.",
-			"quoteSource": "Sentensi ambayo Vuguvugu la Uhamasishaji wa Afya ya Hedhi lilijengwa juu yake.",
-			"items": {
-				"makoko": {
-					"when": "Makoko",
-					"title": "Vuguvugu la Uhamasishaji wa Afya ya Hedhi",
-					"body": "Pamoja na Sanitary Aid NG, Civic Hive, Skygirls na The GirlsComm, zaidi ya wasichana 300 walihudhuria, pedi 300 zilitolewa, na hadithi potofu kuhusu hedhi zilivunjwa mbele ya wasichana ambao hawakuwahi kuziona zikipingwa."
-				},
-				"giveToGain": {
-					"when": "Machi",
-					"title": "Give to Gain",
-					"body": "Karibu na Siku ya Kimataifa ya Wanawake tulipeleka mazungumzo katika shule za sekondari na kuyapanua hadi ukatili wa kijinsia, ukitajwa wazi bila aibu."
-				},
-				"rhythm": {
-					"when": "Kuanzia Aprili",
-					"title": "Mdundo, si tukio moja",
-					"body": "Ugawaji mwingine wa pedi, chumba kingine cha wasichana wakiondoka na kitu ambacho hawakuja nacho, kila mara kikiongozwa na wanawake wa chuo waliofika kabla ya mabasi na kubaki baada ya sanduku la mwisho."
+					"tag": "Mafunzo",
+					"title": "Akademia tatu",
+					"body": "Teknolojia, Biashara na Tabianchi, na wahitimu 500 wa bootcamp za teknolojia."
 				}
 			}
 		},
-		"campuses": {
-			"pill": "Orodha ya vyuo",
-			"first": "Vikiongozwa na wanawake",
-			"second": "walio uwanjani.",
-			"items": {
-				"unilag": {
-					"name": "Chuo Kikuu cha Lagos",
-					"lead": "Kinaongozwa na Adeyemi Aliyat Omowunmi",
-					"highlight": "Wanachama 347, kati yao 47 wapya mwaka huu",
-					"body": "Mei, semina ya mtandaoni kuhusu Endometriosis iliwaweka washiriki 25 kwa saa nzima na mtaalamu wa afya. Julai, pamoja na Nigeria Association of Accounting Students na Final Ledger, Pad a Girl iliwafikia wanafunzi 100."
-				},
-				"kwasu": {
-					"name": "Kwara State University",
-					"lead": "Kinaongozwa na Elizabeth Agbana",
-					"highlight": "Programu za Endometriosis na Pad a Girl",
-					"body": "Chuo kiliendesha programu zilezile za Endometriosis na Pad a Girl mwaka huu, sambamba na vuguvugu zima."
-				},
-				"lautech": {
-					"name": "LAUTECH",
-					"lead": "Kinaongozwa na Oluwatosin E. Idowu",
-					"highlight": "Nusu ya wanachama ni hai, mojawapo ya viwango bora katika mtandao",
-					"body": "Rhythms of Connection iliwakutanisha wanachama na wabunifu wa eneo hilo. Aprili, Women Techmakers Ogbomoso ilitoa mafunzo ya teknolojia bure. Mei, kampeni ya Siku ya Usafi wa Hedhi ilivunja hadithi potofu za mabweni, na nukuu za kila wiki ziliwaweka wote wakizungumza mwaka mzima."
-				}
-			},
-			"closing": "Tulibaki na vyuo 25+ katika nchi tano mwaka huu na tukaweka nguvu katika kukuza kila kimoja. Kila chuo huendesha uhamasishaji wake, na washirika wake, kwa ratiba yake, na kwa mara ya kwanza kitu kimoja kilikuwa wazi kwa kila mwanachama popote anaposoma."
-		},
-		"mentorship": {
-			"pill": "Ushauri, umefunguliwa",
-			"first": "Becoming Her si",
-			"second": "majaribio tena.",
-			"body": "Tuliijaribu kimya kimya kwa misimu miwili, tukijifunza msichana anahitaji nini anapouliza “nimpigie nani sasa?” Kwenye maadhimisho tuliifungua rasmi. Kila mwanachama sasa anaweza kumfikia mtu aliye hatua chache mbele yake kwenye njia anayoitembea.",
-			"cta": "Kutana na washauri"
-		},
-		"anniversary": {
-			"date": "28 Agosti 2026",
-			"title": "Miaka miwili, na tumefika mbali zaidi ya hapo.",
-			"body": "Ese, Hus, Ademide na Faree waliongoza mazungumzo na wanawake ambao tayari wamejenga kile wanachama wetu wanajenga. CV zilipata maoni halisi, wasifu wa LinkedIn uliboreshwa, na Becoming Her ilionyeshwa hadharani kwa mara ya kwanza.",
-			"partnersLabel": "Waliokuwepo",
-			"partners": "Civic Hive, Ordina, FUSE, Moniepoint na Cowrywise, pamoja na matawi ya 4HerFrika UNILAG na LASUCOM.",
-			"stride": "Sherehe inaendelea tarehe 27 Novemba 2026 kwenye The Stride Conference, Civic Hive, Lagos: mkutano wetu wa kwanza wa uongozi, wenye kaulimbiu “Stride: Women Leading Africa Forward”."
-		},
-		"numbers": {
-			"pill": "Kwa takwimu",
-			"first": "Zimehesabiwa,",
-			"second": "si kusimuliwa tu.",
-			"figures": {
-				"girlsReached": {
-					"label": "wasichana waliofikiwa na kupata ushauri",
-					"note": "katika kila chuo"
-				},
-				"campuses": {
-					"label": "vyuo",
-					"note": "katika nchi tano"
-				},
-				"mentees": {
-					"label": "wanafunzi waliomwekea mshauri miadi",
-					"note": "Career Corner, tangu 31 Ago"
-				},
-				"socialReach": {
-					"label": "waliofikiwa mitandaoni",
-					"note": "watu waliofikiwa mtandaoni"
-				},
-				"sessions": {
-					"label": "vikao vya ushauri vilivyokamilika",
-					"note": "Career Corner, tangu 31 Ago"
-				},
-				"makoko": {
-					"label": "wasichana kwenye uhamasishaji wa Makoko",
-					"note": "pedi 300 zilitolewa"
-				}
-			},
-			"pendingNote": "Hizi ni takwimu zilizothibitishwa hadi sasa. Hesabu kamili ya vyuo vyote inakuja, na ukurasa huu utasasishwa itakapofika."
-		},
-		"lessons": {
-			"title": "Tulichojifunza",
-			"intro": "Hakuna kati ya takwimu hizi kilichokuja kwa urahisi, na kujifanya vinginevyo kungezifanya zinazofuata zisiaminike.",
-			"items": {
-				"hard": {
-					"title": "Kilichokuwa kigumu",
-					"body": "Mitihani iliwavuta wanachama mbali, ufadhili ulichukua muda mrefu kuliko tulivyotarajia, na baadhi ya vyuo vilikuwa na wanachama waliotawanyika katika jumuiya nyingi mno."
-				},
-				"worked": {
-					"title": "Kilichofanya kazi",
-					"body": "Kushirikiana na mashirika ya wanafunzi yaliyopo chuoni, kuwasiliana na wanachama hata wachache walipojibu, na kuwakabidhi viongozi wa vyuo kazi zaidi."
-				},
-				"next": {
-					"title": "Tunachobeba mbele",
-					"body": "Kuanza mazungumzo ya ufadhili kabla hitaji halijawa la dharura, kujenga mpango halisi wa kuchangisha fedha, na kudumisha utoaji ripoti wa kawaida tulioanza mwaka huu."
-				}
-			}
-		},
-		"give": {
-			"pill": "Changia",
-			"first": "Ombi mahususi,",
-			"second": "kwa mahitaji mahususi.",
-			"intro": "Maombi yasiyo wazi ni rahisi kupuuzwa, kwa hivyo hapa ndipo hasa msaada wako unakwenda.",
-			"items": {
-				"donations": {
-					"title": "Michango ya wazi",
-					"body": "Usafirishaji wa uhamasishaji, usafiri na tukio la maadhimisho: ukumbi, viburudisho, tuzo kwa wazungumzaji wanaojitolea jioni yao bure, na mabango.",
-					"cost": "Tukio la maadhimisho: ₦210,000"
-				},
-				"pads": {
-					"title": "Pad Support Movement",
-					"body": "Pedi kwa Makoko inayofuata, chuo kinachofuata, msichana anayefuata ambaye hapaswi kukosa shule kwa jambo linalotatulika kwa urahisi hivi.",
-					"cost": "Uhamasishaji mmoja: chini ya ₦100,000"
-				},
-				"inKind": {
-					"title": "Msaada wa vitu",
-					"body": "Nguo, viatu, mikoba na vitu vya usafi binafsi, vitu vidogo vinavyomruhusu msichana kuingia chumbani bila kubeba aibu.",
-					"cost": "Wasiliana nasi kutoa vitu"
-				}
-			},
-			"donate": "Changia",
-			"inKindCta": "Toa vitu"
+		"report": {
+			"first": "Ripoti",
+			"second": "kamili.",
+			"body": "Ujumbe wa mwanzilishi, kila programu, vyuo vyetu, washirika na mafunzo yetu yote yamo katika ripoti kamili ya Mwaka wa 2.",
+			"soon": "Ripoti iliyosanifiwa inakuja hivi karibuni."
 		},
 		"goal": {
-			"pill": "Kuelekea 2030",
-			"first": "Milioni mbili",
-			"second": "bado ndiyo lengo.",
-			"body": "Vyuo ishirini na tano, nchi tano na zaidi ya wasichana 3,000 waliopata ushauri tangu wa kwanza. Umbali hadi milioni mbili ifikapo 2030 ni halisi, na hatutajifanya vinginevyo. Mwaka huu tulijisajili, tukajenga akademia tatu, tukafungua ushauri na kuwafikia wasichana katika vyumba ambavyo havijawahi kuwa na mazungumzo haya.",
-			"nextTitle": "Hatua mbili zinazofuata",
-			"next": {
-				"reporting": "Utoaji ripoti wa kawaida katika kila chuo.",
-				"funding": "Ufadhili usiotegemea chanzo kimoja.",
-				"playbook": "Mwongozo kamili kiasi kwamba chuo kipya kinaweza kufunguliwa bila kusubiri ruhusa kutoka makao makuu."
-			}
-		},
-		"thanks": {
-			"first": "Asante",
-			"second": "sana.",
-			"leads": "Kwa Adeyemi Aliyat Omowunmi, Elizabeth Agbana na Oluwatosin E. Idowu, walioongoza vyuo vyao katika mwaka uliowadai zaidi ya jedwali lolote linavyoweza kuonyesha.",
-			"partners": "Kwa TEDx Ajegunle, FUSE, Google Developer Group, Hult Prize, Sanitary Aid Initiative, Civic Hive, Skygirls, The GirlsComm, Women Techmakers Ogbomoso, Rhythms of Connection, Final Ledger na kila aliyejitokeza wakati ulipohitajika.",
-			"girls": "Na kwa kila msichana aliyeingia chumbani mwaka huu na kuuliza swali alilokuwa amelibeba peke yake.",
-			"closing": "Hatua inayofuata tayari inapima ardhi. Njoo uegemee pamoja nasi."
+			"first": "Wanawake na wasichana milioni mbili",
+			"second": "ifikapo 2050.",
+			"body": "Hilo ndilo lengo letu. Kila msichana anayefikiwa na kila fursa inayoundwa inatukaribia zaidi."
 		}
 	},
 	"impactBanner": {

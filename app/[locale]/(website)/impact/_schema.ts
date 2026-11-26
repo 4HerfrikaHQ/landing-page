@@ -35,7 +35,6 @@ export type ImpactReport = {
 	cover: StaticImageData;
 	onlineHref: string;
 	pdfHref: string | null;
-	pending: boolean;
 	figures: ReadonlyArray<{ value: string; labelKey: FigureLabelKey }>;
 };
 
@@ -45,7 +44,6 @@ export const impactReports: ReadonlyArray<ImpactReport> = [
 		cover: beginning,
 		onlineHref: "/impact/year-2",
 		pdfHref: year2Report.pdf?.url ?? null,
-		pending: !year2Report.fullCountPublished,
 		figures: year2Report.figures.slice(0, 4).map((figure) => ({
 			value: figure.value,
 			labelKey: `year2.figures.${figure.key}` as const,
@@ -56,7 +54,6 @@ export const impactReports: ReadonlyArray<ImpactReport> = [
 		cover: yearReport,
 		onlineHref: "/impact/year-1",
 		pdfHref: REPORT_PDF_URL,
-		pending: false,
 		figures: [
 			{ value: "3,000+", labelKey: "year1.figures.girlsMentored" },
 			{ value: "25+", labelKey: "year1.figures.campuses" },

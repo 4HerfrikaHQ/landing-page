@@ -68,7 +68,7 @@ export async function Year2Hero({ report }: { report: ImpactYear2Report }) {
 				</p>
 				<div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
 					<Button
-						href="#note"
+						href="#numbers"
 						size="lg"
 						className="min-h-12 gap-2 px-6 font-medium"
 					>

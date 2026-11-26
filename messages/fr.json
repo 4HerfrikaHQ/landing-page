@@ -1655,247 +1655,85 @@
 			"coverAlt": "Participantes de 4HerFrika en t-shirts roses, couverture du rapport Année 2",
 			"label": "Année 2",
 			"title": "Deux pas en avant",
-			"summary": "Plus de 4 000 filles touchées et accompagnées sur plus de 25 campus, un enregistrement à la CAC, trois académies et un mentorat ouvert à chaque membre.",
-			"comingSoon": "Décompte complet à venir",
-			"figuresPending": "Chiffres vérifiés à ce jour. Le décompte complet arrive.",
-			"preview": "Lire en ligne",
+			"summary": "Une organisation enregistrée, The Career Corner et plus de 3 500 membres sur plus de 25 campus dans cinq pays.",
 			"figures": {
-				"girlsReached": "Filles touchées et accompagnées",
+				"members": "Membres de la communauté",
 				"campuses": "Campus",
-				"mentees": "Mentorées",
-				"socialReach": "Portée sur les réseaux",
-				"sessions": "Séances réalisées",
-				"makoko": "Filles à Makoko"
+				"countries": "Pays",
+				"mentored": "Accompagnées sur Career Corner",
+				"menstrualHealth": "Filles touchées (santé menstruelle)",
+				"bootcampGraduates": "Diplômées des bootcamps tech",
+				"academies": "Académies",
+				"partners": "Partenaires"
 			}
 		}
 	},
 	"impactYear2": {
 		"seo": {
 			"title": "Rapport d'impact Année 2 : Deux pas en avant — 4HerFrika",
-			"description": "La deuxième année de 4HerFrika : enregistrement à la CAC, trois académies, sensibilisation à la santé menstruelle de Makoko à Ogbomoso, et un programme de mentorat ouvert à chaque membre."
+			"description": "La deuxième année de 4HerFrika en chiffres : plus de 3 500 membres sur plus de 25 campus dans cinq pays africains, un enregistrement à la CAC, The Career Corner et trois académies."
 		},
 		"heroEyebrow": "Rapport Année 2",
 		"heroFirst": "Deux pas",
 		"heroSecond": "en avant.",
-		"heroDescription": "Former des femmes à l'impact mondial. Cette année, nous nous sommes enregistrées, avons ouvert trois académies, porté la sensibilisation à la santé menstruelle de Makoko à Ogbomoso et ouvert le mentorat à chaque membre.",
+		"heroDescription": "Former des femmes à l'impact mondial. Notre deuxième année a consisté à consolider nos fondations et à porter notre travail plus loin dans nos communautés.",
 		"heroAlt": "Participantes de 4HerFrika en t-shirts roses réunies en plein air sur un campus",
-		"readReport": "Lire le rapport",
-		"downloadPdf": "Télécharger le PDF · {size} Mo",
+		"readReport": "Voir les temps forts",
+		"downloadPdf": "Télécharger le rapport · {size} Mo",
 		"donate": "Faire un don",
 		"join": "Nous rejoindre",
-		"menuLabel": "Sections du rapport",
-		"menu": {
-			"note": "Mot de la fondatrice",
-			"built": "Ce que nous avons bâti",
-			"outreach": "Actions",
-			"campuses": "Campus",
-			"numbers": "Chiffres",
-			"give": "Soutenir"
+		"allReports": "Tous les rapports",
+		"intro": "Pendant notre deuxième année, nous nous sommes enregistrées auprès de la Corporate Affairs Commission, avons ouvert The Career Corner à chaque membre et sommes passées à plus de 3 500 jeunes femmes sur plus de 25 campus au Nigeria, au Ghana, en Sierra Leone, au Kenya et au Cameroun.",
+		"numbers": {
+			"first": "L'année deux",
+			"second": "en chiffres.",
+			"figures": {
+				"members": "membres de la communauté",
+				"campuses": "campus",
+				"countries": "pays africains",
+				"mentored": "étudiantes accompagnées sur The Career Corner",
+				"menstrualHealth": "filles touchées par nos actions sur la santé menstruelle",
+				"bootcampGraduates": "diplômées des bootcamps tech",
+				"academies": "académies : Tech, Business, Climat",
+				"partners": "partenaires"
+			}
 		},
-		"note": {
-			"pill": "Mot de la fondatrice",
-			"first": "L'an dernier, nous avons dit ce qu'il nous fallait.",
-			"second": "Cette année, nous l'avons bâti.",
-			"p1": "L'an dernier, nous parlions de ce qu'il nous fallait : une façon de mesurer notre travail au-delà de ce que nous ressentions, une façon de le financer au-delà de nos propres moyens, et un guide pour qu'un campus à Bamenda fonctionne comme un campus à Lagos, sans l'équipe à chaque appel.",
-			"p2": "En octobre, nous nous sommes enregistrées auprès de la Corporate Affairs Commission. 4HerFrika a cessé d'être une belle idée sur un site web pour devenir une structure reconnue par la loi, responsable devant plus que notre seule conscience.",
-			"p3": "En janvier, nous avons discrètement testé un programme de mentorat, car nous voulions éprouver le terrain avant de demander à quiconque de s'y appuyer. Le terrain a tenu, alors nous l'avons ouvert à toutes.",
-			"p4": "Nous sommes aussi allées plus loin que ce que nous avons bâti. À Makoko, des filles ont brandi des boîtes de serviettes hygiéniques comme des trophées. À Lagos, une jeune femme a enfin posé à un médecin la question sur son corps qu'elle portait seule depuis des années. À Ogbomoso, un campus a brisé un silence sur la santé menstruelle plus ancien que nous toutes.",
-			"p5": "Nous n'avons pas fini, et ce n'était pas le but cette année. Nous voulions faire le prochain pas honnête, puis le suivant. Ensemble, nous faisons deux pas en avant.",
-			"name": "Ademide Ademola",
-			"role": "Fondatrice, 4HerFrika"
-		},
-		"previously": {
-			"label": "Précédemment, en Année 1",
-			"body": "Un campus au Nigeria est devenu 25 dans cinq pays, et plus de 3 000 filles ont été accompagnées. « Ce n'est que le début », disions-nous. Nous le pensions.",
-			"cta": "Lire le rapport Année 1"
-		},
-		"built": {
-			"pill": "Premier pas",
-			"first": "Ce que nous avons",
-			"second": "bâti.",
+		"highlights": {
+			"first": "Les étapes de",
+			"second": "l'année deux.",
 			"items": {
 				"registered": {
-					"when": "Octobre 2025",
+					"tag": "Organisation",
 					"title": "Enregistrées à la CAC",
-					"body": "Nous sommes devenues une organisation enregistrée : nos partenaires peuvent signer de vrais accords avec nous, et non plus de simples promesses."
+					"body": "En octobre 2025, 4HerFrika est devenue une organisation enregistrée, prête pour de vrais partenariats."
+				},
+				"careerCorner": {
+					"tag": "Mentorat",
+					"title": "The Career Corner",
+					"body": "Testé en janvier et février, puis ouvert à chaque membre."
+				},
+				"menstrualHealth": {
+					"tag": "Actions",
+					"title": "Santé menstruelle",
+					"body": "Serviettes et éducation de Makoko à Ede, pour 700 filles."
 				},
 				"academies": {
-					"when": "Toute l'année",
-					"title": "Trois académies, un seul toit",
-					"body": "Tech, Business et Climat, pour que les bénévoles aient un lieu où revenir entre deux journées d'action."
-				},
-				"partnerships": {
-					"when": "Au fil de l'année",
-					"title": "Des partenaires à nos côtés",
-					"body": "TEDx Ajegunle nous a offert une scène, FUSE a façonné la Tech Academy, Google Developer Group nous a accompagnées à TechFiesta et Hult Prize nous a ouvert les portes de l'entrepreneuriat."
-				},
-				"mentorship": {
-					"when": "Janvier – février",
-					"title": "Becoming Her, en pilote",
-					"body": "Un programme de mentorat testé discrètement pendant deux saisons avant de demander publiquement la confiance de quiconque."
-				}
-			},
-			"closing": "Rien de tout cela ne dort dans un classeur. Ce que nous avons bâti n'est pas resté immobile : il est sorti sur le terrain."
-		},
-		"outreach": {
-			"pill": "Actions communautaires",
-			"first": "Là où le travail",
-			"second": "s'est mis au travail.",
-			"quote": "Aucune fille ni aucune femme ne devrait manquer une opportunité, ou se sentir plus petite qu'elle ne l'est, à cause de ses règles.",
-			"quoteSource": "La phrase sur laquelle le Mouvement de sensibilisation à la santé menstruelle a été bâti.",
-			"items": {
-				"makoko": {
-					"when": "Makoko",
-					"title": "Mouvement de sensibilisation à la santé menstruelle",
-					"body": "Avec Sanitary Aid NG, Civic Hive, Skygirls et The GirlsComm, plus de 300 filles sont venues, 300 serviettes ont été distribuées et les mythes sur les règles ont été démontés devant des filles qui ne les avaient jamais vus remis en question."
-				},
-				"giveToGain": {
-					"when": "Mars",
-					"title": "Give to Gain",
-					"body": "Autour de la Journée internationale des femmes, nous avons porté la conversation dans les écoles secondaires et l'avons élargie aux violences basées sur le genre, nommées clairement et sans honte."
-				},
-				"rhythm": {
-					"when": "Dès avril",
-					"title": "Un rythme, pas un coup unique",
-					"body": "Une autre distribution, une autre salle de filles repartant avec quelque chose qu'elles n'avaient pas en arrivant, chaque fois menée par des femmes du campus arrivées avant les bus et restées après le dernier carton."
+					"tag": "Apprentissage",
+					"title": "Trois académies",
+					"body": "Tech, Business et Climat, avec 500 diplômées des bootcamps tech."
 				}
 			}
 		},
-		"campuses": {
-			"pill": "Tour des campus",
-			"first": "Menés par des femmes",
-			"second": "sur le terrain.",
-			"items": {
-				"unilag": {
-					"name": "Université de Lagos",
-					"lead": "Menée par Adeyemi Aliyat Omowunmi",
-					"highlight": "347 membres, dont 47 nouvelles cette année",
-					"body": "En mai, un webinaire sur l'endométriose a retenu 25 participantes pendant une heure entière avec une professionnelle de santé. En juillet, avec la Nigeria Association of Accounting Students et Final Ledger, Pad a Girl a touché 100 étudiantes."
-				},
-				"kwasu": {
-					"name": "Kwara State University",
-					"lead": "Menée par Elizabeth Agbana",
-					"highlight": "Programmes Endométriose et Pad a Girl",
-					"body": "Le campus a mené les mêmes programmes Endométriose et Pad a Girl cette année, au rythme du mouvement."
-				},
-				"lautech": {
-					"name": "LAUTECH",
-					"lead": "Menée par Oluwatosin E. Idowu",
-					"highlight": "La moitié des membres actives, l'un des meilleurs taux du réseau",
-					"body": "Rhythms of Connection a réuni les membres avec des créatifs locaux. En avril, Women Techmakers Ogbomoso a offert une formation tech gratuite. En mai, une campagne pour la Journée de l'hygiène menstruelle a brisé les mythes des résidences, et une citation hebdomadaire a fait vivre la communauté toute l'année."
-				}
-			},
-			"closing": "Nous sommes restées à plus de 25 campus dans cinq pays cette année et avons consacré nos efforts à faire grandir chacun d’eux. Chaque campus mène ses propres actions, avec ses partenaires, selon son calendrier, et pour la première fois une chose était ouverte à chaque membre, où qu’elle étudie."
-		},
-		"mentorship": {
-			"pill": "Mentorat, ouvert",
-			"first": "Becoming Her n'est",
-			"second": "plus un pilote.",
-			"body": "Nous l'avons testé discrètement pendant deux saisons, en apprenant ce dont une fille a besoin quand elle demande « qui j'appelle maintenant ? ». Lors de l'anniversaire, nous l'avons vraiment ouvert. Chaque membre peut désormais joindre quelqu'un qui a quelques pas d'avance sur le chemin qu'elle emprunte.",
-			"cta": "Rencontrer les mentores"
-		},
-		"anniversary": {
-			"date": "28 août 2026",
-			"title": "Deux ans, et déjà plus loin que ça.",
-			"body": "Ese, Hus, Ademide et Faree ont animé une discussion au coin du feu avec des femmes qui ont déjà bâti ce que nos membres construisent. Des CV ont reçu de vrais retours, des profils LinkedIn ont été affûtés, et Becoming Her a eu son premier aperçu public.",
-			"partnersLabel": "Dans la salle",
-			"partners": "Civic Hive, Ordina, FUSE, Moniepoint et Cowrywise, avec les chapitres 4HerFrika UNILAG et LASUCOM.",
-			"stride": "La célébration se poursuit le 27 novembre 2026 avec The Stride Conference, à Civic Hive, Lagos : notre première conférence sur le leadership, sur le thème « Stride : Women Leading Africa Forward »."
-		},
-		"numbers": {
-			"pill": "En chiffres",
-			"first": "Comptés,",
-			"second": "pas seulement racontés.",
-			"figures": {
-				"girlsReached": {
-					"label": "filles touchées et accompagnées",
-					"note": "sur tous les campus"
-				},
-				"campuses": {
-					"label": "campus",
-					"note": "dans cinq pays"
-				},
-				"mentees": {
-					"label": "mentorées ayant réservé",
-					"note": "Career Corner, depuis le 31 août"
-				},
-				"socialReach": {
-					"label": "portée sur les réseaux sociaux",
-					"note": "personnes touchées en ligne"
-				},
-				"sessions": {
-					"label": "séances de mentorat réalisées",
-					"note": "Career Corner, depuis le 31 août"
-				},
-				"makoko": {
-					"label": "filles à l’action de Makoko",
-					"note": "300 serviettes distribuées"
-				}
-			},
-			"pendingNote": "Voici les chiffres vérifiés à ce jour. Le décompte complet de tous les campus arrive, et cette page sera mise à jour dès sa publication."
-		},
-		"lessons": {
-			"title": "Ce que nous avons appris",
-			"intro": "Aucun de ces chiffres n'a été facile, et prétendre le contraire rendrait les suivants moins crédibles.",
-			"items": {
-				"hard": {
-					"title": "Ce qui a été difficile",
-					"body": "Les examens ont éloigné des membres, les parrainages ont pris plus de temps que prévu, et certains campus avaient des membres dispersées dans trop de communautés."
-				},
-				"worked": {
-					"title": "Ce qui a marché",
-					"body": "S'associer aux organisations étudiantes déjà présentes, garder le contact même quand peu répondaient, et confier davantage aux responsables de campus."
-				},
-				"next": {
-					"title": "Ce que nous gardons",
-					"body": "Lancer les discussions de parrainage avant l'urgence, bâtir un vrai plan de collecte de fonds, et garder le reporting standard commencé cette année."
-				}
-			}
-		},
-		"give": {
-			"pill": "Soutenir",
-			"first": "Une demande précise,",
-			"second": "pour des besoins précis.",
-			"intro": "Les demandes vagues sont faciles à ignorer, alors voici exactement où va votre soutien.",
-			"items": {
-				"donations": {
-					"title": "Dons libres",
-					"body": "Logistique des actions, transport et l'événement anniversaire : salle, rafraîchissements, plaques pour les intervenantes bénévoles et banderoles.",
-					"cost": "Événement anniversaire : 210 000 ₦"
-				},
-				"pads": {
-					"title": "Pad Support Movement",
-					"body": "Des serviettes hygiéniques pour le prochain Makoko, le prochain campus, la prochaine fille qui ne devrait pas manquer l'école pour un problème aussi simple à résoudre.",
-					"cost": "Une action : moins de 100 000 ₦"
-				},
-				"inKind": {
-					"title": "Dons en nature",
-					"body": "Vêtements, chaussures, sacs et produits d'hygiène, ces petites choses qui permettent à une fille d'entrer dans une pièce sans porter de honte.",
-					"cost": "Contactez-nous pour donner des articles"
-				}
-			},
-			"donate": "Faire un don",
-			"inKindCta": "Donner des articles"
+		"report": {
+			"first": "Le rapport",
+			"second": "complet.",
+			"body": "Le mot de la fondatrice, chaque programme, nos campus, nos partenaires et nos leçons se trouvent dans le rapport complet de l'Année 2.",
+			"soon": "Le rapport mis en page arrive bientôt."
 		},
 		"goal": {
-			"pill": "Vers 2030",
-			"first": "Deux millions",
-			"second": "reste notre cap.",
-			"body": "Vingt-cinq campus, cinq pays et plus de 3 000 filles accompagnées depuis la première. La distance jusqu'à deux millions d'ici 2030 est réelle, et nous ne prétendrons pas le contraire. Cette année, nous nous sommes enregistrées, avons bâti trois académies, ouvert le mentorat et touché des filles dans des salles où cette conversation n'avait jamais eu lieu.",
-			"nextTitle": "Les deux prochains pas",
-			"next": {
-				"reporting": "Un reporting standard sur chaque campus.",
-				"funding": "Un financement qui ne dépend d'aucune source unique.",
-				"playbook": "Un guide assez complet pour qu'un nouveau campus ouvre sans attendre le feu vert du centre."
-			}
-		},
-		"thanks": {
-			"first": "Merci",
-			"second": "à vous.",
-			"leads": "À Adeyemi Aliyat Omowunmi, Elizabeth Agbana et Oluwatosin E. Idowu, qui ont mené leurs campus pendant une année qui leur a demandé plus qu'aucun tableur ne peut le montrer.",
-			"partners": "À TEDx Ajegunle, FUSE, Google Developer Group, Hult Prize, Sanitary Aid Initiative, Civic Hive, Skygirls, The GirlsComm, Women Techmakers Ogbomoso, Rhythms of Connection, Final Ledger et à toutes celles et ceux qui étaient là quand il le fallait.",
-			"girls": "Et à chaque fille qui est entrée dans une salle cette année pour poser la question qu'elle portait seule.",
-			"closing": "Le prochain pas éprouve déjà le terrain. Venez y poser votre poids avec nous."
+			"first": "Deux millions de femmes et de filles",
+			"second": "d'ici 2050.",
+			"body": "C'est notre destination. Chaque fille touchée et chaque opportunité créée nous en rapproche."
 		}
 	},
 	"impactBanner": {
