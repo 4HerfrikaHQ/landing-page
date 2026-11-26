@@ -2,12 +2,13 @@
 
 import { animate, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
-import { EASE_OUT_CUBIC } from "./tokens";
+import { formatCount, parseCount } from "./count-format";
+import { EASE_OUT_CUBIC, REVEAL_DURATION } from "./tokens";
 import { useRevealed } from "./use-revealed";
 
-const COUNT_DURATION = 0.9;
+const COUNT_DURATION = 1.2;
 
-const COUNT_PATTERN = /^(\d[\d,]*)(.*)$/;
+const COUNT_DELAY = REVEAL_DURATION * 0.6;
 
 type CountUpProps = {
 	value: string;
@@ -16,6 +17,8 @@ type CountUpProps = {
 
 export function CountUp({ value, className }: CountUpProps) {
 	const textRef = useRef<HTMLSpanElement>(null);
+	const started = useRef(false);
+	const controls = useRef<ReturnType<typeof animate>>(undefined);
 	const reduced = useReducedMotion();
 	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>();
 	const setRef = useCallback(
@@ -25,36 +28,39 @@ export function CountUp({ value, className }: CountUpProps) {
 		},
 		[revealRef],
 	);
-	const match = COUNT_PATTERN.exec(value);
-	const digits = match?.[1] ?? value;
-	const suffix = match?.[2] ?? "";
-	const target = Number(digits.replaceAll(",", ""));
-	const countable = !reduced && digits !== "" && !Number.isNaN(target);
+	const { digits, suffix, target, grouped } = parseCount(value);
+	const countable = !reduced && target !== null;
 
 	useEffect(() => {
 		const node = textRef.current?.firstChild;
-		if (!node || !countable) return;
-		node.nodeValue = "0";
-		return () => {
-			node.nodeValue = digits;
-		};
-	}, [countable, digits]);
+		if (!node || !countable || started.current) return;
+		node.nodeValue = formatCount(0, grouped);
+	}, [countable, grouped]);
 
 	useEffect(() => {
 		const node = textRef.current?.firstChild;
-		if (!node || !countable || !revealed) return;
-		const controls = animate(0, target, {
+		if (!node || !countable || !revealed || started.current) return;
+		started.current = true;
+		controls.current = animate(0, target, {
+			delay: COUNT_DELAY,
 			duration: COUNT_DURATION,
 			ease: EASE_OUT_CUBIC,
 			onUpdate: (latest) => {
-				node.nodeValue = Math.round(latest).toLocaleString("en-US");
+				node.nodeValue = formatCount(Math.round(latest), grouped);
 			},
 			onComplete: () => {
 				node.nodeValue = digits;
 			},
 		});
-		return () => controls.stop();
-	}, [countable, revealed, target, digits]);
+	}, [countable, revealed, target, digits, grouped]);
+
+	useEffect(
+		() => () => {
+			controls.current?.stop();
+			started.current = false;
+		},
+		[],
+	);
 
 	return (
 		<>

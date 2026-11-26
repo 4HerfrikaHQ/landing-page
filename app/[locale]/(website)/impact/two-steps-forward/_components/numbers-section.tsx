@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/motion";
+import { CountUp } from "@/components/motion/count-up";
 import { getTranslations } from "next-intl/server";
 import type { ImpactYear2Report } from "../_report";
 
@@ -23,7 +24,7 @@ export async function NumbersSection({
 					{report.figures.map((figure) => (
 						<li key={figure.key} className="px-2 text-center">
 							<p className="text-[44px] font-semibold leading-none tabular-nums text-secondary-500 lg:text-5xl">
-								{figure.value}
+								<CountUp value={figure.value} />
 							</p>
 							<p className="mt-2 text-[15px] font-medium">
 								{t(`numbers.figures.${figure.key}`)}
