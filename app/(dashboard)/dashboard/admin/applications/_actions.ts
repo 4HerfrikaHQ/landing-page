@@ -1,7 +1,7 @@
 "use server";
 
 import { createHash } from "node:crypto";
-import { createAdminClient } from "@/src/auth";
+import { AccountError, addMentorUser } from "@/src/accounts";
 import { db } from "@/src/db";
 import { insertDefaultBookingSettings } from "@/src/db/actions/mentors";
 import {
@@ -9,7 +9,6 @@ import {
 	mentorApplications,
 } from "@/src/db/schema/tables/mentor-applications";
 import { mentors } from "@/src/db/schema/tables/mentors";
-import { users } from "@/src/db/schema/tables/users";
 import { sendMentorOnboardingInvite } from "@/src/lib/mentor-onboarding-invite";
 import { ActionError, adminAction } from "@/src/lib/safe-action";
 import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
@@ -44,48 +43,6 @@ Thank you for applying. We're unable to move forward at this time.${params.reaso
 
 — 4HerFrika`,
 	});
-}
-
-async function resolveApplicantUser(params: { email: string; name: string }) {
-	const existing = await db
-		.select({ id: users.id })
-		.from(users)
-		.where(eq(users.email, params.email))
-		.limit(1)
-		.then((rows) => rows[0] ?? null);
-	if (existing) return existing.id;
-
-	const supabase = await createAdminClient();
-	const { data, error } = await supabase.auth.admin.createUser({
-		email: params.email,
-		email_confirm: true,
-		user_metadata: { name: params.name },
-	});
-
-	if (error) {
-		// Auth user may already exist even though no public.users row was found
-		// above (e.g. the row was deleted, or a race). Fall back to the row the
-		// signup trigger creates so we never strand the applicant.
-		const fallback = await db
-			.select({ id: users.id })
-			.from(users)
-			.where(eq(users.email, params.email))
-			.limit(1)
-			.then((rows) => rows[0] ?? null);
-		if (fallback) return fallback.id;
-		throw new ActionError(
-			`Could not create applicant account: ${error.message}`,
-		);
-	}
-
-	const dbUser = await db
-		.select({ id: users.id })
-		.from(users)
-		.where(eq(users.auth_user_id, data.user.id))
-		.limit(1)
-		.then((rows) => rows[0] ?? null);
-	if (!dbUser) throw new ActionError("User record not found after creation.");
-	return dbUser.id;
 }
 
 interface ApplicationFilters {
@@ -162,16 +119,23 @@ export const approveMentorApplication = adminAction
 			.slice(0, 8);
 		const slug = `${baseSlug}-${suffix}`;
 
-		const applicantUserId = await resolveApplicantUser({
+		const applicant = await addMentorUser({
 			email: app.email,
 			name: app.name,
+		}).catch((error) => {
+			if (error instanceof AccountError) {
+				throw new ActionError(
+					`Could not create applicant account: ${error.message}`,
+				);
+			}
+			throw error;
 		});
 
 		const result = await db.transaction(async (tx) => {
 			const [mentor] = await tx
 				.insert(mentors)
 				.values({
-					user_id: applicantUserId,
+					user_id: applicant.id,
 					bio: app.bio,
 					linkedin_url: app.linkedin_url,
 					slug,
