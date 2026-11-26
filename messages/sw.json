@@ -1034,7 +1034,8 @@
 				"failed": "Video imeacha kupakia.",
 				"retry": "Pakia video upya",
 				"watchToContinue": "Tazama hadi mwisho ili kuendelea.",
-				"captionsLabel": "Kiingereza"
+				"captionsLabel": "Kiingereza",
+				"rewind": "Rudi nyuma sekunde {seconds}"
 			},
 			"reading": {
 				"badge": "Kusoma · takriban dakika {minutes}",

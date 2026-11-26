@@ -1034,7 +1034,8 @@
 				"failed": "The video stopped loading.",
 				"retry": "Reload the video",
 				"watchToContinue": "Watch to the end to continue.",
-				"captionsLabel": "English"
+				"captionsLabel": "English",
+				"rewind": "Back {seconds} seconds"
 			},
 			"reading": {
 				"badge": "Reading · about {minutes} min",
