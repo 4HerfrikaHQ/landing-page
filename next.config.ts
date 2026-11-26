@@ -10,6 +10,8 @@ const IMPACT_REPORT_SLUGS = {
 	"year-2": "two-steps-forward",
 };
 
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
+
 const nextConfig: NextConfig = {
 	typedRoutes: true,
 	productionBrowserSourceMaps: false,
@@ -39,6 +41,19 @@ const nextConfig: NextConfig = {
 			})),
 		];
 	},
+	async headers() {
+		return [
+			{
+				source: "/assets/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: `public, max-age=${THIRTY_DAYS}, stale-while-revalidate=${THIRTY_DAYS}`,
+					},
+				],
+			},
+		];
+	},
 	experimental: {
 		authInterrupts: true,
 		viewTransition: true,
@@ -47,6 +62,7 @@ const nextConfig: NextConfig = {
 		},
 	},
 	images: {
+		minimumCacheTTL: THIRTY_DAYS,
 		qualities: [100, 75],
 		remotePatterns: [
 			{
