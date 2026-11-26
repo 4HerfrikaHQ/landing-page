@@ -1,12 +1,23 @@
 "use server";
 
 import { createClient, currentDbUser } from "@/src/auth";
+import { db, schema } from "@/src/db";
 import { ActionError, actionClient } from "@/src/lib/safe-action";
 import type { AuthError } from "@supabase/supabase-js";
+import { sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { SendLoginCodeSchema, VerifyLoginCodeSchema } from "./_schema";
 
 const RESEND_COOLDOWN_SECONDS = 60;
+
+async function isStaffEmail(email: string) {
+	const [staff] = await db
+		.select({ id: schema.users.id })
+		.from(schema.users)
+		.where(sql`lower(${schema.users.email}) = lower(${email.trim()})`)
+		.limit(1);
+	return Boolean(staff);
+}
 
 function friendlyAuthError(error: AuthError) {
 	switch (error.code) {
@@ -27,6 +38,7 @@ function friendlyAuthError(error: AuthError) {
 export const sendLoginCode = actionClient
 	.schema(SendLoginCodeSchema)
 	.action(async ({ parsedInput: { email } }) => {
+		if (!(await isStaffEmail(email))) throw new ActionError("user_not_found");
 		const supabase = await createClient();
 		const { error } = await supabase.auth.signInWithOtp({
 			email,
