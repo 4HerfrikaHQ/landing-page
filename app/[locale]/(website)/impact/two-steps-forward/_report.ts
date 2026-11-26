@@ -1,9 +1,10 @@
+import type { StaticImageData } from "next/image";
 import type { FigureKey } from "./_schema";
 
 export type Figure = { key: FigureKey; value: string };
 
 export type ImpactYear2Report = {
-	pdf: { url: string; sizeMb: string } | null;
+	pdf: { url: string; sizeMb: string; cover: StaticImageData } | null;
 	figures: ReadonlyArray<Figure>;
 };
 

@@ -1,4 +1,5 @@
 import { FadeIn, TextReveal } from "@/components/motion";
+import { ScrollDrift } from "@/components/motion/scroll-drift";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -43,16 +44,18 @@ export async function Year2Hero({ report }: { report: ImpactYear2Report }) {
 			data-hero="full-bleed"
 			className="relative flex min-h-160 items-center justify-center overflow-hidden px-6 pb-16 pt-32 text-white lg:min-h-190"
 		>
-			<div className="animate-hero-settle absolute inset-0">
-				<Image
-					src={hero}
-					alt={t("heroAlt")}
-					fill
-					priority
-					sizes="100vw"
-					className="object-cover object-[50%_80%]"
-				/>
-			</div>
+			<ScrollDrift className="absolute -inset-y-32 inset-x-0">
+				<div className="animate-hero-settle absolute inset-0">
+					<Image
+						src={hero}
+						alt={t("heroAlt")}
+						fill
+						priority
+						sizes="100vw"
+						className="object-cover object-[50%_80%]"
+					/>
+				</div>
+			</ScrollDrift>
 			<div className="absolute inset-0 bg-black/60" />
 			<div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
 				<FadeIn className="flex flex-wrap items-center justify-center gap-2">

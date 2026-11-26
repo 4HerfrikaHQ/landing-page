@@ -22,15 +22,21 @@ export async function NumbersSection({
 				</h2>
 				<RevealGroup
 					as="ul"
-					className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-y-14"
+					className="mt-14 grid grid-cols-2 gap-y-12 lg:grid-cols-4 lg:gap-y-16 [&>li:nth-child(even)]:border-l lg:[&>li]:border-l-0 lg:[&>li:not(:nth-child(4n+1))]:border-l"
 				>
 					{report.figures.map((figure) => (
-						<li key={figure.key} className="px-2 text-center">
-							<p className="text-[44px] font-semibold leading-none tabular-nums text-secondary-500 lg:text-5xl">
+						<li
+							key={figure.key}
+							className="border-primary-500/15 px-3 text-center lg:px-6"
+						>
+							<p className="whitespace-nowrap text-4xl font-semibold leading-none tracking-tight tabular-nums text-secondary-500 sm:text-5xl lg:text-6xl">
 								<CountUp value={figure.value} />
 							</p>
-							<p className="mt-2 text-[15px] font-medium">
-								{t(`numbers.figures.${figure.key}`)}
+							<p className="mt-3 text-base font-semibold text-secondary-500 lg:text-lg">
+								{t(`numbers.figures.${figure.key}.label`)}
+							</p>
+							<p className="mt-1 text-sm text-muted-foreground">
+								{t(`numbers.figures.${figure.key}.note`)}
 							</p>
 						</li>
 					))}

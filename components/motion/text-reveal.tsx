@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/cn";
 import { m } from "motion/react";
-import { EASE_OUT, REVEAL_DISTANCE, REVEAL_DURATION } from "./tokens";
+import { EASE_OUT, REVEAL_DURATION, WORD_DISTANCE } from "./tokens";
 import { useRevealed } from "./use-revealed";
 
 interface TextRevealProps {
@@ -15,7 +15,7 @@ const STAGGER = 0.06;
 
 const HIDDEN = {
 	opacity: 0,
-	transform: `translateY(${REVEAL_DISTANCE}px)`,
+	transform: `translateY(${WORD_DISTANCE}px)`,
 	transition: { duration: 0 },
 };
 
@@ -44,7 +44,7 @@ export function TextReveal({
 						data-motion=""
 						initial={{
 							opacity: 0,
-							transform: `translateY(${REVEAL_DISTANCE}px)`,
+							transform: `translateY(${WORD_DISTANCE}px)`,
 						}}
 						animate={revealed ? SHOWN : HIDDEN}
 						transition={{
