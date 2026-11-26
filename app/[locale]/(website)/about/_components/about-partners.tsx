@@ -1,8 +1,9 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import { RevealGroup } from "@/components/motion/reveal-group";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
+import type { StaticImageData } from "next/image";
 import Link from "next/link";
 import { sponsors } from "../_schema";
 
@@ -53,7 +54,7 @@ function PartnerTile({
 	logoAlt,
 	linkLabel,
 }: {
-	logo: string;
+	logo: StaticImageData;
 	url: string | null;
 	logoAlt: string;
 	linkLabel: string;

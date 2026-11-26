@@ -1,3 +1,6 @@
+import businessSourceImage from "@/public/assets/academy/business-source.jpg";
+import climateSourceImage from "@/public/assets/academy/climate-source.jpg";
+import techSourceImage from "@/public/assets/academy/tech-source.jpg";
 import { z } from "zod";
 
 export const academyType = z.enum(["tech", "business", "climate"]);
@@ -22,21 +25,21 @@ export const academies = [
 		name: "Tech Academy",
 		description:
 			"Master product design, web development, product management, and more. Join 1000+ women already shaping Africa's tech future.",
-		image: "/assets/academy/tech-source.jpg",
+		image: techSourceImage,
 	},
 	{
 		academy: "business",
 		name: "Business Academy",
 		description:
 			"Turn your ideas into sustainable ventures with practical business skills, mentorship, and a community built to help you grow.",
-		image: "/assets/academy/business-source.jpg",
+		image: businessSourceImage,
 	},
 	{
 		academy: "climate",
 		name: "Climate Academy",
 		description:
 			"Shape Africa's environmental future. Build the skills to lead in green innovation, sustainability, and climate advocacy.",
-		image: "/assets/academy/climate-source.jpg",
+		image: climateSourceImage,
 	},
 ] as const;
 

@@ -1,6 +1,7 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
+import academyLogoImage from "@/public/assets/academy/academy-logo.png";
 import type { DbCertificate } from "@/src/db/schema/tables";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { formatCertificateCode } from "../../../_helpers";
 import { PrintButton } from "./print-button";
 
@@ -51,7 +52,7 @@ export function PrintSheet({
 					<div className="absolute inset-[7cqw] flex flex-col items-center text-center">
 						<header className="flex w-full items-start justify-between">
 							<Image
-								src="/assets/academy/academy-logo.png"
+								src={academyLogoImage}
 								alt="4HerFrika"
 								width={160}
 								height={45}

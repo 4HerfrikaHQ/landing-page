@@ -1,8 +1,8 @@
 import { FadeIn } from "@/components/motion";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { cn } from "@/utils/cn";
 import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import type { ReactNode } from "react";
 import { usageItems } from "../_data/brand-assets";
 import {

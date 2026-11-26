@@ -1,10 +1,10 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import { RevealGroup } from "@/components/motion/reveal-group";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { ReactNode } from "react";
 import { PATHS } from "../_schema";
 import { SectionHeading } from "./section-heading";

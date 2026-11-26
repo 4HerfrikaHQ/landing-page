@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { coursePath } from "../[uid]/_helpers";
 import type { Course } from "../_helpers";
 import { CourseChips } from "./course-chips";

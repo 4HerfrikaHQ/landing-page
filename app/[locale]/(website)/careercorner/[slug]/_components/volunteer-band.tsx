@@ -1,7 +1,8 @@
 import { RollLabel } from "@/components/ui/roll-label";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import techSourceImage from "@/public/assets/academy/tech-source.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 
 export async function VolunteerBand() {
 	const t = await getTranslations("mentorProfile.volunteer");
@@ -36,7 +37,7 @@ export async function VolunteerBand() {
 			</div>
 			<div className="relative aspect-[4/3] w-full lg:aspect-auto lg:w-1/2">
 				<Image
-					src="/assets/academy/tech-source.jpg"
+					src={techSourceImage}
 					alt={t("imageAlt")}
 					fill
 					sizes="(min-width: 1024px) 50vw, 100vw"

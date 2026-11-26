@@ -1,8 +1,8 @@
 import { FadeIn } from "@/components/motion";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { cn } from "@/utils/cn";
 import { Download } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { type LogoVariant, logoVariants } from "../_data/brand-assets";
 import { logoSurface, logoVariantId } from "../_schema";
 import {

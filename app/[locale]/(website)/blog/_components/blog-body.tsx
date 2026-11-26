@@ -1,9 +1,9 @@
 "use client";
 
 import { HoverCard, StaggerContainer, StaggerItem } from "@/components/motion";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Route } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 import {

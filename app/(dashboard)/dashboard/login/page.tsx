@@ -1,9 +1,10 @@
 import FourHerfrikaLogo from "@/app/[locale]/(website)/4herfrika-logo";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { routing } from "@/i18n/routing";
+import namelessLogoWhiteImage from "@/public/assets/nameless-logo-white.png";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import { LoginForm } from "./_components/login-form";
 
 export default async function LoginPage({
@@ -34,7 +35,7 @@ export default async function LoginPage({
 
 				<a href="/" aria-label="4HerFrika home" className="relative z-10">
 					<Image
-						src="/assets/nameless-logo-white.png"
+						src={namelessLogoWhiteImage}
 						alt="4HerFrika"
 						width={140}
 						height={40}

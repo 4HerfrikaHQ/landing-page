@@ -7,6 +7,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { logout } from "@/src/auth";
 import { cn } from "@/utils/cn";
 import {
@@ -20,7 +21,6 @@ import {
 	Users,
 } from "lucide-react";
 import type { Route } from "next";
-import Image from "next/image";
 import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";

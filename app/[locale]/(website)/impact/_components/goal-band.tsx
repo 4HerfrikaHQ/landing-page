@@ -1,6 +1,6 @@
 import { ClipReveal } from "@/components/motion/clip-reveal";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import right from "../right.jpg";
 
 export async function GoalBand() {

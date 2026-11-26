@@ -1,10 +1,11 @@
 import { RollLabel } from "@/components/ui/roll-label";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
+import heroImage from "@/public/assets/donate/hero.jpg";
 import { isOnlineGivingConfigured } from "@/src/lib/paystack/client";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { DonateFaq } from "./_components/donate-faq";
 import { GiveBar } from "./_components/give-bar";
 import { GiveSection } from "./_components/give-section";
@@ -36,7 +37,7 @@ export default async function DonationPage({
 				className="relative flex min-h-[680px] items-end overflow-hidden text-white lg:min-h-[760px] lg:items-start"
 			>
 				<Image
-					src="/assets/donate/hero.jpg"
+					src={heroImage}
 					alt={t("imageAlt")}
 					fill
 					priority

@@ -10,10 +10,10 @@ import {
 } from "@/app/[locale]/(website)/blog/_feed";
 import { imageFitSchema } from "@/app/[locale]/(website)/blog/_schema";
 import { formatFeedDate } from "@/app/[locale]/(website)/blog/_utils";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Streamdown } from "streamdown";
 import "streamdown/styles.css";

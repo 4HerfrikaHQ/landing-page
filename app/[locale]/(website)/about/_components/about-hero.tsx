@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { JOIN_US_URL } from "../../navigation";
 import heroImage from "../assets/hero.jpg";
 import { SectionEyebrow } from "./section-eyebrow";

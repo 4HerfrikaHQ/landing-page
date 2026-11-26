@@ -1,7 +1,8 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
+import academyLogoImage from "@/public/assets/academy/academy-logo.png";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { PartnerLogo } from "../../_components/course-card";
 import { CourseChips } from "../../_components/course-chips";
@@ -77,7 +78,7 @@ function PartnerStrip({ partners }: { partners: Course["partners"] }) {
 	return (
 		<div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl border border-border bg-white px-4 py-3">
 			<Image
-				src="/assets/academy/academy-logo.png"
+				src={academyLogoImage}
 				alt="4Herfrika"
 				width={96}
 				height={27}

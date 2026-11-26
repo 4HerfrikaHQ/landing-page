@@ -1,10 +1,11 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import { RevealGroup } from "@/components/motion/reveal-group";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import decorativeLogoImage from "@/public/assets/academy/decorative-logo.png";
 import { cn } from "@/utils/cn";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { HomeTestimonial } from "../_content";
 import { AVATAR_TONES, MIN_TESTIMONIALS } from "../_schema";
 import { SectionHeading } from "./section-heading";
@@ -56,7 +57,7 @@ export async function TestimonialsSection({
 	return (
 		<section className="relative overflow-hidden bg-surface-indigo px-4 py-16 lg:px-20 lg:py-24">
 			<Image
-				src="/assets/academy/decorative-logo.png"
+				src={decorativeLogoImage}
 				alt=""
 				width={173}
 				height={251}

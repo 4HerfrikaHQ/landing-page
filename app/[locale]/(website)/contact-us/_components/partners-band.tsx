@@ -1,6 +1,7 @@
 import { ClipReveal } from "@/components/motion/clip-reveal";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import partnersImage from "@/public/assets/contact/partners.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { PartnerButton } from "./partner-button";
 
 export async function PartnersBand() {
@@ -26,7 +27,7 @@ export async function PartnersBand() {
 				</div>
 				<ClipReveal className="relative aspect-4/3 w-full lg:aspect-auto lg:w-1/2">
 					<Image
-						src="/assets/contact/partners.jpg"
+						src={partnersImage}
 						alt={t("partnersImageAlt")}
 						fill
 						sizes="(max-width: 1024px) 100vw, 50vw"

@@ -1,6 +1,7 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import impactSourceImage from "@/public/assets/academy/impact-source.jpg";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { ReactNode } from "react";
 
 export const PILL_PRIMARY =
@@ -37,7 +38,7 @@ export async function UnsubscribeCard({
 				<div className="grid overflow-hidden rounded-[20px] bg-white shadow-[0_12px_24px_rgba(0,0,0,0.10)] lg:grid-cols-[0.9fr_1.1fr] lg:rounded-[40px]">
 					<div className="relative hidden lg:block">
 						<Image
-							src="/assets/academy/impact-source.jpg"
+							src={impactSourceImage}
 							alt={t("photoAlt")}
 							fill
 							sizes="460px"

@@ -1,4 +1,6 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import techSourceImage from "@/public/assets/academy/tech-source.jpg";
 import { CONTACT_EMAIL } from "@/src/lib/contact";
 import {
 	ArrowLeft,
@@ -10,7 +12,6 @@ import {
 	Users,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { ReportBrokenLink } from "./report-broken-link";
 
 const ROUTES = [
@@ -52,7 +53,7 @@ export async function NotFoundView() {
 				<div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
 					<div className="relative order-first lg:order-last">
 						<Image
-							src="/assets/academy/tech-source.jpg"
+							src={techSourceImage}
 							alt={t("photoAlt")}
 							width={1400}
 							height={875}

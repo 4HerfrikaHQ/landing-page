@@ -1,3 +1,7 @@
+import ambassadorImage from "@/public/assets/home/ambassador.jpg";
+import donateImage from "@/public/assets/home/donate.jpg";
+import learnImage from "@/public/assets/home/learn.jpg";
+import mentorImage from "@/public/assets/home/mentor.jpg";
 import type { Route } from "next";
 import { z } from "zod";
 import { JOIN_US_URL } from "../navigation";
@@ -14,28 +18,28 @@ export const PATHS = [
 		key: "learn",
 		href: "/academy" as Route,
 		external: false,
-		image: "/assets/home/learn.jpg",
+		image: learnImage,
 		surface: "bg-white",
 	},
 	{
 		key: "mentor",
 		href: "/careercorner" as Route,
 		external: false,
-		image: "/assets/home/mentor.jpg",
+		image: mentorImage,
 		surface: "bg-white",
 	},
 	{
 		key: "ambassador",
 		href: JOIN_US_URL,
 		external: true,
-		image: "/assets/home/ambassador.jpg",
+		image: ambassadorImage,
 		surface: "bg-white",
 	},
 	{
 		key: "donate",
 		href: "/donate" as Route,
 		external: false,
-		image: "/assets/home/donate.jpg",
+		image: donateImage,
 		surface: "bg-surface-pink",
 	},
 ] as const;

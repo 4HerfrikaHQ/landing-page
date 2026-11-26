@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { ArrowDown } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import beginning from "../beginning.jpg";
 
 export async function ImpactHero() {

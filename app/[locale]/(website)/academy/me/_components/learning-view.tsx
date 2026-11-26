@@ -1,7 +1,7 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { ArrowRight, GraduationCap } from "lucide-react";
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { certificatePath } from "../../../certificates/_helpers";
 import { completePath, coursePath, lessonPath } from "../../[uid]/_helpers";

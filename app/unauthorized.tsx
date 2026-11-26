@@ -1,10 +1,11 @@
 import FourHerfrikaLogo from "@/app/[locale]/(website)/4herfrika-logo";
+import { SiteImage as Image } from "@/components/ui/site-image";
+import heroSourceImage from "@/public/assets/academy/hero-source.jpg";
 import { createClient, logout } from "@/src/auth";
 import { CONTACT_EMAIL } from "@/src/lib/contact";
 import { ArrowLeft, ArrowRight, ShieldAlert } from "lucide-react";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import Link from "next/link";
 
 const PILL =
@@ -130,7 +131,7 @@ export default async function UnauthorizedPage() {
 					>
 						<div className="relative hidden aspect-[16/10] lg:block">
 							<Image
-								src="/assets/academy/hero-source.jpg"
+								src={heroSourceImage}
 								alt={t("photoAlt")}
 								fill
 								sizes="560px"

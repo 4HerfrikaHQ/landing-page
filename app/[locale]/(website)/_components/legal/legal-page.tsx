@@ -1,9 +1,10 @@
+import { SiteImage as Image } from "@/components/ui/site-image";
 import { Link } from "@/i18n/navigation";
+import decorativeLogoImage from "@/public/assets/academy/decorative-logo.png";
 import { CONTACT_EMAIL } from "@/src/lib/contact";
 import { CalendarDays, Mail } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import type { LegalKind } from "./_schema";
 import { legalMdxComponents } from "./legal-mdx-components";
 import { LegalSidebar } from "./legal-sidebar";
@@ -57,7 +58,7 @@ export async function LegalPage({
 				className="relative overflow-hidden bg-[#fffaf5] px-4 pb-10 pt-28 lg:px-20 lg:pb-16 xl:pt-40"
 			>
 				<Image
-					src="/assets/academy/decorative-logo.png"
+					src={decorativeLogoImage}
 					alt=""
 					width={173}
 					height={251}
