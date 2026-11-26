@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "lucide-react";
@@ -37,6 +38,7 @@ function StoryImage({
 }
 
 type VariantStyle = {
+	slot: string;
 	card: string;
 	image: string;
 	body: string;
@@ -46,13 +48,15 @@ type VariantStyle = {
 
 const VARIANT_STYLES: Record<StoryVariant, VariantStyle> = {
 	featured: {
-		card: "lg:col-span-2 lg:grid lg:h-100 lg:grid-cols-[1.1fr_1fr]",
+		slot: "lg:col-span-2",
+		card: "lg:grid lg:h-100 lg:grid-cols-[1.1fr_1fr]",
 		image: "lg:aspect-auto lg:h-full",
 		body: "lg:p-8",
 		title: "text-2xl",
 		excerpt: "line-clamp-4",
 	},
 	regular: {
+		slot: "",
 		card: "lg:h-100",
 		image: "lg:aspect-auto lg:h-55",
 		body: "",
@@ -60,7 +64,8 @@ const VARIANT_STYLES: Record<StoryVariant, VariantStyle> = {
 		excerpt: "line-clamp-2",
 	},
 	desktopOnly: {
-		card: "max-lg:hidden lg:h-100",
+		slot: "max-lg:hidden",
+		card: "lg:h-100",
 		image: "lg:aspect-auto lg:h-55",
 		body: "",
 		title: "text-lg",
@@ -131,27 +136,30 @@ export async function StoriesSection({ stories }: { stories: HomeStory[] }) {
 
 	return (
 		<section className="bg-muted px-4 py-16 lg:px-20 lg:pt-20 lg:pb-24">
-			<FadeIn className="mx-auto max-w-6xl">
-				<SectionHeading
-					eyebrow={t("eyebrow")}
-					first={t("titleFirst")}
-					second={t("titleSecond")}
-				/>
-				<div className="mt-8 grid gap-5 lg:grid-cols-3">
+			<div className="mx-auto max-w-6xl">
+				<FadeIn>
+					<SectionHeading
+						eyebrow={t("eyebrow")}
+						first={t("titleFirst")}
+						second={t("titleSecond")}
+					/>
+				</FadeIn>
+				<RevealGroup className="mt-8 grid gap-5 lg:grid-cols-3">
 					{stories.map((story, index) => (
-						<StoryCard
+						<div
 							key={story.id}
-							story={story}
-							variant={variantFor(index)}
-						/>
+							className={VARIANT_STYLES[variantFor(index)].slot}
+						>
+							<StoryCard story={story} variant={variantFor(index)} />
+						</div>
 					))}
-				</div>
+				</RevealGroup>
 				<div className="mt-10 text-center">
 					<PillLink href="/blog" variant="outline-primary">
 						{t("viewAll")}
 					</PillLink>
 				</div>
-			</FadeIn>
+			</div>
 		</section>
 	);
 }

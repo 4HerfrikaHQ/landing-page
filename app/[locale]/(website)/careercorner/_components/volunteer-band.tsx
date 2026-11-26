@@ -1,4 +1,6 @@
 import { JOIN_US_URL } from "@/app/[locale]/(website)/navigation";
+import { ClipReveal } from "@/components/motion/clip-reveal";
+import { RollLabel } from "@/components/ui/roll-label";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -25,22 +27,22 @@ export async function VolunteerBand() {
 				<div className="mt-8 flex flex-col gap-3 sm:flex-row">
 					<Link
 						href={"/careercorner/apply" as Route}
-						className="inline-flex h-12 items-center justify-center rounded-pill bg-primary-bright px-6 font-semibold text-secondary-500 transition-[filter] hover:no-underline hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+						className="press inline-flex h-12 items-center justify-center rounded-pill bg-primary-bright px-6 font-semibold text-secondary-500 transition-[filter] hover:no-underline hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
 					>
-						{t("volunteerCta")}
+						<RollLabel>{t("volunteerCta")}</RollLabel>
 					</Link>
 					<a
 						href={JOIN_US_URL}
 						target="_blank"
 						rel="noreferrer"
-						className="inline-flex h-12 items-center justify-center rounded-pill border-2 border-white/70 px-6 font-medium transition-colors hover:bg-white/10 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+						className="press inline-flex h-12 items-center justify-center rounded-pill border-2 border-white/70 px-6 font-medium transition-colors hover:bg-white/10 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
 					>
-						{t("ambassadorCta")}
+						<RollLabel>{t("ambassadorCta")}</RollLabel>
 						<span className="sr-only"> {t("opensInNewTab")}</span>
 					</a>
 				</div>
 			</div>
-			<div className="relative aspect-square w-full lg:aspect-auto lg:h-full lg:w-1/2">
+			<ClipReveal className="relative aspect-square w-full overflow-hidden rounded-b-[40px] lg:aspect-auto lg:h-full lg:w-1/2 lg:rounded-b-none lg:rounded-bl-[64px]">
 				<Image
 					src="/assets/careercorner/volunteer.jpg"
 					alt={t("volunteerImageAlt")}
@@ -48,7 +50,7 @@ export async function VolunteerBand() {
 					sizes="(max-width: 1024px) 100vw, 50vw"
 					className="object-cover"
 				/>
-			</div>
+			</ClipReveal>
 		</section>
 	);
 }

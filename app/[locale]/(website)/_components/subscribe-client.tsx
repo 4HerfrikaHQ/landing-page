@@ -1,5 +1,6 @@
 "use client";
 
+import { PendingLabel } from "@/components/ui/pending-label";
 import { Button } from "@base-ui/react";
 import { useId, useTransition } from "react";
 import { toast } from "sonner";
@@ -89,7 +90,9 @@ export const SubscribeFormClient = ({
 					disabled={isPending}
 					className={`h-11 shrink-0 cursor-pointer rounded-pill px-5 text-[15px] font-medium press outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${TONES[tone].button}`}
 				>
-					{submitLabel}
+					<PendingLabel pending={isPending} pendingLabel={submitLabel}>
+						{submitLabel}
+					</PendingLabel>
 				</Button>
 			</form>
 		</div>

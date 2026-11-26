@@ -1,4 +1,30 @@
+import { SelectedHighlight } from "@/components/ui/selected-highlight";
 import type { ReactNode } from "react";
+
+const PILL_RADIUS = 9999;
+
+const TILE_RADIUS = 16;
+
+function ActiveHighlight({
+	active,
+	layoutId,
+	radius,
+	className,
+}: {
+	active: boolean;
+	layoutId: string;
+	radius: number;
+	className: string;
+}) {
+	if (!active) return null;
+	return (
+		<SelectedHighlight
+			layoutId={layoutId}
+			radius={radius}
+			className={className}
+		/>
+	);
+}
 
 export function SegmentedRadio({
 	legend,
@@ -27,7 +53,13 @@ export function SegmentedRadio({
 							onChange={() => onChange(option.value)}
 							className="peer sr-only"
 						/>
-						<span className="flex h-11 cursor-pointer items-center justify-center rounded-full text-[15px] font-medium transition-colors peer-checked:bg-primary-500 peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary-500 motion-reduce:transition-none">
+						<span className="relative isolate flex h-11 cursor-pointer items-center justify-center rounded-full text-[15px] font-medium transition-colors duration-200 peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary-500">
+							<ActiveHighlight
+								active={value === option.value}
+								layoutId={`${name}-highlight`}
+								radius={PILL_RADIUS}
+								className="bg-primary-500"
+							/>
 							{option.label}
 						</span>
 					</label>
@@ -57,7 +89,13 @@ export function OptionTile({
 				onChange={onChange}
 				className="peer sr-only"
 			/>
-			<span className="flex min-h-14 cursor-pointer items-center rounded-2xl border border-border px-4 text-2xl font-semibold tabular-nums transition-colors peer-checked:border-2 peer-checked:border-primary-500 peer-checked:bg-surface-pink peer-checked:text-primary-500 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary-500 motion-reduce:transition-none">
+			<span className="relative isolate flex min-h-14 cursor-pointer items-center rounded-2xl border border-border px-4 text-2xl font-semibold tabular-nums transition-colors duration-200 peer-checked:text-primary-500 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary-500">
+				<ActiveHighlight
+					active={checked}
+					layoutId={`${name}-highlight`}
+					radius={TILE_RADIUS}
+					className="border-2 border-primary-500 bg-surface-pink"
+				/>
 				{children}
 			</span>
 		</label>

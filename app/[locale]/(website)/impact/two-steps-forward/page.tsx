@@ -1,4 +1,4 @@
-import { FadeIn } from "@/components/motion";
+import { ScrollWords } from "@/components/motion/scroll-words";
 import { Link } from "@/i18n/navigation";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
 import { ArrowLeft } from "lucide-react";
@@ -41,11 +41,9 @@ export default async function YearTwoReportPage({
 					{t("allReports")}
 				</Link>
 			</div>
-			<FadeIn>
-				<p className="mx-auto max-w-5xl px-6 py-16 text-center text-lg leading-relaxed text-muted-foreground lg:py-24 lg:text-[32px] lg:leading-snug">
-					{t("intro")}
-				</p>
-			</FadeIn>
+			<ScrollWords className="mx-auto max-w-5xl px-6 py-16 text-center text-lg leading-relaxed text-secondary-500 lg:py-24 lg:text-[32px] lg:leading-snug">
+				{t("intro")}
+			</ScrollWords>
 			<NumbersSection report={year2Report} />
 			<HighlightsSection />
 			<MomentsSection />

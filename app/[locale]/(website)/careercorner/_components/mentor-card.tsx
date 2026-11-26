@@ -1,6 +1,7 @@
 "use client";
 
 import { MentorImage } from "@/components/mentor-image";
+import { RollLabel } from "@/components/ui/roll-label";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -27,9 +28,9 @@ export function MentorCard({ mentor }: { mentor: DbMentorWithAvailability }) {
 					mentor={{ id: mentor.id, slug: mentor.slug, name: displayName }}
 					source="directory"
 					ariaLabel={t("bookCallWith", { name: displayName })}
-					className="inline-flex h-11 items-center justify-center rounded-pill bg-primary-500 text-[15px] font-medium text-white transition-[filter] hover:no-underline hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+					className="press inline-flex h-11 items-center justify-center rounded-pill bg-primary-500 text-[15px] font-medium text-white transition-[filter] hover:no-underline hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
 				>
-					{tc("bookACall")}
+					<RollLabel>{tc("bookACall")}</RollLabel>
 				</BookCallLink>
 			</div>
 		</article>

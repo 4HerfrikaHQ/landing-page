@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "lucide-react";
@@ -9,7 +10,7 @@ import { PATHS } from "../_schema";
 import { SectionHeading } from "./section-heading";
 
 const CARD_CLASSES =
-	"group flex w-[78%] shrink-0 snap-start flex-col rounded-[20px] p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:w-auto lg:rounded-[20px]";
+	"group flex w-full flex-col rounded-[20px] p-4 shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 lg:w-auto lg:rounded-[20px]";
 
 type CardLinkProps = {
 	href: string;
@@ -47,17 +48,25 @@ export async function PathsSection() {
 
 	return (
 		<section className="px-4 py-16 lg:px-20 lg:py-24">
-			<FadeIn className="mx-auto max-w-6xl">
-				<SectionHeading
-					eyebrow={t("eyebrow")}
-					first={t("titleFirst")}
-					second={t("titleSecond")}
-					breakLine
-					className="max-w-2xl"
-				/>
-				<ul className="-mx-4 mt-10 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-6 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
+			<div className="mx-auto max-w-6xl">
+				<FadeIn>
+					<SectionHeading
+						eyebrow={t("eyebrow")}
+						first={t("titleFirst")}
+						second={t("titleSecond")}
+						breakLine
+						className="max-w-2xl"
+					/>
+				</FadeIn>
+				<RevealGroup
+					as="ul"
+					className="-mx-4 mt-10 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-6 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0"
+				>
 					{PATHS.map((path) => (
-						<li key={path.key} className="contents">
+						<li
+							key={path.key}
+							className="flex w-[78%] shrink-0 snap-start lg:w-auto"
+						>
 							<CardLink
 								href={path.href}
 								external={path.external}
@@ -89,8 +98,8 @@ export async function PathsSection() {
 							</CardLink>
 						</li>
 					))}
-				</ul>
-			</FadeIn>
+				</RevealGroup>
+			</div>
 		</section>
 	);
 }

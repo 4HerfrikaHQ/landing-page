@@ -3,6 +3,7 @@
 import { MentorImage } from "@/components/mentor-image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RollLabel } from "@/components/ui/roll-label";
 import {
 	Select,
 	SelectContent,
@@ -333,9 +334,9 @@ export function BookingForm({
 				<button
 					type="submit"
 					disabled={action.isPending}
-					className="inline-flex h-12 w-full items-center justify-center rounded-pill bg-primary px-6 font-medium text-primary-foreground outline-none transition-colors hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60"
+					className="press inline-flex h-12 w-full items-center justify-center rounded-pill bg-primary px-6 font-medium text-primary-foreground outline-none transition-colors hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60"
 				>
-					{submitLabel}
+					<RollLabel>{submitLabel}</RollLabel>
 				</button>
 			</div>
 		</form>

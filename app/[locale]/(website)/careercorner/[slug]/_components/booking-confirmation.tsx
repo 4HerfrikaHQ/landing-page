@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -57,9 +58,9 @@ export function BookingConfirmation({
 			</p>
 			<Link
 				href="/careercorner"
-				className="mt-4 inline-flex h-12 items-center justify-center rounded-pill border-2 border-primary bg-white px-6 font-medium text-primary outline-none transition-colors hover:bg-primary hover:text-primary-foreground hover:no-underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+				className="press mt-4 inline-flex h-12 items-center justify-center rounded-pill border-2 border-primary bg-white px-6 font-medium text-primary outline-none transition-colors hover:bg-primary hover:text-primary-foreground hover:no-underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 			>
-				{t("back")}
+				<RollLabel>{t("back")}</RollLabel>
 			</Link>
 		</div>
 	);

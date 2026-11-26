@@ -27,13 +27,11 @@
 
 	/* ── Motion ── */
 	--ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 	--duration-roll: 300ms;
-	--ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+	--ease-page: cubic-bezier(0.16, 1, 0.3, 1);
 	--duration-press: 160ms;
 	--duration-ui: 200ms;
-	--duration-reveal: 500ms;
-	--reveal-distance: 12px;
-	--stagger-step: 50ms;
 
 	/* ── Layout ── */
 	--max-width-9xl: 72rem;
@@ -153,65 +151,6 @@ a[data-active="true"] {
 		linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 }
 
-@keyframes enter-up {
-	from {
-		opacity: 0;
-		transform: translateY(var(--reveal-distance));
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@keyframes enter-down {
-	from {
-		opacity: 0;
-		transform: translateY(calc(var(--reveal-distance) * -1));
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@keyframes enter-left {
-	from {
-		opacity: 0;
-		transform: translateX(var(--reveal-distance));
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@keyframes enter-right {
-	from {
-		opacity: 0;
-		transform: translateX(calc(var(--reveal-distance) * -1));
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@keyframes enter-scale {
-	from {
-		opacity: 0;
-		transform: scale(0.96);
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-.animate-enter {
-	animation: enter-up var(--duration-reveal) var(--ease-out-strong) both;
-}
-
 @keyframes parallax-drift {
 	from {
 		transform: translateY(var(--parallax-from, -30px));
@@ -248,6 +187,22 @@ a[data-active="true"] {
 	}
 }
 
+@keyframes hero-settle {
+	from {
+		transform: scale(1.08);
+	}
+}
+
+.animate-hero-settle {
+	animation: hero-settle 1.6s var(--ease-out-strong) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-hero-settle {
+		animation: none;
+	}
+}
+
 @keyframes hero-float {
 	0% {
 		transform: translateY(0) rotate(0deg);
@@ -270,51 +225,11 @@ a[data-active="true"] {
 	}
 }
 
-@media (prefers-reduced-motion: no-preference) {
-	[data-reveal] {
-		opacity: 0;
-	}
-
-	[data-reveal][data-revealed] {
-		animation: enter-up var(--duration-reveal) var(--ease-out-strong) both;
-	}
-
-	[data-reveal="down"][data-revealed] {
-		animation-name: enter-down;
-	}
-	[data-reveal="left"][data-revealed] {
-		animation-name: enter-left;
-	}
-	[data-reveal="right"][data-revealed] {
-		animation-name: enter-right;
-	}
-	[data-reveal="scale"][data-revealed] {
-		animation-name: enter-scale;
-	}
-
-	[data-stagger] > *:nth-child(2) {
-		animation-delay: calc(var(--stagger-step) * 1);
-	}
-	[data-stagger] > *:nth-child(3) {
-		animation-delay: calc(var(--stagger-step) * 2);
-	}
-	[data-stagger] > *:nth-child(4) {
-		animation-delay: calc(var(--stagger-step) * 3);
-	}
-	[data-stagger] > *:nth-child(5) {
-		animation-delay: calc(var(--stagger-step) * 4);
-	}
-	[data-stagger] > *:nth-child(6) {
-		animation-delay: calc(var(--stagger-step) * 5);
-	}
-	[data-stagger] > *:nth-child(7) {
-		animation-delay: calc(var(--stagger-step) * 6);
-	}
-	[data-stagger] > *:nth-child(8) {
-		animation-delay: calc(var(--stagger-step) * 7);
-	}
-	[data-stagger] > *:nth-child(n + 9) {
-		animation-delay: calc(var(--stagger-step) * 8);
+@media (prefers-reduced-motion: reduce) {
+	[data-motion] {
+		opacity: 1 !important;
+		transform: none !important;
+		clip-path: none !important;
 	}
 }
 
@@ -404,17 +319,35 @@ html {
 
 ::view-transition-new(root),
 ::view-transition-new(site-nav),
-::view-transition-group(site-nav),
-::view-transition-group(page) {
+::view-transition-group(site-nav) {
 	animation: none;
 }
 
-::view-transition-old(page) {
-	animation: page-out 120ms ease-out both;
+::view-transition-group(site-nav) {
+	z-index: 100;
 }
 
-::view-transition-new(page) {
-	animation: page-in 240ms var(--ease-out-strong) both;
+::view-transition {
+	pointer-events: none;
+}
+
+::view-transition-old(.page-exit) {
+	animation: 200ms ease-out both page-out;
+}
+
+::view-transition-new(.page-enter) {
+	animation:
+		700ms ease-out 180ms both page-fade,
+		900ms var(--ease-page) 180ms both page-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(*),
+	::view-transition-new(*),
+	::view-transition-group(*) {
+		animation-duration: 0s !important;
+		animation-delay: 0s !important;
+	}
 }
 
 @keyframes page-out {
@@ -423,10 +356,15 @@ html {
 	}
 }
 
-@keyframes page-in {
+@keyframes page-fade {
 	from {
 		opacity: 0;
-		transform: translateY(8px);
+	}
+}
+
+@keyframes page-in {
+	from {
+		transform: translateY(16px);
 	}
 }
 
@@ -534,10 +472,6 @@ body:has(.impact-banner) footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.animate-enter {
-		animation: none;
-	}
-
 	.press:active {
 		transform: none;
 	}
@@ -545,5 +479,24 @@ body:has(.impact-banner) footer {
 	.card-lift,
 	.card-lift:hover {
 		transform: none;
+	}
+}
+
+@supports selector(::details-content) {
+	.faq-item::details-content {
+		height: 0;
+		overflow: clip;
+		transition: height 200ms var(--ease-out-strong), content-visibility 200ms
+			allow-discrete;
+	}
+
+	.faq-item[open]::details-content {
+		height: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.faq-item::details-content {
+			transition: none;
+		}
 	}
 }

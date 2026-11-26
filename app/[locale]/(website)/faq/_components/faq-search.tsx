@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { FormEvent } from "react";
@@ -40,9 +41,9 @@ export function FaqSearch() {
 				/>
 				<button
 					type="submit"
-					className="inline-flex h-11 shrink-0 items-center rounded-pill bg-primary-500 px-5 font-medium text-white outline-none transition-[filter] hover:brightness-90 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+					className="press inline-flex h-11 shrink-0 items-center rounded-pill bg-primary-500 px-5 font-medium text-white outline-none transition-[filter] hover:brightness-90 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
 				>
-					{t("searchButton")}
+					<RollLabel>{t("searchButton")}</RollLabel>
 				</button>
 			</form>
 		</search>

@@ -456,13 +456,8 @@
 			"imageAlt": "4HerFrika graduates holding up their certificates"
 		},
 		"stats": {
-			"girlsMentored": "girls mentored",
-			"graduates": "Tech Academy graduates",
-			"campuses": "campuses",
-			"countries": "countries",
-			"period": "Year 1",
-			"source": "From the Year 1 report.",
-			"reportLink": "Read our impact reports"
+			"source": "From the Year 2 report.",
+			"reportLink": "Read the Year 2 report"
 		},
 		"give": {
 			"badge": "Give in two minutes",
@@ -1688,14 +1683,38 @@
 			"first": "Year two",
 			"second": "in numbers.",
 			"figures": {
-				"members": "community members",
-				"campuses": "campuses",
-				"countries": "African countries",
-				"mentored": "students mentored on The Career Corner",
-				"menstrualHealth": "girls reached through menstrual health work",
-				"bootcampGraduates": "tech bootcamp graduates",
-				"academies": "academies: Tech, Business, Climate",
-				"partners": "partners"
+				"members": {
+					"label": "Members",
+					"note": "across 25+ campuses"
+				},
+				"campuses": {
+					"label": "Campuses",
+					"note": "in our network"
+				},
+				"countries": {
+					"label": "Countries",
+					"note": "across Africa"
+				},
+				"mentored": {
+					"label": "Mentored",
+					"note": "on The Career Corner"
+				},
+				"menstrualHealth": {
+					"label": "Girls reached",
+					"note": "menstrual health work"
+				},
+				"bootcampGraduates": {
+					"label": "Graduates",
+					"note": "tech bootcamps"
+				},
+				"academies": {
+					"label": "Academies",
+					"note": "Tech · Business · Climate"
+				},
+				"partners": {
+					"label": "Partners",
+					"note": "this year"
+				}
 			}
 		},
 		"highlights": {
@@ -1728,7 +1747,8 @@
 			"first": "The full",
 			"second": "report.",
 			"body": "The founder's note, every programme, our campuses, partners and lessons are all in the full Year 2 report.",
-			"soon": "The designed report is coming soon."
+			"soon": "The designed report is coming soon.",
+			"openCover": "Open the Year 2 report"
 		},
 		"goal": {
 			"first": "Two million women and girls",

@@ -25,7 +25,7 @@ export async function ProjectsMovedBand() {
 				</div>
 				<Link
 					href={categoryHref(PROJECTS_CATEGORY) as Route}
-					className="inline-flex h-12 items-center justify-center rounded-pill bg-primary-500 px-6 font-medium text-white no-underline outline-none hover:brightness-90 hover:no-underline! focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+					className="press inline-flex h-12 items-center justify-center rounded-pill bg-primary-500 px-6 font-medium text-white no-underline outline-none hover:brightness-90 hover:no-underline! focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
 				>
 					{t("movedCta")} <span aria-hidden="true">&nbsp;→</span>
 				</Link>

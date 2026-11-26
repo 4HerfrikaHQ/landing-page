@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { LoaderCircle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -23,9 +24,9 @@ export async function PendingView({ reference }: { reference: string }) {
 			</p>
 			<Link
 				href={{ pathname: "/donate/thank-you", query: { reference } } as never}
-				className="mt-6 inline-flex h-12 items-center rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
+				className="press mt-6 inline-flex h-12 items-center rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
 			>
-				{t("checkAgain")}
+				<RollLabel>{t("checkAgain")}</RollLabel>
 			</Link>
 			<p className="mt-6 text-[15px] text-muted-foreground">
 				<strong className="text-foreground">{t("dontPayAgain")}</strong>{" "}

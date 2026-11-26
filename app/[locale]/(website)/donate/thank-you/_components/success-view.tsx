@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { formatAmount } from "@/src/lib/paystack/amounts";
 import { Check, Mail } from "lucide-react";
@@ -82,7 +83,7 @@ export async function SuccessView({ gift }: { gift: GiftSummary }) {
 									href={link.href}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="inline-flex h-11 items-center rounded-full border border-border bg-white px-5 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
+									className="press inline-flex h-11 items-center rounded-full border border-border bg-white px-5 text-sm font-medium outline-offset-2 hover:bg-surface-pink focus-visible:outline-2 focus-visible:outline-primary-500"
 								>
 									{t(`share.${link.key}`)}
 								</a>
@@ -154,9 +155,9 @@ async function OnceAside({
 			<p className="mt-4 text-[15px] text-muted-foreground">{t("onceText")}</p>
 			<Link
 				href="/donate#give"
-				className="mt-4 inline-flex h-12 items-center rounded-full bg-primary-500 px-6 font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
+				className="press mt-4 inline-flex h-12 items-center rounded-full bg-primary-500 px-6 font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
 			>
-				{t("onceCta")}
+				<RollLabel>{t("onceCta")}</RollLabel>
 			</Link>
 		</aside>
 	);

@@ -399,13 +399,8 @@
 			"imageAlt": "Des diplômées de 4HerFrika brandissant leurs certificats"
 		},
 		"stats": {
-			"girlsMentored": "filles accompagnées",
-			"graduates": "diplômées de la Tech Academy",
-			"campuses": "campus",
-			"countries": "pays",
-			"period": "Année 1",
-			"source": "Tiré du rapport de l’année 1.",
-			"reportLink": "Lire nos rapports d’impact"
+			"source": "Extrait du rapport Année 2.",
+			"reportLink": "Lire le rapport Année 2"
 		},
 		"give": {
 			"badge": "Donnez en deux minutes",
@@ -1688,14 +1683,38 @@
 			"first": "L'année deux",
 			"second": "en chiffres.",
 			"figures": {
-				"members": "membres de la communauté",
-				"campuses": "campus",
-				"countries": "pays africains",
-				"mentored": "étudiantes accompagnées sur The Career Corner",
-				"menstrualHealth": "filles touchées par nos actions sur la santé menstruelle",
-				"bootcampGraduates": "diplômées des bootcamps tech",
-				"academies": "académies : Tech, Business, Climat",
-				"partners": "partenaires"
+				"members": {
+					"label": "Membres",
+					"note": "sur plus de 25 campus"
+				},
+				"campuses": {
+					"label": "Campus",
+					"note": "dans notre réseau"
+				},
+				"countries": {
+					"label": "Pays",
+					"note": "en Afrique"
+				},
+				"mentored": {
+					"label": "Accompagnées",
+					"note": "sur The Career Corner"
+				},
+				"menstrualHealth": {
+					"label": "Filles touchées",
+					"note": "santé menstruelle"
+				},
+				"bootcampGraduates": {
+					"label": "Diplômées",
+					"note": "bootcamps tech"
+				},
+				"academies": {
+					"label": "Académies",
+					"note": "Tech · Business · Climat"
+				},
+				"partners": {
+					"label": "Partenaires",
+					"note": "cette année"
+				}
 			}
 		},
 		"highlights": {
@@ -1728,7 +1747,8 @@
 			"first": "Le rapport",
 			"second": "complet.",
 			"body": "Le mot de la fondatrice, chaque programme, nos campus, nos partenaires et nos leçons se trouvent dans le rapport complet de l'Année 2.",
-			"soon": "Le rapport mis en page arrive bientôt."
+			"soon": "Le rapport mis en page arrive bientôt.",
+			"openCover": "Ouvrir le rapport Année 2"
 		},
 		"goal": {
 			"first": "Deux millions de femmes et de filles",

@@ -399,13 +399,8 @@
 			"imageAlt": "Wahitimu wa 4HerFrika wakiwa wameshika vyeti vyao"
 		},
 		"stats": {
-			"girlsMentored": "wasichana walioshauriwa",
-			"graduates": "wahitimu wa Tech Academy",
-			"campuses": "vyuo",
-			"countries": "nchi",
-			"period": "Mwaka wa 1",
-			"source": "Kutoka ripoti ya Mwaka wa 1.",
-			"reportLink": "Soma ripoti zetu za athari"
+			"source": "Kutoka ripoti ya Mwaka wa 2.",
+			"reportLink": "Soma ripoti ya Mwaka wa 2"
 		},
 		"give": {
 			"badge": "Changia kwa dakika mbili",
@@ -1688,14 +1683,38 @@
 			"first": "Mwaka wa pili",
 			"second": "kwa takwimu.",
 			"figures": {
-				"members": "wanachama wa jumuiya",
-				"campuses": "vyuo",
-				"countries": "nchi za Afrika",
-				"mentored": "wanafunzi waliopata ushauri kwenye The Career Corner",
-				"menstrualHealth": "wasichana waliofikiwa kupitia kazi ya afya ya hedhi",
-				"bootcampGraduates": "wahitimu wa bootcamp za teknolojia",
-				"academies": "akademia: Teknolojia, Biashara, Tabianchi",
-				"partners": "washirika"
+				"members": {
+					"label": "Wanachama",
+					"note": "katika vyuo 25+"
+				},
+				"campuses": {
+					"label": "Vyuo",
+					"note": "katika mtandao wetu"
+				},
+				"countries": {
+					"label": "Nchi",
+					"note": "barani Afrika"
+				},
+				"mentored": {
+					"label": "Waliopata ushauri",
+					"note": "kwenye The Career Corner"
+				},
+				"menstrualHealth": {
+					"label": "Wasichana",
+					"note": "afya ya hedhi"
+				},
+				"bootcampGraduates": {
+					"label": "Wahitimu",
+					"note": "bootcamp za teknolojia"
+				},
+				"academies": {
+					"label": "Akademia",
+					"note": "Teknolojia · Biashara · Tabianchi"
+				},
+				"partners": {
+					"label": "Washirika",
+					"note": "mwaka huu"
+				}
 			}
 		},
 		"highlights": {
@@ -1728,7 +1747,8 @@
 			"first": "Ripoti",
 			"second": "kamili.",
 			"body": "Ujumbe wa mwanzilishi, kila programu, vyuo vyetu, washirika na mafunzo yetu yote yamo katika ripoti kamili ya Mwaka wa 2.",
-			"soon": "Ripoti iliyosanifiwa inakuja hivi karibuni."
+			"soon": "Ripoti iliyosanifiwa inakuja hivi karibuni.",
+			"openCover": "Fungua ripoti ya Mwaka wa 2"
 		},
 		"goal": {
 			"first": "Wanawake na wasichana milioni mbili",

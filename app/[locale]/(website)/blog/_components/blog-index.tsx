@@ -1,3 +1,4 @@
+import { FadeIn } from "@/components/motion/fade-in";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { loadFeed } from "../_data";
@@ -110,12 +111,12 @@ export async function BlogIndex({ locale, category }: Props) {
 
 			<section className="px-4 pb-6 pt-16 lg:px-20 lg:pt-24">
 				<div className="mx-auto max-w-6xl">
-					<div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+					<FadeIn className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
 						<SectionHeading active={active} />
 						<p className="text-[15px] text-muted-foreground">
 							{t("projectsLiveHere")}
 						</p>
-					</div>
+					</FadeIn>
 					<CategoryChips
 						label={t("filterLabel")}
 						allLabel={t("all")}

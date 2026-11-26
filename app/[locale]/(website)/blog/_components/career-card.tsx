@@ -1,3 +1,4 @@
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -17,9 +18,9 @@ export async function CareerCard() {
 			</p>
 			<Link
 				href="/careercorner"
-				className="mt-5 flex h-12 items-center justify-center rounded-pill bg-primary-500 font-medium text-white no-underline outline-none hover:brightness-90 hover:no-underline! focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+				className="press mt-5 flex h-12 items-center justify-center rounded-pill bg-primary-500 font-medium text-white no-underline outline-none hover:brightness-90 hover:no-underline! focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
 			>
-				{t("careerCta")}
+				<RollLabel>{t("careerCta")}</RollLabel>
 			</Link>
 		</aside>
 	);

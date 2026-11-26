@@ -1,5 +1,6 @@
 "use client";
 
+import { RollLabel } from "@/components/ui/roll-label";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Dispatch } from "react";
@@ -53,9 +54,9 @@ export function FailedStep({
 			<button
 				type="button"
 				onClick={onRetry}
-				className="inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
+				className="press inline-flex h-12 items-center justify-center rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
 			>
-				{t("retry")}
+				<RollLabel>{t("retry")}</RollLabel>
 			</button>
 			<button
 				type="button"

@@ -1,4 +1,6 @@
 import { MentorImage } from "@/components/mentor-image";
+import { Button } from "@/components/ui/button";
+import { RollLabel } from "@/components/ui/roll-label";
 import { Link } from "@/i18n/navigation";
 import type { MentorImageCrop } from "@/src/lib/mentor-image";
 import {
@@ -144,15 +146,14 @@ function Position({ position }: { position: string | null }) {
 	);
 }
 
+const HERO_BUTTON = "min-h-12 px-6 font-medium md:py-3 md:text-base";
+
 function BookLink({ visible, label }: { visible: boolean; label: string }) {
 	if (!visible) return null;
 	return (
-		<a
-			href="#book"
-			className={`inline-flex min-h-12 items-center justify-center rounded-pill bg-primary px-6 py-2 text-center font-medium text-primary-foreground transition-colors hover:bg-primary-700 hover:no-underline ${FOCUS_RING}`}
-		>
+		<Button href="#book" size="lg" className={HERO_BUTTON}>
 			{label}
-		</a>
+		</Button>
 	);
 }
 
@@ -167,15 +168,16 @@ function LinkedinLink({
 }) {
 	if (!url) return null;
 	return (
-		<a
+		<Button
 			href={url}
-			target="_blank"
-			rel="noreferrer"
-			className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-pill border-2 border-primary bg-white px-6 py-2 text-center font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground hover:no-underline ${FOCUS_RING}`}
+			isExternal
+			variant="outline"
+			size="lg"
+			className={`${HERO_BUTTON} gap-2 border-2 bg-white`}
 		>
-			<Linkedin className="size-4 shrink-0" aria-hidden="true" />
-			{label}
+			<Linkedin className="size-4" aria-hidden="true" />
+			<RollLabel>{label}</RollLabel>
 			<span className="sr-only">{newTabLabel}</span>
-		</a>
+		</Button>
 	);
 }

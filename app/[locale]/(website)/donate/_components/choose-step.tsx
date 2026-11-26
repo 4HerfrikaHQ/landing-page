@@ -1,5 +1,6 @@
 "use client";
 
+import { LayoutMotion } from "@/components/ui/layout-motion";
 import {
 	AMOUNT_LIMITS,
 	CURRENCIES,
@@ -60,133 +61,135 @@ export function ChooseStep({
 	});
 
 	return (
-		<form
-			aria-label={t("formLabel")}
-			noValidate
-			onSubmit={(event) => {
-				event.preventDefault();
-				dispatch({ type: "continued" });
-			}}
-			className="flex flex-col gap-6"
-		>
-			<p className="text-sm font-semibold text-muted-foreground">
-				{t("step")} <span className="text-foreground">{t("stepName")}</span>
-			</p>
-
-			<SegmentedRadio
-				legend={t("frequencyLegend")}
-				name="frequency"
-				value={gift.frequency}
-				options={DISPLAY_FREQUENCIES.map((value) => ({
-					value,
-					label: t(value),
-				}))}
-				onChange={(value) => {
-					if (isFrequency(value)) {
-						dispatch({ type: "gift-changed", gift: { frequency: value } });
-					}
+		<LayoutMotion>
+			<form
+				aria-label={t("formLabel")}
+				noValidate
+				onSubmit={(event) => {
+					event.preventDefault();
+					dispatch({ type: "continued" });
 				}}
-			/>
+				className="flex flex-col gap-6"
+			>
+				<p className="text-sm font-semibold text-muted-foreground">
+					{t("step")} <span className="text-foreground">{t("stepName")}</span>
+				</p>
 
-			<SegmentedRadio
-				legend={t("currencyLegend")}
-				name="currency"
-				value={gift.currency}
-				options={CURRENCIES.map((value) => ({
-					value,
-					label: t(CURRENCY_LABEL_KEYS[value]),
-				}))}
-				onChange={(value) => {
-					if (isCurrency(value)) {
-						dispatch({ type: "currency-changed", currency: value });
-					}
-				}}
-			/>
+				<SegmentedRadio
+					legend={t("frequencyLegend")}
+					name="frequency"
+					value={gift.frequency}
+					options={DISPLAY_FREQUENCIES.map((value) => ({
+						value,
+						label: t(value),
+					}))}
+					onChange={(value) => {
+						if (isFrequency(value)) {
+							dispatch({ type: "gift-changed", gift: { frequency: value } });
+						}
+					}}
+				/>
 
-			<fieldset className="min-w-0">
-				<legend className="text-sm font-semibold">{t("amountLegend")}</legend>
-				<div className="mt-3 grid grid-cols-2 gap-3">
-					{PRESET_AMOUNTS[gift.currency].map((amount) => (
-						<OptionTile
-							key={amount}
-							name="amount"
-							checked={
-								gift.choice.kind === "preset" && gift.choice.amount === amount
-							}
-							onChange={() =>
+				<SegmentedRadio
+					legend={t("currencyLegend")}
+					name="currency"
+					value={gift.currency}
+					options={CURRENCIES.map((value) => ({
+						value,
+						label: t(CURRENCY_LABEL_KEYS[value]),
+					}))}
+					onChange={(value) => {
+						if (isCurrency(value)) {
+							dispatch({ type: "currency-changed", currency: value });
+						}
+					}}
+				/>
+
+				<fieldset className="min-w-0">
+					<legend className="text-sm font-semibold">{t("amountLegend")}</legend>
+					<div className="mt-3 grid grid-cols-2 gap-3">
+						{PRESET_AMOUNTS[gift.currency].map((amount) => (
+							<OptionTile
+								key={amount}
+								name="amount"
+								checked={
+									gift.choice.kind === "preset" && gift.choice.amount === amount
+								}
+								onChange={() =>
+									dispatch({
+										type: "gift-changed",
+										gift: { choice: { kind: "preset", amount } },
+									})
+								}
+							>
+								{money(amount)}
+							</OptionTile>
+						))}
+					</div>
+					<label className="mt-3 flex h-12 items-center gap-2 rounded-xl border border-input bg-white px-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary-500">
+						<span aria-hidden="true" className="text-muted-foreground">
+							{symbol}
+						</span>
+						<span className="sr-only">{t("customLabel")}</span>
+						<input
+							name="custom-amount"
+							inputMode="numeric"
+							autoComplete="off"
+							value={customText}
+							placeholder={t("customPlaceholder")}
+							aria-invalid={amountInvalid}
+							aria-describedby="amount-help"
+							onChange={(event) =>
 								dispatch({
 									type: "gift-changed",
-									gift: { choice: { kind: "preset", amount } },
+									gift: {
+										choice: { kind: "custom", text: event.target.value },
+									},
 								})
 							}
-						>
-							{money(amount)}
-						</OptionTile>
-					))}
-				</div>
-				<label className="mt-3 flex h-12 items-center gap-2 rounded-xl border border-input bg-white px-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary-500">
-					<span aria-hidden="true" className="text-muted-foreground">
-						{symbol}
+							className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground"
+						/>
+					</label>
+					<p
+						id="amount-help"
+						role={amountInvalid ? "alert" : undefined}
+						data-invalid={amountInvalid}
+						className="mt-2 text-xs text-muted-foreground data-[invalid=true]:font-medium data-[invalid=true]:text-destructive"
+					>
+						{amountMessage}
+					</p>
+				</fieldset>
+
+				<FeeCover
+					gift={gift}
+					feeEstimateMinor={feeEstimateMinor}
+					onChange={(coverFee) =>
+						dispatch({ type: "gift-changed", gift: { coverFee } })
+					}
+				/>
+
+				<div className="flex items-center justify-between rounded-xl bg-surface-pink px-4 py-3">
+					<span className="text-sm text-muted-foreground">
+						{t(SUMMARY_KEYS[gift.frequency])}
 					</span>
-					<span className="sr-only">{t("customLabel")}</span>
-					<input
-						name="custom-amount"
-						inputMode="numeric"
-						autoComplete="off"
-						value={customText}
-						placeholder={t("customPlaceholder")}
-						aria-invalid={amountInvalid}
-						aria-describedby="amount-help"
-						onChange={(event) =>
-							dispatch({
-								type: "gift-changed",
-								gift: {
-									choice: { kind: "custom", text: event.target.value },
-								},
-							})
-						}
-						className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground"
-					/>
-				</label>
-				<p
-					id="amount-help"
-					role={amountInvalid ? "alert" : undefined}
-					data-invalid={amountInvalid}
-					className="mt-2 text-xs text-muted-foreground data-[invalid=true]:font-medium data-[invalid=true]:text-destructive"
+					<span className="text-xl font-semibold tabular-nums text-primary-500">
+						{total}
+					</span>
+				</div>
+
+				<button
+					type="submit"
+					className="press inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
 				>
-					{amountMessage}
+					{t("continue")}
+					<ArrowRight className="size-5" aria-hidden="true" />
+				</button>
+				<p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+					<Lock className="size-3.5" aria-hidden="true" />
+					{t("secure")}
 				</p>
-			</fieldset>
-
-			<FeeCover
-				gift={gift}
-				feeEstimateMinor={feeEstimateMinor}
-				onChange={(coverFee) =>
-					dispatch({ type: "gift-changed", gift: { coverFee } })
-				}
-			/>
-
-			<div className="flex items-center justify-between rounded-xl bg-surface-pink px-4 py-3">
-				<span className="text-sm text-muted-foreground">
-					{t(SUMMARY_KEYS[gift.frequency])}
-				</span>
-				<span className="text-xl font-semibold tabular-nums text-primary-500">
-					{total}
-				</span>
-			</div>
-
-			<button
-				type="submit"
-				className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary-500 px-8 text-lg font-medium text-white outline-offset-2 hover:brightness-90 focus-visible:outline-2 focus-visible:outline-primary-500"
-			>
-				{t("continue")}
-				<ArrowRight className="size-5" aria-hidden="true" />
-			</button>
-			<p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-				<Lock className="size-3.5" aria-hidden="true" />
-				{t("secure")}
-			</p>
-		</form>
+			</form>
+		</LayoutMotion>
 	);
 }
 

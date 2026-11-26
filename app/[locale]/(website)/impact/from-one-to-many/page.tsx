@@ -1,4 +1,6 @@
-import { FadeIn, TextReveal } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
+import { TextReveal } from "@/components/motion/text-reveal";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { setLocaleFromParams } from "@/i18n/set-locale-from-params";
@@ -75,15 +77,20 @@ export default async function YearOneReportPage({
 				{t("whatStarted")}
 			</p>
 			<div className="bg-surface-pink pt-16 md:pt-30 pb-44 md:pb-105 flex flex-col text-center relative">
-				<h2 className="mb-12 text-3xl font-bold text-secondary-500 md:text-5xl">
-					{t("milestones")}
-				</h2>
-				<ul className="list-disc space-y-4 px-6 text-center text-lg text-foreground marker:text-primary-500 md:space-y-6 md:text-2xl">
+				<FadeIn>
+					<h2 className="mb-12 text-3xl font-bold text-secondary-500 md:text-5xl">
+						{t("milestones")}
+					</h2>
+				</FadeIn>
+				<RevealGroup
+					as="ul"
+					className="list-disc space-y-4 px-6 text-center text-lg text-foreground marker:text-primary-500 md:space-y-6 md:text-2xl"
+				>
 					<li className="mx-auto w-fit">{t("girlsMentored")}</li>
 					<li className="mx-auto w-fit">{t("campusesReached")}</li>
 					<li className="mx-auto w-fit">{t("graduates")}</li>
 					<li className="mx-auto w-fit">{t("academies")}</li>
-				</ul>
+				</RevealGroup>
 				<div className="grid grid-cols-2 gap-4 px-6 mt-12 lg:mt-0">
 					<Image
 						src={milestone1}

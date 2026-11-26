@@ -1,4 +1,5 @@
-import { FadeIn } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import type { Route } from "next";
@@ -23,7 +24,7 @@ async function TestimonialCard({
 	return (
 		<Link
 			href={`/careercorner/${item.mentorSlug}` as Route}
-			className="group flex flex-col rounded-[20px] bg-white p-6 shadow-sm hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
+			className="group flex w-full flex-col rounded-[20px] bg-white p-6 shadow-sm hover:no-underline! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
 		>
 			<figure className="flex h-full flex-col">
 				<blockquote className="line-clamp-6 text-lg leading-relaxed">
@@ -61,23 +62,25 @@ export async function TestimonialsSection({
 				height={251}
 				className="pointer-events-none absolute -right-8 bottom-6 w-40 -rotate-12 opacity-15 lg:top-10 lg:bottom-auto lg:w-56"
 			/>
-			<FadeIn className="relative mx-auto max-w-6xl">
-				<SectionHeading
-					first={t("titleFirst")}
-					second={t("titleSecond")}
-					className="text-center"
-				/>
-				<p className="mt-3 text-center text-lg text-muted-foreground">
-					{t("description")}
-				</p>
-				<ul className="mt-10 grid gap-4 lg:grid-cols-3">
+			<div className="relative mx-auto max-w-6xl">
+				<FadeIn>
+					<SectionHeading
+						first={t("titleFirst")}
+						second={t("titleSecond")}
+						className="text-center"
+					/>
+					<p className="mt-3 text-center text-lg text-muted-foreground">
+						{t("description")}
+					</p>
+				</FadeIn>
+				<RevealGroup as="ul" className="mt-10 grid gap-4 lg:grid-cols-3">
 					{testimonials.map((item, index) => (
-						<li key={item.id} className="contents">
+						<li key={item.id} className="flex">
 							<TestimonialCard item={item} index={index} />
 						</li>
 					))}
-				</ul>
-			</FadeIn>
+				</RevealGroup>
+			</div>
 		</section>
 	);
 }

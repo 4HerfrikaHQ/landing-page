@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/motion";
+import { CountUp } from "@/components/motion/count-up";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -61,7 +62,7 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 									{t(figure.labelKey)}
 								</dt>
 								<dd className="text-2xl font-semibold tabular-nums text-secondary-500">
-									{figure.value}
+									<CountUp value={figure.value} />
 								</dd>
 							</div>
 						))}

@@ -1,4 +1,5 @@
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { type JoinLink, joinOptions } from "../_schema";
@@ -19,9 +20,9 @@ export async function AboutJoin() {
 						</em>
 					</h2>
 				</FadeIn>
-				<StaggerContainer className="mt-10 grid gap-4 lg:grid-cols-3">
+				<RevealGroup className="mt-10 grid gap-4 lg:grid-cols-3">
 					{joinOptions.map((option) => (
-						<StaggerItem key={option.titleKey}>
+						<div key={option.titleKey}>
 							<JoinCard
 								link={option.link}
 								title={t(option.titleKey)}
@@ -29,9 +30,9 @@ export async function AboutJoin() {
 								linkLabel={t(option.linkKey)}
 								newTabHint={t("newTabHint")}
 							/>
-						</StaggerItem>
+						</div>
 					))}
-				</StaggerContainer>
+				</RevealGroup>
 			</div>
 		</section>
 	);

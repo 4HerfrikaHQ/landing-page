@@ -1,4 +1,5 @@
 import { MentorImage } from "@/components/mentor-image";
+import { RollLabel } from "@/components/ui/roll-label";
 import type { DbMentorWithAvailability } from "@/src/db/schema/tables";
 import { Clock, UserRound } from "lucide-react";
 import type { Route } from "next";
@@ -60,16 +61,16 @@ export async function FeaturedMentorCard({
 								}}
 								source="featured"
 								ariaLabel={t("bookCallWith", { name: displayName })}
-								className="inline-flex h-12 items-center justify-center rounded-pill bg-primary-500 px-6 font-medium text-white transition-[filter] hover:no-underline hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+								className="press inline-flex h-12 items-center justify-center rounded-pill bg-primary-500 px-6 font-medium text-white transition-[filter] hover:no-underline hover:brightness-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
 							>
-								{tc("bookACall")}
+								<RollLabel>{tc("bookACall")}</RollLabel>
 							</BookCallLink>
 							<Link
 								href={`/careercorner/${mentor.slug}` as Route}
 								aria-label={`${t("viewProfile")}: ${displayName}`}
-								className="inline-flex h-12 items-center justify-center rounded-pill border-2 border-primary-500 px-6 font-medium text-primary-500 transition-colors hover:bg-primary-500 hover:text-white hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+								className="press inline-flex h-12 items-center justify-center rounded-pill border-2 border-primary-500 px-6 font-medium text-primary-500 transition-colors hover:bg-primary-500 hover:text-white hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
 							>
-								{t("viewProfile")}
+								<RollLabel>{t("viewProfile")}</RollLabel>
 							</Link>
 						</div>
 					</div>

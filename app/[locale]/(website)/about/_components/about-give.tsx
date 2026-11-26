@@ -1,3 +1,4 @@
+import { ClipReveal } from "@/components/motion/clip-reveal";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -35,7 +36,7 @@ export async function AboutGive() {
 					</Button>
 				</div>
 			</div>
-			<div className="relative aspect-square w-full lg:aspect-auto lg:w-1/2">
+			<ClipReveal className="relative aspect-square w-full lg:aspect-auto lg:w-1/2">
 				<Image
 					src={giveImage}
 					alt={t("giveImageAlt")}
@@ -43,7 +44,7 @@ export async function AboutGive() {
 					sizes="(max-width: 1024px) 100vw, 50vw"
 					className="object-cover"
 				/>
-			</div>
+			</ClipReveal>
 		</section>
 	);
 }

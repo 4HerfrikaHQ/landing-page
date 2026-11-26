@@ -1,3 +1,5 @@
+import { FadeIn } from "@/components/motion/fade-in";
+import { RevealGroup } from "@/components/motion/reveal-group";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { getQuickAnswerQuestions } from "../_actions";
@@ -12,7 +14,7 @@ export async function QuickAnswers() {
 	return (
 		<section className="bg-surface-indigo px-4 py-14 lg:px-20 lg:py-20">
 			<div className="mx-auto max-w-6xl">
-				<div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+				<FadeIn className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
 					<h2 className="text-[28px] font-bold lg:text-4xl">
 						{t("faqHeading")}
 					</h2>
@@ -22,8 +24,8 @@ export async function QuickAnswers() {
 					>
 						{t("allFaqs")} <span aria-hidden="true">&nbsp;→</span>
 					</Link>
-				</div>
-				<ul className="mt-8 grid gap-4 lg:grid-cols-3">
+				</FadeIn>
+				<RevealGroup as="ul" className="mt-8 grid gap-4 lg:grid-cols-3">
 					{questions.map((question) => (
 						<li key={question} className="flex">
 							<Link
@@ -37,7 +39,7 @@ export async function QuickAnswers() {
 							</Link>
 						</li>
 					))}
-				</ul>
+				</RevealGroup>
 			</div>
 		</section>
 	);
