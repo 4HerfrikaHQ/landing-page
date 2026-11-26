@@ -11,6 +11,7 @@ import { logout } from "@/src/auth";
 import { cn } from "@/utils/cn";
 import {
 	CalendarDays,
+	ClipboardCheck,
 	FileText,
 	LogOut,
 	type LucideIcon,
@@ -33,6 +34,7 @@ const SEGMENT_LABELS: Record<string, string> = {
 	admins: "Admins",
 	applications: "Applications",
 	"academy-waitlist": "Academy waitlist",
+	"academy-tasks": "Academy tasks",
 	bookings: "Bookings",
 	feedback: "Feedback",
 };
@@ -72,6 +74,12 @@ const NAV_ITEMS: {
 		label: "Academy waitlist",
 		href: "/dashboard/admin/academy-waitlist" as Route,
 		icon: FileText,
+	},
+	{
+		key: "academy-tasks",
+		label: "Academy tasks",
+		href: "/dashboard/admin/academy-tasks" as Route,
+		icon: ClipboardCheck,
 	},
 	{
 		key: "admins",
@@ -157,7 +165,7 @@ export function AdminHeader({
 
 				{/* Right: nav + sign out + mobile trigger */}
 				<div className="flex items-center gap-2">
-					<nav className="hidden items-center gap-1 lg:flex">
+					<nav className="hidden items-center gap-1 2xl:flex">
 						{NAV_ITEMS.map((item) => {
 							const isActive = item.key === activeKey;
 							const Icon = item.icon;
@@ -167,7 +175,7 @@ export function AdminHeader({
 									href={item.href}
 									data-active={isActive}
 									className={cn(
-										"inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium no-underline transition-colors",
+										"inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium no-underline transition-colors",
 										isActive
 											? "bg-surface-pink text-primary-500"
 											: "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -180,7 +188,7 @@ export function AdminHeader({
 						})}
 					</nav>
 
-					<span className="hidden h-6 w-px bg-border lg:block" />
+					<span className="hidden h-6 w-px bg-border 2xl:block" />
 
 					<button
 						type="button"
@@ -198,7 +206,7 @@ export function AdminHeader({
 								<button
 									type="button"
 									aria-label="Open menu"
-									className="inline-flex size-9 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted lg:hidden"
+									className="inline-flex size-9 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted 2xl:hidden"
 								/>
 							}
 						>

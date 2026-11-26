@@ -6,6 +6,7 @@ import {
 	taskSubmissions,
 } from "@/src/db/schema/tables";
 import { and, eq, isNotNull } from "drizzle-orm";
+import type { Transaction } from "../certificates/_certificate";
 
 export async function findEnrolment(learnerId: string, courseId: string) {
 	const [enrolment] = await db
@@ -21,8 +22,11 @@ export async function findEnrolment(learnerId: string, courseId: string) {
 	return enrolment ?? null;
 }
 
-export async function completedLessonIds(enrolmentId: string) {
-	const rows = await db
+export async function completedLessonIds(
+	enrolmentId: string,
+	executor: Transaction | typeof db = db,
+) {
+	const rows = await executor
 		.select({ lessonId: lessonProgress.lesson_id })
 		.from(lessonProgress)
 		.where(
@@ -31,7 +35,7 @@ export async function completedLessonIds(enrolmentId: string) {
 				isNotNull(lessonProgress.completed_at),
 			),
 		);
-	const reviewed = await db
+	const reviewed = await executor
 		.selectDistinct({ lessonId: taskSubmissions.lesson_id })
 		.from(taskSubmissions)
 		.where(
