@@ -302,29 +302,53 @@ html {
 
 ::view-transition-new(root),
 ::view-transition-new(site-nav),
-::view-transition-group(site-nav),
-::view-transition-group(page) {
+::view-transition-group(site-nav) {
 	animation: none;
 }
 
-::view-transition-old(page) {
-	animation: page-out 120ms ease-out both;
+::view-transition-group(site-nav) {
+	z-index: 100;
 }
 
-::view-transition-new(page) {
-	animation: page-in 240ms var(--ease-out-strong) both;
+::view-transition {
+	pointer-events: none;
+}
+
+::view-transition-old(.page-exit) {
+	animation: 140ms ease-in both page-out;
+}
+
+::view-transition-new(.page-enter) {
+	animation:
+		240ms var(--ease-out-strong) 100ms both page-fade,
+		380ms var(--ease-out-strong) both page-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(*),
+	::view-transition-new(*),
+	::view-transition-group(*) {
+		animation-duration: 0s !important;
+		animation-delay: 0s !important;
+	}
 }
 
 @keyframes page-out {
 	to {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+}
+
+@keyframes page-fade {
+	from {
 		opacity: 0;
 	}
 }
 
 @keyframes page-in {
 	from {
-		opacity: 0;
-		transform: translateY(8px);
+		transform: translateY(14px) scale(0.995);
 	}
 }
 
