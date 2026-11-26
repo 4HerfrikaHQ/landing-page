@@ -456,13 +456,8 @@
 			"imageAlt": "4HerFrika graduates holding up their certificates"
 		},
 		"stats": {
-			"girlsMentored": "girls mentored",
-			"graduates": "Tech Academy graduates",
-			"campuses": "campuses",
-			"countries": "countries",
-			"period": "Year 1",
-			"source": "From the Year 1 report.",
-			"reportLink": "Read our impact reports"
+			"source": "From the Year 2 report.",
+			"reportLink": "Read the Year 2 report"
 		},
 		"give": {
 			"badge": "Give in two minutes",
