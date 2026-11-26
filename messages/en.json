@@ -484,6 +484,10 @@
 		"attendance": {
 			"title": "Confirm Attendance",
 			"description": "Confirm whether your 4Herfrika mentorship session took place."
+		},
+		"impactReports": {
+			"title": "Impact Reports — Every Year, Counted Out Loud",
+			"description": "Read 4Herfrika's annual impact reports online or download the PDF, from 3,000+ girls mentored in year one to our goal of 2 million women and girls by 2030."
 		}
 	},
 	"attendance": {
@@ -766,5 +770,300 @@
 		"aboutReauth": "About reauthorization",
 		"reauthTooltip": "Refreshes consent for this linked Google account; it cannot switch accounts.",
 		"updating": "Updating connection…"
+	},
+	"impactIndex": {
+		"allReports": "All reports",
+		"heroEyebrow": "Annual reports",
+		"heroFirst": "Every year,",
+		"heroSecond": "counted out loud.",
+		"heroDescription": "Here is every report we have published, with the numbers behind the work.",
+		"seeReports": "See the reports",
+		"donate": "Donate",
+		"join": "Join us",
+		"statsCaption": "Year 1 in numbers",
+		"statGirls": "girls mentored",
+		"statCampuses": "campuses reached",
+		"statCountries": "countries",
+		"statGraduates": "Tech Academy graduates",
+		"reportsPill": "Annual reports",
+		"reportsFirst": "Every report,",
+		"reportsSecond": "in one place.",
+		"readOnline": "Read online",
+		"downloadPdf": "Download PDF · 25.6 MB",
+		"largeFileNote": "Large file. On mobile data, reading online uses far less.",
+		"year1": {
+			"coverAlt": "Cover of the Year 1 report, From One to Many",
+			"label": "Year 1",
+			"title": "From one to many",
+			"summary": "What started on a single campus in Nigeria spread to 25 campuses in five countries in twelve months.",
+			"figures": {
+				"girlsMentored": "Girls mentored",
+				"campuses": "Campuses reached",
+				"academyGraduates": "Tech Academy graduates",
+				"countries": "Countries"
+			}
+		},
+		"goalPill": "The 2030 goal",
+		"goalFirst": "Two million",
+		"goalSecond": "by 2030.",
+		"goalDescription": "By 2030, 4HerFrika envisions 2 million women and girls empowered across Africa, with the skills and the people to lead.",
+		"ctaFirst": "Help us reach",
+		"ctaSecond": "two million.",
+		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected.",
+		"year2": {
+			"coverAlt": "4HerFrika participants in pink shirts, the cover of the Year 2 report",
+			"label": "Year 2",
+			"title": "Two steps forward",
+			"summary": "Over 4,000 girls reached and mentored across 25+ campuses, a CAC registration, three academies, and mentorship opened to every member.",
+			"comingSoon": "Full count coming",
+			"figuresPending": "Verified figures so far. The full count is on its way.",
+			"preview": "Read online",
+			"figures": {
+				"girlsReached": "Girls reached and mentored",
+				"campuses": "Campuses",
+				"mentees": "Mentees",
+				"socialReach": "Social media reach",
+				"sessions": "Sessions completed",
+				"makoko": "Girls at Makoko"
+			}
+		}
+	},
+	"impactYear2": {
+		"seo": {
+			"title": "Year 2 Impact Report: Two Steps Forward — 4HerFrika",
+			"description": "4HerFrika's second year: registered with the CAC, three academies, menstrual health outreach from Makoko to Ogbomoso, and a mentorship programme open to every member."
+		},
+		"heroEyebrow": "Year 2 report",
+		"heroFirst": "Two steps",
+		"heroSecond": "forward.",
+		"heroDescription": "Building women of global impact. This year we registered, opened three academies, took menstrual health outreach from Makoko to Ogbomoso, and opened mentorship to every member.",
+		"heroAlt": "4HerFrika participants in pink shirts standing together outdoors on campus",
+		"readReport": "Read the report",
+		"downloadPdf": "Download PDF · {size} MB",
+		"donate": "Donate",
+		"join": "Join us",
+		"menuLabel": "Report sections",
+		"menu": {
+			"note": "Founder's note",
+			"built": "What we built",
+			"outreach": "Outreach",
+			"campuses": "Campuses",
+			"numbers": "Numbers",
+			"give": "Give back"
+		},
+		"note": {
+			"pill": "Founder's note",
+			"first": "Last year we named what we needed.",
+			"second": "This year we built it.",
+			"p1": "Last year we spoke about what we needed: a way to measure what we were doing beyond how it felt, a way to fund it beyond our own resources, and a playbook so a campus in Bamenda could run the same way as a campus in Lagos, without the team on every call.",
+			"p2": "In October we registered with the Corporate Affairs Commission. 4HerFrika stopped being a beautiful idea living on a website and became something recognised by the law, accountable to more than our own conscience.",
+			"p3": "In January we quietly piloted a mentorship programme, because we wanted to test the ground before we asked anyone to put their weight on it. The ground held, so we opened it to everyone.",
+			"p4": "We also reached further than we built. Girls in Makoko held boxes of sanitary pads over their heads like trophies. A young woman in Lagos finally asked a doctor the question about her own body she had carried alone for years. A campus in Ogbomoso broke a silence around menstrual health older than any of us.",
+			"p5": "We are not finished, and we were never trying to be this year. We were trying to take the next honest step, and then the one after it. Together, we're taking two steps forward.",
+			"name": "Ademide Ademola",
+			"role": "Founder, 4HerFrika"
+		},
+		"previously": {
+			"label": "Previously, in Year 1",
+			"body": "One campus in Nigeria became 25 across five countries, and over 3,000 girls were mentored. “This is just the beginning,” we said. We meant it.",
+			"cta": "Read the Year 1 report"
+		},
+		"built": {
+			"pill": "Step one",
+			"first": "What got",
+			"second": "built.",
+			"items": {
+				"registered": {
+					"when": "October 2025",
+					"title": "Registered with the CAC",
+					"body": "We became a registered organisation, so partners can sign real agreements with us instead of handshake promises."
+				},
+				"academies": {
+					"when": "All year",
+					"title": "Three academies, one roof",
+					"body": "Tech, Business and Climate, giving volunteers somewhere to return to between outreach days."
+				},
+				"partnerships": {
+					"when": "Through the year",
+					"title": "Partners who stood beside us",
+					"body": "TEDx Ajegunle gave us a stage, FUSE shaped the Tech Academy, Google Developer Group joined us at TechFiesta, and Hult Prize opened a door into entrepreneurship."
+				},
+				"mentorship": {
+					"when": "January – February",
+					"title": "Becoming Her, piloted",
+					"body": "A mentorship programme tested quietly for two seasons before we asked anyone to trust it publicly."
+				}
+			},
+			"closing": "None of it lives in a filing cabinet. What got built didn't stay built. It walked out the door."
+		},
+		"outreach": {
+			"pill": "Community outreach",
+			"first": "Where the work",
+			"second": "went to work.",
+			"quote": "No girl or woman should miss an opportunity, or feel smaller than she is, because of her period.",
+			"quoteSource": "The sentence the Menstrual Health Awareness Movement was built on.",
+			"items": {
+				"makoko": {
+					"when": "Makoko",
+					"title": "Menstrual Health Awareness Movement",
+					"body": "With Sanitary Aid NG, Civic Hive, Skygirls and The GirlsComm, more than 300 girls came, 300 pads were given out, and period myths were taken apart in front of girls who had never heard them challenged."
+				},
+				"giveToGain": {
+					"when": "March",
+					"title": "Give to Gain",
+					"body": "Around International Women's Day we took the conversation into secondary schools and widened it to gender-based violence, named plainly and without shame."
+				},
+				"rhythm": {
+					"when": "From April",
+					"title": "A rhythm, not a one-off",
+					"body": "Another pad distribution, another room of girls leaving with something they didn't walk in with, each one led by campus women who arrived before the buses and stayed after the last box was gone."
+				}
+			}
+		},
+		"campuses": {
+			"pill": "Campus roll call",
+			"first": "Led by women",
+			"second": "on the ground.",
+			"items": {
+				"unilag": {
+					"name": "University of Lagos",
+					"lead": "Led by Adeyemi Aliyat Omowunmi",
+					"highlight": "347 members, 47 of them new this year",
+					"body": "In May, an Endometriosis webinar kept 25 participants for the full hour with a health professional. In July, with the Nigeria Association of Accounting Students and Final Ledger, Pad a Girl reached 100 students."
+				},
+				"kwasu": {
+					"name": "Kwara State University",
+					"lead": "Led by Elizabeth Agbana",
+					"highlight": "Endometriosis and Pad a Girl programming",
+					"body": "The campus ran the same Endometriosis and Pad a Girl programming this year, in step with the wider movement."
+				},
+				"lautech": {
+					"name": "LAUTECH",
+					"lead": "Led by Oluwatosin E. Idowu",
+					"highlight": "Half the members active, one of the strongest rates in the network",
+					"body": "Rhythms of Connection put members in rooms with local creatives. In April, Women Techmakers Ogbomoso opened free tech learning. In May, a World Menstrual Hygiene Day campaign broke hostel-room myths, and a weekly quote series kept everyone talking all year."
+				}
+			},
+			"closing": "We stayed at 25+ campuses in five countries this year and put the work into growing each one. Every campus runs its own outreach, with its own partners, on its own calendar, and for the first time one thing was open to every member wherever she studies."
+		},
+		"mentorship": {
+			"pill": "Mentorship, opened",
+			"first": "Becoming Her is",
+			"second": "no longer a pilot.",
+			"body": "We tested it quietly for two seasons, learning what a girl needs when she asks “who do I call now?” At the anniversary we opened it properly. Every member can now reach someone a few steps ahead of her on the road she's walking.",
+			"cta": "Meet the mentors"
+		},
+		"anniversary": {
+			"date": "28 August 2026",
+			"title": "Two years old, further along than that.",
+			"body": "Ese, Hus, Ademide and Faree led a fireside chat with women who have already built what our members are building. CVs got real feedback, LinkedIn profiles got sharper, and Becoming Her had its first public teaser.",
+			"partnersLabel": "In the room",
+			"partners": "Civic Hive, Ordina, FUSE, Moniepoint and Cowrywise, with the 4HerFrika UNILAG and LASUCOM chapters.",
+			"stride": "The celebration continues on 27 November 2026 at The Stride Conference, Civic Hive, Lagos: our first leadership conference, themed “Stride: Women Leading Africa Forward”."
+		},
+		"numbers": {
+			"pill": "By the numbers",
+			"first": "Counted,",
+			"second": "not just told.",
+			"figures": {
+				"girlsReached": {
+					"label": "girls reached and mentored",
+					"note": "across every campus"
+				},
+				"campuses": {
+					"label": "campuses",
+					"note": "in five countries"
+				},
+				"mentees": {
+					"label": "mentees booked a mentor",
+					"note": "Career Corner, since 31 Aug"
+				},
+				"socialReach": {
+					"label": "social media reach",
+					"note": "people reached online"
+				},
+				"sessions": {
+					"label": "mentoring sessions completed",
+					"note": "Career Corner, since 31 Aug"
+				},
+				"makoko": {
+					"label": "girls at the Makoko outreach",
+					"note": "300 pads given out"
+				}
+			},
+			"pendingNote": "These are the figures verified so far. The full count across every campus is on its way, and this page will be updated when it lands."
+		},
+		"lessons": {
+			"title": "What we learned",
+			"intro": "None of those numbers came easy, and pretending otherwise would make the next ones less believable.",
+			"items": {
+				"hard": {
+					"title": "What was hard",
+					"body": "Exams pulled members away, sponsorships took longer to close than we expected, and some campuses had members spread across too many communities."
+				},
+				"worked": {
+					"title": "What worked",
+					"body": "Partnering with student organisations already on campus, staying in touch with members even when few replied, and handing more of the work to campus leads."
+				},
+				"next": {
+					"title": "What we're carrying forward",
+					"body": "Starting sponsorship talks before the need is urgent, building a real fundraising plan, and keeping the standard reporting we began this year."
+				}
+			}
+		},
+		"give": {
+			"pill": "Give back",
+			"first": "A specific ask,",
+			"second": "for specific needs.",
+			"intro": "Vague asks are easy to ignore, so here is exactly where your support goes.",
+			"items": {
+				"donations": {
+					"title": "Open donations",
+					"body": "Outreach logistics, transport and the anniversary event: venue, refreshments, plaques for speakers who give their evening for free, and banners.",
+					"cost": "Anniversary event: ₦210,000"
+				},
+				"pads": {
+					"title": "Pad Support Movement",
+					"body": "Sanitary pads for the next Makoko, the next campus, the next girl who shouldn't miss school over something this solvable.",
+					"cost": "One outreach: under ₦100,000"
+				},
+				"inKind": {
+					"title": "In-kind support",
+					"body": "Clothing, shoes, bags and personal care items, the small things that let a girl walk into a room without carrying shame in with her.",
+					"cost": "Get in touch to give items"
+				}
+			},
+			"donate": "Donate",
+			"inKindCta": "Give items"
+		},
+		"goal": {
+			"pill": "Toward 2030",
+			"first": "Two million",
+			"second": "is still the number.",
+			"body": "Twenty-five campuses, five countries and over 3,000 girls mentored since the first one. The distance to two million by 2030 is real, and we won't pretend otherwise. This year we registered, built three academies, opened mentorship and reached girls in rooms that had never had this conversation.",
+			"nextTitle": "The next two steps",
+			"next": {
+				"reporting": "Standard reporting across every campus.",
+				"funding": "Funding that doesn't depend on any single source.",
+				"playbook": "A playbook thorough enough that a new campus can open without waiting for the centre."
+			}
+		},
+		"thanks": {
+			"first": "Thank",
+			"second": "you.",
+			"leads": "To Adeyemi Aliyat Omowunmi, Elizabeth Agbana and Oluwatosin E. Idowu, who led their campuses through a year that asked more of them than any spreadsheet can show.",
+			"partners": "To TEDx Ajegunle, FUSE, Google Developer Group, Hult Prize, Sanitary Aid Initiative, Civic Hive, Skygirls, The GirlsComm, Women Techmakers Ogbomoso, Rhythms of Connection, Final Ledger and everyone who showed up when it mattered.",
+			"girls": "And to every girl who walked into a room this year and asked the question she had been carrying alone.",
+			"closing": "The next step is already testing the ground. Come put your weight down with us."
+		}
+	},
+	"impactBanner": {
+		"label": "Year 2 impact report",
+		"badge": "Year 2",
+		"title": "Our Year 2 impact report is out",
+		"titleShort": "Year 2 report",
+		"description": "See what a second year of mentoring did.",
+		"cta": "Read the report",
+		"dismiss": "Hide this banner"
 	}
 }

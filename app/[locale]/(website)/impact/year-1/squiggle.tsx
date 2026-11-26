@@ -5,6 +5,7 @@ export default function ImpactSquiggle(props: SVGProps<SVGSVGElement>) {
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
+			className="text-primary-500"
 			viewBox="0 0 1440 589"
 			{...props}
 		>
@@ -25,9 +26,9 @@ export default function ImpactSquiggle(props: SVGProps<SVGSVGElement>) {
 					y2={110.5}
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stopColor="#216F38" />
-					<stop offset={0.549} stopColor="#216F38" stopOpacity={0.2} />
-					<stop offset={1} stopColor="#216F38" stopOpacity={0.9} />
+					<stop stopColor="currentColor" />
+					<stop offset={0.549} stopColor="currentColor" stopOpacity={0.2} />
+					<stop offset={1} stopColor="currentColor" stopOpacity={0.9} />
 				</linearGradient>
 			</defs>
 		</svg>
