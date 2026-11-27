@@ -1611,7 +1611,7 @@
 		"reportsFirst": "Ripoti zote,",
 		"reportsSecond": "mahali pamoja.",
 		"readOnline": "Soma mtandaoni",
-		"downloadPdf": "Pakua PDF · MB 25.6",
+		"downloadPdf": "Pakua PDF · MB {size, number}",
 		"largeFileNote": "Faili kubwa. Ukitumia data ya simu, kusoma mtandaoni hutumia kidogo zaidi.",
 		"year1": {
 			"coverAlt": "Jalada la ripoti ya Mwaka wa Kwanza, From One to Many",
@@ -1660,7 +1660,7 @@
 		"heroDescription": "Kujenga wanawake wenye athari duniani. Mwaka wetu wa pili ulihusu kuimarisha misingi yetu na kupeleka kazi yetu mbali zaidi katika jamii zetu.",
 		"heroAlt": "Wasichana wa shule wakishikilia mabango ya 4HerFrika katika Siku ya Mtoto wa Kike",
 		"readReport": "Tazama mambo muhimu",
-		"downloadPdf": "Pakua ripoti · MB {size}",
+		"downloadPdf": "Pakua ripoti · MB {size, number}",
 		"donate": "Changia",
 		"join": "Jiunge nasi",
 		"allReports": "Ripoti zote",

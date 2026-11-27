@@ -6,26 +6,27 @@ import { ArrowRight, Download } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { ImpactReport } from "../_schema";
 
-async function PdfAction({ href }: { href: string | null }) {
-	if (href === null) return null;
+async function PdfAction({ pdf }: { pdf: ImpactReport["pdf"] }) {
+	if (pdf === null) return null;
 	const t = await getTranslations("impactIndex");
 
 	return (
 		<Button
-			href={href}
+			href={pdf.href}
 			isExternal
 			variant="outline"
 			size="lg"
 			className="min-h-12 gap-2 px-6 font-medium"
 		>
-			<Download aria-hidden="true" className="size-5" /> {t("downloadPdf")}
+			<Download aria-hidden="true" className="size-5" />{" "}
+			{t("downloadPdf", { size: pdf.sizeMb })}
 		</Button>
 	);
 }
 
 async function ReportNote({ report }: { report: ImpactReport }) {
 	const t = await getTranslations("impactIndex");
-	if (report.pdfHref === null) return null;
+	if (report.pdf === null) return null;
 
 	return (
 		<p className="mt-3 text-xs text-muted-foreground">{t("largeFileNote")}</p>
@@ -76,7 +77,7 @@ export async function ReportCard({ report }: { report: ImpactReport }) {
 							{t("readOnline")}{" "}
 							<ArrowRight aria-hidden="true" className="size-5" />
 						</Button>
-						<PdfAction href={report.pdfHref} />
+						<PdfAction pdf={report.pdf} />
 					</div>
 					<ReportNote report={report} />
 				</div>

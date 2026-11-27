@@ -1611,7 +1611,7 @@
 		"reportsFirst": "Every report,",
 		"reportsSecond": "in one place.",
 		"readOnline": "Read online",
-		"downloadPdf": "Download PDF · 25.6 MB",
+		"downloadPdf": "Download PDF · {size, number} MB",
 		"largeFileNote": "Large file. On mobile data, reading online uses far less.",
 		"year1": {
 			"coverAlt": "Cover of the Year 1 report, From One to Many",
@@ -1660,7 +1660,7 @@
 		"heroDescription": "Building women of global impact. Our second year was about strengthening our foundations and taking the work further into our communities.",
 		"heroAlt": "Schoolgirls holding 4HerFrika placards at a Day of the Girl Child event",
 		"readReport": "See the highlights",
-		"downloadPdf": "Download the report · {size} MB",
+		"downloadPdf": "Download the report · {size, number} MB",
 		"donate": "Donate",
 		"join": "Join us",
 		"allReports": "All reports",

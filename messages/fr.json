@@ -1611,7 +1611,7 @@
 		"reportsFirst": "Tous les rapports,",
 		"reportsSecond": "au même endroit.",
 		"readOnline": "Lire en ligne",
-		"downloadPdf": "Télécharger le PDF · 25,6 Mo",
+		"downloadPdf": "Télécharger le PDF · {size, number} Mo",
 		"largeFileNote": "Fichier volumineux. Avec des données mobiles, la lecture en ligne consomme bien moins.",
 		"year1": {
 			"coverAlt": "Couverture du rapport de la première année, From One to Many",
@@ -1660,7 +1660,7 @@
 		"heroDescription": "Former des femmes à l'impact mondial. Notre deuxième année a consisté à consolider nos fondations et à porter notre travail plus loin dans nos communautés.",
 		"heroAlt": "Des écolières tenant des pancartes 4HerFrika lors de la Journée de la fille",
 		"readReport": "Voir les temps forts",
-		"downloadPdf": "Télécharger le rapport · {size} Mo",
+		"downloadPdf": "Télécharger le rapport · {size, number} Mo",
 		"donate": "Faire un don",
 		"join": "Nous rejoindre",
 		"allReports": "Tous les rapports",
