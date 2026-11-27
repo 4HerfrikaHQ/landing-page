@@ -84,6 +84,19 @@ export function PartnerLogo({ url }: { url: string | null }) {
 	);
 }
 
+export function PartnerMark({ partner }: { partner: Partner }) {
+	if (!partner.logoUrl) return <span>{partner.name}</span>;
+	return (
+		<Image
+			src={partner.logoUrl}
+			alt={partner.name}
+			width={72}
+			height={20}
+			className="h-5 w-auto object-contain"
+		/>
+	);
+}
+
 function PartnerLine({ partner }: { partner: Partner | undefined }) {
 	const t = useTranslations("academy.catalog");
 	if (!partner) return null;

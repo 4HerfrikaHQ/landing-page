@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { PartnerLogo } from "../../_components/course-card";
+import { PartnerMark } from "../../_components/course-card";
 import { CourseChips } from "../../_components/course-chips";
 import type { Course } from "../../_helpers";
 import { ACADEMY_HOME_PATH, localizedPath } from "../../sign-in/_helpers";
@@ -89,9 +89,8 @@ function PartnerStrip({ partners }: { partners: Course["partners"] }) {
 					<span aria-hidden="true" className="text-muted-foreground">
 						×
 					</span>
-					<PartnerLogo url={partner.logoUrl} />
 					<span className="text-sm font-medium text-foreground">
-						{partner.name}
+						<PartnerMark partner={partner} />
 					</span>
 				</span>
 			))}
