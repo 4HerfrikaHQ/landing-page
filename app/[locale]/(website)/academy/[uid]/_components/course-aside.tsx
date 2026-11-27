@@ -1,6 +1,6 @@
 import { SiteImage as Image } from "@/components/ui/site-image";
 import { useTranslations } from "next-intl";
-import { PartnerLogo } from "../../_components/course-card";
+import { PartnerMark } from "../../_components/course-card";
 import type { Course } from "../../_helpers";
 import { activePolicy, courseProgressPercent, nextLesson } from "../_helpers";
 import type { Viewer } from "../_viewer";
@@ -158,8 +158,7 @@ function Partners({ partners }: { partners: Course["partners"] }) {
 			<dd className="flex flex-wrap items-center gap-3 text-sm font-semibold text-secondary-500">
 				{partners.map((partner) => (
 					<span key={partner.name} className="flex items-center gap-2">
-						<PartnerLogo url={partner.logoUrl} />
-						{partner.name}
+						<PartnerMark partner={partner} />
 					</span>
 				))}
 			</dd>
