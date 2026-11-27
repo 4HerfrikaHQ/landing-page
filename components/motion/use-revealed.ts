@@ -4,10 +4,9 @@ import { useCallback, useState } from "react";
 import { REVEAL_RATIO } from "./tokens";
 
 const listeners = new Map<Element, (inView: boolean) => void>();
-const observers = new Map<number, IntersectionObserver>();
+let observer: IntersectionObserver | null = null;
 
-function observerFor(bottomInset: number) {
-	let observer = observers.get(bottomInset);
+function sharedObserver() {
 	if (!observer) {
 		observer = new IntersectionObserver(
 			(entries) => {
@@ -18,37 +17,27 @@ function observerFor(bottomInset: number) {
 					else if (!entry.isIntersecting) setInView(false);
 				}
 			},
-			{
-				threshold: [0, REVEAL_RATIO],
-				rootMargin: `0px 0px -${bottomInset * 100}% 0px`,
-			},
+			{ threshold: [0, REVEAL_RATIO] },
 		);
-		observers.set(bottomInset, observer);
 	}
 	return observer;
 }
 
-export function useRevealed<T extends Element>({
-	bottomInset = 0,
-}: { bottomInset?: number } = {}) {
+export function useRevealed<T extends Element>() {
 	const [revealed, setRevealed] = useState(false);
 
-	const ref = useCallback(
-		(el: T | null) => {
-			if (!el) return;
-			const rect = el.getBoundingClientRect();
-			const visibleBottom = window.innerHeight * (1 - bottomInset);
-			if (rect.top < visibleBottom && rect.bottom > 0) setRevealed(true);
-			listeners.set(el, setRevealed);
-			const io = observerFor(bottomInset);
-			io.observe(el);
-			return () => {
-				listeners.delete(el);
-				io.unobserve(el);
-			};
-		},
-		[bottomInset],
-	);
+	const ref = useCallback((el: T | null) => {
+		if (!el) return;
+		const rect = el.getBoundingClientRect();
+		if (rect.top < window.innerHeight && rect.bottom > 0) setRevealed(true);
+		listeners.set(el, setRevealed);
+		const io = sharedObserver();
+		io.observe(el);
+		return () => {
+			listeners.delete(el);
+			io.unobserve(el);
+		};
+	}, []);
 
 	return { ref, revealed };
 }

@@ -3,14 +3,10 @@
 import { animate, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
 import { formatCount, parseCount } from "./count-format";
-import { EASE_OUT_CUBIC, REVEAL_DURATION } from "./tokens";
+import { EASE_OUT_CUBIC } from "./tokens";
 import { useRevealed } from "./use-revealed";
 
 const COUNT_DURATION = 1.2;
-
-const COUNT_DELAY = REVEAL_DURATION * 0.6;
-
-const COUNT_INSET = 0.2;
 
 type CountUpProps = {
 	value: string;
@@ -20,9 +16,7 @@ type CountUpProps = {
 export function CountUp({ value, className }: CountUpProps) {
 	const textRef = useRef<HTMLSpanElement>(null);
 	const reduced = useReducedMotion();
-	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>({
-		bottomInset: COUNT_INSET,
-	});
+	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>();
 	const setRef = useCallback(
 		(el: HTMLSpanElement | null) => {
 			textRef.current = el;
@@ -41,7 +35,6 @@ export function CountUp({ value, className }: CountUpProps) {
 			return;
 		}
 		const controls = animate(0, target, {
-			delay: COUNT_DELAY,
 			duration: COUNT_DURATION,
 			ease: EASE_OUT_CUBIC,
 			onUpdate: (latest) => {
