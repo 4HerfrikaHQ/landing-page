@@ -60,8 +60,8 @@ function CoverImage({ url }: { url: string | null }) {
 			src={url}
 			alt=""
 			fill
-			sizes="(max-width: 1024px) 100vw, 420px"
-			className="object-cover"
+			sizes="(max-width: 1024px) 100vw, 560px"
+			className="object-cover object-left"
 		/>
 	);
 }
