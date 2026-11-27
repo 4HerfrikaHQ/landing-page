@@ -104,7 +104,13 @@ function Cover({ url }: { url: string | null }) {
 	if (!url) return <div aria-hidden="true" className="bg-surface-pink" />;
 	return (
 		<div className="relative size-20 overflow-hidden rounded-xl sm:size-auto sm:min-h-48 sm:rounded-none">
-			<Image src={url} alt="" fill sizes="280px" className="object-cover" />
+			<Image
+				src={url}
+				alt=""
+				fill
+				sizes="280px"
+				className="object-cover object-left"
+			/>
 		</div>
 	);
 }
