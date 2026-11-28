@@ -34,9 +34,6 @@ function MenuReportCard({ onNavigate }: { onNavigate: () => void }) {
 				NAV_FOCUS_RING,
 			)}
 		>
-			<span className="shrink-0 rounded-md bg-secondary-500 px-2 py-1 text-xs font-bold tracking-[0.12em] text-primary-bright uppercase">
-				{t("badge")}
-			</span>
 			<span className="min-w-0 flex-1">
 				<span className="block text-base font-semibold">{t("title")}</span>
 				<span className="block text-sm text-secondary-500/80">{t("cta")}</span>
