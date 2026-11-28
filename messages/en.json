@@ -144,7 +144,7 @@
 		"tagNetworks": "Networks",
 		"tagResources": "Resources",
 		"visionTitle": "Our vision",
-		"visionDescription": "By 2030, we envision 4HerFrika as the trusted mentorship and leadership network across every African campus, empowering 2 million women to lead with impact in technology, business, medicine, law, agriculture, science, and every field that shapes our future.",
+		"visionDescription": "By 2050, we envision 4HerFrika as the trusted mentorship and leadership network across every African campus, empowering 2 million women to lead with impact in technology, business, medicine, law, agriculture, science, and every field that shapes our future.",
 		"visionImageAlt": "Young women holding their certificates at a 4HerFrika bootcamp graduation",
 		"storyEyebrow": "Our story",
 		"storyFirst": "From one",
@@ -157,7 +157,7 @@
 		"timelineReachDescription": "25+ campuses across Nigeria, Ghana, Sierra Leone, Kenya and Cameroon.",
 		"timelineAcademiesTitle": "Three academies",
 		"timelineAcademiesDescription": "Tech, Business and Climate, with 1,000+ Tech Academy graduates.",
-		"timelineGoalPeriod": "2030",
+		"timelineGoalPeriod": "2050",
 		"timelineGoalTitle": "2 million women and girls",
 		"timelineGoalDescription": "The goal we're building towards, campus by campus.",
 		"valuesFirst": "Our",
@@ -434,14 +434,14 @@
 		"copy": "Copy",
 		"copied": "Copied",
 		"thankYou": "Thank you for your support. Every contribution helps us make a bigger impact.",
-		"heroVision": "By 2030, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact in every field that shapes our future.",
+		"heroVision": "By 2050, we envision 4herfrika as the trusted mentorship and leadership network across every African campus — empowering 2 million women to lead with impact in every field that shapes our future.",
 		"bankName": "Zenith Bank",
 		"bankTransferNote": "Use the account details below to make your transfer",
 		"hero": {
 			"badge": "Donate · 4HerFrika Youth Empowerment Initiative",
 			"titleFirst": "Back the next girl",
 			"titleSecond": "to lead.",
-			"description": "Your gift pays for bootcamps, mentor calls and data on African campuses. We are working towards 2 million women and girls by 2030.",
+			"description": "Your gift pays for bootcamps, mentor calls and data on African campuses. We are working towards 2 million women and girls by 2050.",
 			"cta": "Give now",
 			"imageAlt": "4HerFrika graduates holding up their certificates"
 		},
@@ -531,7 +531,7 @@
 		"goal": {
 			"badge": "Our goal",
 			"titleFirst": "2 million women and girls",
-			"titleSecond": "by 2030.",
+			"titleSecond": "by 2050.",
 			"body": "Leadership in Africa is built across every campus, every sector, every ambitious woman with the will to lead. You are not supporting a programme. You are supporting a movement.",
 			"progressLeft": "3,000+ mentored, Year 1",
 			"progressRight": "2,000,000",
@@ -789,7 +789,7 @@
 		"graduates": "1,000+ graduates in Tech Academy",
 		"academies": "3 thriving academies: Tech, Business, Climate.",
 		"neverTouched": "In one year, we've seen girls who never touched a computer now designing products, coding software, and leading change in their schools and communities.",
-		"justTheBeginning": "This is just the beginning. By 2030, 4herfrika envisions 2 million women and girls empowered across Africa. Together, we can make it happen",
+		"justTheBeginning": "This is just the beginning. By 2050, 4herfrika envisions 2 million women and girls empowered across Africa. Together, we can make it happen",
 		"whatStarted": "What started in a single campus in Nigeria has now spread across 25 campuses in Nigeria, Ghana, Sierra Leone, Kenya, and Cameroon. In just one year, 4herfrika has become a community where girls discover their voices, grow their skills, and prepare to lead Africa's future."
 	},
 	"projects": {
@@ -1179,7 +1179,7 @@
 		},
 		"about": {
 			"title": "About Us — Our Mission, Vision & Core Values",
-			"description": "4Herfrika trains, mentors, and empowers women to become transformative leaders across Africa. Our vision: impact 2 million women with tech and entrepreneurship by 2030.",
+			"description": "4Herfrika trains, mentors, and empowers women to become transformative leaders across Africa. Our vision: impact 2 million women with tech and entrepreneurship by 2050.",
 			"ogTitle": "About 4Herfrika",
 			"ogSubtitle": "Training, mentoring, and empowering women to become transformative leaders across Africa."
 		},
@@ -1241,7 +1241,7 @@
 		},
 		"impactReports": {
 			"title": "Impact Reports — Every Year, Counted Out Loud",
-			"description": "Read 4Herfrika's annual impact reports online or download the PDF, from 3,000+ girls mentored in year one to our goal of 2 million women and girls by 2030."
+			"description": "Read 4Herfrika's annual impact reports online or download the PDF, from 3,000+ girls mentored in year one to our goal of 2 million women and girls by 2050."
 		},
 		"blogCategory": {
 			"title": "{name} — The Pink Blog",
@@ -1625,10 +1625,10 @@
 				"countries": "Countries"
 			}
 		},
-		"goalPill": "The 2030 goal",
+		"goalPill": "The 2050 goal",
 		"goalFirst": "Two million",
-		"goalSecond": "by 2030.",
-		"goalDescription": "By 2030, 4HerFrika envisions 2 million women and girls empowered across Africa, with the skills and the people to lead.",
+		"goalSecond": "by 2050.",
+		"goalDescription": "By 2050, 4HerFrika envisions 2 million women and girls empowered across Africa, with the skills and the people to lead.",
 		"ctaFirst": "Help us reach",
 		"ctaSecond": "two million.",
 		"ctaDescription": "Every gift and every volunteer helps more girls get mentored, trained and connected.",
@@ -1738,7 +1738,7 @@
 		},
 		"goal": {
 			"first": "Two million women and girls",
-			"second": "by 2030.",
+			"second": "by 2050.",
 			"body": "That's the destination. Every girl reached and every opportunity created brings us closer."
 		},
 		"moments": {

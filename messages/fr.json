@@ -18,7 +18,7 @@
 		"tagNetworks": "Réseaux",
 		"tagResources": "Ressources",
 		"visionTitle": "Notre vision",
-		"visionDescription": "D’ici 2030, nous voyons 4HerFrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain, donnant à 2 millions de femmes les moyens de diriger avec impact dans la technologie, les affaires, la médecine, le droit, l’agriculture, les sciences et tous les domaines qui façonnent notre avenir.",
+		"visionDescription": "D’ici 2050, nous voyons 4HerFrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain, donnant à 2 millions de femmes les moyens de diriger avec impact dans la technologie, les affaires, la médecine, le droit, l’agriculture, les sciences et tous les domaines qui façonnent notre avenir.",
 		"visionImageAlt": "De jeunes femmes tenant leurs certificats lors d’une remise de diplômes d’un bootcamp 4HerFrika",
 		"storyEyebrow": "Notre histoire",
 		"storyFirst": "D’une seule",
@@ -31,7 +31,7 @@
 		"timelineReachDescription": "Plus de 25 campus au Nigeria, au Ghana, en Sierra Leone, au Kenya et au Cameroun.",
 		"timelineAcademiesTitle": "Trois académies",
 		"timelineAcademiesDescription": "Tech, Business et Climat, avec plus de 1 000 diplômées de la Tech Academy.",
-		"timelineGoalPeriod": "2030",
+		"timelineGoalPeriod": "2050",
 		"timelineGoalTitle": "2 millions de femmes et de filles",
 		"timelineGoalDescription": "L’objectif que nous construisons, campus après campus.",
 		"valuesFirst": "Nos",
@@ -382,14 +382,14 @@
 		"copied": "Copié",
 		"copy": "Copier",
 		"description": "Votre don nous aide à toucher plus de jeunes filles et à créer un changement durable dans les régions défavorisées.",
-		"heroVision": "D’ici 2030, nous voyons 4Herfrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain — donnant à 2 million de femmes les moyens de diriger avec impact dans tous les domaines qui façonnent notre avenir.",
+		"heroVision": "D’ici 2050, nous voyons 4Herfrika comme le réseau de mentorat et de leadership de référence sur chaque campus africain — donnant à 2 million de femmes les moyens de diriger avec impact dans tous les domaines qui façonnent notre avenir.",
 		"thankYou": "Merci de votre soutien. Chaque contribution nous aide à avoir plus d’impact.",
 		"title": "Soutenez notre mission",
 		"hero": {
 			"badge": "Faire un don · 4HerFrika Youth Empowerment Initiative",
 			"titleFirst": "Soutenez la prochaine fille",
 			"titleSecond": "à diriger.",
-			"description": "Votre don finance des bootcamps, des appels de mentorat et des données mobiles sur les campus africains. Nous visons 2 millions de femmes et de filles d’ici 2030.",
+			"description": "Votre don finance des bootcamps, des appels de mentorat et des données mobiles sur les campus africains. Nous visons 2 millions de femmes et de filles d’ici 2050.",
 			"cta": "Donner maintenant",
 			"imageAlt": "Des diplômées de 4HerFrika brandissant leurs certificats"
 		},
@@ -479,7 +479,7 @@
 		"goal": {
 			"badge": "Notre objectif",
 			"titleFirst": "2 millions de femmes et de filles",
-			"titleSecond": "d’ici 2030.",
+			"titleSecond": "d’ici 2050.",
 			"body": "Le leadership en Afrique se construit sur chaque campus, dans chaque secteur, chez chaque femme ambitieuse qui a la volonté de diriger. Vous ne soutenez pas un programme. Vous soutenez un mouvement.",
 			"progressLeft": "3 000+ accompagnées, année 1",
 			"progressRight": "2 000 000",
@@ -771,7 +771,7 @@
 		"campusesReached": "25+ campus touchés",
 		"girlsMentored": "3,000+ filles accompagnées",
 		"graduates": "1,000+ diplômées de Tech Academy",
-		"justTheBeginning": "Ce n’est que le début. D’ici 2030, 4HerFrika imagine 2 million de femmes et de filles autonomisées à travers l’Afrique. Ensemble, nous pouvons y arriver",
+		"justTheBeginning": "Ce n’est que le début. D’ici 2050, 4HerFrika imagine 2 million de femmes et de filles autonomisées à travers l’Afrique. Ensemble, nous pouvons y arriver",
 		"milestones": "Étapes clés de la première année",
 		"neverTouched": "En un an, nous avons vu des filles qui n’avaient jamais touché un ordinateur concevoir des produits, coder des logiciels et porter le changement dans leurs écoles et leurs communautés.",
 		"storyInMotion": "Notre histoire en mouvement",
@@ -1179,7 +1179,7 @@
 		},
 		"about": {
 			"title": "À propos — Notre mission, notre vision et nos valeurs",
-			"description": "4Herfrika forme, encadre et autonomise les femmes pour qu'elles deviennent des leaders transformatrices à travers l'Afrique. Notre vision : impacter 2 millions de femmes grâce à la technologie et à l'entrepreneuriat d'ici 2030.",
+			"description": "4Herfrika forme, encadre et autonomise les femmes pour qu'elles deviennent des leaders transformatrices à travers l'Afrique. Notre vision : impacter 2 millions de femmes grâce à la technologie et à l'entrepreneuriat d'ici 2050.",
 			"ogTitle": "À propos de 4Herfrika",
 			"ogSubtitle": "Former, encadrer et autonomiser les femmes pour qu'elles deviennent des leaders transformatrices à travers l'Afrique."
 		},
@@ -1241,7 +1241,7 @@
 		},
 		"impactReports": {
 			"title": "Rapports d’impact — Chaque année, comptée à voix haute",
-			"description": "Lisez en ligne les rapports d’impact annuels de 4Herfrika ou téléchargez le PDF, des plus de 3 000 filles accompagnées la première année à notre objectif de 2 millions de femmes et de filles d’ici 2030."
+			"description": "Lisez en ligne les rapports d’impact annuels de 4Herfrika ou téléchargez le PDF, des plus de 3 000 filles accompagnées la première année à notre objectif de 2 millions de femmes et de filles d’ici 2050."
 		},
 		"blogCategory": {
 			"title": "{name} — Le Pink Blog",
@@ -1625,10 +1625,10 @@
 				"countries": "Pays"
 			}
 		},
-		"goalPill": "L’objectif 2030",
+		"goalPill": "L’objectif 2050",
 		"goalFirst": "Deux millions",
-		"goalSecond": "d’ici 2030.",
-		"goalDescription": "D’ici 2030, 4HerFrika imagine 2 millions de femmes et de filles autonomisées à travers l’Afrique, avec les compétences et les personnes pour mener.",
+		"goalSecond": "d’ici 2050.",
+		"goalDescription": "D’ici 2050, 4HerFrika imagine 2 millions de femmes et de filles autonomisées à travers l’Afrique, avec les compétences et les personnes pour mener.",
 		"ctaFirst": "Aidez-nous à atteindre",
 		"ctaSecond": "deux millions.",
 		"ctaDescription": "Chaque don et chaque bénévole aident davantage de filles à être accompagnées, formées et connectées.",
@@ -1738,7 +1738,7 @@
 		},
 		"goal": {
 			"first": "Deux millions de femmes et de filles",
-			"second": "d'ici 2030.",
+			"second": "d'ici 2050.",
 			"body": "C'est notre destination. Chaque fille touchée et chaque opportunité créée nous en rapproche."
 		},
 		"moments": {

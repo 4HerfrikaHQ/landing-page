@@ -18,7 +18,7 @@
 		"tagNetworks": "Mitandao",
 		"tagResources": "Rasilimali",
 		"visionTitle": "Maono yetu",
-		"visionDescription": "Kufikia 2030, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika, ukiwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika teknolojia, biashara, tiba, sheria, kilimo, sayansi na kila nyanja inayounda mustakabali wetu.",
+		"visionDescription": "Kufikia 2050, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika, ukiwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika teknolojia, biashara, tiba, sheria, kilimo, sayansi na kila nyanja inayounda mustakabali wetu.",
 		"visionImageAlt": "Wanawake vijana wakiwa wameshika vyeti vyao katika mahafali ya bootcamp ya 4HerFrika",
 		"storyEyebrow": "Hadithi yetu",
 		"storyFirst": "Kutoka mmoja",
@@ -31,7 +31,7 @@
 		"timelineReachDescription": "Zaidi ya kampasi 25 nchini Nigeria, Ghana, Sierra Leone, Kenya na Kamerun.",
 		"timelineAcademiesTitle": "Akademia tatu",
 		"timelineAcademiesDescription": "Teknolojia, Biashara na Tabianchi, zikiwa na zaidi ya wahitimu 1,000 wa Tech Academy.",
-		"timelineGoalPeriod": "2030",
+		"timelineGoalPeriod": "2050",
 		"timelineGoalTitle": "Wanawake na wasichana milioni 2",
 		"timelineGoalDescription": "Lengo tunalolijenga, kampasi moja baada ya nyingine.",
 		"valuesFirst": "Maadili yetu",
@@ -382,14 +382,14 @@
 		"copied": "Imenakiliwa",
 		"copy": "Nakili",
 		"description": "Mchango wako unatusaidia kuwafikia wasichana zaidi na kuleta mabadiliko endelevu katika maeneo yasiyohudumiwa vya kutosha.",
-		"heroVision": "Kufikia 2030, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika — kuwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika kila nyanja inayounda mustakabali wetu.",
+		"heroVision": "Kufikia 2050, tunaiona 4HerFrika kama mtandao unaoaminika wa umlezi na uongozi katika kila kampasi ya Afrika — kuwawezesha wanawake milioni 2 kuongoza kwa matokeo makubwa katika kila nyanja inayounda mustakabali wetu.",
 		"thankYou": "Asante kwa msaada wako. Kila mchango unatusaidia kuleta athari kubwa zaidi.",
 		"title": "Unga Mkono Dhamira Yetu",
 		"hero": {
 			"badge": "Changia · 4HerFrika Youth Empowerment Initiative",
 			"titleFirst": "Msaidie msichana anayefuata",
 			"titleSecond": "kuongoza.",
-			"description": "Mchango wako unalipia kambi za mafunzo, simu za ushauri na data katika vyuo vya Afrika. Tunafanya kazi kufikia wanawake na wasichana milioni 2 ifikapo 2030.",
+			"description": "Mchango wako unalipia kambi za mafunzo, simu za ushauri na data katika vyuo vya Afrika. Tunafanya kazi kufikia wanawake na wasichana milioni 2 ifikapo 2050.",
 			"cta": "Changia sasa",
 			"imageAlt": "Wahitimu wa 4HerFrika wakiwa wameshika vyeti vyao"
 		},
@@ -479,7 +479,7 @@
 		"goal": {
 			"badge": "Lengo letu",
 			"titleFirst": "Wanawake na wasichana milioni 2",
-			"titleSecond": "ifikapo 2030.",
+			"titleSecond": "ifikapo 2050.",
 			"body": "Uongozi barani Afrika hujengwa katika kila chuo, kila sekta, kila mwanamke mwenye tamaa na nia ya kuongoza. Huungi mkono programu tu. Unaunga mkono harakati.",
 			"progressLeft": "3,000+ walioshauriwa, Mwaka wa 1",
 			"progressRight": "2,000,000",
@@ -771,7 +771,7 @@
 		"campusesReached": "Kampasi 25+ zilizofikiwa",
 		"girlsMentored": "Wasichana 3,000+ waliopata malezi",
 		"graduates": "Wahitimu 1,000+ katika Tech Academy",
-		"justTheBeginning": "Huu ni mwanzo tu. Kufikia 2030, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika. Pamoja, tunaweza kufanikisha hilo",
+		"justTheBeginning": "Huu ni mwanzo tu. Kufikia 2050, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika. Pamoja, tunaweza kufanikisha hilo",
 		"milestones": "Mafanikio ya Mwaka wa Kwanza",
 		"neverTouched": "Katika mwaka mmoja, tumewaona wasichana ambao hawakuwahi hata kugusa kompyuta sasa wakibuni bidhaa, wakiandika programu, na wakiongoza mabadiliko katika shule na jamii zao.",
 		"storyInMotion": "Hadithi Yetu Katika Mwendo",
@@ -1179,7 +1179,7 @@
 		},
 		"about": {
 			"title": "Kutuhusu — Dhamira, Maono na Maadili Yetu",
-			"description": "4Herfrika inafunza, inashauri, na kuwawezesha wanawake kuwa viongozi wa mageuzi kote Afrika. Maono yetu: kugusa wanawake milioni 2 kupitia teknolojia na ujasiriamali ifikapo 2030.",
+			"description": "4Herfrika inafunza, inashauri, na kuwawezesha wanawake kuwa viongozi wa mageuzi kote Afrika. Maono yetu: kugusa wanawake milioni 2 kupitia teknolojia na ujasiriamali ifikapo 2050.",
 			"ogTitle": "Kuhusu 4Herfrika",
 			"ogSubtitle": "Kufunza, kushauri, na kuwawezesha wanawake kuwa viongozi wa mageuzi kote Afrika."
 		},
@@ -1241,7 +1241,7 @@
 		},
 		"impactReports": {
 			"title": "Ripoti za Athari — Kila Mwaka, Tunahesabu kwa Sauti",
-			"description": "Soma ripoti za athari za mwaka za 4Herfrika mtandaoni au pakua PDF, kuanzia wasichana zaidi ya 3,000 walioshauriwa mwaka wa kwanza hadi lengo letu la wanawake na wasichana milioni 2 kufikia 2030."
+			"description": "Soma ripoti za athari za mwaka za 4Herfrika mtandaoni au pakua PDF, kuanzia wasichana zaidi ya 3,000 walioshauriwa mwaka wa kwanza hadi lengo letu la wanawake na wasichana milioni 2 kufikia 2050."
 		},
 		"blogCategory": {
 			"title": "{name} — Blogu ya Pink",
@@ -1625,10 +1625,10 @@
 				"countries": "Nchi"
 			}
 		},
-		"goalPill": "Lengo la 2030",
+		"goalPill": "Lengo la 2050",
 		"goalFirst": "Milioni mbili",
-		"goalSecond": "kufikia 2030.",
-		"goalDescription": "Kufikia 2030, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika, wenye ujuzi na watu wa kuongoza.",
+		"goalSecond": "kufikia 2050.",
+		"goalDescription": "Kufikia 2050, 4HerFrika inalenga kuwawezesha wanawake na wasichana milioni 2 kote Afrika, wenye ujuzi na watu wa kuongoza.",
 		"ctaFirst": "Tusaidie kufikia",
 		"ctaSecond": "milioni mbili.",
 		"ctaDescription": "Kila mchango na kila mjitolea husaidia wasichana wengi zaidi kupata malezi, mafunzo na uhusiano.",
@@ -1738,7 +1738,7 @@
 		},
 		"goal": {
 			"first": "Wanawake na wasichana milioni mbili",
-			"second": "ifikapo 2030.",
+			"second": "ifikapo 2050.",
 			"body": "Hilo ndilo lengo letu. Kila msichana anayefikiwa na kila fursa inayoundwa inatukaribia zaidi."
 		},
 		"moments": {
