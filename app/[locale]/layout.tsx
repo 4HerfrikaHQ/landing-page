@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 		template: "%s | 4Herfrika",
 	},
 	description:
-		"Join 3,000+ women across 25+ African university campuses gaining tech skills, mentorship, and leadership training. 4Herfrika is on a mission to impact 2 million women by 2030.",
+		"Join 3,000+ women across 25+ African university campuses gaining tech skills, mentorship, and leadership training. 4Herfrika is on a mission to impact 2 million women by 2050.",
 	keywords: [
 		"4Herfrika",
 		"mentorship for young African women",
