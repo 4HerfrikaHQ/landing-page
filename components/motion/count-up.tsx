@@ -8,6 +8,8 @@ import { useRevealed } from "./use-revealed";
 
 const COUNT_DURATION = 1.2;
 
+const COUNT_VISIBLE_RATIO = 0.9;
+
 type CountUpProps = {
 	value: string;
 	className?: string;
@@ -16,7 +18,9 @@ type CountUpProps = {
 export function CountUp({ value, className }: CountUpProps) {
 	const textRef = useRef<HTMLSpanElement>(null);
 	const reduced = useReducedMotion();
-	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>();
+	const { ref: revealRef, revealed } = useRevealed<HTMLSpanElement>({
+		ratio: COUNT_VISIBLE_RATIO,
+	});
 	const setRef = useCallback(
 		(el: HTMLSpanElement | null) => {
 			textRef.current = el;
