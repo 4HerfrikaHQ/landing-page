@@ -4,7 +4,7 @@ const listeners = new Set<() => void>();
 
 function read(key: string) {
 	try {
-		return window.localStorage.getItem(key) === "1";
+		return window.sessionStorage.getItem(key) === "1";
 	} catch {
 		return false;
 	}
@@ -24,7 +24,7 @@ export function useDismissed(key: string) {
 
 	const dismiss = () => {
 		try {
-			window.localStorage.setItem(key, "1");
+			window.sessionStorage.setItem(key, "1");
 		} catch {}
 		for (const listener of listeners) listener();
 	};

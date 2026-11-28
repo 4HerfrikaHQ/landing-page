@@ -4,7 +4,7 @@ import { RollLabel } from "@/components/ui/roll-label";
 import { Link, usePathname } from "@/i18n/navigation";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { isBannerHidden } from "./banner-visibility";
+import { isBannerExpired, isBannerHidden } from "./banner-visibility";
 import { useDismissed } from "./use-dismissed";
 
 const DISMISS_KEY = "banner:year-2-report";
@@ -14,7 +14,7 @@ export function ImpactBanner() {
 	const pathname = usePathname();
 	const { dismissed, dismiss } = useDismissed(DISMISS_KEY);
 
-	if (dismissed || isBannerHidden(pathname)) {
+	if (dismissed || isBannerExpired(Date.now()) || isBannerHidden(pathname)) {
 		return null;
 	}
 
