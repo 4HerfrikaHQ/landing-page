@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import Logo from "../4herfrika-logo";
@@ -21,6 +21,30 @@ import { NAV_FOCUS_RING } from "./nav-styles";
 
 const ROUND_BUTTON_STYLES =
 	"inline-flex size-11 shrink-0 press cursor-pointer items-center justify-center rounded-pill bg-secondary text-secondary-foreground";
+
+function MenuReportCard({ onNavigate }: { onNavigate: () => void }) {
+	const t = useTranslations("impactBanner");
+
+	return (
+		<Link
+			href="/impact/two-steps-forward"
+			onClick={onNavigate}
+			className={cn(
+				"press mt-6 flex items-center gap-3 rounded-2xl bg-primary-bright p-4 text-secondary-500 hover:no-underline",
+				NAV_FOCUS_RING,
+			)}
+		>
+			<span className="shrink-0 rounded-md bg-secondary-500 px-2 py-1 text-xs font-bold tracking-[0.12em] text-primary-bright uppercase">
+				{t("badge")}
+			</span>
+			<span className="min-w-0 flex-1">
+				<span className="block text-base font-semibold">{t("title")}</span>
+				<span className="block text-sm text-secondary-500/80">{t("cta")}</span>
+			</span>
+			<ArrowRight aria-hidden="true" className="size-5 shrink-0" />
+		</Link>
+	);
+}
 
 export function MobileNav() {
 	const t = useTranslations("nav");
@@ -98,6 +122,7 @@ export function MobileNav() {
 							);
 						})}
 					</ul>
+					<MenuReportCard onNavigate={closeMenu} />
 					<div className="py-6">
 						<LocaleList onSelect={closeMenu} />
 					</div>
