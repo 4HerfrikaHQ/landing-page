@@ -426,6 +426,17 @@ body:has(.impact-banner) footer {
 	}
 }
 
+.impact-banner-pill {
+	animation: banner-pill-in 360ms var(--ease-out-strong) both;
+}
+
+@keyframes banner-pill-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.92);
+	}
+}
+
 @keyframes banner-in {
 	from {
 		transform: translateY(100%);
@@ -433,7 +444,8 @@ body:has(.impact-banner) footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.impact-banner {
+	.impact-banner,
+	.impact-banner-pill {
 		animation: none;
 	}
 }

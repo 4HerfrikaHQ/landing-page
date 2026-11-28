@@ -1767,7 +1767,9 @@
 		"titleShort": "Rapport 2e année",
 		"description": "Découvrez ce qu’une deuxième année de mentorat a changé.",
 		"cta": "Lire le rapport",
-		"dismiss": "Masquer cette bannière"
+		"dismiss": "Réduire cette bannière",
+		"pill": "Rapport",
+		"reopen": "Afficher la bannière du rapport de l’année 2"
 	},
 	"mentorApply": {
 		"badge": "Devenir mentor",

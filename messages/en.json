@@ -1767,7 +1767,9 @@
 		"titleShort": "Year 2 report",
 		"description": "See what a second year of mentoring did.",
 		"cta": "Read the report",
-		"dismiss": "Hide this banner"
+		"dismiss": "Minimise this banner",
+		"pill": "Report",
+		"reopen": "Show the Year 2 report banner"
 	},
 	"mentorApply": {
 		"badge": "Become a mentor",

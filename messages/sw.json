@@ -1767,7 +1767,9 @@
 		"titleShort": "Ripoti ya Mwaka 2",
 		"description": "Ona kile mwaka wa pili wa ushauri ulichobadilisha.",
 		"cta": "Soma ripoti",
-		"dismiss": "Ficha bango hili"
+		"dismiss": "Punguza bango hili",
+		"pill": "Ripoti",
+		"reopen": "Onyesha bango la ripoti ya Mwaka wa 2"
 	},
 	"mentorApply": {
 		"badge": "Kuwa mlezi",

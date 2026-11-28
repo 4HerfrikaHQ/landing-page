@@ -2,21 +2,43 @@
 
 import { RollLabel } from "@/components/ui/roll-label";
 import { Link, usePathname } from "@/i18n/navigation";
-import { X } from "lucide-react";
+import { ChevronUp, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { isBannerHidden } from "./banner-visibility";
-import { useDismissed } from "./use-dismissed";
+import { useBannerState } from "./use-banner-state";
 
 const DISMISS_KEY = "banner:year-2-report";
 
 export function ImpactBanner() {
-	const t = useTranslations("impactBanner");
 	const pathname = usePathname();
-	const { dismissed, dismiss } = useDismissed(DISMISS_KEY);
+	const { state, collapse, open } = useBannerState(DISMISS_KEY);
 
-	if (dismissed || isBannerHidden(pathname)) {
-		return null;
-	}
+	if (state === "pending" || isBannerHidden(pathname)) return null;
+	if (state === "collapsed") return <CollapsedBanner onOpen={open} />;
+	return <FullBanner onCollapse={collapse} />;
+}
+
+function CollapsedBanner({ onOpen }: { onOpen: () => void }) {
+	const t = useTranslations("impactBanner");
+
+	return (
+		<button
+			type="button"
+			onClick={onOpen}
+			aria-label={t("reopen")}
+			className="impact-banner-pill press fixed right-4 bottom-4 z-40 inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-primary-bright pr-3 pl-2 text-sm font-semibold text-secondary-500 shadow-[0_8px_24px_rgba(3,6,92,0.18)] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2 lg:right-6 lg:bottom-6"
+		>
+			<span className="rounded-md bg-secondary-500 px-2 py-1 text-xs font-bold tracking-[0.12em] text-primary-bright uppercase">
+				{t("badge")}
+			</span>
+			{t("pill")}
+			<ChevronUp aria-hidden="true" className="size-4" />
+		</button>
+	);
+}
+
+function FullBanner({ onCollapse }: { onCollapse: () => void }) {
+	const t = useTranslations("impactBanner");
 
 	return (
 		<aside
@@ -42,7 +64,7 @@ export function ImpactBanner() {
 				</Link>
 				<button
 					type="button"
-					onClick={dismiss}
+					onClick={onCollapse}
 					aria-label={t("dismiss")}
 					className="press inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full outline-none hover:bg-secondary-500/10 focus-visible:ring-2 focus-visible:ring-secondary-500"
 				>
